@@ -1,45 +1,51 @@
-/* IMPORT FONTS: Kosugi Maru (Cute Japanese), VT323 (Terminal), Press Start 2P (Retro Pixel) */
-@import url('https://fonts.googleapis.com/css2?family=Kosugi+Maru&family=Press+Start+2P&family=VT323&display=swap');
+/* IMPORT FONTS: VT323 (Terminal), Press Start 2P (Retro Pixel), Syncopate (Wide Y2K Techno) */
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Syncopate:wght@400;700&family=VT323&display=swap');
 
 :root {
-    /* Gyaru x Terminal Palette */
-    --gal-pink: #ff66b2;
-    --gal-sakura: #ffb7c5;
-    --term-green: #39ff14;
-    --dark-bg: #0d0b14;
-    --panel-bg: rgba(20, 18, 25, 0.95);
-    --border-dashed: 2px dashed var(--gal-pink);
-    --text-muted: #a9a9b3;
+    /* Y2K PS/Techno Palette */
+    --ps-blue-deep: #020211;
+    --ps-blue-mid: #0033aa;
+    --ps-cyan: #00e5ff;
+    --silver-light: #e0e0e0;
+    --silver-dark: #808080;
+    --ui-bg: rgba(10, 15, 40, 0.85); /* Slightly less opaque for better integration */
+    --border-3d: 3px outset var(--silver-light);
+    --border-inset: 3px inset var(--silver-dark);
 }
 
-/* Custom Leopard-print inspired selection */
 ::selection {
-    background-color: var(--gal-pink);
-    color: #fff;
-    text-shadow: none;
+    background-color: var(--ps-cyan);
+    color: var(--ps-blue-deep);
 }
 
 * {
     box-sizing: border-box;
     scrollbar-width: thin;
-    scrollbar-color: var(--gal-pink) var(--dark-bg);
+    scrollbar-color: var(--silver-light) var(--ps-blue-deep);
 }
 
 body {
-    font-family: 'Kosugi Maru', sans-serif;
-    background-color: var(--dark-bg);
-    /* Subtle Terminal Dotted Matrix instead of heavy neon grid */
-    background-image: radial-gradient(var(--text-muted) 1px, transparent 1px);
-    background-size: 20px 20px;
-    background-position: 0 0;
-    color: #fff;
+    
+    background-image: url('psvibe.png');
+    
+    
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+    background-attachment: fixed;
+    
+    background-color: var(--ps-blue-deep);
+    background-blend-mode: screen;
+    
+    
+    color: var(--silver-light);
+    font-family: 'VT323', monospace;
     margin: 0;
     padding: 20px;
     min-height: 100vh;
     overflow-x: hidden;
 }
 
-/* Softer CRT Scanline Effect Overlay */
 body::after {
     content: " ";
     display: block;
@@ -48,77 +54,82 @@ body::after {
     left: 0;
     bottom: 0;
     right: 0;
-    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.15) 50%);
+    background: linear-gradient(rgba(0, 50, 255, 0.03) 50%, rgba(0, 0, 0, 0.2) 50%);
     z-index: 999;
     background-size: 100% 4px;
     pointer-events: none;
 }
 
-/* Terminal H1 with Blinking Block Cursor */
 h1 {
-    font-family: 'VT323', monospace;
+    font-family: 'Syncopate', sans-serif;
+    font-weight: 700;
     text-align: center;
-    color: var(--gal-sakura);
-    font-size: 3.5rem;
+    color: #fff;
+    font-size: 2.8rem;
     margin-bottom: 5px;
-    letter-spacing: 2px;
+    letter-spacing: 5px;
     text-transform: uppercase;
-}
-
-h1::after {
-    content: " █";
-    color: var(--gal-pink);
-    animation: blink 1s step-end infinite;
-}
-
-@keyframes blink {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0; }
+    
+    text-shadow: 
+        0 0 5px #fff,
+        0 0 15px var(--ps-cyan);
+    
+    transform: scaleX(1.1);
 }
 
 .subtitle {
     text-align: center;
-    color: var(--term-green);
+    color: var(--silver-light);
     font-family: 'Press Start 2P', cursive;
     font-size: 0.6rem;
     margin-bottom: 30px;
-    letter-spacing: 1px;
+    letter-spacing: 2px;
 }
 
-/* Y2K Terminal Warning Bar */
 .marquee-container {
-    background: var(--gal-pink);
+    background: var(--ps-blue-mid);
     color: #fff;
-    font-family: 'Press Start 2P', cursive;
-    font-size: 0.7rem;
-    padding: 8px 0;
+    font-family: 'VT323', monospace;
+    font-size: 1.2rem;
+    padding: 5px 0;
     margin-bottom: 25px;
-    border-top: 2px solid #fff;
-    border-bottom: 2px solid #fff;
+    border-top: 2px solid var(--ps-cyan);
+    border-bottom: 2px solid var(--ps-cyan);
     text-transform: uppercase;
+    letter-spacing: 3px;
+    box-shadow: 0 0 15px rgba(0, 229, 255, 0.3);
 }
 
-/* Gyaru System Menu Container */
 .menu-container {
-    background: var(--panel-bg);
-    padding: 25px;
-    border: var(--border-dashed);
+    background: var(--ui-bg);
+    padding: 30px 20px 20px 20px;
+    border: var(--border-3d);
     margin-bottom: 30px;
     position: relative;
     z-index: 10;
 }
 
-/* Cute ASCII Corners */
-.menu-container::before, .menu-container::after {
+.menu-container::before {
+    content: "MEMCARD_1 // 8MB";
     position: absolute;
-    color: var(--term-green);
-    font-family: 'VT323', monospace;
-    font-size: 18px;
-    background: var(--dark-bg);
-    padding: 0 5px;
+    top: 5px;
+    left: 10px;
+    color: var(--ps-cyan);
+    font-family: 'Press Start 2P', cursive;
+    font-size: 8px;
 }
-.menu-container::before { content: "[ SYSTEM ♡ ]"; top: -12px; left: 15px; }
-.menu-container::after { content: "(｡♥‿♥｡)"; bottom: -12px; right: 15px; color: var(--gal-pink); }
+
+.menu-container::after {
+    content: "|| ||| | ||| | | ||";
+    position: absolute;
+    bottom: 5px;
+    right: 15px;
+    color: var(--silver-light);
+    font-family: 'Press Start 2P', cursive;
+    font-size: 10px;
+    letter-spacing: -2px;
+    opacity: 0.7;
+}
 
 ul { 
     list-style-type: none; 
@@ -126,114 +137,98 @@ ul {
     display: flex; 
     flex-wrap: wrap; 
     justify-content: center; 
-    gap: 15px;
+    gap: 12px;
 }
 
 li { margin: 0; }
 
-/* Gyaru Terminal Buttons */
 button { 
-    background: transparent;
-    color: var(--gal-sakura); 
-    padding: 10px 15px; 
-    border: 1px solid var(--gal-sakura);
+    background: var(--silver-light);
+    color: #000; 
+    padding: 8px 16px; 
+    border: var(--border-3d);
     cursor: pointer;
-    font-family: 'VT323', monospace;
-    font-size: 1.2rem;
+    font-family: 'Syncopate', sans-serif;
+    font-weight: bold;
+    font-size: 0.8rem;
     text-transform: uppercase;
-    transition: all 0.2s ease;
-    position: relative;
-}
-
-button::before {
-    content: "> ";
-    color: var(--term-green);
-    opacity: 0;
-    transition: opacity 0.2s;
+    transition: all 0.1s ease; /* Fast transition for tech feel */
 }
 
 button:hover { 
-    background: var(--gal-sakura);
-    color: var(--dark-bg);
-    border-color: var(--gal-pink);
-    transform: translateY(-2px);
-}
-
-button:hover::before {
-    opacity: 1;
-    color: var(--dark-bg);
+    background: var(--ps-cyan);
+    color: #000;
 }
 
 button:active {
-    transform: translateY(2px);
+    border: var(--border-inset);
+    background: var(--ps-blue-mid);
+    color: #fff;
+    transform: translateY(1px);
 }
 
-/* OS/Terminal Window Iframe */
 .iframe-container {
     position: relative;
     width: 100%;
     height: 70vh;
-    background: var(--dark-bg);
-    border: 2px solid var(--gal-pink);
-    padding-top: 30px; /* Space for fake title bar */
+    background: #000;
+    border: var(--border-3d);
+    padding-top: 25px; 
     z-index: 10;
 }
 
-/* Fake Window Title Bar */
 .iframe-container::before {
-    content: "C:\\GYARU\\ROOT\\INDEX.EXE";
+    content: "► MEDIA_PLAYER_v2.0";
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
-    height: 30px;
-    background: var(--gal-pink);
-    color: #fff;
-    font-family: 'VT323', monospace;
-    font-size: 1.2rem;
-    line-height: 30px;
-    padding-left: 10px;
-    border-bottom: 2px solid var(--dark-bg);
-}
-
-/* Fake Window Controls [ _ □ X ] */
-.iframe-container::after {
-    content: "[_] [□] [X]";
-    position: absolute;
-    top: 0;
-    right: 10px;
+    height: 25px;
+    background: linear-gradient(90deg, var(--ps-blue-deep), var(--ps-blue-mid));
     color: #fff;
     font-family: 'Press Start 2P', cursive;
     font-size: 0.6rem;
-    line-height: 30px;
+    line-height: 25px;
+    padding-left: 10px;
+    border-bottom: 2px solid var(--silver-dark);
+}
+
+.iframe-container::after {
+    content: "[-][O][X]";
+    position: absolute;
+    top: 0;
+    right: 5px;
+    color: var(--silver-light);
+    font-family: 'Press Start 2P', cursive;
+    font-size: 0.7rem;
+    line-height: 25px;
     cursor: default;
 }
 
 iframe {
     width: 100%;
     height: 100%;
-    border: none;
+    border: var(--border-inset);
     display: block;
     background: #fff;
 }
 
-/* Terminal Boot Placeholder */
 .placeholder {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    color: var(--term-green);
-    font-family: 'VT323', monospace;
-    font-size: 1.5rem;
+    color: var(--ps-cyan);
+    font-family: 'Syncopate', sans-serif;
+    font-size: 1.2rem;
     text-align: center;
     pointer-events: none;
+    text-shadow: 0 0 5px var(--ps-cyan);
 }
 
-/* Responsive */
 @media (max-width: 600px) {
-    h1 { font-size: 2.2rem; }
-    button { width: 100%; text-align: left; }
+    h1 { font-size: 1.5rem; letter-spacing: 2px; }
+    button { width: 100%; }
     .iframe-container { height: 50vh; }
-    .menu-container::after { display: none; } /* Hide kaomoji on mobile to save space */
+    .menu-container::after { display: none; } 
 }
