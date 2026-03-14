@@ -1,29 +1,37 @@
-/* IMPORT FONTS: Tech + Japanese Round */
-@import url('https://fonts.googleapis.com/css2?family=Kosugi+Maru&family=Orbitron:wght@400;700&family=Press+Start+2P&display=swap');
+/* IMPORT FONTS: Kosugi Maru (Cute Japanese), VT323 (Terminal), Press Start 2P (Retro Pixel) */
+@import url('https://fonts.googleapis.com/css2?family=Kosugi+Maru&family=Press+Start+2P&family=VT323&display=swap');
 
 :root {
-    --neon-pink: #ff00ff;
-    --neon-cyan: #00ffff;
-    --gyaru-purple: #b026ff;
-    --dark-bg: #0a0a12;
-    --glass-bg: rgba(20, 20, 30, 0.85);
-    --border-glow: 0 0 10px var(--neon-pink), 0 0 20px var(--neon-pink);
+    /* Gyaru x Terminal Palette */
+    --gal-pink: #ff66b2;
+    --gal-sakura: #ffb7c5;
+    --term-green: #39ff14;
+    --dark-bg: #0d0b14;
+    --panel-bg: rgba(20, 18, 25, 0.95);
+    --border-dashed: 2px dashed var(--gal-pink);
+    --text-muted: #a9a9b3;
+}
+
+/* Custom Leopard-print inspired selection */
+::selection {
+    background-color: var(--gal-pink);
+    color: #fff;
+    text-shadow: none;
 }
 
 * {
     box-sizing: border-box;
     scrollbar-width: thin;
-    scrollbar-color: var(--neon-pink) var(--dark-bg);
+    scrollbar-color: var(--gal-pink) var(--dark-bg);
 }
 
 body {
     font-family: 'Kosugi Maru', sans-serif;
     background-color: var(--dark-bg);
-    /* Cyber Grid Background */
-    background-image: 
-        linear-gradient(rgba(0, 255, 255, 0.1) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0, 255, 255, 0.1) 1px, transparent 1px);
-    background-size: 30px 30px;
+    /* Subtle Terminal Dotted Matrix instead of heavy neon grid */
+    background-image: radial-gradient(var(--text-muted) 1px, transparent 1px);
+    background-size: 20px 20px;
+    background-position: 0 0;
     color: #fff;
     margin: 0;
     padding: 20px;
@@ -31,7 +39,7 @@ body {
     overflow-x: hidden;
 }
 
-/* CRT Scanline Effect Overlay */
+/* Softer CRT Scanline Effect Overlay */
 body::after {
     content: " ";
     display: block;
@@ -40,70 +48,77 @@ body::after {
     left: 0;
     bottom: 0;
     right: 0;
-    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.15) 50%);
     z-index: 999;
-    background-size: 100% 2px, 3px 100%;
+    background-size: 100% 4px;
     pointer-events: none;
 }
 
+/* Terminal H1 with Blinking Block Cursor */
 h1 {
-    font-family: 'Orbitron', sans-serif;
+    font-family: 'VT323', monospace;
     text-align: center;
-    color: #fff;
-    text-shadow: 
-        0 0 5px #fff,
-        0 0 10px #fff,
-        0 0 20px var(--neon-pink),
-        0 0 40px var(--neon-pink);
-    font-size: 2.5rem;
+    color: var(--gal-sakura);
+    font-size: 3.5rem;
     margin-bottom: 5px;
     letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+h1::after {
+    content: " █";
+    color: var(--gal-pink);
+    animation: blink 1s step-end infinite;
+}
+
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
 }
 
 .subtitle {
     text-align: center;
-    color: var(--neon-cyan);
+    color: var(--term-green);
+    font-family: 'Press Start 2P', cursive;
+    font-size: 0.6rem;
+    margin-bottom: 30px;
+    letter-spacing: 1px;
+}
+
+/* Y2K Terminal Warning Bar */
+.marquee-container {
+    background: var(--gal-pink);
+    color: #fff;
     font-family: 'Press Start 2P', cursive;
     font-size: 0.7rem;
-    margin-bottom: 20px;
-    text-shadow: 0 0 5px var(--neon-cyan);
+    padding: 8px 0;
+    margin-bottom: 25px;
+    border-top: 2px solid #fff;
+    border-bottom: 2px solid #fff;
+    text-transform: uppercase;
 }
 
-/* Y2K Marquee Bar */
-.marquee-container {
-    background: var(--neon-pink);
-    color: #000;
-    font-family: 'Orbitron', sans-serif;
-    font-weight: bold;
-    padding: 5px 0;
-    margin-bottom: 20px;
-    border: 2px solid #fff;
-    box-shadow: 0 0 15px var(--neon-pink);
-}
-
-/* Menu Container */
+/* Gyaru System Menu Container */
 .menu-container {
-    background: var(--glass-bg);
-    padding: 20px;
-    border: 2px solid var(--neon-cyan);
-    border-radius: 15px;
-    box-shadow: 0 0 15px var(--neon-cyan);
-    margin-bottom: 20px;
-    backdrop-filter: blur(5px);
+    background: var(--panel-bg);
+    padding: 25px;
+    border: var(--border-dashed);
+    margin-bottom: 30px;
     position: relative;
     z-index: 10;
 }
 
-/* Decorative Corners */
+/* Cute ASCII Corners */
 .menu-container::before, .menu-container::after {
-    content: "★";
     position: absolute;
-    color: var(--neon-pink);
-    font-size: 20px;
-    text-shadow: 0 0 5px var(--neon-pink);
+    color: var(--term-green);
+    font-family: 'VT323', monospace;
+    font-size: 18px;
+    background: var(--dark-bg);
+    padding: 0 5px;
 }
-.menu-container::before { top: -15px; left: 20px; }
-.menu-container::after { bottom: -15px; right: 20px; }
+.menu-container::before { content: "[ SYSTEM ♡ ]"; top: -12px; left: 15px; }
+.menu-container::after { content: "(｡♥‿♥｡)"; bottom: -12px; right: 15px; color: var(--gal-pink); }
 
 ul { 
     list-style-type: none; 
@@ -116,46 +131,82 @@ ul {
 
 li { margin: 0; }
 
-/* Gyaru Tech Buttons */
+/* Gyaru Terminal Buttons */
 button { 
-    background: linear-gradient(45deg, var(--gyaru-purple), var(--neon-pink));
-    color: #fff; 
-    padding: 12px 20px; 
-    border-radius: 20px; 
-    border: 2px solid #fff;
+    background: transparent;
+    color: var(--gal-sakura); 
+    padding: 10px 15px; 
+    border: 1px solid var(--gal-sakura);
     cursor: pointer;
-    font-family: 'Kosugi Maru', sans-serif;
-    font-weight: bold;
-    font-size: 14px;
+    font-family: 'VT323', monospace;
+    font-size: 1.2rem;
     text-transform: uppercase;
-    box-shadow: 0 0 10px var(--neon-pink);
-    transition: all 0.3s ease;
+    transition: all 0.2s ease;
     position: relative;
-    overflow: hidden;
+}
+
+button::before {
+    content: "> ";
+    color: var(--term-green);
+    opacity: 0;
+    transition: opacity 0.2s;
 }
 
 button:hover { 
-    background: linear-gradient(45deg, var(--neon-cyan), var(--neon-pink));
-    box-shadow: 0 0 20px var(--neon-cyan), 0 0 40px var(--neon-pink);
-    transform: translateY(-3px) scale(1.05);
-    color: #000;
+    background: var(--gal-sakura);
+    color: var(--dark-bg);
+    border-color: var(--gal-pink);
+    transform: translateY(-2px);
+}
+
+button:hover::before {
+    opacity: 1;
+    color: var(--dark-bg);
 }
 
 button:active {
-    transform: translateY(1px);
+    transform: translateY(2px);
 }
 
-/* Iframe Dashboard */
+/* OS/Terminal Window Iframe */
 .iframe-container {
     position: relative;
     width: 100%;
     height: 70vh;
-    background: #000;
-    border: 4px solid var(--neon-pink);
-    border-radius: 10px;
-    box-shadow: 0 0 30px var(--neon-pink), inset 0 0 30px var(--neon-pink);
-    overflow: hidden;
+    background: var(--dark-bg);
+    border: 2px solid var(--gal-pink);
+    padding-top: 30px; /* Space for fake title bar */
     z-index: 10;
+}
+
+/* Fake Window Title Bar */
+.iframe-container::before {
+    content: "C:\\GYARU\\ROOT\\INDEX.EXE";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 30px;
+    background: var(--gal-pink);
+    color: #fff;
+    font-family: 'VT323', monospace;
+    font-size: 1.2rem;
+    line-height: 30px;
+    padding-left: 10px;
+    border-bottom: 2px solid var(--dark-bg);
+}
+
+/* Fake Window Controls [ _ □ X ] */
+.iframe-container::after {
+    content: "[_] [□] [X]";
+    position: absolute;
+    top: 0;
+    right: 10px;
+    color: #fff;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 0.6rem;
+    line-height: 30px;
+    cursor: default;
 }
 
 iframe {
@@ -163,33 +214,26 @@ iframe {
     height: 100%;
     border: none;
     display: block;
-    background: #fff; /* Fallback */
+    background: #fff;
 }
 
-/* Placeholder Text */
+/* Terminal Boot Placeholder */
 .placeholder {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    color: var(--neon-cyan);
-    font-family: 'Orbitron', sans-serif;
-    font-size: 1.5em;
+    color: var(--term-green);
+    font-family: 'VT323', monospace;
+    font-size: 1.5rem;
     text-align: center;
-    text-shadow: 0 0 10px var(--neon-cyan);
     pointer-events: none;
-    animation: pulse 2s infinite;
-}
-
-@keyframes pulse {
-    0% { opacity: 0.5; }
-    50% { opacity: 1; }
-    100% { opacity: 0.5; }
 }
 
 /* Responsive */
 @media (max-width: 600px) {
-    h1 { font-size: 1.8rem; }
-    button { width: 100%; margin-bottom: 5px; }
+    h1 { font-size: 2.2rem; }
+    button { width: 100%; text-align: left; }
     .iframe-container { height: 50vh; }
+    .menu-container::after { display: none; } /* Hide kaomoji on mobile to save space */
 }
