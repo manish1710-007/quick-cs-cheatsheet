@@ -4,23 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>★ CYBER FORMULA LIBRARY ★</title>
-    <!-- Link to the new CSS file -->
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <!-- Main Header -->
     <h1>FORMULA DATABASE</h1>
-    <div class="subtitle">コンピューターサイエンス公式集 (CS Formula Collection)</div>
+    <div class="subtitle" id="typewriter-text">コンピューターサイエンス公式集 (CS Formula Collection)</div>
 
-    <!-- Y2K Marquee Bar -->
     <div class="marquee-container">
         <marquee scrollamount="10">
             ★ WELCOME TO THE DATABASE ★ LOAD YOUR MODULES ★ SYSTEM READY ★ Gyaru Tech v1.0 ★
         </marquee>
     </div>
 
-    <!-- Navigation Menu -->
     <div class="menu-container">
         <ul>
             <li><button onclick="loadPage('files/algorithms_formulas.html')">Algorithms</button></li>
@@ -37,7 +33,6 @@
         </ul>
     </div>
 
-    <!-- Dashboard View Area -->
     <div class="iframe-container">
         <div id="placeholderText" class="placeholder">
             ✦ SELECT A MODULE TO LOAD ✦<br>
@@ -47,12 +42,47 @@
     </div>
 
     <script>
-        function loadPage(url) {
-            // Set the iframe source to the selected file
-            document.getElementById('contentFrame').src = url;
+        // TYPEWRITER EFFECT FOR SUBTITLE 
+        document.addEventListener("DOMContentLoaded", () => {
+            const subtitleEl = document.getElementById('typewriter-text');
+            const text = subtitleEl.innerText;
+            subtitleEl.innerText = ''; // Clear text on load
             
-            // Hide the placeholder text
-            document.getElementById('placeholderText').style.display = 'none';
+            let i = 0;
+            function typeWriter() {
+                if (i < text.length) {
+                    subtitleEl.innerHTML += text.charAt(i);
+                    i++;
+                    setTimeout(typeWriter, 50); 
+                }
+            }
+            
+            
+            setTimeout(typeWriter, 500); 
+        });
+
+        // ENHANCED LOAD FUNCTION 
+        function loadPage(url) {
+            const placeholder = document.getElementById('placeholderText');
+            const iframe = document.getElementById('contentFrame');
+            
+            
+            iframe.style.opacity = '0'; 
+            placeholder.style.display = 'block';
+            placeholder.innerHTML = 'DOWNLOADING MODULE... <br><span style="font-size:0.5em;">お待ちください (Please wait)</span>';
+            placeholder.style.color = "var(--term-green)";
+
+            
+            setTimeout(() => {
+                iframe.src = url;
+                
+                
+                iframe.onload = () => {
+                    placeholder.style.display = 'none';
+                    iframe.style.transition = "opacity 0.5s ease";
+                    iframe.style.opacity = '1';
+                };
+            }, 400);
         }
     </script>
 
