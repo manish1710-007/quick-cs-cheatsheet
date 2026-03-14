@@ -1,0 +1,2008 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Compiler Design Formula Sheet</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #fff;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            padding: 30px 0;
+            margin-bottom: 30px;
+        }
+
+        header h1 {
+            font-size: 2.8rem;
+            background: linear-gradient(90deg, #22d3ee, #a78bfa, #f472b6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 30px rgba(34, 211, 238, 0.3);
+            margin-bottom: 10px;
+        }
+
+        header p {
+            color: #94a3b8;
+            font-size: 1.1rem;
+        }
+
+        .section {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            color: #22d3ee;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid rgba(34, 211, 238, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .section-title .icon {
+            font-size: 2rem;
+        }
+
+        .subsection {
+            margin-bottom: 25px;
+        }
+
+        .subsection-title {
+            font-size: 1.3rem;
+            color: #a78bfa;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .subsection-title::before {
+            content: "◆";
+            font-size: 0.8rem;
+            color: #f472b6;
+        }
+
+        .formula-box {
+            background: linear-gradient(135deg, rgba(34, 211, 238, 0.15), rgba(167, 139, 250, 0.1));
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-left: 4px solid #22d3ee;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .formula-box:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 20px rgba(34, 211, 238, 0.3);
+        }
+
+        .formula-name {
+            font-size: 1.1rem;
+            color: #22d3ee;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .formula {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px 20px;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 1.05rem;
+            color: #f9a8d4;
+            margin: 10px 0;
+            overflow-x: auto;
+        }
+
+        .formula-description {
+            color: #94a3b8;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-top: 10px;
+        }
+
+        .variables {
+            background: rgba(167, 139, 250, 0.1);
+            padding: 12px 15px;
+            border-radius: 8px;
+            margin-top: 10px;
+            font-size: 0.9rem;
+        }
+
+        .variables strong {
+            color: #a78bfa;
+        }
+
+        .example {
+            background: rgba(244, 114, 182, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 10px;
+            border: 1px dashed rgba(244, 114, 182, 0.5);
+        }
+
+        .example-title {
+            color: #f472b6;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 20px;
+        }
+
+        .algorithm-card {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 15px;
+            padding: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .algorithm-card h4 {
+            color: #22d3ee;
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(34, 211, 238, 0.3);
+        }
+
+        .steps {
+            counter-reset: step;
+        }
+
+        .step {
+            position: relative;
+            padding-left: 35px;
+            margin-bottom: 10px;
+            color: #e2e8f0;
+            line-height: 1.6;
+        }
+
+        .step::before {
+            counter-increment: step;
+            content: counter(step);
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 25px;
+            height: 25px;
+            background: linear-gradient(135deg, #22d3ee, #a78bfa);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .note {
+            background: rgba(251, 191, 36, 0.1);
+            border-left: 4px solid #fbbf24;
+            padding: 15px;
+            border-radius: 0 10px 10px 0;
+            margin-top: 15px;
+        }
+
+        .note-title {
+            color: #fbbf24;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .warning {
+            background: rgba(239, 68, 68, 0.1);
+            border-left: 4px solid #ef4444;
+            padding: 15px;
+            border-radius: 0 10px 10px 0;
+            margin-top: 15px;
+        }
+
+        .warning-title {
+            color: #ef4444;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .important {
+            background: rgba(34, 197, 94, 0.1);
+            border-left: 4px solid #22c55e;
+            padding: 15px;
+            border-radius: 0 10px 10px 0;
+            margin-top: 15px;
+        }
+
+        .important-title {
+            color: #22c55e;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            margin: 15px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        th {
+            background: linear-gradient(135deg, #22d3ee, #0891b2);
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            color: #fff;
+        }
+
+        td {
+            padding: 12px 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            color: #e2e8f0;
+        }
+
+        tr:hover {
+            background: rgba(34, 211, 238, 0.1);
+        }
+
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .comparison-item {
+            background: rgba(167, 139, 250, 0.05);
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid rgba(167, 139, 250, 0.2);
+        }
+
+        .comparison-item h5 {
+            color: #a78bfa;
+            margin-bottom: 8px;
+        }
+
+        .grammar-box {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            padding: 15px;
+            margin: 10px 0;
+            font-family: 'Courier New', monospace;
+        }
+
+        .production {
+            margin: 5px 0;
+            color: #f9a8d4;
+        }
+
+        .terminal {
+            color: #22d3ee;
+        }
+
+        .non-terminal {
+            color: #a78bfa;
+            font-weight: bold;
+        }
+
+        .parsing-table {
+            font-family: 'Courier New', monospace;
+            font-size: 0.85rem;
+        }
+
+        .parsing-table td, .parsing-table th {
+            text-align: center;
+            padding: 8px 12px;
+        }
+
+        .action-shift {
+            color: #22c55e;
+        }
+
+        .action-reduce {
+            color: #f59e0b;
+        }
+
+        .action-accept {
+            color: #ec4899;
+            font-weight: bold;
+        }
+
+        .phase-diagram {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .phase-box {
+            background: linear-gradient(135deg, rgba(34, 211, 238, 0.2), rgba(167, 139, 250, 0.15));
+            border: 2px solid #22d3ee;
+            padding: 15px 25px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .phase-arrow {
+            color: #a78bfa;
+            font-size: 1.5rem;
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px;
+            color: #64748b;
+            margin-top: 30px;
+        }
+
+        .formula-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 10px 0;
+        }
+
+        .formula-item {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            color: #f9a8d4;
+        }
+
+        .code-block {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            padding: 15px;
+            margin: 10px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            overflow-x: auto;
+        }
+
+        .code-line {
+            margin: 3px 0;
+        }
+
+        .code-comment {
+            color: #6b7280;
+        }
+
+        .code-keyword {
+            color: #22d3ee;
+        }
+
+        .code-variable {
+            color: #a78bfa;
+        }
+
+        .code-value {
+            color: #f472b6;
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2rem;
+            }
+
+            .grid {
+                grid-template-columns: 1fr;
+            }
+
+            .section {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>⚙️ Compiler Design Formula Sheet</h1>
+            <p>Complete Reference for Lexical Analysis, Parsing, Semantic Analysis & Code Generation</p>
+        </header>
+
+        <!-- COMPILER STRUCTURE SECTION -->
+        <div class="section">
+            <h2 class="section-title">
+                <span class="icon">🏗️</span>
+                Compiler Structure
+            </h2>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Phases of Compiler</h3>
+                <div class="phase-diagram">
+                    <div class="phase-box">Lexical Analysis</div>
+                    <span class="phase-arrow">→</span>
+                    <div class="phase-box">Syntax Analysis</div>
+                    <span class="phase-arrow">→</span>
+                    <div class="phase-box">Semantic Analysis</div>
+                    <span class="phase-arrow">→</span>
+                    <div class="phase-box">Intermediate Code</div>
+                    <span class="phase-arrow">→</span>
+                    <div class="phase-box">Code Optimization</div>
+                    <span class="phase-arrow">→</span>
+                    <div class="phase-box">Code Generation</div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Phase Functions</h3>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Phase</th>
+                                <th>Input</th>
+                                <th>Output</th>
+                                <th>Function</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Lexical Analysis</td>
+                                <td>Source Code</td>
+                                <td>Tokens</td>
+                                <td>Scan and identify tokens</td>
+                            </tr>
+                            <tr>
+                                <td>Syntax Analysis</td>
+                                <td>Tokens</td>
+                                <td>Parse Tree</td>
+                                <td>Check syntax, build tree</td>
+                            </tr>
+                            <tr>
+                                <td>Semantic Analysis</td>
+                                <td>Parse Tree</td>
+                                <td>Syntax Tree</td>
+                                <td>Type checking, scope analysis</td>
+                            </tr>
+                            <tr>
+                                <td>Intermediate Code</td>
+                                <td>Syntax Tree</td>
+                                <td>IR Code</td>
+                                <td>Generate machine-independent code</td>
+                            </tr>
+                            <tr>
+                                <td>Code Optimization</td>
+                                <td>IR Code</td>
+                                <td>Optimized IR</td>
+                                <td>Improve efficiency</td>
+                            </tr>
+                            <tr>
+                                <td>Code Generation</td>
+                                <td>Optimized IR</td>
+                                <td>Target Code</td>
+                                <td>Generate machine code</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Symbol Table Management</h3>
+                <div class="grid">
+                    <div class="algorithm-card">
+                        <h4>Symbol Table Operations</h4>
+                        <div class="steps">
+                            <div class="step"><strong>Insert:</strong> Add new identifier with attributes</div>
+                            <div class="step"><strong>Lookup:</strong> Search for identifier and retrieve attributes</div>
+                            <div class="step"><strong>Delete:</strong> Remove entries going out of scope</div>
+                            <div class="step"><strong>Update:</strong> Modify existing entry attributes</div>
+                        </div>
+                    </div>
+                    <div class="algorithm-card">
+                        <h4>Symbol Table Entry</h4>
+                        <div class="formula-description">
+                            • <strong>Name:</strong> Identifier name<br>
+                            • <strong>Type:</strong> Data type (int, float, char, etc.)<br>
+                            • <strong>Scope:</strong> Visibility region<br>
+                            • <strong>Memory Location:</strong> Address offset<br>
+                            • <strong>Other Attributes:</strong> Array dimensions, function parameters
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Error Handling</h3>
+                <div class="grid">
+                    <div class="algorithm-card">
+                        <h4>Types of Errors</h4>
+                        <div class="formula-description">
+                            • <strong>Lexical:</strong> Invalid characters, malformed tokens<br>
+                            • <strong>Syntax:</strong> Grammar violations, missing tokens<br>
+                            • <strong>Semantic:</strong> Type mismatches, undeclared variables<br>
+                            • <strong>Logical:</strong> Infinite loops, dead code
+                        </div>
+                    </div>
+                    <div class="algorithm-card">
+                        <h4>Error Recovery Strategies</h4>
+                        <div class="steps">
+                            <div class="step"><strong>Panic Mode:</strong> Skip tokens until synchronizing token</div>
+                            <div class="step"><strong>Phrase Level:</strong> Local correction at error point</div>
+                            <div class="step"><strong>Error Productions:</strong> Grammar includes error rules</div>
+                            <div class="step"><strong>Global Correction:</strong> Find minimal correction</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- LEXICAL ANALYSIS SECTION -->
+        <div class="section">
+            <h2 class="section-title">
+                <span class="icon">📝</span>
+                Lexical Analysis
+            </h2>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Token Specification</h3>
+                <div class="formula-box">
+                    <div class="formula-name">Token Definition</div>
+                    <div class="formula">Token = <token-name, attribute-value></div>
+                    <div class="variables">
+                        <strong>Components:</strong><br>
+                        • <strong>Token Name:</strong> Abstract symbol representing type (e.g., ID, NUM, IF)<br>
+                        • <strong>Attribute Value:</strong> Additional info (e.g., lexeme, value, symbol table pointer)
+                    </div>
+                </div>
+
+                <div class="table-container" style="margin-top: 15px;">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Lexeme</th>
+                                <th>Token Name</th>
+                                <th>Attribute Value</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>if</td><td>IF</td><td>—</td></tr>
+                            <tr><td>while</td><td>WHILE</td><td>—</td></tr>
+                            <tr><td>123</td><td>NUM</td><td>integer value 123</td></tr>
+                            <tr><td>count</td><td>ID</td><td>pointer to symbol table entry</td></tr>
+                            <tr><td>&lt;=</td><td>RELOP</td><td>LE (less than or equal)</td></tr>
+                            <tr><td>+</td><td>ADDOP</td><td>PLUS</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Regular Expressions for Tokens</h3>
+                <div class="grid">
+                    <div class="algorithm-card">
+                        <h4>Common Token Patterns</h4>
+                        <div class="formula">identifier → letter(letter|digit)*</div>
+                        <div class="formula">number → digit+ (.digit+)? (E[+-]?digit+)?</div>
+                        <div class="formula">whitespace → (blank|tab|newline)+</div>
+                        <div class="formula">comment → /* (non-* | * non-/)* */</div>
+                    </div>
+                    <div class="algorithm-card">
+                        <h4>Regular Definitions</h4>
+                        <div class="formula">digit → [0-9]</div>
+                        <div class="formula">letter → [a-zA-Z]</div>
+                        <div class="formula">alphanum → letter | digit</div>
+                        <div class="formula">id → letter(alphanum)*</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Finite Automata for Lexical Analysis</h3>
+                <div class="grid">
+                    <div class="algorithm-card">
+                        <h4>NFA to DFA Conversion</h4>
+                        <div class="formula">DFA states = Subsets of NFA states</div>
+                        <div class="formula">Max DFA states = 2^n (n = NFA states)</div>
+                        <div class="formula-description">
+                            Subset construction algorithm converts NFA to equivalent DFA.
+                        </div>
+                    </div>
+                    <div class="algorithm-card">
+                        <h4>DFA Minimization</h4>
+                        <div class="formula">Min states = Number of equivalence classes</div>
+                        <div class="formula-description">
+                            Partition refinement algorithm groups indistinguishable states.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">LEX/FLEX Specifications</h3>
+                <div class="code-block">
+                    <div class="code-line"><span class="code-comment">%{</span></div>
+                    <div class="code-line"><span class="code-comment">/* C declarations */</span></div>
+                    <div class="code-line"><span class="code-comment">%}</span></div>
+                    <div class="code-line"></div>
+                    <div class="code-line"><span class="code-comment">/* Regular definitions */</span></div>
+                    <div class="code-line"><span class="code-variable">digit</span>   [0-9]</div>
+                    <div class="code-line"><span class="code-variable">letter</span>  [a-zA-Z]</div>
+                    <div class="code-line"><span class="code-variable">id</span>      {letter}({letter}|{digit})*</div>
+                    <div class="code-line"></div>
+                    <div class="code-line">%%</div>
+                    <div class="code-line"></div>
+                    <div class="code-line"><span class="code-comment">/* Translation rules */</span></div>
+                    <div class="code-line"><span class="code-keyword">if</span>            {return IF;}</div>
+                    <div class="code-line"><span class="code-keyword">else</span>          {return ELSE;}</div>
+                    <div class="code-line">{<span class="code-variable">id</span>}          {return ID;}</div>
+                    <div class="code-line">{<span class="code-variable">digit</span>}+      {return NUM;}</div>
+                    <div class="code-line"></div>
+                    <div class="code-line">%%</div>
+                    <div class="code-line"></div>
+                    <div class="code-line"><span class="code-comment">/* User subroutines */</span></div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Buffering Techniques</h3>
+                <div class="grid">
+                    <div class="algorithm-card">
+                        <h4>Double Buffer</h4>
+                        <div class="formula">Buffer size: N characters each</div>
+                        <div class="formula-description">
+                            Two alternating buffers. While one is processed, other is loaded. Uses sentinels to detect end.
+                        </div>
+                    </div>
+                    <div class="algorithm-card">
+                        <h4>Buffer Pairs</h4>
+                        <div class="formula">Sentinel character at end of each buffer</div>
+                        <div class="formula">EOF mark: switches to other buffer or signals end</div>
+                        <div class="formula-description">
+                            Lexeme can span buffer boundary with lookahead.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SYNTAX ANALYSIS SECTION -->
+        <div class="section">
+            <h2 class="section-title">
+                <span class="icon">🌳</span>
+                Syntax Analysis (Parsing)
+            </h2>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Context-Free Grammar</h3>
+                <div class="formula-box">
+                    <div class="formula-name">Formal Definition</div>
+                    <div class="formula">G = (V, T, P, S)</div>
+                    <div class="variables">
+                        <strong>Where:</strong><br>
+                        • V = Set of non-terminals (variables)<br>
+                        • T = Set of terminals (tokens)<br>
+                        • P = Set of productions (rules)<br>
+                        • S = Start symbol
+                    </div>
+                </div>
+
+                <div class="example" style="margin-top: 15px;">
+                    <div class="example-title">📌 Example: Grammar for Expressions</div>
+                    <div class="grammar-box">
+                        <div class="production"><span class="non-terminal">E</span> → <span class="non-terminal">E</span> + <span class="non-terminal">T</span> | <span class="non-terminal">T</span></div>
+                        <div class="production"><span class="non-terminal">T</span> → <span class="non-terminal">T</span> * <span class="non-terminal">F</span> | <span class="non-terminal">F</span></div>
+                        <div class="production"><span class="non-terminal">F</span> → ( <span class="non-terminal">E</span> ) | <span class="terminal">id</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Types of Parsing</h3>
+                <div class="grid">
+                    <div class="algorithm-card">
+                        <h4>Top-Down Parsing</h4>
+                        <div class="formula-description">
+                            • Starts from start symbol<br>
+                            • Constructs parse tree from root to leaves<br>
+                            • Uses leftmost derivation<br>
+                            • Types: Recursive descent, LL(1)
+                        </div>
+                        <div class="note">
+                            <div class="note-title">⚠️ Problem:</div>
+                            Left recursion must be eliminated for top-down parsers.
+                        </div>
+                    </div>
+                    <div class="algorithm-card">
+                        <h4>Bottom-Up Parsing</h4>
+                        <div class="formula-description">
+                            • Starts from input string<br>
+                            • Constructs parse tree from leaves to root<br>
+                            • Uses reverse of rightmost derivation<br>
+                            • Types: Operator precedence, LR parsers
+                        </div>
+                        <div class="formula">Reduce: Replace RHS with LHS</div>
+                        <div class="formula">Shift: Move input to stack</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Left Recursion Elimination</h3>
+                <div class="formula-box">
+                    <div class="formula-name">Immediate Left Recursion</div>
+                    <div class="formula">A → Aα₁ | Aα₂ | ... | Aαₘ | β₁ | β₂ | ... | βₙ</div>
+                    <div class="formula-description">Transform to:</div>
+                    <div class="formula">A → β₁A' | β₂A' | ... | βₙA'</div>
+                    <div class="formula">A' → α₁A' | α₂A' | ... | αₘA' | ε</div>
+                    <div class="example">
+                        <div class="example-title">📌 Example:</div>
+                        Original: E → E + T | T<br>
+                        After: E → T E'<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;E' → + T E' | ε
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Left Factoring</h3>
+                <div class="formula-box">
+                    <div class="formula-name">For Predictive Parsing</div>
+                    <div class="formula">A → αβ₁ | αβ₂ | ... | αβₙ</div>
+                    <div class="formula-description">Transform to:</div>
+                    <div class="formula">A → αA'</div>
+                    <div class="formula">A' → β₁ | β₂ | ... | βₙ</div>
+                    <div class="example">
+                        <div class="example-title">📌 Example:</div>
+                        Original: S → if E then S else S | if E then S<br>
+                        After: S → if E then S S'<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;S' → else S | ε
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">FIRST and FOLLOW Sets</h3>
+                <div class="grid">
+                    <div class="algorithm-card">
+                        <h4>FIRST(α) Computation</h4>
+                        <div class="formula">FIRST(α) = Set of terminals that begin strings derivable from α</div>
+                        <div class="steps">
+                            <div class="step">If X is terminal: FIRST(X) = {X}</div>
+                            <div class="step">If X → ε: add ε to FIRST(X)</div>
+                            <div class="step">If X → Y₁Y₂...Yₖ:</div>
+                            <div class="step" style="padding-left: 50px;">Add FIRST(Y₁) - {ε}</div>
+                            <div class="step" style="padding-left: 50px;">If ε ∈ FIRST(Y₁), add FIRST(Y₂) - {ε}</div>
+                            <div class="step" style="padding-left: 50px;">Continue until no ε or end</div>
+                        </div>
+                    </div>
+                    <div class="algorithm-card">
+                        <h4>FOLLOW(A) Computation</h4>
+                        <div class="formula">FOLLOW(A) = Set of terminals that can appear immediately after A</div>
+                        <div class="steps">
+                            <div class="step">Add $ to FOLLOW(S) where S is start symbol</div>
+                            <div class="step">If A → αBβ: add FIRST(β) - {ε} to FOLLOW(B)</div>
+                            <div class="step">If A → αB or ε ∈ FIRST(β): add FOLLOW(A) to FOLLOW(B)</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="example" style="margin-top: 15px;">
+                    <div class="example-title">📌 Example: FIRST and FOLLOW</div>
+                    Grammar: E → T E', E' → + T E' | ε, T → F T', T' → * F T' | ε, F → ( E ) | id<br><br>
+                    <table class="parsing-table">
+                        <tr><th>Non-terminal</th><th>FIRST</th><th>FOLLOW</th></tr>
+                        <tr><td>E</td><td>( id</td><td>$ )</td></tr>
+                        <tr><td>E'</td><td>+ ε</td><td>$ )</td></tr>
+                        <tr><td>T</td><td>( id</td><td>+ $ )</td></tr>
+                        <tr><td>T'</td><td>* ε</td><td>+ $ )</td></tr>
+                        <tr><td>F</td><td>( id</td><td>* + $ )</td></tr>
+                    </table>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">LL(1) Parsing</h3>
+                <div class="formula-box">
+                    <div class="formula-name">LL(1) Grammar Condition</div>
+                    <div class="formula">For productions A → α | β:</div>
+                    <div class="formula">1. FIRST(α) ∩ FIRST(β) = ∅</div>
+                    <div class="formula">2. If ε ∈ FIRST(α), then FIRST(β) ∩ FOLLOW(A) = ∅</div>
+                </div>
+
+                <div class="algorithm-card" style="margin-top: 15px;">
+                    <h4>LL(1) Parsing Table Construction</h4>
+                    <div class="formula">For each production A → α:</div>
+                    <div class="formula">&nbsp;&nbsp;For each terminal a in FIRST(α):</div>
+                    <div class="formula">&nbsp;&nbsp;&nbsp;&nbsp;M[A, a] = A → α</div>
+                    <div class="formula">&nbsp;&nbsp;If ε ∈ FIRST(α):</div>
+                    <div class="formula">&nbsp;&nbsp;&nbsp;&nbsp;For each terminal b in FOLLOW(A):</div>
+                    <div class="formula">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;M[A, b] = A → α</div>
+                </div>
+
+                <div class="algorithm-card" style="margin-top: 15px;">
+                    <h4>LL(1) Parsing Algorithm</h4>
+                    <div class="steps">
+                        <div class="step">Initialize: Stack = [$, S], Input = w$</div>
+                        <div class="step">Let X = top of stack, a = current input</div>
+                        <div class="step">If X = a = $: Accept</div>
+                        <div class="step">If X = a ≠ $: Pop X, advance input pointer</div>
+                        <div class="step">If X is non-terminal:</div>
+                        <div class="step" style="padding-left: 50px;">If M[X, a] = error: Report error</div>
+                        <div class="step" style="padding-left: 50px;">Else: Pop X, push RHS of M[X, a] (right to left)</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">LR Parsing</h3>
+                <div class="grid">
+                    <div class="algorithm-card">
+                        <h4>LR Parser Components</h4>
+                        <div class="formula-description">
+                            • <strong>Stack:</strong> States and grammar symbols<br>
+                            • <strong>Input:</strong> String to parse with $<br>
+                            • <strong>Parsing Table:</strong> ACTION and GOTO tables<br>
+                            • <strong>Output:</strong> Handles for semantic analysis
+                        </div>
+                    </div>
+                    <div class="algorithm-card">
+                        <h4>LR Parsing Actions</h4>
+                        <div class="formula"><span class="action-shift">s<sub>n</sub></span>: Shift, push state n</div>
+                        <div class="formula"><span class="action-reduce">r<sub>k</sub></span>: Reduce by production k</div>
+                        <div class="formula"><span class="action-accept">acc</span>: Accept input</div>
+                        <div class="formula">goto n: Go to state n (after reduce)</div>
+                    </div>
+                </div>
+
+                <div class="algorithm-card" style="margin-top: 15px;">
+                    <h4>LR Parsing Algorithm</h4>
+                    <div class="steps">
+                        <div class="step">Stack = [0], Input = w$, Output = []</div>
+                        <div class="step">Let s = top state, a = current input</div>
+                        <div class="step">If ACTION[s, a] = <span class="action-shift">s<sub>n</sub></span>: Push a, push state n, advance input</div>
+                        <div class="step">If ACTION[s, a] = <span class="action-reduce">r<sub>k</sub></span> (A → β):</div>
+                        <div class="step" style="padding-left: 50px;">Pop 2|β| symbols, let s' = top state</div>
+                        <div class="step" style="padding-left: 50px;">Push A, push GOTO[s', A], output production k</div>
+                        <div class="step">If ACTION[s, a] = <span class="action-accept">acc</span>: Accept</div>
+                        <div class="step">If ACTION[s, a] = error: Report syntax error</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Types of LR Parsers</h3>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Parser</th>
+                                <th>States</th>
+                                <th>Grammar Class</th>
+                                <th>Complexity</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>LR(0)</td>
+                                <td>Items without lookahead</td>
+                                <td>Very restricted</td>
+                                <td>Simple</td>
+                            </tr>
+                            <tr>
+                                <td>SLR(1)</td>
+                                <td>LR(0) items</td>
+                                <td>FOLLOW-based reduce</td>
+                                <td>Simple, tables small</td>
+                            </tr>
+                            <tr>
+                                <td>CLR(1)/LR(1)</td>
+                                <td>LR(1) items</td>
+                                <td>Most powerful LR</td>
+                                <td>Large tables</td>
+                            </tr>
+                            <tr>
+                                <td>LALR(1)</td>
+                                <td>Merged LR(1) states</td>
+                                <td>Between SLR and CLR</td>
+                                <td>Most practical</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">LR Items and Closures</h3>
+                <div class="grid">
+                    <div class="algorithm-card">
+                        <h4>LR(0) Item</h4>
+                        <div class="formula">Item: Production with dot indicating parsing position</div>
+                        <div class="formula">A → α·β (α already seen, β expected)</div>
+                        <div class="example">
+                            <div class="example-title">📌 Example:</div>
+                            E → ·T E' (nothing seen yet)<br>
+                            E → T·E' (T seen, E' expected)<br>
+                            E → T E'· (production complete)
+                        </div>
+                    </div>
+                    <div class="algorithm-card">
+                        <h4>CLOSURE(I)</h4>
+                        <div class="steps">
+                            <div class="step">Add all items in I</div>
+                            <div class="step">If A → α·Bβ in I, add B → ·γ for all B → γ</div>
+                            <div class="step">Repeat until no more items can be added</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid" style="margin-top: 15px;">
+                    <div class="algorithm-card">
+                        <h4>GOTO(I, X)</h4>
+                        <div class="formula">GOTO(I, X) = CLOSURE({A → αX·β | A → α·Xβ ∈ I})</div>
+                        <div class="formula-description">
+                            Set of items reachable from I by moving past symbol X.
+                        </div>
+                    </div>
+                    <div class="algorithm-card">
+                        <h4>LR(1) Item</h4>
+                        <div class="formula">Item: [A → α·β, a] where a is lookahead</div>
+                        <div class="formula-description">
+                            Lookahead tells us which terminal can follow after reducing.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Conflict Resolution</h3>
+                <div class="grid">
+                    <div class="algorithm-card">
+                        <h4>Shift-Reduce Conflict</h4>
+                        <div class="formula">Both shift and reduce possible for same state and input</div>
+                        <div class="formula-description">
+                            <strong>Resolution:</strong> Usually prefer shift (correct for most grammars)
+                        </div>
+                        <div class="warning">
+                            <div class="warning-title">⚠️ Example:</div>
+                            Dangling else problem in if-then-else statements
+                        </div>
+                    </div>
+                    <div class="algorithm-card">
+                        <h4>Reduce-Reduce Conflict</h4>
+                        <div class="formula">Multiple reductions possible for same state and input</div>
+                        <div class="formula-description">
+                            <strong>Resolution:</strong> Usually indicates grammar problem - needs restructuring
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SYNTAX-DIRECTED TRANSLATION SECTION -->
+        <div class="section">
+            <h2 class="section-title">
+                <span class="icon">🔄</span>
+                Syntax-Directed Translation
+            </h2>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Syntax-Directed Definitions (SDD)</h3>
+                <div class="formula-box">
+                    <div class="formula-name">Components</div>
+                    <div class="formula-description">
+                        • <strong>Grammar:</strong> Context-free grammar<br>
+                        • <strong>Attributes:</strong> Associated values (synthesized, inherited)<br>
+                        • <strong>Semantic Rules:</strong> Rules for computing attribute values<br>
+                        • <strong>Predicates:</strong> Conditions that must be satisfied
+                    </div>
+                </div>
+
+                <div class="grid" style="margin-top: 15px;">
+                    <div class="algorithm-card">
+                        <h4>Synthesized Attributes</h4>
+                        <div class="formula">Value computed from children nodes</div>
+                        <div class="formula">E.val computed from E₁.val and E₂.val</div>
+                        <div class="formula-description">
+                            Can be evaluated during bottom-up parsing (post-order traversal).
+                        </div>
+                    </div>
+                    <div class="algorithm-card">
+                        <h4>Inherited Attributes</h4>
+                        <div class="formula">Value computed from parent/siblings</div>
+                        <div class="formula">T.type inherited from parent E.type</div>
+                        <div class="formula-description">
+                            Useful for expressing context dependencies (type propagation).
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Annotated Parse Tree</h3>
+                <div class="example">
+                    <div class="example-title">📌 Example: Expression Evaluation</div>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr><th>Production</th><th>Semantic Rules</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>E → E₁ + T</td><td>E.val = E₁.val + T.val</td></tr>
+                                <tr><td>E → E₁ - T</td><td>E.val = E₁.val - T.val</td></tr>
+                                <tr><td>E → T</td><td>E.val = T.val</td></tr>
+                                <tr><td>T → T₁ * F</td><td>T.val = T₁.val * F.val</td></tr>
+                                <tr><td>T → F</td><td>T.val = F.val</td></tr>
+                                <tr><td>F → ( E )</td><td>F.val = E.val</td></tr>
+                                <tr><td>F → num</td><td>F.val = num.lexval</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    For input: 3 + 4 * 2<br>
+                    E.val = 3 + (4 * 2) = 11
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Syntax-Directed Translation Schemes (SDT)</h3>
+                <div class="formula-box">
+                    <div class="formula-name">SDT Definition</div>
+                    <div class="formula">Grammar with semantic actions embedded in productions</div>
+                    <div class="formula">E → E₁ + T { print('+'); }</div>
+                    <div class="variables">
+                        <strong>Action Placement:</strong><br>
+                        • Within production body {action}<br>
+                        • Executed when parser reaches that position during derivation
+                    </div>
+                </div>
+
+                <div class="algorithm-card" style="margin-top: 15px;">
+                    <h4>Postfix Notation SDT</h4>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr><th>Production</th><th>Semantic Action</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>E → E₁ + T</td><td>{ print('+'); }</td></tr>
+                                <tr><td>E → E₁ - T</td><td>{ print('-'); }</td></tr>
+                                <tr><td>E → T</td><td>{ }</td></tr>
+                                <tr><td>T → T₁ * F</td><td>{ print('*'); }</td></tr>
+                                <tr><td>T → T₁ / F</td><td>{ print('/'); }</td></tr>
+                                <tr><td>T → F</td><td>{ }</td></tr>
+                                <tr><td>F → num</td><td>{ print(num.lexval); }</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="example">
+                        Input: 9 - 5 + 2<br>
+                        Output: 9 5 - 2 + (postfix notation)
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- INTERMEDIATE CODE GENERATION SECTION -->
+        <div class="section">
+            <h2 class="section-title">
+                <span class="icon">💻</span>
+                Intermediate Code Generation
+            </h2>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Three-Address Code (TAC)</h3>
+                <div class="formula-box">
+                    <div class="formula-name">Instruction Forms</div>
+                    <div class="formula">x = y op z      (binary operation)</div>
+                    <div class="formula">x = op y        (unary operation)</div>
+                    <div class="formula">x = y           (copy)</div>
+                    <div class="formula">goto L          (unconditional jump)</div>
+                    <div class="formula">if x relop y goto L  (conditional jump)</div>
+                    <div class="formula">param x         (parameter passing)</div>
+                    <div class="formula">call p, n       (function call)</div>
+                    <div class="formula">x = call p, n   (function call with return)</div>
+                    <div class="formula">return x        (return statement)</div>
+                </div>
+
+                <div class="example" style="margin-top: 15px;">
+                    <div class="example-title">📌 Example: Expression to TAC</div>
+                    Source: a = b * c + b * c<br>
+                    Three-Address Code:<br>
+                    <div class="code-block">
+                        <div class="code-line">t1 = b * c</div>
+                        <div class="code-line">t2 = b * c</div>
+                        <div class="code-line">t3 = t1 + t2</div>
+                        <div class="code-line">a = t3</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Quadruples</h3>
+                <div class="formula-box">
+                    <div class="formula-name">Representation</div>
+                    <div class="formula">Four fields: (op, arg1, arg2, result)</div>
+                    <div class="example">
+                        <div class="example-title">📌 Example:</div>
+                        <table class="parsing-table">
+                            <tr><th>op</th><th>arg1</th><th>arg2</th><th>result</th></tr>
+                            <tr><td>*</td><td>b</td><td>c</td><td>t1</td></tr>
+                            <tr><td>*</td><td>b</td><td>c</td><td>t2</td></tr>
+                            <tr><td>+</td><td>t1</td><td>t2</td><td>t3</td></tr>
+                            <tr><td>=</td><td>t3</td><td>—</td><td>a</td></tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Triples</h3>
+                <div class="formula-box">
+                    <div class="formula-name">Representation</div>
+                    <div class="formula">Three fields: (op, arg1, arg2)</div>
+                    <div class="formula">References by position index</div>
+                    <div class="example">
+                        <div class="example-title">📌 Example:</div>
+                        <table class="parsing-table">
+                            <tr><th>#</th><th>op</th><th>arg1</th><th>arg2</th></tr>
+                            <tr><td>(0)</td><td>*</td><td>b</td><td>c</td></tr>
+                            <tr><td>(1)</td><td>*</td><td>b</td><td>c</td></tr>
+                            <tr><td>(2)</td><td>+</td><td>(0)</td><td>(1)</td></tr>
+                            <tr><td>(3)</td><td>=</td><td>a</td><td>(2)</td></tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Abstract Syntax Tree (AST)</h3>
+                <div class="grid">
+                    <div class="algorithm-card">
+                        <h4>AST vs Parse Tree</h4>
+                        <div class="formula-description">
+                            <strong>Parse Tree:</strong> Full derivation with all grammar symbols<br>
+                            <strong>AST:</strong> Compressed representation with only essential nodes<br>
+                            • No parentheses nodes<br>
+                            • No unit productions<br>
+                            • Operators at interior nodes
+                        </div>
+                    </div>
+                    <div class="algorithm-card">
+                        <h4>AST for a = b * c + b * c</h4>
+                        <div class="diagram-box">
+                            <pre>
+        =
+       / \
+      a   +
+         / \
+        *   *
+       / \ / \
+      b  c b  c
+                            </pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Translation of Control Flow</h3>
+                <div class="grid">
+                    <div class="algorithm-card">
+                        <h4>if-else Statement</h4>
+                        <div class="formula">if (E) S₁ else S₂</div>
+                        <div class="code-block">
+                            <div class="code-line">ifFalse E goto L1</div>
+                            <div class="code-line">// code for S₁</div>
+                            <div class="code-line">goto L2</div>
+                            <div class="code-line">L1:</div>
+                            <div class="code-line">// code for S₂</div>
+                            <div class="code-line">L2:</div>
+                        </div>
+                    </div>
+                    <div class="algorithm-card">
+                        <h4>while Loop</h4>
+                        <div class="formula">while (E) S</div>
+                        <div class="code-block">
+                            <div class="code-line">Lbegin:</div>
+                            <div class="code-line">ifFalse E goto Lend</div>
+                            <div class="code-line">// code for S</div>
+                            <div class="code-line">goto Lbegin</div>
+                            <div class="code-line">Lend:</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid" style="margin-top: 15px;">
+                    <div class="algorithm-card">
+                        <h4>for Loop</h4>
+                        <div class="formula">for (E₁; E₂; E₃) S</div>
+                        <div class="code-block">
+                            <div class="code-line">// code for E₁</div>
+                            <div class="code-line">Ltest:</div>
+                            <div class="code-line">ifFalse E₂ goto Lend</div>
+                            <div class="code-line">// code for S</div>
+                            <div class="code-line">// code for E₃</div>
+                            <div class="code-line">goto Ltest</div>
+                            <div class="code-line">Lend:</div>
+                        </div>
+                    </div>
+                    <div class="algorithm-card">
+                        <h4>Switch Statement</h4>
+                        <div class="formula">switch(E) { case v₁: S₁; ... }</div>
+                        <div class="code-block">
+                            <div class="code-line">t = E</div>
+                            <div class="code-line">if t == v₁ goto L₁</div>
+                            <div class="code-line">if t == v₂ goto L₂</div>
+                            <div class="code-line">goto Ldefault</div>
+                            <div class="code-line">L₁: // code for S₁</div>
+                            <div class="code-line">goto Lend</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Backpatching</h3>
+                <div class="formula-box">
+                    <div class="formula-name">One-Pass Code Generation</div>
+                    <div class="formula-description">
+                        Used to generate code in one pass when jump targets not yet known.
+                    </div>
+                    <div class="steps">
+                        <div class="step"><strong>Makelist(i):</strong> Create new list with index i</div>
+                        <div class="step"><strong>Merge(p₁, p₂):</strong> Merge two lists of jumps</div>
+                        <div class="step"><strong>Backpatch(p, i):</strong> Set target of all jumps in list p to i</div>
+                    </div>
+                </div>
+
+                <div class="example" style="margin-top: 15px;">
+                    <div class="example-title">📌 Example: Boolean Expression</div>
+                    Expression: a < b || c < d && e < f<br>
+                    <div class="code-block">
+                        <div class="code-line">100: if a < b goto _</div>
+                        <div class="code-line">101: goto 102</div>
+                        <div class="code-line">102: if c < d goto 104</div>
+                        <div class="code-line">103: goto _</div>
+                        <div class="code-line">104: if e < f goto _</div>
+                        <div class="code-line">105: goto _</div>
+                    </div>
+                    Backpatch: 100.truelist, 104.truelist → merge → target filled later
+                </div>
+            </div>
+        </div>
+
+        <!-- RUNTIME ENVIRONMENT SECTION -->
+        <div class="section">
+            <h2 class="section-title">
+                <span class="icon">🔧</span>
+                Runtime Environment
+            </h2>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Storage Organization</h3>
+                <div class="algorithm-card">
+                    <h4>Memory Layout</h4>
+                    <div class="diagram-box">
+                        <pre>
+┌─────────────────────┐ High Address
+│    Stack            │ ← Grows downward
+│    ↓                │
+│                     │
+│    (Free Space)     │
+│                     │
+│    ↑                │
+│    Heap             │ ← Grows upward
+├─────────────────────┤
+│    Static Data      │ ← Global/static variables
+├─────────────────────┤
+│    Code (Text)      │ ← Program instructions
+└─────────────────────┘ Low Address
+                        </pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Activation Record (Stack Frame)</h3>
+                <div class="algorithm-card">
+                    <h4>Stack Frame Structure</h4>
+                    <div class="diagram-box">
+                        <pre>
+┌─────────────────────────┐
+│   Return Value          │
+├─────────────────────────┤
+│   Parameters            │
+├─────────────────────────┤
+│   Saved Return Address  │
+├─────────────────────────┤
+│   Saved FP (Old FP)     │
+├─────────────────────────┤ ← Current FP
+│   Local Variables       │
+├─────────────────────────┤
+│   Temporaries           │
+├─────────────────────────┤ ← SP
+│   (for expression eval) │
+└─────────────────────────┘
+                        </pre>
+                    </div>
+                </div>
+
+                <div class="grid" style="margin-top: 15px;">
+                    <div class="formula-box">
+                        <div class="formula-name">Frame Pointer (FP)</div>
+                        <div class="formula-description">
+                            Points to a fixed location in the current activation record. Used to access local variables and parameters.
+                        </div>
+                    </div>
+                    <div class="formula-box">
+                        <div class="formula-name">Stack Pointer (SP)</div>
+                        <div class="formula-description">
+                            Points to the top of the stack. Changes as temporaries are pushed/popped during expression evaluation.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Parameter Passing Methods</h3>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Method</th>
+                                <th>Mechanism</th>
+                                <th>Effect</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Call by Value</td>
+                                <td>Copy value to formal parameter</td>
+                                <td>Original unchanged</td>
+                            </tr>
+                            <tr>
+                                <td>Call by Reference</td>
+                                <td>Pass address of actual parameter</td>
+                                <td>Changes affect original</td>
+                            </tr>
+                            <tr>
+                                <td>Call by Value-Result</td>
+                                <td>Copy in, copy out on return</td>
+                                <td>Changes copied back</td>
+                            </tr>
+                            <tr>
+                                <td>Call by Name</td>
+                                <td>Textual substitution</td>
+                                <td>Evaluated when used</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Access Links (Static Chain)</h3>
+                <div class="grid">
+                    <div class="algorithm-card">
+                        <h4>Nested Procedures</h4>
+                        <div class="formula">Access link points to activation record of lexically enclosing procedure</div>
+                        <div class="formula-description">
+                            Used to access non-local variables in nested function definitions.
+                        </div>
+                    </div>
+                    <div class="algorithm-card">
+                        <h4>Accessing Non-Local Variables</h4>
+                        <div class="formula">Follow k access links to reach enclosing scope at depth k</div>
+                        <div class="formula">Variable at offset d: FP → access link^k → (FP + d)</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Display vs Static Chain</h3>
+                <div class="grid">
+                    <div class="algorithm-card">
+                        <h4>Static Chain</h4>
+                        <div class="formula-description">
+                            • Each frame has pointer to lexically enclosing frame<br>
+                            • Access requires following chain<br>
+                            • Simple, low overhead on call<br>
+                            • O(n) access for n levels deep
+                        </div>
+                    </div>
+                    <div class="algorithm-card">
+                        <h4>Display</h4>
+                        <div class="formula-description">
+                            • Array of pointers to most recent activation at each level<br>
+                            • Direct O(1) access to any level<br>
+                            • Higher overhead on call/return<br>
+                            • Better for deeply nested scopes
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CODE OPTIMIZATION SECTION -->
+        <div class="section">
+            <h2 class="section-title">
+                <span class="icon">⚡</span>
+                Code Optimization
+            </h2>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Types of Optimization</h3>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Scope</th>
+                                <th>Description</th>
+                                <th>Examples</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Peephole</td>
+                                <td>Local pattern matching</td>
+                                <td>Eliminate redundant loads/stores</td>
+                            </tr>
+                            <tr>
+                                <td>Local</td>
+                                <td>Within basic block</td>
+                                <td>Common subexpression elimination</td>
+                            </tr>
+                            <tr>
+                                <td>Global</td>
+                                <td>Across basic blocks</td>
+                                <td>Global common subexpression</td>
+                            </tr>
+                            <tr>
+                                <td>Interprocedural</td>
+                                <td>Across procedures</td>
+                                <td>Inline expansion, constant propagation</td>
+                            </tr>
+                            <tr>
+                                <td>Loop</td>
+                                <td>Loop-specific optimizations</td>
+                                <td>Loop unrolling, strength reduction</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Basic Block</h3>
+                <div class="formula-box">
+                    <div class="formula-name">Definition</div>
+                    <div class="formula-description">
+                        A basic block is a sequence of consecutive statements with:<br>
+                        • Single entry point (first statement)<br>
+                        • Single exit point (last statement)<br>
+                        • No branching inside the block
+                    </div>
+                </div>
+
+                <div class="algorithm-card" style="margin-top: 15px;">
+                    <h4>Basic Block Construction</h4>
+                    <div class="steps">
+                        <div class="step">Identify leaders (first statements of blocks):</div>
+                        <div class="step" style="padding-left: 50px;">First statement is a leader</div>
+                        <div class="step" style="padding-left: 50px;">Target of conditional/unconditional jump is leader</div>
+                        <div class="step" style="padding-left: 50px;">Statement following jump is leader</div>
+                        <div class="step">Basic block = statements from leader to just before next leader</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Common Optimizations</h3>
+                
+                <div class="grid">
+                    <div class="algorithm-card">
+                        <h4>Constant Folding</h4>
+                        <div class="formula">Evaluate constant expressions at compile time</div>
+                        <div class="example">
+                            <div class="example-title">Before:</div>
+                            x = 3 + 5 * 2<br>
+                            <div class="example-title">After:</div>
+                            x = 13
+                        </div>
+                    </div>
+                    <div class="algorithm-card">
+                        <h4>Constant Propagation</h4>
+                        <div class="formula">Replace variable with constant value</div>
+                        <div class="example">
+                            <div class="example-title">Before:</div>
+                            x = 5; y = x + 2<br>
+                            <div class="example-title">After:</div>
+                            x = 5; y = 7
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid" style="margin-top: 15px;">
+                    <div class="algorithm-card">
+                        <h4>Common Subexpression Elimination</h4>
+                        <div class="formula">Compute once, reuse result</div>
+                        <div class="example">
+                            <div class="example-title">Before:</div>
+                            a = b + c<br>
+                            d = b + c<br>
+                            <div class="example-title">After:</div>
+                            t = b + c<br>
+                            a = t<br>
+                            d = t
+                        </div>
+                    </div>
+                    <div class="algorithm-card">
+                        <h4>Dead Code Elimination</h4>
+                        <div class="formula">Remove code that doesn't affect program output</div>
+                        <div class="example">
+                            <div class="example-title">Before:</div>
+                            x = 5; x = 10; y = x<br>
+                            <div class="example-title">After:</div>
+                            x = 10; y = x
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid" style="margin-top: 15px;">
+                    <div class="algorithm-card">
+                        <h4>Strength Reduction</h4>
+                        <div class="formula">Replace expensive operations with cheaper ones</div>
+                        <div class="example">
+                            <div class="example-title">Before:</div>
+                            x = y * 2<br>
+                            <div class="example-title">After:</div>
+                            x = y + y or x = y << 1
+                        </div>
+                    </div>
+                    <div class="algorithm-card">
+                        <h4>Copy Propagation</h4>
+                        <div class="formula">Use original variable instead of copy</div>
+                        <div class="example">
+                            <div class="example-title">Before:</div>
+                            x = y; z = x + 1<br>
+                            <div class="example-title">After:</div>
+                            x = y; z = y + 1
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid" style="margin-top: 15px;">
+                    <div class="algorithm-card">
+                        <h4>Code Motion (Loop Invariant)</h4>
+                        <div class="formula">Move invariant code outside loop</div>
+                        <div class="example">
+                            <div class="example-title">Before:</div>
+                            for(i=0; i&lt;n; i++) x = y + z;<br>
+                            <div class="example-title">After:</div>
+                            t = y + z; for(i=0; i&lt;n; i++) x = t;
+                        </div>
+                    </div>
+                    <div class="algorithm-card">
+                        <h4>Induction Variable Elimination</h4>
+                        <div class="formula">Replace loop counter with derived variables</div>
+                        <div class="example">
+                            <div class="example-title">Before:</div>
+                            for(i=0; i&lt;n; i++) A[i]=0;<br>
+                            <div class="example-title">After:</div>
+                            for(p=A; p&lt;A+n; p++) *p=0;
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Loop Optimizations</h3>
+                <div class="grid">
+                    <div class="algorithm-card">
+                        <h4>Loop Unrolling</h4>
+                        <div class="formula">Execute multiple iterations in one loop body</div>
+                        <div class="example">
+                            <div class="example-title">Before:</div>
+                            for(i=0; i&lt;4; i++) A[i]=0;<br>
+                            <div class="example-title">After:</div>
+                            A[0]=0; A[1]=0; A[2]=0; A[3]=0;
+                        </div>
+                    </div>
+                    <div class="algorithm-card">
+                        <h4>Loop Fusion</h4>
+                        <div class="formula">Combine adjacent loops with same bounds</div>
+                        <div class="example">
+                            <div class="example-title">Before:</div>
+                            for(i=0;i&lt;n;i++) A[i]=0;<br>
+                            for(i=0;i&lt;n;i++) B[i]=0;<br>
+                            <div class="example-title">After:</div>
+                            for(i=0;i&lt;n;i++) {A[i]=0; B[i]=0;}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid" style="margin-top: 15px;">
+                    <div class="algorithm-card">
+                        <h4>Loop Interchange</h4>
+                        <div class="formula">Swap nested loops for better cache performance</div>
+                        <div class="example">
+                            <div class="example-title">Before:</div>
+                            for(i=0;i&lt;n;i++) for(j=0;j&lt;m;j++) A[i][j]++<br>
+                            <div class="example-title">After (if row-major):</div>
+                            for(j=0;j&lt;m;j++) for(i=0;i&lt;n;i++) A[i][j]++
+                        </div>
+                    </div>
+                    <div class="algorithm-card">
+                        <h4>Loop Fission/Distribution</h4>
+                        <div class="formula">Split loop into multiple loops</div>
+                        <div class="formula-description">
+                            Useful for parallelization and cache optimization.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Data Flow Analysis</h3>
+                <div class="grid">
+                    <div class="algorithm-card">
+                        <h4>Available Expressions</h4>
+                        <div class="formula">Expression x+y is available if computed on all paths</div>
+                        <div class="formula">OUT[B] = gen[B] ∪ (IN[B] - kill[B])</div>
+                        <div class="formula">IN[B] = ∩ OUT[P] for all predecessors P</div>
+                    </div>
+                    <div class="algorithm-card">
+                        <h4>Live Variables</h4>
+                        <div class="formula">Variable is live if used later before redefinition</div>
+                        <div class="formula">IN[B] = use[B] ∪ (OUT[B] - def[B])</div>
+                        <div class="formula">OUT[B] = ∪ IN[S] for all successors S</div>
+                    </div>
+                </div>
+
+                <div class="grid" style="margin-top: 15px;">
+                    <div class="algorithm-card">
+                        <h4>Reaching Definitions</h4>
+                        <div class="formula">Definition d reaches point p if path from d to p without redefinition</div>
+                        <div class="formula">OUT[B] = gen[B] ∪ (IN[B] - kill[B])</div>
+                        <div class="formula">IN[B] = ∪ OUT[P] for all predecessors P</div>
+                    </div>
+                    <div class="algorithm-card">
+                        <h4>Very Busy Expressions</h4>
+                        <div class="formula">Expression evaluated on all paths before modification</div>
+                        <div class="formula">IN[B] = use[B] ∪ (OUT[B] - kill[B])</div>
+                        <div class="formula">OUT[B] = ∩ IN[S] for all successors S</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CODE GENERATION SECTION -->
+        <div class="section">
+            <h2 class="section-title">
+                <span class="icon">🎯</span>
+                Code Generation
+            </h2>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Issues in Code Generation</h3>
+                <div class="grid">
+                    <div class="algorithm-card">
+                        <h4>Input</h4>
+                        <div class="formula-description">
+                            • Intermediate code<br>
+                            • Symbol table information<br>
+                            • Target machine description
+                        </div>
+                    </div>
+                    <div class="algorithm-card">
+                        <h4>Output</h4>
+                        <div class="formula-description">
+                            • Absolute machine code<br>
+                            • Relocatable machine code<br>
+                            • Assembly language code
+                        </div>
+                    </div>
+                </div>
+
+                <div class="table-container" style="margin-top: 15px;">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Issue</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Instruction Selection</td>
+                                <td>Choose target instructions for IR operations</td>
+                            </tr>
+                            <tr>
+                                <td>Register Allocation</td>
+                                <td>Assign values to limited registers</td>
+                            </tr>
+                            <tr>
+                                <td>Instruction Ordering</td>
+                                <td>Schedule instructions for efficiency</td>
+                            </tr>
+                            <tr>
+                                <td>Memory Management</td>
+                                <td>Allocate variables to memory locations</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Register Allocation</h3>
+                <div class="formula-box">
+                    <div class="formula-name">Graph Coloring Algorithm</div>
+                    <div class="steps">
+                        <div class="step">Build interference graph: nodes = variables, edges = variables live simultaneously</div>
+                        <div class="step">Try to color graph with k colors (k registers)</div>
+                        <div class="step">If successful: each color = one register</div>
+                        <div class="step">If not: spill some variables to memory</div>
+                    </div>
+                </div>
+
+                <div class="grid" style="margin-top: 15px;">
+                    <div class="algorithm-card">
+                        <h4>Register Allocation Criteria</h4>
+                        <div class="formula">Benefit = (uses × memory_cost) - register_cost</div>
+                        <div class="formula-description">
+                            Allocate registers to variables with highest usage count (priority).
+                        </div>
+                    </div>
+                    <div class="algorithm-card">
+                        <h4>Spilling</h4>
+                        <div class="formula-description">
+                            When not enough registers, store variable in memory.<br>
+                            • Load before use<br>
+                            • Store after definition<br>
+                            • Choose variable with longest time until next use
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Peephole Optimization</h3>
+                <div class="grid">
+                    <div class="algorithm-card">
+                        <h4>Redundant Load/Store</h4>
+                        <div class="example">
+                            <div class="example-title">Before:</div>
+                            LOAD R1, a<br>
+                            STORE a, R1<br>
+                            <div class="example-title">After:</div>
+                            LOAD R1, a
+                        </div>
+                    </div>
+                    <div class="algorithm-card">
+                        <h4>Jump Optimization</h4>
+                        <div class="example">
+                            <div class="example-title">Before:</div>
+                            goto L1<br>
+                            L1: goto L2<br>
+                            <div class="example-title">After:</div>
+                            goto L2
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid" style="margin-top: 15px;">
+                    <div class="algorithm-card">
+                        <h4>Algebraic Simplification</h4>
+                        <div class="formula">x = x + 0 → x = x</div>
+                        <div class="formula">x = x * 1 → x = x</div>
+                        <div class="formula">x = x * 0 → x = 0</div>
+                    </div>
+                    <div class="algorithm-card">
+                        <h4>Dead Code Elimination</h4>
+                        <div class="example">
+                            <div class="example-title">Before:</div>
+                            if(false) S<br>
+                            <div class="example-title">After:</div>
+                            (removed)
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Instruction Selection</h3>
+                <div class="formula-box">
+                    <div class="formula-name">Tree Rewriting</div>
+                    <div class="formula-description">
+                        Pattern matching on expression trees to select optimal instructions.
+                    </div>
+                    <div class="example">
+                        <div class="example-title">📌 Example:</div>
+                        Tree for a + b[i]:<br>
+                        +<br>
+                       / \<br>
+                      a   []<br>
+                         / \<br>
+                        b   i<br><br>
+                        Instructions:<br>
+                        LOAD R1, i<br>
+                        LOAD R2, b(R1)  // indexed addressing<br>
+                        ADD R3, a, R2
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- DATA FLOW ANALYSIS SECTION -->
+        <div class="section">
+            <h2 class="section-title">
+                <span class="icon">📈</span>
+                Data Flow Analysis Equations
+            </h2>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Analysis Types Summary</h3>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Analysis</th>
+                                <th>Direction</th>
+                                <th>Meet Operator</th>
+                                <th>Application</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Reaching Definitions</td>
+                                <td>Forward</td>
+                                <td>∪ (union)</td>
+                                <td>UD-chains, constant propagation</td>
+                            </tr>
+                            <tr>
+                                <td>Available Expressions</td>
+                                <td>Forward</td>
+                                <td>∩ (intersection)</td>
+                                <td>CSE elimination</td>
+                            </tr>
+                            <tr>
+                                <td>Live Variables</td>
+                                <td>Backward</td>
+                                <td>∪ (union)</td>
+                                <td>Register allocation</td>
+                            </tr>
+                            <tr>
+                                <td>Very Busy Expressions</td>
+                                <td>Backward</td>
+                                <td>∩ (intersection)</td>
+                                <td>Code hoisting</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Iterative Algorithm</h3>
+                <div class="algorithm-card">
+                    <h4>Worklist Algorithm</h4>
+                    <div class="steps">
+                        <div class="step">Initialize: IN[entry] = ∅, IN[others] = ⊤ (for forward)</div>
+                        <div class="step">Add all blocks to worklist</div>
+                        <div class="step">While worklist not empty:</div>
+                        <div class="step" style="padding-left: 50px;">Remove block B from worklist</div>
+                        <div class="step" style="padding-left: 50px;">Compute new OUT[B] using transfer function</div>
+                        <div class="step" style="padding-left: 50px;">If OUT[B] changed:</div>
+                        <div class="step" style="padding-left: 70px;">Update IN[succ(B)] for all successors</div>
+                        <div class="step" style="padding-left: 70px;">Add successors to worklist</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Static Single Assignment (SSA)</h3>
+                <div class="formula-box">
+                    <div class="formula-name">SSA Form</div>
+                    <div class="formula">Each variable assigned exactly once</div>
+                    <div class="formula">φ-functions at join points merge multiple definitions</div>
+                    <div class="example">
+                        <div class="example-title">📌 Example:</div>
+                        <div class="code-block">
+                            <div class="code-line"><span class="code-comment">// Original</span></div>
+                            <div class="code-line">x = 1</div>
+                            <div class="code-line">if (cond) x = 2</div>
+                            <div class="code-line">y = x</div>
+                        </div>
+                        <div class="code-block">
+                            <div class="code-line"><span class="code-comment">// SSA Form</span></div>
+                            <div class="code-line">x₁ = 1</div>
+                            <div class="code-line">if (cond) x₂ = 2</div>
+                            <div class="code-line">x₃ = φ(x₁, x₂)</div>
+                            <div class="code-line">y = x₃</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Summary Section -->
+        <div class="section" style="background: linear-gradient(135deg, rgba(34, 211, 238, 0.2), rgba(167, 139, 250, 0.15));">
+            <h2 class="section-title">
+                <span class="icon">📋</span>
+                Quick Reference Summary
+            </h2>
+            <div class="comparison-grid">
+                <div class="comparison-item">
+                    <h5>Lexical Analysis</h5>
+                    <p><strong>Token:</strong> <name, attribute></p>
+                    <p><strong>LEX:</strong> Pattern → Action</p>
+                    <p><strong>NFA→DFA:</strong> Subset construction</p>
+                </div>
+                <div class="comparison-item">
+                    <h5>Syntax Analysis</h5>
+                    <p><strong>LL(1):</strong> Top-down, predictive</p>
+                    <p><strong>LR:</strong> Bottom-up, shift-reduce</p>
+                    <p><strong>FIRST/FOLLOW:</strong> Table construction</p>
+                </div>
+                <div class="comparison-item">
+                    <h5>Intermediate Code</h5>
+                    <p><strong>TAC:</strong> x = y op z</p>
+                    <p><strong>Quad:</strong> (op, arg1, arg2, result)</p>
+                    <p><strong>Triple:</strong> (op, arg1, arg2)</p>
+                </div>
+                <div class="comparison-item">
+                    <h5>Optimization</h5>
+                    <p><strong>Local:</strong> Within basic block</p>
+                    <p><strong>Global:</strong> Across blocks</p>
+                    <p><strong>CSE:</strong> Common subexpr elim</p>
+                </div>
+                <div class="comparison-item">
+                    <h5>Runtime</h5>
+                    <p><strong>Stack:</strong> Activation records</p>
+                    <p><strong>FP/SP:</strong> Frame/Stack pointers</p>
+                    <p><strong>Access Link:</strong> Non-local access</p>
+                </div>
+                <div class="comparison-item">
+                    <h5>Code Generation</h5>
+                    <p><strong>Reg Alloc:</strong> Graph coloring</p>
+                    <p><strong>Spilling:</strong> Memory backup</p>
+                    <p><strong>Peephole:</strong> Local patterns</p>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>📚 Compiler Design Formula Reference Sheet</p>
+            <p>Lexical • Syntax • Semantic • Intermediate • Optimization • Code Generation</p>
+        </footer>
+    </div>
+</body>
+</html>

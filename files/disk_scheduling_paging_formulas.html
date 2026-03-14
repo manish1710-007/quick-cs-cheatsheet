@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Disk Scheduling & Paging Formula Sheet</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #fff;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            padding: 30px 0;
+            margin-bottom: 30px;
+        }
+
+        header h1 {
+            font-size: 2.8rem;
+            background: linear-gradient(90deg, #00d4ff, #7c3aed, #f472b6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 30px rgba(0, 212, 255, 0.3);
+            margin-bottom: 10px;
+        }
+
+        header p {
+            color: #94a3b8;
+            font-size: 1.1rem;
+        }
+
+        .section {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            color: #00d4ff;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid rgba(0, 212, 255, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .section-title .icon {
+            font-size: 2rem;
+        }
+
+        .subsection {
+            margin-bottom: 25px;
+        }
+
+        .subsection-title {
+            font-size: 1.3rem;
+            color: #7c3aed;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .subsection-title::before {
+            content: "▶";
+            font-size: 0.8rem;
+            color: #f472b6;
+        }
+
+        .formula-box {
+            background: linear-gradient(135deg, rgba(124, 58, 237, 0.2), rgba(0, 212, 255, 0.1));
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-left: 4px solid #7c3aed;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .formula-box:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 20px rgba(124, 58, 237, 0.3);
+        }
+
+        .formula-name {
+            font-size: 1.1rem;
+            color: #00d4ff;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .formula {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px 20px;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 1.1rem;
+            color: #f472b6;
+            margin: 10px 0;
+            overflow-x: auto;
+        }
+
+        .formula-description {
+            color: #94a3b8;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-top: 10px;
+        }
+
+        .variables {
+            background: rgba(0, 212, 255, 0.1);
+            padding: 12px 15px;
+            border-radius: 8px;
+            margin-top: 10px;
+            font-size: 0.9rem;
+        }
+
+        .variables strong {
+            color: #00d4ff;
+        }
+
+        .example {
+            background: rgba(244, 114, 182, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 10px;
+            border: 1px dashed rgba(244, 114, 182, 0.5);
+        }
+
+        .example-title {
+            color: #f472b6;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 20px;
+        }
+
+        .algorithm-card {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 15px;
+            padding: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .algorithm-card h4 {
+            color: #00d4ff;
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(0, 212, 255, 0.3);
+        }
+
+        .steps {
+            counter-reset: step;
+        }
+
+        .step {
+            position: relative;
+            padding-left: 35px;
+            margin-bottom: 10px;
+            color: #e2e8f0;
+            line-height: 1.6;
+        }
+
+        .step::before {
+            counter-increment: step;
+            content: counter(step);
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 25px;
+            height: 25px;
+            background: linear-gradient(135deg, #7c3aed, #00d4ff);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .highlight {
+            color: #f472b6;
+            font-weight: 600;
+        }
+
+        .note {
+            background: rgba(255, 193, 7, 0.1);
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            border-radius: 0 10px 10px 0;
+            margin-top: 15px;
+        }
+
+        .note-title {
+            color: #ffc107;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            margin: 15px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        th {
+            background: linear-gradient(135deg, #7c3aed, #5b21b6);
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            color: #fff;
+        }
+
+        td {
+            padding: 12px 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            color: #e2e8f0;
+        }
+
+        tr:hover {
+            background: rgba(124, 58, 237, 0.1);
+        }
+
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .comparison-item {
+            background: rgba(0, 212, 255, 0.05);
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid rgba(0, 212, 255, 0.2);
+        }
+
+        .comparison-item h5 {
+            color: #00d4ff;
+            margin-bottom: 8px;
+        }
+
+        .pros {
+            color: #4ade80;
+        }
+
+        .cons {
+            color: #f87171;
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px;
+            color: #64748b;
+            margin-top: 30px;
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2rem;
+            }
+
+            .grid {
+                grid-template-columns: 1fr;
+            }
+
+            .section {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>💾 Disk Scheduling & Paging Formulas</h1>
+            <p>Complete Formula Reference Sheet for Operating Systems</p>
+        </header>
+
+        <!-- DISK SCHEDULING SECTION -->
+        <div class="section">
+            <h2 class="section-title">
+                <span class="icon">💾</span>
+                Disk Scheduling Algorithms
+            </h2>
+
+            <!-- Basic Formulas -->
+            <div class="subsection">
+                <h3 class="subsection-title">Basic Disk Scheduling Formulas</h3>
+                
+                <div class="formula-box">
+                    <div class="formula-name">Total Head Movement</div>
+                    <div class="formula">Total Head Movement = Σ |Current Position - Next Position|</div>
+                    <div class="formula-description">
+                        The sum of absolute differences between consecutive disk positions that the read/write head traverses.
+                    </div>
+                    <div class="variables">
+                        <strong>Variables:</strong> Current Position = Current cylinder position, Next Position = Next cylinder to be accessed
+                    </div>
+                </div>
+
+                <div class="formula-box">
+                    <div class="formula-name">Average Seek Time</div>
+                    <div class="formula">Average Seek Time = Total Head Movement / Number of Requests</div>
+                    <div class="formula-description">
+                        The average time taken for the disk arm to move to the specified track for all requests.
+                    </div>
+                    <div class="example">
+                        <div class="example-title">📌 Example:</div>
+                        If Total Head Movement = 500 cylinders and Number of Requests = 10<br>
+                        Average Seek Time = 500 / 10 = 50 cylinders
+                    </div>
+                </div>
+
+                <div class="formula-box">
+                    <div class="formula-name">Total Seek Time</div>
+                    <div class="formula">Total Seek Time = Total Head Movement × Time per Cylinder</div>
+                    <div class="formula-description">
+                        Converts the head movement distance into actual time units based on the disk's seek time characteristics.
+                    </div>
+                </div>
+
+                <div class="formula-box">
+                    <div class="formula-name">Disk Service Time</div>
+                    <div class="formula">Service Time = Seek Time + Rotational Latency + Transfer Time</div>
+                    <div class="variables">
+                        <strong>Where:</strong><br>
+                        • Seek Time = Time to move arm to correct cylinder<br>
+                        • Rotational Latency = Time for sector to rotate under head (~ half rotation)<br>
+                        • Transfer Time = Time to read/write data
+                    </div>
+                </div>
+            </div>
+
+            <!-- FCFS -->
+            <div class="subsection">
+                <h3 class="subsection-title">FCFS (First Come First Serve)</h3>
+                <div class="grid">
+                    <div class="algorithm-card">
+                        <h4>Algorithm Steps</h4>
+                        <div class="steps">
+                            <div class="step">Requests are serviced in the order they arrive in the queue</div>
+                            <div class="step">No reordering or optimization of requests</div>
+                            <div class="step">Simple but may cause long seek times</div>
+                            <div class="step">Calculate total head movement by summing distances between consecutive requests</div>
+                        </div>
+                    </div>
+                    <div class="algorithm-card">
+                        <h4>Formula</h4>
+                        <div class="formula">Head Movement = |Head - R₁| + |R₁ - R₂| + |R₂ - R₃| + ... + |Rₙ₋₁ - Rₙ|</div>
+                        <div class="variables">
+                            <strong>Where:</strong> R₁, R₂, ..., Rₙ are requests in arrival order, Head is initial position
+                        </div>
+                        <div class="note">
+                            <div class="note-title">⚠️ Note:</div>
+                            FCFS is fair but not optimal. Can cause excessive head movement (thrashing) if requests are scattered.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SSTF -->
+            <div class="subsection">
+                <h3 class="subsection-title">SSTF (Shortest Seek Time First)</h3>
+                <div class="grid">
+                    <div class="algorithm-card">
+                        <h4>Algorithm Steps</h4>
+                        <div class="steps">
+                            <div class="step">Select the request with minimum seek time from current position</div>
+                            <div class="step">Calculate distance to all pending requests</div>
+                            <div class="step">Service the closest request first</div>
+                            <div class="step">Repeat until all requests are serviced</div>
+                        </div>
+                    </div>
+                    <div class="algorithm-card">
+                        <h4>Selection Formula</h4>
+                        <div class="formula">Next Request = argmin(|Current Position - Rᵢ|)</div>
+                        <div class="formula-description">
+                            Select request Rᵢ that minimizes the absolute difference from current head position.
+                        </div>
+                        <div class="note">
+                            <div class="note-title">⚠️ Note:</div>
+                            May cause starvation for distant requests. Better throughput than FCFS but less fair.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SCAN -->
+            <div class="subsection">
+                <h3 class="subsection-title">SCAN (Elevator Algorithm)</h3>
+                <div class="grid">
+                    <div class="algorithm-card">
+                        <h4>Algorithm Steps</h4>
+                        <div class="steps">
+                            <div class="step">Head moves in one direction servicing all requests</div>
+                            <div class="step">When end is reached, direction reverses</div>
+                            <div class="step">Continue servicing requests in reverse direction</div>
+                            <div class="step">Like an elevator - goes to top, then comes down</div>
+                        </div>
+                    </div>
+                    <div class="algorithm-card">
+                        <h4>Formula (Moving Towards End)</h4>
+                        <div class="formula">If Head → End: Movement = (End - Head) + (End - Min_Request)</div>
+                        <div class="formula">If Head → Start: Movement = (Head - Start) + (Max_Request - Start)</div>
+                        <div class="variables">
+                            <strong>Where:</strong><br>
+                            • End = Last cylinder (e.g., 199 or 4999)<br>
+                            • Start = First cylinder (usually 0)<br>
+                            • Min_Request = Smallest pending request<br>
+                            • Max_Request = Largest pending request
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- C-SCAN -->
+            <div class="subsection">
+                <h3 class="subsection-title">C-SCAN (Circular SCAN)</h3>
+                <div class="grid">
+                    <div class="algorithm-card">
+                        <h4>Algorithm Steps</h4>
+                        <div class="steps">
+                            <div class="step">Head moves in one direction only (e.g., towards end)</div>
+                            <div class="step">Services all requests on the way</div>
+                            <div class="step">When end is reached, jump to start (circular)</div>
+                            <div class="step">Continue in same direction from start</div>
+                        </div>
+                    </div>
+                    <div class="algorithm-card">
+                        <h4>Formula</h4>
+                        <div class="formula">Movement = (End - Head) + End + Max_Request</div>
+                        <div class="formula">Or = Total Cylinders - 1 + (End - Head) + Max_Request</div>
+                        <div class="formula-description">
+                            Accounts for the jump from end to start as part of total movement.
+                        </div>
+                        <div class="note">
+                            <div class="note-title">💡 Key Point:</div>
+                            More uniform wait time than SCAN as requests at beginning don't have to wait for return trip.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- LOOK and C-LOOK -->
+            <div class="subsection">
+                <h3 class="subsection-title">LOOK & C-LOOK</h3>
+                <div class="grid">
+                    <div class="algorithm-card">
+                        <h4>LOOK Algorithm</h4>
+                        <div class="formula">Movement = (Max_Request - Head) + (Max_Request - Min_Request)</div>
+                        <div class="formula-description">
+                            Similar to SCAN but doesn't go to the end. Reverses direction at the last request in current direction.
+                        </div>
+                        <div class="steps">
+                            <div class="step">Go only as far as the last request</div>
+                            <div class="step">Reverse direction at extreme request</div>
+                            <div class="step">No need to reach disk boundaries</div>
+                        </div>
+                    </div>
+                    <div class="algorithm-card">
+                        <h4>C-LOOK Algorithm</h4>
+                        <div class="formula">Movement = (Max_Request - Head) + (Max_Request - Min_Request) + (Min_Request - Head)</div>
+                        <div class="formula-description">
+                            Combines C-SCAN and LOOK. Moves in one direction, jumps from last request to first, continues.
+                        </div>
+                        <div class="steps">
+                            <div class="step">Like C-SCAN but stops at extreme requests</div>
+                            <div class="step">Jumps from max to min request</div>
+                            <div class="step">More efficient than C-SCAN</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Comparison Table -->
+            <div class="subsection">
+                <h3 class="subsection-title">Algorithm Comparison</h3>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Algorithm</th>
+                                <th>Throughput</th>
+                                <th>Avg. Seek Time</th>
+                                <th>Starvation</th>
+                                <th>Variance</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>FCFS</td>
+                                <td>Low</td>
+                                <td>High</td>
+                                <td>No</td>
+                                <td>High</td>
+                            </tr>
+                            <tr>
+                                <td>SSTF</td>
+                                <td>High</td>
+                                <td>Low</td>
+                                <td>Yes</td>
+                                <td>High</td>
+                            </tr>
+                            <tr>
+                                <td>SCAN</td>
+                                <td>Medium</td>
+                                <td>Medium</td>
+                                <td>No</td>
+                                <td>Medium</td>
+                            </tr>
+                            <tr>
+                                <td>C-SCAN</td>
+                                <td>Medium</td>
+                                <td>Medium</td>
+                                <td>No</td>
+                                <td>Low</td>
+                            </tr>
+                            <tr>
+                                <td>LOOK</td>
+                                <td>Medium-High</td>
+                                <td>Medium-Low</td>
+                                <td>No</td>
+                                <td>Medium</td>
+                            </tr>
+                            <tr>
+                                <td>C-LOOK</td>
+                                <td>High</td>
+                                <td>Low</td>
+                                <td>No</td>
+                                <td>Low</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- PAGING SECTION -->
+        <div class="section">
+            <h2 class="section-title">
+                <span class="icon">📄</span>
+                Paging Formulas
+            </h2>
+
+            <!-- Basic Paging -->
+            <div class="subsection">
+                <h3 class="subsection-title">Basic Paging Calculations</h3>
+                
+                <div class="formula-box">
+                    <div class="formula-name">Number of Pages</div>
+                    <div class="formula">Number of Pages = Logical Address Space / Page Size</div>
+                    <div class="formula">Number of Pages = 2^(Logical Address Bits - Page Offset Bits)</div>
+                    <div class="example">
+                        <div class="example-title">📌 Example:</div>
+                        Logical Address Space = 64 KB, Page Size = 4 KB<br>
+                        Number of Pages = 64 KB / 4 KB = 16 pages
+                    </div>
+                </div>
+
+                <div class="formula-box">
+                    <div class="formula-name">Number of Frames</div>
+                    <div class="formula">Number of Frames = Physical Address Space / Frame Size</div>
+                    <div class="formula">Number of Frames = 2^(Physical Address Bits - Frame Offset Bits)</div>
+                    <div class="variables">
+                        <strong>Note:</strong> Frame Size = Page Size (pages and frames are same size)
+                    </div>
+                </div>
+
+                <div class="formula-box">
+                    <div class="formula-name">Page Table Size</div>
+                    <div class="formula">Page Table Size = Number of Pages × Entry Size</div>
+                    <div class="formula">If multi-level: Level-1 Size + Level-2 Size + ...</div>
+                    <div class="example">
+                        <div class="example-title">📌 Example:</div>
+                        16 pages, Entry Size = 4 bytes<br>
+                        Page Table Size = 16 × 4 = 64 bytes
+                    </div>
+                </div>
+            </div>
+
+            <!-- Address Translation -->
+            <div class="subsection">
+                <h3 class="subsection-title">Address Translation</h3>
+                
+                <div class="formula-box">
+                    <div class="formula-name">Logical Address Breakdown</div>
+                    <div class="formula">Page Number (p) = ⌊Logical Address / Page Size⌋</div>
+                    <div class="formula">Page Offset (d) = Logical Address mod Page Size</div>
+                    <div class="formula">Or in binary: Page Number | Page Offset</div>
+                    <div class="variables">
+                        <strong>Where:</strong><br>
+                        • Page Number bits = log₂(Number of Pages)<br>
+                        • Page Offset bits = log₂(Page Size)
+                    </div>
+                </div>
+
+                <div class="formula-box">
+                    <div class="formula-name">Physical Address Calculation</div>
+                    <div class="formula">Physical Address = Frame Number × Page Size + Offset</div>
+                    <div class="formula">Or: Physical Address = (Frame Number << Offset Bits) | Offset</div>
+                    <div class="example">
+                        <div class="example-title">📌 Example:</div>
+                        Frame Number = 5, Page Size = 4 KB, Offset = 100<br>
+                        Physical Address = 5 × 4096 + 100 = 20580
+                    </div>
+                </div>
+
+                <div class="formula-box">
+                    <div class="formula-name">Address Translation Formula</div>
+                    <div class="formula">PA = [PageTable[p] × PageSize] + d</div>
+                    <div class="variables">
+                        <strong>Where:</strong><br>
+                        • PA = Physical Address<br>
+                        • p = Page Number from logical address<br>
+                        • PageTable[p] = Frame Number at page table entry p<br>
+                        • d = Page Offset
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bit Calculations -->
+            <div class="subsection">
+                <h3 class="subsection-title">Bit Calculations</h3>
+                
+                <div class="grid">
+                    <div class="algorithm-card">
+                        <h4>Address Structure</h4>
+                        <div class="formula">Logical Address = Page Number Bits + Offset Bits</div>
+                        <div class="formula">Physical Address = Frame Number Bits + Offset Bits</div>
+                        <div class="variables">
+                            <strong>Key Point:</strong> Offset bits are the same for both logical and physical addresses because page size equals frame size.
+                        </div>
+                    </div>
+                    <div class="algorithm-card">
+                        <h4>Number of Bits</h4>
+                        <div class="formula">Page Number Bits = ⌈log₂(Number of Pages)⌉</div>
+                        <div class="formula">Frame Number Bits = ⌈log₂(Number of Frames)⌉</div>
+                        <div class="formula">Offset Bits = log₂(Page Size)</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Page Fault -->
+            <div class="subsection">
+                <h3 class="subsection-title">Page Fault & Memory Access</h3>
+                
+                <div class="formula-box">
+                    <div class="formula-name">Effective Access Time (EAT)</div>
+                    <div class="formula">EAT = (1 - p) × Memory Access Time + p × Page Fault Time</div>
+                    <div class="formula">EAT = (1 - p) × ma + p × (Page Fault Overhead + Swap Page + Restart)</div>
+                    <div class="variables">
+                        <strong>Where:</strong><br>
+                        • p = Page Fault Rate (0 ≤ p ≤ 1)<br>
+                        • ma = Memory Access Time (nanoseconds)<br>
+                        • Page Fault Time = Time to handle page fault (milliseconds)
+                    </div>
+                    <div class="example">
+                        <div class="example-title">📌 Example:</div>
+                        p = 0.001, ma = 100 ns, Page Fault Time = 8 ms<br>
+                        EAT = (1 - 0.001) × 100 + 0.001 × 8,000,000<br>
+                        EAT = 99.9 + 8000 = 8099.9 ns
+                    </div>
+                </div>
+
+                <div class="formula-box">
+                    <div class="formula-name">Page Fault Time Components</div>
+                    <div class="formula">Page Fault Time = Service Page Fault + Read Page + Restart Process</div>
+                    <div class="variables">
+                        <strong>Components:</strong><br>
+                        • Service Page Fault: OS overhead to handle the trap<br>
+                        • Read Page: Disk I/O to read the page (major component)<br>
+                        • Restart Process: Context switch back to process
+                    </div>
+                </div>
+
+                <div class="formula-box">
+                    <div class="formula-name">Page Fault Rate Calculation</div>
+                    <div class="formula">Maximum p such that EAT ≤ Acceptable Time</div>
+                    <div class="formula">p_max = (EAT_max - ma) / (Page Fault Time - ma)</div>
+                    <div class="example">
+                        <div class="example-title">📌 Example:</div>
+                        If acceptable EAT = 200 ns, ma = 100 ns, Page Fault Time = 10 ms<br>
+                        p_max = (200 - 100) / (10,000,000 - 100) ≈ 0.00001
+                    </div>
+                </div>
+            </div>
+
+            <!-- TLB -->
+            <div class="subsection">
+                <h3 class="subsection-title">TLB (Translation Lookaside Buffer)</h3>
+                
+                <div class="formula-box">
+                    <div class="formula-name">EAT with TLB</div>
+                    <div class="formula">EAT = TLB Hit Ratio × (TLB Access + Memory Access) + (1 - TLB Hit Ratio) × (TLB Access + Page Table Access + Memory Access)</div>
+                    <div class="formula">Simplified: EAT = TLB Access + Hit Ratio × ma + (1 - Hit Ratio) × 2ma</div>
+                    <div class="variables">
+                        <strong>Assumptions:</strong><br>
+                        • TLB Access time is typically included in memory access<br>
+                        • Page table lookup requires one memory access<br>
+                        • Final data access requires one memory access
+                    </div>
+                </div>
+
+                <div class="formula-box">
+                    <div class="formula-name">Complete EAT Formula with TLB and Page Fault</div>
+                    <div class="formula">EAT = TLB_access + (1-p)[hit×ma + (1-hit)×2ma] + p×PageFaultTime</div>
+                    <div class="variables">
+                        <strong>Where:</strong><br>
+                        • TLB_access = Time to search TLB<br>
+                        • hit = TLB hit ratio<br>
+                        • p = Page fault rate<br>
+                        • ma = Memory access time
+                    </div>
+                </div>
+            </div>
+
+            <!-- Page Replacement -->
+            <div class="subsection">
+                <h3 class="subsection-title">Page Replacement Algorithms</h3>
+                
+                <div class="grid">
+                    <div class="algorithm-card">
+                        <h4>FIFO (First In First Out)</h4>
+                        <div class="formula">Replace the page that has been in memory longest</div>
+                        <div class="steps">
+                            <div class="step">Maintain a queue of pages</div>
+                            <div class="step">On page fault, remove first page in queue</div>
+                            <div class="step">Add new page at end of queue</div>
+                        </div>
+                        <div class="note">
+                            <div class="note-title">⚠️ Belady's Anomaly:</div>
+                            More frames can cause MORE page faults!
+                        </div>
+                    </div>
+                    <div class="algorithm-card">
+                        <h4>Optimal (OPT/MIN)</h4>
+                        <div class="formula">Replace page that will be used farthest in future</div>
+                        <div class="steps">
+                            <div class="step">Look ahead in reference string</div>
+                            <div class="step">Find page not needed for longest time</div>
+                            <div class="step">Theoretical best - not implementable</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid" style="margin-top: 15px;">
+                    <div class="algorithm-card">
+                        <h4>LRU (Least Recently Used)</h4>
+                        <div class="formula">Replace page that has not been used for longest time</div>
+                        <div class="steps">
+                            <div class="step">Track when each page was last accessed</div>
+                            <div class="step">On fault, remove least recently used page</div>
+                            <div class="step">Approximation of optimal algorithm</div>
+                        </div>
+                    </div>
+                    <div class="algorithm-card">
+                        <h4>Page Fault Rate</h4>
+                        <div class="formula">Page Fault Rate = Number of Page Faults / Total References</div>
+                        <div class="example">
+                            <div class="example-title">📌 Example:</div>
+                            Reference string: 7, 0, 1, 2, 0, 3, 0, 4, 2, 3<br>
+                            3 frames: Count page faults<br>
+                            Lower rate = Better performance
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Thrashing -->
+            <div class="subsection">
+                <h3 class="subsection-title">Thrashing</h3>
+                
+                <div class="formula-box">
+                    <div class="formula-name">CPU Utilization & Degree of Multiprogramming</div>
+                    <div class="formula">If CPU utilization < Threshold, reduce degree of multiprogramming</div>
+                    <div class="formula-description">
+                        Thrashing occurs when a process spends more time paging than executing. The system degrades rapidly as processes compete for frames.
+                    </div>
+                </div>
+
+                <div class="formula-box">
+                    <div class="formula-name">Working Set Model</div>
+                    <div class="formula">Working Set = {pages accessed in last Δ references}</div>
+                    <div class="formula">Total Frames Needed ≥ Σ Working Set Size for all processes</div>
+                    <div class="variables">
+                        <strong>Where:</strong> Δ = Working set window parameter<br>
+                        If total frames needed > available frames → Thrashing occurs
+                    </div>
+                </div>
+
+                <div class="formula-box">
+                    <div class="formula-name">Page Fault Frequency (PFF)</div>
+                    <div class="formula">If PFF > Upper Threshold → Allocate more frames</div>
+                    <div class="formula">If PFF < Lower Threshold → Reduce frames allocated</div>
+                    <div class="formula-description">
+                        PFF is a local replacement algorithm that adjusts frame allocation based on page fault frequency.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Memory Management -->
+            <div class="subsection">
+                <h3 class="subsection-title">Memory Management Calculations</h3>
+                
+                <div class="formula-box">
+                    <div class="formula-name">Internal Fragmentation</div>
+                    <div class="formula">Internal Fragmentation = Page Size - (Actual Data Size mod Page Size)</div>
+                    <div class="formula">Average Internal Fragmentation = Page Size / 2</div>
+                    <div class="formula-description">
+                        Wasted space within the last partially filled page of a process.
+                    </div>
+                </div>
+
+                <div class="formula-box">
+                    <div class="formula-name">External Fragmentation (Not in Paging)</div>
+                    <div class="formula">External Fragmentation = 0 (in pure paging)</div>
+                    <div class="formula-description">
+                        Paging eliminates external fragmentation because pages are fixed size. However, internal fragmentation still exists.
+                    </div>
+                </div>
+
+                <div class="formula-box">
+                    <div class="formula-name">Multi-level Page Table</div>
+                    <div class="formula">Outer Page Table Size = 2^(Outer Index Bits) × Entry Size</div>
+                    <div class="formula">Inner Page Tables = Number of valid outer entries</div>
+                    <div class="formula">Total Space = Outer Page Table + Active Inner Tables</div>
+                    <div class="example">
+                        <div class="example-title">📌 Example:</div>
+                        32-bit address, 4KB pages, 4 bytes per entry<br>
+                        • Offset = 12 bits<br>
+                        • 2-level: Outer = 10 bits, Inner = 10 bits<br>
+                        • Each page table fits in one page
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Reference Table -->
+            <div class="subsection">
+                <h3 class="subsection-title">Quick Reference - Powers of 2</h3>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Power</th>
+                                <th>Value</th>
+                                <th>Common Name</th>
+                                <th>Address Space</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>2¹⁰</td><td>1,024</td><td>1K</td><td>1 KB</td></tr>
+                            <tr><td>2¹²</td><td>4,096</td><td>4K</td><td>4 KB (common page size)</td></tr>
+                            <tr><td>2¹⁶</td><td>65,536</td><td>64K</td><td>64 KB</td></tr>
+                            <tr><td>2²⁰</td><td>1,048,576</td><td>1M</td><td>1 MB</td></tr>
+                            <tr><td>2²⁴</td><td>16,777,216</td><td>16M</td><td>16 MB</td></tr>
+                            <tr><td>2³²</td><td>4,294,967,296</td><td>4G</td><td>4 GB</td></tr>
+                            <tr><td>2⁴⁰</td><td>~1.1 trillion</td><td>1T</td><td>1 TB</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Summary Box -->
+        <div class="section" style="background: linear-gradient(135deg, rgba(124, 58, 237, 0.3), rgba(0, 212, 255, 0.2));">
+            <h2 class="section-title">
+                <span class="icon">📊</span>
+                Key Formulas Summary
+            </h2>
+            <div class="comparison-grid">
+                <div class="comparison-item">
+                    <h5>Disk Scheduling</h5>
+                    <p><strong>Total Movement:</strong> Σ|position differences|</p>
+                    <p><strong>Seek Time:</strong> Movement × Time/cylinder</p>
+                    <p><strong>Average:</strong> Total / #requests</p>
+                </div>
+                <div class="comparison-item">
+                    <h5>Address Translation</h5>
+                    <p><strong>Page#:</strong> Address / PageSize</p>
+                    <p><strong>Offset:</strong> Address mod PageSize</p>
+                    <p><strong>Physical:</strong> Frame × PageSize + Offset</p>
+                </div>
+                <div class="comparison-item">
+                    <h5>Memory Access</h5>
+                    <p><strong>EAT:</strong> (1-p)ma + p(PageFaultTime)</p>
+                    <p><strong>With TLB:</strong> Hit×t + Miss×(t+pt)</p>
+                    <p><strong>Page Fault Rate:</strong> Faults/Refs</p>
+                </div>
+                <div class="comparison-item">
+                    <h5>Page Table</h5>
+                    <p><strong>Size:</strong> Pages × EntrySize</p>
+                    <p><strong>#Pages:</strong> LAS / PageSize</p>
+                    <p><strong>#Frames:</strong> PAS / FrameSize</p>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>📚 Operating Systems Formula Reference Sheet</p>
+            <p>Disk Scheduling & Paging Mathematics</p>
+        </footer>
+    </div>
+</body>
+</html>

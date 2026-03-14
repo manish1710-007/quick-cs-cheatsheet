@@ -1,0 +1,1874 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Theory of Computation Formula Sheet</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a0a2e 0%, #2d1b4e 50%, #1e1133 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #fff;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            padding: 30px 0;
+            margin-bottom: 30px;
+        }
+
+        header h1 {
+            font-size: 2.8rem;
+            background: linear-gradient(90deg, #e879f9, #c084fc, #a78bfa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 30px rgba(232, 121, 249, 0.3);
+            margin-bottom: 10px;
+        }
+
+        header p {
+            color: #c4b5fd;
+            font-size: 1.1rem;
+        }
+
+        .section {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            color: #e879f9;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid rgba(232, 121, 249, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .section-title .icon {
+            font-size: 2rem;
+        }
+
+        .subsection {
+            margin-bottom: 25px;
+        }
+
+        .subsection-title {
+            font-size: 1.3rem;
+            color: #c084fc;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .subsection-title::before {
+            content: "◆";
+            font-size: 0.8rem;
+            color: #a78bfa;
+        }
+
+        .formula-box {
+            background: linear-gradient(135deg, rgba(232, 121, 249, 0.15), rgba(192, 132, 252, 0.1));
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-left: 4px solid #e879f9;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .formula-box:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 20px rgba(232, 121, 249, 0.3);
+        }
+
+        .formula-name {
+            font-size: 1.1rem;
+            color: #c084fc;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .formula {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px 20px;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 1.05rem;
+            color: #e9d5ff;
+            margin: 10px 0;
+            overflow-x: auto;
+        }
+
+        .formula-description {
+            color: #c4b5fd;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-top: 10px;
+        }
+
+        .variables {
+            background: rgba(192, 132, 252, 0.1);
+            padding: 12px 15px;
+            border-radius: 8px;
+            margin-top: 10px;
+            font-size: 0.9rem;
+        }
+
+        .variables strong {
+            color: #c084fc;
+        }
+
+        .example {
+            background: rgba(167, 139, 250, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 10px;
+            border: 1px dashed rgba(167, 139, 250, 0.5);
+        }
+
+        .example-title {
+            color: #a78bfa;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 20px;
+        }
+
+        .algorithm-card {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 15px;
+            padding: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .algorithm-card h4 {
+            color: #e879f9;
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(232, 121, 249, 0.3);
+        }
+
+        .steps {
+            counter-reset: step;
+        }
+
+        .step {
+            position: relative;
+            padding-left: 35px;
+            margin-bottom: 10px;
+            color: #e2e8f0;
+            line-height: 1.6;
+        }
+
+        .step::before {
+            counter-increment: step;
+            content: counter(step);
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 25px;
+            height: 25px;
+            background: linear-gradient(135deg, #e879f9, #c084fc);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .note {
+            background: rgba(251, 191, 36, 0.1);
+            border-left: 4px solid #fbbf24;
+            padding: 15px;
+            border-radius: 0 10px 10px 0;
+            margin-top: 15px;
+        }
+
+        .note-title {
+            color: #fbbf24;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .warning {
+            background: rgba(239, 68, 68, 0.1);
+            border-left: 4px solid #ef4444;
+            padding: 15px;
+            border-radius: 0 10px 10px 0;
+            margin-top: 15px;
+        }
+
+        .warning-title {
+            color: #ef4444;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .important {
+            background: rgba(34, 197, 94, 0.1);
+            border-left: 4px solid #22c55e;
+            padding: 15px;
+            border-radius: 0 10px 10px 0;
+            margin-top: 15px;
+        }
+
+        .important-title {
+            color: #22c55e;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            margin: 15px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        th {
+            background: linear-gradient(135deg, #e879f9, #c084fc);
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            color: #fff;
+        }
+
+        td {
+            padding: 12px 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            color: #e2e8f0;
+        }
+
+        tr:hover {
+            background: rgba(232, 121, 249, 0.1);
+        }
+
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .comparison-item {
+            background: rgba(192, 132, 252, 0.05);
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid rgba(192, 132, 252, 0.2);
+        }
+
+        .comparison-item h5 {
+            color: #c084fc;
+            margin-bottom: 8px;
+        }
+
+        .transition-table {
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+        }
+
+        .transition-table td, .transition-table th {
+            text-align: center;
+            padding: 8px 12px;
+        }
+
+        .state-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #e879f9, #c084fc);
+            padding: 3px 12px;
+            border-radius: 15px;
+            font-weight: 600;
+            margin: 2px;
+        }
+
+        .final-state {
+            border: 2px solid #22c55e;
+            padding: 3px 10px;
+            border-radius: 15px;
+        }
+
+        .start-state {
+            border: 2px solid #fbbf24;
+            padding: 3px 10px;
+            border-radius: 15px;
+        }
+
+        .diagram-box {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 15px 0;
+            text-align: center;
+        }
+
+        .diagram-box pre {
+            font-family: 'Courier New', monospace;
+            color: #e9d5ff;
+            font-size: 0.95rem;
+            text-align: left;
+        }
+
+        .chomsky-hierarchy {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 20px 0;
+        }
+
+        .chomsky-level {
+            background: linear-gradient(135deg, rgba(232, 121, 249, 0.2), rgba(192, 132, 252, 0.15));
+            border: 2px solid #e879f9;
+            padding: 15px 30px;
+            border-radius: 10px;
+            margin: 5px;
+            text-align: center;
+        }
+
+        .chomsky-level.re {
+            width: 95%;
+            border-color: #ef4444;
+            background: rgba(239, 68, 68, 0.1);
+        }
+
+        .chomsky-level.csl {
+            width: 75%;
+            border-color: #f59e0b;
+            background: rgba(245, 158, 11, 0.1);
+        }
+
+        .chomsky-level.cfl {
+            width: 55%;
+            border-color: #22c55e;
+            background: rgba(34, 197, 94, 0.1);
+        }
+
+        .chomsky-level.rl {
+            width: 35%;
+            border-color: #3b82f6;
+            background: rgba(59, 130, 246, 0.1);
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px;
+            color: #64748b;
+            margin-top: 30px;
+        }
+
+        .formula-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 10px 0;
+        }
+
+        .formula-item {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            color: #e9d5ff;
+        }
+
+        .closure-table {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+            margin: 15px 0;
+        }
+
+        .closure-item {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 12px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .closure-yes {
+            color: #22c55e;
+            font-weight: 600;
+        }
+
+        .closure-no {
+            color: #ef4444;
+            font-weight: 600;
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2rem;
+            }
+
+            .grid {
+                grid-template-columns: 1fr;
+            }
+
+            .section {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🧮 Theory of Computation Formula Sheet</h1>
+            <p>Complete Reference for Automata, Languages, Computability & Complexity</p>
+        </header>
+
+        <!-- FINITE AUTOMATA SECTION -->
+        <div class="section">
+            <h2 class="section-title">
+                <span class="icon">🤖</span>
+                Finite Automata
+            </h2>
+
+            <div class="subsection">
+                <h3 class="subsection-title">DFA (Deterministic Finite Automaton)</h3>
+                <div class="formula-box">
+                    <div class="formula-name">Formal Definition</div>
+                    <div class="formula">DFA = (Q, Σ, δ, q₀, F)</div>
+                    <div class="variables">
+                        <strong>Where:</strong><br>
+                        • Q = Finite set of states<br>
+                        • Σ = Input alphabet (finite set of symbols)<br>
+                        • δ = Transition function: Q × Σ → Q<br>
+                        • q₀ = Initial/start state (q₀ ∈ Q)<br>
+                        • F = Set of final/accepting states (F ⊆ Q)
+                    </div>
+                </div>
+
+                <div class="grid">
+                    <div class="algorithm-card">
+                        <h4>Extended Transition Function (δ̂)</h4>
+                        <div class="formula">δ̂(q, ε) = q</div>
+                        <div class="formula">δ̂(q, wa) = δ(δ̂(q, w), a)</div>
+                        <div class="formula-description">
+                            Extends δ to process entire strings. δ̂(q₀, w) ∈ F means string w is accepted.
+                        </div>
+                    </div>
+                    <div class="algorithm-card">
+                        <h4>Language Accepted by DFA</h4>
+                        <div class="formula">L(M) = {w ∈ Σ* | δ̂(q₀, w) ∈ F}</div>
+                        <div class="formula-description">
+                            The language accepted by DFA M is the set of all strings that lead from start state to a final state.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="example" style="margin-top: 15px;">
+                    <div class="example-title">📌 Example: DFA for strings ending with 'ab'</div>
+                    <div class="formula">Q = {q₀, q₁, q₂}, Σ = {a, b}, F = {q₂}</div>
+                    <table class="transition-table">
+                        <tr><th>State</th><th>a</th><th>b</th></tr>
+                        <tr><td>→q₀</td><td>q₁</td><td>q₀</td></tr>
+                        <tr><td>q₁</td><td>q₁</td><td>q₂</td></tr>
+                        <tr><td>*q₂</td><td>q₁</td><td>q₀</td></tr>
+                    </table>
+                    <div class="formula-description">→ indicates start state, * indicates final state</div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">NFA (Nondeterministic Finite Automaton)</h3>
+                <div class="formula-box">
+                    <div class="formula-name">Formal Definition</div>
+                    <div class="formula">NFA = (Q, Σ, δ, q₀, F)</div>
+                    <div class="variables">
+                        <strong>Key Difference from DFA:</strong><br>
+                        • δ = Transition function: Q × (Σ ∪ {ε}) → P(Q)<br>
+                        • P(Q) = Power set of Q (set of all subsets)<br>
+                        • Can have ε-transitions (move without reading input)<br>
+                        • Multiple transitions on same symbol allowed
+                    </div>
+                </div>
+
+                <div class="grid">
+                    <div class="algorithm-card">
+                        <h4>Extended Transition Function</h4>
+                        <div class="formula">δ̂(q, ε) = ECLOSE(q)</div>
+                        <div class="formula">δ̂(q, wa) = ∪ ECLOSE(δ(r, a)) for all r ∈ δ̂(q, w)</div>
+                        <div class="formula-description">
+                            ECLOSE(q) = all states reachable from q using only ε-transitions
+                        </div>
+                    </div>
+                    <div class="algorithm-card">
+                        <h4>Language Accepted by NFA</h4>
+                        <div class="formula">L(M) = {w ∈ Σ* | δ̂(q₀, w) ∩ F ≠ ∅}</div>
+                        <div class="formula-description">
+                            String accepted if ANY path through NFA ends in a final state.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="important" style="margin-top: 15px;">
+                    <div class="important-title">✓ Key Theorem:</div>
+                    DFA and NFA are equivalent in expressive power.<br>
+                    For every NFA, there exists an equivalent DFA (and vice versa).<br>
+                    <strong>L(NFA) = L(DFA)</strong> - They recognize the same class of languages (Regular Languages).
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">NFA to DFA Conversion (Subset Construction)</h3>
+                <div class="algorithm-card">
+                    <h4>Algorithm</h4>
+                    <div class="steps">
+                        <div class="step">Start state of DFA = ECLOSE(q₀) of NFA</div>
+                        <div class="step">For each DFA state S and input symbol a:</div>
+                        <div class="step" style="padding-left: 50px;">New state = ∪ δ̂(q, a) for all q ∈ S</div>
+                        <div class="step">DFA final states = All states containing any NFA final state</div>
+                        <div class="step">Remove unreachable states</div>
+                    </div>
+                    <div class="formula">Maximum DFA states = 2^|Q_NFA| (worst case)</div>
+                    <div class="example">
+                        <div class="example-title">📌 Example:</div>
+                        NFA with states {0, 1, 2}<br>
+                        DFA states are subsets: {∅, {0}, {1}, {2}, {0,1}, {0,2}, {1,2}, {0,1,2}}<br>
+                        Maximum 2³ = 8 states (many may be unreachable)
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">DFA Minimization</h3>
+                <div class="algorithm-card">
+                    <h4>Partition Refinement Algorithm</h4>
+                    <div class="steps">
+                        <div class="step">Initial partition: P₀ = {F, Q-F} (final and non-final states)</div>
+                        <div class="step">Refine each group: Split if states go to different groups on same input</div>
+                        <div class="step">Repeat until no further splitting possible</div>
+                        <div class="step">Each final group becomes one state in minimized DFA</div>
+                    </div>
+                    <div class="note">
+                        <div class="note-title">💡 Properties:</div>
+                        • Minimum DFA is unique (up to renaming of states)<br>
+                        • Time complexity: O(n² × |Σ|) where n = number of states<br>
+                        • States unreachable from start state should be removed first
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Myhill-Nerode Theorem</h3>
+                <div class="formula-box">
+                    <div class="formula-name">Indistinguishability Relation</div>
+                    <div class="formula">x ≡_L y iff ∀z ∈ Σ*: xz ∈ L ⟺ yz ∈ L</div>
+                    <div class="formula-description">
+                        Two strings x and y are indistinguishable with respect to L if for every continuation z, either both xz and yz are in L, or both are not in L.
+                    </div>
+                </div>
+
+                <div class="grid" style="margin-top: 15px;">
+                    <div class="formula-box">
+                        <div class="formula-name">Theorem Statement</div>
+                        <div class="formula-description">
+                            L is regular ⟺ ≡_L has finite index (finite number of equivalence classes)
+                        </div>
+                        <div class="variables">
+                            Number of states in minimum DFA = Number of equivalence classes
+                        </div>
+                    </div>
+                    <div class="formula-box">
+                        <div class="formula-name">Proving Non-Regularity</div>
+                        <div class="formula-description">
+                            To prove L is NOT regular: Show infinitely many pairwise distinguishable strings exist.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- REGULAR EXPRESSIONS SECTION -->
+        <div class="section">
+            <h2 class="section-title">
+                <span class="icon">📝</span>
+                Regular Expressions
+            </h2>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Regular Expression Operations</h3>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Operation</th>
+                                <th>Notation</th>
+                                <th>Description</th>
+                                <th>Example</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Empty Set</td>
+                                <td>∅</td>
+                                <td>Language with no strings</td>
+                                <td>L(∅) = {}</td>
+                            </tr>
+                            <tr>
+                                <td>Empty String</td>
+                                <td>ε or λ</td>
+                                <td>Language containing only empty string</td>
+                                <td>L(ε) = {ε}</td>
+                            </tr>
+                            <tr>
+                                <td>Symbol</td>
+                                <td>a (where a ∈ Σ)</td>
+                                <td>Single symbol</td>
+                                <td>L(a) = {a}</td>
+                            </tr>
+                            <tr>
+                                <td>Concatenation</td>
+                                <td>RS or R·S</td>
+                                <td>Strings from R followed by strings from S</td>
+                                <td>L(ab) = {ab}</td>
+                            </tr>
+                            <tr>
+                                <td>Union</td>
+                                <td>R + S or R|S or R∪S</td>
+                                <td>Strings from R or S</td>
+                                <td>L(a+b) = {a, b}</td>
+                            </tr>
+                            <tr>
+                                <td>Kleene Star</td>
+                                <td>R*</td>
+                                <td>Zero or more repetitions</td>
+                                <td>L(a*) = {ε, a, aa, aaa, ...}</td>
+                            </tr>
+                            <tr>
+                                <td>Positive Closure</td>
+                                <td>R⁺</td>
+                                <td>One or more repetitions</td>
+                                <td>L(a⁺) = {a, aa, aaa, ...}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Algebraic Laws for Regular Expressions</h3>
+                <div class="grid">
+                    <div class="algorithm-card">
+                        <h4>Identity Laws</h4>
+                        <div class="formula">R + ∅ = R</div>
+                        <div class="formula">R · ε = R</div>
+                        <div class="formula">ε · R = R</div>
+                    </div>
+                    <div class="algorithm-card">
+                        <h4>Annihilator</h4>
+                        <div class="formula">R · ∅ = ∅</div>
+                        <div class="formula">∅ · R = ∅</div>
+                    </div>
+                </div>
+
+                <div class="grid" style="margin-top: 15px;">
+                    <div class="algorithm-card">
+                        <h4>Idempotent Law</h4>
+                        <div class="formula">R + R = R</div>
+                    </div>
+                    <div class="algorithm-card">
+                        <h4>Commutative Law</h4>
+                        <div class="formula">R + S = S + R</div>
+                    </div>
+                </div>
+
+                <div class="grid" style="margin-top: 15px;">
+                    <div class="algorithm-card">
+                        <h4>Associative Laws</h4>
+                        <div class="formula">(R + S) + T = R + (S + T)</div>
+                        <div class="formula">(RS)T = R(ST)</div>
+                    </div>
+                    <div class="algorithm-card">
+                        <h4>Distributive Laws</h4>
+                        <div class="formula">R(S + T) = RS + RT</div>
+                        <div class="formula">(R + S)T = RT + ST</div>
+                    </div>
+                </div>
+
+                <div class="grid" style="margin-top: 15px;">
+                    <div class="algorithm-card">
+                        <h4>Kleene Star Laws</h4>
+                        <div class="formula">ε* = ε</div>
+                        <div class="formula">∅* = ε</div>
+                        <div class="formula">R** = R*</div>
+                        <div class="formula">R* = ε + R⁺</div>
+                        <div class="formula">R⁺ = RR*</div>
+                    </div>
+                    <div class="algorithm-card">
+                        <h4>Arden's Theorem</h4>
+                        <div class="formula">If R = Q + RP, then R = QP*</div>
+                        <div class="formula-description">
+                            Used to find regular expression from a system of equations. Condition: P must not contain ε.
+                        </div>
+                        <div class="example">
+                            <div class="example-title">📌 Example:</div>
+                            If L = aL + b, then L = ba*
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">DFA/NFA to Regular Expression</h3>
+                <div class="algorithm-card">
+                    <h4>State Elimination Method</h4>
+                    <div class="steps">
+                        <div class="step">Add new start state with ε-transition to original start</div>
+                        <div class="step">Add new single final state with ε-transitions from all original final states</div>
+                        <div class="step">Eliminate intermediate states one by one:</div>
+                        <div class="step" style="padding-left: 50px;">For each pair of states i, j with eliminated state k:</div>
+                        <div class="step" style="padding-left: 50px;">New transition from i to j = R_ij + R_ik(R_kk)*R_kj</div>
+                        <div class="step">Result: Single transition from start to final state gives the regular expression</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Common Regular Expression Patterns</h3>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Language</th>
+                                <th>Regular Expression</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>All strings over {a,b}</td><td>(a+b)*</td></tr>
+                            <tr><td>Strings starting with a</td><td>a(a+b)*</td></tr>
+                            <tr><td>Strings ending with b</td><td>(a+b)*b</td></tr>
+                            <tr><td>Strings containing 'ab'</td><td>(a+b)*ab(a+b)*</td></tr>
+                            <tr><td>Strings not containing 'aa'</td><td>(b+ab)* + (b+ab)*a</td></tr>
+                            <tr><td>Even number of a's</td><td>(b*ab*ab*)*</td></tr>
+                            <tr><td>Strings of even length</td><td>((a+b)(a+b))*</td></tr>
+                            <tr><td>Exactly two a's</td><td>b*ab*ab*</td></tr>
+                            <tr><td>At least two a's</td><td>(a+b)*a(a+b)*a(a+b)*</td></tr>
+                            <tr><td>Starts and ends with same symbol</td><td>a(a+b)*a + b(a+b)*b + a + b</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- PROPERTIES OF REGULAR LANGUAGES SECTION -->
+        <div class="section">
+            <h2 class="section-title">
+                <span class="icon">✅</span>
+                Properties of Regular Languages
+            </h2>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Closure Properties</h3>
+                <div class="algorithm-card">
+                    <h4>Operations Closed Under Regular Languages</h4>
+                    <div class="closure-table">
+                        <div class="closure-item"><span class="closure-yes">✓</span> Union</div>
+                        <div class="closure-item"><span class="closure-yes">✓</span> Intersection</div>
+                        <div class="closure-item"><span class="closure-yes">✓</span> Complement</div>
+                        <div class="closure-item"><span class="closure-yes">✓</span> Concatenation</div>
+                        <div class="closure-item"><span class="closure-yes">✓</span> Kleene Star</div>
+                        <div class="closure-item"><span class="closure-yes">✓</span> Reversal</div>
+                        <div class="closure-item"><span class="closure-yes">✓</span> Homomorphism</div>
+                        <div class="closure-item"><span class="closure-yes">✓</span> Inverse Homomorphism</div>
+                        <div class="closure-item"><span class="closure-yes">✓</span> Difference</div>
+                        <div class="closure-item"><span class="closure-yes">✓</span> Substitution</div>
+                    </div>
+                </div>
+
+                <div class="grid" style="margin-top: 15px;">
+                    <div class="algorithm-card">
+                        <h4>Proof Techniques</h4>
+                        <div class="formula-description">
+                            • <strong>Union:</strong> NFA construction (parallel machines)<br>
+                            • <strong>Intersection:</strong> Product construction of DFAs<br>
+                            • <strong>Complement:</strong> Swap final/non-final states in DFA<br>
+                            • <strong>Reversal:</strong> Reverse edges, swap start/final
+                        </div>
+                    </div>
+                    <div class="algorithm-card">
+                        <h4>Product Construction for Intersection</h4>
+                        <div class="formula">DFA₁ = (Q₁, Σ, δ₁, q₁, F₁)</div>
+                        <div class="formula">DFA₂ = (Q₂, Σ, δ₂, q₂, F₂)</div>
+                        <div class="formula">DFA₁∩₂: Q = Q₁ × Q₂</div>
+                        <div class="formula">δ((s₁,s₂), a) = (δ₁(s₁,a), δ₂(s₂,a))</div>
+                        <div class="formula">F = F₁ × F₂</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Pumping Lemma for Regular Languages</h3>
+                <div class="formula-box">
+                    <div class="formula-name">Statement</div>
+                    <div class="formula">If L is regular, ∃p > 0 (pumping length) such that:</div>
+                    <div class="formula">∀w ∈ L where |w| ≥ p:</div>
+                    <div class="formula">w can be divided into xyz where:</div>
+                    <div class="formula" style="padding-left: 20px;">1. |y| > 0</div>
+                    <div class="formula" style="padding-left: 20px;">2. |xy| ≤ p</div>
+                    <div class="formula" style="padding-left: 20px;">3. ∀i ≥ 0: xyⁱz ∈ L</div>
+                </div>
+
+                <div class="algorithm-card" style="margin-top: 15px;">
+                    <h4>Using Pumping Lemma to Prove Non-Regular</h4>
+                    <div class="steps">
+                        <div class="step">Assume L is regular with pumping length p</div>
+                        <div class="step">Choose a string w ∈ L with |w| ≥ p (careful choice!)</div>
+                        <div class="step">For all possible ways to split w = xyz satisfying conditions:</div>
+                        <div class="step" style="padding-left: 50px;">Find an i such that xyⁱz ∉ L</div>
+                        <div class="step">Contradiction → L is not regular</div>
+                    </div>
+                    <div class="example">
+                        <div class="example-title">📌 Example: L = {aⁿbⁿ | n ≥ 0} is NOT regular</div>
+                        Choose w = aᵖbᵖ where p is pumping length<br>
+                        Case 1: y contains only a's → pumping changes number of a's but not b's<br>
+                        Case 2: y contains only b's → similar argument<br>
+                        Case 3: y contains both a's and b's → pumping creates mixed string<br>
+                        All cases lead to contradiction ✓
+                    </div>
+                </div>
+
+                <div class="note" style="margin-top: 15px;">
+                    <div class="note-title">💡 Important:</div>
+                    Pumping Lemma is a necessary condition, not sufficient.<br>
+                    Some non-regular languages satisfy the pumping lemma (e.g., special cases).
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Decision Problems for Regular Languages</h3>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Problem</th>
+                                <th>Question</th>
+                                <th>Decidable?</th>
+                                <th>Algorithm</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Emptiness</td>
+                                <td>L = ∅?</td>
+                                <td class="closure-yes">Yes</td>
+                                <td>Check if any final state reachable from start</td>
+                            </tr>
+                            <tr>
+                                <td>Finiteness</td>
+                                <td>Is L finite?</td>
+                                <td class="closure-yes">Yes</td>
+                                <td>No cycle on path to final state</td>
+                            </tr>
+                            <tr>
+                                <td>Membership</td>
+                                <td>w ∈ L?</td>
+                                <td class="closure-yes">Yes</td>
+                                <td>Run DFA on w, check final state</td>
+                            </tr>
+                            <tr>
+                                <td>Equivalence</td>
+                                <td>L₁ = L₂?</td>
+                                <td class="closure-yes">Yes</td>
+                                <td>(L₁ ∩ L₂') ∪ (L₁' ∩ L₂) = ∅?</td>
+                            </tr>
+                            <tr>
+                                <td>Subset</td>
+                                <td>L₁ ⊆ L₂?</td>
+                                <td class="closure-yes">Yes</td>
+                                <td>L₁ ∩ L₂' = ∅?</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- CONTEXT-FREE GRAMMARS SECTION -->
+        <div class="section">
+            <h2 class="section-title">
+                <span class="icon">📐</span>
+                Context-Free Grammars (CFG)
+            </h2>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Formal Definition</h3>
+                <div class="formula-box">
+                    <div class="formula-name">CFG Definition</div>
+                    <div class="formula">G = (V, T, P, S)</div>
+                    <div class="variables">
+                        <strong>Where:</strong><br>
+                        • V = Set of variables (non-terminals)<br>
+                        • T = Set of terminals (Σ - alphabet)<br>
+                        • P = Set of production rules (V → (V ∪ T)*)<br>
+                        • S = Start variable (S ∈ V)
+                    </div>
+                </div>
+
+                <div class="grid" style="margin-top: 15px;">
+                    <div class="algorithm-card">
+                        <h4>Derivation</h4>
+                        <div class="formula">α ⇒ β (α derives β in one step)</div>
+                        <div class="formula">α ⇒* β (α derives β in zero or more steps)</div>
+                        <div class="formula">α ⇒⁺ β (α derives β in one or more steps)</div>
+                        <div class="formula-description">
+                            Derivation: Replace a variable using a production rule.
+                        </div>
+                    </div>
+                    <div class="algorithm-card">
+                        <h4>Language Generated</h4>
+                        <div class="formula">L(G) = {w ∈ T* | S ⇒* w}</div>
+                        <div class="formula-description">
+                            The language generated by G consists of all strings of terminals that can be derived from the start symbol.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="example" style="margin-top: 15px;">
+                    <div class="example-title">📌 Example: CFG for {aⁿbⁿ | n ≥ 0}</div>
+                    <div class="formula">G = ({S}, {a,b}, P, S)</div>
+                    <div class="formula">P: S → aSb | ε</div>
+                    Derivation of a³b³: S ⇒ aSb ⇒ aaSbb ⇒ aaaSbbb ⇒ aaabbb<br>
+                    This grammar generates strings with equal numbers of a's followed by b's.
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Derivation Trees (Parse Trees)</h3>
+                <div class="grid">
+                    <div class="algorithm-card">
+                        <h4>Properties</h4>
+                        <div class="steps">
+                            <div class="step">Root labeled with start symbol S</div>
+                            <div class="step">Leaves labeled with terminals or ε</div>
+                            <div class="step">Internal nodes labeled with variables</div>
+                            <div class="step">Children of node A spell out right side of production A → α</div>
+                        </div>
+                    </div>
+                    <div class="algorithm-card">
+                        <h4>Leftmost vs Rightmost Derivation</h4>
+                        <div class="formula-description">
+                            • <strong>Leftmost:</strong> Always replace leftmost variable first<br>
+                            • <strong>Rightmost:</strong> Always replace rightmost variable first<br>
+                            • Both give same parse tree for unambiguous grammar
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Ambiguity</h3>
+                <div class="formula-box">
+                    <div class="formula-name">Definition</div>
+                    <div class="formula-description">
+                        A CFG G is <strong>ambiguous</strong> if ∃w ∈ L(G) that has more than one:<br>
+                        • Parse tree, OR<br>
+                        • Leftmost derivation, OR<br>
+                        • Rightmost derivation
+                    </div>
+                </div>
+
+                <div class="example" style="margin-top: 15px;">
+                    <div class="example-title">📌 Example: Ambiguous Grammar for Expressions</div>
+                    <div class="formula">E → E + E | E * E | id</div>
+                    String "id + id * id" has two parse trees:<br>
+                    • (id + id) * id - multiplication first<br>
+                    • id + (id * id) - addition first<br>
+                    <strong>Unambiguous version:</strong><br>
+                    E → E + T | T<br>
+                    T → T * F | F<br>
+                    F → id | (E)
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Chomsky Normal Form (CNF)</h3>
+                <div class="formula-box">
+                    <div class="formula-name">Definition</div>
+                    <div class="formula">CNF Rules: A → BC or A → a</div>
+                    <div class="variables">
+                        • Only productions allowed: A → BC (two variables) or A → a (single terminal)<br>
+                        • Start symbol S can also produce ε: S → ε (if ε ∈ L)<br>
+                        • No unit productions (A → B) or ε-productions (A → ε, except S → ε)
+                    </div>
+                </div>
+
+                <div class="algorithm-card" style="margin-top: 15px;">
+                    <h4>Conversion to CNF</h4>
+                    <div class="steps">
+                        <div class="step">Add new start symbol S₀ → S (if S appears on RHS)</div>
+                        <div class="step">Remove ε-productions (except S → ε): For A → αBβ where B is nullable, add A → αβ</div>
+                        <div class="step">Remove unit productions A → B: If B → α, add A → α</div>
+                        <div class="step">Replace terminals in RHS of length > 1: A → aB becomes A → XₐB, Xₐ → a</div>
+                        <div class="step">Break long RHS: A → BCD becomes A → BE, E → CD</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Greibach Normal Form (GNF)</h3>
+                <div class="formula-box">
+                    <div class="formula-name">Definition</div>
+                    <div class="formula">GNF Rules: A → aα where a ∈ T, α ∈ V* (zero or more variables)</div>
+                    <div class="formula-description">
+                        Every production starts with a terminal followed by zero or more variables.
+                    </div>
+                    <div class="example">
+                        <div class="example-title">📌 Example:</div>
+                        S → aABC, A → bB, B → c, C → d
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PUSHDOWN AUTOMATA SECTION -->
+        <div class="section">
+            <h2 class="section-title">
+                <span class="icon">📚</span>
+                Pushdown Automata (PDA)
+            </h2>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Formal Definition</h3>
+                <div class="formula-box">
+                    <div class="formula-name">PDA Definition</div>
+                    <div class="formula">PDA = (Q, Σ, Γ, δ, q₀, Z₀, F)</div>
+                    <div class="variables">
+                        <strong>Where:</strong><br>
+                        • Q = Finite set of states<br>
+                        • Σ = Input alphabet<br>
+                        • Γ = Stack alphabet<br>
+                        • δ = Transition: Q × (Σ ∪ {ε}) × Γ → P(Q × Γ*)<br>
+                        • q₀ = Initial state<br>
+                        • Z₀ = Initial stack symbol<br>
+                        • F = Set of final states
+                    </div>
+                </div>
+
+                <div class="grid" style="margin-top: 15px;">
+                    <div class="algorithm-card">
+                        <h4>Acceptance by Final State</h4>
+                        <div class="formula">L(M) = {w | (q₀, w, Z₀) ⊢* (q, ε, γ), q ∈ F}</div>
+                        <div class="formula-description">
+                            String accepted if PDA reaches a final state after consuming all input.
+                        </div>
+                    </div>
+                    <div class="algorithm-card">
+                        <h4>Acceptance by Empty Stack</h4>
+                        <div class="formula">L(M) = {w | (q₀, w, Z₀) ⊢* (q, ε, ε)}</div>
+                        <div class="formula-description">
+                            String accepted if stack becomes empty after consuming all input.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="important" style="margin-top: 15px;">
+                    <div class="important-title">✓ Equivalence:</div>
+                    Both acceptance methods are equivalent. A PDA accepting by final state can be converted to one accepting by empty stack, and vice versa.
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">PDA for Context-Free Languages</h3>
+                <div class="example">
+                    <div class="example-title">📌 Example: PDA for {aⁿbⁿ | n ≥ 0}</div>
+                    <div class="formula">States: Q = {q₀, q₁, q₂}</div>
+                    <div class="formula">Stack: Γ = {Z, A}</div>
+                    <table class="transition-table">
+                        <tr><th>State</th><th>Input</th><th>Stack Top</th><th>Operation</th><th>Next State</th></tr>
+                        <tr><td>q₀</td><td>a</td><td>Z</td><td>push A</td><td>q₀</td></tr>
+                        <tr><td>q₀</td><td>a</td><td>A</td><td>push A</td><td>q₀</td></tr>
+                        <tr><td>q₀</td><td>b</td><td>A</td><td>pop</td><td>q₁</td></tr>
+                        <tr><td>q₁</td><td>b</td><td>A</td><td>pop</td><td>q₁</td></tr>
+                        <tr><td>q₁</td><td>ε</td><td>Z</td><td>—</td><td>q₂</td></tr>
+                    </table>
+                    Algorithm: Push A for each a, pop A for each b, accept if stack empty after all b's
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Equivalence: CFG ↔ PDA</h3>
+                <div class="grid">
+                    <div class="algorithm-card">
+                        <h4>CFG → PDA Conversion</h4>
+                        <div class="steps">
+                            <div class="step">Single state q</div>
+                            <div class="step">For each A → α in P: add transition that pops A and pushes α</div>
+                            <div class="step">For each terminal a: add transition that pops a when reading a</div>
+                            <div class="step">Start with S on stack</div>
+                        </div>
+                    </div>
+                    <div class="algorithm-card">
+                        <h4>PDA → CFG Conversion</h4>
+                        <div class="steps">
+                            <div class="step">Variables: Aₚq for states p, q</div>
+                            <div class="step">Aₚq generates strings taking PDA from p to q with empty net stack change</div>
+                            <div class="step">For δ(p, a, X) contains (r, Y₁Y₂...Yₖ):</div>
+                            <div class="step" style="padding-left: 50px;">Add Aₚq → aAr₁Ar₂...Arₖ₋₁q (for all q)</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PROPERTIES OF CFL SECTION -->
+        <div class="section">
+            <h2 class="section-title">
+                <span class="icon">🔶</span>
+                Properties of Context-Free Languages
+            </h2>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Closure Properties</h3>
+                <div class="closure-table">
+                    <div class="closure-item"><span class="closure-yes">✓</span> Union</div>
+                    <div class="closure-item"><span class="closure-yes">✓</span> Concatenation</div>
+                    <div class="closure-item"><span class="closure-yes">✓</span> Kleene Star</div>
+                    <div class="closure-item"><span class="closure-yes">✓</span> Reversal</div>
+                    <div class="closure-item"><span class="closure-yes">✓</span> Homomorphism</div>
+                    <div class="closure-item"><span class="closure-yes">✓</span> Inverse Homomorphism</div>
+                    <div class="closure-item"><span class="closure-yes">✓</span> Intersection with Regular</div>
+                    <div class="closure-item"><span class="closure-no">✗</span> Intersection (CFL ∩ CFL)</div>
+                    <div class="closure-item"><span class="closure-no">✗</span> Complement</div>
+                    <div class="closure-item"><span class="closure-no">✗</span> Difference</div>
+                </div>
+
+                <div class="warning" style="margin-top: 15px;">
+                    <div class="warning-title">⚠️ Important:</div>
+                    CFLs are NOT closed under intersection or complement.<br>
+                    Example: L₁ = {aⁿbⁿcⁱ} and L₂ = {aⁱbⁿcⁿ} are CFLs<br>
+                    But L₁ ∩ L₂ = {aⁿbⁿcⁿ} is NOT a CFL
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Pumping Lemma for CFLs</h3>
+                <div class="formula-box">
+                    <div class="formula-name">Statement</div>
+                    <div class="formula">If L is a CFL, ∃p > 0 (pumping length) such that:</div>
+                    <div class="formula">∀w ∈ L where |w| ≥ p:</div>
+                    <div class="formula">w can be divided into uvxyz where:</div>
+                    <div class="formula" style="padding-left: 20px;">1. |vxy| ≤ p</div>
+                    <div class="formula" style="padding-left: 20px;">2. |vy| > 0</div>
+                    <div class="formula" style="padding-left: 20px;">3. ∀i ≥ 0: uvⁱxyⁱz ∈ L</div>
+                </div>
+
+                <div class="example" style="margin-top: 15px;">
+                    <div class="example-title">📌 Example: L = {aⁿbⁿcⁿ | n ≥ 0} is NOT a CFL</div>
+                    Choose w = aᵖbᵖcᵖ<br>
+                    Since |vxy| ≤ p, vxy cannot contain all three symbols<br>
+                    Pumping v and y will increase count of some symbols but not all three equally<br>
+                    Result: uv²xy²z ∉ L → Contradiction ✓
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">CYK Algorithm (Membership Testing)</h3>
+                <div class="algorithm-card">
+                    <h4>Algorithm for CFG in CNF</h4>
+                    <div class="steps">
+                        <div class="step">Input: String w = w₁w₂...wₙ and CFG G in CNF</div>
+                        <div class="step">Create n × n table T</div>
+                        <div class="step">For i = 1 to n: T[i,i] = {A | A → wᵢ in P}</div>
+                        <div class="step">For length l = 2 to n:</div>
+                        <div class="step" style="padding-left: 50px;">For i = 1 to n-l+1:</div>
+                        <div class="step" style="padding-left: 70px;">j = i + l - 1</div>
+                        <div class="step" style="padding-left: 70px;">T[i,j] = {A | A → BC, B ∈ T[i,k], C ∈ T[k+1,j] for some k}</div>
+                        <div class="step">w ∈ L(G) iff S ∈ T[1,n]</div>
+                    </div>
+                    <div class="variables">
+                        <strong>Time Complexity:</strong> O(n³ × |P|)<br>
+                        <strong>Space Complexity:</strong> O(n²)
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Decision Problems for CFLs</h3>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Problem</th>
+                                <th>Decidable?</th>
+                                <th>Algorithm</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Membership (w ∈ L?)</td>
+                                <td class="closure-yes">Yes</td>
+                                <td>CYK Algorithm (O(n³))</td>
+                            </tr>
+                            <tr>
+                                <td>Emptiness (L = ∅?)</td>
+                                <td class="closure-yes">Yes</td>
+                                <td>Find if S can derive terminal string</td>
+                            </tr>
+                            <tr>
+                                <td>Finiteness</td>
+                                <td class="closure-yes">Yes</td>
+                                <td>Check for cycles in derivation</td>
+                            </tr>
+                            <tr>
+                                <td>L₁ ∩ L₂ = ∅?</td>
+                                <td class="closure-yes">Yes</td>
+                                <td>Convert to PDA, product construction</td>
+                            </tr>
+                            <tr>
+                                <td>Equivalence (L₁ = L₂?)</td>
+                                <td class="closure-no">No</td>
+                                <td>Undecidable</td>
+                            </tr>
+                            <tr>
+                                <td>Ambiguity</td>
+                                <td class="closure-no">No</td>
+                                <td>Undecidable</td>
+                            </tr>
+                            <tr>
+                                <td>Universality (L = Σ*?)</td>
+                                <td class="closure-no">No</td>
+                                <td>Undecidable</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- TURING MACHINES SECTION -->
+        <div class="section">
+            <h2 class="section-title">
+                <span class="icon">🖥️</span>
+                Turing Machines
+            </h2>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Formal Definition</h3>
+                <div class="formula-box">
+                    <div class="formula-name">TM Definition</div>
+                    <div class="formula">TM = (Q, Σ, Γ, δ, q₀, B, F)</div>
+                    <div class="variables">
+                        <strong>Where:</strong><br>
+                        • Q = Finite set of states<br>
+                        • Σ = Input alphabet (⊂ Γ, excluding B)<br>
+                        • Γ = Tape alphabet (includes blank symbol B)<br>
+                        • δ = Transition: Q × Γ → Q × Γ × {L, R, S}<br>
+                        • q₀ = Initial state<br>
+                        • B = Blank symbol (B ∈ Γ)<br>
+                        • F = Set of final/halting states
+                    </div>
+                </div>
+
+                <div class="grid" style="margin-top: 15px;">
+                    <div class="algorithm-card">
+                        <h4>Instantaneous Description (ID)</h4>
+                        <div class="formula">ID: αqβ where:</div>
+                        <div class="formula-description">
+                            • α = tape contents left of head<br>
+                            • q = current state<br>
+                            • β = tape contents at and right of head
+                        </div>
+                        <div class="example">
+                            <div class="example-title">📌 Example:</div>
+                            1011q₅01 represents: tape has 101101, head at 0, state q₅
+                        </div>
+                    </div>
+                    <div class="algorithm-card">
+                        <h4>Move Relation (⊢)</h4>
+                        <div class="formula">If δ(q, X) = (p, Y, R):</div>
+                        <div class="formula">αqXβ ⊢ αYpβ</div>
+                        <div class="formula">If δ(q, X) = (p, Y, L):</div>
+                        <div class="formula">ZaXqβ ⊢ ZpYaβ (if Y ≠ B)</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Language Classes</h3>
+                <div class="grid">
+                    <div class="algorithm-card">
+                        <h4>Recursively Enumerable (RE)</h4>
+                        <div class="formula">L is RE ⟺ ∃TM M such that L = L(M)</div>
+                        <div class="formula-description">
+                            TM accepts all strings in L (may loop on strings not in L).
+                        </div>
+                        <div class="formula">L(M) = {w | q₀w ⊢* αqₐβ for some qₐ ∈ F}</div>
+                    </div>
+                    <div class="algorithm-card">
+                        <h4>Recursive (Decidable)</h4>
+                        <div class="formula">L is Recursive ⟺ ∃TM M that halts on all inputs and L = L(M)</div>
+                        <div class="formula-description">
+                            TM accepts strings in L and rejects (halts) strings not in L.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="important" style="margin-top: 15px;">
+                    <div class="important-title">✓ Relationship:</div>
+                    Recursive ⊂ RE ⊂ All Languages<br>
+                    • Recursive: TM always halts<br>
+                    • RE: TM may loop on strings not in L<br>
+                    • Co-RE: Complement is RE
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">TM Variants</h3>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Variant</th>
+                                <th>Feature</th>
+                                <th>Equivalent to Standard TM?</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Multi-tape TM</td>
+                                <td>k tapes with independent heads</td>
+                                <td class="closure-yes">Yes</td>
+                            </tr>
+                            <tr>
+                                <td>Non-deterministic TM</td>
+                                <td>Multiple possible moves</td>
+                                <td class="closure-yes">Yes</td>
+                            </tr>
+                            <tr>
+                                <td>Two-way infinite tape</td>
+                                <td>Tape extends both directions</td>
+                                <td class="closure-yes">Yes</td>
+                            </tr>
+                            <tr>
+                                <td>Multi-dimensional tape</td>
+                                <td>2D or higher tape</td>
+                                <td class="closure-yes">Yes</td>
+                            </tr>
+                            <tr>
+                                <td>Enumerator</td>
+                                <td>Outputs strings of L</td>
+                                <td class="closure-yes">Yes</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="note">
+                    <div class="note-title">💡 Church-Turing Thesis:</div>
+                    Any computation that can be carried out by a mechanical procedure can be performed by a Turing Machine. All reasonable computational models are equivalent.
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Encoding and Universal TM</h3>
+                <div class="formula-box">
+                    <div class="formula-name">Universal Turing Machine U</div>
+                    <div class="formula">U takes ⟨M, w⟩ as input and simulates M on w</div>
+                    <div class="formula-description">
+                        • ⟨M, w⟩ is an encoding of TM M and input w<br>
+                        • U is a programmable TM that can simulate any other TM<br>
+                        • Foundation of stored-program computers
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- UNDECIDABILITY SECTION -->
+        <div class="section">
+            <h2 class="section-title">
+                <span class="icon">❓</span>
+                Undecidability
+            </h2>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Key Undecidable Problems</h3>
+                
+                <div class="formula-box">
+                    <div class="formula-name">Halting Problem</div>
+                    <div class="formula">HALT = {⟨M, w⟩ | M halts on input w}</div>
+                    <div class="formula-description">
+                        Given a TM M and input w, determine if M halts on w.<br>
+                        <strong>Proof:</strong> Diagonalization - assume decider H exists, construct D that contradicts
+                    </div>
+                    <div class="warning">
+                        <div class="warning-title">Undecidable:</div>
+                        No algorithm can determine if an arbitrary program halts on given input.
+                    </div>
+                </div>
+
+                <div class="grid" style="margin-top: 15px;">
+                    <div class="algorithm-card">
+                        <h4>Other Undecidable Problems</h4>
+                        <div class="formula">A_TM = {⟨M, w⟩ | M accepts w}</div>
+                        <div class="formula">EMPTY_TM = {⟨M⟩ | L(M) = ∅}</div>
+                        <div class="formula">EQ_TM = {⟨M₁, M₂⟩ | L(M₁) = L(M₂)}</div>
+                        <div class="formula">ALL_TM = {⟨M⟩ | L(M) = Σ*}</div>
+                        <div class="formula">REGULAR_TM = {⟨M⟩ | L(M) is regular}</div>
+                    </div>
+                    <div class="algorithm-card">
+                        <h4>Rice's Theorem</h4>
+                        <div class="formula-description">
+                            Every non-trivial property of RE languages is undecidable.
+                        </div>
+                        <div class="variables">
+                            <strong>Non-trivial property:</strong> Some RE languages have it, some don't.<br>
+                            <strong>Examples:</strong> "L is finite", "L contains ε", "L is regular"
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Reduction</h3>
+                <div class="formula-box">
+                    <div class="formula-name">Mapping Reduction</div>
+                    <div class="formula">A ≤ₘ B (A reduces to B) if ∃ computable f: w ∈ A ⟺ f(w) ∈ B</div>
+                    <div class="formula-description">
+                        If A ≤ₘ B and B is decidable, then A is decidable.<br>
+                        If A ≤ₘ B and A is undecidable, then B is undecidable.
+                    </div>
+                </div>
+
+                <div class="algorithm-card" style="margin-top: 15px;">
+                    <h4>Using Reductions</h4>
+                    <div class="steps">
+                        <div class="step">To prove B is undecidable:</div>
+                        <div class="step" style="padding-left: 50px;">Find known undecidable problem A</div>
+                        <div class="step" style="padding-left: 50px;">Show A ≤ₘ B (construct reduction)</div>
+                        <div class="step" style="padding-left: 50px;">If A were decidable through B, contradiction</div>
+                        <div class="step">Common reductions: HALT → A_TM → EMPTY_TM → EQ_TM</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Post Correspondence Problem (PCP)</h3>
+                <div class="formula-box">
+                    <div class="formula-name">Definition</div>
+                    <div class="formula">PCP: Given dominos (x₁,y₁), (x₂,y₂), ..., (xₖ,yₖ)</div>
+                    <div class="formula">Find sequence i₁i₂...iₘ such that xᵢ₁xᵢ₂...xᵢₘ = yᵢ₁yᵢ₂...yᵢₘ</div>
+                    <div class="formula-description">
+                        PCP is undecidable. Used to prove many problems in formal languages undecidable.
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Decidability Summary</h3>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Problem</th>
+                                <th>Regular</th>
+                                <th>CFL</th>
+                                <th>Recursive</th>
+                                <th>RE</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Membership</td>
+                                <td class="closure-yes">D</td>
+                                <td class="closure-yes">D</td>
+                                <td class="closure-yes">D</td>
+                                <td class="closure-yes">D (semi)</td>
+                            </tr>
+                            <tr>
+                                <td>Emptiness</td>
+                                <td class="closure-yes">D</td>
+                                <td class="closure-yes">D</td>
+                                <td class="closure-yes">D</td>
+                                <td class="closure-no">U</td>
+                            </tr>
+                            <tr>
+                                <td>Equivalence</td>
+                                <td class="closure-yes">D</td>
+                                <td class="closure-no">U</td>
+                                <td class="closure-no">U</td>
+                                <td class="closure-no">U</td>
+                            </tr>
+                            <tr>
+                                <td>Subset</td>
+                                <td class="closure-yes">D</td>
+                                <td class="closure-no">U</td>
+                                <td class="closure-no">U</td>
+                                <td class="closure-no">U</td>
+                            </tr>
+                            <tr>
+                                <td>Ambiguity</td>
+                                <td class="closure-yes">D</td>
+                                <td class="closure-no">U</td>
+                                <td>—</td>
+                                <td>—</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="variables">D = Decidable, U = Undecidable, semi = semidecidable</div>
+            </div>
+        </div>
+
+        <!-- COMPLEXITY THEORY SECTION -->
+        <div class="section">
+            <h2 class="section-title">
+                <span class="icon">⏱️</span>
+                Complexity Theory
+            </h2>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Time and Space Complexity</h3>
+                <div class="formula-box">
+                    <div class="formula-name">Definitions</div>
+                    <div class="formula">TIME(f(n)) = {L | ∃TM decides L in O(f(n)) time}</div>
+                    <div class="formula">SPACE(f(n)) = {L | ∃TM decides L in O(f(n)) space}</div>
+                    <div class="variables">
+                        • n = input length<br>
+                        • Time = number of steps<br>
+                        • Space = number of tape cells used
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Complexity Classes</h3>
+                <div class="grid">
+                    <div class="algorithm-card">
+                        <h4>Class P</h4>
+                        <div class="formula">P = ∪ₖ TIME(nᵏ)</div>
+                        <div class="formula-description">
+                            Languages decidable in polynomial time by a deterministic TM.<br>
+                            "Efficiently solvable" problems.
+                        </div>
+                        <div class="example">
+                            <div class="example-title">📌 Examples in P:</div>
+                            Path finding, sorting, matrix multiplication, primality testing
+                        </div>
+                    </div>
+                    <div class="algorithm-card">
+                        <h4>Class NP</h4>
+                        <div class="formula">NP = {L | ∃ polynomial-time verifier for L}</div>
+                        <div class="formula-description">
+                            Languages verifiable in polynomial time.<br>
+                            "Efficiently checkable" problems.
+                        </div>
+                        <div class="example">
+                            <div class="example-title">📌 Examples in NP:</div>
+                            SAT, Hamiltonian path, graph coloring, subset sum
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid" style="margin-top: 15px;">
+                    <div class="algorithm-card">
+                        <h4>Class PSPACE</h4>
+                        <div class="formula">PSPACE = ∪ₖ SPACE(nᵏ)</div>
+                        <div class="formula-description">
+                            Languages decidable in polynomial space.
+                        </div>
+                    </div>
+                    <div class="algorithm-card">
+                        <h4>Class EXPTIME</h4>
+                        <div class="formula">EXPTIME = ∪ₖ TIME(2^(nᵏ))</div>
+                        <div class="formula-description">
+                            Languages decidable in exponential time.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid" style="margin-top: 15px;">
+                    <div class="algorithm-card">
+                        <h4>Class co-NP</h4>
+                        <div class="formula">co-NP = {L̄ | L ∈ NP}</div>
+                        <div class="formula-description">
+                            Complements of NP languages.
+                        </div>
+                    </div>
+                    <div class="algorithm-card">
+                        <h4>Class NL</h4>
+                        <div class="formula">NL = NSPACE(log n)</div>
+                        <div class="formula-description">
+                            Nondeterministic logarithmic space.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Hierarchy of Classes</h3>
+                <div class="diagram-box">
+                    <pre>
+    P ⊆ NP ⊆ PSPACE ⊆ EXPTIME ⊆ NEXPTIME
+    
+    Known strict inclusions:
+    P ⊂ EXPTIME
+    
+    Unknown (major open problems):
+    P vs NP (P = NP?)
+    NP vs co-NP
+    P vs PSPACE
+                    </pre>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">NP-Completeness</h3>
+                <div class="formula-box">
+                    <div class="formula-name">Definitions</div>
+                    <div class="formula">L is NP-Hard: ∀L' ∈ NP: L' ≤ₚ L (polynomial-time reduction)</div>
+                    <div class="formula">L is NP-Complete: L ∈ NP AND L is NP-Hard</div>
+                </div>
+
+                <div class="algorithm-card" style="margin-top: 15px;">
+                    <h4>Proving NP-Completeness</h4>
+                    <div class="steps">
+                        <div class="step">Show L ∈ NP (give polynomial-time verifier)</div>
+                        <div class="step">Choose known NP-Complete problem L'</div>
+                        <div class="step">Show L' ≤ₚ L (polynomial-time reduction)</div>
+                        <div class="step">Conclude L is NP-Complete</div>
+                    </div>
+                </div>
+
+                <div class="example" style="margin-top: 15px;">
+                    <div class="example-title">📌 First NP-Complete Problem: SAT</div>
+                    <strong>SAT (Boolean Satisfiability):</strong> Given boolean formula φ, is there an assignment making φ true?<br>
+                    Cook-Levin Theorem: SAT is NP-Complete<br><br>
+                    <strong>Common NP-Complete Problems:</strong>
+                    <div class="table-container">
+                        <table>
+                            <tr><th>Problem</th><th>Description</th></tr>
+                            <tr><td>3-SAT</td><td>SAT with 3-literal clauses</td></tr>
+                            <tr><td>VERTEX-COVER</td><td>Find k vertices covering all edges</td></tr>
+                            <tr><td>HAM-PATH</td><td>Find path visiting all vertices once</td></tr>
+                            <tr><td>HAM-CYCLE</td><td>Find cycle visiting all vertices once</td></tr>
+                            <tr><td>TSP</td><td>Find shortest tour visiting all cities</td></tr>
+                            <tr><td>SUBSET-SUM</td><td>Find subset summing to target</td></tr>
+                            <tr><td>CLIQUE</td><td>Find complete subgraph of size k</td></tr>
+                            <tr><td>GRAPH-COLORING</td><td>Color graph with k colors</td></tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Space Complexity Theorems</h3>
+                <div class="grid">
+                    <div class="algorithm-card">
+                        <h4>Savitch's Theorem</h4>
+                        <div class="formula">NSPACE(f(n)) ⊆ SPACE(f(n)²)</div>
+                        <div class="formula-description">
+                            Nondeterministic space can be simulated by deterministic space with quadratic overhead.
+                        </div>
+                        <div class="variables">
+                            Corollary: NPSPACE = PSPACE
+                        </div>
+                    </div>
+                    <div class="algorithm-card">
+                        <h4>Immerman-Szelepcsényi Theorem</h4>
+                        <div class="formula">NSPACE(f(n)) = co-NSPACE(f(n))</div>
+                        <div class="formula-description">
+                            Nondeterministic space classes are closed under complement (for f(n) ≥ log n).
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CHOMSKY HIERARCHY SECTION -->
+        <div class="section">
+            <h2 class="section-title">
+                <span class="icon">📊</span>
+                Chomsky Hierarchy
+            </h2>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Language Classes</h3>
+                <div class="chomsky-hierarchy">
+                    <div class="chomsky-level re">
+                        <h4>Type 0: Recursively Enumerable (RE)</h4>
+                        <div>Grammar: Unrestricted</div>
+                        <div>Automaton: Turing Machine</div>
+                    </div>
+                    <div class="chomsky-level csl">
+                        <h4>Type 1: Context-Sensitive (CSL)</h4>
+                        <div>Grammar: αAβ → αγβ (|γ| ≥ 1)</div>
+                        <div>Automaton: LBA (Linear Bounded Automaton)</div>
+                    </div>
+                    <div class="chomsky-level cfl">
+                        <h4>Type 2: Context-Free (CFL)</h4>
+                        <div>Grammar: A → γ</div>
+                        <div>Automaton: PDA</div>
+                    </div>
+                    <div class="chomsky-level rl">
+                        <h4>Type 3: Regular (RL)</h4>
+                        <div>Grammar: A → aB or A → a (right-linear)</div>
+                        <div>Automaton: DFA/NFA</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Complete Comparison</h3>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Property</th>
+                                <th>Regular</th>
+                                <th>CFL</th>
+                                <th>CSL</th>
+                                <th>RE</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Grammar Type</td>
+                                <td>Type 3</td>
+                                <td>Type 2</td>
+                                <td>Type 1</td>
+                                <td>Type 0</td>
+                            </tr>
+                            <tr>
+                                <td>Automaton</td>
+                                <td>DFA/NFA</td>
+                                <td>PDA</td>
+                                <td>LBA</td>
+                                <td>TM</td>
+                            </tr>
+                            <tr>
+                                <td>Union</td>
+                                <td class="closure-yes">✓</td>
+                                <td class="closure-yes">✓</td>
+                                <td class="closure-yes">✓</td>
+                                <td class="closure-yes">✓</td>
+                            </tr>
+                            <tr>
+                                <td>Intersection</td>
+                                <td class="closure-yes">✓</td>
+                                <td class="closure-no">✗</td>
+                                <td class="closure-yes">✓</td>
+                                <td class="closure-yes">✓</td>
+                            </tr>
+                            <tr>
+                                <td>Complement</td>
+                                <td class="closure-yes">✓</td>
+                                <td class="closure-no">✗</td>
+                                <td class="closure-yes">✓</td>
+                                <td class="closure-no">✗</td>
+                            </tr>
+                            <tr>
+                                <td>Membership</td>
+                                <td class="closure-yes">D</td>
+                                <td class="closure-yes">D</td>
+                                <td class="closure-yes">D</td>
+                                <td class="closure-yes">Semi</td>
+                            </tr>
+                            <tr>
+                                <td>Emptiness</td>
+                                <td class="closure-yes">D</td>
+                                <td class="closure-yes">D</td>
+                                <td class="closure-yes">D</td>
+                                <td class="closure-no">U</td>
+                            </tr>
+                            <tr>
+                                <td>Equivalence</td>
+                                <td class="closure-yes">D</td>
+                                <td class="closure-no">U</td>
+                                <td class="closure-no">U</td>
+                                <td class="closure-no">U</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Summary Section -->
+        <div class="section" style="background: linear-gradient(135deg, rgba(232, 121, 249, 0.2), rgba(192, 132, 252, 0.15));">
+            <h2 class="section-title">
+                <span class="icon">📋</span>
+                Quick Reference Summary
+            </h2>
+            <div class="comparison-grid">
+                <div class="comparison-item">
+                    <h5>DFA/NFA</h5>
+                    <p><strong>DFA:</strong> (Q, Σ, δ, q₀, F)</p>
+                    <p><strong>NFA:</strong> δ: Q × (Σ∪{ε}) → P(Q)</p>
+                    <p><strong>Equivalence:</strong> DFA ≡ NFA</p>
+                    <p><strong>Conversion:</strong> Subset construction</p>
+                </div>
+                <div class="comparison-item">
+                    <h5>Regular Expressions</h5>
+                    <p><strong>Operations:</strong> ∅, ε, a, R+S, RS, R*</p>
+                    <p><strong>Arden's:</strong> R = Q + RP → R = QP*</p>
+                    <p><strong>Pumping:</strong> |xy| ≤ p, |y| > 0</p>
+                </div>
+                <div class="comparison-item">
+                    <h5>CFG/PDA</h5>
+                    <p><strong>CFG:</strong> (V, T, P, S)</p>
+                    <p><strong>PDA:</strong> (Q, Σ, Γ, δ, q₀, Z₀, F)</p>
+                    <p><strong>CNF:</strong> A → BC | a</p>
+                    <p><strong>Equivalence:</strong> CFG ≡ PDA</p>
+                </div>
+                <div class="comparison-item">
+                    <h5>Turing Machine</h5>
+                    <p><strong>TM:</strong> (Q, Σ, Γ, δ, q₀, B, F)</p>
+                    <p><strong>RE:</strong> TM accepts (may loop)</p>
+                    <p><strong>Recursive:</strong> TM always halts</p>
+                </div>
+                <div class="comparison-item">
+                    <h5>Undecidability</h5>
+                    <p><strong>HALT:</strong> Undecidable</p>
+                    <p><strong>Rice's:</strong> Non-trivial properties U</p>
+                    <p><strong>Reduction:</strong> A ≤ₘ B</p>
+                </div>
+                <div class="comparison-item">
+                    <h5>Complexity</h5>
+                    <p><strong>P:</strong> Polynomial time</p>
+                    <p><strong>NP:</strong> Polynomial verification</p>
+                    <p><strong>NP-C:</strong> NP-Hard ∩ NP</p>
+                    <p><strong>P vs NP:</strong> Open problem</p>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>📚 Theory of Computation Formula Reference Sheet</p>
+            <p>Automata • Languages • Computability • Complexity</p>
+        </footer>
+    </div>
+</body>
+</html>

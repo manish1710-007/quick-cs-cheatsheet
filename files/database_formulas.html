@@ -1,0 +1,2244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Database Management Systems Formula Sheet</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #059669 0%, #047857 50%, #065f46 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #fff;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            padding: 30px 0;
+            margin-bottom: 30px;
+        }
+
+        header h1 {
+            font-size: 2.8rem;
+            background: linear-gradient(90deg, #34d399, #6ee7b7, #a7f3d0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 30px rgba(52, 211, 153, 0.3);
+            margin-bottom: 10px;
+        }
+
+        header p {
+            color: #6ee7b7;
+            font-size: 1.1rem;
+        }
+
+        .section {
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            color: #34d399;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid rgba(52, 211, 153, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .section-title .icon {
+            font-size: 2rem;
+        }
+
+        .subsection {
+            margin-bottom: 25px;
+        }
+
+        .subsection-title {
+            font-size: 1.3rem;
+            color: #6ee7b7;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .subsection-title::before {
+            content: "◆";
+            font-size: 0.8rem;
+            color: #a7f3d0;
+        }
+
+        .formula-box {
+            background: linear-gradient(135deg, rgba(52, 211, 153, 0.15), rgba(110, 231, 183, 0.1));
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-left: 4px solid #34d399;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .formula-box:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 20px rgba(52, 211, 153, 0.3);
+        }
+
+        .formula-name {
+            font-size: 1.1rem;
+            color: #34d399;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .formula {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px 20px;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 1.05rem;
+            color: #a7f3d0;
+            margin: 10px 0;
+            overflow-x: auto;
+        }
+
+        .formula-description {
+            color: #d1fae5;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-top: 10px;
+        }
+
+        .variables {
+            background: rgba(110, 231, 183, 0.1);
+            padding: 12px 15px;
+            border-radius: 8px;
+            margin-top: 10px;
+            font-size: 0.9rem;
+        }
+
+        .variables strong {
+            color: #6ee7b7;
+        }
+
+        .example {
+            background: rgba(167, 243, 208, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 10px;
+            border: 1px dashed rgba(167, 243, 208, 0.5);
+        }
+
+        .example-title {
+            color: #a7f3d0;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 20px;
+        }
+
+        .algorithm-card {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 15px;
+            padding: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .algorithm-card h4 {
+            color: #34d399;
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(52, 211, 153, 0.3);
+        }
+
+        .steps {
+            counter-reset: step;
+        }
+
+        .step {
+            position: relative;
+            padding-left: 35px;
+            margin-bottom: 10px;
+            color: #e2e8f0;
+            line-height: 1.6;
+        }
+
+        .step::before {
+            counter-increment: step;
+            content: counter(step);
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 25px;
+            height: 25px;
+            background: linear-gradient(135deg, #34d399, #10b981);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .note {
+            background: rgba(251, 191, 36, 0.15);
+            border-left: 4px solid #fbbf24;
+            padding: 15px;
+            border-radius: 0 10px 10px 0;
+            margin-top: 15px;
+        }
+
+        .note-title {
+            color: #fbbf24;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .warning {
+            background: rgba(239, 68, 68, 0.15);
+            border-left: 4px solid #ef4444;
+            padding: 15px;
+            border-radius: 0 10px 10px 0;
+            margin-top: 15px;
+        }
+
+        .warning-title {
+            color: #ef4444;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .important {
+            background: rgba(59, 130, 246, 0.15);
+            border-left: 4px solid #3b82f6;
+            padding: 15px;
+            border-radius: 0 10px 10px 0;
+            margin-top: 15px;
+        }
+
+        .important-title {
+            color: #3b82f6;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            margin: 15px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        th {
+            background: linear-gradient(135deg, #34d399, #059669);
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            color: #fff;
+        }
+
+        td {
+            padding: 12px 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            color: #e2e8f0;
+        }
+
+        tr:hover {
+            background: rgba(52, 211, 153, 0.1);
+        }
+
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .comparison-item {
+            background: rgba(110, 231, 183, 0.05);
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid rgba(110, 231, 183, 0.2);
+        }
+
+        .comparison-item h5 {
+            color: #6ee7b7;
+            margin-bottom: 8px;
+        }
+
+        .sql-block {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            padding: 15px;
+            margin: 10px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            overflow-x: auto;
+        }
+
+        .sql-keyword {
+            color: #34d399;
+            font-weight: bold;
+        }
+
+        .sql-function {
+            color: #6ee7b7;
+        }
+
+        .sql-string {
+            color: #fbbf24;
+        }
+
+        .sql-comment {
+            color: #6b7280;
+        }
+
+        .sql-operator {
+            color: #a7f3d0;
+        }
+
+        .er-diagram {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 15px 0;
+            text-align: center;
+        }
+
+        .er-diagram pre {
+            font-family: 'Courier New', monospace;
+            color: #a7f3d0;
+            font-size: 0.9rem;
+            text-align: left;
+            display: inline-block;
+        }
+
+        .entity-box {
+            display: inline-block;
+            border: 2px solid #34d399;
+            padding: 10px 20px;
+            margin: 10px;
+            border-radius: 5px;
+        }
+
+        .relationship-diamond {
+            display: inline-block;
+            border: 2px solid #fbbf24;
+            padding: 10px 15px;
+            margin: 10px;
+            transform: rotate(45deg);
+        }
+
+        .relationship-diamond span {
+            display: block;
+            transform: rotate(-45deg);
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px;
+            color: #6ee7b7;
+            margin-top: 30px;
+        }
+
+        .formula-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 10px 0;
+        }
+
+        .formula-item {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            color: #a7f3d0;
+        }
+
+        .nf-box {
+            background: linear-gradient(135deg, rgba(52, 211, 153, 0.1), rgba(110, 231, 183, 0.05));
+            border-radius: 10px;
+            padding: 15px;
+            margin: 10px 0;
+            border: 1px solid rgba(52, 211, 153, 0.3);
+        }
+
+        .nf-title {
+            color: #34d399;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .timeline {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            margin: 15px 0;
+            overflow-x: auto;
+            padding: 10px 0;
+        }
+
+        .timeline-item {
+            background: rgba(52, 211, 153, 0.2);
+            padding: 8px 15px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            white-space: nowrap;
+        }
+
+        .timeline-arrow {
+            color: #6ee7b7;
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2rem;
+            }
+
+            .grid {
+                grid-template-columns: 1fr;
+            }
+
+            .section {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🗄️ Database Management Systems Formula Sheet</h1>
+            <p>Complete Reference for ER Model, SQL, Normalization, Transactions & More</p>
+        </header>
+
+        <!-- ER MODEL SECTION -->
+        <div class="section">
+            <h2 class="section-title">
+                <span class="icon">📐</span>
+                Entity-Relationship (ER) Model
+            </h2>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Basic Concepts</h3>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Concept</th>
+                                <th>Symbol</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Entity</strong></td>
+                                <td>Rectangle</td>
+                                <td>Object with independent existence (e.g., Student, Course)</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Attribute</strong></td>
+                                <td>Ellipse/Oval</td>
+                                <td>Property of an entity (e.g., name, age)</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Relationship</strong></td>
+                                <td>Diamond</td>
+                                <td>Association between entities</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Primary Key</strong></td>
+                                <td>Underlined</td>
+                                <td>Unique identifier for entity</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Weak Entity</strong></td>
+                                <td>Double Rectangle</td>
+                                <td>Depends on owner entity for existence</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Identifying Relationship</strong></td>
+                                <td>Double Diamond</td>
+                                <td>Connects weak entity to owner</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Types of Attributes</h3>
+                <div class="grid">
+                    <div class="algorithm-card">
+                        <h4>Attribute Classifications</h4>
+                        <div class="formula-description">
+                            • <strong>Simple:</strong> Cannot be divided (e.g., age)<br>
+                            • <strong>Composite:</strong> Can be divided (e.g., name → first, last)<br>
+                            • <strong>Single-valued:</strong> One value per entity<br>
+                            • <strong>Multi-valued:</strong> Multiple values (double ellipse)<br>
+                            • <strong>Derived:</strong> Computed from other attributes (dashed ellipse)<br>
+                            • <strong>Key:</strong> Unique identifier (underlined)
+                        </div>
+                    </div>
+                    <div class="algorithm-card">
+                        <h4>Example: Student Entity</h4>
+                        <div class="er-diagram">
+                            <pre>
+         ┌─────────┐
+         │ student │
+         │  _id_   │
+         └────┬────┘
+              │
+    ┌─────────┼─────────┬─────────┐
+    │         │         │         │
+┌───┴───┐ ┌───┴───┐ ┌───┴───┐ ┌───┴───┐
+│ name  │ │  age  │ │phone  │ │courses│
+│(comp) │ │(simp) │ │(multi)│ │(deri) │
+└───────┘ └───────┘ └───────┘ └───────┘
+                            </pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Cardinality Constraints</h3>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Type</th>
+                                <th>Notation</th>
+                                <th>Example</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>One-to-One (1:1)</td>
+                                <td>1 ─── 1</td>
+                                <td>Person ↔ Passport</td>
+                            </tr>
+                            <tr>
+                                <td>One-to-Many (1:N)</td>
+                                <td>1 ─── N</td>
+                                <td>Department → Employees</td>
+                            </tr>
+                            <tr>
+                                <td>Many-to-One (N:1)</td>
+                                <td>N ─── 1</td>
+                                <td>Employees → Department</td>
+                            </tr>
+                            <tr>
+                                <td>Many-to-Many (M:N)</td>
+                                <td>M ─── N</td>
+                                <td>Students ↔ Courses</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="formula-box" style="margin-top: 15px;">
+                    <div class="formula-name">Participation Constraints</div>
+                    <div class="formula-description">
+                        • <strong>Total Participation:</strong> Every entity must participate (double line)<br>
+                        • <strong>Partial Participation:</strong> Some entities may not participate (single line)
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">ER to Relational Mapping</h3>
+                <div class="algorithm-card">
+                    <h4>Mapping Algorithm</h4>
+                    <div class="steps">
+                        <div class="step"><strong>Step 1:</strong> For each regular entity → Create relation with all attributes</div>
+                        <div class="step"><strong>Step 2:</strong> For each weak entity → Create relation with attributes + primary key of owner</div>
+                        <div class="step"><strong>Step 3:</strong> For each 1:1 relationship → Add foreign key to either side</div>
+                        <div class="step"><strong>Step 4:</strong> For each 1:N relationship → Add foreign key to N side</div>
+                        <div class="step"><strong>Step 5:</strong> For each M:N relationship → Create new relation with foreign keys</div>
+                        <div class="step"><strong>Step 6:</strong> For multi-valued attributes → Create separate relation</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Extended ER (EER) Features</h3>
+                <div class="grid">
+                    <div class="algorithm-card">
+                        <h4>Specialization (Top-Down)</h4>
+                        <div class="formula-description">
+                            Process of defining subclasses from superclass.<br>
+                            • <strong>Total:</strong> Every superclass entity belongs to subclass<br>
+                            • <strong>Partial:</strong> Some may not belong to any subclass<br>
+                            • <strong>Disjoint:</strong> Entity can belong to at most one subclass<br>
+                            • <strong>Overlapping:</strong> Entity can belong to multiple subclasses
+                        </div>
+                    </div>
+                    <div class="algorithm-card">
+                        <h4>Generalization (Bottom-Up)</h4>
+                        <div class="formula-description">
+                            Process of defining superclass from subclasses.<br>
+                            Combines common attributes into higher-level entity.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid" style="margin-top: 15px;">
+                    <div class="algorithm-card">
+                        <h4>Union (Category)</h4>
+                        <div class="formula-description">
+                            Represents a collection of entities from different entity types. Symbol: "U" in a circle.
+                        </div>
+                    </div>
+                    <div class="algorithm-card">
+                        <h4>Aggregation</h4>
+                        <div class="formula-description">
+                            Treats relationship as higher-level entity for participating in other relationships.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- RELATIONAL MODEL SECTION -->
+        <div class="section">
+            <h2 class="section-title">
+                <span class="icon">📊</span>
+                Relational Model
+            </h2>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Basic Terminology</h3>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Relational Term</th>
+                                <th>Equivalent</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Relation</td>
+                                <td>Table</td>
+                                <td>Collection of tuples (rows)</td>
+                            </tr>
+                            <tr>
+                                <td>Attribute</td>
+                                <td>Column</td>
+                                <td>Named column of a relation</td>
+                            </tr>
+                            <tr>
+                                <td>Tuple</td>
+                                <td>Row</td>
+                                <td>Single record in a relation</td>
+                            </tr>
+                            <tr>
+                                <td>Domain</td>
+                                <td>Data Type</td>
+                                <td>Set of allowable values</td>
+                            </tr>
+                            <tr>
+                                <td>Degree/Arity</td>
+                                <td>Number of Columns</td>
+                                <td>Number of attributes</td>
+                            </tr>
+                            <tr>
+                                <td>Cardinality</td>
+                                <td>Number of Rows</td>
+                                <td>Number of tuples</td>
+                            </tr>
+                            <tr>
+                                <td>Schema</td>
+                                <td>Structure</td>
+                                <td>R(A₁, A₂, ..., Aₙ)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Keys</h3>
+                <div class="grid">
+                    <div class="formula-box">
+                        <div class="formula-name">Super Key</div>
+                        <div class="formula">Set of attributes that uniquely identifies a tuple</div>
+                        <div class="formula-description">
+                            May contain extra attributes. Any superset of a candidate key.
+                        </div>
+                    </div>
+                    <div class="formula-box">
+                        <div class="formula-name">Candidate Key</div>
+                        <div class="formula">Minimal super key (no proper subset is a super key)</div>
+                        <div class="formula-description">
+                            A relation can have multiple candidate keys.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid" style="margin-top: 15px;">
+                    <div class="formula-box">
+                        <div class="formula-name">Primary Key</div>
+                        <div class="formula">Selected candidate key to uniquely identify tuples</div>
+                        <div class="formula-description">
+                            NOT NULL, UNIQUE. Only one per relation.
+                        </div>
+                    </div>
+                    <div class="formula-box">
+                        <div class="formula-name">Foreign Key</div>
+                        <div class="formula">Attribute(s) referencing primary key of another relation</div>
+                        <div class="formula-description">
+                            Enforces referential integrity between tables.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="formula-box" style="margin-top: 15px;">
+                    <div class="formula-name">Alternate Key</div>
+                    <div class="formula">Candidate keys not chosen as primary key</div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Relational Algebra Operations</h3>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Operation</th>
+                                <th>Symbol</th>
+                                <th>Notation</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Selection</td>
+                                <td>σ (sigma)</td>
+                                <td>σ<sub>condition</sub>(R)</td>
+                                <td>Select rows satisfying condition</td>
+                            </tr>
+                            <tr>
+                                <td>Projection</td>
+                                <td>π (pi)</td>
+                                <td>π<sub>attrs</sub>(R)</td>
+                                <td>Select columns (eliminates duplicates)</td>
+                            </tr>
+                            <tr>
+                                <td>Cartesian Product</td>
+                                <td>×</td>
+                                <td>R × S</td>
+                                <td>All combinations of tuples</td>
+                            </tr>
+                            <tr>
+                                <td>Union</td>
+                                <td>∪</td>
+                                <td>R ∪ S</td>
+                                <td>Tuples in R or S (union compatible)</td>
+                            </tr>
+                            <tr>
+                                <td>Intersection</td>
+                                <td>∩</td>
+                                <td>R ∩ S</td>
+                                <td>Tuples in both R and S</td>
+                            </tr>
+                            <tr>
+                                <td>Difference</td>
+                                <td>−</td>
+                                <td>R − S</td>
+                                <td>Tuples in R but not in S</td>
+                            </tr>
+                            <tr>
+                                <td>Join (Theta)</td>
+                                <td>⋈</td>
+                                <td>R ⋈<sub>condition</sub> S</td>
+                                <td>Rows satisfying join condition</td>
+                            </tr>
+                            <tr>
+                                <td>Natural Join</td>
+                                <td>⋈</td>
+                                <td>R ⋈ S</td>
+                                <td>Join on common attributes</td>
+                            </tr>
+                            <tr>
+                                <td>Left Outer Join</td>
+                                <td>⟕</td>
+                                <td>R ⟕ S</td>
+                                <td>All R tuples + matching S or NULL</td>
+                            </tr>
+                            <tr>
+                                <td>Right Outer Join</td>
+                                <td>⟖</td>
+                                <td>R ⟖ S</td>
+                                <td>All S tuples + matching R or NULL</td>
+                            </tr>
+                            <tr>
+                                <td>Full Outer Join</td>
+                                <td>⟗</td>
+                                <td>R ⟗ S</td>
+                                <td>All tuples from both relations</td>
+                            </tr>
+                            <tr>
+                                <td>Division</td>
+                                <td>÷</td>
+                                <td>R ÷ S</td>
+                                <td>Tuples that match all S tuples</td>
+                            </tr>
+                            <tr>
+                                <td>Rename</td>
+                                <td>ρ (rho)</td>
+                                <td>ρ<sub>newname</sub>(R)</td>
+                                <td>Rename relation/attributes</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Relational Algebra Examples</h3>
+                <div class="example">
+                    <div class="example-title">📌 Example Queries</div>
+                    <strong>1. Find all students with GPA > 3.5:</strong><br>
+                    <div class="formula">σ<sub>GPA > 3.5</sub>(Student)</div>
+                    
+                    <strong>2. Get names and majors of all students:</strong><br>
+                    <div class="formula">π<sub>name, major</sub>(Student)</div>
+                    
+                    <strong>3. Find students enrolled in 'Database' course:</strong><br>
+                    <div class="formula">π<sub>name</sub>(σ<sub>cname='Database'</sub>(Student ⋈ Enrollment ⋈ Course))</div>
+                    
+                    <strong>4. Find students taking ALL courses:</strong><br>
+                    <div class="formula">π<sub>sid,cid</sub>(Enrollment) ÷ π<sub>cid</sub>(Course)</div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Relational Calculus</h3>
+                <div class="grid">
+                    <div class="algorithm-card">
+                        <h4>Tuple Relational Calculus (TRC)</h4>
+                        <div class="formula">{ t | P(t) }</div>
+                        <div class="formula-description">
+                            Query expressed as tuple variable t satisfying predicate P.
+                        </div>
+                        <div class="example">
+                            <div class="example-title">Example:</div>
+                            Find students with GPA > 3.5:<br>
+                            { t | ∃s ∈ Student(s.gpa > 3.5 ∧ t.name = s.name) }
+                        </div>
+                    </div>
+                    <div class="algorithm-card">
+                        <h4>Domain Relational Calculus (DRC)</h4>
+                        <div class="formula">{ ⟨x₁,x₂,...,xₙ⟩ | P(x₁,x₂,...,xₙ) }</div>
+                        <div class="formula-description">
+                            Query uses domain variables (column values) instead of tuple variables.
+                        </div>
+                        <div class="example">
+                            <div class="example-title">Example:</div>
+                            { ⟨n⟩ | ∃g ⟨Student⟩(g > 3.5 ∧ ⟨n,g,_⟩ ∈ Student) }
+                        </div>
+                    </div>
+                </div>
+
+                <div class="important" style="margin-top: 15px;">
+                    <div class="important-title">ℹ️ Equivalence:</div>
+                    Relational Algebra and Relational Calculus are equivalent in expressive power. Both are relationally complete.
+                </div>
+            </div>
+        </div>
+
+        <!-- SQL SECTION -->
+        <div class="section">
+            <h2 class="section-title">
+                <span class="icon">📝</span>
+                SQL (Structured Query Language)
+            </h2>
+
+            <div class="subsection">
+                <h3 class="subsection-title">DDL Commands</h3>
+                <div class="algorithm-card">
+                    <h4>CREATE TABLE</h4>
+                    <div class="sql-block">
+                        <span class="sql-keyword">CREATE TABLE</span> Student (<br>
+                        &nbsp;&nbsp;sid <span class="sql-keyword">INT PRIMARY KEY</span>,<br>
+                        &nbsp;&nbsp;name <span class="sql-keyword">VARCHAR</span>(50) <span class="sql-keyword">NOT NULL</span>,<br>
+                        &nbsp;&nbsp;major <span class="sql-keyword">VARCHAR</span>(30),<br>
+                        &nbsp;&nbsp;gpa <span class="sql-keyword">DECIMAL</span>(3,2) <span class="sql-keyword">DEFAULT</span> <span class="sql-string">0.0</span>,<br>
+                        &nbsp;&nbsp;dept_id <span class="sql-keyword">INT</span>,<br>
+                        &nbsp;&nbsp;<span class="sql-keyword">FOREIGN KEY</span> (dept_id) <span class="sql-keyword">REFERENCES</span> Department(id)<br>
+                        );
+                    </div>
+                </div>
+
+                <div class="grid" style="margin-top: 15px;">
+                    <div class="algorithm-card">
+                        <h4>ALTER TABLE</h4>
+                        <div class="sql-block">
+                            <span class="sql-comment">-- Add column</span><br>
+                            <span class="sql-keyword">ALTER TABLE</span> Student <span class="sql-keyword">ADD</span> email <span class="sql-keyword">VARCHAR</span>(100);<br><br>
+                            <span class="sql-comment">-- Drop column</span><br>
+                            <span class="sql-keyword">ALTER TABLE</span> Student <span class="sql-keyword">DROP COLUMN</span> email;<br><br>
+                            <span class="sql-comment">-- Modify column</span><br>
+                            <span class="sql-keyword">ALTER TABLE</span> Student <span class="sql-keyword">MODIFY</span> name <span class="sql-keyword">VARCHAR</span>(100);
+                        </div>
+                    </div>
+                    <div class="algorithm-card">
+                        <h4>DROP & TRUNCATE</h4>
+                        <div class="sql-block">
+                            <span class="sql-comment">-- Remove table structure and data</span><br>
+                            <span class="sql-keyword">DROP TABLE</span> Student;<br><br>
+                            <span class="sql-comment">-- Remove all data, keep structure</span><br>
+                            <span class="sql-keyword">TRUNCATE TABLE</span> Student;
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">DML Commands</h3>
+                <div class="grid">
+                    <div class="algorithm-card">
+                        <h4>SELECT Statement</h4>
+                        <div class="sql-block">
+                            <span class="sql-keyword">SELECT</span> name, major<br>
+                            <span class="sql-keyword">FROM</span> Student<br>
+                            <span class="sql-keyword">WHERE</span> gpa <span class="sql-operator">></span> 3.5<br>
+                            <span class="sql-keyword">ORDER BY</span> name <span class="sql-keyword">ASC</span><br>
+                            <span class="sql-keyword">LIMIT</span> 10;
+                        </div>
+                    </div>
+                    <div class="algorithm-card">
+                        <h4>INSERT Statement</h4>
+                        <div class="sql-block">
+                            <span class="sql-keyword">INSERT INTO</span> Student (sid, name, gpa)<br>
+                            <span class="sql-keyword">VALUES</span> (<span class="sql-string">1</span>, <span class="sql-string">'John'</span>, <span class="sql-string">3.8</span>);<br><br>
+                            <span class="sql-comment">-- Insert from query</span><br>
+                            <span class="sql-keyword">INSERT INTO</span> Student_Backup<br>
+                            <span class="sql-keyword">SELECT</span> * <span class="sql-keyword">FROM</span> Student;
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid" style="margin-top: 15px;">
+                    <div class="algorithm-card">
+                        <h4>UPDATE Statement</h4>
+                        <div class="sql-block">
+                            <span class="sql-keyword">UPDATE</span> Student<br>
+                            <span class="sql-keyword">SET</span> gpa <span class="sql-operator">=</span> <span class="sql-string">4.0</span>, major <span class="sql-operator">=</span> <span class="sql-string">'CS'</span><br>
+                            <span class="sql-keyword">WHERE</span> sid <span class="sql-operator">=</span> <span class="sql-string">1</span>;
+                        </div>
+                    </div>
+                    <div class="algorithm-card">
+                        <h4>DELETE Statement</h4>
+                        <div class="sql-block">
+                            <span class="sql-keyword">DELETE FROM</span> Student<br>
+                            <span class="sql-keyword">WHERE</span> gpa <span class="sql-operator"><</span> 2.0;
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Joins in SQL</h3>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Join Type</th>
+                                <th>Syntax</th>
+                                <th>Result</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>INNER JOIN</td>
+                                <td>A INNER JOIN B ON condition</td>
+                                <td>Only matching rows</td>
+                            </tr>
+                            <tr>
+                                <td>LEFT JOIN</td>
+                                <td>A LEFT JOIN B ON condition</td>
+                                <td>All A rows + matching B (NULL if no match)</td>
+                            </tr>
+                            <tr>
+                                <td>RIGHT JOIN</td>
+                                <td>A RIGHT JOIN B ON condition</td>
+                                <td>All B rows + matching A</td>
+                            </tr>
+                            <tr>
+                                <td>FULL OUTER JOIN</td>
+                                <td>A FULL OUTER JOIN B ON condition</td>
+                                <td>All rows from both tables</td>
+                            </tr>
+                            <tr>
+                                <td>CROSS JOIN</td>
+                                <td>A CROSS JOIN B</td>
+                                <td>Cartesian product</td>
+                            </tr>
+                            <tr>
+                                <td>NATURAL JOIN</td>
+                                <td>A NATURAL JOIN B</td>
+                                <td>Join on same-named columns</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="example" style="margin-top: 15px;">
+                    <div class="example-title">📌 Join Example</div>
+                    <div class="sql-block">
+                        <span class="sql-keyword">SELECT</span> s.name, c.cname<br>
+                        <span class="sql-keyword">FROM</span> Student s<br>
+                        <span class="sql-keyword">LEFT JOIN</span> Enrollment e <span class="sql-keyword">ON</span> s.sid <span class="sql-operator">=</span> e.sid<br>
+                        <span class="sql-keyword">LEFT JOIN</span> Course c <span class="sql-keyword">ON</span> e.cid <span class="sql-operator">=</span> c.cid;
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Aggregate Functions</h3>
+                <div class="grid">
+                    <div class="formula-box">
+                        <div class="formula-name">Aggregate Functions</div>
+                        <div class="formula-row">
+                            <div class="formula-item">COUNT(*) - count all rows</div>
+                            <div class="formula-item">COUNT(col) - count non-NULL</div>
+                        </div>
+                        <div class="formula-row">
+                            <div class="formula-item">SUM(col) - sum values</div>
+                            <div class="formula-item">AVG(col) - average</div>
+                        </div>
+                        <div class="formula-row">
+                            <div class="formula-item">MAX(col) - maximum</div>
+                            <div class="formula-item">MIN(col) - minimum</div>
+                        </div>
+                    </div>
+                    <div class="formula-box">
+                        <div class="formula-name">GROUP BY & HAVING</div>
+                        <div class="sql-block">
+                            <span class="sql-keyword">SELECT</span> major, <span class="sql-function">COUNT</span>(*) <span class="sql-keyword">AS</span> cnt<br>
+                            <span class="sql-keyword">FROM</span> Student<br>
+                            <span class="sql-keyword">GROUP BY</span> major<br>
+                            <span class="sql-keyword">HAVING</span> <span class="sql-function">COUNT</span>(*) <span class="sql-operator">></span> 5;
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Subqueries</h3>
+                <div class="grid">
+                    <div class="algorithm-card">
+                        <h4>Scalar Subquery</h4>
+                        <div class="sql-block">
+                            <span class="sql-comment">-- Single value</span><br>
+                            <span class="sql-keyword">SELECT</span> name <span class="sql-keyword">FROM</span> Student<br>
+                            <span class="sql-keyword">WHERE</span> gpa <span class="sql-operator">=</span> (<span class="sql-keyword">SELECT</span> <span class="sql-function">MAX</span>(gpa) <span class="sql-keyword">FROM</span> Student);
+                        </div>
+                    </div>
+                    <div class="algorithm-card">
+                        <h4>IN / NOT IN</h4>
+                        <div class="sql-block">
+                            <span class="sql-keyword">SELECT</span> name <span class="sql-keyword">FROM</span> Student<br>
+                            <span class="sql-keyword">WHERE</span> major <span class="sql-keyword">IN</span> (<span class="sql-string">'CS'</span>, <span class="sql-string">'Math'</span>, <span class="sql-string">'Physics'</span>);
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid" style="margin-top: 15px;">
+                    <div class="algorithm-card">
+                        <h4>EXISTS / NOT EXISTS</h4>
+                        <div class="sql-block">
+                            <span class="sql-comment">-- Students enrolled in any course</span><br>
+                            <span class="sql-keyword">SELECT</span> name <span class="sql-keyword">FROM</span> Student s<br>
+                            <span class="sql-keyword">WHERE EXISTS</span> (<br>
+                            &nbsp;&nbsp;<span class="sql-keyword">SELECT</span> * <span class="sql-keyword">FROM</span> Enrollment e<br>
+                            &nbsp;&nbsp;<span class="sql-keyword">WHERE</span> e.sid <span class="sql-operator">=</span> s.sid<br>
+                            );
+                        </div>
+                    </div>
+                    <div class="algorithm-card">
+                        <h4>Correlated Subquery</h4>
+                        <div class="sql-block">
+                            <span class="sql-comment">-- Students above avg GPA in their major</span><br>
+                            <span class="sql-keyword">SELECT</span> name <span class="sql-keyword">FROM</span> Student s1<br>
+                            <span class="sql-keyword">WHERE</span> gpa <span class="sql-operator">></span> (<br>
+                            &nbsp;&nbsp;<span class="sql-keyword">SELECT</span> <span class="sql-function">AVG</span>(gpa) <span class="sql-keyword">FROM</span> Student s2<br>
+                            &nbsp;&nbsp;<span class="sql-keyword">WHERE</span> s2.major <span class="sql-operator">=</span> s1.major<br>
+                            );
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Advanced SQL</h3>
+                <div class="grid">
+                    <div class="algorithm-card">
+                        <h4>Views</h4>
+                        <div class="sql-block">
+                            <span class="sql-keyword">CREATE VIEW</span> CS_Students <span class="sql-keyword">AS</span><br>
+                            <span class="sql-keyword">SELECT</span> sid, name, gpa<br>
+                            <span class="sql-keyword">FROM</span> Student<br>
+                            <span class="sql-keyword">WHERE</span> major <span class="sql-operator">=</span> <span class="sql-string">'CS'</span>;
+                        </div>
+                    </div>
+                    <div class="algorithm-card">
+                        <h4>Indexes</h4>
+                        <div class="sql-block">
+                            <span class="sql-comment">-- Create index</span><br>
+                            <span class="sql-keyword">CREATE INDEX</span> idx_name<br>
+                            <span class="sql-keyword">ON</span> Student(name);<br><br>
+                            <span class="sql-comment">-- Unique index</span><br>
+                            <span class="sql-keyword">CREATE UNIQUE INDEX</span> idx_email<br>
+                            <span class="sql-keyword">ON</span> Student(email);
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid" style="margin-top: 15px;">
+                    <div class="algorithm-card">
+                        <h4>Window Functions</h4>
+                        <div class="sql-block">
+                            <span class="sql-keyword">SELECT</span> name, gpa,<br>
+                            &nbsp;&nbsp;<span class="sql-function">RANK</span>() <span class="sql-keyword">OVER</span> (<span class="sql-keyword">ORDER BY</span> gpa <span class="sql-keyword">DESC</span>) <span class="sql-keyword">AS</span> rank,<br>
+                            &nbsp;&nbsp;<span class="sql-function">ROW_NUMBER</span>() <span class="sql-keyword">OVER</span> (<span class="sql-keyword">ORDER BY</span> gpa <span class="sql-keyword">DESC</span>) <span class="sql-keyword">AS</span> rn,<br>
+                            &nbsp;&nbsp;<span class="sql-function">DENSE_RANK</span>() <span class="sql-keyword">OVER</span> (<span class="sql-keyword">ORDER BY</span> gpa <span class="sql-keyword">DESC</span>) <span class="sql-keyword">AS</span> dr<br>
+                            <span class="sql-keyword">FROM</span> Student;
+                        </div>
+                    </div>
+                    <div class="algorithm-card">
+                        <h4>CTE (Common Table Expression)</h4>
+                        <div class="sql-block">
+                            <span class="sql-keyword">WITH</span> TopStudents <span class="sql-keyword">AS</span> (<br>
+                            &nbsp;&nbsp;<span class="sql-keyword">SELECT</span> name, gpa <span class="sql-keyword">FROM</span> Student<br>
+                            &nbsp;&nbsp;<span class="sql-keyword">WHERE</span> gpa <span class="sql-operator">></span> 3.5<br>
+                            )<br>
+                            <span class="sql-keyword">SELECT</span> * <span class="sql-keyword">FROM</span> TopStudents<br>
+                            <span class="sql-keyword">ORDER BY</span> gpa <span class="sql-keyword">DESC</span>;
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- NORMALIZATION SECTION -->
+        <div class="section">
+            <h2 class="section-title">
+                <span class="icon">📐</span>
+                Normalization
+            </h2>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Functional Dependencies</h3>
+                <div class="formula-box">
+                    <div class="formula-name">Definition</div>
+                    <div class="formula">X → Y (X determines Y)</div>
+                    <div class="formula-description">
+                        For any two tuples t₁, t₂: if t₁[X] = t₂[X], then t₁[Y] = t₂[Y]
+                    </div>
+                </div>
+
+                <div class="grid" style="margin-top: 15px;">
+                    <div class="algorithm-card">
+                        <h4>Types of FD</h4>
+                        <div class="formula-description">
+                            • <strong>Trivial:</strong> Y ⊆ X (e.g., AB → A)<br>
+                            • <strong>Non-trivial:</strong> Y ⊈ X<br>
+                            • <strong>Completely non-trivial:</strong> Y ⊈ X and X ∩ Y = ∅
+                        </div>
+                    </div>
+                    <div class="algorithm-card">
+                        <h4>Armstrong's Axioms</h4>
+                        <div class="formula"><strong>Reflexivity:</strong> If Y ⊆ X, then X → Y</div>
+                        <div class="formula"><strong>Augmentation:</strong> If X → Y, then XZ → YZ</div>
+                        <div class="formula"><strong>Transitivity:</strong> If X → Y and Y → Z, then X → Z</div>
+                    </div>
+                </div>
+
+                <div class="algorithm-card" style="margin-top: 15px;">
+                    <h4>Derived Rules</h4>
+                    <div class="grid">
+                        <div class="formula-box">
+                            <div class="formula-name">Union</div>
+                            <div class="formula">If X → Y and X → Z, then X → YZ</div>
+                        </div>
+                        <div class="formula-box">
+                            <div class="formula-name">Decomposition</div>
+                            <div class="formula">If X → YZ, then X → Y and X → Z</div>
+                        </div>
+                        <div class="formula-box">
+                            <div class="formula-name">Pseudo-transitivity</div>
+                            <div class="formula">If X → Y and YW → Z, then XW → Z</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Closure and Keys</h3>
+                <div class="grid">
+                    <div class="algorithm-card">
+                        <h4>Attribute Closure (X⁺)</h4>
+                        <div class="steps">
+                            <div class="step">Initialize: X⁺ = X</div>
+                            <div class="step">Repeat until no change:</div>
+                            <div class="step" style="padding-left: 50px;">For each FD Y → Z in F:</div>
+                            <div class="step" style="padding-left: 70px;">If Y ⊆ X⁺, add Z to X⁺</div>
+                            <div class="step">Return X⁺</div>
+                        </div>
+                    </div>
+                    <div class="algorithm-card">
+                        <h4>Finding Candidate Keys</h4>
+                        <div class="steps">
+                            <div class="step">Find attribute closure of each attribute</div>
+                            <div class="step">Attributes not in any LHS → must be in key</div>
+                            <div class="step">Attributes only on LHS → must be in key</div>
+                            <div class="step">Try combinations until closure = all attributes</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="example" style="margin-top: 15px;">
+                    <div class="example-title">📌 Example: Finding Closure</div>
+                    R(A, B, C, D, E) with FDs: A → BC, CD → E, B → D<br><br>
+                    Find (AB)⁺:<br>
+                    1. (AB)⁺ = {A, B}<br>
+                    2. A → BC: Add B, C → (AB)⁺ = {A, B, C}<br>
+                    3. B → D: Add D → (AB)⁺ = {A, B, C, D}<br>
+                    4. CD → E: Add E → (AB)⁺ = {A, B, C, D, E}<br>
+                    <strong>Result:</strong> (AB)⁺ = {A, B, C, D, E} → AB is a candidate key
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Normal Forms</h3>
+                
+                <div class="nf-box">
+                    <div class="nf-title">First Normal Form (1NF)</div>
+                    <div class="formula-description">
+                        • All attributes have atomic (indivisible) values<br>
+                        • No repeating groups or arrays<br>
+                        • Each cell contains single value<br>
+                        • Each row is unique
+                    </div>
+                </div>
+
+                <div class="nf-box">
+                    <div class="nf-title">Second Normal Form (2NF)</div>
+                    <div class="formula-description">
+                        • Must be in 1NF<br>
+                        • No partial dependency: X → A where X is proper subset of candidate key<br>
+                        • All non-prime attributes fully depend on entire candidate key
+                    </div>
+                    <div class="example">
+                        <div class="example-title">Violation:</div>
+                        R(StudID, CourseID, StudName, Grade)<br>
+                        Key: (StudID, CourseID)<br>
+                        FD: StudID → StudName (partial dependency)<br>
+                        <strong>Fix:</strong> Split into Student(StudID, StudName) and Enrollment(StudID, CourseID, Grade)
+                    </div>
+                </div>
+
+                <div class="nf-box">
+                    <div class="nf-title">Third Normal Form (3NF)</div>
+                    <div class="formula-description">
+                        • Must be in 2NF<br>
+                        • No transitive dependency: X → Y → Z (non-prime Z)<br>
+                        • Every non-prime attribute depends ONLY on candidate key
+                    </div>
+                    <div class="formula">A relation is in 3NF if for every X → A:</div>
+                    <div class="formula">&nbsp;&nbsp;1. X is a super key, OR</div>
+                    <div class="formula">&nbsp;&nbsp;2. A is prime (part of candidate key)</div>
+                    <div class="example">
+                        <div class="example-title">Violation:</div>
+                        R(StudID, Zip, City) with StudID → Zip → City<br>
+                        <strong>Fix:</strong> Split into Student(StudID, Zip) and ZipCode(Zip, City)
+                    </div>
+                </div>
+
+                <div class="nf-box">
+                    <div class="nf-title">Boyce-Codd Normal Form (BCNF)</div>
+                    <div class="formula-description">
+                        • Stronger than 3NF<br>
+                        • Every determinant is a candidate key
+                    </div>
+                    <div class="formula">A relation is in BCNF if for every X → A:</div>
+                    <div class="formula">&nbsp;&nbsp;X is a super key</div>
+                    <div class="example">
+                        <div class="example-title">Violation:</div>
+                        R(Student, Course, Instructor) with FDs:<br>
+                        (Student, Course) → Instructor<br>
+                        Instructor → Course<br>
+                        <strong>Problem:</strong> Instructor → Course but Instructor not a key<br>
+                        <strong>Fix:</strong> Split into R1(Student, Instructor) and R2(Instructor, Course)
+                    </div>
+                </div>
+
+                <div class="nf-box">
+                    <div class="nf-title">Fourth Normal Form (4NF)</div>
+                    <div class="formula-description">
+                        • Must be in BCNF<br>
+                        • No multi-valued dependencies (MVD)
+                    </div>
+                    <div class="formula">MVD X →→ Y: For each X, there is a set of Y values independent of other attributes</div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Decomposition Properties</h3>
+                <div class="grid">
+                    <div class="algorithm-card">
+                        <h4>Lossless Join Decomposition</h4>
+                        <div class="formula">R₁ ⋈ R₂ = R (no spurious tuples)</div>
+                        <div class="formula-description">
+                            Decomposition is lossless if:<br>
+                            (R₁ ∩ R₂) → R₁ or (R₁ ∩ R₂) → R₂
+                        </div>
+                    </div>
+                    <div class="algorithm-card">
+                        <h4>Dependency Preservation</h4>
+                        <div class="formula-description">
+                            All FDs in original relation can be enforced by FDs on individual decomposed relations.<br>
+                            Check: (F₁ ∪ F₂ ∪ ... ∪ Fₙ)⁺ = F⁺
+                        </div>
+                    </div>
+                </div>
+
+                <div class="table-container" style="margin-top: 15px;">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Normal Form</th>
+                                <th>Eliminates</th>
+                                <th>Lossless?</th>
+                                <th>Dependency Preserving?</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1NF → 2NF</td>
+                                <td>Partial dependencies</td>
+                                <td class="formula-item">Yes</td>
+                                <td class="formula-item">Yes</td>
+                            </tr>
+                            <tr>
+                                <td>2NF → 3NF</td>
+                                <td>Transitive dependencies</td>
+                                <td class="formula-item">Yes</td>
+                                <td class="formula-item">Yes</td>
+                            </tr>
+                            <tr>
+                                <td>3NF → BCNF</td>
+                                <td>Non-key determinants</td>
+                                <td class="formula-item">Yes</td>
+                                <td style="color: #fbbf24;">Not always</td>
+                            </tr>
+                            <tr>
+                                <td>BCNF → 4NF</td>
+                                <td>Multi-valued dependencies</td>
+                                <td class="formula-item">Yes</td>
+                                <td class="formula-item">Yes</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- TRANSACTIONS SECTION -->
+        <div class="section">
+            <h2 class="section-title">
+                <span class="icon">🔄</span>
+                Transactions
+            </h2>
+
+            <div class="subsection">
+                <h3 class="subsection-title">ACID Properties</h3>
+                <div class="grid">
+                    <div class="algorithm-card">
+                        <h4>Atomicity</h4>
+                        <div class="formula-description">
+                            Transaction is indivisible unit - either all operations complete or none do.<br>
+                            <strong>Implementation:</strong> Logging, undo on failure
+                        </div>
+                    </div>
+                    <div class="algorithm-card">
+                        <h4>Consistency</h4>
+                        <div class="formula-description">
+                            Transaction takes database from one consistent state to another.<br>
+                            <strong>Implementation:</strong> Constraints, triggers
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid" style="margin-top: 15px;">
+                    <div class="algorithm-card">
+                        <h4>Isolation</h4>
+                        <div class="formula-description">
+                            Concurrent transactions don't interfere with each other.<br>
+                            <strong>Implementation:</strong> Locking, MVCC
+                        </div>
+                    </div>
+                    <div class="algorithm-card">
+                        <h4>Durability</h4>
+                        <div class="formula-description">
+                            Once committed, changes survive system failures.<br>
+                            <strong>Implementation:</strong> Logging, checkpointing, replication
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Transaction States</h3>
+                <div class="timeline">
+                    <div class="timeline-item">Active</div>
+                    <span class="timeline-arrow">→</span>
+                    <div class="timeline-item">Partially Committed</div>
+                    <span class="timeline-arrow">→</span>
+                    <div class="timeline-item">Committed</div>
+                </div>
+                <div class="timeline">
+                    <div class="timeline-item">Active</div>
+                    <span class="timeline-arrow">→</span>
+                    <div class="timeline-item">Failed</div>
+                    <span class="timeline-arrow">→</span>
+                    <div class="timeline-item">Aborted</div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Schedules</h3>
+                <div class="grid">
+                    <div class="algorithm-card">
+                        <h4>Serial Schedule</h4>
+                        <div class="formula-description">
+                            Transactions execute one after another (no interleaving).<br>
+                            Always consistent but poor performance.
+                        </div>
+                    </div>
+                    <div class="algorithm-card">
+                        <h4>Conflict Serializable</h4>
+                        <div class="formula-description">
+                            Equivalent to some serial schedule.<br>
+                            No conflicting operations in different order than any serial schedule.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="formula-box" style="margin-top: 15px;">
+                    <div class="formula-name">Conflicting Operations</div>
+                    <div class="formula">Two operations conflict if:</div>
+                    <div class="formula">&nbsp;&nbsp;1. They belong to different transactions</div>
+                    <div class="formula">&nbsp;&nbsp;2. They access the same data item</div>
+                    <div class="formula">&nbsp;&nbsp;3. At least one is a write operation</div>
+                    <div class="variables">
+                        <strong>Types:</strong> Read-Write (RW), Write-Read (WR), Write-Write (WW)
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Precedence Graph (Conflict Graph)</h3>
+                <div class="algorithm-card">
+                    <h4>Testing Conflict Serializability</h4>
+                    <div class="steps">
+                        <div class="step">Create node for each transaction</div>
+                        <div class="step">Add edge Tᵢ → Tⱼ if Tᵢ executes conflicting operation before Tⱼ</div>
+                        <div class="step">Schedule is conflict serializable ⟺ Graph is acyclic</div>
+                    </div>
+                    <div class="example">
+                        <div class="example-title">📌 Example:</div>
+                        Schedule: r₁(A), w₂(A), r₂(B), w₁(B)<br>
+                        Conflicts: r₁(A)-w₂(A), w₁(B)-r₂(B)<br>
+                        Edges: T₁ → T₂ (from A), T₂ → T₁ (from B)<br>
+                        <strong>Cycle exists → NOT conflict serializable</strong>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Recoverable Schedules</h3>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Type</th>
+                                <th>Condition</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Recoverable</td>
+                                <td>If Tᵢ reads from Tⱼ, then Tⱼ commits before Tᵢ</td>
+                            </tr>
+                            <tr>
+                                <td>Cascadeless</td>
+                                <td>If Tᵢ reads from Tⱼ, Tⱼ must commit before Tᵢ reads</td>
+                            </tr>
+                            <tr>
+                                <td>Strict</td>
+                                <td>Tᵢ can read/write X only after Tⱼ that wrote X has committed/aborted</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="note">
+                    <div class="note-title">💡 Hierarchy:</div>
+                    Strict ⊂ Cascadeless ⊂ Recoverable ⊂ All Schedules
+                </div>
+            </div>
+        </div>
+
+        <!-- CONCURRENCY CONTROL SECTION -->
+        <div class="section">
+            <h2 class="section-title">
+                <span class="icon">🔐</span>
+                Concurrency Control
+            </h2>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Lock-Based Protocols</h3>
+                <div class="grid">
+                    <div class="algorithm-card">
+                        <h4>Lock Types</h4>
+                        <div class="formula-description">
+                            • <strong>Shared (S):</strong> Read lock - multiple transactions can hold<br>
+                            • <strong>Exclusive (X):</strong> Write lock - only one transaction can hold
+                        </div>
+                        <div class="table-container">
+                            <table>
+                                <tr><th></th><th>S</th><th>X</th></tr>
+                                <tr><td>S</td><td>✓</td><td>✗</td></tr>
+                                <tr><td>X</td><td>✗</td><td>✗</td></tr>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="algorithm-card">
+                        <h4>Lock Compatibility Matrix</h4>
+                        <div class="formula-description">
+                            ✓ = Compatible (can grant lock)<br>
+                            ✗ = Not compatible (must wait)
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Two-Phase Locking (2PL)</h3>
+                <div class="formula-box">
+                    <div class="formula-name">2PL Protocol</div>
+                    <div class="steps">
+                        <div class="step"><strong>Growing Phase:</strong> Transaction can acquire locks but cannot release any</div>
+                        <div class="step"><strong>Shrinking Phase:</strong> Transaction can release locks but cannot acquire any</div>
+                    </div>
+                    <div class="important">
+                        <div class="important-title">✓ Guarantee:</div>
+                        2PL ensures conflict serializability. All schedules under 2PL are conflict serializable.
+                    </div>
+                </div>
+
+                <div class="grid" style="margin-top: 15px;">
+                    <div class="algorithm-card">
+                        <h4>Variants of 2PL</h4>
+                        <div class="formula-description">
+                            • <strong>Basic 2PL:</strong> May cause deadlock<br>
+                            • <strong>Strict 2PL:</strong> Exclusive locks held until commit/abort<br>
+                            • <strong>Rigorous 2PL:</strong> All locks held until commit/abort
+                        </div>
+                    </div>
+                    <div class="algorithm-card">
+                        <h4>Lock Point</h4>
+                        <div class="formula-description">
+                            Point when transaction acquires its final lock.<br>
+                            Transactions can be serialized in order of their lock points.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Deadlock Handling</h3>
+                <div class="grid">
+                    <div class="algorithm-card">
+                        <h4>Deadlock Prevention</h4>
+                        <div class="steps">
+                            <div class="step"><strong>Wait-Die:</strong> Older waits for younger; younger dies (aborts)</div>
+                            <div class="step"><strong>Wound-Wait:</strong> Older wounds (aborts) younger; younger waits</div>
+                            <div class="step"><strong>Timeout:</strong> Abort if waiting too long</div>
+                        </div>
+                    </div>
+                    <div class="algorithm-card">
+                        <h4>Deadlock Detection</h4>
+                        <div class="steps">
+                            <div class="step">Maintain wait-for graph</div>
+                            <div class="step">Periodically check for cycles</div>
+                            <div class="step">If cycle found, abort one transaction (victim selection)</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Timestamp-Based Protocols</h3>
+                <div class="grid">
+                    <div class="algorithm-card">
+                        <h4>Timestamp Ordering</h4>
+                        <div class="formula">TS(Tᵢ) = Unique timestamp for transaction Tᵢ</div>
+                        <div class="formula-description">
+                            • <strong>W-TS(X):</strong> Largest timestamp of transaction that wrote X<br>
+                            • <strong>R-TS(X):</strong> Largest timestamp of transaction that read X
+                        </div>
+                    </div>
+                    <div class="algorithm-card">
+                        <h4>Rules</h4>
+                        <div class="formula"><strong>Read(X):</strong></div>
+                        <div class="formula">&nbsp;&nbsp;If TS(Tᵢ) < W-TS(X): reject (abort Tᵢ)</div>
+                        <div class="formula">&nbsp;&nbsp;Else: execute, update R-TS(X)</div>
+                        <div class="formula"><strong>Write(X):</strong></div>
+                        <div class="formula">&nbsp;&nbsp;If TS(Tᵢ) < R-TS(X) or TS(Tᵢ) < W-TS(X): reject</div>
+                        <div class="formula">&nbsp;&nbsp;Else: execute, update W-TS(X)</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Multiversion Concurrency Control (MVCC)</h3>
+                <div class="formula-box">
+                    <div class="formula-name">MVCC Concept</div>
+                    <div class="formula-description">
+                        • Multiple versions of each data item are maintained<br>
+                        • Each write creates a new version with transaction timestamp<br>
+                        • Reads access appropriate version based on timestamp<br>
+                        • No blocking between readers and writers
+                    </div>
+                    <div class="variables">
+                        Used in: PostgreSQL, MySQL (InnoDB), Oracle, MongoDB
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Isolation Levels</h3>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Level</th>
+                                <th>Dirty Read</th>
+                                <th>Non-repeatable Read</th>
+                                <th>Phantom Read</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Read Uncommitted</td>
+                                <td style="color: #ef4444;">Possible</td>
+                                <td style="color: #ef4444;">Possible</td>
+                                <td style="color: #ef4444;">Possible</td>
+                            </tr>
+                            <tr>
+                                <td>Read Committed</td>
+                                <td style="color: #22c55e;">Not Possible</td>
+                                <td style="color: #ef4444;">Possible</td>
+                                <td style="color: #ef4444;">Possible</td>
+                            </tr>
+                            <tr>
+                                <td>Repeatable Read</td>
+                                <td style="color: #22c55e;">Not Possible</td>
+                                <td style="color: #22c55e;">Not Possible</td>
+                                <td style="color: #ef4444;">Possible</td>
+                            </tr>
+                            <tr>
+                                <td>Serializable</td>
+                                <td style="color: #22c55e;">Not Possible</td>
+                                <td style="color: #22c55e;">Not Possible</td>
+                                <td style="color: #22c55e;">Not Possible</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="grid" style="margin-top: 15px;">
+                    <div class="algorithm-card">
+                        <h4>Problems Prevented</h4>
+                        <div class="formula-description">
+                            • <strong>Dirty Read:</strong> Reading uncommitted data<br>
+                            • <strong>Non-repeatable Read:</strong> Same query returns different results<br>
+                            • <strong>Phantom Read:</strong> New rows appear in range queries
+                        </div>
+                    </div>
+                    <div class="algorithm-card">
+                        <h4>SQL Syntax</h4>
+                        <div class="sql-block">
+                            <span class="sql-keyword">SET TRANSACTION ISOLATION LEVEL</span> REPEATABLE READ;
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- RECOVERY SECTION -->
+        <div class="section">
+            <h2 class="section-title">
+                <span class="icon">💾</span>
+                Recovery System
+            </h2>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Log-Based Recovery</h3>
+                <div class="algorithm-card">
+                    <h4>Log Records</h4>
+                    <div class="formula"><strong>Update log record:</strong> ⟨Tᵢ, X, V_old, V_new⟩</div>
+                    <div class="formula"><strong>Other records:</strong></div>
+                    <div class="formula">&nbsp;&nbsp;⟨Tᵢ, start⟩ - Transaction started</div>
+                    <div class="formula">&nbsp;&nbsp;⟨Tᵢ, commit⟩ - Transaction committed</div>
+                    <div class="formula">&nbsp;&nbsp;⟨Tᵢ, abort⟩ - Transaction aborted</div>
+                    <div class="formula">&nbsp;&nbsp;⟨checkpoint, L⟩ - Checkpoint with active transaction list L</div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Undo and Redo</h3>
+                <div class="grid">
+                    <div class="algorithm-card">
+                        <h4>Undo (Rollback)</h4>
+                        <div class="formula-description">
+                            Restore old value if transaction not committed.<br>
+                            Used for: Active transactions at crash, aborted transactions.
+                        </div>
+                        <div class="formula">⟨Tᵢ, X, V_old, V_new⟩ → Set X = V_old</div>
+                    </div>
+                    <div class="algorithm-card">
+                        <h4>Redo (Replay)</h4>
+                        <div class="formula-description">
+                            Apply changes if transaction committed.<br>
+                            Used for: Committed transactions not written to disk.
+                        </div>
+                        <div class="formula">⟨Tᵢ, X, V_old, V_new⟩ → Set X = V_new</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Recovery Algorithms</h3>
+                <div class="grid">
+                    <div class="algorithm-card">
+                        <h4>UNDO/REDO Algorithm</h4>
+                        <div class="steps">
+                            <div class="step">Find last checkpoint, identify:</div>
+                            <div class="step" style="padding-left: 50px;"><strong>Undo list:</strong> Active transactions (not committed)</div>
+                            <div class="step" style="padding-left: 50px;"><strong>Redo list:</strong> Committed transactions after checkpoint</div>
+                            <div class="step">Scan forward from checkpoint, redo all in redo list</div>
+                            <div class="step">Scan backward, undo all in undo list</div>
+                        </div>
+                    </div>
+                    <div class="algorithm-card">
+                        <h4>Write-Ahead Logging (WAL)</h4>
+                        <div class="formula-description">
+                            Log must be written to stable storage BEFORE data is written to disk.<br>
+                            <strong>Rules:</strong><br>
+                            1. Undo rule: Log record written before data page<br>
+                            2. Redo rule: All log records written before commit
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Checkpoints</h3>
+                <div class="grid">
+                    <div class="formula-box">
+                        <div class="formula-name">Fuzzy Checkpoint</div>
+                        <div class="formula-description">
+                            • Don't stop transactions during checkpoint<br>
+                            • Record list of active transactions<br>
+                            • Background process writes dirty pages
+                        </div>
+                    </div>
+                    <div class="formula-box">
+                        <div class="formula-name">ARIES Recovery</div>
+                        <div class="steps">
+                            <div class="step"><strong>Analysis:</strong> Identify dirty pages, active transactions</div>
+                            <div class="step"><strong>Redo:</strong> Repeat history from last checkpoint</div>
+                            <div class="step"><strong>Undo:</strong> Roll back uncommitted transactions</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- INDEXING SECTION -->
+        <div class="section">
+            <h2 class="section-title">
+                <span class="icon">🔍</span>
+                Indexing
+            </h2>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Index Types</h3>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Type</th>
+                                <th>Description</th>
+                                <th>Use Case</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Primary Index</td>
+                                <td>On primary key, ordered file</td>
+                                <td>Exact match on key</td>
+                            </tr>
+                            <tr>
+                                <td>Clustering Index</td>
+                                <td>On non-key, records grouped</td>
+                                <td>Range queries on ordering field</td>
+                            </tr>
+                            <tr>
+                                <td>Secondary Index</td>
+                                <td>On any attribute, dense</td>
+                                <td>Non-ordering field lookup</td>
+                            </tr>
+                            <tr>
+                                <td>Dense Index</td>
+                                <td>Entry for every search key value</td>
+                                <td>Fast lookup, more space</td>
+                            </tr>
+                            <tr>
+                                <td>Sparse Index</td>
+                                <td>Entry for some values only</td>
+                                <td>Less space, may need scan</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">B+ Tree Index</h3>
+                <div class="grid">
+                    <div class="algorithm-card">
+                        <h4>B+ Tree Properties</h4>
+                        <div class="formula">Order m: each node has ⌈m/2⌉ to m children</div>
+                        <div class="formula-description">
+                            • All leaf nodes at same level (balanced)<br>
+                            • Leaf nodes linked for sequential access<br>
+                            • Internal nodes store only keys (pointers)<br>
+                            • Leaf nodes store key-pointer pairs
+                        </div>
+                    </div>
+                    <div class="algorithm-card">
+                        <h4>Complexity</h4>
+                        <div class="formula">Height h = ⌈log⌈m/2⌉(n)⌉</div>
+                        <div class="formula-description">
+                            • <strong>Search:</strong> O(log n)<br>
+                            • <strong>Insert:</strong> O(log n) + possible splits<br>
+                            • <strong>Delete:</strong> O(log n) + possible merges
+                        </div>
+                    </div>
+                </div>
+
+                <div class="example" style="margin-top: 15px;">
+                    <div class="example-title">📌 B+ Tree Example (Order 3)</div>
+                    <div class="er-diagram">
+                        <pre>
+                [ 30 | 70 ]
+               /     |     \
+         [10|20] [30|50] [70|80|90]
+            |       |        |
+         Leaves linked in order
+                        </pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Hash Index</h3>
+                <div class="grid">
+                    <div class="algorithm-card">
+                        <h4>Static Hashing</h4>
+                        <div class="formula">h(k) = k mod M (M = number of buckets)</div>
+                        <div class="formula-description">
+                            • O(1) average search<br>
+                            • Problem: Overflow chains, fixed buckets
+                        </div>
+                    </div>
+                    <div class="algorithm-card">
+                        <h4>Extendible Hashing</h4>
+                        <div class="formula-description">
+                            • Dynamic directory that grows/shrinks<br>
+                            • Uses prefix of hash value<br>
+                            • Directory size: 2^d where d = global depth
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid" style="margin-top: 15px;">
+                    <div class="algorithm-card">
+                        <h4>Linear Hashing</h4>
+                        <div class="formula-description">
+                            • No directory, split buckets incrementally<br>
+                            • Split pointer tracks next bucket to split<br>
+                            • n = current number of buckets, i = ⌈log₂ n⌉
+                        </div>
+                        <div class="formula">hᵢ(k) = k mod 2ⁱ</div>
+                    </div>
+                    <div class="algorithm-card">
+                        <h4>Bucket Overflow</h4>
+                        <div class="formula-description">
+                            <strong>Causes:</strong><br>
+                            • Insufficient buckets<br>
+                            • Skewed distribution (many collisions)
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- QUERY PROCESSING SECTION -->
+        <div class="section">
+            <h2 class="section-title">
+                <span class="icon">⚡</span>
+                Query Processing & Optimization
+            </h2>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Query Processing Steps</h3>
+                <div class="timeline">
+                    <div class="timeline-item">SQL Query</div>
+                    <span class="timeline-arrow">→</span>
+                    <div class="timeline-item">Parser</div>
+                    <span class="timeline-arrow">→</span>
+                    <div class="timeline-item">Query Tree</div>
+                    <span class="timeline-arrow">→</span>
+                    <div class="timeline-item">Optimizer</div>
+                    <span class="timeline-arrow">→</span>
+                    <div class="timeline-item">Execution Plan</div>
+                    <span class="timeline-arrow">→</span>
+                    <div class="timeline-item">Result</div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Cost Estimation</h3>
+                <div class="formula-box">
+                    <div class="formula-name">Cost Components</div>
+                    <div class="formula">Total Cost = Disk I/O + CPU Cost + Network Cost</div>
+                    <div class="formula-description">
+                        Primary metric: Number of disk block transfers (I/O cost)
+                    </div>
+                </div>
+
+                <div class="table-container" style="margin-top: 15px;">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Operation</th>
+                                <th>Cost (in block transfers)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Table Scan</td>
+                                <td>B(R) - all blocks of relation R</td>
+                            </tr>
+                            <tr>
+                                <td>Index Scan (point query)</td>
+                                <td>h + 1 (h = height of tree)</td>
+                            </tr>
+                            <tr>
+                                <td>Index Scan (range query)</td>
+                                <td>h + ⌈T/I⌉ (T = tuples, I = index entries per block)</td>
+                            </tr>
+                            <tr>
+                                <td>Nested Loop Join</td>
+                                <td>B(R) + T(R) × B(S)</td>
+                            </tr>
+                            <tr>
+                                <td>Block Nested Loop Join</td>
+                                <td>B(R) + ⌈B(R)/(M-1)⌉ × B(S)</td>
+                            </tr>
+                            <tr>
+                                <td>Sort-Merge Join</td>
+                                <td>Sort(R) + Sort(S) + B(R) + B(S)</td>
+                            </tr>
+                            <tr>
+                                <td>Hash Join</td>
+                                <td>3 × (B(R) + B(S))</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="variables">
+                    <strong>Notation:</strong><br>
+                    • B(R) = Number of blocks containing R<br>
+                    • T(R) = Number of tuples in R<br>
+                    • M = Number of available memory blocks
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Join Algorithms</h3>
+                <div class="grid">
+                    <div class="algorithm-card">
+                        <h4>Nested Loop Join</h4>
+                        <div class="steps">
+                            <div class="step">For each tuple in outer relation R:</div>
+                            <div class="step" style="padding-left: 50px;">For each tuple in inner relation S:</div>
+                            <div class="step" style="padding-left: 70px;">If match, output combined tuple</div>
+                        </div>
+                        <div class="formula">Cost: O(B(R) × B(S)) worst case</div>
+                    </div>
+                    <div class="algorithm-card">
+                        <h4>Block Nested Loop Join</h4>
+                        <div class="steps">
+                            <div class="step">Load blocks of R into memory</div>
+                            <div class="step">Scan all of S for matches</div>
+                            <div class="step">Repeat with next blocks of R</div>
+                        </div>
+                        <div class="formula">Cost: B(R) + B(R)/M × B(S)</div>
+                    </div>
+                </div>
+
+                <div class="grid" style="margin-top: 15px;">
+                    <div class="algorithm-card">
+                        <h4>Index Nested Loop Join</h4>
+                        <div class="formula">Cost: B(R) + T(R) × (index lookup cost for S)</div>
+                        <div class="formula-description">
+                            Use index on join attribute of S for efficient lookup.
+                        </div>
+                    </div>
+                    <div class="algorithm-card">
+                        <h4>Hash Join</h4>
+                        <div class="steps">
+                            <div class="step"><strong>Partition:</strong> Hash both relations into buckets</div>
+                            <div class="step"><strong>Probe:</strong> For each R bucket, match with S bucket</div>
+                        </div>
+                        <div class="formula">Cost: 3(B(R) + B(S)) typical</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Query Optimization</h3>
+                <div class="grid">
+                    <div class="algorithm-card">
+                        <h4>Heuristic Optimization</h4>
+                        <div class="steps">
+                            <div class="step">Push selections down (reduce early)</div>
+                            <div class="step">Push projections down (reduce columns)</div>
+                            <div class="step">Convert cross products to joins</div>
+                            <div class="step">Reorder joins optimally</div>
+                        </div>
+                    </div>
+                    <div class="algorithm-card">
+                        <h4>Cost-Based Optimization</h4>
+                        <div class="steps">
+                            <div class="step">Generate possible query plans</div>
+                            <div class="step">Estimate cost for each plan</div>
+                            <div class="step">Choose plan with minimum cost</div>
+                        </div>
+                        <div class="formula">Uses statistics: cardinality, selectivity, histograms</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- FILE ORGANIZATION SECTION -->
+        <div class="section">
+            <h2 class="section-title">
+                <span class="icon">📁</span>
+                Storage and File Organization
+            </h2>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Storage Hierarchy</h3>
+                <div class="timeline" style="flex-direction: column; align-items: flex-start;">
+                    <div class="formula-item">Cache (Fastest, Smallest, Expensive)</div>
+                    <span class="timeline-arrow">↓</span>
+                    <div class="formula-item">Main Memory (RAM)</div>
+                    <span class="timeline-arrow">↓</span>
+                    <div class="formula-item">SSD (Flash Storage)</div>
+                    <span class="timeline-arrow">↓</span>
+                    <div class="formula-item">Hard Disk (Magnetic)</div>
+                    <span class="timeline-arrow">↓</span>
+                    <div class="formula-item">Tape/Optical (Slowest, Largest, Cheapest)</div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Disk Access Time</h3>
+                <div class="formula-box">
+                    <div class="formula-name">Total Access Time</div>
+                    <div class="formula">Access Time = Seek Time + Rotational Latency + Transfer Time</div>
+                    <div class="variables">
+                        <strong>Seek Time:</strong> Move arm to correct track (4-10 ms typical)<br>
+                        <strong>Rotational Latency:</strong> Wait for sector (~half rotation, 2-4 ms at 7200 RPM)<br>
+                        <strong>Transfer Time:</strong> Read data (depends on transfer rate)
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">File Organizations</h3>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Type</th>
+                                <th>Insert</th>
+                                <th>Delete</th>
+                                <th>Search</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Heap (Unordered)</td>
+                                <td>O(1)</td>
+                                <td>O(n)</td>
+                                <td>O(n)</td>
+                            </tr>
+                            <tr>
+                                <td>Sorted (Sequential)</td>
+                                <td>O(n)</td>
+                                <td>O(n)</td>
+                                <td>O(log n)</td>
+                            </tr>
+                            <tr>
+                                <td>Hashed</td>
+                                <td>O(1) avg</td>
+                                <td>O(1) avg</td>
+                                <td>O(1) avg</td>
+                            </tr>
+                            <tr>
+                                <td>B+ Tree Indexed</td>
+                                <td>O(log n)</td>
+                                <td>O(log n)</td>
+                                <td>O(log n)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Buffer Management</h3>
+                <div class="grid">
+                    <div class="algorithm-card">
+                        <h4>Buffer Replacement Policies</h4>
+                        <div class="formula-description">
+                            • <strong>LRU:</strong> Least Recently Used<br>
+                            • <strong>MRU:</strong> Most Recently Used (for sequential scans)<br>
+                            • <strong>Clock:</strong> LRU approximation<br>
+                            • <strong>FIFO:</strong> First In First Out
+                        </div>
+                    </div>
+                    <div class="algorithm-card">
+                        <h4>Buffer Hit Ratio</h4>
+                        <div class="formula">Hit Ratio = (Hits / Total Requests) × 100%</div>
+                        <div class="formula-description">
+                            Higher hit ratio means fewer disk I/O operations.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Summary Section -->
+        <div class="section" style="background: linear-gradient(135deg, rgba(52, 211, 153, 0.2), rgba(110, 231, 183, 0.15));">
+            <h2 class="section-title">
+                <span class="icon">📋</span>
+                Quick Reference Summary
+            </h2>
+            <div class="comparison-grid">
+                <div class="comparison-item">
+                    <h5>ER Model</h5>
+                    <p><strong>Entity:</strong> Rectangle</p>
+                    <p><strong>Attribute:</strong> Ellipse</p>
+                    <p><strong>Relationship:</strong> Diamond</p>
+                    <p><strong>Weak Entity:</strong> Double Rectangle</p>
+                </div>
+                <div class="comparison-item">
+                    <h5>Normal Forms</h5>
+                    <p><strong>1NF:</strong> Atomic values</p>
+                    <p><strong>2NF:</strong> No partial dependency</p>
+                    <p><strong>3NF:</strong> No transitive dependency</p>
+                    <p><strong>BCNF:</strong> Every determinant is key</p>
+                </div>
+                <div class="comparison-item">
+                    <h5>SQL</h5>
+                    <p><strong>DDL:</strong> CREATE, ALTER, DROP</p>
+                    <p><strong>DML:</strong> SELECT, INSERT, UPDATE</p>
+                    <p><strong>Joins:</strong> INNER, LEFT, RIGHT, FULL</p>
+                    <p><strong>Aggregates:</strong> COUNT, SUM, AVG</p>
+                </div>
+                <div class="comparison-item">
+                    <h5>Transactions</h5>
+                    <p><strong>ACID:</strong> Atomicity, Consistency</p>
+                    <p><strong></strong> Isolation, Durability</p>
+                    <p><strong>2PL:</strong> Growing → Shrinking</p>
+                    <p><strong>Serializability:</strong> Acyclic graph</p>
+                </div>
+                <div class="comparison-item">
+                    <h5>Indexing</h5>
+                    <p><strong>B+ Tree:</strong> O(log n) operations</p>
+                    <p><strong>Hash:</strong> O(1) average</p>
+                    <p><strong>Dense:</strong> Every key entry</p>
+                    <p><strong>Sparse:</strong> Some keys only</p>
+                </div>
+                <div class="comparison-item">
+                    <h5>Recovery</h5>
+                    <p><strong>WAL:</strong> Log before data</p>
+                    <p><strong>Undo:</strong> Rollback changes</p>
+                    <p><strong>Redo:</strong> Replay committed</p>
+                    <p><strong>Checkpoint:</strong> Recovery point</p>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>📚 Database Management Systems Formula Reference Sheet</p>
+            <p>ER Model • SQL • Normalization • Transactions • Concurrency • Recovery • Indexing</p>
+        </footer>
+    </div>
+</body>
+</html>

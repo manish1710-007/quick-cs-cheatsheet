@@ -1,0 +1,1828 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Computer Organization Formula Sheet</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f0f23 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #fff;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            padding: 30px 0;
+            margin-bottom: 30px;
+        }
+
+        header h1 {
+            font-size: 2.8rem;
+            background: linear-gradient(90deg, #f72585, #b5179e, #7209b7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 30px rgba(247, 37, 133, 0.3);
+            margin-bottom: 10px;
+        }
+
+        header p {
+            color: #c8b6ff;
+            font-size: 1.1rem;
+        }
+
+        .section {
+            background: rgba(255, 255, 255, 0.06);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            color: #f72585;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid rgba(247, 37, 133, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .section-title .icon {
+            font-size: 2rem;
+        }
+
+        .subsection {
+            margin-bottom: 25px;
+        }
+
+        .subsection-title {
+            font-size: 1.3rem;
+            color: #b5179e;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .subsection-title::before {
+            content: "◆";
+            font-size: 0.8rem;
+            color: #7209b7;
+        }
+
+        .formula-box {
+            background: linear-gradient(135deg, rgba(247, 37, 133, 0.12), rgba(181, 23, 158, 0.08));
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-left: 4px solid #f72585;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .formula-box:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 20px rgba(247, 37, 133, 0.25);
+        }
+
+        .formula-name {
+            font-size: 1.1rem;
+            color: #f72585;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .formula {
+            background: rgba(0, 0, 0, 0.35);
+            padding: 15px 20px;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 1.05rem;
+            color: #e0aaff;
+            margin: 10px 0;
+            overflow-x: auto;
+        }
+
+        .formula-description {
+            color: #c8b6ff;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-top: 10px;
+        }
+
+        .variables {
+            background: rgba(181, 23, 158, 0.12);
+            padding: 12px 15px;
+            border-radius: 8px;
+            margin-top: 10px;
+            font-size: 0.9rem;
+        }
+
+        .variables strong {
+            color: #b5179e;
+        }
+
+        .example {
+            background: rgba(224, 170, 255, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 10px;
+            border: 1px dashed rgba(224, 170, 255, 0.4);
+        }
+
+        .example-title {
+            color: #e0aaff;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 20px;
+        }
+
+        .algorithm-card {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 15px;
+            padding: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .algorithm-card h4 {
+            color: #f72585;
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(247, 37, 133, 0.3);
+        }
+
+        .steps {
+            counter-reset: step;
+        }
+
+        .step {
+            position: relative;
+            padding-left: 35px;
+            margin-bottom: 10px;
+            color: #e2e8f0;
+            line-height: 1.6;
+        }
+
+        .step::before {
+            counter-increment: step;
+            content: counter(step);
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 25px;
+            height: 25px;
+            background: linear-gradient(135deg, #f72585, #b5179e);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .note {
+            background: rgba(255, 193, 7, 0.12);
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            border-radius: 0 10px 10px 0;
+            margin-top: 15px;
+        }
+
+        .note-title {
+            color: #ffc107;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .warning {
+            background: rgba(239, 68, 68, 0.12);
+            border-left: 4px solid #ef4444;
+            padding: 15px;
+            border-radius: 0 10px 10px 0;
+            margin-top: 15px;
+        }
+
+        .warning-title {
+            color: #ef4444;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .important {
+            background: rgba(34, 197, 94, 0.12);
+            border-left: 4px solid #22c55e;
+            padding: 15px;
+            border-radius: 0 10px 10px 0;
+            margin-top: 15px;
+        }
+
+        .important-title {
+            color: #22c55e;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            margin: 15px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: rgba(0, 0, 0, 0.25);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        th {
+            background: linear-gradient(135deg, #f72585, #b5179e);
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            color: #fff;
+        }
+
+        td {
+            padding: 12px 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            color: #e2e8f0;
+        }
+
+        tr:hover {
+            background: rgba(247, 37, 133, 0.08);
+        }
+
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .comparison-item {
+            background: rgba(181, 23, 158, 0.06);
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid rgba(181, 23, 158, 0.2);
+        }
+
+        .comparison-item h5 {
+            color: #b5179e;
+            margin-bottom: 8px;
+        }
+
+        .diagram-box {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 15px 0;
+            text-align: center;
+        }
+
+        .diagram-box pre {
+            font-family: 'Courier New', monospace;
+            color: #e0aaff;
+            font-size: 0.85rem;
+            text-align: left;
+            display: inline-block;
+        }
+
+        .pipeline-stage {
+            display: inline-block;
+            background: linear-gradient(135deg, rgba(247, 37, 133, 0.3), rgba(114, 9, 183, 0.3));
+            border: 2px solid #f72585;
+            padding: 10px 20px;
+            margin: 5px;
+            border-radius: 8px;
+            text-align: center;
+            min-width: 80px;
+        }
+
+        .pipeline-arrow {
+            display: inline-block;
+            color: #b5179e;
+            font-size: 1.5rem;
+            margin: 0 5px;
+        }
+
+        .hazard-box {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            border-radius: 10px;
+            padding: 15px;
+            margin: 10px 0;
+        }
+
+        .hazard-title {
+            color: #ef4444;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .memory-level {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 20px 0;
+        }
+
+        .memory-box {
+            padding: 15px 40px;
+            border: 2px solid;
+            margin: 3px 0;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .mem-reg { background: rgba(239, 68, 68, 0.2); border-color: #ef4444; width: 30%; }
+        .mem-cache { background: rgba(255, 152, 0, 0.2); border-color: #ff9800; width: 50%; }
+        .mem-main { background: rgba(255, 193, 7, 0.2); border-color: #ffc107; width: 70%; }
+        .mem-disk { background: rgba(76, 175, 80, 0.2); border-color: #4caf50; width: 90%; }
+
+        footer {
+            text-align: center;
+            padding: 30px;
+            color: #c8b6ff;
+            margin-top: 30px;
+        }
+
+        .formula-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 10px 0;
+        }
+
+        .formula-item {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            color: #e0aaff;
+        }
+
+        .timing-diagram {
+            font-family: 'Courier New', monospace;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: 10px;
+            overflow-x: auto;
+            font-size: 0.8rem;
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2rem;
+            }
+
+            .grid {
+                grid-template-columns: 1fr;
+            }
+
+            .section {
+                padding: 20px;
+            }
+
+            .memory-box {
+                width: 90% !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🖥️ Computer Organization Formula Sheet</h1>
+            <p>Complete Reference for Pipelining, Memory Hierarchy, CPU Design & I/O Organization</p>
+        </header>
+
+        <!-- DATA REPRESENTATION SECTION -->
+        <div class="section">
+            <h2 class="section-title">
+                <span class="icon">🔢</span>
+                Data Representation
+            </h2>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Number Systems</h3>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Base</th>
+                                <th>Name</th>
+                                <th>Digits</th>
+                                <th>Example</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>2</td><td>Binary</td><td>0, 1</td><td>1010₂ = 10₁₀</td></tr>
+                            <tr><td>8</td><td>Octal</td><td>0-7</td><td>12₈ = 10₁₀</td></tr>
+                            <tr><td>10</td><td>Decimal</td><td>0-9</td><td>10₁₀</td></tr>
+                            <tr><td>16</td><td>Hexadecimal</td><td>0-9, A-F</td><td>A₁₆ = 10₁₀</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Number Conversions</h3>
+                <div class="grid">
+                    <div class="formula-box">
+                        <div class="formula-name">Decimal to Other Bases</div>
+                        <div class="formula">Repeated division by base, collect remainders (bottom-up)</div>
+                        <div class="example">
+                            <div class="example-title">📌 Decimal to Binary:</div>
+                            25₁₀ ÷ 2 = 12 R 1<br>
+                            12 ÷ 2 = 6 R 0<br>
+                            6 ÷ 2 = 3 R 0<br>
+                            3 ÷ 2 = 1 R 1<br>
+                            1 ÷ 2 = 0 R 1<br>
+                            Result: 11001₂
+                        </div>
+                    </div>
+                    <div class="formula-box">
+                        <div class="formula-name">Other Bases to Decimal</div>
+                        <div class="formula">Value = Σ(dᵢ × baseⁱ) where i = position from right (0-indexed)</div>
+                        <div class="example">
+                            <div class="example-title">📌 Binary to Decimal:</div>
+                            11001₂ = 1×2⁴ + 1×2³ + 0×2² + 0×2¹ + 1×2⁰<br>
+                            = 16 + 8 + 0 + 0 + 1 = 25₁₀
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid" style="margin-top: 15px;">
+                    <div class="formula-box">
+                        <div class="formula-name">Binary ↔ Hexadecimal</div>
+                        <div class="formula">Group binary in 4s, convert each group</div>
+                        <div class="example">
+                            <div class="example-title">📌 Example:</div>
+                            11010110₂ = 1101 0110 = D6₁₆<br>
+                            2F₁₆ = 0010 1111 = 101111₂
+                        </div>
+                    </div>
+                    <div class="formula-box">
+                        <div class="formula-name">Binary ↔ Octal</div>
+                        <div class="formula">Group binary in 3s, convert each group</div>
+                        <div class="example">
+                            <div class="example-title">📌 Example:</div>
+                            11010110₂ = 011 010 110 = 326₈<br>
+                            75₈ = 111 101 = 111101₂
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Signed Number Representations</h3>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Method</th>
+                                <th>Positive</th>
+                                <th>Negative</th>
+                                <th>Range (n bits)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Sign-Magnitude</td>
+                                <td>0 followed by magnitude</td>
+                                <td>1 followed by magnitude</td>
+                                <td>-(2ⁿ⁻¹-1) to +(2ⁿ⁻¹-1)</td>
+                            </tr>
+                            <tr>
+                                <td>One's Complement</td>
+                                <td>Same as binary</td>
+                                <td>Invert all bits</td>
+                                <td>-(2ⁿ⁻¹-1) to +(2ⁿ⁻¹-1)</td>
+                            </tr>
+                            <tr>
+                                <td>Two's Complement</td>
+                                <td>Same as binary</td>
+                                <td>Invert all bits, add 1</td>
+                                <td>-2ⁿ⁻¹ to +(2ⁿ⁻¹-1)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="example" style="margin-top: 15px;">
+                    <div class="example-title">📌 Example: -5 in 8-bit</div>
+                    <strong>5 in binary:</strong> 00000101<br>
+                    <strong>One's complement:</strong> 11111010<br>
+                    <strong>Two's complement:</strong> 11111011 (add 1)
+                </div>
+
+                <div="note" style="margin-top: 15px;">
+                    <div class="note-title">💡 Two's Complement Advantages:</div>
+                    • Single representation for zero<br>
+                    • Arithmetic is simpler (same hardware for signed/unsigned)<br>
+                    • Most commonly used in modern computers
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Floating Point Representation</h3>
+                <div class="formula-box">
+                    <div class="formula-name">IEEE 754 Format</div>
+                    <div class="formula">Value = (-1)ˢ × (1 + M) × 2^(E - bias)</div>
+                    <div class="variables">
+                        <strong>Where:</strong><br>
+                        • S = Sign bit (1 bit)<br>
+                        • E = Exponent (biased)<br>
+                        • M = Mantissa/Fraction (implicit leading 1)
+                    </div>
+                </div>
+
+                <div class="table-container" style="margin-top: 15px;">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Format</th>
+                                <th>Sign</th>
+                                <th>Exponent</th>
+                                <th>Mantissa</th>
+                                <th>Bias</th>
+                                <th>Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Single Precision</td><td>1</td><td>8</td><td>23</td><td>127</td><td>32 bits</td></tr>
+                            <tr><td>Double Precision</td><td>1</td><td>11</td><td>52</td><td>1023</td><td>64 bits</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="example" style="margin-top: 15px;">
+                    <div class="example-title">📌 Example: Convert 6.75 to IEEE 754 Single Precision</div>
+                    <strong>Step 1:</strong> 6.75 = 110.11₂ = 1.1011 × 2²<br>
+                    <strong>Step 2:</strong> Sign = 0 (positive)<br>
+                    <strong>Step 3:</strong> Exponent = 2 + 127 = 129 = 10000001₂<br>
+                    <strong>Step 4:</strong> Mantissa = 10110000000000000000000<br>
+                    <strong>Result:</strong> 0 10000001 10110000000000000000000
+                </div>
+
+                <div class="grid" style="margin-top: 15px;">
+                    <div class="algorithm-card">
+                        <h4>Special Values</h4>
+                        <div class="formula-description">
+                            • <strong>+0:</strong> S=0, E=0, M=0<br>
+                            • <strong>-0:</strong> S=1, E=0, M=0<br>
+                            • <strong>+∞:</strong> S=0, E=255, M=0<br>
+                            • <strong>-∞:</strong> S=1, E=255, M=0<br>
+                            • <strong>NaN:</strong> E=255, M≠0
+                        </div>
+                    </div>
+                    <div class="algorithm-card">
+                        <h4>Denormalized Numbers</h4>
+                        <div class="formula-description">
+                            When E=0, M≠0:<br>
+                            Value = (-1)ˢ × (0 + M) × 2^(-126)<br>
+                            Allows representation of very small numbers near zero.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CPU ORGANIZATION SECTION -->
+        <div class="section">
+            <h2 class="section-title">
+                <span class="icon">🎯</span>
+                CPU Organization
+            </h2>
+
+            <div class="subsection">
+                <h3 class="subsection-title">CPU Components</h3>
+                <div class="grid">
+                    <div class="algorithm-card">
+                        <h4>ALU (Arithmetic Logic Unit)</h4>
+                        <div class="formula-description">
+                            Performs arithmetic and logical operations:<br>
+                            • <strong>Arithmetic:</strong> ADD, SUB, MUL, DIV<br>
+                            • <strong>Logical:</strong> AND, OR, XOR, NOT<br>
+                            • <strong>Shift/Rotate:</strong> SHL, SHR, ROL, ROR
+                        </div>
+                    </div>
+                    <div class="algorithm-card">
+                        <h4>Control Unit</h4>
+                        <div class="formula-description">
+                            Directs CPU operations:<br>
+                            • Fetches instructions from memory<br>
+                            • Decodes instructions<br>
+                            • Generates control signals<br>
+                            • Coordinates data movement
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid" style="margin-top: 15px;">
+                    <div class="algorithm-card">
+                        <h4>Registers</h4>
+                        <div class="formula-description">
+                            Fast, small storage within CPU:<br>
+                            • <strong>PC:</strong> Program Counter<br>
+                            • <strong>IR:</strong> Instruction Register<br>
+                            • <strong>MAR:</strong> Memory Address Register<br>
+                            • <strong>MDR:</strong> Memory Data Register<br>
+                            • <strong>ACC:</strong> Accumulator<br>
+                            • <strong>General Purpose:</strong> R0-Rn
+                        </div>
+                    </div>
+                    <div class="algorithm-card">
+                        <h4>Flags/Status Register</h4>
+                        <div class="formula-description">
+                            • <strong>Z (Zero):</strong> Result is zero<br>
+                            • <strong>N (Negative):</strong> Result is negative<br>
+                            • <strong>C (Carry):</strong> Carry out from operation<br>
+                            • <strong>V (Overflow):</strong> Signed overflow<br>
+                            • <strong>P (Parity):</strong> Even parity of result
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Instruction Cycle</h3>
+                <div class="diagram-box">
+                    <pre>
+    ┌─────────────────────────────────────────────────────┐
+    │                   INSTRUCTION CYCLE                  │
+    └─────────────────────────────────────────────────────┘
+                              │
+                              ▼
+    ┌──────────┐      ┌──────────┐      ┌──────────┐
+    │  FETCH   │ ──▶  │  DECODE  │ ──▶  │ EXECUTE  │
+    │          │      │          │      │          │
+    │ IR←M[PC] │      │ Interpret│      │ Perform  │
+    │ PC++     │      │ opcode   │      │ operation│
+    └──────────┘      └──────────┘      └──────────┘
+                              │
+                              ▼
+                      ┌──────────┐
+                      │  STORE   │
+                      │ Result   │
+                      └──────────┘
+                    </pre>
+                </div>
+
+                <div class="formula-box" style="margin-top: 15px;">
+                    <div class="formula-name">Instruction Cycle Time</div>
+                    <div class="formula">T_cycle = T_fetch + T_decode + T_execute + T_store</div>
+                    <div class="formula">CPI (Cycles Per Instruction) = Total Cycles / Instructions</div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Data Path</h3>
+                <div class="algorithm-card">
+                    <h4>Single Bus Organization</h4>
+                    <div class="diagram-box">
+                        <pre>
+    ┌─────────┐     ┌─────────┐     ┌─────────┐
+    │   PC    │────▶│  Memory │◀────│   MAR   │
+    └─────────┘     │  Unit   │     └─────────┘
+         │          └────┬────┘          ▲
+         ▼               │               │
+    ┌─────────┐          │          ┌─────────┐
+    │   IR    │◀─────────┼──────────│   MDR   │
+    └─────────┘          │          └─────────┘
+         │               │               │
+         ▼               │               │
+    ┌─────────┐     ┌────┴────┐     ┌─────────┐
+    │ Control │     │   ALU   │◀────│Register │
+    │  Unit   │     └────┬────┘     │  File   │
+    └─────────┘          │          └─────────┘
+                         ▼
+                    ┌─────────┐
+                    │   Y     │ (Output)
+                    └─────────┘
+                        </pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- INSTRUCTION SET ARCHITECTURE SECTION -->
+        <div class="section">
+            <h2 class="section-title">
+                <span class="icon">📜</span>
+                Instruction Set Architecture (ISA)
+            </h2>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Instruction Format</h3>
+                <div class="grid">
+                    <div class="formula-box">
+                        <div class="formula-name">Three-Address Instruction</div>
+                        <div class="formula">OPCODE Dest, Source1, Source2</div>
+                        <div class="formula">Example: ADD R1, R2, R3  (R1 = R2 + R3)</div>
+                        <div class="formula-description">
+                            Most flexible but requires more bits for addresses.
+                        </div>
+                    </div>
+                    <div class="formula-box">
+                        <div class="formula-name">Two-Address Instruction</div>
+                        <div class="formula">OPCODE Dest, Source</div>
+                        <div class="formula">Example: ADD R1, R2  (R1 = R1 + R2)</div>
+                        <div class="formula-description">
+                            Destination is also one source. Compact but overwrites destination.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid" style="margin-top: 15px;">
+                    <div class="formula-box">
+                        <div class="formula-name">One-Address Instruction</div>
+                        <div class="formula">OPCODE Operand</div>
+                        <div class="formula">Example: ADD R1  (ACC = ACC + R1)</div>
+                        <div class="formula-description">
+                            Uses accumulator. Implicit second operand.
+                        </div>
+                    </div>
+                    <div class="formula-box">
+                        <div class="formula-name">Zero-Address (Stack)</div>
+                        <div class="formula">OPCODE (no operands)</div>
+                        <div class="formula">Example: ADD  (Top = Top + Second)</div>
+                        <div class="formula-description">
+                            Uses stack-based evaluation. Operands implicit from stack.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Addressing Modes</h3>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Mode</th>
+                                <th>Effective Address</th>
+                                <th>Example</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Immediate</td>
+                                <td>Operand in instruction</td>
+                                <td>MOV R1, #100</td>
+                            </tr>
+                            <tr>
+                                <td>Direct (Absolute)</td>
+                                <td>EA = Address field</td>
+                                <td>MOV R1, 1000</td>
+                            </tr>
+                            <tr>
+                                <td>Indirect</td>
+                                <td>EA = M[Address]</td>
+                                <td>MOV R1, @1000</td>
+                            </tr>
+                            <tr>
+                                <td>Register</td>
+                                <td>EA = Register</td>
+                                <td>MOV R1, R2</td>
+                            </tr>
+                            <tr>
+                                <td>Register Indirect</td>
+                                <td>EA = M[R]</td>
+                                <td>MOV R1, (R2)</td>
+                            </tr>
+                            <tr>
+                                <td>Displacement</td>
+                                <td>EA = M[R + displacement]</td>
+                                <td>MOV R1, 100(R2)</td>
+                            </tr>
+                            <tr>
+                                <td>Indexed</td>
+                                <td>EA = M[Index + base]</td>
+                                <td>MOV R1, array(Rx)</td>
+                            </tr>
+                            <tr>
+                                <td>Based</td>
+                                <td>EA = M[Base + offset]</td>
+                                <td>MOV R1, offset(Rb)</td>
+                            </tr>
+                            <tr>
+                                <td>PC-Relative</td>
+                                <td>EA = PC + offset</td>
+                                <td>JMP +100</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Instruction Length Calculation</h3>
+                <div class="formula-box">
+                    <div class="formula-name">Instruction Size</div>
+                    <div class="formula">Instruction Bits = Opcode bits + Σ(Address field bits × Number of addresses)</div>
+                    <div class="example">
+                        <div class="example-title">📌 Example:</div>
+                        CPU with 64 opcodes, 16 registers, 32-bit memory addresses<br>
+                        <strong>Three-address:</strong> 6 + 4 + 4 + 4 = 18 bits (register addresses)<br>
+                        <strong>One-address (memory):</strong> 6 + 32 = 38 bits
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">CISC vs RISC</h3>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Feature</th>
+                                <th>CISC</th>
+                                <th>RISC</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Instruction Size</td><td>Variable</td><td>Fixed</td></tr>
+                            <tr><td>Instruction Count</td><td>Fewer instructions</td><td>More instructions</td></tr>
+                            <tr><td>CPI</td><td>Higher (varies)</td><td>Lower (~1)</td></tr>
+                            <tr><td>Addressing Modes</td><td>Many (12-24)</td><td>Few (3-5)</td></tr>
+                            <tr><td>Memory Access</td><td>Memory-to-memory</td><td>Load/Store only</td></tr>
+                            <tr><td>Pipelining</td><td>Difficult</td><td>Easier</td></tr>
+                            <tr><td>Control Unit</td><td>Microprogrammed</td><td>Hardwired</td></tr>
+                            <tr><td>Registers</td><td>Fewer</td><td>Many</td></tr>
+                            <tr><td>Examples</td><td>x86, VAX</td><td>MIPS, ARM, RISC-V</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- PIPELINING SECTION -->
+        <div class="section">
+            <h2 class="section-title">
+                <span class="icon">⚡</span>
+                Pipelining
+            </h2>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Basic Pipeline Concept</h3>
+                <div class="algorithm-card">
+                    <h4>5-Stage RISC Pipeline</h4>
+                    <div style="text-align: center; margin: 15px 0;">
+                        <span class="pipeline-stage">IF<br>Instruction<br>Fetch</span>
+                        <span class="pipeline-arrow">→</span>
+                        <span class="pipeline-stage">ID<br>Instruction<br>Decode</span>
+                        <span class="pipeline-arrow">→</span>
+                        <span class="pipeline-stage">EX<br>Execute</span>
+                        <span class="pipeline-arrow">→</span>
+                        <span class="pipeline-stage">MEM<br>Memory<br>Access</span>
+                        <span class="pipeline-arrow">→</span>
+                        <span class="pipeline-stage">WB<br>Write<br>Back</span>
+                    </div>
+                    <div class="formula">Each stage takes 1 clock cycle</div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Pipeline Performance</h3>
+                <div class="grid">
+                    <div class="formula-box">
+                        <div class="formula-name">Speedup</div>
+                        <div class="formula">Speedup = Time_non-pipelined / Time_pipelined</div>
+                        <div class="formula">Ideal Speedup = n (number of stages)</div>
+                        <div class="example">
+                            <div class="example-title">📌 Example:</div>
+                            Non-pipelined: 5ns × 1000 instructions = 5000ns<br>
+                            Pipelined: 5ns + (1000-1) × 1ns = 1004ns<br>
+                            Speedup = 5000/1004 ≈ 4.98×
+                        </div>
+                    </div>
+                    <div class="formula-box">
+                        <div class="formula-name">Pipeline Time</div>
+                        <div class="formula">Total Time = k × τ + (n-1) × τ = (k + n - 1) × τ</div>
+                        <div class="variables">
+                            k = Number of stages<br>
+                            n = Number of instructions<br>
+                            τ = Clock cycle time (time of slowest stage)
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid" style="margin-top: 15px;">
+                    <div class="formula-box">
+                        <div class="formula-name">Throughput</div>
+                        <div class="formula">Throughput = n / Total Time</div>
+                        <div class="formula">Ideal Throughput = 1/τ (1 instruction per cycle)</div>
+                    </div>
+                    <div class="formula-box">
+                        <div class="formula-name">Efficiency</div>
+                        <div class="formula">Efficiency = (Useful time) / (Total time × Number of stages)</div>
+                        <div class="formula">Efficiency = n / (k + n - 1)</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Pipeline Hazards</h3>
+                
+                <div class="hazard-box">
+                    <div class="hazard-title">🔴 Data Hazards</div>
+                    <div class="formula">Occurs when an instruction depends on result of previous instruction</div>
+                    <div class="grid" style="margin-top: 10px;">
+                        <div class="formula-box">
+                            <div class="formula-name">RAW (Read After Write)</div>
+                            <div class="formula-description">
+                                Most common. True dependency.<br>
+                                <strong>Example:</strong><br>
+                                ADD R1, R2, R3<br>
+                                SUB R4, R1, R5  ← Needs R1
+                            </div>
+                        </div>
+                        <div class="formula-box">
+                            <div class="formula-name">WAR (Write After Read)</div>
+                            <div class="formula-description">
+                                Anti-dependency. Rare in simple pipelines.<br>
+                                <strong>Example:</strong><br>
+                                SUB R4, R1, R5<br>
+                                ADD R1, R2, R3  ← Writes R1
+                            </div>
+                        </div>
+                    </div>
+                    <div class="formula-box" style="margin-top: 10px;">
+                        <div class="formula-name">WAW (Write After Write)</div>
+                        <div class="formula-description">
+                            Output dependency. Occurs in out-of-order execution.
+                        </div>
+                    </div>
+
+                    <div class="important" style="margin-top: 15px;">
+                        <div class="important-title">✓ Solutions for Data Hazards:</div>
+                        <strong>1. Forwarding (Bypassing):</strong> Route result directly to waiting instruction<br>
+                        <strong>2. Stalling (Pipeline Bubbles):</strong> Insert NOPs until data ready<br>
+                        <strong>3. Code Scheduling:</strong> Reorder instructions to avoid hazards
+                    </div>
+                </div>
+
+                <div class="hazard-box">
+                    <div class="hazard-title">🟠 Control Hazards</div>
+                    <div class="formula">Occurs when pipeline cannot determine next instruction (branches)</div>
+                    <div class="grid" style="margin-top: 10px;">
+                        <div class="formula-box">
+                            <div class="formula-name">Branch Penalty</div>
+                            <div class="formula">Penalty = Number of cycles wasted on misprediction</div>
+                            <div class="formula">Average Branch Cost = Penalty × Misprediction Rate</div>
+                        </div>
+                        <div class="formula-box">
+                            <div class="formula-name">Solutions</div>
+                            <div class="formula-description">
+                                • <strong>Branch Prediction:</strong> Guess branch outcome<br>
+                                • <strong>Delayed Branch:</strong> Execute useful instruction after branch<br>
+                                • <strong>Prefetching:</strong> Fetch both possible paths
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="hazard-box">
+                    <div class="hazard-title">🟡 Structural Hazards</div>
+                    <div class="formula">Occurs when multiple instructions need same hardware resource</div>
+                    <div class="formula-description">
+                        <strong>Example:</strong> Two instructions trying to access memory simultaneously.<br>
+                        <strong>Solution:</strong> Duplicate resources (separate instruction/data caches)
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Pipeline Timing Diagram</h3>
+                <div class="timing-diagram">
+                    <pre>
+Instruction | Cycle:  1    2    3    4    5    6    7    8    9
+------------|-------------------------------------------------
+    I1      |       IF   ID   EX   MEM  WB
+    I2      |            IF   ID   EX   MEM  WB
+    I3      |                 IF   ID   EX   MEM  WB
+    I4      |                      IF   ID   EX   MEM  WB
+    I5      |                           IF   ID   EX   MEM  WB
+------------|-------------------------------------------------
+Stages Used |       F    D    E    M    W
+             |       D    E    M    W
+             |            E    M    W
+             |                 M    W
+             |                      W
+
+After pipeline fills: 1 instruction completes every cycle
+                    </pre>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Speedup with Stalls</h3>
+                <div class="formula-box">
+                    <div class="formula-name">Actual Speedup</div>
+                    <div class="formula">Actual Speedup = n × k / (k + n - 1 + S)</div>
+                    <div class="variables">
+                        S = Number of stall cycles<br>
+                        n = Number of instructions<br>
+                        k = Number of pipeline stages
+                    </div>
+                    <div class="example">
+                        <div class="example-title">📌 Example:</div>
+                        5-stage pipeline, 100 instructions, 20 stall cycles<br>
+                        Ideal time: 5 + 99 = 104 cycles<br>
+                        Actual time: 104 + 20 = 124 cycles<br>
+                        Speedup = (100 × 5) / 124 = 4.03×
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- MEMORY HIERARCHY SECTION -->
+        <div class="section">
+            <h2 class="section-title">
+                <span class="icon">🗄️</span>
+                Memory Hierarchy
+            </h2>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Memory Hierarchy Pyramid</h3>
+                <div class="memory-level">
+                    <div class="memory-box mem-reg"><strong>Registers</strong><br>Fastest, Smallest<br>~1ns, ~KB</div>
+                    <div class="memory-box mem-cache"><strong>Cache Memory</strong><br>L1/L2/L3<br>~1-10ns, ~MB</div>
+                    <div class="memory-box mem-main"><strong>Main Memory (RAM)</strong><br>~50-100ns, ~GB</div>
+                    <div class="memory-box mem-disk"><strong>Secondary Storage</strong><br>~5-10ms, ~TB</div>
+                </div>
+                <div class="formula" style="text-align: center; margin-top: 10px;">
+                    Speed: Fast ↑ | Size: Small ↑ | Cost: High ↑
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Average Memory Access Time</h3>
+                <div class="formula-box">
+                    <div class="formula-name">AMAT Formula</div>
+                    <div class="formula">AMAT = Hit Time + Miss Rate × Miss Penalty</div>
+                    <div class="formula">With Multiple Levels:</div>
+                    <div class="formula">AMAT = H₁ × t₁ + (1-H₁) × [t₁ + H₂ × t₂ + (1-H₂) × (t₂ + t₃)]</div>
+                    <div class="variables">
+                        H = Hit ratio, t = access time<br>
+                        Miss Rate = 1 - Hit Rate
+                    </div>
+                    <div class="example">
+                        <div class="example-title">📌 Example:</div>
+                        L1: Hit rate 95%, access time 1ns<br>
+                        L2: Hit rate 90%, access time 10ns<br>
+                        Main memory: access time 100ns<br><br>
+                        AMAT = 0.95(1) + 0.05[1 + 0.90(10) + 0.10(10+100)]<br>
+                        AMAT = 0.95 + 0.05[1 + 9 + 11] = 0.95 + 1.05 = 2ns
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Cache Organization</h3>
+                <div class="grid">
+                    <div class="algorithm-card">
+                        <h4>Direct Mapped Cache</h4>
+                        <div class="formula">Block maps to exactly one cache line</div>
+                        <div class="formula">Line = (Block Address) mod (Number of Lines)</div>
+                        <div class="formula-description">
+                            <strong>Address Structure:</strong><br>
+                            | Tag | Line/Index | Offset |<br><br>
+                            • Fast, simple hardware<br>
+                            • High conflict misses
+                        </div>
+                    </div>
+                    <div class="algorithm-card">
+                        <h4>Fully Associative Cache</h4>
+                        <div class="formula">Block can go anywhere in cache</div>
+                        <div class="formula">Search all entries in parallel</div>
+                        <div class="formula-description">
+                            <strong>Address Structure:</strong><br>
+                            | Tag | Offset |<br><br>
+                            • Lowest miss rate<br>
+                            • Expensive, slow search
+                        </div>
+                    </div>
+                </div>
+
+                <div class="algorithm-card" style="margin-top: 15px;">
+                    <h4>Set Associative Cache</h4>
+                    <div class="formula">Block maps to one set, can go in any line within set</div>
+                    <div class="formula">Set = (Block Address) mod (Number of Sets)</div>
+                    <div class="formula-description">
+                        <strong>Address Structure:</strong><br>
+                        | Tag | Set Index | Offset |<br><br>
+                        • N-way set associative: N lines per set<br>
+                        • Balance between direct mapped and fully associative<br>
+                        • 2-way, 4-way, 8-way common
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Cache Formulas</h3>
+                <div class="grid">
+                    <div class="formula-box">
+                        <div class="formula-name">Number of Cache Lines</div>
+                        <div class="formula">Number of Lines = Cache Size / Block Size</div>
+                    </div>
+                    <div class="formula-box">
+                        <div class="formula-name">Number of Sets (Set Associative)</div>
+                        <div class="formula">Number of Sets = Cache Size / (Block Size × Associativity)</div>
+                    </div>
+                </div>
+
+                <div class="grid" style="margin-top: 15px;">
+                    <div class="formula-box">
+                        <div class="formula-name">Offset Bits</div>
+                        <div class="formula">Offset bits = log₂(Block Size)</div>
+                    </div>
+                    <div class="formula-box">
+                        <div class="formula-name">Index Bits</div>
+                        <div class="formula">Index bits = log₂(Number of Sets or Lines)</div>
+                    </div>
+                </div>
+
+                <div class="formula-box" style="margin-top: 15px;">
+                    <div class="formula-name">Tag Bits</div>
+                    <div class="formula">Tag bits = Address bits - Index bits - Offset bits</div>
+                    <div class="example">
+                        <div class="example-title">📌 Example:</div>
+                        32-bit address, 64KB cache, 32B blocks, 4-way associative<br>
+                        • Cache lines = 64KB / 32B = 2048 lines<br>
+                        • Sets = 2048 / 4 = 512 sets<br>
+                        • Offset bits = log₂(32) = 5<br>
+                        • Index bits = log₂(512) = 9<br>
+                        • Tag bits = 32 - 9 - 5 = 18 bits
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Cache Miss Types</h3>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Type</th>
+                                <th>Cause</th>
+                                <th>Solution</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Compulsory (Cold)</td>
+                                <td>First access to block</td>
+                                <td>Larger blocks, prefetching</td>
+                            </tr>
+                            <tr>
+                                <td>Capacity</td>
+                                <td>Cache too small</td>
+                                <td>Larger cache</td>
+                            </tr>
+                            <tr>
+                                <td>Conflict</td>
+                                <td>Multiple blocks map to same set</td>
+                                <td>Higher associativity</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Cache Write Policies</h3>
+                <div class="grid">
+                    <div class="algorithm-card">
+                        <h4>Write Through</h4>
+                        <div class="formula-description">
+                            • Write to cache AND memory<br>
+                            • Always consistent<br>
+                            • Higher memory traffic<br>
+                            • No dirty bit needed
+                        </div>
+                    </div>
+                    <div class="algorithm-card">
+                        <h4>Write Back</h4>
+                        <div class="formula-description">
+                            • Write only to cache<br>
+                            • Update memory on eviction<br>
+                            • Lower memory traffic<br>
+                            • Needs dirty bit
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid" style="margin-top: 15px;">
+                    <div class="algorithm-card">
+                        <h4>Write Allocate</h4>
+                        <div class="formula-description">
+                            On write miss: bring block to cache, then write<br>
+                            Used with write-back
+                        </div>
+                    </div>
+                    <div class="algorithm-card">
+                        <h4>No Write Allocate</h4>
+                        <div class="formula-description">
+                            On write miss: write directly to memory<br>
+                            Used with write-through
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Virtual Memory</h3>
+                <div class="formula-box">
+                    <div class="formula-name">Address Translation</div>
+                    <div class="formula">Physical Address = Frame Number × Page Size + Offset</div>
+                    <div class="formula">Virtual Address = Page Number × Page Size + Offset</div>
+                    <div class="variables">
+                        Page Number bits = log₂(Number of Pages)<br>
+                        Offset bits = log₂(Page Size)
+                    </div>
+                </div>
+
+                <div class="grid" style="margin-top: 15px;">
+                    <div class="algorithm-card">
+                        <h4>Page Table Entry (PTE)</h4>
+                        <div class="formula-description">
+                            Contains for each page:<br>
+                            • <strong>Frame Number:</strong> Physical location<br>
+                            • <strong>Valid Bit:</strong> Page in memory<br>
+                            • <strong>Dirty Bit:</strong> Page modified<br>
+                            • <strong>Reference Bit:</strong> Page accessed<br>
+                            • <strong>Protection:</strong> R/W/X permissions
+                        </div>
+                    </div>
+                    <div class="algorithm-card">
+                        <h4>Page Table Size</h4>
+                        <div class="formula">Page Table Size = Number of Pages × Entry Size</div>
+                        <div class="example">
+                            <div class="example-title">📌 Example:</div>
+                            32-bit VA, 4KB pages, 4B entries<br>
+                            Pages = 2³² / 2¹² = 2²⁰ = 1M<br>
+                            Page Table Size = 1M × 4B = 4MB
+                        </div>
+                    </div>
+                </div>
+
+                <div class="algorithm-card" style="margin-top: 15px;">
+                    <h4>TLB (Translation Lookaside Buffer)</h4>
+                    <div class="formula">Effective Access Time = TLB Hit Rate × (TLB + Memory) + TLB Miss Rate × (TLB + Page Table + Memory)</div>
+                    <div class="formula-description">
+                        Cache for page table entries. Small, fully associative cache.<br>
+                        Typical: 64-256 entries, ~95-99% hit rate
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Page Replacement Algorithms</h3>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Algorithm</th>
+                                <th>Description</th>
+                                <th>Optimality</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>OPT/MIN</td>
+                                <td>Replace page used farthest in future</td>
+                                <td>Optimal (theoretical)</td>
+                            </tr>
+                            <tr>
+                                <td>FIFO</td>
+                                <td>Replace oldest page</td>
+                                <td>Simple, may have Belady's anomaly</td>
+                            </tr>
+                            <tr>
+                                <td>LRU</td>
+                                <td>Replace least recently used</td>
+                                <td>Good approximation of OPT</td>
+                            </tr>
+                            <tr>
+                                <td>Clock</td>
+                                <td>LRU approximation with reference bit</td>
+                                <td>Practical implementation</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- I/O ORGANIZATION SECTION -->
+        <div class="section">
+            <h2 class="section-title">
+                <span class="icon">🔌</span>
+                I/O Organization
+            </h2>
+
+            <div class="subsection">
+                <h3 class="subsection-title">I/O Control Methods</h3>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Method</th>
+                                <th>CPU Involvement</th>
+                                <th>Speed</th>
+                                <th>Hardware</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Programmed I/O</td>
+                                <td>Polls status continuously</td>
+                                <td>Slow</td>
+                                <td>Simple</td>
+                            </tr>
+                            <tr>
+                                <td>Interrupt-Driven I/O</td>
+                                <td>Interrupted when ready</td>
+                                <td>Medium</td>
+                                <td>Moderate</td>
+                            </tr>
+                            <tr>
+                                <td>DMA</td>
+                                <td>Only setup and completion</td>
+                                <td>Fast</td>
+                                <td>DMA Controller</td>
+                            </tr>
+                            <tr>
+                                <td>Channel I/O</td>
+                                <td>Minimal</td>
+                                <td>Fastest</td>
+                                <td>I/O Processor</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Programmed I/O</h3>
+                <div class="algorithm-card">
+                    <h4>Polling Process</h4>
+                    <div class="steps">
+                        <div class="step">CPU reads device status register</div>
+                        <div class="step">Check if device is ready</div>
+                        <div class="step">If not ready, loop back to step 1</div>
+                        <div class="step">If ready, read/write data</div>
+                    </div>
+                    <div class="formula">Time wasted = Polling loops × Loop time</div>
+                    <div class="warning">
+                        <div class="warning-title">⚠️ Disadvantage:</div>
+                        CPU wastes cycles waiting for I/O device.
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Interrupt-Driven I/O</h3>
+                <div class="grid">
+                    <div class="algorithm-card">
+                        <h4>Interrupt Process</h4>
+                        <div class="steps">
+                            <div class="step">CPU issues I/O command</div>
+                            <div class="step">CPU continues other work</div>
+                            <div class="step">Device sends interrupt when done</div>
+                            <div class="step">CPU saves context, jumps to ISR</div>
+                            <div class="step">ISR handles I/O, restores context</div>
+                        </div>
+                    </div>
+                    <div class="algorithm-card">
+                        <h4>Interrupt Overhead</h4>
+                        <div class="formula">Overhead = Context Save + ISR Execution + Context Restore</div>
+                        <div class="formula-description">
+                            Typically 2-10 microseconds per interrupt.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">DMA (Direct Memory Access)</h3>
+                <div class="formula-box">
+                    <div class="formula-name">DMA Transfer</div>
+                    <div class="formula">Transfer Time = Data Size / Transfer Rate</div>
+                    <div class="formula">CPU Overhead = Setup Time + Post-processing Time</div>
+                </div>
+
+                <div class="grid" style="margin-top: 15px;">
+                    <div class="algorithm-card">
+                        <h4>DMA Process</h4>
+                        <div class="steps">
+                            <div class="step">CPU programs DMA: source, dest, count</div>
+                            <div class="step">DMA requests bus (BR signal)</div>
+                            <div class="step">CPU grants bus (BG signal)</div>
+                            <div class="step">DMA transfers data directly</div>
+                            <div class="step">DMA sends interrupt when done</div>
+                        </div>
+                    </div>
+                    <div class="algorithm-card">
+                        <h4>DMA Modes</h4>
+                        <div class="formula-description">
+                            <strong>Burst Mode:</strong> Transfer entire block at once<br>
+                            <strong>Cycle Stealing:</strong> Transfer one word, release bus<br>
+                            <strong>Transparent:</strong> Transfer during CPU cache miss
+                        </div>
+                    </div>
+                </div>
+
+                <div class="formula-box" style="margin-top: 15px;">
+                    <div class="formula-name">DMA Efficiency</div>
+                    <div class="formula">Efficiency = (Data Size / Transfer Rate) / [(Data Size / Transfer Rate) + CPU Overhead]</div>
+                    <div class="example">
+                        <div class="example-title">📌 Example:</div>
+                        Transfer 1MB, Rate = 100MB/s, Overhead = 10μs<br>
+                        Transfer time = 1MB / 100MB/s = 10ms<br>
+                        CPU utilization = 10μs / 10ms = 0.1% overhead
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">I/O Bus Standards</h3>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Bus</th>
+                                <th>Type</th>
+                                <th>Speed</th>
+                                <th>Use</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>PCI</td>
+                                <td>Parallel</td>
+                                <td>133 MB/s</td>
+                                <td>Internal peripherals</td>
+                            </tr>
+                            <tr>
+                                <td>PCIe</td>
+                                <td>Serial</td>
+                                <td>16 GB/s (x16)</td>
+                                <td>Graphics, SSDs</td>
+                            </tr>
+                            <tr>
+                                <td>USB 3.0</td>
+                                <td>Serial</td>
+                                <td>5 Gbps</td>
+                                <td>External devices</td>
+                            </tr>
+                            <tr>
+                                <td>SATA</td>
+                                <td>Serial</td>
+                                <td>6 Gbps</td>
+                                <td>Storage</td>
+                            </tr>
+                            <tr>
+                                <td>SCSI</td>
+                                <td>Parallel/Serial</td>
+                                <td>640 MB/s</td>
+                                <td>Enterprise storage</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Bus Arbitration</h3>
+                <div class="grid">
+                    <div class="algorithm-card">
+                        <h4>Daisy Chain</h4>
+                        <div class="formula-description">
+                            • Devices connected in series<br>
+                            • Priority by physical position<br>
+                            • Simple but unfair (farther devices starve)<br>
+                            • Single point of failure
+                        </div>
+                    </div>
+                    <div class="algorithm-card">
+                        <h4>Centralized Parallel</h4>
+                        <div class="formula-description">
+                            • All devices connect to arbitrator<br>
+                            • Parallel request lines<br>
+                            • Fair arbitration possible<br>
+                            • More complex wiring
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid" style="margin-top: 15px;">
+                    <div class="algorithm-card">
+                        <h4>Distributed Self-Selection</h4>
+                        <div class="formula-description">
+                            • Each device decides if it wins<br>
+                            • Based on priority scheme<br>
+                            • No central arbitrator
+                        </div>
+                    </div>
+                    <div class="algorithm-card">
+                        <h4>Distributed Collision Detection</h4>
+                        <div class="formula-description">
+                            • Devices detect conflicts<br>
+                            • Backoff and retry<br>
+                            • Used in Ethernet
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PERFORMANCE METRICS SECTION -->
+        <div class="section">
+            <h2 class="section-title">
+                <span class="icon">📊</span>
+                Performance Metrics
+            </h2>
+
+            <div class="subsection">
+                <h3 class="subsection-title">CPU Performance</h3>
+                <div class="grid">
+                    <div class="formula-box">
+                        <div class="formula-name">CPU Time</div>
+                        <div class="formula">CPU Time = Instructions × CPI × Clock Cycle Time</div>
+                        <div class="formula">CPU Time = (Instructions × CPI) / Clock Rate</div>
+                        <div class="variables">
+                            CPI = Cycles Per Instruction<br>
+                            Clock Rate = 1 / Clock Cycle Time
+                        </div>
+                    </div>
+                    <div class="formula-box">
+                        <div class="formula-name">MIPS (Million Instructions Per Second)</div>
+                        <div class="formula">MIPS = Instruction Count / (Execution Time × 10⁶)</div>
+                        <div class="formula">MIPS = Clock Rate / (CPI × 10⁶)</div>
+                    </div>
+                </div>
+
+                <div class="grid" style="margin-top: 15px;">
+                    <div class="formula-box">
+                        <div class="formula-name">Clock Rate</div>
+                        <div class="formula">Clock Rate (Hz) = 1 / Cycle Time (seconds)</div>
+                        <div class="example">
+                            <div class="example-title">📌 Example:</div>
+                            Cycle time = 0.5ns = 0.5 × 10⁻⁹ s<br>
+                            Clock Rate = 1 / (0.5 × 10⁻⁹) = 2 GHz
+                        </div>
+                    </div>
+                    <div class="formula-box">
+                        <div class="formula-name">Overall CPI</div>
+                        <div class="formula">CPI = Σ(CPIᵢ × Frequencyᵢ)</div>
+                        <div class="variables">
+                            CPIᵢ = CPI for instruction type i<br>
+                            Frequencyᵢ = Fraction of instructions of type i
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Amdahl's Law</h3>
+                <div class="formula-box">
+                    <div class="formula-name">Speedup Formula</div>
+                    <div class="formula">Speedup = 1 / [(1 - f) + f/s]</div>
+                    <div class="variables">
+                        f = Fraction of execution time improved<br>
+                        s = Speedup of that fraction
+                    </div>
+                    <div class="example">
+                        <div class="example-title">📌 Example:</div>
+                        60% of time can be improved with 10× speedup<br>
+                        Speedup = 1 / [(1 - 0.6) + 0.6/10]<br>
+                        Speedup = 1 / [0.4 + 0.06] = 1 / 0.46 ≈ 2.17×
+                    </div>
+                    <div class="important">
+                        <div class="important-title">💡 Key Insight:</div>
+                        Maximum speedup when f=1 is s, but if f<1, speedup < s. Even infinite improvement to part of code has limited effect.
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Performance Comparison</h3>
+                <div class="formula-box">
+                    <div class="formula-name">Relative Performance</div>
+                    <div class="formula">Performance Ratio = Execution Time_B / Execution Time_A</div>
+                    <div class="formula">"A is n times faster than B" means Time_B / Time_A = n</div>
+                </div>
+
+                <div class="grid" style="margin-top: 15px;">
+                    <div class="formula-box">
+                        <div class="formula-name">Average CPI Calculation</div>
+                        <div class="example">
+                            <div class="example-title">📌 Example:</div>
+                            <table style="margin-top: 10px;">
+                                <tr><th>Instruction</th><th>Frequency</th><th>CPI</th></tr>
+                                <tr><td>ALU</td><td>50%</td><td>1</td></tr>
+                                <tr><td>Load/Store</td><td>30%</td><td>2</td></tr>
+                                <tr><td>Branch</td><td>20%</td><td>3</td></tr>
+                            </table>
+                            CPI = 0.5×1 + 0.3×2 + 0.2×3<br>
+                            CPI = 0.5 + 0.6 + 0.6 = 1.7
+                        </div>
+                    </div>
+                    <div class="formula-box">
+                        <div class="formula-name">FLOPS (Floating Point Operations/sec)</div>
+                        <div class="formula">FLOPS = Number of FP Operations / Execution Time</div>
+                        <div class="formula-description">
+                            Used for scientific computing benchmarks. Common units: MFLOPS, GFLOPS, TFLOPS.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PARALLEL PROCESSING SECTION -->
+        <div class="section">
+            <h2 class="section-title">
+                <span class="icon">🔀</span>
+                Parallel Processing
+            </h2>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Flynn's Taxonomy</h3>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Type</th>
+                                <th>Instruction Streams</th>
+                                <th>Data Streams</th>
+                                <th>Example</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>SISD</td>
+                                <td>Single</td>
+                                <td>Single</td>
+                                <td>Traditional uniprocessor</td>
+                            </tr>
+                            <tr>
+                                <td>SIMD</td>
+                                <td>Single</td>
+                                <td>Multiple</td>
+                                <td>Vector processors, GPU</td>
+                            </tr>
+                            <tr>
+                                <td>MISD</td>
+                                <td>Multiple</td>
+                                <td>Single</td>
+                                <td>Rare (fault-tolerant systems)</td>
+                            </tr>
+                            <tr>
+                                <td>MIMD</td>
+                                <td>Multiple</td>
+                                <td>Multiple</td>
+                                <td>Multiprocessors, multicore</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Parallel Speedup</h3>
+                <div class="formula-box">
+                    <div class="formula-name">Speedup with p Processors</div>
+                    <div class="formula">Speedup = Time_serial / Time_parallel</div>
+                    <div class="formula">Ideal Speedup = p</div>
+                    <div class="formula">Actual = 1 / [(1-f) + f/p]</div>
+                    <div class="variables">
+                        f = Fraction parallelizable<br>
+                        p = Number of processors
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Efficiency & Scalability</h3>
+                <div class="grid">
+                    <div class="formula-box">
+                        <div class="formula-name">Parallel Efficiency</div>
+                        <div class="formula">Efficiency = Speedup / p</div>
+                        <div class="formula">Ideal: Efficiency = 1 (100%)</div>
+                    </div>
+                    <div class="formula-box">
+                        <div class="formula-name">Overhead</div>
+                        <div class="formula">Overhead = Communication + Synchronization + Load Imbalance</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Cache Coherence</h3>
+                <div class="grid">
+                    <div class="algorithm-card">
+                        <h4>Snooping Protocol</h4>
+                        <div class="formula-description">
+                            Each cache monitors bus for memory operations.<br>
+                            <strong>MESI States:</strong><br>
+                            • <strong>M</strong>odified - Only copy, dirty<br>
+                            • <strong>E</strong>xclusive - Only copy, clean<br>
+                            • <strong>S</strong>hared - Multiple copies<br>
+                            • <strong>I</strong>nvalid - Not valid
+                        </div>
+                    </div>
+                    <div class="algorithm-card">
+                        <h4>Directory-Based</h4>
+                        <div class="formula-description">
+                            Central directory tracks which caches have each block.<br>
+                            • Scales better for large systems<br>
+                            • Higher latency for small systems
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Summary Section -->
+        <div class="section" style="background: linear-gradient(135deg, rgba(247, 37, 133, 0.15), rgba(181, 23, 158, 0.1));">
+            <h2 class="section-title">
+                <span class="icon">📋</span>
+                Quick Reference Summary
+            </h2>
+            <div class="comparison-grid">
+                <div class="comparison-item">
+                    <h5>Pipelining</h5>
+                    <p><strong>Speedup:</strong> n (stages)</p>
+                    <p><strong>Time:</strong> (k+n-1) × τ</p>
+                    <p><strong>Hazards:</strong> Data, Control, Structural</p>
+                    <p><strong>Solutions:</strong> Forwarding, Stalling</p>
+                </div>
+                <div class="comparison-item">
+                    <h5>Memory</h5>
+                    <p><strong>AMAT:</strong> Hit + Miss×Penalty</p>
+                    <p><strong>Direct Mapped:</strong> Block mod Lines</p>
+                    <p><strong>Set Assoc:</strong> Block mod Sets</p>
+                    <p><strong>Offset bits:</strong> log₂(Block Size)</p>
+                </div>
+                <div class="comparison-item">
+                    <h5>CPU Performance</h5>
+                    <p><strong>CPU Time:</strong> IC × CPI × τ</p>
+                    <p><strong>MIPS:</strong> IC / (Time × 10⁶)</p>
+                    <p><strong>Amdahl:</strong> 1/[(1-f) + f/s]</p>
+                </div>
+                <div class="comparison-item">
+                    <h5>I/O</h5>
+                    <p><strong>Polling:</strong> CPU waits</p>
+                    <p><strong>Interrupt:</strong> CPU notified</p>
+                    <p><strong>DMA:</strong> Direct transfer</p>
+                    <p><strong>Overhead:</strong> Setup + Post-process</p>
+                </div>
+                <div class="comparison-item">
+                    <h5>Cache Misses</h5>
+                    <p><strong>Compulsory:</strong> First access</p>
+                    <p><strong>Capacity:</strong> Cache too small</p>
+                    <p><strong>Conflict:</strong> Mapping collision</p>
+                </div>
+                <div class="comparison-item">
+                    <h5>Virtual Memory</h5>
+                    <p><strong>PA:</strong> Frame × PageSize + Offset</p>
+                    <p><strong>VA:</strong> Page × PageSize + Offset</p>
+                    <p><strong>TLB:</strong> Page table cache</p>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>📚 Computer Organization Formula Reference Sheet</p>
+            <p>Data Representation • CPU • Pipelining • Memory Hierarchy • I/O • Performance</p>
+        </footer>
+    </div>
+</body>
+</html>

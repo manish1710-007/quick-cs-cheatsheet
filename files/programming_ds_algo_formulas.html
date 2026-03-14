@@ -1,0 +1,2163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Programming, Data Structures & Algorithms - Formula Sheet</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 40%, #16213e 70%, #0f3460 100%);
+            min-height: 100vh;
+            color: #e0e0e0;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1500px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            padding: 40px 20px;
+            background: linear-gradient(90deg, #00bcd4, #4caf50, #ff9800);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        header h1 {
+            font-size: 2.8em;
+            margin-bottom: 10px;
+            text-shadow: 0 0 30px rgba(0, 188, 212, 0.3);
+        }
+
+        header p {
+            font-size: 1.2em;
+            color: #8892b0;
+            -webkit-text-fill-color: #8892b0;
+        }
+
+        .section {
+            margin: 30px 0;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 15px;
+            padding: 25px;
+            border: 1px solid rgba(0, 188, 212, 0.2);
+            backdrop-filter: blur(10px);
+        }
+
+        .section h2 {
+            color: #00bcd4;
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid rgba(0, 188, 212, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section h2::before {
+            content: '💻';
+        }
+
+        .subsection {
+            margin: 20px 0;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            border-left: 4px solid #4caf50;
+        }
+
+        .subsection h3 {
+            color: #4caf50;
+            font-size: 1.3em;
+            margin-bottom: 15px;
+        }
+
+        .formula-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 20px;
+            margin-top: 15px;
+        }
+
+        .formula-box {
+            background: linear-gradient(145deg, rgba(0, 188, 212, 0.1), rgba(76, 175, 80, 0.05));
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid rgba(0, 188, 212, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .formula-box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 188, 212, 0.2);
+            border-color: #00bcd4;
+        }
+
+        .formula-box h4 {
+            color: #00bcd4;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        .formula {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 1em;
+            color: #4caf50;
+            text-align: center;
+            margin: 10px 0;
+            border: 1px solid rgba(76, 175, 80, 0.2);
+        }
+
+        .formula-inline {
+            display: inline-block;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            color: #4caf50;
+            margin: 2px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        th {
+            background: linear-gradient(90deg, rgba(0, 188, 212, 0.3), rgba(76, 175, 80, 0.2));
+            color: #fff;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        td {
+            padding: 12px 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        tr:hover {
+            background: rgba(0, 188, 212, 0.1);
+        }
+
+        .code-block {
+            background: #1e1e1e;
+            padding: 15px 20px;
+            border-radius: 10px;
+            border-left: 4px solid #00bcd4;
+            margin: 15px 0;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+
+        .code-block code {
+            color: #d4d4d4;
+        }
+
+        .code-block .keyword {
+            color: #569cd6;
+            font-weight: bold;
+        }
+
+        .code-block .comment {
+            color: #6a9955;
+            font-style: italic;
+        }
+
+        .code-block .string {
+            color: #ce9178;
+        }
+
+        .code-block .function {
+            color: #dcdcaa;
+        }
+
+        .code-block .type {
+            color: #4ec9b0;
+        }
+
+        .code-block .number {
+            color: #b5cea8;
+        }
+
+        .code-block .preprocessor {
+            color: #c586c0;
+        }
+
+        .code-block .class-name {
+            color: #4ec9b0;
+        }
+
+        .example {
+            background: linear-gradient(145deg, rgba(255, 152, 0, 0.1), rgba(255, 193, 7, 0.05));
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #ff9800;
+            margin: 15px 0;
+        }
+
+        .example h4 {
+            color: #ff9800;
+            margin-bottom: 10px;
+        }
+
+        .note {
+            background: linear-gradient(145deg, rgba(156, 39, 176, 0.1), rgba(103, 58, 183, 0.05));
+            padding: 15px 20px;
+            border-radius: 10px;
+            border-left: 4px solid #9c27b0;
+            margin: 15px 0;
+        }
+
+        .note h4 {
+            color: #ce93d8;
+            margin-bottom: 8px;
+        }
+
+        .quick-ref {
+            background: linear-gradient(145deg, rgba(0, 188, 212, 0.15), rgba(76, 175, 80, 0.1));
+            padding: 25px;
+            border-radius: 15px;
+            margin-top: 30px;
+            border: 2px solid rgba(0, 188, 212, 0.3);
+        }
+
+        .quick-ref h3 {
+            color: #00bcd4;
+            font-size: 1.5em;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .quick-ref-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+        }
+
+        .quick-ref-item {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 15px;
+            border-radius: 8px;
+        }
+
+        .quick-ref-item strong {
+            color: #4caf50;
+        }
+
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .comparison-card {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            border-radius: 10px;
+            border-top: 3px solid #00bcd4;
+        }
+
+        .comparison-card h4 {
+            color: #00bcd4;
+            margin-bottom: 15px;
+        }
+
+        .lang-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .lang-tab {
+            padding: 8px 20px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(0, 188, 212, 0.3);
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .lang-tab.active {
+            background: rgba(0, 188, 212, 0.3);
+            border-color: #00bcd4;
+        }
+
+        .lang-tab:hover {
+            background: rgba(0, 188, 212, 0.2);
+        }
+
+        ul {
+            margin-left: 20px;
+            margin-top: 10px;
+        }
+
+        li {
+            margin: 5px 0;
+        }
+
+        .time-complexity {
+            display: inline-block;
+            background: rgba(76, 175, 80, 0.2);
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            color: #81c784;
+        }
+
+        .space-complexity {
+            display: inline-block;
+            background: rgba(255, 152, 0, 0.2);
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            color: #ffb74d;
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px;
+            margin-top: 40px;
+            color: #8892b0;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .two-column {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .ds-card {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid rgba(0, 188, 212, 0.2);
+        }
+
+        .ds-card h4 {
+            color: #00bcd4;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Programming, Data Structures & Algorithms</h1>
+            <p>Comprehensive Reference Guide - C/C++, Java & DSA</p>
+        </header>
+
+        <!-- C Programming -->
+        <section class="section">
+            <h2>C Programming Fundamentals</h2>
+            
+            <div class="subsection">
+                <h3>Data Types & Size</h3>
+                <div class="formula-grid">
+                    <div class="formula-box">
+                        <h4>Basic Data Types</h4>
+                        <table>
+                            <tr><th>Type</th><th>Size</th><th>Range</th></tr>
+                            <tr><td><span class="formula-inline">char</span></td><td>1 byte</td><td>-128 to 127</td></tr>
+                            <tr><td><span class="formula-inline">unsigned char</span></td><td>1 byte</td><td>0 to 255</td></tr>
+                            <tr><td><span class="formula-inline">short</span></td><td>2 bytes</td><td>-32,768 to 32,767</td></tr>
+                            <tr><td><span class="formula-inline">int</span></td><td>4 bytes</td><td>-2³¹ to 2³¹-1</td></tr>
+                            <tr><td><span class="formula-inline">unsigned int</span></td><td>4 bytes</td><td>0 to 2³²-1</td></tr>
+                            <tr><td><span class="formula-inline">long</span></td><td>4/8 bytes</td><td>Platform dependent</td></tr>
+                            <tr><td><span class="formula-inline">long long</span></td><td>8 bytes</td><td>-2⁶³ to 2⁶³-1</td></tr>
+                            <tr><td><span class="formula-inline">float</span></td><td>4 bytes</td><td>±3.4E38 (7 digits)</td></tr>
+                            <tr><td><span class="formula-inline">double</span></td><td>8 bytes</td><td>±1.7E308 (15 digits)</td></tr>
+                        </table>
+                    </div>
+                    <div class="formula-box">
+                        <h4>Format Specifiers</h4>
+                        <table>
+                            <tr><th>Type</th><th>Specifier</th></tr>
+                            <tr><td>int</td><td><span class="formula-inline">%d</span> or <span class="formula-inline">%i</span></td></tr>
+                            <tr><td>unsigned int</td><td><span class="formula-inline">%u</span></td></tr>
+                            <tr><td>long</td><td><span class="formula-inline">%ld</span></td></tr>
+                            <tr><td>long long</td><td><span class="formula-inline">%lld</span></td></tr>
+                            <tr><td>float</td><td><span class="formula-inline">%f</span></td></tr>
+                            <tr><td>double</td><td><span class="formula-inline">%lf</span></td></tr>
+                            <tr><td>char</td><td><span class="formula-inline">%c</span></td></tr>
+                            <tr><td>string (char*)</td><td><span class="formula-inline">%s</span></td></tr>
+                            <tr><td>pointer</td><td><span class="formula-inline">%p</span></td></tr>
+                            <tr><td>hexadecimal</td><td><span class="formula-inline">%x</span> / <span class="formula-inline">%X</span></td></tr>
+                            <tr><td>octal</td><td><span class="formula-inline">%o</span></td></tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3>Operators</h3>
+                <div class="formula-grid">
+                    <div class="formula-box">
+                        <h4>Arithmetic Operators</h4>
+                        <div class="code-block">
+<code><span class="keyword">int</span> a = <span class="number">10</span>, b = <span class="number">3</span>;
+a + b;  <span class="comment">// Addition: 13</span>
+a - b;  <span class="comment">// Subtraction: 7</span>
+a * b;  <span class="comment">// Multiplication: 30</span>
+a / b;  <span class="comment">// Division: 3 (integer)</span>
+a % b;  <span class="comment">// Modulus: 1</span>
+a++;    <span class="comment">// Increment: a = 11</span>
+b--;    <span class="comment">// Decrement: b = 2</span></code>
+                        </div>
+                    </div>
+                    <div class="formula-box">
+                        <h4>Bitwise Operators</h4>
+                        <div class="code-block">
+<code><span class="keyword">int</span> a = <span class="number">5</span>;  <span class="comment">// 0101 in binary</span>
+<span class="keyword">int</span> b = <span class="number">3</span>;  <span class="comment">// 0011 in binary</span>
+
+a & b;   <span class="comment">// AND: 0001 = 1</span>
+a | b;   <span class="comment">// OR: 0111 = 7</span>
+a ^ b;   <span class="comment">// XOR: 0110 = 6</span>
+~a;      <span class="comment">// NOT: ...11111010 = -6</span>
+a << 2;  <span class="comment">// Left shift: 10100 = 20</span>
+a >> 1;  <span class="comment">// Right shift: 0010 = 2</span></code>
+                        </div>
+                    </div>
+                    <div class="formula-box">
+                        <h4>Logical Operators</h4>
+                        <div class="code-block">
+<code><span class="keyword">int</span> x = <span class="number">1</span>, y = <span class="number">0</span>;
+
+x && y;  <span class="comment">// AND: 0 (false)</span>
+x || y;  <span class="comment">// OR: 1 (true)</span>
+!x;      <span class="comment">// NOT: 0 (false)</span>
+
+<span class="comment">// Short-circuit evaluation</span>
+<span class="keyword">if</span> (ptr != <span class="keyword">NULL</span> && *ptr > <span class="number">0</span>) {
+    <span class="comment">// Safe: if ptr is NULL, *ptr not evaluated</span>
+}</code>
+                        </div>
+                    </div>
+                    <div class="formula-box">
+                        <h4>Assignment Operators</h4>
+                        <div class="code-block">
+<code><span class="keyword">int</span> a = <span class="number">10</span>;
+
+a += <span class="number">5</span>;   <span class="comment">// a = a + 5 = 15</span>
+a -= <span class="number">3</span>;   <span class="comment">// a = a - 3 = 12</span>
+a *= <span class="number">2</span>;   <span class="comment">// a = a * 2 = 24</span>
+a /= <span class="number">4</span>;   <span class="comment">// a = a / 4 = 6</span>
+a %= <span class="number">4</span>;   <span class="comment">// a = a % 4 = 2</span>
+a &= <span class="number">3</span>;   <span class="comment">// a = a & 3 = 2</span>
+a |= <span class="number">1</span>;   <span class="comment">// a = a | 1 = 3</span>
+a <<= <span class="number">1</span>;  <span class="comment">// a = a << 1 = 6</span></code>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3>Control Structures</h3>
+                <div class="formula-grid">
+                    <div class="formula-box">
+                        <h4>Conditional Statements</h4>
+                        <div class="code-block">
+<code><span class="comment">// if-else</span>
+<span class="keyword">if</span> (condition) {
+    <span class="comment">// code</span>
+} <span class="keyword">else if</span> (another_condition) {
+    <span class="comment">// code</span>
+} <span class="keyword">else</span> {
+    <span class="comment">// code</span>
+}
+
+<span class="comment">// Ternary operator</span>
+result = (a > b) ? a : b;
+
+<span class="comment">// switch statement</span>
+<span class="keyword">switch</span> (expression) {
+    <span class="keyword">case</span> <span class="number">1</span>: <span class="comment">// code</span>; <span class="keyword">break</span>;
+    <span class="keyword">case</span> <span class="number">2</span>: <span class="comment">// code</span>; <span class="keyword">break</span>;
+    <span class="keyword">default</span>: <span class="comment">// code</span>;
+}</code>
+                        </div>
+                    </div>
+                    <div class="formula-box">
+                        <h4>Loops</h4>
+                        <div class="code-block">
+<code><span class="comment">// for loop</span>
+<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i < n; i++) {
+    <span class="comment">// code</span>
+}
+
+<span class="comment">// while loop</span>
+<span class="keyword">while</span> (condition) {
+    <span class="comment">// code</span>
+}
+
+<span class="comment">// do-while loop</span>
+<span class="keyword">do</span> {
+    <span class="comment">// code (executes at least once)</span>
+} <span class="keyword">while</span> (condition);
+
+<span class="comment">// break and continue</span>
+<span class="keyword">break</span>;    <span class="comment">// exit loop</span>
+<span class="keyword">continue</span>; <span class="comment">// skip to next iteration</span></code>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3>Pointers</h3>
+                <div class="formula-grid">
+                    <div class="formula-box">
+                        <h4>Pointer Basics</h4>
+                        <div class="code-block">
+<code><span class="keyword">int</span> a = <span class="number">10</span>;
+<span class="keyword">int</span> *ptr = &a;  <span class="comment">// ptr holds address of a</span>
+
+*ptr;   <span class="comment">// Dereference: value at address = 10</span>
+&a;     <span class="comment">// Address-of operator</span>
+
+<span class="comment">// Pointer arithmetic</span>
+<span class="keyword">int</span> arr[<span class="number">5</span>] = {<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>};
+<span class="keyword">int</span> *p = arr;
+*(p + <span class="number">2</span>);  <span class="comment">// arr[2] = 3</span>
+p++;       <span class="comment">// Now points to arr[1]</span></code>
+                        </div>
+                    </div>
+                    <div class="formula-box">
+                        <h4>Dynamic Memory Allocation</h4>
+                        <div class="code-block">
+<code><span class="preprocessor">#include</span> <span class="string">&lt;stdlib.h&gt;</span>
+
+<span class="comment">// malloc - allocate uninitialized memory</span>
+<span class="keyword">int</span> *arr = (<span class="keyword">int</span>*)<span class="function">malloc</span>(n * <span class="keyword">sizeof</span>(<span class="keyword">int</span>));
+
+<span class="comment">// calloc - allocate zero-initialized memory</span>
+<span class="keyword">int</span> *arr = (<span class="keyword">int</span>*)<span class="function">calloc</span>(n, <span class="keyword">sizeof</span>(<span class="keyword">int</span>));
+
+<span class="comment">// realloc - resize allocated memory</span>
+arr = (<span class="keyword">int</span>*)<span class="function">realloc</span>(arr, new_size * <span class="keyword">sizeof</span>(<span class="keyword">int</span>));
+
+<span class="comment">// free - deallocate memory</span>
+<span class="function">free</span>(arr);
+arr = <span class="keyword">NULL</span>;  <span class="comment">// Avoid dangling pointer</span></code>
+                        </div>
+                    </div>
+                    <div class="formula-box">
+                        <h4>Pointers to Pointers</h4>
+                        <div class="code-block">
+<code><span class="keyword">int</span> a = <span class="number">10</span>;
+<span class="keyword">int</span> *ptr = &a;
+<span class="keyword">int</span> **pptr = &ptr;
+
+**pptr = <span class="number">20</span>;  <span class="comment">// a is now 20</span>
+
+<span class="comment">// Common use: 2D arrays</span>
+<span class="keyword">int</span> **matrix = (<span class="keyword">int</span>**)<span class="function">malloc</span>(rows * <span class="keyword">sizeof</span>(<span class="keyword">int</span>*));
+<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i < rows; i++)
+    matrix[i] = (<span class="keyword">int</span>*)<span class="function">malloc</span>(cols * <span class="keyword">sizeof</span>(<span class="keyword">int</span>));</code>
+                        </div>
+                    </div>
+                    <div class="formula-box">
+                        <h4>Function Pointers</h4>
+                        <div class="code-block">
+<code><span class="comment">// Declaration</span>
+<span class="keyword">int</span> (*fptr)(<span class="keyword">int</span>, <span class="keyword">int</span>);
+
+<span class="comment">// Assignment</span>
+fptr = &add;  <span class="comment">// or just fptr = add</span>
+
+<span class="comment">// Call</span>
+<span class="keyword">int</span> result = fptr(<span class="number">5</span>, <span class="number">3</span>);
+
+<span class="comment">// Use in qsort</span>
+<span class="keyword">int</span> <span class="function">compare</span>(<span class="keyword">const void</span> *a, <span class="keyword">const void</span> *b) {
+    <span class="keyword">return</span> (*(<span class="keyword">int</span>*)a - *(<span class="keyword">int</span>*)b);
+}
+<span class="function">qsort</span>(arr, n, <span class="keyword">sizeof</span>(<span class="keyword">int</span>), compare);</code>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3>Arrays & Strings</h3>
+                <div class="formula-grid">
+                    <div class="formula-box">
+                        <h4>Arrays</h4>
+                        <div class="code-block">
+<code><span class="comment">// Declaration & Initialization</span>
+<span class="keyword">int</span> arr[<span class="number">5</span>] = {<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>};
+<span class="keyword">int</span> arr[] = {<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>};  <span class="comment">// Size inferred</span>
+
+<span class="comment">// 2D Array</span>
+<span class="keyword">int</span> matrix[<span class="number">3</span>][<span class="number">4</span>];  <span class="comment">// 3 rows, 4 columns</span>
+
+<span class="comment">// Array size</span>
+<span class="keyword">int</span> size = <span class="keyword">sizeof</span>(arr) / <span class="keyword">sizeof</span>(arr[<span class="number">0</span>]);
+
+<span class="comment">// Passing to function</span>
+<span class="keyword">void</span> <span class="function">func</span>(<span class="keyword">int</span> arr[], <span class="keyword">int</span> n);
+<span class="keyword">void</span> <span class="function">func</span>(<span class="keyword">int</span> *arr, <span class="keyword">int</span> n);  <span class="comment">// Equivalent</span></code>
+                        </div>
+                    </div>
+                    <div class="formula-box">
+                        <h4>Strings</h4>
+                        <div class="code-block">
+<code><span class="preprocessor">#include</span> <span class="string">&lt;string.h&gt;</span>
+
+<span class="keyword">char</span> str[<span class="number">20</span>] = <span class="string">"Hello"</span>;
+<span class="keyword">char</span> str[] = <span class="string">"Hello"</span>;  <span class="comment">// Size = 6 (includes '\0')</span>
+
+<span class="comment">// String functions</span>
+<span class="function">strlen</span>(str);           <span class="comment">// Length (excludes '\0')</span>
+<span class="function">strcpy</span>(dest, src);     <span class="comment">// Copy</span>
+<span class="function">strcat</span>(dest, src);     <span class="comment">// Concatenate</span>
+<span class="function">strcmp</span>(s1, s2);        <span class="comment">// Compare: 0 if equal</span>
+<span class="function">strchr</span>(str, 'c');      <span class="comment">// Find character</span>
+<span class="function">strstr</span>(str, "sub");    <span class="comment">// Find substring</span></code>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3>Structures & Unions</h3>
+                <div class="formula-grid">
+                    <div class="formula-box">
+                        <h4>Structure</h4>
+                        <div class="code-block">
+<code><span class="keyword">struct</span> <span class="class-name">Student</span> {
+    <span class="keyword">char</span> name[<span class="number">50</span>];
+    <span class="keyword">int</span> age;
+    <span class="keyword">float</span> gpa;
+};
+
+<span class="comment">// Declaration & Initialization</span>
+<span class="keyword">struct</span> <span class="class-name">Student</span> s1 = {<span class="string">"John"</span>, <span class="number">20</span>, <span class="number">3.8</span>};
+<span class="keyword">struct</span> <span class="class-name">Student</span> *ptr = &s1;
+
+<span class="comment">// Access members</span>
+s1.age = <span class="number">21</span>;       <span class="comment">// Direct access</span>
+ptr->age = <span class="number">21</span>;     <span class="comment">// Pointer access</span>
+(*ptr).age = <span class="number">21</span>;   <span class="comment">// Equivalent</span>
+
+<span class="comment">// Typedef</span>
+<span class="keyword">typedef struct</span> {
+    <span class="keyword">int</span> x, y;
+} <span class="class-name">Point</span>;
+
+<span class="class-name">Point</span> p = {<span class="number">10</span>, <span class="number">20</span>};</code>
+                        </div>
+                    </div>
+                    <div class="formula-box">
+                        <h4>Union</h4>
+                        <div class="code-block">
+<code><span class="keyword">union</span> <span class="class-name">Data</span> {
+    <span class="keyword">int</span> i;
+    <span class="keyword">float</span> f;
+    <span class="keyword">char</span> str[<span class="number">20</span>];
+};
+
+<span class="comment">// Size = max(sizeof(int), sizeof(float), 20)</span>
+<span class="comment">// All members share same memory location</span>
+
+<span class="keyword">union</span> <span class="class-name">Data</span> d;
+d.i = <span class="number">10</span>;
+<span class="function">printf</span>(<span class="string">"%d"</span>, d.i);  <span class="comment">// OK</span>
+d.f = <span class="number">3.14</span>;          <span class="comment">// Overwrites d.i</span></code>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3>File Handling</h3>
+                <div class="formula-box">
+                    <h4>File Operations</h4>
+                    <div class="code-block">
+<code><span class="preprocessor">#include</span> <span class="string">&lt;stdio.h&gt;</span>
+
+<span class="keyword">FILE</span> *fp;
+
+<span class="comment">// Open file</span>
+fp = <span class="function">fopen</span>(<span class="string">"file.txt"</span>, <span class="string">"r"</span>);   <span class="comment">// Read</span>
+fp = <span class="function">fopen</span>(<span class="string">"file.txt"</span>, <span class="string">"w"</span>);   <span class="comment">// Write (overwrite)</span>
+fp = <span class="function">fopen</span>(<span class="string">"file.txt"</span>, <span class="string">"a"</span>);   <span class="comment">// Append</span>
+fp = <span class="function">fopen</span>(<span class="string">"file.txt"</span>, <span class="string">"r+"</span>);  <span class="comment">// Read & Write</span>
+fp = <span class="function">fopen</span>(<span class="string">"file.txt"</span>, <span class="string">"rb"</span>);  <span class="comment">// Binary read</span>
+
+<span class="comment">// Read/Write</span>
+<span class="keyword">char</span> ch = <span class="function">fgetc</span>(fp);           <span class="comment">// Read character</span>
+<span class="function">fputc</span>(ch, fp);                  <span class="comment">// Write character</span>
+<span class="function">fgets</span>(str, n, fp);              <span class="comment">// Read string</span>
+<span class="function">fputs</span>(str, fp);                 <span class="comment">// Write string</span>
+<span class="function">fscanf</span>(fp, <span class="string">"%d"</span>, &num);        <span class="comment">// Formatted read</span>
+<span class="function">fprintf</span>(fp, <span class="string">"Value: %d\n"</span>, n); <span class="comment">// Formatted write</span>
+
+<span class="comment">// Binary I/O</span>
+<span class="function">fread</span>(&var, <span class="keyword">sizeof</span>(var), <span class="number">1</span>, fp);
+<span class="function">fwrite</span>(&var, <span class="keyword">sizeof</span>(var), <span class="number">1</span>, fp);
+
+<span class="comment">// Close file</span>
+<span class="function">fclose</span>(fp);</code>
+                        </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- C++ Programming -->
+        <section class="section">
+            <h2>C++ Programming</h2>
+            
+            <div class="subsection">
+                <h3>C++ Specific Features</h3>
+                <div class="formula-grid">
+                    <div class="formula-box">
+                        <h4>Input/Output</h4>
+                        <div class="code-block">
+<code><span class="preprocessor">#include</span> <span class="string">&lt;iostream&gt;</span>
+<span class="keyword">using namespace</span> std;
+
+<span class="keyword">int</span> a;
+<span class="class-name">cout</span> << <span class="string">"Enter value: "</span>;
+<span class="class-name">cin</span> >> a;
+<span class="class-name">cout</span> << <span class="string">"Value is: "</span> << a << <span class="class-name">endl</span>;
+
+<span class="comment">// cerr for errors, clog for logging</span>
+<span class="class-name">cerr</span> << <span class="string">"Error!"</span> << <span class="class-name">endl</span>;</code>
+                        </div>
+                    </div>
+                    <div class="formula-box">
+                        <h4>Strings</h4>
+                        <div class="code-block">
+<code><span class="preprocessor">#include</span> <span class="string">&lt;string&gt;</span>
+
+<span class="class-name">string</span> s1 = <span class="string">"Hello"</span>;
+<span class="class-name">string</span> s2 = <span class="string">"World"</span>;
+<span class="class-name">string</span> s3 = s1 + <span class="string">" "</span> + s2;  <span class="comment">// Concatenation</span>
+
+s1.length();    <span class="comment">// or s1.size()</span>
+s1.empty();     <span class="comment">// Check if empty</span>
+s1.substr(<span class="number">0</span>, <span class="number">3</span>); <span class="comment">// "Hel"</span>
+s1.find(<span class="string">"ell"</span>);  <span class="comment">// Position or string::npos</span>
+s1.push_back(<span class="string">'!'</span>);
+s1.pop_back();
+
+<span class="comment">// Iterate</span>
+<span class="keyword">for</span> (<span class="keyword">char</span> c : s1) { }
+<span class="keyword">for</span> (<span class="keyword">auto</span> it = s1.begin(); it != s1.end(); ++it) { }</code>
+                        </div>
+                    </div>
+                    <div class="formula-box">
+                        <h4>Vectors</h4>
+                        <div class="code-block">
+<code><span class="preprocessor">#include</span> <span class="string">&lt;vector&gt;</span>
+
+<span class="class-name">vector</span>&lt;<span class="keyword">int</span>&gt; v = {<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>};
+v.push_back(<span class="number">4</span>);      <span class="comment">// Add to end</span>
+v.pop_back();        <span class="comment">// Remove from end</span>
+v.size();            <span class="comment">// Number of elements</span>
+v.capacity();        <span class="comment">// Allocated space</span>
+v.empty();           <span class="comment">// Check if empty</span>
+v.clear();           <span class="comment">// Remove all elements</span>
+
+v[<span class="number">0</span>];     <span class="comment">// Access (no bounds check)</span>
+v.at(<span class="number">0</span>);   <span class="comment">// Access (with bounds check)</span>
+v.front();  <span class="comment">// First element</span>
+v.back();   <span class="comment">// Last element</span>
+
+<span class="comment">// 2D Vector</span>
+<span class="class-name">vector</span>&lt;<span class="class-name">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; matrix(rows, <span class="class-name">vector</span>&lt;<span class="keyword">int</span>&gt;(cols, <span class="number">0</span>));</code>
+                        </div>
+                    </div>
+                    <div class="formula-box">
+                        <h4>References</h4>
+                        <div class="code-block">
+<code><span class="keyword">int</span> a = <span class="number">10</span>;
+<span class="keyword">int</span> &ref = a;  <span class="comment">// Reference to a</span>
+
+ref = <span class="number">20</span>;  <span class="comment">// a is now 20</span>
+
+<span class="comment">// Pass by reference</span>
+<span class="keyword">void</span> <span class="function">swap</span>(<span class="keyword">int</span> &x, <span class="keyword">int</span> &y) {
+    <span class="keyword">int</span> temp = x; x = y; y = temp;
+}
+
+<span class="comment">// Const reference (read-only)</span>
+<span class="keyword">void</span> <span class="function">print</span>(<span class="keyword">const</span> <span class="class-name">string</span> &s) {
+    <span class="class-name">cout</span> << s;  <span class="comment">// Cannot modify s</span>
+}</code>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3>Object-Oriented Programming (OOP)</h3>
+                <div class="formula-grid">
+                    <div class="formula-box">
+                        <h4>Class Definition</h4>
+                        <div class="code-block">
+<code><span class="keyword">class</span> <span class="class-name">Student</span> {
+<span class="keyword">private</span>:
+    <span class="class-name">string</span> name;
+    <span class="keyword">int</span> age;
+    
+<span class="keyword">public</span>:
+    <span class="comment">// Constructor</span>
+    <span class="function">Student</span>(<span class="class-name">string</span> n, <span class="keyword">int</span> a) : name(n), age(a) {}
+    
+    <span class="comment">// Default constructor</span>
+    <span class="function">Student</span>() : name(<span class="string">""</span>), age(<span class="number">0</span>) {}
+    
+    <span class="comment">// Destructor</span>
+    <span class="function">~Student</span>() {}
+    
+    <span class="comment">// Getter</span>
+    <span class="class-name">string</span> <span class="function">getName</span>() <span class="keyword">const</span> { <span class="keyword">return</span> name; }
+    
+    <span class="comment">// Setter</span>
+    <span class="keyword">void</span> <span class="function">setAge</span>(<span class="keyword">int</span> a) { age = a; }
+    
+    <span class="comment">// Member function</span>
+    <span class="keyword">void</span> <span class="function">display</span>() {
+        <span class="class-name">cout</span> << name << <span class="string">", "</span> << age << <span class="class-name">endl</span>;
+    }
+};</code>
+                        </div>
+                    </div>
+                    <div class="formula-box">
+                        <h4>Inheritance</h4>
+                        <div class="code-block">
+<code><span class="keyword">class</span> <span class="class-name">Person</span> {
+<span class="keyword">protected</span>:
+    <span class="class-name">string</span> name;
+<span class="keyword">public</span>:
+    <span class="function">Person</span>(<span class="class-name">string</span> n) : name(n) {}
+    <span class="keyword">virtual void</span> <span class="function">display</span>() { }
+    <span class="keyword">virtual</span> ~<span class="function">Person</span>() {}  <span class="comment">// Virtual destructor</span>
+};
+
+<span class="comment">// Single inheritance</span>
+<span class="keyword">class</span> <span class="class-name">Student</span> : <span class="keyword">public</span> <span class="class-name">Person</span> {
+    <span class="keyword">int</span> grade;
+<span class="keyword">public</span>:
+    <span class="function">Student</span>(<span class="class-name">string</span> n, <span class="keyword">int</span> g) : <span class="class-name">Person</span>(n), grade(g) {}
+    <span class="keyword">void</span> <span class="function">display</span>() <span class="keyword">override</span> { }  <span class="comment">// Override</span>
+};
+
+<span class="comment">// Multiple inheritance</span>
+<span class="keyword">class</span> <span class="class-name">TA</span> : <span class="keyword">public</span> <span class="class-name">Student</span>, <span class="keyword">public</span> <span class="class-name">Employee</span> { };</code>
+                        </div>
+                    </div>
+                    <div class="formula-box">
+                        <h4>Polymorphism</h4>
+                        <div class="code-block">
+<code><span class="comment">// Virtual functions</span>
+<span class="keyword">class</span> <span class="class-name">Shape</span> {
+<span class="keyword">public</span>:
+    <span class="keyword">virtual double</span> <span class="function">area</span>() = <span class="number">0</span>;  <span class="comment">// Pure virtual</span>
+    <span class="keyword">virtual</span> ~<span class="function">Shape</span>() {}
+};
+
+<span class="keyword">class</span> <span class="class-name">Circle</span> : <span class="keyword">public</span> <span class="class-name">Shape</span> {
+    <span class="keyword">double</span> radius;
+<span class="keyword">public</span>:
+    <span class="keyword">double</span> <span class="function">area</span>() <span class="keyword">override</span> {
+        <span class="keyword">return</span> <span class="number">3.14159</span> * radius * radius;
+    }
+};
+
+<span class="comment">// Runtime polymorphism</span>
+<span class="class-name">Shape</span>* s = <span class="keyword">new</span> <span class="class-name">Circle</span>(<span class="number">5.0</span>);
+s-><span class="function">area</span>();  <span class="comment">// Calls Circle::area()</span>
+<span class="keyword">delete</span> s;</code>
+                        </div>
+                    </div>
+                    <div class="formula-box">
+                        <h4>Operator Overloading</h4>
+                        <div class="code-block">
+<code><span class="keyword">class</span> <span class="class-name">Complex</span> {
+<span class="keyword">public</span>:
+    <span class="keyword">double</span> real, imag;
+    
+    <span class="class-name">Complex</span> <span class="keyword">operator</span>+ (<span class="keyword">const</span> <span class="class-name">Complex</span>& other) {
+        <span class="keyword">return</span> <span class="class-name">Complex</span>{real + other.real, 
+                           imag + other.imag};
+    }
+    
+    <span class="keyword">friend ostream</span>& <span class="keyword">operator</span>&lt;&lt; (
+        <span class="class-name">ostream</span>& os, <span class="keyword">const</span> <span class="class-name">Complex</span>& c) {
+        <span class="keyword">return</span> os << c.real << <span class="string">"+"</span> << c.imag << <span class="string">"i"</span>;
+    }
+};</code>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3>STL Containers</h3>
+                <div class="formula-grid">
+                    <div class="formula-box">
+                        <h4>Stack</h4>
+                        <div class="code-block">
+<code><span class="preprocessor">#include</span> <span class="string">&lt;stack&gt;</span>
+
+<span class="class-name">stack</span>&lt;<span class="keyword">int</span>&gt; s;
+s.push(<span class="number">1</span>);     <span class="comment">// Add element</span>
+s.pop();        <span class="comment">// Remove top</span>
+s.top();        <span class="comment">// Access top</span>
+s.empty();      <span class="comment">// Check if empty</span>
+s.size();       <span class="comment">// Number of elements</span></code>
+                        </div>
+                    </div>
+                    <div class="formula-box">
+                        <h4>Queue</h4>
+                        <div class="code-block">
+<code><span class="preprocessor">#include</span> <span class="string">&lt;queue&gt;</span>
+
+<span class="class-name">queue</span>&lt;<span class="keyword">int</span>&gt; q;
+q.push(<span class="number">1</span>;      <span class="comment">// Add to back</span>
+q.pop();        <span class="comment">// Remove from front</span>
+q.front();      <span class="comment">// Access front</span>
+q.back();       <span class="comment">// Access back</span>
+q.empty();
+q.size();</code>
+                        </div>
+                    </div>
+                    <div class="formula-box">
+                        <h4>Priority Queue (Heap)</h4>
+                        <div class="code-block">
+<code><span class="preprocessor">#include</span> <span class="string">&lt;queue&gt;</span>
+
+<span class="comment">// Max heap (default)</span>
+<span class="class-name">priority_queue</span>&lt;<span class="keyword">int</span>&gt; pq;
+
+<span class="comment">// Min heap</span>
+<span class="class-name">priority_queue</span>&lt;<span class="keyword">int</span>, <span class="class-name">vector</span>&lt;<span class="keyword">int</span>&gt;, 
+                <span class="class-name">greater</span>&lt;<span class="keyword">int</span>&gt;&gt; pq;
+
+pq.push(<span class="number">3</span>);
+pq.push(<span class="number">1</span>);
+pq.push(<span class="number">2</span>);
+pq.top();   <span class="comment">// Max: 3, Min: 1</span>
+pq.pop();</code>
+                        </div>
+                    </div>
+                    <div class="formula-box">
+                        <h4>Set & Map</h4>
+                        <div class="code-block">
+<code><span class="preprocessor">#include</span> <span class="string">&lt;set&gt;</span>
+<span class="preprocessor">#include</span> <span class="string">&lt;map&gt;</span>
+
+<span class="class-name">set</span>&lt;<span class="keyword">int</span>&gt; s;
+s.insert(<span class="number">5</span>);
+s.erase(<span class="number">5</span>);
+s.count(<span class="number">5</span>);     <span class="comment">// 0 or 1</span>
+s.find(<span class="number">5</span>);       <span class="comment">// Iterator or s.end()</span>
+
+<span class="class-name">map</span>&lt;<span class="class-name">string</span>, <span class="keyword">int</span>&gt; m;
+m[<span class="string">"key"</span>] = <span class="number">10</span>;
+m.insert({<span class="string">"key"</span>, <span class="number">10</span>});
+m.count(<span class="string">"key"</span>);
+m.erase(<span class="string">"key"</span>);</code>
+                        </div>
+                    </div>
+                    <div class="formula-box">
+                        <h4>Unordered Set & Map (Hash)</h4>
+                        <div class="code-block">
+<code><span class="preprocessor">#include</span> <span class="string">&lt;unordered_set&gt;</span>
+<span class="preprocessor">#include</span> <span class="string">&lt;unordered_map&gt;</span>
+
+<span class="comment">// O(1) average operations</span>
+<span class="class-name">unordered_set</span>&lt;<span class="keyword">int</span>&gt; us;
+<span class="class-name">unordered_map</span>&lt;<span class="class-name">string</span>, <span class="keyword">int</span>&gt; um;
+
+<span class="comment">// Same operations as set/map</span>
+us.insert(<span class="number">5</span>);
+um[<span class="string">"key"</span>] = <span class="number">10</span>;
+
+<span class="comment">// No ordering guaranteed</span></code>
+                        </div>
+                    </div>
+                    <div class="formula-box">
+                        <h4>Deque</h4>
+                        <div class="code-block">
+<code><span class="preprocessor">#include</span> <span class="string">&lt;deque&gt;</span>
+
+<span class="class-name">deque</span>&lt;<span class="keyword">int</span>&gt; d;
+d.push_back(<span class="number">1</span>);   <span class="comment">// Add to back</span>
+d.push_front(<span class="number">2</span>);  <span class="comment">// Add to front</span>
+d.pop_back();
+d.pop_front();
+d.front();
+d.back();
+d[<span class="number">0</span>];  <span class="comment">// Random access</span></code>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3>STL Algorithms</h3>
+                <div class="formula-grid">
+                    <div class="formula-box">
+                        <h4>Sorting & Searching</h4>
+                        <div class="code-block">
+<code><span class="preprocessor">#include</span> <span class="string">&lt;algorithm&gt;</span>
+
+<span class="class-name">vector</span>&lt;<span class="keyword">int</span>&gt; v = {<span class="number">3</span>, <span class="number">1</span>, <span class="number">4</span>, <span class="number">1</span>, <span class="number">5</span>};
+
+<span class="comment">// Sort</span>
+<span class="function">sort</span>(v.begin(), v.end());
+<span class="function">sort</span>(v.begin(), v.end(), <span class="class-name">greater</span>&lt;<span class="keyword">int</span>&gt;());
+
+<span class="comment">// Binary search (sorted)</span>
+<span class="function">binary_search</span>(v.begin(), v.end(), <span class="number">3</span>);
+<span class="function">lower_bound</span>(v.begin(), v.end(), <span class="number">3</span>);  <span class="comment">// First >=</span>
+<span class="function">upper_bound</span>(v.begin(), v.end(), <span class="number">3</span>);  <span class="comment">// First ></span></code>
+                        </div>
+                    </div>
+                    <div class="formula-box">
+                        <h4>Useful Algorithms</h4>
+                        <div class="code-block">
+<code><span class="function">reverse</span>(v.begin(), v.end());
+<span class="function">rotate</span>(v.begin(), v.begin()+<span class="number">2</span>, v.end());
+
+<span class="comment">// Min/Max</span>
+<span class="keyword">auto</span> it = <span class="function">min_element</span>(v.begin(), v.end());
+<span class="keyword">auto</span> it = <span class="function">max_element</span>(v.begin(), v.end());
+<span class="keyword">int</span> m = <span class="function">min</span>(a, b);
+<span class="keyword">int</span> m = <span class="function">max</span>(a, b);
+
+<span class="comment">// Find</span>
+<span class="keyword">auto</span> it = <span class="function">find</span>(v.begin(), v.end(), <span class="number">3</span>);
+<span class="keyword">int</span> cnt = <span class="function">count</span>(v.begin(), v.end(), <span class="number">3</span>);
+
+<span class="comment">// Remove duplicates (sorted first)</span>
+<span class="function">sort</span>(v.begin(), v.end());
+v.<span class="function">erase</span>(<span class="function">unique</span>(v.begin(), v.end()), v.end());
+
+<span class="comment">// Next/Previous permutation</span>
+<span class="function">next_permutation</span>(v.begin(), v.end());
+
+<span class="comment">// Heap operations</span>
+<span class="function">make_heap</span>(v.begin(), v.end());
+<span class="function">push_heap</span>(v.begin(), v.end());
+<span class="function">pop_heap</span>(v.begin(), v.end());</code>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Java Programming -->
+        <section class="section">
+            <h2>Java Programming</h2>
+            
+            <div class="subsection">
+                <h3>Java Basics</h3>
+                <div class="formula-grid">
+                    <div class="formula-box">
+                        <h4>Input/Output</h4>
+                        <div class="code-block">
+<code><span class="keyword">import</span> java.util.Scanner;
+
+<span class="class-name">Scanner</span> sc = <span class="keyword">new</span> <span class="class-name">Scanner</span>(System.in);
+<span class="keyword">int</span> n = sc.<span class="function">nextInt</span>();
+<span class="keyword">double</span> d = sc.<span class="function">nextDouble</span>();
+<span class="class-name">String</span> s = sc.<span class="function">next</span>();       <span class="comment">// Word</span>
+<span class="class-name">String</span> line = sc.<span class="function">nextLine</span>(); <span class="comment">// Line</span>
+sc.<span class="function">close</span>();
+
+<span class="comment">// Output</span>
+System.out.<span class="function">println</span>(<span class="string">"Hello"</span>);
+System.out.<span class="function">printf</span>(<span class="string">"Value: %d\n"</span>, n);
+
+<span class="comment">// Fast I/O for competitive programming</span>
+<span class="class-name">BufferedReader</span> br = <span class="keyword">new</span> <span class="class-name">BufferedReader</span>(
+    <span class="keyword">new</span> <span class="class-name">InputStreamReader</span>(System.in));
+<span class="class-name">StringTokenizer</span> st = <span class="keyword">new</span> <span class="class-name">StringTokenizer</span>(br.<span class="function">readLine</span>());
+<span class="keyword">int</span> n = Integer.<span class="function">parseInt</span>(st.<span class="function">nextToken</span>());</code>
+                        </div>
+                    </div>
+                    <div class="formula-box">
+                        <h4>Arrays</h4>
+                        <div class="code-block">
+<code><span class="keyword">import</span> java.util.Arrays;
+
+<span class="comment">// Declaration</span>
+<span class="keyword">int</span>[] arr = <span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">5</span>];
+<span class="keyword">int</span>[] arr = {<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>};
+
+<span class="comment">// 2D Array</span>
+<span class="keyword">int</span>[][] matrix = <span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">3</span>][<span class="number">4</span>];
+
+<span class="comment">// Length</span>
+<span class="keyword">int</span> len = arr.length;      <span class="comment">// Array length</span>
+<span class="keyword">int</span> rows = matrix.length;  <span class="comment">// Number of rows</span>
+
+<span class="comment">// Utility methods</span>
+Arrays.<span class="function">sort</span>(arr);
+Arrays.<span class="function">fill</span>(arr, <span class="number">0</span>);
+Arrays.<span class="function">toString</span>(arr);      <span class="comment">// String representation</span>
+Arrays.<span class="function">binarySearch</span>(arr, key);
+Arrays.<span class="function">copyOf</span>(arr, newLength);
+Arrays.<span class="function">equals</span>(arr1, arr2);</code>
+                        </div>
+                    </div>
+                    <div class="formula-box">
+                        <h4>Strings</h4>
+                        <div class="code-block">
+<code><span class="class-name">String</span> s = <span class="string">"Hello"</span>;
+<span class="class-name">String</span> s2 = <span class="keyword">new</span> <span class="class-name">String</span>(<span class="string">"World"</span>);
+
+s.<span class="function">length</span>();
+s.<span class="function">charAt</span>(<span class="number">0</span>);          <span class="comment">// 'H'</span>
+s.<span class="function">substring</span>(<span class="number">0</span>, <span class="number">3</span>);   <span class="comment">// "Hel"</span>
+s.<span class="function">indexOf</span>(<span class="string">"ell"</span>);     <span class="comment">// 1</span>
+s.<span class="function">equals</span>(<span class="string">"Hello"</span>);   <span class="comment">// true (use equals, not ==)</span>
+s.<span class="function">equalsIgnoreCase</span>(<span class="string">"hello"</span>);
+s.<span class="function">toUpperCase</span>();
+s.<span class="function">toLowerCase</span>();
+s.<span class="function">trim</span>();           <span class="comment">// Remove whitespace</span>
+s.<span class="function">split</span>(<span class="string">","</span>);       <span class="comment">// String[]</span>
+s.<span class="function">replace</span>(<span class="string">"l"</span>, <span class="string">"x"</span>);
+s.<span class="function">contains</span>(<span class="string">"ell"</span>);
+s.<span class="function">startsWith</span>(<span class="string">"He"</span>);
+s.<span class="function">endsWith</span>(<span class="string">"lo"</span>);
+
+<span class="comment">// StringBuilder (mutable)</span>
+<span class="class-name">StringBuilder</span> sb = <span class="keyword">new</span> <span class="class-name">StringBuilder</span>();
+sb.<span class="function">append</span>(<span class="string">"Hello"</span>);
+sb.<span class="function">append</span>(<span class="string">" World"</span>);
+sb.<span class="function">insert</span>(<span class="number">5</span>, <span class="string">","</span>);
+sb.<span class="function">delete</span>(<span class="number">5</span>, <span class="number">6</span>);
+sb.<span class="function">reverse</span>();
+<span class="class-name">String</span> result = sb.<span class="function">toString</span>();</code>
+                        </div>
+                    </div>
+                    <div class="formula-box">
+                        <h4>Wrapper Classes</h4>
+                        <div class="code-block">
+<code><span class="comment">// Primitives to Objects</span>
+<span class="class-name">Integer</span> i = <span class="class-name">Integer</span>.<span class="function">valueOf</span>(<span class="number">10</span>);
+<span class="class-name">Integer</span> i = <span class="number">10</span>;  <span class="comment">// Autoboxing</span>
+
+<span class="comment">// Object to Primitive</span>
+<span class="keyword">int</span> val = i.<span class="function">intValue</span>();
+<span class="keyword">int</span> val = i;  <span class="comment">// Unboxing</span>
+
+<span class="comment">// Parsing</span>
+<span class="keyword">int</span> n = <span class="class-name">Integer</span>.<span class="function">parseInt</span>(<span class="string">"123"</span>);
+<span class="keyword">double</span> d = <span class="class-name">Double</span>.<span class="function">parseDouble</span>(<span class="string">"3.14"</span>);
+
+<span class="comment">// toString</span>
+<span class="class-name">String</span> s = <span class="class-name">Integer</span>.<span class="function">toString</span>(<span class="number">123</span>);
+<span class="class-name">String</span> s = <span class="class-name">String</span>.<span class="function">valueOf</span>(<span class="number">123</span>);
+
+<span class="comment">// Constants</span>
+<span class="class-name">Integer</span>.MAX_VALUE;  <span class="comment">// 2147483647</span>
+<span class="class-name">Integer</span>.MIN_VALUE;  <span class="comment">// -2147483648</span>
+<span class="class-name">Integer</span>.SIZE;       <span class="comment">// 32 bits</span></code>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3>Java Collections Framework</h3>
+                <div class="formula-grid">
+                    <div class="formula-box">
+                        <h4>ArrayList</h4>
+                        <div class="code-block">
+<code><span class="keyword">import</span> java.util.ArrayList;
+
+<span class="class-name">ArrayList</span>&lt;<span class="class-name">Integer</span>&gt; list = <span class="keyword">new</span> <span class="class-name">ArrayList</span>&lt;&gt;();
+
+list.<span class="function">add</span>(<span class="number">1</span>);
+list.<span class="function">add</span>(<span class="number">0</span>, <span class="number">5</span>);  <span class="comment">// Insert at index</span>
+list.<span class="function">get</span>(<span class="number">0</span>);        <span class="comment">// Get element</span>
+list.<span class="function">set</span>(<span class="number">0</span>, <span class="number">10</span>);    <span class="comment">// Update element</span>
+list.<span class="function">remove</span>(<span class="number">0</span>);     <span class="comment">// Remove by index</span>
+list.<span class="function">remove</span>(<span class="class-name">Integer</span>.<span class="function">valueOf</span>(<span class="number">5</span>)); <span class="comment">// Remove object</span>
+list.<span class="function">size</span>();
+list.<span class="function">isEmpty</span>();
+list.<span class="function">contains</span>(<span class="number">3</span>);
+list.<span class="function">clear</span>();
+
+<span class="comment">// Iterate</span>
+<span class="keyword">for</span> (<span class="keyword">int</span> x : list) { }
+<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i < list.<span class="function">size</span>(); i++) { }</code>
+                        </div>
+                    </div>
+                    <div class="formula-box">
+                        <h4>LinkedList</h4>
+                        <div class="code-block">
+<code><span class="keyword">import</span> java.util.LinkedList;
+
+<span class="class-name">LinkedList</span>&lt;<span class="class-name">Integer</span>&gt; ll = <span class="keyword">new</span> <span class="class-name">LinkedList</span>&lt;&gt;();
+
+ll.<span class="function">addFirst</span>(<span class="number">1</span>);
+ll.<span class="function">addLast</span>(<span class="number">2</span>);
+ll.<span class="function">getFirst</span>();
+ll.<span class="function">getLast</span>();
+ll.<span class="function">removeFirst</span>();
+ll.<span class="function">removeLast</span>();
+
+<span class="comment">// Can be used as Stack or Queue</span>
+ll.<span class="function">push</span>(<span class="number">3</span>);   <span class="comment">// addFirst</span>
+ll.<span class="function">pop</span>();    <span class="comment">// removeFirst</span></code>
+                        </div>
+                    </div>
+                    <div class="formula-box">
+                        <h4>HashMap</h4>
+                        <div class="code-block">
+<code><span class="keyword">import</span> java.util.HashMap;
+
+<span class="class-name">HashMap</span>&lt;<span class="class-name">String</span>, <span class="class-name">Integer</span>&gt; map = <span class="keyword">new</span> <span class="class-name">HashMap</span>&lt;&gt;();
+
+map.<span class="function">put</span>(<span class="string">"one"</span>, <span class="number">1</span>);
+map.<span class="function">get</span>(<span class="string">"one"</span>);      <span class="comment">// 1</span>
+map.<span class="function">getOrDefault</span>(<span class="string">"two"</span>, <span class="number">0</span>);
+map.<span class="function">containsKey</span>(<span class="string">"one"</span>);
+map.<span class="function">containsValue</span>(<span class="number">1</span>);
+map.<span class="function">remove</span>(<span class="string">"one"</span>);
+map.<span class="function">size</span>();
+map.<span class="function">isEmpty</span>();
+map.<span class="function">keySet</span>();   <span class="comment">// Set of keys</span>
+map.<span class="function">values</span>();   <span class="comment">// Collection of values</span>
+
+<span class="comment">// Iterate</span>
+<span class="keyword">for</span> (<span class="class-name">Map</span>.Entry&lt;<span class="class-name">String</span>, <span class="class-name">Integer</span>&gt; e : map.<span class="function">entrySet</span>()) {
+    e.<span class="function">getKey</span>();
+    e.<span class="function">getValue</span>();
+}</code>
+                        </div>
+                    </div>
+                    <div class="formula-box">
+                        <h4>HashSet</h4>
+                        <div class="code-block">
+<code><span class="keyword">import</span> java.util.HashSet;
+
+<span class="class-name">HashSet</span>&lt;<span class="class-name">Integer</span>&gt; set = <span class="keyword">new</span> <span class="class-name">HashSet</span>&lt;&gt;();
+
+set.<span class="function">add</span>(<span class="number">1</span>);
+set.<span class="function">contains</span>(<span class="number">1</span>);  <span class="comment">// true</span>
+set.<span class="function">remove</span>(<span class="number">1</span>);
+set.<span class="function">size</span>();
+set.<span class="function">isEmpty</span>();
+set.<span class="function">clear</span>();
+
+<span class="comment">// Set operations</span>
+set1.<span class="function">addAll</span>(set2);       <span class="comment">// Union</span>
+set1.<span class="function">retainAll</span>(set2);    <span class="comment">// Intersection</span>
+set1.<span class="function">removeAll</span>(set2);   <span class="comment">// Difference</span></code>
+                        </div>
+                    </div>
+                    <div class="formula-box">
+                        <h4>PriorityQueue (Heap)</h4>
+                        <div class="code-block">
+<code><span class="keyword">import</span> java.util.PriorityQueue;
+<span class="keyword">import</span> java.util.Collections;
+
+<span class="comment">// Min heap (default)</span>
+<span class="class-name">PriorityQueue</span>&lt;<span class="class-name">Integer</span>&gt; minPQ = <span class="keyword">new</span> <span class="class-name">PriorityQueue</span>&lt;&gt;();
+
+<span class="comment">// Max heap</span>
+<span class="class-name">PriorityQueue</span>&lt;<span class="class-name">Integer</span>&gt; maxPQ = <span class="keyword">new</span> <span class="class-name">PriorityQueue</span>&lt;&gt;(
+    Collections.<span class="function">reverseOrder</span>());
+
+minPQ.<span class="function">add</span>(<span class="number">3</span>);
+minPQ.<span class="function">add</span>(<span class="number">1</span>);
+minPQ.<span class="function">add</span>(<span class="number">2</span>);
+minPQ.<span class="function">peek</span>();  <span class="comment">// 1 (min element)</span>
+minPQ.<span class="function">poll</span>();  <span class="comment">// Remove and return min</span>
+minPQ.<span class="function">size</span>();</code>
+                        </div>
+                    </div>
+                    <div class="formula-box">
+                        <h4>TreeMap & TreeSet (Sorted)</h4>
+                        <div class="code-block">
+<code><span class="keyword">import</span> java.util.TreeMap;
+<span class="keyword">import</span> java.util.TreeSet;
+
+<span class="comment">// TreeSet - Sorted set (BST)</span>
+<span class="class-name">TreeSet</span>&lt;<span class="class-name">Integer</span>&gt; ts = <span class="keyword">new</span> <span class="class-name">TreeSet</span>&lt;&gt;();
+ts.<span class="function">add</span>(<span class="number">5</span>); ts.<span class="function">add</span>(<span class="number">3</span>); ts.<span class="function">add</span>(<span class="number">7</span>);
+ts.<span class="function">first</span>();       <span class="comment">// 3 (smallest)</span>
+ts.<span class="function">last</span>();        <span class="comment">// 7 (largest)</span>
+ts.<span class="function">lower</span>(<span class="number">5</span>);     <span class="comment">// 3 (strictly less)</span>
+ts.<span class="function">higher</span>(<span class="number">5</span>);    <span class="comment">// 7 (strictly greater)</span>
+ts.<span class="function">floor</span>(<span class="number">5</span>);     <span class="comment">// 5 (<=)</span>
+ts.<span class="function">ceiling</span>(<span class="number">5</span>);   <span class="comment">// 5 (>=)</span>
+
+<span class="comment">// TreeMap - Sorted map (BST)</span>
+<span class="class-name">TreeMap</span>&lt;<span class="class-name">Integer</span>, <span class="class-name">String</span>&gt; tm = <span class="keyword">new</span> <span class="class-name">TreeMap</span>&lt;&gt;();
+tm.<span class="function">firstKey</span>();
+tm.<span class="function">lastKey</span>();
+tm.<span class="function">lowerKey</span>(key);
+tm.<span class="function">higherKey</span>(key);</code>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3>Exception Handling</h3>
+                <div class="formula-box">
+                    <h4>Try-Catch-Finally</h4>
+                    <div class="code-block">
+<code><span class="keyword">try</span> {
+    <span class="comment">// Code that may throw exception</span>
+    <span class="keyword">int</span> result = <span class="number">10</span> / <span class="number">0</span>;
+} <span class="keyword">catch</span> (<span class="class-name">ArithmeticException</span> e) {
+    System.out.<span class="function">println</span>(<span class="string">"Error: "</span> + e.<span class="function">getMessage</span>());
+} <span class="keyword">catch</span> (<span class="class-name">Exception</span> e) {
+    System.out.<span class="function">println</span>(<span class="string">"General error"</span>);
+} <span class="keyword">finally</span> {
+    <span class="comment">// Always executed</span>
+}
+
+<span class="comment">// Throw exception</span>
+<span class="keyword">throw new</span> <span class="class-name">IllegalArgumentException</span>(<span class="string">"Invalid input"</span>);
+
+<span class="comment">// Declare exception</span>
+<span class="keyword">public void</span> <span class="function">readFile</span>(<span class="class-name">String</span> filename) <span class="keyword">throws</span> <span class="class-name">IOException</span> { }</code>
+                        </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Data Structures -->
+        <section class="section">
+            <h2>Data Structures</h2>
+            
+            <div class="subsection">
+                <h3>Arrays</h3>
+                <div class="formula-grid">
+                    <div class="ds-card">
+                        <h4>Static Array</h4>
+                        <div class="formula">Access: <span class="time-complexity">O(1)</span> | Search: <span class="time-complexity">O(n)</span></div>
+                        <div class="formula">Insert: <span class="time-complexity">O(n)</span> | Delete: <span class="time-complexity">O(n)</span></div>
+                        <div class="code-block">
+<code><span class="comment">// C</span>
+<span class="keyword">int</span> arr[<span class="number">100</span>];
+arr[<span class="number">0</span>] = <span class="number">10</span>;
+
+<span class="comment">// C++</span>
+<span class="keyword">int</span> arr[<span class="number">100</span>];
+<span class="class-name">array</span>&lt;<span class="keyword">int</span>, <span class="number">100</span>&gt; arr;
+
+<span class="comment">// Java</span>
+<span class="keyword">int</span>[] arr = <span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">100</span>];</code>
+                        </div>
+                    </div>
+                    <div class="ds-card">
+                        <h4>Dynamic Array</h4>
+                        <div class="formula">Amortized Insert: <span class="time-complexity">O(1)</span></div>
+                        <div class="formula">Space: <span class="space-complexity">O(n)</span> (may over-allocate)</div>
+                        <div class="code-block">
+<code><span class="comment">// C++</span>
+<span class="class-name">vector</span>&lt;<span class="keyword">int</span>&gt; v;
+v.push_back(<span class="number">1</span>);
+v.pop_back();
+
+<span class="comment">// Java</span>
+<span class="class-name">ArrayList</span>&lt;<span class="class-name">Integer</span>&gt; list = <span class="keyword">new</span> <span class="class-name">ArrayList</span>&lt;&gt;();
+list.<span class="function">add</span>(<span class="number">1</span>);</code>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3>Linked List</h3>
+                <div class="formula-grid">
+                    <div class="ds-card">
+                        <h4>Singly Linked List</h4>
+                        <div class="formula">Insert/Delete at head: <span class="time-complexity">O(1)</span></div>
+                        <div class="formula">Search/Insert at position: <span class="time-complexity">O(n)</span></div>
+                        <div class="code-block">
+<code><span class="keyword">struct</span> <span class="class-name">Node</span> {
+    <span class="keyword">int</span> data;
+    <span class="class-name">Node</span>* next;
+};
+
+<span class="comment">// Insert at head</span>
+<span class="class-name">Node</span>* <span class="function">insertHead</span>(<span class="class-name">Node</span>* head, <span class="keyword">int</span> val) {
+    <span class="class-name">Node</span>* newNode = <span class="keyword">new</span> <span class="class-name">Node</span>{val, head};
+    <span class="keyword">return</span> newNode;
+}
+
+<span class="comment">// Insert at end</span>
+<span class="keyword">void</span> <span class="function">insertEnd</span>(<span class="class-name">Node</span>* head, <span class="keyword">int</span> val) {
+    <span class="class-name">Node</span>* temp = head;
+    <span class="keyword">while</span> (temp->next) temp = temp->next;
+    temp->next = <span class="keyword">new</span> <span class="class-name">Node</span>{val, <span class="keyword">nullptr</span>};
+}
+
+<span class="comment">// Reverse</span>
+<span class="class-name">Node</span>* <span class="function">reverse</span>(<span class="class-name">Node</span>* head) {
+    <span class="class-name">Node</span> *prev = <span class="keyword">nullptr</span>, *curr = head, *next;
+    <span class="keyword">while</span> (curr) {
+        next = curr->next;
+        curr->next = prev;
+        prev = curr;
+        curr = next;
+    }
+    <span class="keyword">return</span> prev;
+}</code>
+                        </div>
+                    </div>
+                    <div class="ds-card">
+                        <h4>Doubly Linked List</h4>
+                        <div class="formula">Insert/Delete at both ends: <span class="time-complexity">O(1)</span></div>
+                        <div class="formula">Space: <span class="space-complexity">O(n)</span> (extra pointer)</div>
+                        <div class="code-block">
+<code><span class="keyword">struct</span> <span class="class-name">Node</span> {
+    <span class="keyword">int</span> data;
+    <span class="class-name">Node</span> *prev, *next;
+};
+
+<span class="comment">// C++ STL</span>
+<span class="class-name">list</span>&lt;<span class="keyword">int</span>&gt; dll;
+dll.push_front(<span class="number">1</span>);
+dll.push_back(<span class="number">2</span>);
+dll.pop_front();
+dll.pop_back();
+
+<span class="comment">// Java</span>
+<span class="class-name">LinkedList</span>&lt;<span class="class-name">Integer</span>&gt; dll = <span class="keyword">new</span> <span class="class-name">LinkedList</span>&lt;&gt;();</code>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3>Stack (LIFO)</h3>
+                <div class="formula-grid">
+                    <div class="ds-card">
+                        <h4>Stack Implementation</h4>
+                        <div class="formula">Push/Pop/Peek: <span class="time-complexity">O(1)</span></div>
+                        <div class="formula">Space: <span class="space-complexity">O(n)</span></div>
+                        <div class="code-block">
+<code><span class="comment">// C++ STL</span>
+<span class="class-name">stack</span>&lt;<span class="keyword">int</span>&gt; s;
+s.push(<span class="number">1</span>);
+s.push(<span class="number">2</span>);
+<span class="keyword">int</span> top = s.top();  <span class="comment">// 2</span>
+s.pop();
+
+<span class="comment">// Java</span>
+<span class="class-name">Stack</span>&lt;<span class="class-name">Integer</span>&gt; s = <span class="keyword">new</span> <span class="class-name">Stack</span>&lt;&gt;();
+s.<span class="function">push</span>(<span class="number">1</span>);
+<span class="keyword">int</span> top = s.<span class="function">peek</span>();
+s.<span class="function">pop</span>();
+
+<span class="comment">// Array-based (C)</span>
+<span class="keyword">int</span> stack[MAX], top = <span class="number">-1</span>;
+<span class="keyword">void</span> <span class="function">push</span>(<span class="keyword">int</span> x) { stack[++top] = x; }
+<span class="keyword">int</span> <span class="function">pop</span>() { <span class="keyword">return</span> stack[top--]; }
+<span class="keyword">int</span> <span class="function">peek</span>() { <span class="keyword">return</span> stack[top]; }
+<span class="keyword">bool</span> <span class="function">isEmpty</span>() { <span class="keyword">return</span> top == <span class="number">-1</span>; }</code>
+                        </div>
+                    </div>
+                    <div class="ds-card">
+                        <h4>Applications</h4>
+                        <ul>
+                            <li>Function call stack</li>
+                            <li>Expression evaluation (postfix, prefix)</li>
+                            <li>Bracket matching</li>
+                            <li>Undo/Redo operations</li>
+                            <li>Next greater element</li>
+                            <li>Valid parentheses</li>
+                            <li>DFS (iterative)</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3>Queue (FIFO)</h3>
+                <div class="formula-grid">
+                    <div class="ds-card">
+                        <h4>Queue Implementation</h4>
+                        <div class="formula">Enqueue/Dequeue/Peek: <span class="time-complexity">O(1)</span></div>
+                        <div class="code-block">
+<code><span class="comment">// C++ STL</span>
+<span class="class-name">queue</span>&lt;<span class="keyword">int</span>&gt; q;
+q.push(<span class="number">1</span>);
+q.push(<span class="number">2</span>);
+<span class="keyword">int</span> front = q.front();  <span class="comment">// 1</span>
+q.pop();
+
+<span class="comment">// Java</span>
+<span class="class-name">Queue</span>&lt;<span class="class-name">Integer</span>&gt; q = <span class="keyword">new</span> <span class="class-name">LinkedList</span>&lt;&gt;();
+q.<span class="function">offer</span>(<span class="number">1</span>);
+<span class="keyword">int</span> front = q.<span class="function">peek</span>();
+q.<span class="function">poll</span>();
+
+<span class="comment">// Circular Queue (Array)</span>
+<span class="keyword">int</span> front = <span class="number">0</span>, rear = <span class="number">-1</span>, size = <span class="number">0</span>;
+<span class="keyword">void</span> <span class="function">enqueue</span>(<span class="keyword">int</span> x) {
+    rear = (rear + <span class="number">1</span>) % MAX;
+    arr[rear] = x; size++;
+}
+<span class="keyword">int</span> <span class="function">dequeue</span>() {
+    <span class="keyword">int</span> x = arr[front];
+    front = (front + <span class="number">1</span>) % MAX;
+    size--; <span class="keyword">return</span> x;
+}</code>
+                        </div>
+                    </div>
+                    <div class="ds-card">
+                        <h4>Applications</h4>
+                        <ul>
+                            <li>BFS traversal</li>
+                            <li>Level order traversal</li>
+                            <li>Task scheduling</li>
+                            <li>Buffer management</li>
+                            <li>Printer queue</li>
+                            <li>Sliding window problems</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3>Trees</h3>
+                <div class="formula-grid">
+                    <div class="ds-card">
+                        <h4>Binary Tree Node</h4>
+                        <div class="code-block">
+<code><span class="keyword">struct</span> <span class="class-name">TreeNode</span> {
+    <span class="keyword">int</span> val;
+    <span class="class-name">TreeNode</span> *left, *right;
+    <span class="function">TreeNode</span>(<span class="keyword">int</span> x) : val(x), left(<span class="keyword">nullptr</span>), 
+                               right(<span class="keyword">nullptr</span>) {}
+};
+
+<span class="comment">// Traversals</span>
+<span class="keyword">void</span> <span class="function">inorder</span>(<span class="class-name">TreeNode</span>* root) {
+    <span class="keyword">if</span> (!root) <span class="keyword">return</span>;
+    <span class="function">inorder</span>(root->left);
+    <span class="class-name">cout</span> << root->val << <span class="string">" "</span>;
+    <span class="function">inorder</span>(root->right);
+}
+
+<span class="keyword">void</span> <span class="function">preorder</span>(<span class="class-name">TreeNode</span>* root) {
+    <span class="keyword">if</span> (!root) <span class="keyword">return</span>;
+    <span class="class-name">cout</span> << root->val << <span class="string">" "</span>;
+    <span class="function">preorder</span>(root->left);
+    <span class="function">preorder</span>(root->right);
+}
+
+<span class="keyword">void</span> <span class="function">postorder</span>(<span class="class-name">TreeNode</span>* root) {
+    <span class="keyword">if</span> (!root) <span class="keyword">return</span>;
+    <span class="function">postorder</span>(root->left);
+    <span class="function">postorder</span>(root->right);
+    <span class="class-name">cout</span> << root->val << <span class="string">" "</span>;
+}</code>
+                        </div>
+                    </div>
+                    <div class="ds-card">
+                        <h4>Level Order (BFS)</h4>
+                        <div class="code-block">
+<code><span class="keyword">void</span> <span class="function">levelOrder</span>(<span class="class-name">TreeNode</span>* root) {
+    <span class="keyword">if</span> (!root) <span class="keyword">return</span>;
+    <span class="class-name">queue</span>&lt;<span class="class-name">TreeNode</span>*&gt; q;
+    q.push(root);
+    
+    <span class="keyword">while</span> (!q.empty()) {
+        <span class="class-name">TreeNode</span>* node = q.front();
+        q.pop();
+        <span class="class-name">cout</span> << node->val << <span class="string">" "</span>;
+        
+        <span class="keyword">if</span> (node->left) q.push(node->left);
+        <span class="keyword">if</span> (node->right) q.push(node->right);
+    }
+}
+
+<span class="comment">// Height of tree</span>
+<span class="keyword">int</span> <span class="function">height</span>(<span class="class-name">TreeNode</span>* root) {
+    <span class="keyword">if</span> (!root) <span class="keyword">return</span> <span class="number">0</span>;
+    <span class="keyword">return</span> <span class="number">1</span> + <span class="function">max</span>(<span class="function">height</span>(root->left), 
+                      <span class="function">height</span>(root->right));
+}</code>
+                        </div>
+                    </div>
+                    <div class="ds-card">
+                        <h4>Binary Search Tree (BST)</h4>
+                        <div class="formula">Search/Insert/Delete: <span class="time-complexity">O(h)</span></div>
+                        <div class="formula">h = height (O(log n) balanced, O(n) worst)</div>
+                        <div class="code-block">
+<code><span class="comment">// Search</span>
+<span class="class-name">TreeNode</span>* <span class="function">search</span>(<span class="class-name">TreeNode</span>* root, <span class="keyword">int</span> key) {
+    <span class="keyword">if</span> (!root || root->val == key) <span class="keyword">return</span> root;
+    <span class="keyword">if</span> (key < root->val) 
+        <span class="keyword">return</span> <span class="function">search</span>(root->left, key);
+    <span class="keyword">return</span> <span class="function">search</span>(root->right, key);
+}
+
+<span class="comment">// Insert</span>
+<span class="class-name">TreeNode</span>* <span class="function">insert</span>(<span class="class-name">TreeNode</span>* root, <span class="keyword">int</span> key) {
+    <span class="keyword">if</span> (!root) <span class="keyword">return new</span> <span class="class-name">TreeNode</span>(key);
+    <span class="keyword">if</span> (key < root->val)
+        root->left = <span class="function">insert</span>(root->left, key);
+    <span class="keyword">else</span>
+        root->right = <span class="function">insert</span>(root->right, key);
+    <span class="keyword">return</span> root;
+}</code>
+                        </div>
+                    </div>
+                    <div class="ds-card">
+                        <h4>Heap (Priority Queue)</h4>
+                        <div class="formula">Insert: <span class="time-complexity">O(log n)</span></div>
+                        <div class="formula">Extract Min/Max: <span class="time-complexity">O(log n)</span></div>
+                        <div class="formula">Peek: <span class="time-complexity">O(1)</span></div>
+                        <div class="code-block">
+<code><span class="comment">// 0-indexed heap</span>
+<span class="keyword">int</span> parent(<span class="keyword">int</span> i) { <span class="keyword">return</span> (i - <span class="number">1</span>) / <span class="number">2</span>; }
+<span class="keyword">int</span> left(<span class="keyword">int</span> i) { <span class="keyword">return</span> <span class="number">2</span> * i + <span class="number">1</span>; }
+<span class="keyword">int</span> right(<span class="keyword">int</span> i) { <span class="keyword">return</span> <span class="number">2</span> * i + <span class="number">2</span>; }
+
+<span class="comment">// Min-heapify</span>
+<span class="keyword">void</span> <span class="function">heapify</span>(<span class="keyword">int</span> arr[], <span class="keyword">int</span> n, <span class="keyword">int</span> i) {
+    <span class="keyword">int</span> smallest = i;
+    <span class="keyword">int</span> l = <span class="function">left</span>(i), r = <span class="function">right</span>(i);
+    <span class="keyword">if</span> (l < n && arr[l] < arr[smallest])
+        smallest = l;
+    <span class="keyword">if</span> (r < n && arr[r] < arr[smallest])
+        smallest = r;
+    <span class="keyword">if</span> (smallest != i) {
+        <span class="function">swap</span>(arr[i], arr[smallest]);
+        <span class="function">heapify</span>(arr, n, smallest);
+    }
+}
+
+<span class="comment">// Build heap: O(n)</span>
+<span class="keyword">for</span> (<span class="keyword">int</span> i = n/<span class="number">2</span> - <span class="number">1</span>; i >= <span class="number">0</span>; i--)
+    <span class="function">heapify</span>(arr, n, i);</code>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3>Hash Table</h3>
+                <div class="formula-grid">
+                    <div class="ds-card">
+                        <h4>Hash Table Operations</h4>
+                        <div class="formula">Average: <span class="time-complexity">O(1)</span> for all operations</div>
+                        <div class="formula">Worst: <span class="time-complexity">O(n)</span> (all collisions)</div>
+                        <div class="code-block">
+<code><span class="comment">// Hash function for string</span>
+<span class="keyword">unsigned long</span> <span class="function">hash</span>(<span class="keyword">const char</span>* str) {
+    <span class="keyword">unsigned long</span> hash = <span class="number">5381</span>;
+    <span class="keyword">int</span> c;
+    <span class="keyword">while</span> (c = *str++)
+        hash = ((hash << <span class="number">5</span>) + hash) + c;
+    <span class="keyword">return</span> hash;
+}
+
+<span class="comment">// Collision Resolution</span>
+<span class="comment">// 1. Chaining: Linked list at each bucket</span>
+<span class="comment">// 2. Linear Probing: (hash + i) % size</span>
+<span class="comment">// 3. Quadratic Probing: (hash + i*i) % size</span>
+<span class="comment">// 4. Double Hashing: (h1 + i*h2) % size</span></code>
+                        </div>
+                    </div>
+                    <div class="ds-card">
+                        <h4>Load Factor</h4>
+                        <div class="formula">α = n / m (elements / buckets)</div>
+                        <p><strong>Rehash when α > 0.7</strong></p>
+                        <ul>
+                            <li>Double the size</li>
+                            <li>Rehash all elements</li>
+                            <li>Amortized O(1) insert</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3>Graph Representations</h3>
+                <div class="formula-grid">
+                    <div class="ds-card">
+                        <h4>Adjacency List</h4>
+                        <div class="formula">Space: <span class="space-complexity">O(V + E)</span></div>
+                        <div class="code-block">
+<code><span class="comment">// C++ - Vector of vectors</span>
+<span class="class-name">vector</span>&lt;<span class="class-name">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; adj(n);
+
+<span class="comment">// Unweighted</span>
+adj[u].push_back(v);
+
+<span class="comment">// Weighted</span>
+<span class="class-name">vector</span>&lt;<span class="class-name">vector</span>&lt;<span class="class-name">pair</span>&lt;<span class="keyword">int</span>,<span class="keyword">int</span>&gt;&gt;&gt; adj(n);
+adj[u].push_back({v, weight});
+
+<span class="comment">// Java</span>
+<span class="class-name">ArrayList</span>&lt;<span class="class-name">ArrayList</span>&lt;<span class="class-name">Integer</span>&gt;&gt; adj = 
+    <span class="keyword">new</span> <span class="class-name">ArrayList</span>&lt;&gt;();
+<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i < n; i++) 
+    adj.<span class="function">add</span>(<span class="keyword">new</span> <span class="class-name">ArrayList</span>&lt;&gt;());</code>
+                        </div>
+                    </div>
+                    <div class="ds-card">
+                        <h4>Adjacency Matrix</h4>
+                        <div class="formula">Space: <span class="space-complexity">O(V²)</span></div>
+                        <div class="code-block">
+<code><span class="comment">// C++</span>
+<span class="keyword">int</span> adj[MAX][MAX] = {<span class="number">0</span>};
+adj[u][v] = <span class="number">1</span>;  <span class="comment">// Edge from u to v</span>
+adj[u][v] = w;    <span class="comment">// Weighted edge</span>
+
+<span class="comment">// Check edge: O(1)</span>
+<span class="keyword">if</span> (adj[u][v]) { }
+
+<span class="comment">// Java</span>
+<span class="keyword">int</span>[][] adj = <span class="keyword">new</span> <span class="keyword">int</span>[n][n];</code>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Algorithm Implementations -->
+        <section class="section">
+            <h2>Algorithm Implementations</h2>
+            
+            <div class="subsection">
+                <h3>Sorting Algorithms</h3>
+                <div class="formula-grid">
+                    <div class="ds-card">
+                        <h4>Merge Sort</h4>
+                        <div class="formula">Time: <span class="time-complexity">O(n log n)</span> | Space: <span class="space-complexity">O(n)</span></div>
+                        <div class="code-block">
+<code><span class="keyword">void</span> <span class="function">merge</span>(<span class="keyword">int</span> arr[], <span class="keyword">int</span> l, <span class="keyword">int</span> m, <span class="keyword">int</span> r) {
+    <span class="keyword">int</span> n1 = m - l + <span class="number">1</span>, n2 = r - m;
+    <span class="keyword">int</span> L[n1], R[n2];
+    
+    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i < n1; i++) L[i] = arr[l+i];
+    <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j < n2; j++) R[j] = arr[m+<span class="number">1</span>+j];
+    
+    <span class="keyword">int</span> i = <span class="number">0</span>, j = <span class="number">0</span>, k = l;
+    <span class="keyword">while</span> (i < n1 && j < n2)
+        arr[k++] = (L[i] <= R[j]) ? L[i++] : R[j++];
+    <span class="keyword">while</span> (i < n1) arr[k++] = L[i++];
+    <span class="keyword">while</span> (j < n2) arr[k++] = R[j++];
+}
+
+<span class="keyword">void</span> <span class="function">mergeSort</span>(<span class="keyword">int</span> arr[], <span class="keyword">int</span> l, <span class="keyword">int</span> r) {
+    <span class="keyword">if</span> (l < r) {
+        <span class="keyword">int</span> m = l + (r - l) / <span class="number">2</span>;
+        <span class="function">mergeSort</span>(arr, l, m);
+        <span class="function">mergeSort</span>(arr, m+<span class="number">1</span>, r);
+        <span class="function">merge</span>(arr, l, m, r);
+    }
+}</code>
+                        </div>
+                    </div>
+                    <div class="ds-card">
+                        <h4>Quick Sort</h4>
+                        <div class="formula">Avg: <span class="time-complexity">O(n log n)</span> | Worst: <span class="time-complexity">O(n²)</span></div>
+                        <div class="code-block">
+<code><span class="keyword">int</span> <span class="function">partition</span>(<span class="keyword">int</span> arr[], <span class="keyword">int</span> low, <span class="keyword">int</span> high) {
+    <span class="keyword">int</span> pivot = arr[high];
+    <span class="keyword">int</span> i = low - <span class="number">1</span>;
+    
+    <span class="keyword">for</span> (<span class="keyword">int</span> j = low; j < high; j++) {
+        <span class="keyword">if</span> (arr[j] < pivot) {
+            i++;
+            <span class="function">swap</span>(arr[i], arr[j]);
+        }
+    }
+    <span class="function">swap</span>(arr[i+<span class="number">1</span>], arr[high]);
+    <span class="keyword">return</span> i + <span class="number">1</span>;
+}
+
+<span class="keyword">void</span> <span class="function">quickSort</span>(<span class="keyword">int</span> arr[], <span class="keyword">int</span> low, <span class="keyword">int</span> high) {
+    <span class="keyword">if</span> (low < high) {
+        <span class="keyword">int</span> pi = <span class="function">partition</span>(arr, low, high);
+        <span class="function">quickSort</span>(arr, low, pi - <span class="number">1</span>);
+        <span class="function">quickSort</span>(arr, pi + <span class="number">1</span>, high);
+    }
+}</code>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3>Searching Algorithms</h3>
+                <div class="formula-grid">
+                    <div class="ds-card">
+                        <h4>Binary Search</h4>
+                        <div class="formula">Time: <span class="time-complexity">O(log n)</span> | Space: <span class="space-complexity">O(1)</span></div>
+                        <div class="code-block">
+<code><span class="keyword">int</span> <span class="function">binarySearch</span>(<span class="keyword">int</span> arr[], <span class="keyword">int</span> n, <span class="keyword">int</span> target) {
+    <span class="keyword">int</span> low = <span class="number">0</span>, high = n - <span class="number">1</span>;
+    
+    <span class="keyword">while</span> (low <= high) {
+        <span class="keyword">int</span> mid = low + (high - low) / <span class="number">2</span>;
+        
+        <span class="keyword">if</span> (arr[mid] == target)
+            <span class="keyword">return</span> mid;
+        <span class="keyword">else if</span> (arr[mid] < target)
+            low = mid + <span class="number">1</span>;
+        <span class="keyword">else</span>
+            high = mid - <span class="number">1</span>;
+    }
+    <span class="keyword">return</span> <span class="number">-1</span>;  <span class="comment">// Not found</span>
+}
+
+<span class="comment">// Lower bound (first >= target)</span>
+<span class="keyword">int</span> <span class="function">lowerBound</span>(<span class="keyword">int</span> arr[], <span class="keyword">int</span> n, <span class="keyword">int</span> target) {
+    <span class="keyword">int</span> low = <span class="number">0</span>, high = n;
+    <span class="keyword">while</span> (low < high) {
+        <span class="keyword">int</span> mid = low + (high - low) / <span class="number">2</span>;
+        <span class="keyword">if</span> (arr[mid] < target) low = mid + <span class="number">1</span>;
+        <span class="keyword">else</span> high = mid;
+    }
+    <span class="keyword">return</span> low;
+}</code>
+                        </div>
+                    </div>
+                    <div class="ds-card">
+                        <h4>Linear Search</h4>
+                        <div class="formula">Time: <span class="time-complexity">O(n)</span></div>
+                        <div class="code-block">
+<code><span class="keyword">int</span> <span class="function">linearSearch</span>(<span class="keyword">int</span> arr[], <span class="keyword">int</span> n, <span class="keyword">int</span> target) {
+    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i < n; i++) {
+        <span class="keyword">if</span> (arr[i] == target)
+            <span class="keyword">return</span> i;
+    }
+    <span class="keyword">return</span> <span class="number">-1</span>;
+}</code>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3>Graph Traversals</h3>
+                <div class="formula-grid">
+                    <div class="ds-card">
+                        <h4>BFS</h4>
+                        <div class="formula">Time: <span class="time-complexity">O(V + E)</span> | Space: <span class="space-complexity">O(V)</span></div>
+                        <div class="code-block">
+<code><span class="keyword">void</span> <span class="function">BFS</span>(<span class="class-name">vector</span>&lt;<span class="class-name">vector</span>&lt;<span class="keyword">int</span>&gt;&gt;& adj, <span class="keyword">int</span> start) {
+    <span class="class-name">vector</span>&lt;<span class="keyword">bool</span>&gt; visited(adj.size(), <span class="keyword">false</span>);
+    <span class="class-name">queue</span>&lt;<span class="keyword">int</span>&gt; q;
+    
+    visited[start] = <span class="keyword">true</span>;
+    q.push(start);
+    
+    <span class="keyword">while</span> (!q.empty()) {
+        <span class="keyword">int</span> u = q.front();
+        q.pop();
+        <span class="class-name">cout</span> << u << <span class="string">" "</span>;
+        
+        <span class="keyword">for</span> (<span class="keyword">int</span> v : adj[u]) {
+            <span class="keyword">if</span> (!visited[v]) {
+                visited[v] = <span class="keyword">true</span>;
+                q.push(v);
+            }
+        }
+    }
+}</code>
+                        </div>
+                    </div>
+                    <div class="ds-card">
+                        <h4>DFS</h4>
+                        <div class="formula">Time: <span class="time-complexity">O(V + E)</span> | Space: <span class="space-complexity">O(V)</span></div>
+                        <div class="code-block">
+<code><span class="keyword">void</span> <span class="function">DFSUtil</span>(<span class="class-name">vector</span>&lt;<span class="class-name">vector</span>&lt;<span class="keyword">int</span>&gt;&gt;& adj, 
+            <span class="keyword">int</span> u, <span class="class-name">vector</span>&lt;<span class="keyword">bool</span>&gt;& visited) {
+    visited[u] = <span class="keyword">true</span>;
+    <span class="class-name">cout</span> << u << <span class="string">" "</span>;
+    
+    <span class="keyword">for</span> (<span class="keyword">int</span> v : adj[u]) {
+        <span class="keyword">if</span> (!visited[v]) {
+            <span class="function">DFSUtil</span>(adj, v, visited);
+        }
+    }
+}
+
+<span class="keyword">void</span> <span class="function">DFS</span>(<span class="class-name">vector</span>&lt;<span class="class-name">vector</span>&lt;<span class="keyword">int</span>&gt;&gt;& adj, <span class="keyword">int</span> start) {
+    <span class="class-name">vector</span>&lt;<span class="keyword">bool</span>&gt; visited(adj.size(), <span class="keyword">false</span>);
+    <span class="function">DFSUtil</span>(adj, start, visited);
+}</code>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3>Shortest Path Algorithms</h3>
+                <div class="formula-grid">
+                    <div class="ds-card">
+                        <h4>Dijkstra's Algorithm</h4>
+                        <div class="formula">Time: <span class="time-complexity">O((V + E) log V)</span></div>
+                        <div class="code-block">
+<code><span class="keyword">void</span> <span class="function">dijkstra</span>(<span class="class-name">vector</span>&lt;<span class="class-name">pair</span>&lt;<span class="keyword">int</span>,<span class="keyword">int</span>&gt;&gt;& adj[], 
+              <span class="keyword">int</span> V, <span class="keyword">int</span> src) {
+    <span class="class-name">priority_queue</span>&lt;<span class="class-name">pair</span>&lt;<span class="keyword">int</span>,<span class="keyword">int</span>&gt;,
+        <span class="class-name">vector</span>&lt;<span class="class-name">pair</span>&lt;<span class="keyword">int</span>,<span class="keyword">int</span>&gt;&gt;,
+        <span class="class-name">greater</span>&lt;<span class="class-name">pair</span>&lt;<span class="keyword">int</span>,<span class="keyword">int</span>&gt;&gt;&gt; pq;
+    
+    <span class="class-name">vector</span>&lt;<span class="keyword">int</span>&gt; dist(V, INT_MAX);
+    dist[src] = <span class="number">0</span>;
+    pq.push({<span class="number">0</span>, src});
+    
+    <span class="keyword">while</span> (!pq.empty()) {
+        <span class="keyword">int</span> u = pq.top().second;
+        pq.pop();
+        
+        <span class="keyword">for</span> (<span class="keyword">auto</span>& p : adj[u]) {
+            <span class="keyword">int</span> v = p.first, w = p.second;
+            <span class="keyword">if</span> (dist[u] + w < dist[v]) {
+                dist[v] = dist[u] + w;
+                pq.push({dist[v], v});
+            }
+        }
+    }
+}</code>
+                        </div>
+                    </div>
+                    <div class="ds-card">
+                        <h4>Bellman-Ford</h4>
+                        <div class="formula">Time: <span class="time-complexity">O(V × E)</span></div>
+                        <div class="code-block">
+<code><span class="keyword">bool</span> <span class="function">bellmanFord</span>(<span class="class-name">vector</span>&lt;<span class="class-name">tuple</span>&lt;<span class="keyword">int</span>,<span class="keyword">int</span>,<span class="keyword">int</span>&gt;&gt;& edges,
+                  <span class="keyword">int</span> V, <span class="keyword">int</span> src, <span class="class-name">vector</span>&lt;<span class="keyword">int</span>&gt;& dist) {
+    dist.assign(V, INT_MAX);
+    dist[src] = <span class="number">0</span>;
+    
+    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i < V - <span class="number">1</span>; i++) {
+        <span class="keyword">for</span> (<span class="keyword">auto</span>& e : edges) {
+            <span class="keyword">int</span> u = <span class="function">get</span>&lt;<span class="number">0</span>&gt;(e);
+            <span class="keyword">int</span> v = <span class="function">get</span>&lt;<span class="number">1</span>&gt;(e);
+            <span class="keyword">int</span> w = <span class="function">get</span>&lt;<span class="number">2</span>&gt;(e);
+            <span class="keyword">if</span> (dist[u] != INT_MAX && 
+                dist[u] + w < dist[v])
+                dist[v] = dist[u] + w;
+        }
+    }
+    
+    <span class="comment">// Check for negative cycle</span>
+    <span class="keyword">for</span> (<span class="keyword">auto</span>& e : edges) {
+        <span class="keyword">int</span> u = <span class="function">get</span>&lt;<span class="number">0</span>&gt;(e);
+        <span class="keyword">int</span> v = <span class="function">get</span>&lt;<span class="number">1</span>&gt;(e);
+        <span class="keyword">int</span> w = <span class="function">get</span>&lt;<span class="number">2</span>&gt;(e);
+        <span class="keyword">if</span> (dist[u] != INT_MAX && 
+            dist[u] + w < dist[v])
+            <span class="keyword">return false</span>;  <span class="comment">// Negative cycle</span>
+    }
+    <span class="keyword">return true</span>;
+}</code>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3>Dynamic Programming Examples</h3>
+                <div class="formula-grid">
+                    <div class="ds-card">
+                        <h4>Fibonacci (Memoization)</h4>
+                        <div class="code-block">
+<code><span class="class-name">vector</span>&lt;<span class="keyword">long long</span>&gt; memo;
+
+<span class="keyword">long long</span> <span class="function">fib</span>(<span class="keyword">int</span> n) {
+    <span class="keyword">if</span> (n <= <span class="number">1</span>) <span class="keyword">return</span> n;
+    <span class="keyword">if</span> (memo[n] != <span class="number">-1</span>) <span class="keyword">return</span> memo[n];
+    <span class="keyword">return</span> memo[n] = <span class="function">fib</span>(n-<span class="number">1</span>) + <span class="function">fib</span>(n-<span class="number">2</span>);
+}
+
+<span class="comment">// Tabulation (Bottom-up)</span>
+<span class="keyword">long long</span> <span class="function">fibDP</span>(<span class="keyword">int</span> n) {
+    <span class="keyword">if</span> (n <= <span class="number">1</span>) <span class="keyword">return</span> n;
+    <span class="keyword">long long</span> a = <span class="number">0</span>, b = <span class="number">1</span>, c;
+    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">2</span>; i <= n; i++) {
+        c = a + b;
+        a = b;
+        b = c;
+    }
+    <span class="keyword">return</span> b;
+}</code>
+                        </div>
+                    </div>
+                    <div class="ds-card">
+                        <h4>0/1 Knapsack</h4>
+                        <div class="formula">Time: <span class="time-complexity">O(n × W)</span></div>
+                        <div class="code-block">
+<code><span class="keyword">int</span> <span class="function">knapsack</span>(<span class="keyword">int</span> W, <span class="keyword">int</span> wt[], <span class="keyword">int</span> val[], <span class="keyword">int</span> n) {
+    <span class="class-name">vector</span>&lt;<span class="class-name">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; dp(n+<span class="number">1</span>, 
+        <span class="class-name">vector</span>&lt;<span class="keyword">int</span>&gt;(W+<span class="number">1</span>, <span class="number">0</span>));
+    
+    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i <= n; i++) {
+        <span class="keyword">for</span> (<span class="keyword">int</span> w = <span class="number">0</span>; w <= W; w++) {
+            dp[i][w] = dp[i-<span class="number">1</span>][w];  <span class="comment">// Don't take</span>
+            <span class="keyword">if</span> (wt[i-<span class="number">1</span>] <= w) {
+                dp[i][w] = <span class="function">max</span>(dp[i][w],
+                    val[i-<span class="number">1</span>] + dp[i-<span class="number">1</span>][w-wt[i-<span class="number">1</span>]]);
+            }
+        }
+    }
+    <span class="keyword">return</span> dp[n][W];
+}
+
+<span class="comment">// Space optimized: O(W)</span>
+<span class="keyword">int</span> <span class="function">knapsackOpt</span>(<span class="keyword">int</span> W, <span class="keyword">int</span> wt[], <span class="keyword">int</span> val[], <span class="keyword">int</span> n) {
+    <span class="class-name">vector</span>&lt;<span class="keyword">int</span>&gt; dp(W+<span class="number">1</span>, <span class="number">0</span>);
+    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i < n; i++) {
+        <span class="keyword">for</span> (<span class="keyword">int</span> w = W; w >= wt[i]; w--) {
+            dp[w] = <span class="function">max</span>(dp[w], val[i] + dp[w-wt[i]]);
+        }
+    }
+    <span class="keyword">return</span> dp[W];
+}</code>
+                        </div>
+                    </div>
+                    <div class="ds-card">
+                        <h4>LCS (Longest Common Subsequence)</h4>
+                        <div class="formula">Time: <span class="time-complexity">O(m × n)</span></div>
+                        <div class="code-block">
+<code><span class="keyword">int</span> <span class="function">lcs</span>(<span class="class-name">string</span> X, <span class="class-name">string</span> Y) {
+    <span class="keyword">int</span> m = X.length(), n = Y.length();
+    <span class="class-name">vector</span>&lt;<span class="class-name">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; dp(m+<span class="number">1</span>, 
+        <span class="class-name">vector</span>&lt;<span class="keyword">int</span>&gt;(n+<span class="number">1</span>, <span class="number">0</span>));
+    
+    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i <= m; i++) {
+        <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">1</span>; j <= n; j++) {
+            <span class="keyword">if</span> (X[i-<span class="number">1</span>] == Y[j-<span class="number">1</span>])
+                dp[i][j] = dp[i-<span class="number">1</span>][j-<span class="number">1</span>] + <span class="number">1</span>;
+            <span class="keyword">else</span>
+                dp[i][j] = <span class="function">max</span>(dp[i-<span class="number">1</span>][j], dp[i][j-<span class="number">1</span>]);
+        }
+    }
+    <span class="keyword">return</span> dp[m][n];
+}</code>
+                        </div>
+                    </div>
+                    <div class="ds-card">
+                        <h4>LIS (Longest Increasing Subsequence)</h4>
+                        <div class="formula">Time: <span class="time-complexity">O(n log n)</span></div>
+                        <div class="code-block">
+<code><span class="keyword">int</span> <span class="function">lis</span>(<span class="class-name">vector</span>&lt;<span class="keyword">int</span>&gt;& arr) {
+    <span class="class-name">vector</span>&lt;<span class="keyword">int</span>&gt; tail;
+    
+    <span class="keyword">for</span> (<span class="keyword">int</span> x : arr) {
+        <span class="keyword">auto</span> it = <span class="function">lower_bound</span>(tail.begin(), 
+                                     tail.end(), x);
+        <span class="keyword">if</span> (it == tail.end())
+            tail.push_back(x);
+        <span class="keyword">else</span>
+            *it = x;
+    }
+    <span class="keyword">return</span> tail.size();
+}</code>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Quick Reference -->
+        <section class="section quick-ref">
+            <h3>Quick Reference Summary</h3>
+            <div class="quick-ref-grid">
+                <div class="quick-ref-item">
+                    <strong>C malloc:</strong> int* arr = (int*)malloc(n * sizeof(int));
+                </div>
+                <div class="quick-ref-item">
+                    <strong>C++ vector:</strong> vector&lt;int&gt; v(n, 0);
+                </div>
+                <div class="quick-ref-item">
+                    <strong>Java ArrayList:</strong> ArrayList&lt;Integer&gt; list = new ArrayList&lt;&gt;();
+                </div>
+                <div class="quick-ref-item">
+                    <strong>Stack:</strong> LIFO - push/pop/peek - O(1)
+                </div>
+                <div class="quick-ref-item">
+                    <strong>Queue:</strong> FIFO - offer/poll/peek - O(1)
+                </div>
+                <div class="quick-ref-item">
+                    <strong>HashMap:</strong> Average O(1) operations
+                </div>
+                <div class="quick-ref-item">
+                    <strong>Binary Search:</strong> O(log n) - sorted array only
+                </div>
+                <div class="quick-ref-item">
+                    <strong>Merge Sort:</strong> O(n log n) - stable
+                </div>
+                <div class="quick-ref-item">
+                    <strong>Quick Sort:</strong> O(n log n) avg - in-place
+                </div>
+                <div class="quick-ref-item">
+                    <strong>BFS:</strong> Level-order, shortest path (unweighted)
+                </div>
+                <div class="quick-ref-item">
+                    <strong>DFS:</strong> Recursion/Stack, cycle detection
+                </div>
+                <div class="quick-ref-item">
+                    <strong>Dijkstra:</strong> O((V+E) log V) - non-negative weights
+                </div>
+                <div class="quick-ref-item">
+                    <strong>Tree Traversal:</strong> Inorder, Preorder, Postorder - O(n)
+                </div>
+                <div class="quick-ref-item">
+                    <strong>Heap:</strong> Insert O(log n), Min/Max O(1)
+                </div>
+                <div class="quick-ref-item">
+                    <strong>DP Pattern:</strong> Define state, recurrence, base case
+                </div>
+                <div class="quick-ref-item">
+                    <strong>Linked List:</strong> Insert/Delete at head O(1)
+                </div>
+            </div>
+        </section>
+
+        <footer>
+            <p>Programming, Data Structures & Algorithms Formula Sheet</p>
+            <p>© 2024 | Comprehensive Reference Guide for C/C++, Java & DSA</p>
+        </footer>
+    </div>
+</body>
+</html>

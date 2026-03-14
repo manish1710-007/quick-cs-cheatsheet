@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>★ CYBER FORMULA LIBRARY ★</title>
+    <!-- Link to the new CSS file -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Main Header -->
+    <h1>FORMULA DATABASE</h1>
+    <div class="subtitle">コンピューターサイエンス公式集 (CS Formula Collection)</div>
+
+    <!-- Y2K Marquee Bar -->
+    <div class="marquee-container">
+        <marquee scrollamount="10">
+            ★ WELCOME TO THE DATABASE ★ LOAD YOUR MODULES ★ SYSTEM READY ★ Gyaru Tech v1.0 ★
+        </marquee>
+    </div>
+
+    <!-- Navigation Menu -->
+    <div class="menu-container">
+        <ul>
+            <li><button onclick="loadPage('files/algorithms_formulas.html')">Algorithms</button></li>
+            <li><button onclick="loadPage('files/compiler_design_formulas.html')">Compiler</button></li>
+            <li><button onclick="loadPage('files/computer_networks_formulas.html')">Networks</button></li>
+            <li><button onclick="loadPage('files/computer_organization_formulas.html')">Org & Arch</button></li>
+            <li><button onclick="loadPage('files/database_formulas.html')">Database</button></li>
+            <li><button onclick="loadPage('files/digital_logic_formulas.html')">Digital Logic</button></li>
+            <li><button onclick="loadPage('files/discrete_mathematics_formulas.html')">Discrete Math</button></li>
+            <li><button onclick="loadPage('files/disk_scheduling_paging_formulas.html')">Disk Paging</button></li>
+            <li><button onclick="loadPage('files/operating_systems_formulas.html')">OS</button></li>
+            <li><button onclick="loadPage('files/theory_of_computation_formulas.html')">Theory of Comp</button></li>
+            <li><button onclick="loadPage('files/programming_ds_algo_formulas.html')">Prog & DS</button></li>
+        </ul>
+    </div>
+
+    <!-- Dashboard View Area -->
+    <div class="iframe-container">
+        <div id="placeholderText" class="placeholder">
+            ✦ SELECT A MODULE TO LOAD ✦<br>
+            <span style="font-size:0.5em; font-family:'Kosugi Maru'">モジュールを選択してください</span>
+        </div>
+        <iframe id="contentFrame" src="about:blank"></iframe>
+    </div>
+
+    <script>
+        function loadPage(url) {
+            // Set the iframe source to the selected file
+            document.getElementById('contentFrame').src = url;
+            
+            // Hide the placeholder text
+            document.getElementById('placeholderText').style.display = 'none';
+        }
+    </script>
+
+</body>
+</html>

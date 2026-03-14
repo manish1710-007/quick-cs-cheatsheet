@@ -1,0 +1,1827 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Operating Systems Formula Sheet</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0c0c0c 0%, #1a1a2e 50%, #16213e 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #fff;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            padding: 30px 0;
+            margin-bottom: 30px;
+        }
+
+        header h1 {
+            font-size: 2.8rem;
+            background: linear-gradient(90deg, #00b4d8, #90e0ef, #48cae4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 30px rgba(0, 180, 216, 0.3);
+            margin-bottom: 10px;
+        }
+
+        header p {
+            color: #90e0ef;
+            font-size: 1.1rem;
+        }
+
+        .section {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            color: #00b4d8;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid rgba(0, 180, 216, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .section-title .icon {
+            font-size: 2rem;
+        }
+
+        .subsection {
+            margin-bottom: 25px;
+        }
+
+        .subsection-title {
+            font-size: 1.3rem;
+            color: #48cae4;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .subsection-title::before {
+            content: "●";
+            font-size: 0.8rem;
+            color: #90e0ef;
+        }
+
+        .formula-box {
+            background: linear-gradient(135deg, rgba(0, 180, 216, 0.15), rgba(72, 202, 228, 0.1));
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-left: 4px solid #00b4d8;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .formula-box:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 20px rgba(0, 180, 216, 0.3);
+        }
+
+        .formula-name {
+            font-size: 1.1rem;
+            color: #48cae4;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .formula {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px 20px;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 1.05rem;
+            color: #90e0ef;
+            margin: 10px 0;
+            overflow-x: auto;
+        }
+
+        .formula-description {
+            color: #a8b2d1;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-top: 10px;
+        }
+
+        .variables {
+            background: rgba(72, 202, 228, 0.1);
+            padding: 12px 15px;
+            border-radius: 8px;
+            margin-top: 10px;
+            font-size: 0.9rem;
+        }
+
+        .variables strong {
+            color: #48cae4;
+        }
+
+        .example {
+            background: rgba(144, 224, 239, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 10px;
+            border: 1px dashed rgba(144, 224, 239, 0.5);
+        }
+
+        .example-title {
+            color: #90e0ef;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 20px;
+        }
+
+        .algorithm-card {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 15px;
+            padding: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .algorithm-card h4 {
+            color: #00b4d8;
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(0, 180, 216, 0.3);
+        }
+
+        .steps {
+            counter-reset: step;
+        }
+
+        .step {
+            position: relative;
+            padding-left: 35px;
+            margin-bottom: 10px;
+            color: #e2e8f0;
+            line-height: 1.6;
+        }
+
+        .step::before {
+            counter-increment: step;
+            content: counter(step);
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 25px;
+            height: 25px;
+            background: linear-gradient(135deg, #00b4d8, #48cae4);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .note {
+            background: rgba(255, 193, 7, 0.1);
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            border-radius: 0 10px 10px 0;
+            margin-top: 15px;
+        }
+
+        .note-title {
+            color: #ffc107;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .warning {
+            background: rgba(239, 68, 68, 0.1);
+            border-left: 4px solid #ef4444;
+            padding: 15px;
+            border-radius: 0 10px 10px 0;
+            margin-top: 15px;
+        }
+
+        .warning-title {
+            color: #ef4444;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            margin: 15px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        th {
+            background: linear-gradient(135deg, #00b4d8, #0077b6);
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            color: #fff;
+        }
+
+        td {
+            padding: 12px 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            color: #e2e8f0;
+        }
+
+        tr:hover {
+            background: rgba(0, 180, 216, 0.1);
+        }
+
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .comparison-item {
+            background: rgba(72, 202, 228, 0.05);
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid rgba(72, 202, 228, 0.2);
+        }
+
+        .comparison-item h5 {
+            color: #48cae4;
+            margin-bottom: 8px;
+        }
+
+        .timeline {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            margin: 15px 0;
+            overflow-x: auto;
+            padding: 10px 0;
+        }
+
+        .timeline-item {
+            background: rgba(0, 180, 216, 0.2);
+            padding: 8px 15px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            white-space: nowrap;
+        }
+
+        .timeline-arrow {
+            color: #48cae4;
+        }
+
+        .state-diagram {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 15px 0;
+            text-align: center;
+        }
+
+        .state-box {
+            display: inline-block;
+            background: linear-gradient(135deg, #00b4d8, #0077b6);
+            padding: 10px 20px;
+            border-radius: 8px;
+            margin: 5px;
+            font-weight: 600;
+        }
+
+        .state-arrow {
+            display: inline-block;
+            color: #90e0ef;
+            margin: 0 10px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px;
+            color: #64748b;
+            margin-top: 30px;
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, rgba(0, 180, 216, 0.2), rgba(72, 202, 228, 0.15));
+            border-radius: 15px;
+            padding: 20px;
+            margin: 15px 0;
+            border: 1px solid rgba(0, 180, 216, 0.3);
+        }
+
+        .formula-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 10px 0;
+        }
+
+        .formula-item {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            color: #90e0ef;
+        }
+
+        .gantt-chart {
+            display: flex;
+            margin: 15px 0;
+            border: 1px solid rgba(72, 202, 228, 0.3);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .gantt-block {
+            padding: 15px 10px;
+            text-align: center;
+            border-right: 1px solid rgba(72, 202, 228, 0.2);
+            font-weight: 600;
+        }
+
+        .gantt-block:last-child {
+            border-right: none;
+        }
+
+        .process-p1 { background: rgba(239, 68, 68, 0.3); }
+        .process-p2 { background: rgba(34, 197, 94, 0.3); }
+        .process-p3 { background: rgba(59, 130, 246, 0.3); }
+        .process-p4 { background: rgba(168, 85, 247, 0.3); }
+        .process-idle { background: rgba(107, 114, 128, 0.3); }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2rem;
+            }
+
+            .grid {
+                grid-template-columns: 1fr;
+            }
+
+            .section {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>⚙️ Operating Systems Formula Sheet</h1>
+            <p>Complete Reference for CPU Scheduling, Memory Management, Synchronization & More</p>
+        </header>
+
+        <!-- PROCESS MANAGEMENT SECTION -->
+        <div class="section">
+            <h2 class="section-title">
+                <span class="icon">🔄</span>
+                Process Management
+            </h2>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Process States</h3>
+                <div class="state-diagram">
+                    <div class="state-box">New</div>
+                    <span class="state-arrow">→</span>
+                    <div class="state-box">Ready</div>
+                    <span class="state-arrow">↔</span>
+                    <div class="state-box">Running</div>
+                    <span class="state-arrow">→</span>
+                    <div class="state-box">Blocked/Waiting</div>
+                    <span class="state-arrow">→</span>
+                    <div class="state-box">Terminated</div>
+                </div>
+                <div class="algorithm-card">
+                    <h4>State Transitions</h4>
+                    <div class="formula-row">
+                        <div class="formula-item">New → Ready (Admit)</div>
+                        <div class="formula-item">Ready → Running (Scheduler Dispatch)</div>
+                    </div>
+                    <div class="formula-row">
+                        <div class="formula-item">Running → Ready (Interrupt/Timeout)</div>
+                        <div class="formula-item">Running → Blocked (I/O Request)</div>
+                    </div>
+                    <div class="formula-row">
+                        <div class="formula-item">Blocked → Ready (I/O Complete)</div>
+                        <div class="formula-item">Running → Terminated (Exit)</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Process Control Block (PCB)</h3>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Component</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Process State</td><td>Current state (New, Ready, Running, Blocked, Terminated)</td></tr>
+                            <tr><td>Program Counter</td><td>Address of next instruction to execute</td></tr>
+                            <tr><td>CPU Registers</td><td>Contents of all registers when process was interrupted</td></tr>
+                            <tr><td>CPU Scheduling Info</td><td>Priority, pointers to scheduling queues</td></tr>
+                            <tr><td>Memory Management Info</td><td>Base/limit registers, page tables</td></tr>
+                            <tr><td>Accounting Info</td><td>CPU used, time limits, job numbers</td></tr>
+                            <tr><td>I/O Status Info</td><td>List of I/O devices allocated, open file descriptors</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Context Switching</h3>
+                <div class="formula-box">
+                    <div class="formula-name">Context Switch Time</div>
+                    <div class="formula">Total Overhead = Context Switch Time × Number of Switches</div>
+                    <div class="formula-description">
+                        Time taken to save the state of the old process and load the saved state of the new process.
+                    </div>
+                    <div class="variables">
+                        <strong>Typical Values:</strong> Few microseconds (hardware-dependent)<br>
+                        <strong>Impact:</strong> Pure overhead - no useful work done during switch
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Process Creation & Termination</h3>
+                <div class="grid">
+                    <div class="algorithm-card">
+                        <h4>Process Creation (fork())</h4>
+                        <div class="formula">Parent Process → Child Process (Copy of parent)</div>
+                        <div class="steps">
+                            <div class="step">Allocate new PCB</div>
+                            <div class="step">Assign unique PID</div>
+                            <div class="step">Copy parent's address space (or shared)</div>
+                            <div class="step">Initialize resources</div>
+                            <div class="step">Add to ready queue</div>
+                        </div>
+                    </div>
+                    <div class="algorithm-card">
+                        <h4>Process Termination (exit())</h4>
+                        <div class="steps">
+                            <div class="step">Deallocate resources</div>
+                            <div class="step">Close open files</div>
+                            <div class="step">Return status to parent</div>
+                            <div class="step">Remove child processes (cascade termination)</div>
+                            <div class="step">Free PCB</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Threads</h3>
+                <div class="grid">
+                    <div class="algorithm-card">
+                        <h4>Thread vs Process</h4>
+                        <div class="table-container">
+                            <table>
+                                <tr><th>Aspect</th><th>Thread</th><th>Process</th></tr>
+                                <tr><td>Creation Time</td><td>Low</td><td>High</td></tr>
+                                <tr><td>Memory</td><td>Shared</td><td>Separate</td></tr>
+                                <tr><td>Communication</td><td>Easy</td><td>Complex (IPC)</td></tr>
+                                <tr><td>Context Switch</td><td>Fast</td><td>Slow</td></tr>
+                                <tr><td>Crash Impact</td><td>All threads affected</td><td>Isolated</td></tr>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="algorithm-card">
+                        <h4>Multithreading Models</h4>
+                        <div class="formula">Many-to-One: Many user threads → One kernel thread</div>
+                        <div class="formula">One-to-One: Each user thread → One kernel thread</div>
+                        <div class="formula">Many-to-Many: Many user threads → Equal or fewer kernel threads</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CPU SCHEDULING SECTION -->
+        <div class="section">
+            <h2 class="section-title">
+                <span class="icon">📊</span>
+                CPU Scheduling
+            </h2>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Scheduling Metrics</h3>
+                <div class="grid">
+                    <div class="formula-box">
+                        <div class="formula-name">Turnaround Time (TAT)</div>
+                        <div class="formula">TAT = Completion Time - Arrival Time</div>
+                        <div class="formula">TAT = Waiting Time + Burst Time</div>
+                        <div class="formula-description">
+                            Total time from arrival to completion of process.
+                        </div>
+                    </div>
+                    <div class="formula-box">
+                        <div class="formula-name">Waiting Time (WT)</div>
+                        <div class="formula">WT = Turnaround Time - Burst Time</div>
+                        <div class="formula">WT = Start Time - Arrival Time (for first execution)</div>
+                        <div class="formula-description">
+                            Time spent waiting in the ready queue.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid" style="margin-top: 15px;">
+                    <div class="formula-box">
+                        <div class="formula-name">Response Time (RT)</div>
+                        <div class="formula">RT = First Response Time - Arrival Time</div>
+                        <div class="formula">RT = Time of first CPU allocation - Arrival Time</div>
+                        <div class="formula-description">
+                            Time from submission to first response (important for interactive systems).
+                        </div>
+                    </div>
+                    <div class="formula-box">
+                        <div class="formula-name">CPU Utilization</div>
+                        <div class="formula">CPU Utilization = (CPU Busy Time / Total Time) × 100%</div>
+                        <div class="formula-description">
+                            Percentage of time the CPU is executing processes (not idle).
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid" style="margin-top: 15px;">
+                    <div class="formula-box">
+                        <div class="formula-name">Throughput</div>
+                        <div class="formula">Throughput = Number of Processes / Total Time</div>
+                        <div class="formula-description">
+                            Number of processes completed per unit time.
+                        </div>
+                    </div>
+                    <div class="formula-box">
+                        <div class="formula-name">Average Metrics</div>
+                        <div class="formula">Average TAT = Σ(TATᵢ) / n</div>
+                        <div class="formula">Average WT = Σ(WTᵢ) / n</div>
+                        <div class="variables">
+                            <strong>Where:</strong> n = number of processes
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Scheduling Algorithms</h3>
+                
+                <div class="algorithm-card" style="margin-bottom: 20px;">
+                    <h4>FCFS (First Come First Serve)</h4>
+                    <div class="formula">Order: Sorted by Arrival Time (Non-preemptive)</div>
+                    <div class="grid">
+                        <div class="formula-box">
+                            <div class="formula-name">Gantt Chart Order</div>
+                            <div class="formula">P₁ → P₂ → P₃ → ... (by arrival time)</div>
+                        </div>
+                        <div class="formula-box">
+                            <div class="formula-name">Calculations</div>
+                            <div class="formula">Completion Time = Previous Completion + Burst Time</div>
+                            <div class="formula">First process: CT = Arrival + Burst</div>
+                        </div>
+                    </div>
+                    <div class="example">
+                        <div class="example-title">📌 Example:</div>
+                        P1: AT=0, BT=5 → CT=5, TAT=5, WT=0<br>
+                        P2: AT=1, BT=3 → CT=8, TAT=7, WT=4<br>
+                        P3: AT=2, BT=8 → CT=16, TAT=14, WT=6
+                    </div>
+                    <div class="warning">
+                        <div class="warning-title">⚠️ Convoy Effect:</div>
+                        Short processes wait behind long processes, increasing average waiting time significantly.
+                    </div>
+                </div>
+
+                <div class="algorithm-card" style="margin-bottom: 20px;">
+                    <h4>SJF (Shortest Job First) - Non-preemptive</h4>
+                    <div class="formula">Order: Process with shortest Burst Time first (among arrived processes)</div>
+                    <div class="formula">Select: argmin(Burst Time) among ready processes</div>
+                    <div class="example">
+                        <div class="example-title">📌 Example:</div>
+                        At time 0: P1(AT=0, BT=7), P2(AT=2, BT=4), P3(AT=3, BT=1), P4(AT=4, BT=4)<br>
+                        Order: P1(0-7) → P3(7-8) → P2(8-12) → P4(12-16)
+                    </div>
+                    <div class="note">
+                        <div class="note-title">💡 Note:</div>
+                        SJF gives minimum average waiting time but requires knowing burst times in advance.
+                    </div>
+                </div>
+
+                <div class="algorithm-card" style="margin-bottom: 20px;">
+                    <h4>SRTF (Shortest Remaining Time First) - Preemptive</h4>
+                    <div class="formula">At any time, run process with minimum remaining burst time</div>
+                    <div class="formula">Preempt when new process arrives with BT < Remaining BT of current</div>
+                    <div class="steps">
+                        <div class="step">When new process arrives, compare its BT with current process's remaining time</div>
+                        <div class="step">If new BT < remaining, preempt current process</div>
+                        <div class="step">Context switch to the new shorter process</div>
+                    </div>
+                    <div class="example">
+                        <div class="example-title">📌 Example:</div>
+                        P1(AT=0, BT=8), P2(AT=1, BT=4)<br>
+                        At t=1: P1 remaining=7, P2 BT=4 → Preempt P1, run P2
+                    </div>
+                </div>
+
+                <div class="algorithm-card" style="margin-bottom: 20px;">
+                    <h4>Priority Scheduling</h4>
+                    <div class="formula">Order: Process with highest priority first (lower number = higher priority)</div>
+                    <div class="grid">
+                        <div class="formula-box">
+                            <div class="formula-name">Non-preemptive</div>
+                            <div class="formula">Run selected process to completion</div>
+                        </div>
+                        <div class="formula-box">
+                            <div class="formula-name">Preemptive</div>
+                            <div class="formula">Preempt if new process has higher priority</div>
+                        </div>
+                    </div>
+                    <div class="warning">
+                        <div class="warning-title">⚠️ Starvation Problem:</div>
+                        Low priority processes may never execute. Solution: Aging - gradually increase priority of waiting processes.
+                    </div>
+                </div>
+
+                <div class="algorithm-card" style="margin-bottom: 20px;">
+                    <h4>Round Robin (RR)</h4>
+                    <div class="formula">Time Quantum: q (fixed time slice)</div>
+                    <div class="formula">Each process gets q time, then moves to end of ready queue</div>
+                    <div class="grid">
+                        <div class="formula-box">
+                            <div class="formula-name">Number of Context Switches</div>
+                            <div class="formula">Approximately: Σ⌈Burst Time / Quantum⌉</div>
+                        </div>
+                        <div class="formula-box">
+                            <div class="formula-name">Turnaround Time</div>
+                            <div class="formula">TAT = Completion Time - Arrival Time</div>
+                        </div>
+                    </div>
+                    <div class="example">
+                        <div class="example-title">📌 Example:</div>
+                        P1(BT=10), P2(BT=5), P3(BT=8), Quantum=2<br>
+                        Gantt: P1(2)→P2(2)→P3(2)→P1(2)→P2(2)→P3(2)→P1(2)→P3(2)→P1(2)→P1(2)
+                    </div>
+                    <div class="note">
+                        <div class="note-title">💡 Quantum Selection:</div>
+                        • Too small: Excessive context switches<br>
+                        • Too large: Behaves like FCFS<br>
+                        • Typical: 10-100 milliseconds
+                    </div>
+                </div>
+
+                <div class="algorithm-card">
+                    <h4>HRRN (Highest Response Ratio Next)</h4>
+                    <div class="formula">Response Ratio = (Waiting Time + Burst Time) / Burst Time</div>
+                    <div class="formula">Response Ratio = 1 + (Waiting Time / Burst Time)</div>
+                    <div class="formula">Select: Process with highest Response Ratio</div>
+                    <div class="formula-description">
+                        Non-preemptive algorithm that prevents starvation by considering waiting time.
+                    </div>
+                    <div class="example">
+                        <div class="example-title">📌 Example:</div>
+                        At time t=10, Process A: BT=5, WT=5 → RR = 1 + 5/5 = 2<br>
+                        Process B: BT=2, WT=2 → RR = 1 + 2/2 = 2<br>
+                        Process C: BT=10, WT=0 → RR = 1 + 0/10 = 1
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Algorithm Comparison</h3>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Algorithm</th>
+                                <th>Type</th>
+                                <th>Starvation</th>
+                                <th>Best For</th>
+                                <th>Avg WT</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>FCFS</td>
+                                <td>Non-preemptive</td>
+                                <td>No</td>
+                                <td>Batch systems</td>
+                                <td>High (Convoy)</td>
+                            </tr>
+                            <tr>
+                                <td>SJF</td>
+                                <td>Non-preemptive</td>
+                                <td>Yes (long jobs)</td>
+                                <td>Batch systems</td>
+                                <td>Minimum</td>
+                            </tr>
+                            <tr>
+                                <td>SRTF</td>
+                                <td>Preemptive</td>
+                                <td>Yes (long jobs)</td>
+                                <td>Batch systems</td>
+                                <td>Minimum</td>
+                            </tr>
+                            <tr>
+                                <td>Priority</td>
+                                <td>Both</td>
+                                <td>Yes (low priority)</td>
+                                <td>Real-time</td>
+                                <td>Variable</td>
+                            </tr>
+                            <tr>
+                                <td>Round Robin</td>
+                                <td>Preemptive</td>
+                                <td>No</td>
+                                <td>Time-sharing</td>
+                                <td>Medium</td>
+                            </tr>
+                            <tr>
+                                <td>HRRN</td>
+                                <td>Non-preemptive</td>
+                                <td>No (Aging built-in)</td>
+                                <td>General purpose</td>
+                                <td>Low</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Multi-Level Queue Scheduling</h3>
+                <div class="grid">
+                    <div class="algorithm-card">
+                        <h4>Queue Structure</h4>
+                        <div class="formula-description">
+                            • <strong>Queue 1 (Highest Priority):</strong> System processes<br>
+                            • <strong>Queue 2:</strong> Interactive processes<br>
+                            • <strong>Queue 3:</strong> Interactive editing<br>
+                            • <strong>Queue 4:</strong> Batch processes<br>
+                            • <strong>Queue 5 (Lowest):</strong> Student processes
+                        </div>
+                    </div>
+                    <div class="algorithm-card">
+                        <h4>Scheduling Between Queues</h4>
+                        <div class="formula-description">
+                            • <strong>Fixed Priority:</strong> Serve all in Q1, then Q2, etc.<br>
+                            • <strong>Time Slice:</strong> Each queue gets CPU time proportion<br>
+                            • Each queue can use different scheduling algorithm
+                        </div>
+                    </div>
+                </div>
+
+                <div class="algorithm-card" style="margin-top: 15px;">
+                    <h4>Multi-Level Feedback Queue (MLFQ)</h4>
+                    <div class="formula-description">
+                        Processes can move between queues based on their CPU burst characteristics:
+                    </div>
+                    <div class="steps">
+                        <div class="step">New processes enter highest priority queue</div>
+                        <div class="step">If process uses full time slice → demote to lower queue</div>
+                        <div class="step">If process blocks before time slice → keep or promote</div>
+                        <div class="step">Lower queues have longer time quanta</div>
+                        <div class="step">Aging: Promote long-waiting processes</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PROCESS SYNCHRONIZATION SECTION -->
+        <div class="section">
+            <h2 class="section-title">
+                <span class="icon">🔒</span>
+                Process Synchronization
+            </h2>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Critical Section Problem</h3>
+                <div class="algorithm-card">
+                    <h4>Critical Section Structure</h4>
+                    <div class="formula">do {</div>
+                    <div class="formula" style="padding-left: 20px;">// Entry Section</div>
+                    <div class="formula" style="padding-left: 20px;">// Critical Section (access shared resource)</div>
+                    <div class="formula" style="padding-left: 20px;">// Exit Section</div>
+                    <div class="formula" style="padding-left: 20px;">// Remainder Section</div>
+                    <div class="formula">} while(true);</div>
+                </div>
+
+                <div class="grid" style="margin-top: 15px;">
+                    <div class="algorithm-card">
+                        <h4>Requirements</h4>
+                        <div class="steps">
+                            <div class="step"><strong>Mutual Exclusion:</strong> Only one process in critical section at a time</div>
+                            <div class="step"><strong>Progress:</strong> If no process in CS and processes want to enter, selection can't be postponed</div>
+                            <div class="step"><strong>Bounded Waiting:</strong> Limit on how many times other processes can enter before you</div>
+                        </div>
+                    </div>
+                    <div class="algorithm-card">
+                        <h4>Peterson's Solution</h4>
+                        <div class="formula">// Shared: flag[2], turn</div>
+                        <div class="formula">flag[i] = true;</div>
+                        <div class="formula">turn = j;</div>
+                        <div class="formula">while(flag[j] && turn == j);</div>
+                        <div class="formula" style="color: #90e0ef;">// Critical Section</div>
+                        <div class="formula">flag[i] = false;</div>
+                        <div class="note">
+                            <div class="note-title">⚠️ Limitation:</div>
+                            May not work on modern CPUs due to instruction reordering. Requires memory barriers.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Synchronization Hardware</h3>
+                <div class="grid">
+                    <div class="algorithm-card">
+                        <h4>Test-and-Set</h4>
+                        <div class="formula">boolean TestAndSet(boolean *target) {</div>
+                        <div class="formula" style="padding-left: 20px;">boolean rv = *target;</div>
+                        <div class="formula" style="padding-left: 20px;">*target = true;</div>
+                        <div class="formula" style="padding-left: 20px;">return rv;</div>
+                        <div class="formula">}</div>
+                        <div class="formula-description">
+                            Atomic instruction that tests and sets a value in one uninterruptible operation.
+                        </div>
+                    </div>
+                    <div class="algorithm-card">
+                        <h4>Compare-and-Swap (CAS)</h4>
+                        <div class="formula">int CompareAndSwap(int *value, int expected, int new_value) {</div>
+                        <div class="formula" style="padding-left: 20px;">int temp = *value;</div>
+                        <div class="formula" style="padding-left: 20px;">if (*value == expected)</div>
+                        <div class="formula" style="padding-left: 40px;">*value = new_value;</div>
+                        <div class="formula" style="padding-left: 20px;">return temp;</div>
+                        <div class="formula">}</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Semaphores</h3>
+                <div class="formula-box">
+                    <div class="formula-name">Semaphore Operations</div>
+                    <div class="formula">wait(S): while(S <= 0); S--;</div>
+                    <div class="formula">signal(S): S++;</div>
+                    <div class="formula-description">
+                        Semaphore S is an integer variable accessed only through wait() and signal() operations.
+                    </div>
+                </div>
+
+                <div class="grid">
+                    <div class="algorithm-card">
+                        <h4>Counting Semaphore</h4>
+                        <div class="formula">Initial value: n (resource count)</div>
+                        <div class="formula-description">
+                            Controls access to a resource with multiple instances (e.g., n buffer slots).
+                        </div>
+                    </div>
+                    <div class="algorithm-card">
+                        <h4>Binary Semaphore (Mutex)</h4>
+                        <div class="formula">Initial value: 1</div>
+                        <div class="formula-description">
+                            Provides mutual exclusion. Only one process can access critical section.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="algorithm-card" style="margin-top: 15px;">
+                    <h4>Classic Problems</h4>
+                    <div class="grid">
+                        <div class="formula-box">
+                            <div class="formula-name">Producer-Consumer</div>
+                            <div class="formula">Semaphore empty = n; // empty slots</div>
+                            <div class="formula">Semaphore full = 0;  // full slots</div>
+                            <div class="formula">Semaphore mutex = 1; // mutual exclusion</div>
+                            <div class="formula-description" style="font-size: 0.85rem;">
+                                Producer: wait(empty), wait(mutex), produce, signal(mutex), signal(full)<br>
+                                Consumer: wait(full), wait(mutex), consume, signal(mutex), signal(empty)
+                            </div>
+                        </div>
+                        <div class="formula-box">
+                            <div class="formula-name">Readers-Writers</div>
+                            <div class="formula">Semaphore rw_mutex = 1;</div>
+                            <div class="formula">Semaphore mutex = 1;</div>
+                            <div class="formula">int read_count = 0;</div>
+                            <div class="formula-description" style="font-size: 0.85rem;">
+                                Multiple readers can read simultaneously. Writers need exclusive access.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="formula-box">
+                        <div class="formula-name">Dining Philosophers</div>
+                        <div class="formula">Semaphore chopstick[5] = {1, 1, 1, 1, 1};</div>
+                        <div class="formula-description">
+                            Each philosopher needs two chopsticks (semaphores) to eat. Risk of deadlock.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Monitors</h3>
+                <div class="algorithm-card">
+                    <h4>Monitor Structure</h4>
+                    <div class="formula">monitor MonitorName {</div>
+                    <div class="formula" style="padding-left: 20px;">// Shared variables</div>
+                    <div class="formula" style="padding-left: 20px;">condition x, y; // Condition variables</div>
+                    <div class="formula" style="padding-left: 20px;">// Procedures</div>
+                    <div class="formula" style="padding-left: 20px;">procedure entry P1(...) { ... }</div>
+                    <div class="formula" style="padding-left: 20px;">procedure entry P2(...) { ... }</div>
+                    <div class="formula" style="padding-left: 20px;">// Initialization code</div>
+                    <div class="formula">}</div>
+                    <div class="grid" style="margin-top: 10px;">
+                        <div class="formula-box">
+                            <div class="formula-name">Condition Variable Operations</div>
+                            <div class="formula">x.wait(): Block until x.signal()</div>
+                            <div class="formula">x.signal(): Wake up one waiting process</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- DEADLOCK SECTION -->
+        <div class="section">
+            <h2 class="section-title">
+                <span class="icon">💀</span>
+                Deadlock
+            </h2>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Necessary Conditions (All Required)</h3>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Condition</th>
+                                <th>Description</th>
+                                <th>Prevention Strategy</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Mutual Exclusion</td>
+                                <td>Resource cannot be shared</td>
+                                <td>Use spooling for printers</td>
+                            </tr>
+                            <tr>
+                                <td>Hold and Wait</td>
+                                <td>Hold resources while waiting for more</td>
+                                <td>Request all resources at once</td>
+                            </tr>
+                            <tr>
+                                <td>No Preemption</td>
+                                <td>Cannot forcibly take resources</td>
+                                <td>Preempt resources if possible</td>
+                            </tr>
+                            <tr>
+                                <td>Circular Wait</td>
+                                <td>Circular chain of waiting processes</td>
+                                <td>Order resources, request in order</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Resource-Allocation Graph</h3>
+                <div class="algorithm-card">
+                    <h4>Graph Components</h4>
+                    <div class="formula-description">
+                        • <strong>Circles (P):</strong> Processes<br>
+                        • <strong>Squares (R):</strong> Resource types<br>
+                        • <strong>Edge P→R:</strong> Process requesting resource<br>
+                        • <strong>Edge R→P:</strong> Resource assigned to process<br>
+                        • <strong>Dots in Square:</strong> Instances of resource
+                    </div>
+                    <div class="note">
+                        <div class="note-title">💡 Deadlock Detection:</div>
+                        If graph contains a cycle AND each resource has only one instance → Deadlock<br>
+                        If cycle AND multiple instances → May or may not be deadlock
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Banker's Algorithm</h3>
+                <div class="formula-box">
+                    <div class="formula-name">Data Structures</div>
+                    <div class="formula">Available[m]  // Available resources of each type</div>
+                    <div class="formula">Max[n][m]     // Maximum demand of each process</div>
+                    <div class="formula">Allocation[n][m] // Currently allocated resources</div>
+                    <div class="formula">Need[n][m]    // Remaining resource need</div>
+                    <div class="formula">Need[i][j] = Max[i][j] - Allocation[i][j]</div>
+                </div>
+
+                <div class="algorithm-card">
+                    <h4>Safety Algorithm</h4>
+                    <div class="steps">
+                        <div class="step">Initialize: Work = Available, Finish[i] = false for all i</div>
+                        <div class="step">Find i such that: Finish[i] = false AND Need[i] ≤ Work</div>
+                        <div class="step">If found: Work = Work + Allocation[i], Finish[i] = true, goto step 2</div>
+                        <div class="step">If all Finish[i] = true → System in safe state</div>
+                    </div>
+                    <div class="formula-description">
+                        Safe state means there exists a sequence where all processes can complete.
+                    </div>
+                </div>
+
+                <div class="algorithm-card" style="margin-top: 15px;">
+                    <h4>Resource-Request Algorithm</h4>
+                    <div class="steps">
+                        <div class="step">Check: Request[i] ≤ Need[i] (otherwise error)</div>
+                        <div class="step">Check: Request[i] ≤ Available (otherwise wait)</div>
+                        <div class="step">Pretend allocate: Update matrices temporarily</div>
+                        <div class="step">Run safety algorithm: If safe, grant; else, restore and wait</div>
+                    </div>
+                </div>
+
+                <div class="example" style="margin-top: 15px;">
+                    <div class="example-title">📌 Example:</div>
+                    <strong>Available:</strong> A=3, B=3, C=2<br>
+                    <strong>Process</strong> | Max | Allocation | Need<br>
+                    P0 | 7,5,3 | 0,1,0 | 7,4,3<br>
+                    P1 | 3,2,2 | 2,0,0 | 1,2,2<br>
+                    P2 | 9,0,2 | 3,0,2 | 6,0,0<br>
+                    P3 | 2,2,2 | 2,1,1 | 0,1,1<br>
+                    P4 | 4,3,3 | 0,0,2 | 4,3,1<br>
+                    <strong>Safe Sequence:</strong> P1 → P3 → P4 → P0 → P2 or similar
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Deadlock Detection & Recovery</h3>
+                <div class="grid">
+                    <div class="algorithm-card">
+                        <h4>Detection Algorithm</h4>
+                        <div class="formula-description">
+                            Similar to safety algorithm but uses "Available" and checks for deadlock rather than safe state.
+                        </div>
+                        <div class="formula">If no process can proceed → Deadlock detected</div>
+                    </div>
+                    <div class="algorithm-card">
+                        <h4>Recovery Methods</h4>
+                        <div class="steps">
+                            <div class="step"><strong>Abort:</strong> Terminate deadlocked processes</div>
+                            <div class="step"><strong>Preempt:</strong> Take resources from some processes</div>
+                            <div class="step"><strong>Rollback:</strong> Return to safe checkpoint state</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- MEMORY MANAGEMENT SECTION -->
+        <div class="section">
+            <h2 class="section-title">
+                <span class="icon">🧠</span>
+                Memory Management
+            </h2>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Address Binding</h3>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Stage</th>
+                                <th>When</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Compile Time</td>
+                                <td>Compilation</td>
+                                <td>Absolute code, location known at compile time</td>
+                            </tr>
+                            <tr>
+                                <td>Load Time</td>
+                                <td>Loading</td>
+                                <td>Relocatable code, compiler generates relocatable code</td>
+                            </tr>
+                            <tr>
+                                <td>Execution Time</td>
+                                <td>Runtime</td>
+                                <td>Binding delayed until runtime (MMU needed)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Logical vs Physical Address</h3>
+                <div class="grid">
+                    <div class="formula-box">
+                        <div class="formula-name">MMU Translation</div>
+                        <div class="formula">Physical Address = Logical Address + Relocation Register</div>
+                        <div class="formula-description">
+                            Memory Management Unit (MMU) converts logical addresses to physical addresses at runtime.
+                        </div>
+                    </div>
+                    <div class="formula-box">
+                        <div class="formula-name">Address Space</div>
+                        <div class="formula">Logical Address Space: Process view of memory</div>
+                        <div class="formula">Physical Address Space: Actual memory locations</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Contiguous Memory Allocation</h3>
+                <div class="grid">
+                    <div class="algorithm-card">
+                        <h4>Partitioning Schemes</h4>
+                        <div class="formula-description">
+                            • <strong>Fixed Partitioning:</strong> Equal or varying size partitions, allocated as whole<br>
+                            • <strong>Variable Partitioning:</strong> Holes of various sizes scattered
+                        </div>
+                    </div>
+                    <div class="algorithm-card">
+                        <h4>Allocation Algorithms</h4>
+                        <div class="formula">First Fit: First hole that is big enough</div>
+                        <div class="formula">Best Fit: Smallest hole that is big enough</div>
+                        <div class="formula">Worst Fit: Largest hole (creates largest remaining)</div>
+                    </div>
+                </div>
+
+                <div class="formula-box" style="margin-top: 15px;">
+                    <div class="formula-name">Fragmentation</div>
+                    <div class="grid">
+                        <div class="formula-box">
+                            <div class="formula-name">External Fragmentation</div>
+                            <div class="formula-description">
+                                Total space exists but not contiguous. Solution: Compaction (move processes to create large free block).
+                            </div>
+                        </div>
+                        <div class="formula-box">
+                            <div class="formula-name">Internal Fragmentation</div>
+                            <div class="formula-description">
+                                Allocated memory is slightly larger than requested. Wasted space inside partitions.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Paging</h3>
+                <div class="formula-box">
+                    <div class="formula-name">Basic Formulas</div>
+                    <div class="formula">Page Number = ⌊Logical Address / Page Size⌋</div>
+                    <div class="formula">Page Offset = Logical Address mod Page Size</div>
+                    <div class="formula">Number of Pages = Logical Address Space / Page Size</div>
+                    <div class="formula">Number of Frames = Physical Address Space / Frame Size</div>
+                </div>
+
+                <div class="grid" style="margin-top: 15px;">
+                    <div class="formula-box">
+                        <div class="formula-name">Physical Address Calculation</div>
+                        <div class="formula">Physical Address = Frame Number × Page Size + Offset</div>
+                        <div class="formula">Or: PA = (Frame Number << Offset Bits) | Offset</div>
+                        <div class="example">
+                            <div class="example-title">📌 Example:</div>
+                            Logical Address: 8196, Page Size: 4KB<br>
+                            Page Number = 8196 / 4096 = 2<br>
+                            Offset = 8196 mod 4096 = 4<br>
+                            If Page 2 → Frame 5, PA = 5 × 4096 + 4 = 20484
+                        </div>
+                    </div>
+                    <div class="formula-box">
+                        <div class="formula-name">Page Table Size</div>
+                        <div class="formula">Page Table Size = Number of Pages × Entry Size</div>
+                        <div class="example">
+                            <div class="example-title">📌 Example:</div>
+                            32-bit system, 4KB pages, 4 bytes per entry<br>
+                            Pages = 2³² / 2¹² = 2²⁰ = 1M entries<br>
+                            Page Table Size = 1M × 4 = 4MB per process
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Translation Lookaside Buffer (TLB)</h3>
+                <div class="formula-box">
+                    <div class="formula-name">Effective Access Time with TLB</div>
+                    <div class="formula">EAT = Hit Ratio × (TLB Time + Memory Time)</div>
+                    <div class="formula">     + (1 - Hit Ratio) × (TLB Time + 2 × Memory Time)</div>
+                    <div class="formula">Simplified: EAT = TLB Time + Memory Time + (1 - Hit Ratio) × Memory Time</div>
+                    <div class="example">
+                        <div class="example-title">📌 Example:</div>
+                        TLB Access = 20 ns, Memory Access = 100 ns, Hit Ratio = 0.8<br>
+                        EAT = 0.8 × (20 + 100) + 0.2 × (20 + 200)<br>
+                        EAT = 96 + 44 = 140 ns
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Multi-Level Paging</h3>
+                <div class="formula-box">
+                    <div class="formula-name">Two-Level Paging</div>
+                    <div class="formula">Logical Address = p1 | p2 | d</div>
+                    <div class="formula">p1: Outer page number, p2: Inner page number, d: Offset</div>
+                    <div class="formula">Memory Accesses Required: 3 (outer table + inner table + data)</div>
+                    <div class="example">
+                        <div class="example-title">📌 Example: 32-bit address, 4KB pages, 4 bytes per entry</div>
+                        Offset = 12 bits<br>
+                        Remaining = 20 bits → Split into two 10-bit fields<br>
+                        Outer table: 2¹⁰ = 1024 entries<br>
+                        Inner table: 2¹⁰ = 1024 entries each
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Segmentation</h3>
+                <div class="grid">
+                    <div class="algorithm-card">
+                        <h4>Segment Table Entry</h4>
+                        <div class="formula">Segment Table Entry = (Base, Limit)</div>
+                        <div class="formula-description">
+                            Base: Starting physical address<br>
+                            Limit: Length of segment
+                        </div>
+                    </div>
+                    <div class="algorithm-card">
+                        <h4>Address Translation</h4>
+                        <div class="formula">If offset < limit:</div>
+                        <div class="formula">    Physical Address = Base + Offset</div>
+                        <div class="formula">Else: Segmentation Fault</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- VIRTUAL MEMORY SECTION -->
+        <div class="section">
+            <h2 class="section-title">
+                <span class="icon">💿</span>
+                Virtual Memory
+            </h2>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Page Faults</h3>
+                <div class="formula-box">
+                    <div class="formula-name">Page Fault Handling</div>
+                    <div class="steps">
+                        <div class="step">Check internal table for valid/invalid reference</div>
+                        <div class="step">If invalid, terminate. If valid but not in memory, page fault</div>
+                        <div class="step">Find free frame</div>
+                        <div class="step">Schedule disk operation to read page into frame</div>
+                        <div class="step">Update page table, restart instruction</div>
+                    </div>
+                </div>
+
+                <div class="formula-box" style="margin-top: 15px;">
+                    <div class="formula-name">Effective Access Time with Page Faults</div>
+                    <div class="formula">EAT = (1 - p) × Memory Access Time + p × Page Fault Service Time</div>
+                    <div class="variables">
+                        <strong>Where:</strong> p = Page fault rate (0 ≤ p ≤ 1)
+                    </div>
+                    <div class="example">
+                        <div class="example-title">📌 Example:</div>
+                        Memory Access = 100 ns, Page Fault Service = 8 ms = 8,000,000 ns<br>
+                        EAT with p = 0.001:<br>
+                        EAT = (1 - 0.001) × 100 + 0.001 × 8,000,000<br>
+                        EAT = 99.9 + 8000 = 8099.9 ns
+                    </div>
+                </div>
+
+                <div class="formula-box" style="margin-top: 15px;">
+                    <div class="formula-name">Maximum Acceptable Page Fault Rate</div>
+                    <div class="formula">p_max = (EAT_max - ma) / (Page Fault Service - ma)</div>
+                    <div class="example">
+                        <div class="example-title">📌 Example:</div>
+                        If acceptable EAT = 200 ns, ma = 100 ns, Page Fault = 10 ms<br>
+                        p_max = (200 - 100) / (10,000,000 - 100) ≈ 0.00001
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Page Replacement Algorithms</h3>
+                
+                <div class="algorithm-card" style="margin-bottom: 15px;">
+                    <h4>FIFO (First In First Out)</h4>
+                    <div class="formula">Replace the page that has been in memory longest</div>
+                    <div class="formula-description">
+                        Simple queue-based replacement. May suffer from Belady's Anomaly.
+                    </div>
+                    <div class="warning">
+                        <div class="warning-title">⚠️ Belady's Anomaly:</div>
+                        For some patterns, more frames can result in MORE page faults!
+                    </div>
+                </div>
+
+                <div class="algorithm-card" style="margin-bottom: 15px;">
+                    <h4>Optimal (OPT/MIN)</h4>
+                    <div class="formula">Replace page that will not be used for longest time in future</div>
+                    <div class="formula-description">
+                        Theoretical optimum. Not implementable (requires future knowledge) but used for comparison.
+                    </div>
+                    <div class="note">
+                        <div class="note-title">💡 Key Point:</div>
+                        OPT has minimum possible page faults. Other algorithms compared against it.
+                    </div>
+                </div>
+
+                <div class="algorithm-card" style="margin-bottom: 15px;">
+                    <h4>LRU (Least Recently Used)</h4>
+                    <div class="formula">Replace page that has not been used for longest time</div>
+                    <div class="grid">
+                        <div class="formula-box">
+                            <div class="formula-name">Counter Implementation</div>
+                            <div class="formula">Each page has counter, updated on access</div>
+                            <div class="formula">Replace page with smallest counter value</div>
+                        </div>
+                        <div class="formula-box">
+                            <div class="formula-name">Stack Implementation</div>
+                            <div class="formula">Move accessed page to top of stack</div>
+                            <div class="formula">Replace page at bottom of stack</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid">
+                    <div class="algorithm-card">
+                        <h4>LRU Approximation</h4>
+                        <div class="formula-description">
+                            • <strong>Reference Bit:</strong> Set to 1 when page accessed<br>
+                            • <strong>Second Chance:</strong> Clock algorithm, give second chance if bit=1<br>
+                            • <strong>Enhanced Second Chance:</strong> Use (reference, modify) bits
+                        </div>
+                    </div>
+                    <div class="algorithm-card">
+                        <h4>Working Set Model</h4>
+                        <div class="formula">Working Set = {recently accessed pages in Δ time}</div>
+                        <div class="formula">Total frames ≥ Σ Working Set sizes</div>
+                        <div class="formula-description">
+                            If insufficient frames for working sets → Thrashing occurs
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Thrashing</h3>
+                <div class="formula-box">
+                    <div class="formula-name">Definition & Detection</div>
+                    <div class="formula-description">
+                        Thrashing occurs when a process spends more time paging than executing. 
+                        CPU utilization drops sharply as the system is overwhelmed by page faults.
+                    </div>
+                    <div class="variables">
+                        <strong>Causes:</strong><br>
+                        • Degree of multiprogramming too high<br>
+                        • Insufficient frames per process<br>
+                        • Working sets not accommodated
+                    </div>
+                </div>
+
+                <div class="grid" style="margin-top: 15px;">
+                    <div class="algorithm-card">
+                        <h4>Page Fault Frequency (PFF)</h4>
+                        <div class="formula">If page fault rate > upper bound → Allocate more frames</div>
+                        <div class="formula">If page fault rate < lower bound → Reduce frames</div>
+                    </div>
+                    <div class="algorithm-card">
+                        <h4>Working Set Strategy</h4>
+                        <div class="formula">Monitor working set of each process</div>
+                        <div class="formula">Ensure frames ≥ working set size</div>
+                        <div class="formula">If not enough → Swap out entire process</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Frame Allocation</h3>
+                <div class="grid">
+                    <div class="algorithm-card">
+                        <h4>Equal Allocation</h4>
+                        <div class="formula">Frames per process = Total Frames / Number of Processes</div>
+                    </div>
+                    <div class="algorithm-card">
+                        <h4>Proportional Allocation</h4>
+                        <div class="formula">Framesᵢ = (Sizeᵢ / ΣSizeⱼ) × Total Frames</div>
+                    </div>
+                </div>
+                <div class="note" style="margin-top: 15px;">
+                    <div class="note-title">💡 Minimum Frames:</div>
+                    Minimum frames required depends on instruction set architecture. Need enough to hold one instruction + operands.
+                </div>
+            </div>
+        </div>
+
+        <!-- DISK SCHEDULING SECTION -->
+        <div class="section">
+            <h2 class="section-title">
+                <span class="icon">💾</span>
+                Disk Scheduling
+            </h2>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Disk Service Time</h3>
+                <div class="formula-box">
+                    <div class="formula-name">Total Disk Service Time</div>
+                    <div class="formula">Service Time = Seek Time + Rotational Latency + Transfer Time</div>
+                    <div class="variables">
+                        <strong>Seek Time:</strong> Move arm to correct cylinder<br>
+                        <strong>Rotational Latency:</strong> Wait for sector (~half rotation average)<br>
+                        <strong>Transfer Time:</strong> Read/write the data
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Scheduling Algorithms</h3>
+                <div class="grid">
+                    <div class="algorithm-card">
+                        <h4>FCFS</h4>
+                        <div class="formula">Total Movement = Σ |Positionᵢ - Positionᵢ₋₁|</div>
+                        <div class="formula-description">Service requests in arrival order</div>
+                    </div>
+                    <div class="algorithm-card">
+                        <h4>SSTF</h4>
+                        <div class="formula">Next = argmin(|Current - Requestᵢ|)</div>
+                        <div class="formula-description">Select closest request to current head position</div>
+                    </div>
+                </div>
+
+                <div class="grid" style="margin-top: 15px;">
+                    <div class="algorithm-card">
+                        <h4>SCAN (Elevator)</h4>
+                        <div class="formula">Move in one direction to end, then reverse</div>
+                        <div class="formula">Movement = (End - Head) + (End - Min_Request)</div>
+                        <div class="formula-description">Goes to disk end before reversing</div>
+                    </div>
+                    <div class="algorithm-card">
+                        <h4>C-SCAN (Circular)</h4>
+                        <div class="formula">One direction only, jump from end to start</div>
+                        <div class="formula">Movement = (End - Head) + End + Max_Request</div>
+                        <div class="formula-description">More uniform wait time than SCAN</div>
+                    </div>
+                </div>
+
+                <div class="grid" style="margin-top: 15px;">
+                    <div class="algorithm-card">
+                        <h4>LOOK</h4>
+                        <div class="formula">Like SCAN but only goes to extreme request</div>
+                        <div class="formula">Movement = (Max_Request - Head) + (Max_Request - Min_Request)</div>
+                    </div>
+                    <div class="algorithm-card">
+                        <h4>C-LOOK</h4>
+                        <div class="formula">Like C-SCAN but only to extreme requests</div>
+                        <div class="formula">Jump from max request to min request</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Average Seek Time</h3>
+                <div class="formula-box">
+                    <div class="formula-name">Calculations</div>
+                    <div class="formula">Average Seek Time = Total Head Movement / Number of Requests</div>
+                    <div class="formula">Total Seek Time = Total Movement × Time per Cylinder</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- FILE SYSTEMS SECTION -->
+        <div class="section">
+            <h2 class="section-title">
+                <span class="icon">📁</span>
+                File Systems
+            </h2>
+
+            <div class="subsection">
+                <h3 class="subsection-title">File Allocation Methods</h3>
+                <div class="grid">
+                    <div class="algorithm-card">
+                        <h4>Contiguous Allocation</h4>
+                        <div class="formula">Starting Block + Length</div>
+                        <div class="formula-description">
+                            • Fast sequential and direct access<br>
+                            • Suffers from external fragmentation<br>
+                            • File size must be known in advance
+                        </div>
+                    </div>
+                    <div class="algorithm-card">
+                        <h4>Linked Allocation</h4>
+                        <div class="formula">Starting Block → Next Block → ... → NULL</div>
+                        <div class="formula-description">
+                            • No external fragmentation<br>
+                            • Poor direct access performance<br>
+                            • Pointer overhead in each block
+                        </div>
+                    </div>
+                </div>
+
+                <div class="algorithm-card" style="margin-top: 15px;">
+                    <h4>Indexed Allocation</h4>
+                    <div class="formula">Index Block → [Block Addresses]</div>
+                    <div class="grid">
+                        <div class="formula-box">
+                            <div class="formula-name">Small Files</div>
+                            <div class="formula">All pointers in one index block</div>
+                        </div>
+                        <div class="formula-box">
+                            <div class="formula-name">Large Files</div>
+                            <div class="formula">Linked index blocks</div>
+                            <div class="formula">Or multilevel index</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Free Space Management</h3>
+                <div class="grid">
+                    <div class="algorithm-card">
+                        <h4>Bit Vector</h4>
+                        <div class="formula">Bit[i] = 1 if block i is free, 0 if allocated</div>
+                        <div class="formula">Space Required = Disk Size / Block Size bits</div>
+                        <div class="example">
+                            <div class="example-title">📌 Example:</div>
+                            16 GB disk, 4 KB blocks<br>
+                            Blocks = 16 GB / 4 KB = 4M blocks<br>
+                            Bitmap = 4M bits = 512 KB
+                        </div>
+                    </div>
+                    <div class="algorithm-card">
+                        <h4>Linked List</h4>
+                        <div class="formula">Head pointer → Free Block → Free Block → ...</div>
+                        <div class="formula-description">
+                            Each free block contains pointer to next free block. 
+                            No wasted space but traversing is slow.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Disk Block Size Trade-off</h3>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Factor</th>
+                                <th>Small Block</th>
+                                <th>Large Block</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Internal Fragmentation</td>
+                                <td>Low</td>
+                                <td>High</td>
+                            </tr>
+                            <tr>
+                                <td>Transfer Rate</td>
+                                <td>Lower</td>
+                                <td>Higher</td>
+                            </tr>
+                            <tr>
+                                <td>I/O Overhead</td>
+                                <td>High (more I/O ops)</td>
+                                <td>Low</td>
+                            </tr>
+                            <tr>
+                                <td>Random Access</td>
+                                <td>Better for small files</td>
+                                <td>Worse for small files</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- I/O MANAGEMENT SECTION -->
+        <div class="section">
+            <h2 class="section-title">
+                <span class="icon">🔌</span>
+                I/O Management
+            </h2>
+
+            <div class="subsection">
+                <h3 class="subsection-title">I/O Control Methods</h3>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Method</th>
+                                <th>Description</th>
+                                <th>CPU Usage</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Programmed I/O</td>
+                                <td>CPU polls device status continuously</td>
+                                <td>Wasteful (busy waiting)</td>
+                            </tr>
+                            <tr>
+                                <td>Interrupt-Driven</td>
+                                <td>CPU does other work, device interrupts when ready</td>
+                                <td>Efficient</td>
+                            </tr>
+                            <tr>
+                                <td>DMA (Direct Memory Access)</td>
+                                <td>DMA controller transfers data, CPU interrupted only when done</td>
+                                <td>Most efficient for large transfers</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">I/O Buffering</h3>
+                <div class="grid">
+                    <div class="algorithm-card">
+                        <h4>Single Buffer</h4>
+                        <div class="formula-description">
+                            One buffer between user process and device. While process uses data in buffer, device can read next block.
+                        </div>
+                    </div>
+                    <div class="algorithm-card">
+                        <h4>Double Buffer</h4>
+                        <div class="formula-description">
+                            Two buffers alternate. Process uses one while device fills the other. Better throughput.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="algorithm-card" style="margin-top: 15px;">
+                    <h4>Circular Buffer</h4>
+                    <div class="formula-description">
+                        Multiple buffers in a ring. Accommodates speed differences between producer and consumer.
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">DMA Transfer</h3>
+                <div class="formula-box">
+                    <div class="formula-name">DMA Operation</div>
+                    <div class="steps">
+                        <div class="step">CPU sets up DMA: source, destination, count</div>
+                        <div class="step">DMA controller transfers data without CPU involvement</div>
+                        <div class="step">DMA interrupts CPU when transfer complete</div>
+                    </div>
+                    <div class="formula">Transfer Time = Data Size / Transfer Rate</div>
+                    <div class="variables">
+                        CPU free during transfer. Interrupt only at start and end.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PROTECTION & SECURITY SECTION -->
+        <div class="section">
+            <h2 class="section-title">
+                <span class="icon">🔐</span>
+                Protection & Security
+            </h2>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Access Matrix</h3>
+                <div class="formula-box">
+                    <div class="formula-name">Access Matrix Model</div>
+                    <div class="formula">Access[Domain, Object] = {set of access rights}</div>
+                    <div class="formula-description">
+                        Rows: Domains (protection domains)<br>
+                        Columns: Objects (files, devices, etc.)<br>
+                        Entry: Access rights (read, write, execute, etc.)
+                    </div>
+                </div>
+
+                <div class="grid" style="margin-top: 15px;">
+                    <div class="algorithm-card">
+                        <h4>Access Control List (ACL)</h4>
+                        <div class="formula">Each object has list of (domain, rights) pairs</div>
+                        <div class="formula-description">
+                            Column-wise decomposition of access matrix. 
+                            Easy to answer: "Who can access this object?"
+                        </div>
+                    </div>
+                    <div class="algorithm-card">
+                        <h4>Capability List</h4>
+                        <div class="formula">Each domain has list of (object, rights) pairs</div>
+                        <div class="formula-description">
+                            Row-wise decomposition of access matrix.
+                            Easy to answer: "What objects can this domain access?"
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Protection Rings</h3>
+                <div class="algorithm-card">
+                    <h4>x86 Protection Rings</h4>
+                    <div class="formula-description">
+                        • <strong>Ring 0:</strong> Kernel mode (highest privilege)<br>
+                        • <strong>Ring 1 & 2:</strong> Device drivers, system services<br>
+                        • <strong>Ring 3:</strong> User mode (lowest privilege)
+                    </div>
+                    <div class="note">
+                        <div class="note-title">💡 Privilege Check:</div>
+                        Process in ring i can only access resources at ring j where j ≥ i
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Summary Section -->
+        <div class="section" style="background: linear-gradient(135deg, rgba(0, 180, 216, 0.2), rgba(72, 202, 228, 0.15));">
+            <h2 class="section-title">
+                <span class="icon">📋</span>
+                Quick Reference Summary
+            </h2>
+            <div class="comparison-grid">
+                <div class="comparison-item">
+                    <h5>CPU Scheduling</h5>
+                    <p><strong>TAT:</strong> Completion - Arrival</p>
+                    <p><strong>WT:</strong> TAT - Burst Time</p>
+                    <p><strong>Response Time:</strong> First CPU - Arrival</p>
+                    <p><strong>Throughput:</strong> Processes / Time</p>
+                </div>
+                <div class="comparison-item">
+                    <h5>Paging</h5>
+                    <p><strong>Page#:</strong> Address / PageSize</p>
+                    <p><strong>Offset:</strong> Address mod PageSize</p>
+                    <p><strong>Physical:</strong> Frame × PageSize + Offset</p>
+                    <p><strong>EAT:</strong> (1-p)ma + p×PageFault</p>
+                </div>
+                <div class="comparison-item">
+                    <h5>Disk Scheduling</h5>
+                    <p><strong>Service Time:</strong> Seek + Rotation + Transfer</p>
+                    <p><strong>Avg Seek:</strong> Total Movement / Requests</p>
+                    <p><strong>SCAN:</strong> Go to end, reverse</p>
+                </div>
+                <div class="comparison-item">
+                    <h5>Deadlock</h5>
+                    <p><strong>4 Conditions:</strong> ME, Hold&Wait, No Preempt, Circular</p>
+                    <p><strong>Need:</strong> Max - Allocation</p>
+                    <p><strong>Safe State:</strong> Safe sequence exists</p>
+                </div>
+                <div class="comparison-item">
+                    <h5>Synchronization</h5>
+                    <p><strong>Semaphore:</strong> wait(S), signal(S)</p>
+                    <p><strong>Requirements:</strong> ME, Progress, Bounded Wait</p>
+                    <p><strong>Monitor:</strong> condition.wait/signal</p>
+                </div>
+                <div class="comparison-item">
+                    <h5>Virtual Memory</h5>
+                    <p><strong>Page Fault:</strong> Page not in memory</p>
+                    <p><strong>Thrashing:</strong> Excessive paging</p>
+                    <p><strong>Working Set:</strong> Recently used pages</p>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>📚 Operating Systems Formula Reference Sheet</p>
+            <p>Process Management • Scheduling • Memory • Synchronization • File Systems</p>
+        </footer>
+    </div>
+</body>
+</html>

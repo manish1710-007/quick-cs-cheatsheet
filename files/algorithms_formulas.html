@@ -1,0 +1,1919 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Algorithms - Formula Sheet</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0d0d0d 0%, #1a1a2e 50%, #2d1b4e 100%);
+            min-height: 100vh;
+            color: #e0e0e0;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            padding: 40px 20px;
+            background: linear-gradient(90deg, #f39c12, #e74c3c, #9b59b6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        header h1 {
+            font-size: 3em;
+            margin-bottom: 10px;
+            text-shadow: 0 0 30px rgba(243, 156, 18, 0.3);
+        }
+
+        header p {
+            font-size: 1.2em;
+            color: #8892b0;
+            -webkit-text-fill-color: #8892b0;
+        }
+
+        .section {
+            margin: 30px 0;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 15px;
+            padding: 25px;
+            border: 1px solid rgba(243, 156, 18, 0.2);
+            backdrop-filter: blur(10px);
+        }
+
+        .section h2 {
+            color: #f39c12;
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid rgba(243, 156, 18, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section h2::before {
+            content: '⚙️';
+        }
+
+        .subsection {
+            margin: 20px 0;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            border-left: 4px solid #e74c3c;
+        }
+
+        .subsection h3 {
+            color: #e74c3c;
+            font-size: 1.3em;
+            margin-bottom: 15px;
+        }
+
+        .formula-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 15px;
+        }
+
+        .formula-box {
+            background: linear-gradient(145deg, rgba(243, 156, 18, 0.1), rgba(155, 89, 182, 0.05));
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid rgba(243, 156, 18, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .formula-box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(243, 156, 18, 0.2);
+            border-color: #f39c12;
+        }
+
+        .formula-box h4 {
+            color: #f39c12;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        .formula {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 1.1em;
+            color: #2ecc71;
+            text-align: center;
+            margin: 10px 0;
+            border: 1px solid rgba(46, 204, 113, 0.2);
+        }
+
+        .formula-inline {
+            display: inline-block;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            color: #2ecc71;
+            margin: 2px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        th {
+            background: linear-gradient(90deg, rgba(243, 156, 18, 0.3), rgba(231, 76, 60, 0.2));
+            color: #fff;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        td {
+            padding: 12px 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        tr:hover {
+            background: rgba(243, 156, 18, 0.1);
+        }
+
+        .example {
+            background: linear-gradient(145deg, rgba(52, 152, 219, 0.1), rgba(155, 89, 182, 0.05));
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #3498db;
+            margin: 15px 0;
+        }
+
+        .example h4 {
+            color: #3498db;
+            margin-bottom: 10px;
+        }
+
+        .note {
+            background: linear-gradient(145deg, rgba(155, 89, 182, 0.1), rgba(142, 68, 173, 0.05));
+            padding: 15px 20px;
+            border-radius: 10px;
+            border-left: 4px solid #9b59b6;
+            margin: 15px 0;
+        }
+
+        .note h4 {
+            color: #bb8fce;
+            margin-bottom: 8px;
+        }
+
+        .diagram {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            font-family: 'Courier New', monospace;
+            margin: 15px 0;
+            overflow-x: auto;
+        }
+
+        .diagram pre {
+            color: #2ecc71;
+            font-size: 0.9em;
+        }
+
+        .code-block {
+            background: #0d1117;
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid #30363d;
+            margin: 15px 0;
+            overflow-x: auto;
+        }
+
+        .code-block code {
+            color: #c9d1d9;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95em;
+        }
+
+        .code-block .keyword {
+            color: #ff7b72;
+        }
+
+        .code-block .comment {
+            color: #8b949e;
+        }
+
+        .code-block .function {
+            color: #d2a8ff;
+        }
+
+        .quick-ref {
+            background: linear-gradient(145deg, rgba(243, 156, 18, 0.15), rgba(46, 204, 113, 0.1));
+            padding: 25px;
+            border-radius: 15px;
+            margin-top: 30px;
+            border: 2px solid rgba(243, 156, 18, 0.3);
+        }
+
+        .quick-ref h3 {
+            color: #f39c12;
+            font-size: 1.5em;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .quick-ref-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+        }
+
+        .quick-ref-item {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 15px;
+            border-radius: 8px;
+        }
+
+        .quick-ref-item strong {
+            color: #2ecc71;
+        }
+
+        .complexity-table {
+            margin: 20px 0;
+        }
+
+        .complexity-table th:nth-child(2),
+        .complexity-table th:nth-child(3),
+        .complexity-table th:nth-child(4) {
+            text-align: center;
+        }
+
+        .complexity-table td:nth-child(2),
+        .complexity-table td:nth-child(3),
+        .complexity-table td:nth-child(4) {
+            text-align: center;
+            font-family: 'Courier New', monospace;
+        }
+
+        .best {
+            color: #2ecc71;
+        }
+
+        .average {
+            color: #f39c12;
+        }
+
+        .worst {
+            color: #e74c3c;
+        }
+
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .comparison-card {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            border-radius: 10px;
+            border-top: 3px solid #f39c12;
+        }
+
+        .comparison-card h4 {
+            color: #f39c12;
+            margin-bottom: 15px;
+        }
+
+        ul {
+            margin-left: 20px;
+            margin-top: 10px;
+        }
+
+        li {
+            margin: 5px 0;
+        }
+
+        .step-list {
+            counter-reset: step-counter;
+            list-style: none;
+            margin-left: 0;
+        }
+
+        .step-list li {
+            counter-increment: step-counter;
+            margin: 10px 0;
+            padding-left: 35px;
+            position: relative;
+        }
+
+        .step-list li::before {
+            content: counter(step-counter);
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 25px;
+            height: 25px;
+            background: linear-gradient(135deg, #f39c12, #e74c3c);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+
+        .pseudocode {
+            background: #1e1e1e;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #f39c12;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+        }
+
+        .pseudocode .keyword {
+            color: #569cd6;
+            font-weight: bold;
+        }
+
+        .pseudocode .comment {
+            color: #6a9955;
+        }
+
+        .pseudocode .function {
+            color: #dcdcaa;
+        }
+
+        .pseudocode .string {
+            color: #ce9178;
+        }
+
+        .pseudocode .number {
+            color: #b5cea8;
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px;
+            margin-top: 40px;
+            color: #8892b0;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .recurrence-box {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+        }
+
+        .recurrence-box .recurrence {
+            color: #e74c3c;
+            font-family: 'Courier New', monospace;
+            font-size: 1em;
+        }
+
+        .recurrence-box .solution {
+            color: #2ecc71;
+            font-family: 'Courier New', monospace;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Algorithms</h1>
+            <p>Comprehensive Formula Sheet & Reference Guide</p>
+        </header>
+
+        <!-- Algorithm Analysis -->
+        <section class="section">
+            <h2>Algorithm Analysis</h2>
+            
+            <div class="subsection">
+                <h3>Asymptotic Notations</h3>
+                <div class="formula-grid">
+                    <div class="formula-box">
+                        <h4>Big-O (Upper Bound)</h4>
+                        <div class="formula">f(n) = O(g(n))</div>
+                        <p>∃c > 0, n₀ > 0: f(n) ≤ c·g(n) ∀n ≥ n₀</p>
+                        <p><em>"Worst case - grows no faster than"</em></p>
+                    </div>
+                    <div class="formula-box">
+                        <h4>Big-Ω (Lower Bound)</h4>
+                        <div class="formula">f(n) = Ω(g(n))</div>
+                        <p>∃c > 0, n₀ > 0: f(n) ≥ c·g(n) ∀n ≥ n₀</p>
+                        <p><em>"Best case - grows at least as fast as"</em></p>
+                    </div>
+                    <div class="formula-box">
+                        <h4>Big-Θ (Tight Bound)</h4>
+                        <div class="formula">f(n) = Θ(g(n))</div>
+                        <p>f(n) = O(g(n)) AND f(n) = Ω(g(n))</p>
+                        <p><em>"Average case - grows exactly as fast as"</em></p>
+                    </div>
+                    <div class="formula-box">
+                        <h4>Little-o (Strict Upper)</h4>
+                        <div class="formula">f(n) = o(g(n))</div>
+                        <p>lim(n→∞) f(n)/g(n) = 0</p>
+                        <p><em>"Grows strictly slower than"</em></p>
+                    </div>
+                    <div class="formula-box">
+                        <h4>Little-ω (Strict Lower)</h4>
+                        <div class="formula">f(n) = ω(g(n))</div>
+                        <p>lim(n→∞) f(n)/g(n) = ∞</p>
+                        <p><em>"Grows strictly faster than"</em></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3>Complexity Hierarchy (Fastest to Slowest)</h3>
+                <table>
+                    <tr>
+                        <th>Complexity</th>
+                        <th>Name</th>
+                        <th>Example</th>
+                        <th>n=1000</th>
+                    </tr>
+                    <tr><td class="best">O(1)</td><td>Constant</td><td>Array access</td><td>1</td></tr>
+                    <tr><td class="best">O(log n)</td><td>Logarithmic</td><td>Binary search</td><td>~10</td></tr>
+                    <tr><td class="best">O(√n)</td><td>Square Root</td><td>Primality test</td><td>~32</td></tr>
+                    <tr><td class="average">O(n)</td><td>Linear</td><td>Linear search</td><td>1000</td></tr>
+                    <tr><td class="average">O(n log n)</td><td>Linearithmic</td><td>Merge sort</td><td>~10,000</td></tr>
+                    <tr><td class="average">O(n²)</td><td>Quadratic</td><td>Bubble sort</td><td>1,000,000</td></tr>
+                    <tr><td class="average">O(n³)</td><td>Cubic</td><td>Matrix multiply</td><td>10⁹</td></tr>
+                    <tr><td class="worst">O(2ⁿ)</td><td>Exponential</td><td>Subset generation</td><td>10³⁰¹</td></tr>
+                    <tr><td class="worst">O(n!)</td><td>Factorial</td><td>Permutations</td><td>~∞</td></tr>
+                </table>
+            </div>
+
+            <div class="subsection">
+                <h3>Master Theorem</h3>
+                <div class="formula-box">
+                    <h4>General Form</h4>
+                    <div class="formula">T(n) = aT(n/b) + f(n)</div>
+                    <p>Where: a ≥ 1 (subproblems), b > 1 (size reduction), f(n) = work to divide/combine</p>
+                </div>
+                <div class="formula-grid">
+                    <div class="formula-box">
+                        <h4>Case 1: f(n) = O(n^(log_b a - ε))</h4>
+                        <div class="formula">T(n) = Θ(n^(log_b a))</div>
+                        <p>Work at leaves dominates</p>
+                        <div class="example">
+                            <h4>Example:</h4>
+                            <p>T(n) = 2T(n/2) + n⁰ = 2T(n/2) + 1</p>
+                            <p>a=2, b=2, log₂2 = 1, f(n)=1=O(n^0.5)</p>
+                            <p>T(n) = Θ(n)</p>
+                        </div>
+                    </div>
+                    <div class="formula-box">
+                        <h4>Case 2: f(n) = Θ(n^(log_b a) · logᵏ n)</h4>
+                        <div class="formula">T(n) = Θ(n^(log_b a) · log^(k+1) n)</div>
+                        <p>Work is evenly distributed</p>
+                        <div class="example">
+                            <h4>Example:</h4>
+                            <p>T(n) = 2T(n/2) + n</p>
+                            <p>a=2, b=2, log₂2 = 1, f(n)=n=Θ(n¹log⁰n)</p>
+                            <p>T(n) = Θ(n log n)</p>
+                        </div>
+                    </div>
+                    <div class="formula-box">
+                        <h4>Case 3: f(n) = Ω(n^(log_b a + ε))</h4>
+                        <div class="formula">T(n) = Θ(f(n))</div>
+                        <p>Work at root dominates (if regularity condition holds)</p>
+                        <div class="example">
+                            <h4>Example:</h4>
+                            <p>T(n) = 2T(n/2) + n²</p>
+                            <p>a=2, b=2, log₂2 = 1, f(n)=n²=Ω(n^1.5)</p>
+                            <p>T(n) = Θ(n²)</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3>Common Recurrence Relations</h3>
+                <div class="formula-grid">
+                    <div class="recurrence-box">
+                        <p class="recurrence">T(n) = T(n-1) + O(1)</p>
+                        <p class="solution">→ T(n) = O(n)</p>
+                        <p><em>Linear recursion (factorial, linear search)</em></p>
+                    </div>
+                    <div class="recurrence-box">
+                        <p class="recurrence">T(n) = T(n-1) + O(n)</p>
+                        <p class="solution">→ T(n) = O(n²)</p>
+                        <p><em>Selection sort, insertion sort</em></p>
+                    </div>
+                    <div class="recurrence-box">
+                        <p class="recurrence">T(n) = 2T(n-1) + O(1)</p>
+                        <p class="solution">→ T(n) = O(2ⁿ)</p>
+                        <p><em>Recursive Fibonacci (naive)</em></p>
+                    </div>
+                    <div class="recurrence-box">
+                        <p class="recurrence">T(n) = T(n/2) + O(1)</p>
+                        <p class="solution">→ T(n) = O(log n)</p>
+                        <p><em>Binary search</em></p>
+                    </div>
+                    <div class="recurrence-box">
+                        <p class="recurrence">T(n) = T(n/2) + O(n)</p>
+                        <p class="solution">→ T(n) = O(n)</p>
+                        <p><em>Quickselect (average)</em></p>
+                    </div>
+                    <div class="recurrence-box">
+                        <p class="recurrence">T(n) = 2T(n/2) + O(n)</p>
+                        <p class="solution">→ T(n) = O(n log n)</p>
+                        <p><em>Merge sort, quicksort (average)</em></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3>Amortized Analysis</h3>
+                <div class="formula-grid">
+                    <div class="formula-box">
+                        <h4>Aggregate Method</h4>
+                        <div class="formula">Total cost / n operations = Amortized cost</div>
+                        <p>Compute total cost of n operations, divide by n</p>
+                    </div>
+                    <div class="formula-box">
+                        <h4>Accounting Method</h4>
+                        <p>Assign different "charges" to operations</p>
+                        <p>Bank credits for future expensive operations</p>
+                        <div class="formula">Amortized cost = Actual cost + Credit</div>
+                    </div>
+                    <div class="formula-box">
+                        <h4>Dynamic Array Amortized</h4>
+                        <p>Insertion: O(1) amortized</p>
+                        <p>Although resizing is O(n), it happens rarely</p>
+                        <div class="formula">Total cost: 1 + 2 + 4 + ... + n ≈ 2n</div>
+                        <div class="formula">Amortized: 2n/n = O(1)</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sorting Algorithms -->
+        <section class="section">
+            <h2>Sorting Algorithms</h2>
+            
+            <div class="subsection">
+                <h3>Comparison-Based Sorting Complexity</h3>
+                <table class="complexity-table">
+                    <tr>
+                        <th>Algorithm</th>
+                        <th>Best</th>
+                        <th>Average</th>
+                        <th>Worst</th>
+                        <th>Space</th>
+                        <th>Stable</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Bubble Sort</strong></td>
+                        <td class="best">O(n)</td>
+                        <td class="average">O(n²)</td>
+                        <td class="worst">O(n²)</td>
+                        <td>O(1)</td>
+                        <td>Yes</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Selection Sort</strong></td>
+                        <td class="average">O(n²)</td>
+                        <td class="average">O(n²)</td>
+                        <td class="worst">O(n²)</td>
+                        <td>O(1)</td>
+                        <td>No</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Insertion Sort</strong></td>
+                        <td class="best">O(n)</td>
+                        <td class="average">O(n²)</td>
+                        <td class="worst">O(n²)</td>
+                        <td>O(1)</td>
+                        <td>Yes</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Merge Sort</strong></td>
+                        <td class="best">O(n log n)</td>
+                        <td class="best">O(n log n)</td>
+                        <td class="best">O(n log n)</td>
+                        <td>O(n)</td>
+                        <td>Yes</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Quick Sort</strong></td>
+                        <td class="best">O(n log n)</td>
+                        <td class="best">O(n log n)</td>
+                        <td class="worst">O(n²)</td>
+                        <td>O(log n)</td>
+                        <td>No*</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Heap Sort</strong></td>
+                        <td class="best">O(n log n)</td>
+                        <td class="best">O(n log n)</td>
+                        <td class="best">O(n log n)</td>
+                        <td>O(1)</td>
+                        <td>No</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Tree Sort</strong></td>
+                        <td class="best">O(n log n)</td>
+                        <td class="best">O(n log n)</td>
+                        <td class="worst">O(n²)</td>
+                        <td>O(n)</td>
+                        <td>Yes</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Shell Sort</strong></td>
+                        <td class="average">O(n log n)</td>
+                        <td class="average">O(n^1.25)</td>
+                        <td class="worst">O(n²)</td>
+                        <td>O(1)</td>
+                        <td>No</td>
+                    </tr>
+                </table>
+                <p><em>*Quick sort can be made stable with extra space O(n)</em></p>
+            </div>
+
+            <div class="subsection">
+                <h3>Non-Comparison Sorting</h3>
+                <table class="complexity-table">
+                    <tr>
+                        <th>Algorithm</th>
+                        <th>Time</th>
+                        <th>Space</th>
+                        <th>Range</th>
+                        <th>Stable</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Counting Sort</strong></td>
+                        <td class="best">O(n + k)</td>
+                        <td>O(n + k)</td>
+                        <td>k = max value</td>
+                        <td>Yes</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Radix Sort</strong></td>
+                        <td class="best">O(d(n + k))</td>
+                        <td>O(n + k)</td>
+                        <td>d = digits, k = base</td>
+                        <td>Yes</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Bucket Sort</strong></td>
+                        <td class="best">O(n + k)</td>
+                        <td>O(n + k)</td>
+                        <td>Uniform distribution</td>
+                        <td>Yes</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="subsection">
+                <h3>Sorting Algorithm Details</h3>
+                <div class="formula-grid">
+                    <div class="formula-box">
+                        <h4>Bubble Sort</h4>
+                        <div class="pseudocode">
+<span class="keyword">for</span> i = 0 <span class="keyword">to</span> n-1:<br>
+&nbsp;&nbsp;<span class="keyword">for</span> j = 0 <span class="keyword">to</span> n-i-1:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span> arr[j] > arr[j+1]:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;swap(arr[j], arr[j+1])
+                        </div>
+                        <p><strong>Inversions:</strong> Maximum n(n-1)/2</p>
+                        <p><strong>Swaps:</strong> Equal to number of inversions</p>
+                    </div>
+                    <div class="formula-box">
+                        <h4>Selection Sort</h4>
+                        <div class="pseudocode">
+<span class="keyword">for</span> i = 0 <span class="keyword">to</span> n-1:<br>
+&nbsp;&nbsp;min_idx = i<br>
+&nbsp;&nbsp;<span class="keyword">for</span> j = i+1 <span class="keyword">to</span> n:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span> arr[j] < arr[min_idx]:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;min_idx = j<br>
+&nbsp;&nbsp;swap(arr[i], arr[min_idx])
+                        </div>
+                        <p><strong>Swaps:</strong> Always exactly n-1</p>
+                    </div>
+                    <div class="formula-box">
+                        <h4>Insertion Sort</h4>
+                        <div class="pseudocode">
+<span class="keyword">for</span> i = 1 <span class="keyword">to</span> n-1:<br>
+&nbsp;&nbsp;key = arr[i]<br>
+&nbsp;&nbsp;j = i - 1<br>
+&nbsp;&nbsp;<span class="keyword">while</span> j >= 0 <span class="keyword">and</span> arr[j] > key:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;arr[j+1] = arr[j]<br>
+&nbsp;&nbsp;&nbsp;&nbsp;j = j - 1<br>
+&nbsp;&nbsp;arr[j+1] = key
+                        </div>
+                        <p><strong>Best for:</strong> Nearly sorted arrays, small datasets</p>
+                    </div>
+                    <div class="formula-box">
+                        <h4>Merge Sort</h4>
+                        <div class="pseudocode">
+<span class="function">MergeSort</span>(arr, l, r):<br>
+&nbsp;&nbsp;<span class="keyword">if</span> l < r:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;m = (l + r) / 2<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="function">MergeSort</span>(arr, l, m)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="function">MergeSort</span>(arr, m+1, r)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="function">Merge</span>(arr, l, m, r)
+                        </div>
+                        <p><strong>Stable:</strong> Yes, guaranteed O(n log n)</p>
+                    </div>
+                    <div class="formula-box">
+                        <h4>Quick Sort</h4>
+                        <div class="pseudocode">
+<span class="function">QuickSort</span>(arr, low, high):<br>
+&nbsp;&nbsp;<span class="keyword">if</span> low < high:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;pi = <span class="function">Partition</span>(arr, low, high)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="function">QuickSort</span>(arr, low, pi-1)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="function">QuickSort</span>(arr, pi+1, high)
+                        </div>
+                        <p><strong>Pivot strategies:</strong> First, Last, Random, Median-of-3</p>
+                    </div>
+                    <div class="formula-box">
+                        <h4>Heap Sort</h4>
+                        <div class="pseudocode">
+<span class="function">BuildMaxHeap</span>(arr) <span class="comment">// O(n)</span><br>
+<span class="keyword">for</span> i = n-1 <span class="keyword">downto</span> 1:<br>
+&nbsp;&nbsp;swap(arr[0], arr[i])<br>
+&nbsp;&nbsp;<span class="function">Heapify</span>(arr, 0, i) <span class="comment">// O(log n)</span>
+                        </div>
+                        <p><strong>In-place:</strong> Yes, not stable</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3>Lower Bound for Comparison Sorting</h3>
+                <div class="formula-box">
+                    <h4>Decision Tree Analysis</h4>
+                    <div class="formula">Minimum comparisons = ⌈log₂(n!)⌉ ≈ n log n - 1.44n</div>
+                    <p>Using Stirling's approximation: log₂(n!) = Θ(n log n)</p>
+                    <p><strong>Conclusion:</strong> No comparison-based sort can do better than Ω(n log n)</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Searching Algorithms -->
+        <section class="section">
+            <h2>Searching Algorithms</h2>
+            
+            <div class="subsection">
+                <h3>Search Algorithm Complexity</h3>
+                <table class="complexity-table">
+                    <tr>
+                        <th>Algorithm</th>
+                        <th>Best</th>
+                        <th>Average</th>
+                        <th>Worst</th>
+                        <th>Space</th>
+                        <th>Condition</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Linear Search</strong></td>
+                        <td class="best">O(1)</td>
+                        <td class="average">O(n)</td>
+                        <td class="worst">O(n)</td>
+                        <td>O(1)</td>
+                        <td>None</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Binary Search</strong></td>
+                        <td class="best">O(1)</td>
+                        <td class="best">O(log n)</td>
+                        <td class="best">O(log n)</td>
+                        <td>O(1)</td>
+                        <td>Sorted array</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Jump Search</strong></td>
+                        <td class="best">O(1)</td>
+                        <td class="average">O(√n)</td>
+                        <td class="average">O(√n)</td>
+                        <td>O(1)</td>
+                        <td>Sorted array</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Interpolation Search</strong></td>
+                        <td class="best">O(1)</td>
+                        <td class="best">O(log log n)</td>
+                        <td class="worst">O(n)</td>
+                        <td>O(1)</td>
+                        <td>Sorted, uniform</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Exponential Search</strong></td>
+                        <td class="best">O(1)</td>
+                        <td class="best">O(log n)</td>
+                        <td class="best">O(log n)</td>
+                        <td>O(1)</td>
+                        <td>Sorted, unbounded</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Ternary Search</strong></td>
+                        <td class="best">O(1)</td>
+                        <td class="best">O(log₃ n)</td>
+                        <td class="best">O(log₃ n)</td>
+                        <td>O(1)</td>
+                        <td>Sorted array</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="subsection">
+                <h3>Binary Search Variants</h3>
+                <div class="formula-grid">
+                    <div class="formula-box">
+                        <h4>Standard Binary Search</h4>
+                        <div class="pseudocode">
+<span class="keyword">while</span> low <= high:<br>
+&nbsp;&nbsp;mid = low + (high - low) / 2<br>
+&nbsp;&nbsp;<span class="keyword">if</span> arr[mid] == target: <span class="keyword">return</span> mid<br>
+&nbsp;&nbsp;<span class="keyword">elif</span> arr[mid] < target: low = mid + 1<br>
+&nbsp;&nbsp;<span class="keyword">else</span>: high = mid - 1
+                        </div>
+                        <p><strong>Note:</strong> Use low + (high-low)/2 to avoid overflow</p>
+                    </div>
+                    <div class="formula-box">
+                        <h4>Lower Bound (First ≥ target)</h4>
+                        <div class="pseudocode">
+<span class="keyword">while</span> low < high:<br>
+&nbsp;&nbsp;mid = low + (high - low) / 2<br>
+&nbsp;&nbsp;<span class="keyword">if</span> arr[mid] >= target: high = mid<br>
+&nbsp;&nbsp;<span class="keyword">else</span>: low = mid + 1<br>
+<span class="keyword">return</span> low
+                        </div>
+                        <p>Finds first position where element ≥ target</p>
+                    </div>
+                    <div class="formula-box">
+                        <h4>Upper Bound (First > target)</h4>
+                        <div class="pseudocode">
+<span class="keyword">while</span> low < high:<br>
+&nbsp;&nbsp;mid = low + (high - low) / 2<br>
+&nbsp;&nbsp;<span class="keyword">if</span> arr[mid] > target: high = mid<br>
+&nbsp;&nbsp;<span class="keyword">else</span>: low = mid + 1<br>
+<span class="keyword">return</span> low
+                        </div>
+                        <p>Finds first position where element > target</p>
+                    </div>
+                    <div class="formula-box">
+                        <h4>Find Peak Element</h4>
+                        <div class="pseudocode">
+<span class="keyword">while</span> low < high:<br>
+&nbsp;&nbsp;mid = low + (high - low) / 2<br>
+&nbsp;&nbsp;<span class="keyword">if</span> arr[mid] > arr[mid+1]: high = mid<br>
+&nbsp;&nbsp;<span class="keyword">else</span>: low = mid + 1<br>
+<span class="keyword">return</span> low
+                        </div>
+                        <p>Finds a peak (not necessarily global max)</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3>Hash Table Operations</h3>
+                <div class="formula-grid">
+                    <div class="formula-box">
+                        <h4>Hash Table Complexity</h4>
+                        <table>
+                            <tr><th>Operation</th><th>Average</th><th>Worst</th></tr>
+                            <tr><td>Search</td><td class="best">O(1)</td><td class="worst">O(n)</td></tr>
+                            <tr><td>Insert</td><td class="best">O(1)</td><td class="worst">O(n)</td></tr>
+                            <tr><td>Delete</td><td class="best">O(1)</td><td class="worst">O(n)</td></tr>
+                        </table>
+                        <p>Worst case: all keys hash to same bucket</p>
+                    </div>
+                    <div class="formula-box">
+                        <h4>Collision Resolution</h4>
+                        <p><strong>Chaining:</strong> Linked list per bucket</p>
+                        <p><strong>Open Addressing:</strong></p>
+                        <ul>
+                            <li>Linear: h(k,i) = (h'(k) + i) mod m</li>
+                            <li>Quadratic: h(k,i) = (h'(k) + c₁i + c₂i²) mod m</li>
+                            <li>Double: h(k,i) = (h₁(k) + i·h₂(k)) mod m</li>
+                        </ul>
+                    </div>
+                    <div class="formula-box">
+                        <h4>Load Factor</h4>
+                        <div class="formula">α = n/m (keys/slots)</div>
+                        <p>Expected probes for successful search:</p>
+                        <div class="formula">Chaining: 1 + α/2</div>
+                        <div class="formula">Linear probing: (1 + 1/(1-α))/2</div>
+                        <p>Keep α < 0.7 for good performance</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Dynamic Programming -->
+        <section class="section">
+            <h2>Dynamic Programming</h2>
+            
+            <div class="subsection">
+                <h3>DP Fundamentals</h3>
+                <div class="formula-grid">
+                    <div class="formula-box">
+                        <h4>When to Use DP</h4>
+                        <ul>
+                            <li><strong>Optimal Substructure:</strong> Optimal solution contains optimal solutions to subproblems</li>
+                            <li><strong>Overlapping Subproblems:</strong> Same subproblems solved multiple times</li>
+                        </ul>
+                    </div>
+                    <div class="formula-box">
+                        <h4>DP vs Other Techniques</h4>
+                        <table>
+                            <tr><th>Technique</th><th>Subproblems</th></tr>
+                            <tr><td>Divide & Conquer</td><td>Non-overlapping</td></tr>
+                            <tr><td>Dynamic Programming</td><td>Overlapping</td></tr>
+                            <tr><td>Greedy</td><td>No backtracking</td></tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3>Classic DP Problems</h3>
+                <div class="formula-grid">
+                    <div class="formula-box">
+                        <h4>Fibonacci Numbers</h4>
+                        <div class="formula">F(n) = F(n-1) + F(n-2)</div>
+                        <div class="pseudocode">
+<span class="comment">// Bottom-up DP</span><br>
+dp[0] = 0, dp[1] = 1<br>
+<span class="keyword">for</span> i = 2 <span class="keyword">to</span> n:<br>
+&nbsp;&nbsp;dp[i] = dp[i-1] + dp[i-2]
+                        </div>
+                        <p><strong>Space optimization:</strong> O(n) → O(1)</p>
+                    </div>
+                    <div class="formula-box">
+                        <h4>Longest Common Subsequence (LCS)</h4>
+                        <div class="formula">If X[i] == Y[j]: dp[i][j] = dp[i-1][j-1] + 1</div>
+                        <div class="formula">Else: dp[i][j] = max(dp[i-1][j], dp[i][j-1])</div>
+                        <p><strong>Time:</strong> O(mn), <strong>Space:</strong> O(mn)</p>
+                        <p><strong>Space optimization:</strong> O(min(m,n))</p>
+                    </div>
+                    <div class="formula-box">
+                        <h4>0/1 Knapsack Problem</h4>
+                        <div class="formula">dp[i][w] = max(dp[i-1][w], dp[i-1][w-wᵢ] + vᵢ)</div>
+                        <p>where wᵢ ≤ w (item i can fit)</p>
+                        <p><strong>Time:</strong> O(nW), <strong>Space:</strong> O(nW) → O(W)</p>
+                        <div class="example">
+                            <h4>Example:</h4>
+                            <p>n=3 items, W=50</p>
+                            <p>Weights: [10, 20, 30], Values: [60, 100, 120]</p>
+                            <p>Optimal: Items 1,2 → Value = 160</p>
+                        </div>
+                    </div>
+                    <div class="formula-box">
+                        <h4>Unbounded Knapsack</h4>
+                        <div class="formula">dp[w] = max(dp[w], dp[w-wᵢ] + vᵢ)</div>
+                        <p>Items can be used multiple times</p>
+                        <p><strong>Time:</strong> O(nW), <strong>Space:</strong> O(W)</p>
+                    </div>
+                    <div class="formula-box">
+                        <h4>Longest Increasing Subsequence (LIS)</h4>
+                        <div class="formula">dp[i] = max(dp[j] + 1) for all j < i where arr[j] < arr[i]</div>
+                        <p><strong>DP Time:</strong> O(n²)</p>
+                        <p><strong>Binary Search:</strong> O(n log n)</p>
+                    </div>
+                    <div class="formula-box">
+                        <h4>Edit Distance</h4>
+                        <div class="formula">If s1[i] == s2[j]: dp[i][j] = dp[i-1][j-1]</div>
+                        <div class="formula">Else: dp[i][j] = 1 + min(dp[i-1][j], dp[i][j-1], dp[i-1][j-1])</div>
+                        <p>Operations: Insert, Delete, Replace</p>
+                        <p><strong>Time:</strong> O(mn)</p>
+                    </div>
+                    <div class="formula-box">
+                        <h4>Matrix Chain Multiplication</h4>
+                        <div class="formula">dp[i][j] = min(dp[i][k] + dp[k+1][j] + p[i-1]·p[k]·p[j])</div>
+                        <p>for k from i to j-1</p>
+                        <p><strong>Time:</strong> O(n³), <strong>Space:</strong> O(n²)</p>
+                    </div>
+                    <div class="formula-box">
+                        <h4>Coin Change</h4>
+                        <div class="formula">dp[amount] = min(dp[amount], dp[amount - coin] + 1)</div>
+                        <p><strong>Min coins:</strong> O(amount × n_coins)</p>
+                        <div class="formula">dp[amount] += dp[amount - coin]</div>
+                        <p><strong>Number of ways:</strong> O(amount × n_coins)</p>
+                    </div>
+                    <div class="formula-box">
+                        <h4>Subset Sum</h4>
+                        <div class="formula">dp[i][j] = dp[i-1][j] OR dp[i-1][j-arr[i]]</div>
+                        <p>Check if subset sums to target</p>
+                        <p><strong>Time:</strong> O(n × sum)</p>
+                    </div>
+                    <div class="formula-box">
+                        <h4>Rod Cutting</h4>
+                        <div class="formula">dp[n] = max(price[i] + dp[n-i-1]) for i = 0 to n-1</div>
+                        <p>Maximize profit from cutting rod</p>
+                        <p><strong>Time:</strong> O(n²)</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3>DP on Strings</h3>
+                <div class="formula-grid">
+                    <div class="formula-box">
+                        <h4>Longest Palindromic Subsequence</h4>
+                        <div class="formula">If s[i] == s[j]: dp[i][j] = 2 + dp[i+1][j-1]</div>
+                        <div class="formula">Else: dp[i][j] = max(dp[i+1][j], dp[i][j-1])</div>
+                        <p><strong>Time:</strong> O(n²)</p>
+                    </div>
+                    <div class="formula-box">
+                        <h4>Longest Common Substring</h4>
+                        <div class="formula">If X[i] == Y[j]: dp[i][j] = dp[i-1][j-1] + 1</div>
+                        <div class="formula">Else: dp[i][j] = 0</div>
+                        <p>Track maximum dp[i][j]</p>
+                        <p><strong>Time:</strong> O(mn)</p>
+                    </div>
+                    <div class="formula-box">
+                        <h4>Regular Expression Matching</h4>
+                        <div class="formula">dp[i][j] = dp[i-1][j-1] if match</div>
+                        <div class="formula">If p[j] == '*': dp[i][j] = dp[i][j-2] OR dp[i-1][j]</div>
+                        <p><strong>Time:</strong> O(mn)</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3>DP on Trees</h3>
+                <div class="formula-box">
+                    <h4>Maximum Independent Set on Tree</h4>
+                    <div class="formula">dp[node][0] = sum of max(dp[child][0], dp[child][1])</div>
+                    <div class="formula">dp[node][1] = node.value + sum(dp[child][0])</div>
+                    <p>dp[node][0] = node NOT included</p>
+                    <p>dp[node][1] = node included</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Greedy Algorithms -->
+        <section class="section">
+            <h2>Greedy Algorithms</h2>
+            
+            <div class="subsection">
+                <h3>Greedy Properties</h3>
+                <div class="formula-grid">
+                    <div class="formula-box">
+                        <h4>When Greedy Works</h4>
+                        <ul>
+                            <li><strong>Greedy Choice Property:</strong> Local optimal leads to global optimal</li>
+                            <li><strong>Optimal Substructure:</strong> Solution contains optimal solutions to subproblems</li>
+                        </ul>
+                    </div>
+                    <div class="formula-box">
+                        <h4>Greedy vs DP</h4>
+                        <table>
+                            <tr><th>Aspect</th><th>Greedy</th><th>DP</th></tr>
+                            <tr><td>Choice</td><td>Make once</td><td>Consider all</td></tr>
+                            <tr><td>Speed</td><td>Faster</td><td>Slower</td></tr>
+                            <tr><td>Correctness</td><td>Not always</td><td>Always</td></tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3>Classic Greedy Problems</h3>
+                <div class="formula-grid">
+                    <div class="formula-box">
+                        <h4>Activity Selection</h4>
+                        <p><strong>Goal:</strong> Max number of non-overlapping activities</p>
+                        <p><strong>Strategy:</strong> Sort by finish time, greedily select</p>
+                        <div class="pseudocode">
+Sort activities by finish time<br>
+selected = [first activity]<br>
+last_finish = finish[0]<br>
+<span class="keyword">for</span> i = 1 <span class="keyword">to</span> n:<br>
+&nbsp;&nbsp;<span class="keyword">if</span> start[i] >= last_finish:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;selected.add(i)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;last_finish = finish[i]
+                        </div>
+                        <p><strong>Time:</strong> O(n log n) for sorting</p>
+                    </div>
+                    <div class="formula-box">
+                        <h4>Fractional Knapsack</h4>
+                        <p><strong>Goal:</strong> Maximize value with weight limit</p>
+                        <p><strong>Strategy:</strong> Sort by value/weight ratio, take highest first</p>
+                        <div class="pseudocode">
+Sort items by (value/weight) descending<br>
+remaining = W, total_value = 0<br>
+<span class="keyword">for</span> <span class="keyword">each</span> item:<br>
+&nbsp;&nbsp;take = min(item.weight, remaining)<br>
+&nbsp;&nbsp;total_value += take * item.ratio<br>
+&nbsp;&nbsp;remaining -= take
+                        </div>
+                        <p><strong>Time:</strong> O(n log n)</p>
+                    </div>
+                    <div class="formula-box">
+                        <h4>Huffman Coding</h4>
+                        <p><strong>Goal:</strong> Optimal prefix-free encoding</p>
+                        <p><strong>Strategy:</strong> Build tree from bottom, combine lowest freq</p>
+                        <div class="formula">Total bits = Σ(freqᵢ × depthᵢ)</div>
+                        <p><strong>Time:</strong> O(n log n) with priority queue</p>
+                    </div>
+                    <div class="formula-box">
+                        <h4>Job Sequencing with Deadlines</h4>
+                        <p><strong>Goal:</strong> Maximize profit, each job takes 1 unit</p>
+                        <p><strong>Strategy:</strong> Sort by profit, place as late as possible</p>
+                        <div class="formula">Max jobs = min(n, max_deadline)</div>
+                        <p><strong>Time:</strong> O(n²) or O(n log n) with DSU</p>
+                    </div>
+                    <div class="formula-box">
+                        <h4>Minimum Spanning Tree</h4>
+                        <p><strong>Kruskal's:</strong> Sort edges, add if no cycle (Union-Find)</p>
+                        <p><strong>Prim's:</strong> Start from vertex, add minimum edge to tree</p>
+                        <p><strong>Time (Kruskal):</strong> O(E log E)</p>
+                        <p><strong>Time (Prim):</strong> O(E log V) with heap</p>
+                    </div>
+                    <div class="formula-box">
+                        <h4>Dijkstra's Shortest Path</h4>
+                        <p><strong>Goal:</strong> Shortest path from source (non-negative weights)</p>
+                        <p><strong>Strategy:</strong> Greedily pick minimum distance vertex</p>
+                        <p><strong>Time:</strong> O((V + E) log V) with heap</p>
+                        <div class="note">
+                            <h4>Important</h4>
+                            <p>Does NOT work with negative edges!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3>Greedy Exchange Argument</h3>
+                <div class="formula-box">
+                    <h4>Proving Greedy Correctness</h4>
+                    <p><strong>Exchange Argument:</strong> Show that any optimal solution can be transformed into the greedy solution without making it worse.</p>
+                    <p><strong>Steps:</strong></p>
+                    <ol class="step-list">
+                        <li>Assume an optimal solution different from greedy</li>
+                        <li>Find the first point where optimal differs from greedy</li>
+                        <li>Show that swapping to greedy choice doesn't hurt</li>
+                        <li>Conclude greedy is optimal</li>
+                    </ol>
+                </div>
+            </div>
+        </section>
+
+        <!-- Graph Algorithms -->
+        <section class="section">
+            <h2>Graph Algorithms</h2>
+            
+            <div class="subsection">
+                <h3>Graph Representations</h3>
+                <div class="formula-grid">
+                    <div class="formula-box">
+                        <h4>Adjacency Matrix</h4>
+                        <div class="formula">Space: O(V²)</div>
+                        <p>Edge check: O(1)</p>
+                        <p>Add edge: O(1)</p>
+                        <p>Find neighbors: O(V)</p>
+                        <p><strong>Best for:</strong> Dense graphs, frequent edge queries</p>
+                    </div>
+                    <div class="formula-box">
+                        <h4>Adjacency List</h4>
+                        <div class="formula">Space: O(V + E)</div>
+                        <p>Edge check: O(degree(v))</p>
+                        <p>Add edge: O(1)</p>
+                        <p>Find neighbors: O(degree(v))</p>
+                        <p><strong>Best for:</strong> Sparse graphs, traversals</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3>Graph Traversals</h3>
+                <div class="formula-grid">
+                    <div class="formula-box">
+                        <h4>Breadth-First Search (BFS)</h4>
+                        <div class="pseudocode">
+<span class="function">BFS</span>(start):<br>
+&nbsp;&nbsp;queue = [start], visited = {start}<br>
+&nbsp;&nbsp;<span class="keyword">while</span> queue:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;u = queue.pop_front()<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">for</span> v <span class="keyword">in</span> adj[u]:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span> v <span class="keyword">not in</span> visited:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;visited.add(v)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;queue.push_back(v)
+                        </div>
+                        <p><strong>Time:</strong> O(V + E), <strong>Space:</strong> O(V)</p>
+                        <p><strong>Uses:</strong> Shortest path (unweighted), level order</p>
+                    </div>
+                    <div class="formula-box">
+                        <h4>Depth-First Search (DFS)</h4>
+                        <div class="pseudocode">
+<span class="function">DFS</span>(u):<br>
+&nbsp;&nbsp;visited.add(u)<br>
+&nbsp;&nbsp;<span class="keyword">for</span> v <span class="keyword">in</span> adj[u]:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span> v <span class="keyword">not in</span> visited:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="function">DFS</span>(v)
+                        </div>
+                        <p><strong>Time:</strong> O(V + E), <strong>Space:</strong> O(V)</p>
+                        <p><strong>Uses:</strong> Cycle detection, topological sort, SCC</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3>Shortest Path Algorithms</h3>
+                <table class="complexity-table">
+                    <tr>
+                        <th>Algorithm</th>
+                        <th>Time</th>
+                        <th>Weights</th>
+                        <th>Graph Type</th>
+                    </tr>
+                    <tr>
+                        <td><strong>BFS</strong></td>
+                        <td class="best">O(V + E)</td>
+                        <td>Unweighted</td>
+                        <td>Any</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Dijkstra</strong></td>
+                        <td class="average">O((V+E) log V)</td>
+                        <td>Non-negative</td>
+                        <td>Any</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Bellman-Ford</strong></td>
+                        <td class="worst">O(V·E)</td>
+                        <td>Any</td>
+                        <td>Any</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Floyd-Warshall</strong></td>
+                        <td class="worst">O(V³)</td>
+                        <td>Any</td>
+                        <td>All pairs</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Johnson's</strong></td>
+                        <td class="average">O(V² log V + V·E)</td>
+                        <td>Any</td>
+                        <td>All pairs</td>
+                    </tr>
+                </table>
+
+                <div class="formula-grid">
+                    <div class="formula-box">
+                        <h4>Dijkstra's Algorithm</h4>
+                        <div class="pseudocode">
+<span class="function">Dijkstra</span>(source):<br>
+&nbsp;&nbsp;dist[source] = 0, others = ∞<br>
+&nbsp;&nbsp;pq = priority_queue({0, source})<br>
+&nbsp;&nbsp;<span class="keyword">while</span> pq:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;d, u = pq.pop()<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span> d > dist[u]: <span class="keyword">continue</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">for</span> v, w <span class="keyword">in</span> adj[u]:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span> dist[u] + w < dist[v]:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dist[v] = dist[u] + w<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pq.push({dist[v], v})
+                        </div>
+                    </div>
+                    <div class="formula-box">
+                        <h4>Bellman-Ford Algorithm</h4>
+                        <div class="pseudocode">
+<span class="function">BellmanFord</span>(source):<br>
+&nbsp;&nbsp;dist[source] = 0, others = ∞<br>
+&nbsp;&nbsp;<span class="keyword">for</span> i = 1 <span class="keyword">to</span> V-1:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">for</span> <span class="keyword">each</span> edge (u, v, w):<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span> dist[u] + w < dist[v]:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dist[v] = dist[u] + w<br>
+&nbsp;&nbsp;<span class="comment">// Check for negative cycle</span><br>
+&nbsp;&nbsp;<span class="keyword">for</span> <span class="keyword">each</span> edge (u, v, w):<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span> dist[u] + w < dist[v]:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span> "Negative cycle"
+                        </div>
+                    </div>
+                    <div class="formula-box">
+                        <h4>Floyd-Warshall Algorithm</h4>
+                        <div class="pseudocode">
+<span class="comment">// Initialize dist[i][j] = weight(i,j) or ∞</span><br>
+<span class="keyword">for</span> k = 1 <span class="keyword">to</span> n:<br>
+&nbsp;&nbsp;<span class="keyword">for</span> i = 1 <span class="keyword">to</span> n:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">for</span> j = 1 <span class="keyword">to</span> n:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dist[i][j] = min(dist[i][j],<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dist[i][k] + dist[k][j])
+                        </div>
+                        <p>All-pairs shortest paths</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3>Minimum Spanning Tree (MST)</h3>
+                <div class="formula-grid">
+                    <div class="formula-box">
+                        <h4>Kruskal's Algorithm</h4>
+                        <div class="pseudocode">
+Sort edges by weight<br>
+<span class="keyword">for</span> <span class="keyword">each</span> edge (u, v, w) <span class="keyword">in</span> sorted:<br>
+&nbsp;&nbsp;<span class="keyword">if</span> find(u) != find(v):<br>
+&nbsp;&nbsp;&nbsp;&nbsp;union(u, v)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;add edge to MST
+                        </div>
+                        <p><strong>Time:</strong> O(E log E) or O(E α(V))</p>
+                        <p>Uses Union-Find (Disjoint Set Union)</p>
+                    </div>
+                    <div class="formula-box">
+                        <h4>Prim's Algorithm</h4>
+                        <div class="pseudocode">
+<span class="function">Prim</span>(start):<br>
+&nbsp;&nbsp;inMST = set(), pq = [{0, start}]<br>
+&nbsp;&nbsp;<span class="keyword">while</span> pq:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;w, u = pq.pop()<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span> u <span class="keyword">in</span> inMST: <span class="keyword">continue</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;inMST.add(u)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">for</span> v, w <span class="keyword">in</span> adj[u]:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span> v <span class="keyword">not in</span> inMST:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pq.push({w, v})
+                        </div>
+                        <p><strong>Time:</strong> O(E log V)</p>
+                    </div>
+                    <div class="formula-box">
+                        <h4>MST Properties</h4>
+                        <div class="formula">MST edges = V - 1</div>
+                        <div class="formula">MST is unique if all edge weights are distinct</div>
+                        <p><strong>Cut Property:</strong> Minimum weight edge crossing a cut is in MST</p>
+                        <p><strong>Cycle Property:</strong> Maximum weight edge in a cycle is NOT in MST</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3>Topological Sort</h3>
+                <div class="formula-grid">
+                    <div class="formula-box">
+                        <h4>Kahn's Algorithm (BFS)</h4>
+                        <div class="pseudocode">
+Calculate in-degree of all vertices<br>
+queue = vertices with in-degree 0<br>
+<span class="keyword">while</span> queue:<br>
+&nbsp;&nbsp;u = queue.pop()<br>
+&nbsp;&nbsp;result.add(u)<br>
+&nbsp;&nbsp;<span class="keyword">for</span> v <span class="keyword">in</span> adj[u]:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;in_degree[v] -= 1<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span> in_degree[v] == 0:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;queue.push(v)
+                        </div>
+                        <p><strong>Time:</strong> O(V + E)</p>
+                        <p>If result has < V vertices → cycle exists</p>
+                    </div>
+                    <div class="formula-box">
+                        <h4>DFS-based Topological Sort</h4>
+                        <div class="pseudocode">
+<span class="function">DFS</span>(u):<br>
+&nbsp;&nbsp;visited.add(u)<br>
+&nbsp;&nbsp;<span class="keyword">for</span> v <span class="keyword">in</span> adj[u]:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span> v <span class="keyword">not in</span> visited:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="function">DFS</span>(v)<br>
+&nbsp;&nbsp;stack.push(u) <span class="comment">// After visiting all neighbors</span><br>
+<span class="comment">// Pop all from stack for result</span>
+                        </div>
+                        <p><strong>Time:</strong> O(V + E)</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3>Strongly Connected Components (SCC)</h3>
+                <div class="formula-grid">
+                    <div class="formula-box">
+                        <h4>Kosaraju's Algorithm</h4>
+                        <div class="pseudocode">
+<span class="comment">// Step 1: DFS on original graph</span><br>
+Fill stack with finish order<br>
+<span class="comment">// Step 2: Transpose graph</span><br>
+<span class="comment">// Step 3: DFS on transpose in stack order</span><br>
+<span class="keyword">while</span> stack:<br>
+&nbsp;&nbsp;u = stack.pop()<br>
+&nbsp;&nbsp;<span class="keyword">if</span> u <span class="keyword">not in</span> visited:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="function">DFS</span>(u) <span class="comment">// One SCC</span>
+                        </div>
+                        <p><strong>Time:</strong> O(V + E)</p>
+                    </div>
+                    <div class="formula-box">
+                        <h4>Tarjan's Algorithm</h4>
+                        <div class="pseudocode">
+<span class="function">DFS</span>(u):<br>
+&nbsp;&nbsp;disc[u] = low[u] = time++<br>
+&nbsp;&nbsp;stack.push(u)<br>
+&nbsp;&nbsp;<span class="keyword">for</span> v <span class="keyword">in</span> adj[u]:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span> v <span class="keyword">not in</span> visited:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="function">DFS</span>(v)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;low[u] = min(low[u], low[v])<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">elif</span> v <span class="keyword">in</span> stack:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;low[u] = min(low[u], disc[v])<br>
+&nbsp;&nbsp;<span class="keyword">if</span> low[u] == disc[u]:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="comment">// Pop stack until u - one SCC</span>
+                        </div>
+                        <p><strong>Time:</strong> O(V + E)</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3>Other Graph Algorithms</h3>
+                <div class="formula-grid">
+                    <div class="formula-box">
+                        <h4>Cycle Detection</h4>
+                        <p><strong>Undirected:</strong> DFS with parent tracking</p>
+                        <p><strong>Directed:</strong> DFS with recursion stack or topological sort</p>
+                        <div class="formula">Has cycle ⟺ back edge exists in DFS</div>
+                    </div>
+                    <div class="formula-box">
+                        <h4>Union-Find (Disjoint Set)</h4>
+                        <div class="pseudocode">
+<span class="function">find</span>(x): <span class="comment">// Path compression</span><br>
+&nbsp;&nbsp;<span class="keyword">if</span> parent[x] != x:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;parent[x] = <span class="function">find</span>(parent[x])<br>
+&nbsp;&nbsp;<span class="keyword">return</span> parent[x]<br><br>
+<span class="function">union</span>(x, y): <span class="comment">// Union by rank</span><br>
+&nbsp;&nbsp;px, py = <span class="function">find</span>(x), <span class="function">find</span>(y)<br>
+&nbsp;&nbsp;<span class="keyword">if</span> rank[px] < rank[py]: parent[px] = py<br>
+&nbsp;&nbsp;<span class="keyword">else if</span> rank[px] > rank[py]: parent[py] = px<br>
+&nbsp;&nbsp;<span class="keyword">else</span>: parent[py] = px, rank[px]++
+                        </div>
+                        <p><strong>Time:</strong> O(α(n)) per operation (inverse Ackermann)</p>
+                    </div>
+                    <div class="formula-box">
+                        <h4>Bipartite Check</h4>
+                        <p>Graph is bipartite ⟺ can color with 2 colors</p>
+                        <p>Use BFS/DFS with alternating colors</p>
+                        <div class="formula">Bipartite ⟺ No odd-length cycle</div>
+                    </div>
+                    <div class="formula-box">
+                        <h4>Eulerian Path/Circuit</h4>
+                        <p><strong>Eulerian Circuit:</strong> All vertices have even degree</p>
+                        <p><strong>Eulerian Path:</strong> Exactly 0 or 2 vertices have odd degree</p>
+                        <p><strong>Algorithm:</strong> Hierholzer's O(V + E)</p>
+                    </div>
+                    <div class="formula-box">
+                        <h4>Articulation Points & Bridges</h4>
+                        <div class="formula">u is articulation point if:</div>
+                        <ul>
+                            <li>u is root with ≥2 children in DFS tree</li>
+                            <li>u is not root and has child v where low[v] ≥ disc[u]</li>
+                        </ul>
+                        <div class="formula">Bridge (u,v) if low[v] > disc[u]</div>
+                    </div>
+                    <div class="formula-box">
+                        <h4>Maximum Flow (Ford-Fulkerson)</h4>
+                        <div class="formula">Max Flow = Min Cut</div>
+                        <p><strong>Ford-Fulkerson:</strong> O(E × max_flow)</p>
+                        <p><strong>Edmonds-Karp:</strong> O(V × E²)</p>
+                        <p><strong>Dinic's:</strong> O(V² × E) or O(E × √V) for bipartite</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Divide and Conquer -->
+        <section class="section">
+            <h2>Divide and Conquer</h2>
+            
+            <div class="subsection">
+                <h3>Classic Divide and Conquer Algorithms</h3>
+                <div class="formula-grid">
+                    <div class="formula-box">
+                        <h4>Binary Search</h4>
+                        <div class="formula">T(n) = T(n/2) + O(1) → O(log n)</div>
+                        <p>Divide search space by half each iteration</p>
+                    </div>
+                    <div class="formula-box">
+                        <h4>Merge Sort</h4>
+                        <div class="formula">T(n) = 2T(n/2) + O(n) → O(n log n)</div>
+                        <p>Divide array, sort each half, merge</p>
+                    </div>
+                    <div class="formula-box">
+                        <h4>Quick Sort</h4>
+                        <div class="formula">T(n) = T(k) + T(n-k-1) + O(n)</div>
+                        <p>Best/Average: O(n log n), Worst: O(n²)</p>
+                    </div>
+                    <div class="formula-box">
+                        <h4>Strassen's Matrix Multiplication</h4>
+                        <div class="formula">T(n) = 7T(n/2) + O(n²) → O(n^2.807)</div>
+                        <p>Traditional: O(n³)</p>
+                    </div>
+                    <div class="formula-box">
+                        <h4>Closest Pair of Points</h4>
+                        <div class="formula">T(n) = 2T(n/2) + O(n) → O(n log n)</p>
+                        <p>Divide by x-coordinate, check strip</p>
+                    </div>
+                    <div class="formula-box">
+                        <h4>Maximum Subarray</h4>
+                        <div class="formula">T(n) = 2T(n/2) + O(n) → O(n log n)</div>
+                        <p>Kadane's algorithm: O(n) - not divide and conquer</p>
+                    </div>
+                    <div class="formula-box">
+                        <h4>Karatsuba Multiplication</h4>
+                        <div class="formula">T(n) = 3T(n/2) + O(n) → O(n^1.585)</div>
+                        <p>Traditional: O(n²)</p>
+                    </div>
+                    <div class="formula-box">
+                        <h4>QuickSelect (kth smallest)</h4>
+                        <div class="formula">T(n) = T(n/2) + O(n) → O(n) average</div>
+                        <p>Worst case: O(n²)</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Backtracking & Branch and Bound -->
+        <section class="section">
+            <h2>Backtracking & Branch and Bound</h2>
+            
+            <div class="subsection">
+                <h3>Backtracking</h3>
+                <div class="formula-grid">
+                    <div class="formula-box">
+                        <h4>N-Queens Problem</h4>
+                        <div class="formula">Solutions: O(n!)</div>
+                        <p>Place queens row by row, backtrack on conflict</p>
+                        <p><strong>Constraint:</strong> No two queens share row, column, diagonal</p>
+                    </div>
+                    <div class="formula-box">
+                        <h4>Subset Sum</h4>
+                        <div class="pseudocode">
+<span class="function">solve</span>(index, sum):<br>
+&nbsp;&nbsp;<span class="keyword">if</span> sum == target: <span class="keyword">return</span> true<br>
+&nbsp;&nbsp;<span class="keyword">if</span> sum > target <span class="keyword">or</span> index >= n: <span class="keyword">return</span> false<br>
+&nbsp;&nbsp;<span class="keyword">return</span> <span class="function">solve</span>(index+1, sum) <span class="keyword">or</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="function">solve</span>(index+1, sum + arr[index])
+                        </div>
+                        <p><strong>Time:</strong> O(2ⁿ)</p>
+                    </div>
+                    <div class="formula-box">
+                        <h4>Permutations Generation</h4>
+                        <div class="formula">Time: O(n × n!)</div>
+                        <p>n! permutations, each takes O(n) to process</p>
+                    </div>
+                    <div class="formula-box">
+                        <h4>Hamiltonian Path/Cycle</h4>
+                        <div class="formula">Time: O(n!)</div>
+                        <p>Visit each vertex exactly once</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3>Branch and Bound</h3>
+                <div class="formula-box">
+                    <h4>Concept</h4>
+                    <p><strong>Branch:</strong> Divide problem into subproblems</p>
+                    <p><strong>Bound:</strong> Calculate lower/upper bound for each subproblem</p>
+                    <p><strong>Prune:</strong> Discard subproblems that can't lead to optimal solution</p>
+                    <div class="example">
+                        <h4>Traveling Salesman Problem (TSP)</h4>
+                        <p>Use reduced cost matrix for lower bound</p>
+                        <p>Prune branches where lower bound > current best</p>
+                        <p><strong>Time:</strong> Still exponential, but much faster than brute force</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- String Algorithms -->
+        <section class="section">
+            <h2>String Algorithms</h2>
+            
+            <div class="subsection">
+                <h3>Pattern Matching</h3>
+                <div class="formula-grid">
+                    <div class="formula-box">
+                        <h4>Naive Pattern Matching</h4>
+                        <div class="formula">Time: O(m × n)</div>
+                        <p>m = pattern length, n = text length</p>
+                        <p>Check pattern at every position</p>
+                    </div>
+                    <div class="formula-box">
+                        <h4>KMP Algorithm</h4>
+                        <div class="formula">Time: O(m + n)</div>
+                        <p>Uses failure function (LPS array)</p>
+                        <p>LPS[i] = longest proper prefix of pat[0..i] that is also suffix</p>
+                        <div class="pseudocode">
+<span class="comment">// Build LPS array: O(m)</span><br>
+<span class="comment">// Search: O(n)</span><br>
+<span class="comment">// Never backtracks on text</span>
+                        </div>
+                    </div>
+                    <div class="formula-box">
+                        <h4>Rabin-Karp Algorithm</h4>
+                        <div class="formula">Average: O(m + n), Worst: O(m × n)</div>
+                        <p>Uses rolling hash function</p>
+                        <div class="formula">hash = (d × hash + char) mod q</div>
+                        <div class="formula">Rolling: hash = (d(hash - old × h) + new) mod q</div>
+                        <p>h = d^(m-1) mod q</p>
+                    </div>
+                    <div class="formula-box">
+                        <h4>Boyer-Moore Algorithm</h4>
+                        <div class="formula">Average: O(n/m), Worst: O(m × n)</div>
+                        <p>Bad Character Rule: Skip based on mismatch</p>
+                        <p>Good Suffix Rule: Skip based on matched suffix</p>
+                        <p><strong>Best for:</strong> Large alphabets, long patterns</p>
+                    </div>
+                    <div class="formula-box">
+                        <h4>Z-Algorithm</h4>
+                        <div class="formula">Time: O(m + n)</div>
+                        <p>Z[i] = length of longest substring starting at i that matches prefix</p>
+                        <p>Concatenate: pattern + "$" + text</p>
+                    </div>
+                    <div class="formula-box">
+                        <h4>Aho-Corasick (Multiple Patterns)</h4>
+                        <div class="formula">Build: O(m × k), Search: O(n + matches)</div>
+                        <p>k = number of patterns, m = total pattern length</p>
+                        <p>Uses trie with failure links (like KMP on trie)</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3>Suffix Structures</h3>
+                <div class="formula-grid">
+                    <div class="formula-box">
+                        <h4>Suffix Array</h4>
+                        <div class="formula">Space: O(n), Build: O(n log n) to O(n)</div>
+                        <p>Sorted array of all suffix starting indices</p>
+                        <p>Binary search for pattern: O(m log n)</p>
+                    </div>
+                    <div class="formula-box">
+                        <h4>Suffix Tree</h4>
+                        <div class="formula">Space: O(n), Build: O(n)</div>
+                        <p>Compressed trie of all suffixes</p>
+                        <p>Pattern search: O(m)</p>
+                        <p>Longest common substring: O(n + m)</p>
+                    </div>
+                    <div class="formula-box">
+                        <h4>LCP Array (Kasai's Algorithm)</h4>
+                        <div class="formula">Time: O(n)</div>
+                        <p>LCP[i] = longest common prefix of SA[i] and SA[i-1]</p>
+                        <p>Useful for string processing problems</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3>Trie (Prefix Tree)</h3>
+                <div class="formula-box">
+                    <h4>Trie Operations</h4>
+                    <table>
+                        <tr><th>Operation</th><th>Time</th></tr>
+                        <tr><td>Insert</td><td class="best">O(m)</td></tr>
+                        <tr><td>Search</td><td class="best">O(m)</td></tr>
+                        <tr><td>Delete</td><td class="best">O(m)</td></tr>
+                        <tr><td>Prefix Search</td><td class="best">O(m)</td></tr>
+                    </table>
+                    <p>m = length of key</p>
+                    <p><strong>Space:</strong> O(ALPHABET_SIZE × N × M)</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Advanced Topics -->
+        <section class="section">
+            <h2>Advanced Topics</h2>
+            
+            <div class="subsection">
+                <h3>Bit Manipulation Tricks</h3>
+                <div class="formula-grid">
+                    <div class="formula-box">
+                        <h4>Common Operations</h4>
+                        <div class="formula">n & (n-1)</div>
+                        <p>Clear lowest set bit</p>
+                        <div class="formula">n & (-n)</div>
+                        <p>Get lowest set bit</p>
+                        <div class="formula">n | (n+1)</div>
+                        <p>Set lowest unset bit</p>
+                        <div class="formula">n & (n+1)</div>
+                        <p>Clear all trailing 1s</p>
+                    </div>
+                    <div class="formula-box">
+                        <h4>Bit Counting</h4>
+                        <div class="formula">Brian Kernighan: count while n > 0, n &= (n-1)</div>
+                        <p><strong>Time:</strong> O(number of set bits)</p>
+                        <div class="formula">Population count: Built-in popcount()</div>
+                    </div>
+                    <div class="formula-box">
+                        <h4>Subset Generation</h4>
+                        <div class="formula">All subsets: O(2ⁿ × n)</div>
+                        <p>Each number 0 to 2ⁿ-1 represents a subset</p>
+                        <p>Bit i set → element i included</p>
+                    </div>
+                    <div class="formula-box">
+                        <h4>Power of 2 Check</h4>
+                        <div class="formula">n > 0 AND (n & (n-1)) == 0</div>
+                        <p>True if n is power of 2</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3>Mathematical Algorithms</h3>
+                <div class="formula-grid">
+                    <div class="formula-box">
+                        <h4>GCD (Euclidean Algorithm)</h4>
+                        <div class="formula">gcd(a, b) = gcd(b, a mod b)</div>
+                        <div class="pseudocode">
+<span class="function">gcd</span>(a, b):<br>
+&nbsp;&nbsp;<span class="keyword">while</span> b != 0:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;a, b = b, a % b<br>
+&nbsp;&nbsp;<span class="keyword">return</span> a
+                        </div>
+                        <p><strong>Time:</strong> O(log min(a, b))</p>
+                    </div>
+                    <div class="formula-box">
+                        <h4>Extended Euclidean Algorithm</h4>
+                        <div class="formula">ax + by = gcd(a, b)</div>
+                        <p>Finds x, y such that above holds</p>
+                        <p>Used for modular inverse</p>
+                    </div>
+                    <div class="formula-box">
+                        <h4>Modular Exponentiation</h4>
+                        <div class="formula">a^b mod m</div>
+                        <div class="pseudocode">
+<span class="function">power</span>(a, b, m):<br>
+&nbsp;&nbsp;result = 1<br>
+&nbsp;&nbsp;<span class="keyword">while</span> b > 0:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span> b & 1: result = result * a % m<br>
+&nbsp;&nbsp;&nbsp;&nbsp;a = a * a % m<br>
+&nbsp;&nbsp;&nbsp;&nbsp;b >>= 1<br>
+&nbsp;&nbsp;<span class="keyword">return</span> result
+                        </div>
+                        <p><strong>Time:</strong> O(log b)</p>
+                    </div>
+                    <div class="formula-box">
+                        <h4>Prime Testing (Miller-Rabin)</h4>
+                        <div class="formula">Time: O(k × log³n)</div>
+                        <p>k = number of iterations (witnesses)</p>
+                        <p>Probabilistic: Can give false positives</p>
+                    </div>
+                    <div class="formula-box">
+                        <h4>Sieve of Eratosthenes</h4>
+                        <div class="formula">Time: O(n log log n)</div>
+                        <p>Find all primes up to n</p>
+                        <p><strong>Space:</strong> O(n)</p>
+                    </div>
+                    <div class="formula-box">
+                        <h4>Segmented Sieve</h4>
+                        <div class="formula">Time: O(n log log n)</div>
+                        <p>Find primes in range [L, R]</p>
+                        <p><strong>Space:</strong> O(√R + (R-L))</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3>Segment Trees & Fenwick Trees</h3>
+                <div class="formula-grid">
+                    <div class="formula-box">
+                        <h4>Segment Tree</h4>
+                        <div class="formula">Build: O(n), Query: O(log n), Update: O(log n)</div>
+                        <p>Range queries: sum, min, max, gcd, etc.</p>
+                        <p><strong>Space:</strong> O(4n)</p>
+                        <p>Tree stored in array: children of i at 2i, 2i+1</p>
+                    </div>
+                    <div class="formula-box">
+                        <h4>Lazy Propagation</h4>
+                        <p>Deferred updates for range updates</p>
+                        <p>Range Update + Range Query: O(log n)</p>
+                        <p>Store pending updates in lazy array</p>
+                    </div>
+                    <div class="formula-box">
+                        <h4>Fenwick Tree (Binary Indexed Tree)</h4>
+                        <div class="formula">Build: O(n log n), Query: O(log n), Update: O(log n)</div>
+                        <p>Prefix sum queries, point updates</p>
+                        <p><strong>Space:</strong> O(n)</p>
+                        <div class="formula">i & (-i) = lowest set bit (LSB)</div>
+                        <p>Parent: i + LSB (update), i - LSB (query)</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3>NP Completeness</h3>
+                <div class="formula-grid">
+                    <div class="formula-box">
+                        <h4>Complexity Classes</h4>
+                        <p><strong>P:</strong> Problems solvable in polynomial time</p>
+                        <p><strong>NP:</strong> Problems verifiable in polynomial time</p>
+                        <p><strong>NP-Hard:</strong> At least as hard as all NP problems</p>
+                        <p><strong>NP-Complete:</strong> NP ∩ NP-Hard</p>
+                    </div>
+                    <div class="formula-box">
+                        <h4>NP-Complete Problems</h4>
+                        <ul>
+                            <li>SAT (Boolean Satisfiability)</li>
+                            <li>3-SAT</li>
+                            <li>Vertex Cover</li>
+                            <li>Hamiltonian Path/Cycle</li>
+                            <li>Traveling Salesman (decision)</li>
+                            <li>Subset Sum</li>
+                            <li>Graph Coloring</li>
+                            <li>Clique</li>
+                        </ul>
+                    </div>
+                    <div class="formula-box">
+                        <h4>Reductions</h4>
+                        <p>To prove NP-Complete:</p>
+                        <ol class="step-list">
+                            <li>Show problem is in NP</li>
+                            <li>Reduce known NP-Complete problem to it</li>
+                        </ol>
+                        <p>Reduction must be polynomial time</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Quick Reference -->
+        <section class="section quick-ref">
+            <h3>Quick Reference Summary</h3>
+            <div class="quick-ref-grid">
+                <div class="quick-ref-item">
+                    <strong>Master Theorem:</strong> T(n) = aT(n/b) + f(n), compare f(n) with n^(log_b a)
+                </div>
+                <div class="quick-ref-item">
+                    <strong>Binary Search:</strong> O(log n), sorted array
+                </div>
+                <div class="quick-ref-item">
+                    <strong>Merge Sort:</strong> O(n log n), stable, O(n) space
+                </div>
+                <div class="quick-ref-item">
+                    <strong>Quick Sort:</strong> O(n log n) avg, O(n²) worst, in-place
+                </div>
+                <div class="quick-ref-item">
+                    <strong>Heap Sort:</strong> O(n log n), in-place, not stable
+                </div>
+                <div class="quick-ref-item">
+                    <strong>BFS:</strong> O(V+E), shortest path (unweighted)
+                </div>
+                <div class="quick-ref-item">
+                    <strong>Dijkstra:</strong> O((V+E) log V), non-negative weights
+                </div>
+                <div class="quick-ref-item">
+                    <strong>Bellman-Ford:</strong> O(VE), handles negative weights
+                </div>
+                <div class="quick-ref-item">
+                    <strong>Floyd-Warshall:</strong> O(V³), all-pairs shortest path
+                </div>
+                <div class="quick-ref-item">
+                    <strong>Kruskal MST:</strong> O(E log E), uses Union-Find
+                </div>
+                <div class="quick-ref-item">
+                    <strong>Prim MST:</strong> O(E log V), greedy
+                </div>
+                <div class="quick-ref-item">
+                    <strong>LCS:</strong> O(mn), dp[i][j] = dp[i-1][j-1]+1 if match
+                </div>
+                <div class="quick-ref-item">
+                    <strong>0/1 Knapsack:</strong> O(nW), dp[i][w] = max(skip, take)
+                </div>
+                <div class="quick-ref-item">
+                    <strong>KMP:</strong> O(m+n), failure function
+                </div>
+                <div class="quick-ref-item">
+                    <strong>Union-Find:</strong> O(α(n)), path compression + rank
+                </div>
+                <div class="quick-ref-item">
+                    <strong>Segment Tree:</strong> O(log n) query/update
+                </div>
+                <div class="quick-ref-item">
+                    <strong>Segmented Sieve:</strong> Primes in range [L, R]
+                </div>
+                <div class="quick-ref-item">
+                    <strong>LIS:</strong> O(n log n) with binary search
+                </div>
+            </div>
+        </section>
+
+        <footer>
+            <p>Algorithms Formula Sheet | Comprehensive Reference Guide</p>
+            <p>© 2024 | Created for Computer Science Students</p>
+        </footer>
+    </div>
+</body>
+</html>

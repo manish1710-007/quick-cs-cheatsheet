@@ -1,0 +1,1743 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Computer Networks Formula Sheet</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1e3a5f 0%, #0d253f 50%, #0a1929 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #fff;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            padding: 30px 0;
+            margin-bottom: 30px;
+        }
+
+        header h1 {
+            font-size: 2.8rem;
+            background: linear-gradient(90deg, #00bcd4, #4dd0e1, #80deea);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 30px rgba(0, 188, 212, 0.3);
+            margin-bottom: 10px;
+        }
+
+        header p {
+            color: #4dd0e1;
+            font-size: 1.1rem;
+        }
+
+        .section {
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            color: #00bcd4;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid rgba(0, 188, 212, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .section-title .icon {
+            font-size: 2rem;
+        }
+
+        .subsection {
+            margin-bottom: 25px;
+        }
+
+        .subsection-title {
+            font-size: 1.3rem;
+            color: #4dd0e1;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .subsection-title::before {
+            content: "◆";
+            font-size: 0.8rem;
+            color: #80deea;
+        }
+
+        .formula-box {
+            background: linear-gradient(135deg, rgba(0, 188, 212, 0.15), rgba(77, 208, 225, 0.1));
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-left: 4px solid #00bcd4;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .formula-box:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 20px rgba(0, 188, 212, 0.3);
+        }
+
+        .formula-name {
+            font-size: 1.1rem;
+            color: #00bcd4;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .formula {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px 20px;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 1.05rem;
+            color: #80deea;
+            margin: 10px 0;
+            overflow-x: auto;
+        }
+
+        .formula-description {
+            color: #b0bec5;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-top: 10px;
+        }
+
+        .variables {
+            background: rgba(77, 208, 225, 0.1);
+            padding: 12px 15px;
+            border-radius: 8px;
+            margin-top: 10px;
+            font-size: 0.9rem;
+        }
+
+        .variables strong {
+            color: #4dd0e1;
+        }
+
+        .example {
+            background: rgba(128, 222, 234, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 10px;
+            border: 1px dashed rgba(128, 222, 234, 0.5);
+        }
+
+        .example-title {
+            color: #80deea;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 20px;
+        }
+
+        .algorithm-card {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 15px;
+            padding: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .algorithm-card h4 {
+            color: #00bcd4;
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(0, 188, 212, 0.3);
+        }
+
+        .steps {
+            counter-reset: step;
+        }
+
+        .step {
+            position: relative;
+            padding-left: 35px;
+            margin-bottom: 10px;
+            color: #e2e8f0;
+            line-height: 1.6;
+        }
+
+        .step::before {
+            counter-increment: step;
+            content: counter(step);
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 25px;
+            height: 25px;
+            background: linear-gradient(135deg, #00bcd4, #0097a7);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .note {
+            background: rgba(255, 193, 7, 0.15);
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            border-radius: 0 10px 10px 0;
+            margin-top: 15px;
+        }
+
+        .note-title {
+            color: #ffc107;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .warning {
+            background: rgba(239, 68, 68, 0.15);
+            border-left: 4px solid #ef4444;
+            padding: 15px;
+            border-radius: 0 10px 10px 0;
+            margin-top: 15px;
+        }
+
+        .warning-title {
+            color: #ef4444;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .important {
+            background: rgba(34, 197, 94, 0.15);
+            border-left: 4px solid #22c55e;
+            padding: 15px;
+            border-radius: 0 10px 10px 0;
+            margin-top: 15px;
+        }
+
+        .important-title {
+            color: #22c55e;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            margin: 15px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        th {
+            background: linear-gradient(135deg, #00bcd4, #0097a7);
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            color: #fff;
+        }
+
+        td {
+            padding: 12px 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            color: #e2e8f0;
+        }
+
+        tr:hover {
+            background: rgba(0, 188, 212, 0.1);
+        }
+
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .comparison-item {
+            background: rgba(77, 208, 225, 0.05);
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid rgba(77, 208, 225, 0.2);
+        }
+
+        .comparison-item h5 {
+            color: #4dd0e1;
+            margin-bottom: 8px;
+        }
+
+        .layer-diagram {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 20px 0;
+        }
+
+        .layer-box {
+            width: 80%;
+            max-width: 400px;
+            padding: 12px 20px;
+            text-align: center;
+            border: 2px solid;
+            margin: 2px 0;
+            border-radius: 5px;
+        }
+
+        .layer-app { background: rgba(156, 39, 176, 0.3); border-color: #9c27b0; }
+        .layer-pre { background: rgba(103, 58, 183, 0.3); border-color: #673ab7; }
+        .layer-ses { background: rgba(63, 81, 181, 0.3); border-color: #3f51b5; }
+        .layer-tra { background: rgba(33, 150, 243, 0.3); border-color: #2196f3; }
+        .layer-net { background: rgba(0, 188, 212, 0.3); border-color: #00bcd4; }
+        .layer-dll { background: rgba(0, 150, 136, 0.3); border-color: #009688; }
+        .layer-phy { background: rgba(76, 175, 80, 0.3); border-color: #4caf50; }
+
+        .protocol-box {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            padding: 15px;
+            margin: 10px 0;
+            font-family: 'Courier New', monospace;
+        }
+
+        .header-diagram {
+            font-family: 'Courier New', monospace;
+            font-size: 0.85rem;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+        }
+
+        .header-field {
+            display: inline-block;
+            border: 1px solid #4dd0e1;
+            padding: 5px 10px;
+            margin: 2px;
+            text-align: center;
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px;
+            color: #4dd0e1;
+            margin-top: 30px;
+        }
+
+        .formula-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 10px 0;
+        }
+
+        .formula-item {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            color: #80deea;
+        }
+
+        .bit-diagram {
+            font-family: 'Courier New', monospace;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: 10px;
+            margin: 10px 0;
+            overflow-x: auto;
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2rem;
+            }
+
+            .grid {
+                grid-template-columns: 1fr;
+            }
+
+            .section {
+                padding: 20px;
+            }
+
+            .layer-box {
+                width: 95%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🌐 Computer Networks Formula Sheet</h1>
+            <p>Complete Reference for OSI Model, TCP/IP, IP Addressing, Routing & More</p>
+        </header>
+
+        <!-- OSI AND TCP/IP MODELS SECTION -->
+        <div class="section">
+            <h2 class="section-title">
+                <span class="icon">📊</span>
+                OSI & TCP/IP Models
+            </h2>
+
+            <div class="subsection">
+                <h3 class="subsection-title">OSI Reference Model (7 Layers)</h3>
+                <div class="grid">
+                    <div class="layer-diagram">
+                        <div class="layer-box layer-app"><strong>7. Application Layer</strong><br>User Interface, Network Services</div>
+                        <div class="layer-box layer-pre"><strong>6. Presentation Layer</strong><br>Translation, Encryption, Compression</div>
+                        <div class="layer-box layer-ses"><strong>5. Session Layer</strong><br>Session Management, Synchronization</div>
+                        <div class="layer-box layer-tra"><strong>4. Transport Layer</strong><br>End-to-End Delivery, TCP/UDP</div>
+                        <div class="layer-box layer-net"><strong>3. Network Layer</strong><br>Routing, IP Addressing, Path Selection</div>
+                        <div class="layer-box layer-dll"><strong>2. Data Link Layer</strong><br>Framing, Error Detection, MAC</div>
+                        <div class="layer-box layer-phy"><strong>1. Physical Layer</strong><br>Bits, Cables, Signals, Topology</div>
+                    </div>
+                    <div class="algorithm-card">
+                        <h4>Layer Functions & Protocols</h4>
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Layer</th>
+                                        <th>PDU</th>
+                                        <th>Key Protocols</th>
+                                        <th>Devices</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td>Application</td><td>Data</td><td>HTTP, FTP, DNS, SMTP</td><td>Gateway</td></tr>
+                                    <tr><td>Presentation</td><td>Data</td><td>SSL/TLS, JPEG, MPEG</td><td>Gateway</td></tr>
+                                    <tr><td>Session</td><td>Data</td><td>NetBIOS, RPC</td><td>Gateway</td></tr>
+                                    <tr><td>Transport</td><td>Segment</td><td>TCP, UDP, SCTP</td><td>Firewall</td></tr>
+                                    <tr><td>Network</td><td>Packet</td><td>IP, ICMP, OSPF, BGP</td><td>Router</td></tr>
+                                    <tr><td>Data Link</td><td>Frame</td><td>Ethernet, PPP, HDLC</td><td>Switch, Bridge</td></tr>
+                                    <tr><td>Physical</td><td>Bit</td><td>RS-232, DSL, 802.11</td><td>Hub, Repeater</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">TCP/IP Model (4-5 Layers)</h3>
+                <div class="grid">
+                    <div class="algorithm-card">
+                        <h4>TCP/IP Stack</h4>
+                        <div class="layer-diagram">
+                            <div class="layer-box layer-app"><strong>Application Layer</strong><br>HTTP, FTP, SMTP, DNS, SSH</div>
+                            <div class="layer-box layer-tra"><strong>Transport Layer</strong><br>TCP, UDP</div>
+                            <div class="layer-box layer-net"><strong>Internet Layer</strong><br>IP, ICMP, ARP, RARP</div>
+                            <div class="layer-box layer-dll"><strong>Network Access Layer</strong><br>Ethernet, Wi-Fi, PPP</div>
+                        </div>
+                    </div>
+                    <div class="algorithm-card">
+                        <h4>OSI vs TCP/IP Mapping</h4>
+                        <div class="table-container">
+                            <table>
+                                <tr><th>OSI</th><th>TCP/IP</th></tr>
+                                <tr><td>Application</td><td rowspan="3">Application</td></tr>
+                                <tr><td>Presentation</td></tr>
+                                <tr><td>Session</td></tr>
+                                <tr><td>Transport</td><td>Transport</td></tr>
+                                <tr><td>Network</td><td>Internet</td></tr>
+                                <tr><td>Data Link</td><td rowspan="2">Network Access</td></tr>
+                                <tr><td>Physical</td></tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Encapsulation Process</h3>
+                <div class="formula-box">
+                    <div class="formula-name">Data Encapsulation at Each Layer</div>
+                    <div class="formula">Data → [Transport Header | Data] → [Network Header | Transport Header | Data]</div>
+                    <div class="formula">→ [DLL Header | Network Header | Transport Header | Data | DLL Trailer]</div>
+                    <div class="variables">
+                        <strong>Headers Added:</strong><br>
+                        • Transport Layer: TCP/UDP Header<br>
+                        • Network Layer: IP Header<br>
+                        • Data Link Layer: Frame Header + Trailer
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PHYSICAL LAYER SECTION -->
+        <div class="section">
+            <h2 class="section-title">
+                <span class="icon">⚡</span>
+                Physical Layer
+            </h2>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Transmission Basics</h3>
+                <div class="grid">
+                    <div class="formula-box">
+                        <div class="formula-name">Bandwidth & Data Rate</div>
+                        <div class="formula">Bit Rate = 2 × Bandwidth × log₂(L)  (Nyquist)</div>
+                        <div class="formula">Channel Capacity = Bandwidth × log₂(1 + S/N)  (Shannon)</div>
+                        <div class="variables">
+                            <strong>Where:</strong><br>
+                            L = Number of signal levels<br>
+                            S/N = Signal-to-Noise Ratio (linear, not dB)
+                        </div>
+                    </div>
+                    <div class="formula-box">
+                        <div class="formula-name">Signal-to-Noise Ratio (SNR)</div>
+                        <div class="formula">SNR(dB) = 10 × log₁₀(Signal Power / Noise Power)</div>
+                        <div class="formula">SNR(linear) = 10^(SNR_dB / 10)</div>
+                        <div class="example">
+                            <div class="example-title">📌 Example:</div>
+                            SNR = 30 dB → SNR(linear) = 10³ = 1000
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Transmission Modes</h3>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Mode</th>
+                                <th>Description</th>
+                                <th>Example</th>
+                                <th>Channels</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Simplex</td>
+                                <td>One-way communication only</td>
+                                <td>Keyboard to Monitor</td>
+                                <td>1</td>
+                            </tr>
+                            <tr>
+                                <td>Half-Duplex</td>
+                                <td>Two-way, one at a time</td>
+                                <td>Walkie-Talkie</td>
+                                <td>1</td>
+                            </tr>
+                            <tr>
+                                <td>Full-Duplex</td>
+                                <td>Two-way simultaneously</td>
+                                <td>Telephone, Mobile</td>
+                                <td>2</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Digital to Analog Modulation</h3>
+                <div class="grid">
+                    <div class="algorithm-card">
+                        <h4>Modulation Types</h4>
+                        <div class="formula-description">
+                            • <strong>ASK (Amplitude Shift Keying):</strong> Varies amplitude<br>
+                            • <strong>FSK (Frequency Shift Keying):</strong> Varies frequency<br>
+                            • <strong>PSK (Phase Shift Keying):</strong> Varies phase<br>
+                            • <strong>QAM (Quadrature Amplitude):</strong> Combines ASK + PSK
+                        </div>
+                    </div>
+                    <div class="algorithm-card">
+                        <h4>Baud Rate vs Bit Rate</h4>
+                        <div class="formula">Bit Rate = Baud Rate × log₂(L)</div>
+                        <div class="formula">Where L = signal levels per baud</div>
+                        <div class="example">
+                            <div class="example-title">📌 Example:</div>
+                            2400 baud, 16-QAM (L=16):<br>
+                            Bit Rate = 2400 × log₂(16) = 2400 × 4 = 9600 bps
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Multiplexing</h3>
+                <div class="grid">
+                    <div class="algorithm-card">
+                        <h4>FDM (Frequency Division)</h4>
+                        <div class="formula-description">
+                            • Multiple signals on different frequencies<br>
+                            • Used in: Radio, TV, Analog cellular<br>
+                            • Guard bands prevent interference
+                        </div>
+                    </div>
+                    <div class="algorithm-card">
+                        <h4>TDM (Time Division)</h4>
+                        <div class="formula-description">
+                            • Multiple signals in different time slots<br>
+                            • <strong>Synchronous:</strong> Fixed time slots<br>
+                            • <strong>Asynchronous:</strong> Dynamic allocation<br>
+                            • Used in: Digital telephone networks
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid" style="margin-top: 15px;">
+                    <div class="algorithm-card">
+                        <h4>WDM (Wavelength Division)</h4>
+                        <div class="formula-description">
+                            • Multiple light wavelengths on fiber<br>
+                            • <strong>DWDM:</strong> Dense WDM (many channels)<br>
+                            • Used in: Fiber optic networks
+                        </div>
+                    </div>
+                    <div class="algorithm-card">
+                        <h4>CDMA (Code Division)</h4>
+                        <div class="formula-description">
+                            • Each user has unique code<br>
+                            • All users share same frequency<br>
+                            • Used in: 3G cellular networks
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Transmission Media</h3>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Media</th>
+                                <th>Type</th>
+                                <th>Speed</th>
+                                <th>Distance</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Twisted Pair (UTP)</td>
+                                <td>Guided</td>
+                                <td>1 Gbps (Cat6)</td>
+                                <td>100m</td>
+                            </tr>
+                            <tr>
+                                <td>Coaxial Cable</td>
+                                <td>Guided</td>
+                                <td>10 Gbps</td>
+                                <td>500m</td>
+                            </tr>
+                            <tr>
+                                <td>Fiber Optic</td>
+                                <td>Guided</td>
+                                <td>100+ Gbps</td>
+                                <td>100+ km</td>
+                            </tr>
+                            <tr>
+                                <td>Radio Wave</td>
+                                <td>Unguided</td>
+                                <td>Variable</td>
+                                <td>Long</td>
+                            </tr>
+                            <tr>
+                                <td>Microwave</td>
+                                <td>Unguided</td>
+                                <td>Variable</td>
+                                <td>Line of sight</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- DATA LINK LAYER SECTION -->
+        <div class="section">
+            <h2 class="section-title">
+                <span class="icon">🔗</span>
+                Data Link Layer
+            </h2>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Error Detection</h3>
+                
+                <div class="grid">
+                    <div class="formula-box">
+                        <div class="formula-name">Parity Check</div>
+                        <div class="formula-description">
+                            • <strong>Simple Parity:</strong> 1 bit added (odd/even)<br>
+                            • Detects single-bit errors only<br>
+                            • Cannot detect even number of errors
+                        </div>
+                    </div>
+                    <div class="formula-box">
+                        <div class="formula-name">Two-Dimensional Parity</div>
+                        <div class="formula-description">
+                            • Arrange data in rows and columns<br>
+                            • Parity for each row and column<br>
+                            • Can detect and correct single-bit errors
+                        </div>
+                    </div>
+                </div>
+
+                <div class="formula-box" style="margin-top: 15px;">
+                    <div class="formula-name">Cyclic Redundancy Check (CRC)</div>
+                    <div class="formula">FCS = Data ÷ Generator (mod-2 division)</div>
+                    <div class="formula">Transmitted Data = Data + FCS</div>
+                    <div class="steps">
+                        <div class="step">Append n zeros to data (n = degree of generator)</div>
+                        <div class="step">Divide by generator using XOR</div>
+                        <div class="step">Remainder = FCS (Frame Check Sequence)</div>
+                        <div class="step">At receiver: divide received data by generator</div>
+                        <div class="step">Zero remainder = No error detected</div>
+                    </div>
+                    <div class="example">
+                        <div class="example-title">📌 Example:</div>
+                        Data: 1101, Generator: 1011 (CRC-3)<br>
+                        Append 3 zeros: 1101000<br>
+                        Divide: 1101000 ÷ 1011 → Remainder = 100<br>
+                        Transmitted: 1101100
+                    </div>
+                </div>
+
+                <div class="table-container" style="margin-top: 15px;">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>CRC Type</th>
+                                <th>Generator Polynomial</th>
+                                <th>Application</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>CRC-8</td><td>x⁸ + x² + x + 1</td><td>ATM headers</td></tr>
+                            <tr><td>CRC-16</td><td>x¹⁶ + x¹⁵ + x² + 1</td><td>USB, Modbus</td></tr>
+                            <tr><td>CRC-32</td><td>x³² + x²⁶ + x²³ + ... + 1</td><td>Ethernet, ZIP</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Error Correction</h3>
+                <div class="grid">
+                    <div class="algorithm-card">
+                        <h4>Hamming Distance</h4>
+                        <div class="formula">Hamming Distance = Number of bit positions where codewords differ</div>
+                        <div class="formula">Minimum Distance d:</div>
+                        <div class="formula">&nbsp;&nbsp;• Detect up to (d-1) errors</div>
+                        <div class="formula">&nbsp;&nbsp;• Correct up to ⌊(d-1)/2⌋ errors</div>
+                    </div>
+                    <div class="algorithm-card">
+                        <h4>Hamming Code (7,4)</h4>
+                        <div class="formula">7 bits transmitted, 4 bits data, 3 bits parity</div>
+                        <div class="formula">Positions: p₁ p₂ d₁ p₄ d₂ d₃ d₄</div>
+                        <div class="formula-description">
+                            Parity bits at positions that are powers of 2 (1, 2, 4, ...)<br>
+                            Can detect and correct single-bit errors
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Flow Control</h3>
+                
+                <div class="grid">
+                    <div class="algorithm-card">
+                        <h4>Stop-and-Wait</h4>
+                        <div class="steps">
+                            <div class="step">Sender transmits one frame</div>
+                            <div class="step">Waits for ACK before sending next</div>
+                            <div class="step">Timeout triggers retransmission</div>
+                        </div>
+                        <div class="formula">Efficiency = 1 / (1 + 2a)</div>
+                        <div class="formula">Where a = Propagation Time / Transmission Time</div>
+                    </div>
+                    <div class="algorithm-card">
+                        <h4>Sliding Window</h4>
+                        <div class="formula">Window Size: N frames can be sent without ACK</div>
+                        <div class="formula">Go-Back-N: N ≤ 2ⁿ - 1</div>
+                        <div class="formula">Selective Repeat: N ≤ 2ⁿ⁻¹</div>
+                        <div class="variables">
+                            n = number of bits in sequence number
+                        </div>
+                    </div>
+                </div>
+
+                <div class="formula-box" style="margin-top: 15px;">
+                    <div class="formula-name">Efficiency Comparison</div>
+                    <div class="formula">Stop-and-Wait: η = 1/(1 + 2a)</div>
+                    <div class="formula">Go-Back-N: η = N/(1 + 2a) for N ≤ 1+2a, else 1</div>
+                    <div class="formula">Selective Repeat: η = N/(1 + 2a) for N ≤ 1+2a, else 1</div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">ARQ Protocols</h3>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Protocol</th>
+                                <th>Retransmission</th>
+                                <th>Window Size</th>
+                                <th>Buffer</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Stop-and-Wait ARQ</td>
+                                <td>Single frame</td>
+                                <td>1</td>
+                                <td>1 frame</td>
+                            </tr>
+                            <tr>
+                                <td>Go-Back-N ARQ</td>
+                                <td>All from error frame</td>
+                                <td>2ⁿ - 1</td>
+                                <td>None (receiver)</td>
+                            </tr>
+                            <tr>
+                                <td>Selective Repeat ARQ</td>
+                                <td>Only error frame</td>
+                                <td>2ⁿ⁻¹</td>
+                                <td>Out-of-order frames</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Ethernet Frame</h3>
+                <div class="header-diagram">
+                    <div style="margin-bottom: 10px;"><strong>Ethernet IEEE 802.3 Frame Format</strong></div>
+                    <div class="header-field" style="width: 60px;">Preamble<br>7B</div>
+                    <div class="header-field" style="width: 40px;">SFD<br>1B</div>
+                    <div class="header-field" style="width: 80px;">Dest MAC<br>6B</div>
+                    <div class="header-field" style="width: 80px;">Src MAC<br>6B</div>
+                    <div class="header-field" style="width: 50px;">Type/Length<br>2B</div>
+                    <div class="header-field" style="width: 100px;">Data<br>46-1500B</div>
+                    <div class="header-field" style="width: 40px;">FCS<br>4B</div>
+                </div>
+                <div class="formula">
+                    Min Frame Size: 64 bytes | Max Frame Size: 1518 bytes<br>
+                    If data &lt; 46 bytes, padding is added
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">CSMA/CD (Ethernet)</h3>
+                <div class="formula-box">
+                    <div class="formula-name">Collision Detection</div>
+                    <div class="formula">Minimum Frame Size = 2 × Propagation Delay × Data Rate</div>
+                    <div class="formula">Slot Time = 2τ (round-trip propagation time)</div>
+                    <div class="variables">
+                        For Ethernet: Slot time = 512 bit times<br>
+                        For 10 Mbps: 51.2 μs | For 100 Mbps: 5.12 μs
+                    </div>
+                </div>
+
+                <div class="algorithm-card" style="margin-top: 15px;">
+                    <h4>Binary Exponential Backoff</h4>
+                    <div class="formula">After collision, wait random time: r × slot time</div>
+                    <div class="formula">r ∈ {0, 1, ..., 2ᵏ - 1}</div>
+                    <div class="formula">k = min(number of collisions, 10)</div>
+                    <div class="formula">Max 16 collisions, then abort</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- NETWORK LAYER SECTION -->
+        <div class="section">
+            <h2 class="section-title">
+                <span class="icon">🌐</span>
+                Network Layer
+            </h2>
+
+            <div class="subsection">
+                <h3 class="subsection-title">IPv4 Addressing</h3>
+                <div class="formula-box">
+                    <div class="formula-name">IP Address Structure</div>
+                    <div class="formula">IPv4: 32 bits = Network ID + Host ID</div>
+                    <div class="formula">Total Addresses: 2³² ≈ 4.3 billion</div>
+                    <div class="formula">Dotted Decimal: 192.168.1.1</div>
+                </div>
+
+                <div class="table-container" style="margin-top: 15px;">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Class</th>
+                                <th>Range</th>
+                                <th>Network/Host Bits</th>
+                                <th>Default Mask</th>
+                                <th>Networks</th>
+                                <th>Hosts/Network</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>A</td>
+                                <td>1.0.0.0 - 126.255.255.255</td>
+                                <td>8 / 24</td>
+                                <td>255.0.0.0</td>
+                                <td>128</td>
+                                <td>16,777,214</td>
+                            </tr>
+                            <tr>
+                                <td>B</td>
+                                <td>128.0.0.0 - 191.255.255.255</td>
+                                <td>16 / 16</td>
+                                <td>255.255.0.0</td>
+                                <td>16,384</td>
+                                <td>65,534</td>
+                            </tr>
+                            <tr>
+                                <td>C</td>
+                                <td>192.0.0.0 - 223.255.255.255</td>
+                                <td>24 / 8</td>
+                                <td>255.255.255.0</td>
+                                <td>2,097,152</td>
+                                <td>254</td>
+                            </tr>
+                            <tr>
+                                <td>D</td>
+                                <td>224.0.0.0 - 239.255.255.255</td>
+                                <td colspan="5">Multicast (not for host addressing)</td>
+                            </tr>
+                            <tr>
+                                <td>E</td>
+                                <td>240.0.0.0 - 255.255.255.255</td>
+                                <td colspan="5">Reserved/Experimental</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="note">
+                    <div class="note-title">💡 Special Addresses:</div>
+                    • 127.0.0.1 - Loopback<br>
+                    • 0.0.0.0 - Default route / This network<br>
+                    • 255.255.255.255 - Broadcast<br>
+                    • 169.254.x.x - APIPA (Auto-configuration)
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Subnetting</h3>
+                <div class="formula-box">
+                    <div class="formula-name">Subnet Calculations</div>
+                    <div class="formula">Number of Subnets = 2ⁿ (n = subnet bits borrowed)</div>
+                    <div class="formula">Hosts per Subnet = 2ʰ - 2 (h = host bits remaining)</div>
+                    <div class="formula">Subnet Mask = Network bits + Subnet bits = 1s, rest 0s</div>
+                    <div class="formula">Block Size = 256 - Subnet Mask (in octet being subnetted)</div>
+                </div>
+
+                <div class="example" style="margin-top: 15px;">
+                    <div class="example-title">📌 Subnetting Example</div>
+                    <strong>Network:</strong> 192.168.1.0/24, need 4 subnets<br><br>
+                    <strong>Step 1:</strong> Borrow 2 bits: 2² = 4 subnets<br>
+                    <strong>Step 2:</strong> New mask: /26 = 255.255.255.192<br>
+                    <strong>Step 3:</strong> Block size: 256 - 192 = 64<br>
+                    <strong>Step 4:</strong> Hosts per subnet: 2⁶ - 2 = 62<br><br>
+                    <table class="parsing-table">
+                        <tr><th>Subnet</th><th>Network</th><th>First Host</th><th>Last Host</th><th>Broadcast</th></tr>
+                        <tr><td>1</td><td>192.168.1.0</td><td>192.168.1.1</td><td>192.168.1.62</td><td>192.168.1.63</td></tr>
+                        <tr><td>2</td><td>192.168.1.64</td><td>192.168.1.65</td><td>192.168.1.126</td><td>192.168.1.127</td></tr>
+                        <tr><td>3</td><td>192.168.1.128</td><td>192.168.1.129</td><td>192.168.1.190</td><td>192.168.1.191</td></tr>
+                        <tr><td>4</td><td>192.168.1.192</td><td>192.168.1.193</td><td>192.168.1.254</td><td>192.168.1.255</td></tr>
+                    </table>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">CIDR (Classless Inter-Domain Routing)</h3>
+                <div class="formula-box">
+                    <div class="formula-name">CIDR Notation</div>
+                    <div class="formula">IP/Prefix: 192.168.1.0/24</div>
+                    <div class="formula">Prefix indicates number of network bits</div>
+                    <div class="formula">Enables variable-length subnet masking (VLSM)</div>
+                </div>
+
+                <div class="table-container" style="margin-top: 15px;">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>CIDR</th>
+                                <th>Subnet Mask</th>
+                                <th>Hosts</th>
+                                <th>CIDR</th>
+                                <th>Subnet Mask</th>
+                                <th>Hosts</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>/24</td><td>255.255.255.0</td><td>254</td><td>/28</td><td>255.255.255.240</td><td>14</td></tr>
+                            <tr><td>/25</td><td>255.255.255.128</td><td>126</td><td>/29</td><td>255.255.255.248</td><td>6</td></tr>
+                            <tr><td>/26</td><td>255.255.255.192</td><td>62</td><td>/30</td><td>255.255.255.252</td><td>2</td></tr>
+                            <tr><td>/27</td><td>255.255.255.224</td><td>30</td><td>/31</td><td>255.255.255.254</td><td>0*</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="variables">* /31 used for point-to-point links (RFC 3021)</div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">IPv6 Addressing</h3>
+                <div class="grid">
+                    <div class="formula-box">
+                        <div class="formula-name">IPv6 Structure</div>
+                        <div class="formula">IPv6: 128 bits = 8 groups of 4 hex digits</div>
+                        <div class="formula">Example: 2001:0db8:85a3:0000:0000:8a2e:0370:7334</div>
+                        <div class="formula">Compressed: 2001:db8:85a3::8a2e:370:7334</div>
+                        <div class="variables">
+                            Total Addresses: 2¹²⁸ ≈ 3.4 × 10³⁸
+                        </div>
+                    </div>
+                    <div class="formula-box">
+                        <div class="formula-name">IPv6 Address Types</div>
+                        <div class="formula-description">
+                            • <strong>Unicast:</strong> One-to-one<br>
+                            • <strong>Multicast:</strong> One-to-many (FF00::/8)<br>
+                            • <strong>Anycast:</strong> One-to-nearest<br>
+                            • <strong>Link-local:</strong> FE80::/10<br>
+                            • <strong>Unique local:</strong> FC00::/7
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">IPv4 Header</h3>
+                <div class="header-diagram">
+                    <div style="margin-bottom: 10px;"><strong>IPv4 Header (20-60 bytes)</strong></div>
+                    <div style="display: flex; flex-wrap: wrap; gap: 2px;">
+                        <div class="header-field" style="width: 30px;">Ver<br>4b</div>
+                        <div class="header-field" style="width: 40px;">IHL<br>4b</div>
+                        <div class="header-field" style="width: 50px;">ToS<br>8b</div>
+                        <div class="header-field" style="width: 50px;">Total Len<br>16b</div>
+                    </div>
+                    <div style="display: flex; flex-wrap: wrap; gap: 2px; margin-top: 2px;">
+                        <div class="header-field" style="width: 50px;">ID<br>16b</div>
+                        <div class="header-field" style="width: 30px;">Flags<br>3b</div>
+                        <div class="header-field" style="width: 50px;">Frag Offset<br>13b</div>
+                    </div>
+                    <div style="display: flex; flex-wrap: wrap; gap: 2px; margin-top: 2px;">
+                        <div class="header-field" style="width: 40px;">TTL<br>8b</div>
+                        <div class="header-field" style="width: 40px;">Protocol<br>8b</div>
+                        <div class="header-field" style="width: 50px;">Checksum<br>16b</div>
+                    </div>
+                    <div style="display: flex; flex-wrap: wrap; gap: 2px; margin-top: 2px;">
+                        <div class="header-field" style="width: 170px;">Source IP Address (32b)</div>
+                    </div>
+                    <div style="display: flex; flex-wrap: wrap; gap: 2px; margin-top: 2px;">
+                        <div class="header-field" style="width: 170px;">Destination IP Address (32b)</div>
+                    </div>
+                    <div style="display: flex; flex-wrap: wrap; gap: 2px; margin-top: 2px;">
+                        <div class="header-field" style="width: 170px;">Options (if present, variable)</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Routing Algorithms</h3>
+                
+                <div class="grid">
+                    <div class="algorithm-card">
+                        <h4>Distance Vector (RIP)</h4>
+                        <div class="formula">Bellman-Ford Algorithm</div>
+                        <div class="formula">Dx(y) = min{c(x,v) + Dv(y)} for all neighbors v</div>
+                        <div class="formula-description">
+                            • Shares entire routing table with neighbors<br>
+                            • Count-to-infinity problem<br>
+                            • Max hop count: 15 (RIP)<br>
+                            • Updates every 30 seconds
+                        </div>
+                    </div>
+                    <div class="algorithm-card">
+                        <h4>Link State (OSPF)</h4>
+                        <div class="formula">Dijkstra's Shortest Path Algorithm</div>
+                        <div class="formula-description">
+                            • Each router knows complete topology<br>
+                            • Floods LSA (Link State Advertisements)<br>
+                            • No count-to-infinity<br>
+                            • Triggered updates
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid" style="margin-top: 15px;">
+                    <div class="algorithm-card">
+                        <h4>Path Vector (BGP)</h4>
+                        <div class="formula-description">
+                            • Inter-domain routing (between AS)<br>
+                            • Path information prevents loops<br>
+                            • Policy-based routing<br>
+                            • TCP port 179
+                        </div>
+                    </div>
+                    <div class="algorithm-card">
+                        <h4>Dijkstra's Algorithm</h4>
+                        <div class="steps">
+                            <div class="step">Initialize: Distance to source = 0, others = ∞</div>
+                            <div class="step">Mark all nodes unvisited</div>
+                            <div class="step">Select unvisited node with smallest distance</div>
+                            <div class="step">Update distances to neighbors</div>
+                            <div class="step">Mark current node visited, repeat from step 3</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">NAT (Network Address Translation)</h3>
+                <div class="grid">
+                    <div class="algorithm-card">
+                        <h4>NAT Types</h4>
+                        <div class="formula-description">
+                            • <strong>Static NAT:</strong> 1-to-1 mapping<br>
+                            • <strong>Dynamic NAT:</strong> Pool of public IPs<br>
+                            • <strong>PAT/NAPT:</strong> Many-to-1 using ports
+                        </div>
+                    </div>
+                    <div class="algorithm-card">
+                        <h4>Private Address Ranges</h4>
+                        <div class="formula">Class A: 10.0.0.0/8 (10.0.0.0 - 10.255.255.255)</div>
+                        <div class="formula">Class B: 172.16.0.0/12 (172.16.0.0 - 172.31.255.255)</div>
+                        <div class="formula">Class C: 192.168.0.0/16 (192.168.0.0 - 192.168.255.255)</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TRANSPORT LAYER SECTION -->
+        <div class="section">
+            <h2 class="section-title">
+                <span class="icon">🚚</span>
+                Transport Layer
+            </h2>
+
+            <div class="subsection">
+                <h3 class="subsection-title">TCP vs UDP</h3>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Feature</th>
+                                <th>TCP</th>
+                                <th>UDP</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Connection</td><td>Connection-oriented</td><td>Connectionless</td></tr>
+                            <tr><td>Reliability</td><td>Reliable (ACK, retransmission)</td><td>Unreliable</td></tr>
+                            <tr><td>Ordering</td><td>Ordered delivery</td><td>No ordering</td></tr>
+                            <tr><td>Flow Control</td><td>Yes (sliding window)</td><td>No</td></tr>
+                            <tr><td>Congestion Control</td><td>Yes</td><td>No</td></tr>
+                            <tr><td>Speed</td><td>Slower</td><td>Faster</td></tr>
+                            <tr><td>Header Size</td><td>20+ bytes</td><td>8 bytes</td></tr>
+                            <tr><td>Use Cases</td><td>Web, Email, File Transfer</td><td>DNS, Video, VoIP</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">TCP Header</h3>
+                <div class="header-diagram">
+                    <div style="margin-bottom: 10px;"><strong>TCP Header (20-60 bytes)</strong></div>
+                    <div style="display: flex; flex-wrap: wrap; gap: 2px;">
+                        <div class="header-field" style="width: 85px;">Source Port<br>16b</div>
+                        <div class="header-field" style="width: 85px;">Dest Port<br>16b</div>
+                    </div>
+                    <div style="display: flex; flex-wrap: wrap; gap: 2px; margin-top: 2px;">
+                        <div class="header-field" style="width: 170px;">Sequence Number (32b)</div>
+                    </div>
+                    <div style="display: flex; flex-wrap: wrap; gap: 2px; margin-top: 2px;">
+                        <div class="header-field" style="width: 170px;">Acknowledgment Number (32b)</div>
+                    </div>
+                    <div style="display: flex; flex-wrap: wrap; gap: 2px; margin-top: 2px;">
+                        <div class="header-field" style="width: 20px;">HL<br>4b</div>
+                        <div class="header-field" style="width: 30px;">Res<br>6b</div>
+                        <div class="header-field" style="width: 40px;">Flags<br>6b</div>
+                        <div class="header-field" style="width: 50px;">Window<br>16b</div>
+                    </div>
+                    <div style="display: flex; flex-wrap: wrap; gap: 2px; margin-top: 2px;">
+                        <div class="header-field" style="width: 50px;">Checksum<br>16b</div>
+                        <div class="header-field" style="width: 50px;">Urgent Ptr<br>16b</div>
+                    </div>
+                </div>
+                <div class="formula">
+                    Flags: URG, ACK, PSH, RST, SYN, FIN
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">TCP Connection Management</h3>
+                <div class="grid">
+                    <div class="algorithm-card">
+                        <h4>Three-Way Handshake (Connection)</h4>
+                        <div class="steps">
+                            <div class="step"><strong>SYN:</strong> Client → Server (ISN = x)</div>
+                            <div class="step"><strong>SYN-ACK:</strong> Server → Client (ISN = y, ACK = x+1)</div>
+                            <div class="step"><strong>ACK:</strong> Client → Server (ACK = y+1)</div>
+                        </div>
+                        <div class="formula">Connection established</div>
+                    </div>
+                    <div class="algorithm-card">
+                        <h4>Four-Way Handshake (Termination)</h4>
+                        <div class="steps">
+                            <div class="step"><strong>FIN:</strong> Client → Server</div>
+                            <div class="step"><strong>ACK:</strong> Server → Client</div>
+                            <div class="step"><strong>FIN:</strong> Server → Client</div>
+                            <div class="step"><strong>ACK:</strong> Client → Server</div>
+                        </div>
+                        <div class="formula">Connection closed (TIME_WAIT = 2MSL)</div>
+                    </div>
+                </div>
+
+                <div class="note" style="margin-top: 15px;">
+                    <div class="note-title">💡 MSL (Maximum Segment Lifetime):</div>
+                    Maximum time a segment can exist in network. TIME_WAIT ensures old segments are gone before new connection uses same ports.
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">TCP Flow Control</h3>
+                <div class="formula-box">
+                    <div class="formula-name">Sliding Window</div>
+                    <div class="formula">Window Size = Advertised Window (rwnd)</div>
+                    <div class="formula">Bytes in flight ≤ min(cwnd, rwnd)</div>
+                    <div class="formula">Sequence Number Space: 2³² = 4 GB</div>
+                    <div class="variables">
+                        rwnd = Receiver's available buffer space<br>
+                        cwnd = Congestion window (sender's limit)
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">TCP Congestion Control</h3>
+                <div class="grid">
+                    <div class="algorithm-card">
+                        <h4>Phases</h4>
+                        <div class="formula"><strong>Slow Start:</strong></div>
+                        <div class="formula">&nbsp;&nbsp;cwnd = 1 MSS, double each RTT</div>
+                        <div class="formula">&nbsp;&nbsp;cwnd = cwnd × 2 (exponential)</div>
+                        <div class="formula"><strong>Congestion Avoidance:</strong></div>
+                        <div class="formula">&nbsp;&nbsp;cwnd = cwnd + 1/cwnd (linear)</div>
+                        <div class="formula"><strong>ssthresh:</strong> Slow start threshold</div>
+                    </div>
+                    <div class="algorithm-card">
+                        <h4>Loss Response</h4>
+                        <div class="formula-description">
+                            <strong>Timeout (Severe):</strong><br>
+                            • ssthresh = cwnd/2<br>
+                            • cwnd = 1 MSS<br>
+                            • Go to Slow Start<br><br>
+                            <strong>3 Duplicate ACKs (Mild):</strong><br>
+                            • ssthresh = cwnd/2<br>
+                            • cwnd = ssthresh + 3<br>
+                            • Fast Recovery
+                        </div>
+                    </div>
+                </div>
+
+                <div class="algorithm-card" style="margin-top: 15px;">
+                    <h4>TCP Reno Congestion Control</h4>
+                    <div class="bit-diagram">
+                        <pre>
+cwnd
+  ^
+  |           AIMD (Linear)
+  |          /
+  |         /
+  |        /    After loss
+  |   ____/     cut in half
+  |  /  |
+  | /   |
+  |/    |  Slow Start
+  |     |  (Exponential)
+  |_____|____________________
+        ssthresh    Time
+                        </pre>
+                    <div class="formula-description">
+                        <strong>AIMD:</strong> Additive Increase, Multiplicative Decrease<br>
+                        Fairness property: Converges to fair share
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">UDP Header</h3>
+                <div class="header-diagram">
+                    <div style="margin-bottom: 10px;"><strong>UDP Header (8 bytes)</strong></div>
+                    <div style="display: flex; flex-wrap: wrap; gap: 2px;">
+                        <div class="header-field" style="width: 85px;">Source Port<br>16b</div>
+                        <div class="header-field" style="width: 85px;">Dest Port<br>16b</div>
+                    </div>
+                    <div style="display: flex; flex-wrap: wrap; gap: 2px; margin-top: 2px;">
+                        <div class="header-field" style="width: 85px;">Length<br>16b</div>
+                        <div class="header-field" style="width: 85px;">Checksum<br>16b</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- APPLICATION LAYER SECTION -->
+        <div class="section">
+            <h2 class="section-title">
+                <span class="icon">📱</span>
+                Application Layer
+            </h2>
+
+            <div class="subsection">
+                <h3 class="subsection-title">DNS (Domain Name System)</h3>
+                <div class="grid">
+                    <div class="algorithm-card">
+                        <h4>DNS Structure</h4>
+                        <div class="formula-description">
+                            Hierarchical naming system:<br>
+                            • <strong>Root Servers:</strong> 13 worldwide<br>
+                            • <strong>TLD Servers:</strong> .com, .org, .edu, etc.<br>
+                            • <strong>Authoritative Servers:</strong> Domain specific<br>
+                            • <strong>Recursive Resolvers:</strong> ISP/Public DNS
+                        </div>
+                    </div>
+                    <div class="algorithm-card">
+                        <h4>DNS Record Types</h4>
+                        <div class="table-container">
+                            <table>
+                                <tr><th>Type</th><th>Description</th></tr>
+                                <tr><td>A</td><td>IPv4 address</td></tr>
+                                <tr><td>AAAA</td><td>IPv6 address</td></tr>
+                                <tr><td>CNAME</td><td>Alias (canonical name)</td></tr>
+                                <tr><td>MX</td><td>Mail server</td></tr>
+                                <tr><td>NS</td><td>Name server</td></tr>
+                                <tr><td>TXT</td><td>Text records</td></tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="formula-box" style="margin-top: 15px;">
+                    <div class="formula-name">DNS Query Process</div>
+                    <div class="timeline">
+                        <div class="formula-item">Client → Recursive Resolver</div>
+                        <span>→</span>
+                        <div class="formula-item">Root Server</div>
+                        <span>→</span>
+                        <div class="formula-item">TLD Server</div>
+                        <span>→</span>
+                        <div class="formula-item">Authoritative Server</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">HTTP</h3>
+                <div class="grid">
+                    <div class="algorithm-card">
+                        <h4>HTTP Methods</h4>
+                        <div class="table-container">
+                            <table>
+                                <tr><th>Method</th><th>Description</th></tr>
+                                <tr><td>GET</td><td>Retrieve resource</td></tr>
+                                <tr><td>POST</td><td>Submit data</td></tr>
+                                <tr><td>PUT</td><td>Update/replace</td></tr>
+                                <tr><td>DELETE</td><td>Remove resource</td></tr>
+                                <tr><td>HEAD</td><td>Get headers only</td></tr>
+                                <tr><td>OPTIONS</td><td>Get supported methods</td></tr>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="algorithm-card">
+                        <h4>HTTP Status Codes</h4>
+                        <div class="table-container">
+                            <table>
+                                <tr><th>Code</th><th>Meaning</th></tr>
+                                <tr><td>1xx</td><td>Informational</td></tr>
+                                <tr><td>2xx</td><td>Success (200 OK, 201 Created)</td></tr>
+                                <tr><td>3xx</td><td>Redirect (301 Moved, 304 Not Modified)</td></tr>
+                                <tr><td>4xx</td><td>Client Error (400 Bad, 404 Not Found)</td></tr>
+                                <tr><td>5xx</td><td>Server Error (500 Internal, 503 Unavailable)</td></tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid" style="margin-top: 15px;">
+                    <div class="algorithm-card">
+                        <h4>HTTP/1.1 Features</h4>
+                        <div class="formula-description">
+                            • Persistent connections (Keep-Alive)<br>
+                            • Pipelining (multiple requests)<br>
+                            • Chunked transfer encoding<br>
+                            • Host header (virtual hosting)
+                        </div>
+                    </div>
+                    <div class="algorithm-card">
+                        <h4>HTTP/2 Features</h4>
+                        <div class="formula-description">
+                            • Binary framing (not text)<br>
+                            • Multiplexing (multiple streams)<br>
+                            • Header compression (HPACK)<br>
+                            • Server push
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Email Protocols</h3>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Protocol</th>
+                                <th>Port</th>
+                                <th>Function</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>SMTP</td>
+                                <td>25, 587</td>
+                                <td>Send email (Mail Submission)</td>
+                            </tr>
+                            <tr>
+                                <td>POP3</td>
+                                <td>110, 995</td>
+                                <td>Download email (deletes from server)</td>
+                            </tr>
+                            <tr>
+                                <td>IMAP</td>
+                                <td>143, 993</td>
+                                <td>Access email (syncs with server)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="algorithm-card" style="margin-top: 15px;">
+                    <h4>Email Flow</h4>
+                    <div class="timeline">
+                        <div class="formula-item">Sender's Client</div>
+                        <span>→</span>
+                        <div class="formula-item">SMTP Server</div>
+                        <span>→</span>
+                        <div class="formula-item">Recipient's SMTP Server</div>
+                        <span>→</span>
+                        <div class="formula-item">Recipient's Mailbox</div>
+                        <span>→</span>
+                        <div class="formula-item">POP3/IMAP Client</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">FTP (File Transfer Protocol)</h3>
+                <div class="grid">
+                    <div class="algorithm-card">
+                        <h4>FTP Modes</h4>
+                        <div class="formula-description">
+                            <strong>Active Mode:</strong><br>
+                            • Client opens port, server connects back<br>
+                            • Server: Port 20 (data), 21 (control)<br><br>
+                            <strong>Passive Mode:</strong><br>
+                            • Server opens port, client connects<br>
+                            • Works behind firewalls
+                        </div>
+                    </div>
+                    <div class="algorithm-card">
+                        <h4>FTP Commands</h4>
+                        <div class="formula">USER, PASS - Authentication</div>
+                        <div class="formula">LIST, RETR, STOR - File operations</div>
+                        <div class="formula">PASV, PORT - Connection mode</div>
+                        <div class="formula">PWD, CWD, MKD - Directory operations</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- NETWORK SECURITY SECTION -->
+        <div class="section">
+            <h2 class="section-title">
+                <span class="icon">🔐</span>
+                Network Security
+            </h2>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Cryptography Basics</h3>
+                <div class="grid">
+                    <div class="algorithm-card">
+                        <h4>Symmetric Encryption</h4>
+                        <div class="formula-description">
+                            Same key for encryption & decryption<br>
+                            <strong>Algorithms:</strong> AES, DES, 3DES, RC4<br>
+                            <strong>Key Distribution:</strong> Problem - how to share key securely?<br>
+                            <strong>Speed:</strong> Fast (100-1000x faster than asymmetric)
+                        </div>
+                    </div>
+                    <div class="algorithm-card">
+                        <h4>Asymmetric Encryption</h4>
+                        <div class="formula-description">
+                            Public key encrypts, private key decrypts<br>
+                            <strong>Algorithms:</strong> RSA, ECC, Diffie-Hellman<br>
+                            <strong>Key Size:</strong> RSA 2048-bit ≈ AES 128-bit security<br>
+                            <strong>Use:</strong> Key exchange, digital signatures
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Hash Functions</h3>
+                <div class="formula-box">
+                    <div class="formula-name">Properties</div>
+                    <div class="formula">H(M) → Fixed-size hash from variable input</div>
+                    <div class="formula-description">
+                        • <strong>Pre-image resistant:</strong> Hard to find M from H(M)<br>
+                        • <strong>Collision resistant:</strong> Hard to find M₁ ≠ M₂ with same hash<br>
+                        • <strong>Algorithms:</strong> SHA-256, SHA-3, MD5 (broken)<br>
+                        • <strong>Applications:</strong> Password storage, digital signatures, integrity
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Digital Signatures</h3>
+                <div class="grid">
+                    <div class="algorithm-card">
+                        <h4>Signing Process</h4>
+                        <div class="steps">
+                            <div class="step">Hash the message: h = H(message)</div>
+                            <div class="step">Sign with private key: sig = Encrypt_private(h)</div>
+                            <div class="step">Send message + signature</div>
+                        </div>
+                    </div>
+                    <div class="algorithm-card">
+                        <h4>Verification Process</h4>
+                        <div class="steps">
+                            <div class="step">Hash received message: h' = H(message)</div>
+                            <div class="step">Decrypt signature: h = Decrypt_public(sig)</div>
+                            <div class="step">Compare h and h'</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">SSL/TLS Handshake</h3>
+                <div class="algorithm-card">
+                    <h4>TLS 1.2 Handshake Steps</h4>
+                    <div class="steps">
+                        <div class="step"><strong>ClientHello:</strong> Supported ciphers, TLS version, random</div>
+                        <div class="step"><strong>ServerHello:</strong> Selected cipher, certificate, random</div>
+                        <div class="step"><strong>Key Exchange:</strong> Client generates pre-master secret, encrypts with server's public key</div>
+                        <div class="step"><strong>Key Derivation:</strong> Both compute master secret, session keys</div>
+                        <div class="step"><strong>Finished:</strong> Verify handshake integrity</div>
+                    </div>
+                    <div class="note">
+                        <div class="note-title">💡 Perfect Forward Secrecy:</div>
+                        Use ephemeral Diffie-Hellman (DHE/ECDHE) so compromise of private key doesn't reveal past session keys.
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Network Attacks</h3>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Attack</th>
+                                <th>Description</th>
+                                <th>Prevention</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Eavesdropping</td>
+                                <td>Intercepting traffic</td>
+                                <td>Encryption (TLS)</td>
+                            </tr>
+                            <tr>
+                                <td>Spoofing</td>
+                                <td>Fake identity/IP</td>
+                                <td>Authentication, IPSec</td>
+                            </tr>
+                            <tr>
+                                <td>MITM</td>
+                                <td>Man-in-the-middle</td>
+                                <td>Certificates, PKI</td>
+                            </tr>
+                            <tr>
+                                <td>DoS/DDoS</td>
+                                <td>Overwhelm resources</td>
+                                <td>Rate limiting, CDN</td>
+                            </tr>
+                            <tr>
+                                <td>Replay Attack</td>
+                                <td>Capture and replay</td>
+                                <td>Nonce, Timestamps</td>
+                            </tr>
+                            <tr>
+                                <td>Phishing</td>
+                                <td>Fake websites</td>
+                                <td>User education, 2FA</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- NETWORK PERFORMANCE SECTION -->
+        <div class="section">
+            <h2 class="section-title">
+                <span class="icon">📊</span>
+                Network Performance Metrics
+            </h2>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Key Metrics</h3>
+                <div class="grid">
+                    <div class="formula-box">
+                        <div class="formula-name">Bandwidth vs Throughput</div>
+                        <div class="formula">Bandwidth = Maximum data rate (capacity)</div>
+                        <div class="formula">Throughput = Actual data rate achieved</div>
+                        <div class="formula">Efficiency = Throughput / Bandwidth × 100%</div>
+                    </div>
+                    <div class="formula-box">
+                        <div class="formula-name">Latency (Delay)</div>
+                        <div class="formula">Total Delay = Processing + Queuing + Transmission + Propagation</div>
+                        <div class="formula">Transmission Delay = Packet Size / Bandwidth</div>
+                        <div class="formula">Propagation Delay = Distance / Speed of Light in Medium</div>
+                    </div>
+                </div>
+
+                <div class="grid" style="margin-top: 15px;">
+                    <div class="formula-box">
+                        <div class="formula-name">RTT (Round Trip Time)</div>
+                        <div class="formula">RTT = Time for packet to travel to destination and back</div>
+                        <div class="formula">Bandwidth-Delay Product = Bandwidth × RTT</div>
+                        <div class="variables">
+                            BDP = Amount of data that can be "in flight"<br>
+                            Important for TCP window sizing
+                        </div>
+                    </div>
+                    <div class="formula-box">
+                        <div class="formula-name">Goodput</div>
+                        <div class="formula">Goodput = Useful Application Data / Total Time</div>
+                        <div class="formula-description">
+                            Excludes protocol overhead, retransmissions, and headers.<br>
+                            Always ≤ Throughput ≤ Bandwidth
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3 class="subsection-title">Performance Calculations</h3>
+                <div class="example">
+                    <div class="example-title">📌 Example Calculation</div>
+                    <strong>Given:</strong> 1 Gbps link, 20ms RTT, 1500 byte packets<br><br>
+                    <strong>Transmission Delay:</strong><br>
+                    = 1500 × 8 bits / 10⁹ bps = 12 μs<br><br>
+                    <strong>Bandwidth-Delay Product:</strong><br>
+                    = 10⁹ bps × 0.04s = 40 Mb = 5 MB<br><br>
+                    <strong>TCP Window needed:</strong> At least 5 MB to fill the pipe
+                </div>
+            </div>
+        </div>
+
+        <!-- Summary Section -->
+        <div class="section" style="background: linear-gradient(135deg, rgba(0, 188, 212, 0.2), rgba(77, 208, 225, 0.15));">
+            <h2 class="section-title">
+                <span class="icon">📋</span>
+                Quick Reference Summary
+            </h2>
+            <div class="comparison-grid">
+                <div class="comparison-item">
+                    <h5>OSI Model</h5>
+                    <p><strong>7:</strong> Application</p>
+                    <p><strong>6:</strong> Presentation</p>
+                    <p><strong>5:</strong> Session</p>
+                    <p><strong>4:</strong> Transport (TCP/UDP)</p>
+                    <p><strong>3:</strong> Network (IP)</p>
+                    <p><strong>2:</strong> Data Link (MAC)</p>
+                    <p><strong>1:</strong> Physical (Bits)</p>
+                </div>
+                <div class="comparison-item">
+                    <h5>IP Addressing</h5>
+                    <p><strong>Class A:</strong> 1-126, /8</p>
+                    <p><strong>Class B:</strong> 128-191, /16</p>
+                    <p><strong>Class C:</strong> 192-223, /24</p>
+                    <p><strong>Private:</strong> 10.x, 172.16-31, 192.168</p>
+                    <p><strong>Subnet:</strong> 2ⁿ subnets, 2ʰ-2 hosts</p>
+                </div>
+                <div class="comparison-item">
+                    <h5>TCP</h5>
+                    <p><strong>3-way:</strong> SYN, SYN-ACK, ACK</p>
+                    <p><strong>4-way close:</strong> FIN, ACK, FIN, ACK</p>
+                    <p><strong>Flow:</strong> Sliding window</p>
+                    <p><strong>Congestion:</strong> Slow start, AIMD</p>
+                </div>
+                <div class="comparison-item">
+                    <h5>Routing</h5>
+                    <p><strong>RIP:</strong> Distance vector, max 15 hops</p>
+                    <p><strong>OSPF:</strong> Link state, Dijkstra</p>
+                    <p><strong>BGP:</strong> Path vector, AS routing</p>
+                </div>
+                <div class="comparison-item">
+                    <h5>Error Detection</h5>
+                    <p><strong>Parity:</strong> Single bit errors</p>
+                    <p><strong>CRC:</strong> Polynomial division</p>
+                    <p><strong>Hamming:</strong> d-1 detect, ⌊(d-1)/2⌋ correct</p>
+                </div>
+                <div class="comparison-item">
+                    <h5>Performance</h5>
+                    <p><strong>Tx Delay:</strong> Size/Bandwidth</p>
+                    <p><strong>Prop Delay:</strong> Distance/Speed</p>
+                    <p><strong>BDP:</strong> Bandwidth × RTT</p>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>📚 Computer Networks Formula Reference Sheet</p>
+            <p>OSI Model • TCP/IP • IP Addressing • Routing • Security • Performance</p>
+        </footer>
+    </div>
+</body>
+</html>
