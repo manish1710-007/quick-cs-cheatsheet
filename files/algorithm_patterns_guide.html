@@ -1,0 +1,3108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Algorithm Patterns - Easy Learning Guide</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            color: #e0e0e0;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            padding: 40px 20px;
+            background: linear-gradient(90deg, #00d4ff, #00ff88, #ffcc00);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        header h1 {
+            font-size: 2.8em;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            font-size: 1.2em;
+            color: #8892b0;
+            -webkit-text-fill-color: #8892b0;
+        }
+
+        .topic-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(600px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .topic-card {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 15px;
+            padding: 25px;
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .topic-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 212, 255, 0.15);
+            border-color: rgba(0, 212, 255, 0.4);
+        }
+
+        .topic-card h2 {
+            color: #00d4ff;
+            font-size: 1.4em;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .topic-number {
+            background: linear-gradient(135deg, #00d4ff, #00ff88);
+            color: #1a1a2e;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+
+        .concept-box {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border-left: 4px solid #00ff88;
+        }
+
+        .concept-box h4 {
+            color: #00ff88;
+            margin-bottom: 8px;
+        }
+
+        .diagram-box {
+            background: rgba(0, 0, 0, 0.4);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            overflow-x: auto;
+            border: 1px solid rgba(0, 212, 255, 0.2);
+        }
+
+        .diagram-box pre {
+            font-family: 'Courier New', monospace;
+            font-size: 0.85em;
+            color: #00ff88;
+            line-height: 1.4;
+            white-space: pre;
+        }
+
+        .step-box {
+            background: linear-gradient(145deg, rgba(255, 204, 0, 0.1), rgba(255, 152, 0, 0.05));
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border-left: 4px solid #ffcc00;
+        }
+
+        .step-box h4 {
+            color: #ffcc00;
+            margin-bottom: 10px;
+        }
+
+        .code-box {
+            background: #1e1e1e;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border: 1px solid #30363d;
+            overflow-x: auto;
+        }
+
+        .code-box code {
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            color: #d4d4d4;
+        }
+
+        .code-box .keyword { color: #569cd6; }
+        .code-box .comment { color: #6a9955; }
+        .code-box .string { color: #ce9178; }
+        .code-box .function { color: #dcdcaa; }
+        .code-box .number { color: #b5cea8; }
+
+        .complexity-box {
+            display: flex;
+            gap: 15px;
+            margin: 15px 0;
+        }
+
+        .complexity-item {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 10px 15px;
+            border-radius: 8px;
+            flex: 1;
+        }
+
+        .complexity-item strong {
+            color: #00d4ff;
+        }
+
+        .complexity-item span {
+            color: #00ff88;
+            font-family: 'Courier New', monospace;
+        }
+
+        .example-box {
+            background: linear-gradient(145deg, rgba(156, 39, 176, 0.1), rgba(103, 58, 183, 0.05));
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border-left: 4px solid #9c27b0;
+        }
+
+        .example-box h4 {
+            color: #ce93d8;
+            margin-bottom: 10px;
+        }
+
+        .visual-step {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 8px 0;
+            padding: 8px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+        }
+
+        .step-num {
+            background: #00d4ff;
+            color: #1a1a2e;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.8em;
+            flex-shrink: 0;
+        }
+
+        .pointer {
+            color: #ff6b6b;
+            font-weight: bold;
+        }
+
+        .highlight {
+            color: #ffcc00;
+            font-weight: bold;
+        }
+
+        .good {
+            color: #00ff88;
+        }
+
+        .bad {
+            color: #ff6b6b;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 10px 0;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        th {
+            background: rgba(0, 212, 255, 0.2);
+            color: #fff;
+        }
+
+        td {
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        .nav-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin: 20px 0;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+
+        .nav-links a {
+            color: #00d4ff;
+            text-decoration: none;
+            padding: 8px 15px;
+            background: rgba(0, 212, 255, 0.1);
+            border-radius: 20px;
+            font-size: 0.9em;
+            transition: all 0.3s;
+        }
+
+        .nav-links a:hover {
+            background: rgba(0, 212, 255, 0.3);
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px;
+            margin-top: 40px;
+            color: #8892b0;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        @media (max-width: 700px) {
+            .topic-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🧠 Algorithm Patterns</h1>
+            <p>Easy Learning Guide with Visual Diagrams</p>
+        </header>
+
+        <nav class="nav-links">
+            <a href="#two-pointers">Two Pointers</a>
+            <a href="#prefix-sums">Prefix Sums</a>
+            <a href="#sliding-window">Sliding Window</a>
+            <a href="#kadane">Kadane's Algorithm</a>
+            <a href="#subarrays">Subarrays Count</a>
+            <a href="#fast-slow">Fast & Slow Pointers</a>
+            <a href="#dfs">DFS</a>
+            <a href="#bfs">BFS</a>
+            <a href="#matrix">Matrix Traversal</a>
+            <a href="#adjacency">Adjacency BFS/DFS</a>
+            <a href="#two-heaps">Two Heaps</a>
+            <a href="#binary-search">Binary Search</a>
+            <a href="#topological">Topological Sort</a>
+            <a href="#top-k">Top K</a>
+            <a href="#linked-list">Linked List Reversal</a>
+            <a href="#permutations">Permutations</a>
+            <a href="#combinations">Combinations</a>
+            <a href="#backtracking">Tree Maze</a>
+            <a href="#lcs">LCS</a>
+            <a href="#monotonic">Monotonic Stack</a>
+            <a href="#memoization">Memoization</a>
+            <a href="#tabulation">Tabulation</a>
+            <a href="#multi-bfs">Multi-source BFS</a>
+            <a href="#merge-intervals">Merge Intervals</a>
+        </nav>
+
+        <div class="topic-grid">
+            <!-- 1. Two Pointers -->
+            <div class="topic-card" id="two-pointers">
+                <h2><span class="topic-number">1</span> Two Pointers</h2>
+                
+                <div class="concept-box">
+                    <h4>📌 What is it?</h4>
+                    <p>Two pointers technique uses <strong>two variables</strong> to traverse data from different directions or at different speeds. Think of it like two people walking towards each other on a bridge!</p>
+                </div>
+
+                <div class="diagram-box">
+                    <pre>
+Finding Pair with Target Sum in Sorted Array:
+
+Array: [1, 2, 3, 4, 6, 8, 9, 11]  Target = 10
+
+Step 1: left → [1]                    right → [11]
+        ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        1   2   3   4   6   8   9   11
+        ↑                               ↑
+        left                           right
+        Sum = 1 + 11 = 12 > 10 → move right left
+
+Step 2: left → [1]                right → [9]
+        ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        1   2   3   4   6   8   9   11
+        ↑                           ↑
+        left                       right
+        Sum = 1 + 9 = 10 = 10 → ✓ FOUND!
+
+✅ Found pair: (1, 9) at indices 0 and 6
+                    </pre>
+                </div>
+
+                <div class="step-box">
+                    <h4>🎯 When to Use</h4>
+                    <ul>
+                        <li><strong>Sorted arrays</strong> - finding pairs, triplets</li>
+                        <li><strong>Palindromes</strong> - check from both ends</li>
+                        <li><strong>Container with most water</strong> - maximize area</li>
+                        <li><strong>Removing duplicates</strong> from sorted array</li>
+                    </ul>
+                </div>
+
+                <div class="complexity-box">
+                    <div class="complexity-item">
+                        <strong>Time:</strong> <span>O(n)</span>
+                    </div>
+                    <div class="complexity-item">
+                        <strong>Space:</strong> <span>O(1)</span>
+                    </div>
+                </div>
+
+                <div class="code-box">
+                    <code>
+<span class="comment">// Two Sum in Sorted Array</span>
+<span class="keyword">function</span> <span class="function">twoSum</span>(arr, target) {
+    <span class="keyword">let</span> left = <span class="number">0</span>, right = arr.length - <span class="number">1</span>;
+    
+    <span class="keyword">while</span> (left < right) {
+        <span class="keyword">let</span> sum = arr[left] + arr[right];
+        
+        <span class="keyword">if</span> (sum === target) <span class="keyword">return</span> [left, right];
+        <span class="keyword">else if</span> (sum < target) left++;
+        <span class="keyword">else</span> right--;
+    }
+    <span class="keyword">return</span> [<span class="number">-1</span>, <span class="number">-1</span>];
+}
+                    </code>
+                </div>
+
+                <div class="example-box">
+                    <h4>💡 Key Insight</h4>
+                    <p>Start pointers at different positions based on the problem:<br>
+                    • <strong>Opposite ends:</strong> Sorted array problems<br>
+                    • <strong>Same start:</strong> Fast-slow problems, sliding window</p>
+                </div>
+            </div>
+
+            <!-- 2. Prefix Sums -->
+            <div class="topic-card" id="prefix-sums">
+                <h2><span class="topic-number">2</span> Prefix Sums</h2>
+                
+                <div class="concept-box">
+                    <h4>📌 What is it?</h4>
+                    <p>Prefix sum is like a <strong>running total</strong>. We pre-calculate cumulative sums so we can quickly find the sum of any subarray. Think of it as "remembering all the previous work"!</p>
+                </div>
+
+                <div class="diagram-box">
+                    <pre>
+Original Array:    [2,  4,  1,  3,  6,  5]
+Index:              0   1   2   3   4   5
+
+Building Prefix Sum:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Index 0: prefix[0] = 2           → prefix = [2]
+Index 1: prefix[1] = 2 + 4 = 6   → prefix = [2, 6]
+Index 2: prefix[2] = 6 + 1 = 7   → prefix = [2, 6, 7]
+Index 3: prefix[3] = 7 + 3 = 10  → prefix = [2, 6, 7, 10]
+Index 4: prefix[4] = 10 + 6 = 16 → prefix = [2, 6, 7, 10, 16]
+Index 5: prefix[5] = 16 + 5 = 21 → prefix = [2, 6, 7, 10, 16, 21]
+
+Result Prefix Array: [2, 6, 7, 10, 16, 21]
+
+Query: Sum from index 2 to 4 (elements [1, 3, 6])
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+prefix[4] - prefix[1] = 16 - 6 = 10
+Verify: 1 + 3 + 6 = 10 ✓
+                    </pre>
+                </div>
+
+                <div class="step-box">
+                    <h4>🎯 The Magic Formula</h4>
+                    <p><strong>Sum of range [i, j] = prefix[j] - prefix[i-1]</strong></p>
+                    <p>If i = 0, just use prefix[j]</p>
+                </div>
+
+                <div class="complexity-box">
+                    <div class="complexity-item">
+                        <strong>Build Time:</strong> <span>O(n)</span>
+                    </div>
+                    <div class="complexity-item">
+                        <strong>Query Time:</strong> <span>O(1)</span>
+                    </div>
+                    <div class="complexity-item">
+                        <strong>Space:</strong> <span>O(n)</span>
+                    </div>
+                </div>
+
+                <div class="code-box">
+                    <code>
+<span class="comment">// Build prefix sum array</span>
+<span class="keyword">function</span> <span class="function">buildPrefix</span>(arr) {
+    <span class="keyword">let</span> prefix = <span class="keyword">new</span> Array(arr.length);
+    prefix[<span class="number">0</span>] = arr[<span class="number">0</span>];
+    
+    <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">1</span>; i < arr.length; i++) {
+        prefix[i] = prefix[i-<span class="number">1</span>] + arr[i];
+    }
+    <span class="keyword">return</span> prefix;
+}
+
+<span class="comment">// Get sum of range [left, right]</span>
+<span class="keyword">function</span> <span class="function">rangeSum</span>(prefix, left, right) {
+    <span class="keyword">return</span> left === <span class="number">0</span> 
+        ? prefix[right] 
+        : prefix[right] - prefix[left - <span class="number">1</span>];
+}
+                    </code>
+                </div>
+
+                <div class="example-box">
+                    <h4>💡 Common Applications</h4>
+                    <ul>
+                        <li>Range sum queries</li>
+                        <li>Subarray sum equals K</li>
+                        <li>2D grid sum queries</li>
+                        <li>Equilibrium index finding</li>
+                    </ul>
+                </div>
+            </div>
+            <!-- 3. Sliding Window -->
+            <div class="topic-card" id="sliding-window">
+                <h2><span class="topic-number">3</span> Sliding Window</h2>
+                
+                <div class="concept-box">
+                    <h4>📌 What is it?</h4>
+                    <p>Imagine a <strong>window frame sliding across a picture</strong>. Instead of recalculating everything inside the window each time, we add the new element coming in and remove the element going out. It's like moving your gaze across a scene!</p>
+                </div>
+
+                <div class="diagram-box">
+                    <pre>
+Find Maximum Sum Subarray of Size 3:
+Array: [2, 1, 5, 1, 3, 2]   Window Size k = 3
+
+Step 1: Window = [2, 1, 5]
+        ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        [ 2   1   5 ]  1   3   2
+        ←───────→
+          Sum = 8 (current max = 8)
+
+Step 2: Slide right - Add 1, Remove 2
+        ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+          2 [ 1   5   1 ] 3   2
+             ←───────→
+          Sum = 8 - 2 + 1 = 7 (max still 8)
+
+Step 3: Slide right - Add 3, Remove 1
+        ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+          2   1 [ 5   1   3 ] 2
+                ←───────→
+          Sum = 7 - 1 + 3 = 9 (new max = 9) ⭐
+
+Step 4: Slide right - Add 2, Remove 5
+        ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+          2   1   5 [ 1   3   2 ]
+                    ←───────→
+          Sum = 9 - 5 + 2 = 6 (max still 9)
+
+✅ Maximum sum = 9 from subarray [5, 1, 3]
+                    </pre>
+                </div>
+
+                <div class="step-box">
+                    <h4>🎯 When to Use</h4>
+                    <ul>
+                        <li><strong>Fixed window:</strong> Max/min sum of size k</li>
+                        <li><strong>Variable window:</strong> Smallest subarray with sum ≥ K</li>
+                        <li><strong>String problems:</strong> Longest substring with K distinct chars</li>
+                        <li>Problems with <strong>contiguous subarrays</strong></li>
+                    </ul>
+                </div>
+
+                <div class="complexity-box">
+                    <div class="complexity-item">
+                        <strong>Time:</strong> <span>O(n)</span>
+                    </div>
+                    <div class="complexity-item">
+                        <strong>Space:</strong> <span>O(1) or O(k)</span>
+                    </div>
+                </div>
+
+                <div class="code-box">
+                    <code>
+<span class="comment">// Fixed size sliding window</span>
+<span class="keyword">function</span> <span class="function">maxSumSubarray</span>(arr, k) {
+    <span class="keyword">let</span> windowSum = <span class="number">0</span>, maxSum = <span class="number">0</span>;
+    
+    <span class="comment">// Build first window</span>
+    <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i < k; i++) {
+        windowSum += arr[i];
+    }
+    maxSum = windowSum;
+    
+    <span class="comment">// Slide the window</span>
+    <span class="keyword">for</span> (<span class="keyword">let</span> i = k; i < arr.length; i++) {
+        windowSum = windowSum - arr[i-k] + arr[i];
+        maxSum = Math.<span class="function">max</span>(maxSum, windowSum);
+    }
+    <span class="keyword">return</span> maxSum;
+}
+                    </code>
+                </div>
+
+                <div class="example-box">
+                    <h4>💡 Two Types</h4>
+                    <p><strong>Fixed Size:</strong> Window size is given (size k)<br>
+                    <strong>Dynamic Size:</strong> Window grows/shrinks based on condition</p>
+                </div>
+            </div>
+
+            <!-- 4. Kadane's Algorithm -->
+            <div class="topic-card" id="kadane">
+                <h2><span class="topic-number">4</span> Kadane's Algorithm</h2>
+                
+                <div class="concept-box">
+                    <h4>📌 What is it?</h4>
+                    <p>Kadane's algorithm finds the <strong>maximum sum subarray</strong> in O(n) time. The key insight: if a subarray sum becomes negative, <strong>discard it</strong> and start fresh. Negative prefix can never contribute positively!</p>
+                </div>
+
+                <div class="diagram-box">
+                    <pre>
+Find Maximum Subarray Sum:
+Array: [-2, 1, -3, 4, -1, 2, 1, -5, 4]
+
+Walkthrough:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Index  Element   Current Sum    Decision       Max So Far
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  0      -2        -2           Keep (-2)          -2
+  1       1     max(-2+1, 1) = 1  Start fresh!      1
+  2      -3        1 + (-3) = -2                   1
+  3       4     max(-2+4, 4) = 4  Start fresh!      4
+  4      -1        4 + (-1) = 3                    4
+  5       2        3 + 2 = 5                       5 ⭐
+  6       1        5 + 1 = 6                       6 ⭐
+  7      -5        6 + (-5) = 1                    6
+  8       4        1 + 4 = 5                       6
+
+✅ Maximum subarray sum = 6
+   Subarray: [4, -1, 2, 1]
+
+Key: max(current + previous, current)
+     = max(extend previous, start fresh)
+                    </pre>
+                </div>
+
+                <div class="step-box">
+                    <h4>🎯 The Decision at Each Step</h4>
+                    <div class="visual-step">
+                        <span class="step-num">1</span>
+                        <span>Calculate: <strong>current + previous_sum</strong></span>
+                    </div>
+                    <div class="visual-step">
+                        <span class="step-num">2</span>
+                        <span>If result < current element → <span class="bad">START FRESH</span></span>
+                    </div>
+                    <div class="visual-step">
+                        <span class="step-num">3</span>
+                        <span>Else → <span class="good">EXTEND</span> previous subarray</span>
+                    </div>
+                    <div class="visual-step">
+                        <span class="step-num">4</span>
+                        <span>Update maximum if current is larger</span>
+                    </div>
+                </div>
+
+                <div class="complexity-box">
+                    <div class="complexity-item">
+                        <strong>Time:</strong> <span>O(n)</span>
+                    </div>
+                    <div class="complexity-item">
+                        <strong>Space:</strong> <span>O(1)</span>
+                    </div>
+                </div>
+
+                <div class="code-box">
+                    <code>
+<span class="keyword">function</span> <span class="function">kadane</span>(arr) {
+    <span class="keyword">let</span> maxSoFar = arr[<span class="number">0</span>];
+    <span class="keyword">let</span> maxEndingHere = arr[<span class="number">0</span>];
+    
+    <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">1</span>; i < arr.length; i++) {
+        <span class="comment">// Decision: extend or start fresh?</span>
+        maxEndingHere = Math.<span class="function">max</span>(
+            arr[i],           <span class="comment">// Start fresh</span>
+            maxEndingHere + arr[i]  <span class="comment">// Extend</span>
+        );
+        
+        maxSoFar = Math.<span class="function">max</span>(maxSoFar, maxEndingHere);
+    }
+    <span class="keyword">return</span> maxSoFar;
+}
+                    </code>
+                </div>
+
+                <div class="example-box">
+                    <h4>💡 Why It Works</h4>
+                    <p>A negative sum prefix can never help maximize the total. If the best subarray ending at position i-1 has negative sum, it's better to start a new subarray at i!</p>
+                </div>
+            </div>
+            <!-- 5. Find Number of Subarrays -->
+            <div class="topic-card" id="subarrays">
+                <h2><span class="topic-number">5</span> Number of Subarrays</h2>
+                
+                <div class="concept-box">
+                    <h4>📌 What is it?</h4>
+                    <p>Counting subarrays that meet certain criteria (sum = K, with certain elements, etc.). The key is using <strong>prefix sums + hash maps</strong> to count efficiently.</p>
+                </div>
+
+                <div class="diagram-box">
+                    <pre>
+Count Subarrays with Sum = 7:
+Array: [3, 4, 7, 2, -3, 1, 4, 2]
+
+Using Prefix Sum + HashMap:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Prefix Sum Flow:
+Index:    0    1    2    3    4    5    6    7
+Array:    3    4    7    2   -3    1    4    2
+Prefix:   3    7   14   16   13   14   18   20
+
+For each position, check: Does (prefix - target) exist?
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Index  Prefix   Looking For (prefix - 7)   Found?
+  0       3           3 - 7 = -4           No
+  1       7           7 - 7 = 0            Yes! (count = 1)
+  2      14          14 - 7 = 7            Yes! (count = 2)
+  3      16          16 - 7 = 9            No
+  4      13          13 - 7 = 6            No
+  5      14          14 - 7 = 7            Yes! (count = 3)
+  6      18          18 - 7 = 11           No
+  7      20          20 - 7 = 13           Yes! (count = 4)
+
+✅ Total subarrays with sum 7 = 4
+
+HashMap state at end: {0:1, 3:1, 7:2, 14:2, 16:1, 13:1, 18:1}
+                    </pre>
+                </div>
+
+                <div class="step-box">
+                    <h4>🎯 The Pattern</h4>
+                    <p><strong>Core Formula:</strong> count += map.get(prefixSum - target)</p>
+                    <p>At each position, we ask: "How many times have we seen a prefix sum that equals (current - target)?"</p>
+                </div>
+
+                <div class="complexity-box">
+                    <div class="complexity-item">
+                        <strong>Time:</strong> <span>O(n)</span>
+                    </div>
+                    <div class="complexity-item">
+                        <strong>Space:</strong> <span>O(n)</span>
+                    </div>
+                </div>
+
+                <div class="code-box">
+                    <code>
+<span class="keyword">function</span> <span class="function">subarraySum</span>(arr, k) {
+    <span class="keyword">let</span> count = <span class="number">0</span>, prefixSum = <span class="number">0</span>;
+    <span class="keyword">let</span> map = <span class="keyword">new</span> Map([[<span class="number">0</span>, <span class="number">1</span>]]); <span class="comment">// prefix 0 occurs once</span>
+    
+    <span class="keyword">for</span> (<span class="keyword">let</span> num <span class="keyword">of</span> arr) {
+        prefixSum += num;
+        
+        <span class="comment">// Check if (prefixSum - k) exists</span>
+        <span class="keyword">if</span> (map.<span class="function">has</span>(prefixSum - k)) {
+            count += map.<span class="function">get</span>(prefixSum - k);
+        }
+        
+        <span class="comment">// Store current prefix sum</span>
+        map.<span class="function">set</span>(prefixSum, (map.<span class="function">get</span>(prefixSum) || <span class="number">0</span>) + <span class="number">1</span>);
+    }
+    <span class="keyword">return</span> count;
+}
+                    </code>
+                </div>
+
+                <div class="example-box">
+                    <h4>💡 Total Number of Subarrays</h4>
+                    <p>For array of length n: <strong>n × (n+1) / 2</strong> subarrays total</p>
+                    <p>Example: n = 5 → 5 × 6 / 2 = 15 subarrays</p>
+                </div>
+            </div>
+
+            <!-- 6. Fast & Slow Pointers -->
+            <div class="topic-card" id="fast-slow">
+                <h2><span class="topic-number">6</span> Fast & Slow Pointers</h2>
+                
+                <div class="concept-box">
+                    <h4>📌 What is it?</h4>
+                    <p>Two pointers moving at <strong>different speeds</strong> through a sequence. Like a race where one runner is twice as fast as another. If there's a cycle, they'll <strong>eventually meet</strong>!</p>
+                </div>
+
+                <div class="diagram-box">
+                    <pre>
+Detecting a Cycle in Linked List:
+
+List: 1 → 2 → 3 → 4 → 5 → (back to 3, cycle!)
+
+Position tracking:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Step 0:  Slow at 1, Fast at 1
+         [1] → [2] → [3] → [4] → [5]
+          ↑
+         S,F
+
+Step 1:  Slow moves 1, Fast moves 2
+         [1] → [2] → [3] → [4] → [5]
+                ↑      ↑
+                S      F
+
+Step 2:  Slow at 3, Fast at 5
+         [1] → [2] → [3] → [4] → [5]
+                       ↑             ↑
+                       S             F
+
+Step 3:  Slow at 4, Fast back at 3 (cycle!)
+         [1] → [2] → [3] → [4] → [5]
+                 ↑      ↑
+                 F      S
+
+Step 4:  Slow at 5, Fast at 5
+         [1] → [2] → [3] → [4] → [5]
+                                ↑↑
+                                SF
+         
+         ✅ CYCLE DETECTED! They met at node 5!
+                    </pre>
+                </div>
+
+                <div class="step-box">
+                    <h4>🎯 Why It Works</h4>
+                    <p>Think of it like a circular track. If fast runs 2 laps for every 1 lap of slow, eventually fast will "lap" slow and they'll meet. Distance between them increases by 1 each step, and since the track is finite, they must meet.</p>
+                </div>
+
+                <div class="complexity-box">
+                    <div class="complexity-item">
+                        <strong>Time:</strong> <span>O(n)</span>
+                    </div>
+                    <div class="complexity-item">
+                        <strong>Space:</strong> <span>O(1)</span>
+                    </div>
+                </div>
+
+                <div class="code-box">
+                    <code>
+<span class="comment">// Cycle detection</span>
+<span class="keyword">function</span> <span class="function">hasCycle</span>(head) {
+    <span class="keyword">let</span> slow = head, fast = head;
+    
+    <span class="keyword">while</span> (fast && fast.next) {
+        slow = slow.next;       <span class="comment">// Move 1 step</span>
+        fast = fast.next.next;  <span class="comment">// Move 2 steps</span>
+        
+        <span class="keyword">if</span> (slow === fast) <span class="keyword">return true</span>; <span class="comment">// Cycle!</span>
+    }
+    <span class="keyword">return false</span>;
+}
+
+<span class="comment">// Find middle of linked list</span>
+<span class="keyword">function</span> <span class="function">findMiddle</span>(head) {
+    <span class="keyword">let</span> slow = head, fast = head;
+    
+    <span class="keyword">while</span> (fast && fast.next) {
+        slow = slow.next;
+        fast = fast.next.next;
+    }
+    <span class="keyword">return</span> slow; <span class="comment">// When fast reaches end, slow is at middle</span>
+}
+                    </code>
+                </div>
+
+                <div class="example-box">
+                    <h4>💡 Applications</h4>
+                    <ul>
+                        <li>Cycle detection in linked list</li>
+                        <li>Find middle of linked list</li>
+                        <li>Happy number problem</li>
+                        <li>Cycle start point detection</li>
+                    </ul>
+                </div>
+            </div>
+            <!-- 7. Depth-First Search -->
+            <div class="topic-card" id="dfs">
+                <h2><span class="topic-number">7</span> Depth-First Search (DFS)</h2>
+                
+                <div class="concept-box">
+                    <h4>📌 What is it?</h4>
+                    <p>DFS explores as <strong>deep as possible</strong> before backtracking. Like exploring a maze by always taking the first path you see, and only going back when you hit a dead end. Uses a <strong>stack</strong> (or recursion)!</p>
+                </div>
+
+                <div class="diagram-box">
+                    <pre>
+DFS Traversal of a Tree:
+
+            Tree:           Visited Order:
+            
+              A              1. Start at A
+             /|\             2. Go to B (first child)
+            / | \            3. Go to D (B's first child)
+           B  C  D           4. Backtrack, go to E
+          /|    |            5. Backtrack to A
+         E F    G            6. Go to C
+                             7. Backtrack to A
+        Order: A → B → E → F → C → D → G
+
+DFS on Grid (like finding path in maze):
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    0   1   2   3   4
+  ┌───┬───┬───┬───┬───┐
+0 │ S │   │ █ │   │   │   S = Start
+  ├───┼───┼───┼───┼───┤   E = End
+1 │ █ │   │ █ │   │   │   █ = Wall
+  ├───┼───┼───┼───┼───┤   • = Visited
+2 │   │   │   │   │ █ │   → = Path
+  ├───┼───┼───┼───┼───┤
+3 │   │ █ │ █ │   │ E │
+  └───┴───┴───┴───┴───┘
+
+DFS explores each direction completely before trying next:
+  1. Try RIGHT as far as possible
+  2. Hit wall? BACKTRACK
+  3. Try DOWN, then RIGHT again
+  4. Continue until found or all explored
+                    </pre>
+                </div>
+
+                <div class="step-box">
+                    <h4>🎯 DFS Template</h4>
+                    <div class="visual-step">
+                        <span class="step-num">1</span>
+                        <span>Mark current node as <strong>visited</strong></span>
+                    </div>
+                    <div class="visual-step">
+                        <span class="step-num">2</span>
+                        <span>Process current node (add to result, check condition)</span>
+                    </div>
+                    <div class="visual-step">
+                        <span class="step-num">3</span>
+                        <span>For each <strong>unvisited neighbor</strong>, recurse DFS</span>
+                    </div>
+                    <div class="visual-step">
+                        <span class="step-num">4</span>
+                        <span>Backtrack if needed (for path problems)</span>
+                    </div>
+                </div>
+
+                <div class="complexity-box">
+                    <div class="complexity-item">
+                        <strong>Time:</strong> <span>O(V + E)</span>
+                    </div>
+                    <div class="complexity-item">
+                        <strong>Space:</strong> <span>O(V)</span>
+                    </div>
+                </div>
+
+                <div class="code-box">
+                    <code>
+<span class="comment">// DFS for Graph (recursive)</span>
+<span class="keyword">function</span> <span class="function">dfs</span>(graph, node, visited) {
+    visited.<span class="function">add</span>(node);
+    console.<span class="function">log</span>(node);  <span class="comment">// Process node</span>
+    
+    <span class="keyword">for</span> (<span class="keyword">let</span> neighbor <span class="keyword">of</span> graph[node]) {
+        <span class="keyword">if</span> (!visited.<span class="function">has</span>(neighbor)) {
+            <span class="function">dfs</span>(graph, neighbor, visited);
+        }
+    }
+}
+
+<span class="comment">// DFS for Grid</span>
+<span class="keyword">function</span> <span class="function">dfsGrid</span>(grid, row, col, visited) {
+    <span class="keyword">const</span> ROWS = grid.length, COLS = grid[<span class="number">0</span>].length;
+    <span class="keyword">const</span> dirs = [[<span class="number">1</span>,<span class="number">0</span>], [<span class="number">-1</span>,<span class="number">0</span>], [<span class="number">0</span>,<span class="number">1</span>], [<span class="number">0</span>,<span class="number">-1</span>]];
+    
+    <span class="keyword">if</span> (row < <span class="number">0</span> || row >= ROWS || col < <span class="number">0</span> || col >= COLS) <span class="keyword">return</span>;
+    <span class="keyword">if</span> (visited.<span class="function">has</span>(`${row},${col}`)) <span class="keyword">return</span>;
+    
+    visited.<span class="function">add</span>(`${row},${col}`);
+    <span class="comment">// Process cell here</span>
+    
+    <span class="keyword">for</span> (<span class="keyword">let</span> [dr, dc] <span class="keyword">of</span> dirs) {
+        <span class="function">dfsGrid</span>(grid, row+dr, col+dc, visited);
+    }
+}
+                    </code>
+                </div>
+
+                <div class="example-box">
+                    <h4>💡 When to Use DFS</h4>
+                    <ul>
+                        <li>Find <strong>all paths</strong> between nodes</li>
+                        <li>Check if path <strong>exists</strong></li>
+                        <li><strong>Topological sort</strong></li>
+                        <li>Detect <strong>cycles</strong></li>
+                        <li>Solve <strong>mazes</strong> and puzzles</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 8. Breadth-First Search -->
+            <div class="topic-card" id="bfs">
+                <h2><span class="topic-number">8</span> Breadth-First Search (BFS)</h2>
+                
+                <div class="concept-box">
+                    <h4>📌 What is it?</h4>
+                    <p>BFS explores <strong>level by level</strong>, like ripples spreading from a stone thrown in water. Uses a <strong>queue</strong> to process nodes in order they were discovered. Perfect for finding <strong>shortest paths</strong>!</p>
+                </div>
+
+                <div class="diagram-box">
+                    <pre>
+BFS Traversal of a Tree:
+
+            Tree:           Level Order:
+            
+              A              Level 0: A
+             /|\             Level 1: B, C, D
+            / | \            Level 2: E, F, G
+           B  C  D           
+          /|    |            
+         E F    G            
+
+Queue progression:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Step 1: Queue = [A]           → Process A
+Step 2: Queue = [B,C,D]       → Process B
+Step 3: Queue = [C,D,E,F]     → Process C
+Step 4: Queue = [D,E,F]       → Process D
+Step 5: Queue = [E,F,G]       → Process E, F, G
+
+BFS on Grid (shortest path):
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    0   1   2   3   4
+  ┌───┬───┬───┬───┬───┐
+0 │ S │ 1 │ █ │   │   │   Numbers show distance
+  ├───┼───┼───┼───┼───┤   from start
+1 │ █ │ 2 │ █ │   │   │
+  ├───┼───┼───┼───┼───┤
+2 │ 3 │ 3 │ 4 │ 5 │ █ │
+  ├───┼───┼───┼───┼───┤
+3 │ 4 │ █ │ █ │ 6 │ E │
+  └───┴───┴───┴───┴───┘
+
+BFS finds shortest path: S → (0,1) → (1,1) → (2,0) → (2,1) → (2,2) → (2,3) → (3,3) → E
+Distance = 8 steps
+                    </pre>
+                </div>
+
+                <div class="step-box">
+                    <h4>🎯 BFS Template</h4>
+                    <div class="visual-step">
+                        <span class="step-num">1</span>
+                        <span>Add start node to <strong>queue</strong>, mark visited</span>
+                    </div>
+                    <div class="visual-step">
+                        <span class="step-num">2</span>
+                        <span>While queue not empty: <strong>dequeue</strong> front</span>
+                    </div>
+                    <div class="visual-step">
+                        <span class="step-num">3</span>
+                        <span>Process current node</span>
+                    </div>
+                    <div class="visual-step">
+                        <span class="step-num">4</span>
+                        <span>Add all <strong>unvisited neighbors</strong> to queue</span>
+                    </div>
+                </div>
+
+                <div class="complexity-box">
+                    <div class="complexity-item">
+                        <strong>Time:</strong> <span>O(V + E)</span>
+                    </div>
+                    <div class="complexity-item">
+                        <strong>Space:</strong> <span>O(V)</span>
+                    </div>
+                </div>
+
+                <div class="code-box">
+                    <code>
+<span class="comment">// BFS for Graph</span>
+<span class="keyword">function</span> <span class="function">bfs</span>(graph, start) {
+    <span class="keyword">let</span> visited = <span class="keyword">new</span> Set();
+    <span class="keyword">let</span> queue = [start];
+    visited.<span class="function">add</span>(start);
+    
+    <span class="keyword">while</span> (queue.length > <span class="number">0</span>) {
+        <span class="keyword">let</span> node = queue.<span class="function">shift</span>(); <span class="comment">// Dequeue front</span>
+        console.<span class="function">log</span>(node); <span class="comment">// Process</span>
+        
+        <span class="keyword">for</span> (<span class="keyword">let</span> neighbor <span class="keyword">of</span> graph[node]) {
+            <span class="keyword">if</span> (!visited.<span class="function">has</span>(neighbor)) {
+                visited.<span class="function">add</span>(neighbor);
+                queue.<span class="function">push</span>(neighbor); <span class="comment">// Enqueue</span>
+            }
+        }
+    }
+}
+
+<span class="comment">// BFS for Grid (shortest path)</span>
+<span class="keyword">function</span> <span class="function">bfsGrid</span>(grid, start, end) {
+    <span class="keyword">const</span> ROWS = grid.length, COLS = grid[<span class="number">0</span>].length;
+    <span class="keyword">const</span> dirs = [[<span class="number">1</span>,<span class="number">0</span>], [<span class="number">-1</span>,<span class="number">0</span>], [<span class="number">0</span>,<span class="number">1</span>], [<span class="number">0</span>,<span class="number">-1</span>]];
+    <span class="keyword">const</span> queue = [[...start, <span class="number">0</span>]]; <span class="comment">// [row, col, distance]</span>
+    <span class="keyword">const</span> visited = <span class="keyword">new</span> Set();
+    
+    <span class="keyword">while</span> (queue.length) {
+        <span class="keyword">const</span> [r, c, dist] = queue.<span class="function">shift</span>();
+        <span class="keyword">if</span> (r === end[<span class="number">0</span>] && c === end[<span class="number">1</span>]) <span class="keyword">return</span> dist;
+        
+        <span class="keyword">for</span> (<span class="keyword">let</span> [dr, dc] <span class="keyword">of</span> dirs) {
+            <span class="keyword">const</span> nr = r + dr, nc = c + dc;
+            <span class="keyword">const</span> key = `${nr},${nc}`;
+            <span class="keyword">if</span> (nr >= <span class="number">0</span> && nr < ROWS && nc >= <span class="number">0</span> && nc < COLS
+                && !visited.<span class="function">has</span>(key) && grid[nr][nc] !== <span class="string">'█'</span>) {
+                visited.<span class="function">add</span>(key);
+                queue.<span class="function">push</span>([nr, nc, dist + <span class="number">1</span>]);
+            }
+        }
+    }
+    <span class="keyword">return</span> <span class="number">-1</span>; <span class="comment">// Not reachable</span>
+}
+                    </code>
+                </div>
+
+                <div class="example-box">
+                    <h4>💡 When to Use BFS</h4>
+                    <ul>
+                        <li><strong>Shortest path</strong> in unweighted graph</li>
+                        <li><strong>Level order</strong> traversal</li>
+                        <li>Find nodes at <strong>distance k</strong></li>
+                        <li>Check if graph is <strong>bipartite</strong></li>
+                    </ul>
+                </div>
+            </div>
+            <!-- 9. Matrix Traversal -->
+            <div class="topic-card" id="matrix">
+                <h2><span class="topic-number">9</span> Matrix Traversal</h2>
+                
+                <div class="concept-box">
+                    <h4>📌 What is it?</h4>
+                    <p>Systematically visiting every cell in a 2D grid. Different patterns for different needs: <strong>spiral</strong>, <strong>diagonal</strong>, <strong>snake pattern</strong>, or <strong>island finding</strong>.</p>
+                </div>
+
+                <div class="diagram-box">
+                    <pre>
+Common Traversal Patterns:
+
+1. SPIRAL ORDER:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    ┌───────────────────┐
+    │ 1 → 2 → 3 → 4    │
+    │           ↓       │
+    │ 5 → 6    8       │
+    │ ↑         ↓       │
+    │ 9   10 ← 11      │
+    └───────────────────┘
+    Order: 1,2,3,4,8,11,10,9,5,6
+
+2. DIAGONAL TRAVERSAL:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    1   2   3   4
+    
+    5   6   7   8
+    
+    9  10  11  12
+
+    Order: [1], [5,2], [9,6,3], [10,7,4], [11,8], [12]
+
+3. SNAKE PATTERN:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    →  →  →  →
+    1  2  3  4
+              ↓
+    8  7  6  5
+    ←  ←  ←
+    ↓
+    9 10 11 12
+    →  →  →  →
+
+4. ISLAND COUNT (DFS/BFS):
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    1  0  1  1  0
+    1  0  0  1  1
+    0  1  0  0  0
+    1  0  1  0  1
+
+    Island 1: (0,0),(1,0)
+    Island 2: (0,2),(0,3),(1,3),(1,4)
+    Island 3: (2,1)
+    Island 4: (3,0)
+    Island 5: (3,2)
+    Island 6: (3,4)
+    
+    Total: 6 islands
+                    </pre>
+                </div>
+
+                <div class="code-box">
+                    <code>
+<span class="comment">// Spiral Traversal</span>
+<span class="keyword">function</span> <span class="function">spiralOrder</span>(matrix) {
+    <span class="keyword">const</span> result = [];
+    <span class="keyword">let</span> top = <span class="number">0</span>, bottom = matrix.length - <span class="number">1</span>;
+    <span class="keyword">let</span> left = <span class="number">0</span>, right = matrix[<span class="number">0</span>].length - <span class="number">1</span>;
+    
+    <span class="keyword">while</span> (top <= bottom && left <= right) {
+        <span class="comment">// Right</span>
+        <span class="keyword">for</span> (<span class="keyword">let</span> i = left; i <= right; i++) result.<span class="function">push</span>(matrix[top][i]);
+        top++;
+        <span class="comment">// Down</span>
+        <span class="keyword">for</span> (<span class="keyword">let</span> i = top; i <= bottom; i++) result.<span class="function">push</span>(matrix[i][right]);
+        right--;
+        <span class="comment">// Left</span>
+        <span class="keyword">if</span> (top <= bottom) {
+            <span class="keyword">for</span> (<span class="keyword">let</span> i = right; i >= left; i--) result.<span class="function">push</span>(matrix[bottom][i]);
+            bottom--;
+        }
+        <span class="comment">// Up</span>
+        <span class="keyword">if</span> (left <= right) {
+            <span class="keyword">for</span> (<span class="keyword">let</span> i = bottom; i >= top; i--) result.<span class="function">push</span>(matrix[i][left]);
+            left++;
+        }
+    }
+    <span class="keyword">return</span> result;
+}
+
+<span class="comment">// Island Counter</span>
+<span class="keyword">function</span> <span class="function">numIslands</span>(grid) {
+    <span class="keyword">let</span> count = <span class="number">0</span>;
+    <span class="keyword">const</span> ROWS = grid.length, COLS = grid[<span class="number">0</span>].length;
+    
+    <span class="keyword">function</span> <span class="function">dfs</span>(r, c) {
+        <span class="keyword">if</span> (r < <span class="number">0</span> || r >= ROWS || c < <span class="number">0</span> || c >= COLS) <span class="keyword">return</span>;
+        <span class="keyword">if</span> (grid[r][c] === <span class="string">'0'</span>) <span class="keyword">return</span>;
+        grid[r][c] = <span class="string">'0'</span>; <span class="comment">// Mark as visited</span>
+        <span class="function">dfs</span>(r+<span class="number">1</span>, c); <span class="function">dfs</span>(r-<span class="number">1</span>, c);
+        <span class="function">dfs</span>(r, c+<span class="number">1</span>); <span class="function">dfs</span>(r, c-<span class="number">1</span>);
+    }
+    
+    <span class="keyword">for</span> (<span class="keyword">let</span> r = <span class="number">0</span>; r < ROWS; r++) {
+        <span class="keyword">for</span> (<span class="keyword">let</span> c = <span class="number">0</span>; c < COLS; c++) {
+            <span class="keyword">if</span> (grid[r][c] === <span class="string">'1'</span>) {
+                count++;
+                <span class="function">dfs</span>(r, c);
+            }
+        }
+    }
+    <span class="keyword">return</span> count;
+}
+                    </code>
+                </div>
+            </div>
+
+            <!-- 10. Adjacency List BFS/DFS -->
+            <div class="topic-card" id="adjacency">
+                <h2><span class="topic-number">10</span> Adjacency List BFS/DFS</h2>
+                
+                <div class="concept-box">
+                    <h4>📌 What is it?</h4>
+                    <p>Adjacency list stores graph as a <strong>hash map of lists</strong>: each node maps to its neighbors. More memory efficient than adjacency matrix for <strong>sparse graphs</strong>.</p>
+                </div>
+
+                <div class="diagram-box">
+                    <pre>
+Graph Representation:
+
+    Graph:                  
+         A ───── B
+        /│      │\
+       / │      │ \
+      C  │      │  D
+       \ │      │ /
+        \|      │/
+         E ───── F
+
+Adjacency List:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+{
+    A: [B, C, E],
+    B: [A, D, F],
+    C: [A, E],
+    D: [B, F],
+    E: [A, C, F],
+    F: [B, D, E]
+}
+
+DFS from A: A → B → D → F → E → C
+           (explores deep into graph)
+
+BFS from A: A → B → C → E → D → F
+           (explores level by level)
+                    </pre>
+                </div>
+
+                <div class="code-box">
+                    <code>
+<span class="comment">// Build adjacency list</span>
+<span class="keyword">function</span> <span class="function">buildGraph</span>(edges) {
+    <span class="keyword">const</span> graph = {};
+    <span class="keyword">for</span> (<span class="keyword">let</span> [u, v] <span class="keyword">of</span> edges) {
+        <span class="keyword">if</span> (!graph[u]) graph[u] = [];
+        <span class="keyword">if</span> (!graph[v]) graph[v] = [];
+        graph[u].<span class="function">push</span>(v);
+        graph[v].<span class="function">push</span>(u); <span class="comment">// Undirected</span>
+    }
+    <span class="keyword">return</span> graph;
+}
+
+<span class="comment">// DFS on adjacency list</span>
+<span class="keyword">function</span> <span class="function">dfs</span>(graph, start, visited = <span class="keyword">new</span> Set()) {
+    visited.<span class="function">add</span>(start);
+    console.<span class="function">log</span>(start);
+    
+    <span class="keyword">for</span> (<span class="keyword">let</span> neighbor <span class="keyword">of</span> graph[start] || []) {
+        <span class="keyword">if</span> (!visited.<span class="function">has</span>(neighbor)) {
+            <span class="function">dfs</span>(graph, neighbor, visited);
+        }
+    }
+}
+
+<span class="comment">// BFS on adjacency list</span>
+<span class="keyword">function</span> <span class="function">bfs</span>(graph, start) {
+    <span class="keyword">const</span> visited = <span class="keyword">new</span> Set([start]);
+    <span class="keyword">const</span> queue = [start];
+    
+    <span class="keyword">while</span> (queue.length) {
+        <span class="keyword">const</span> node = queue.<span class="function">shift</span>();
+        console.<span class="function">log</span>(node);
+        
+        <span class="keyword">for</span> (<span class="keyword">let</span> neighbor <span class="keyword">of</span> graph[node] || []) {
+            <span class="keyword">if</span> (!visited.<span class="function">has</span>(neighbor)) {
+                visited.<span class="function">add</span>(neighbor);
+                queue.<span class="function">push</span>(neighbor);
+            }
+        }
+    }
+}
+                    </code>
+                </div>
+
+                <div class="complexity-box">
+                    <div class="complexity-item">
+                        <strong>Space:</strong> <span>O(V + E)</span>
+                    </div>
+                    <div class="complexity-item">
+                        <strong>Better than matrix when:</strong> <span>E << V²</span>
+                    </div>
+                </div>
+            </div>
+            <!-- 11. Two Heaps -->
+            <div class="topic-card" id="two-heaps">
+                <h2><span class="topic-number">11</span> Two Heaps</h2>
+                
+                <div class="concept-box">
+                    <h4>📌 What is it?</h4>
+                    <p>Maintain <strong>two heaps</strong> to efficiently find the median or balance elements. One <strong>max-heap</strong> for smaller half, one <strong>min-heap</strong> for larger half. Like balancing two sides of a scale!</p>
+                </div>
+
+                <div class="diagram-box">
+                    <pre>
+Finding Median with Two Heaps:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Numbers streaming in: [5, 2, 8, 1, 9, 3, 7]
+
+After adding each number:
+
+Step 1: Add 5
+    Max-Heap (small)    Min-Heap (large)
+        [5]                  []
+    Median = 5
+
+Step 2: Add 2
+    Max-Heap (small)    Min-Heap (large)
+        [5]                  [2]
+    2 should go to small, but balance!
+    After balancing:
+        [2]                  [5]
+    Median = (2 + 5) / 2 = 3.5
+
+Step 3: Add 8
+    Max-Heap (small)    Min-Heap (large)
+        [2]                 [5, 8]
+    Median = 5
+
+Step 4: Add 1
+    Max-Heap (small)    Min-Heap (large)
+       [2, 1]              [5, 8]
+    (max at top: 2)
+    Median = (2 + 5) / 2 = 3.5
+
+Final State after [5, 2, 8, 1, 9, 3, 7]:
+    Max-Heap (small)    Min-Heap (large)
+     [5, 2, 1, 3]      [7, 8, 9]
+     (max: 5)
+
+    Median = 5
+
+KEY INVARIANTS:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+1. Max-heap size = Min-heap size OR
+   Max-heap size = Min-heap size + 1
+2. All elements in max-heap ≤ min-heap top
+                    </pre>
+                </div>
+
+                <div class="step-box">
+                    <h4>🎯 Balance Rules</h4>
+                    <div class="visual-step">
+                        <span class="step-num">1</span>
+                        <span>Add to max-heap if ≤ max-heap top, else min-heap</span>
+                    </div>
+                    <div class="visual-step">
+                        <span class="step-num">2</span>
+                        <span>If sizes differ by > 1, rebalance</span>
+                    </div>
+                    <div class="visual-step">
+                        <span class="step-num">3</span>
+                        <span>If max-heap bigger, move top to min-heap</span>
+                    </div>
+                    <div class="visual-step">
+                        <span class="step-num">4</span>
+                        <span>Median = max-heap top if bigger, or average</span>
+                    </div>
+                </div>
+
+                <div class="complexity-box">
+                    <div class="complexity-item">
+                        <strong>Add:</strong> <span>O(log n)</span>
+                    </div>
+                    <div class="complexity-item">
+                        <strong>Find Median:</strong> <span>O(1)</span>
+                    </div>
+                </div>
+
+                <div class="example-box">
+                    <h4>💡 Applications</h4>
+                    <ul>
+                        <li><strong>Running median</strong> in data stream</li>
+                        <li><strong>Sliding window median</strong></li>
+                        <li><strong>IPO problem</strong> (maximize capital)</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 12. Binary Search (Modified) -->
+            <div class="topic-card" id="binary-search">
+                <h2><span class="topic-number">12</span> Binary Search (Modified)</h2>
+                
+                <div class="concept-box">
+                    <h4>📌 What is it?</h4>
+                    <p>Binary search on <strong>answer space</strong> or <strong>rotated arrays</strong>, not just finding elements. We use the "search space" concept to solve problems like "find minimum in rotated sorted array" or "find peak element".</p>
+                </div>
+
+                <div class="diagram-box">
+                    <pre>
+Modified Binary Search Variants:
+
+1. ROTATED SORTED ARRAY:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Array: [4, 5, 6, 7, 0, 1, 2]
+               ↑ pivot
+        0  1  2  3  4  5  6
+
+Normal:    low → [1,2,3,4,5] ← high
+Rotated:   low → [4,5,6,7,0,1,2] ← high
+
+Key insight: One half is always sorted!
+
+If nums[mid] >= nums[low]:  Left half sorted
+    [4, 5, 6, 7] is sorted
+    [0, 1, 2] is sorted
+    
+2. SEARCH IN ANSWER SPACE:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Problem: Split array into k subarrays, minimize 
+         maximum sum
+
+Array: [7, 2, 5, 10, 8], k = 2
+
+Answer space: low = 10 (max element)
+              high = 32 (sum of all)
+
+Binary search on answer:
+    mid = 21 → Can we split with max sum 21?
+           [7,2,5] = 14, [10,8] = 18 ✓ Yes!
+           
+    Try smaller: mid = 18
+           [7,2,5] = 14, [10,8] = 18 ✓ Yes!
+           
+    Try smaller: mid = 17
+           Can't split! Need 3 parts ✗
+           
+    Answer = 18
+
+3. FIND FIRST/LAST POSITION:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Array: [1, 2, 2, 2, 2, 3, 4]  Target = 2
+                     ↑
+
+First position: When found, search left half
+Last position:  When found, search right half
+                    </pre>
+                </div>
+
+                <div class="code-box">
+                    <code>
+<span class="comment">// Search in Rotated Sorted Array</span>
+<span class="keyword">function</span> <span class="function">searchRotated</span>(nums, target) {
+    <span class="keyword">let</span> low = <span class="number">0</span>, high = nums.length - <span class="number">1</span>;
+    
+    <span class="keyword">while</span> (low <= high) {
+        <span class="keyword">let</span> mid = Math.<span class="function">floor</span>((low + high) / <span class="number">2</span>);
+        
+        <span class="keyword">if</span> (nums[mid] === target) <span class="keyword">return</span> mid;
+        
+        <span class="comment">// Left half is sorted</span>
+        <span class="keyword">if</span> (nums[low] <= nums[mid]) {
+            <span class="keyword">if</span> (target >= nums[low] && target < nums[mid]) {
+                high = mid - <span class="number">1</span>;
+            } <span class="keyword">else</span> {
+                low = mid + <span class="number">1</span>;
+            }
+        }
+        <span class="comment">// Right half is sorted</span>
+        <span class="keyword">else</span> {
+            <span class="keyword">if</span> (target > nums[mid] && target <= nums[high]) {
+                low = mid + <span class="number">1</span>;
+            } <span class="keyword">else</span> {
+                high = mid - <span class="number">1</span>;
+            }
+        }
+    }
+    <span class="keyword">return</span> <span class="number">-1</span>;
+}
+
+<span class="comment">// Find Lower Bound (first >= target)</span>
+<span class="keyword">function</span> <span class="function">lowerBound</span>(arr, target) {
+    <span class="keyword">let</span> low = <span class="number">0</span>, high = arr.length;
+    
+    <span class="keyword">while</span> (low < high) {
+        <span class="keyword">let</span> mid = Math.<span class="function">floor</span>((low + high) / <span class="number">2</span>);
+        <span class="keyword">if</span> (arr[mid] < target) low = mid + <span class="number">1</span>;
+        <span class="keyword">else</span> high = mid;
+    }
+    <span class="keyword">return</span> low;
+}
+                    </code>
+                </div>
+            </div>
+            <!-- 13. Topological Sort -->
+            <div class="topic-card" id="topological">
+                <h2><span class="topic-number">13</span> Topological Sort</h2>
+                
+                <div class="concept-box">
+                    <h4>📌 What is it?</h4>
+                    <p>Ordering of vertices in a <strong>DAG (Directed Acyclic Graph)</strong> where for every edge A→B, A comes before B. Think of it as <strong>course prerequisites</strong>: you must take CS101 before CS201!</p>
+                </div>
+
+                <div class="diagram-box">
+                    <pre>
+Course Schedule Problem:
+
+Prerequisites: [[1,0], [2,0], [3,1], [3,2]]
+              (to take 1, need 0 first)
+
+Graph:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        0 ──────┬──────→ 1
+        │       │        │
+        │       │        │
+        ↓       ↓        ↓
+        2 ───────→ 3 ←───┘
+
+Adjacency List:
+{
+    0: [1, 2],   ← Course 0 unlocks 1 and 2
+    1: [3],      ← Course 1 unlocks 3
+    2: [3],      ← Course 2 unlocks 3
+    3: []        ← No courses depend on 3
+}
+
+In-degree: {0: 0, 1: 1, 2: 1, 3: 2}
+           ↑              ↑
+        No deps        Needs 1 AND 2
+
+Kahn's Algorithm (BFS):
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Step 1: Queue = [0]  (in-degree = 0)
+        ┌───┐
+        │ 0 │ → in-degree: {1:0, 2:0, 3:2}
+        └───┘
+
+Step 2: Process 0, reduce neighbors' in-degrees
+        Queue = [1, 2]
+        ┌───┬───┐
+        │ 1 │ 2 │ → in-degree: {3:1, 3:1}
+        └───┴───┘
+        Result: [0]
+
+Step 3: Process 1
+        Queue = [2]
+        ┌───┐
+        │ 2 │ → in-degree: {3:0}
+        └───┘
+        Result: [0, 1]
+
+Step 4: Process 2
+        Queue = [3]
+        ┌───┐
+        │ 3 │ → in-degree: {}
+        └───┘
+        Result: [0, 1, 2]
+
+Step 5: Process 3
+        Queue = []
+        Result: [0, 1, 2, 3]
+
+✅ Valid Order: [0, 1, 2, 3] or [0, 2, 1, 3]
+                    </pre>
+                </div>
+
+                <div class="step-box">
+                    <h4>🎯 Kahn's Algorithm Steps</h4>
+                    <div class="visual-step">
+                        <span class="step-num">1</span>
+                        <span>Calculate <strong>in-degree</strong> for all nodes</span>
+                    </div>
+                    <div class="visual-step">
+                        <span class="step-num">2</span>
+                        <span>Add all nodes with in-degree = 0 to queue</span>
+                    </div>
+                    <div class="visual-step">
+                        <span class="step-num">3</span>
+                        <span>Dequeue, add to result, reduce neighbors' in-degrees</span>
+                    </div>
+                    <div class="visual-step">
+                        <span class="step-num">4</span>
+                        <span>If neighbor's in-degree becomes 0, enqueue it</span>
+                    </div>
+                    <div class="visual-step">
+                        <span class="step-num">5</span>
+                        <span>If result has all nodes → valid, else → cycle exists</span>
+                    </div>
+                </div>
+
+                <div class="warning-box">
+                    <h4>⚠️ Important</h4>
+                    <p>Topological sort only works on <strong>DAGs</strong>. If there's a cycle, we can't produce a valid ordering. Detect this when result.length < number of vertices.</p>
+                </div>
+
+                <div class="code-box">
+                    <code>
+<span class="keyword">function</span> <span class="function">topologicalSort</span>(numCourses, prerequisites) {
+    <span class="comment">// Build graph and in-degree</span>
+    <span class="keyword">const</span> graph = <span class="keyword">new</span> Map();
+    <span class="keyword">const</span> inDegree = <span class="keyword">new</span> Array(numCourses).fill(<span class="number">0</span>);
+    
+    <span class="keyword">for</span> (<span class="keyword">let</span> [course, prereq] <span class="keyword">of</span> prerequisites) {
+        <span class="keyword">if</span> (!graph.<span class="function">has</span>(prereq)) graph.<span class="function">set</span>(prereq, []);
+        graph.<span class="function">get</span>(prereq).<span class="function">push</span>(course);
+        inDegree[course]++;
+    }
+    
+    <span class="comment">// Start with courses that have no prerequisites</span>
+    <span class="keyword">const</span> queue = [];
+    <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i < numCourses; i++) {
+        <span class="keyword">if</span> (inDegree[i] === <span class="number">0</span>) queue.<span class="function">push</span>(i);
+    }
+    
+    <span class="keyword">const</span> result = [];
+    <span class="keyword">while</span> (queue.length) {
+        <span class="keyword">const</span> course = queue.<span class="function">shift</span>();
+        result.<span class="function">push</span>(course);
+        
+        <span class="keyword">for</span> (<span class="keyword">let</span> next <span class="keyword">of</span> graph.<span class="function">get</span>(course) || []) {
+            inDegree[next]--;
+            <span class="keyword">if</span> (inDegree[next] === <span class="number">0</span>) queue.<span class="function">push</span>(next);
+        }
+    }
+    
+    <span class="keyword">return</span> result.length === numCourses ? result : []; <span class="comment">// [] = cycle</span>
+}
+                    </code>
+                </div>
+            </div>
+
+            <!-- 14. Top K Elements -->
+            <div class="topic-card" id="top-k">
+                <h2><span class="topic-number">14</span> Top K Elements</h2>
+                
+                <div class="concept-box">
+                    <h4>📌 What is it?</h4>
+                    <p>Finding the <strong>K largest/smallest/most frequent</strong> elements. Use a <strong>heap of size K</strong> instead of sorting everything. Like keeping only your top 10 favorite songs!</p>
+                </div>
+
+                <div class="diagram-box">
+                    <pre>
+Find K Largest Elements: [3, 2, 1, 5, 6, 4], K = 3
+
+Approach 1: Sort and Take Last K
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Sorted: [1, 2, 3, 4, 5, 6]
+Result: [4, 5, 6]  Time: O(n log n)
+
+Approach 2: Min-Heap of Size K (Better!)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Maintain heap with K largest elements seen so far:
+
+Step 1: Add 3, 2, 1
+        Min-Heap: [1, 3, 2]  (size = K = 3)
+                  ↑ top (smallest of K largest)
+
+Step 2: Process 5
+        5 > heap top (1)? YES → replace
+        Min-Heap: [2, 3, 5]
+
+Step 3: Process 6
+        6 > heap top (2)? YES → replace
+        Min-Heap: [3, 5, 6]
+
+Step 4: Process 4
+        4 > heap top (3)? YES → replace
+        Min-Heap: [4, 5, 6]
+
+Result: [4, 5, 6]  Time: O(n log K)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Why Min-Heap for K Largest?
+• Heap top = smallest among K largest
+• New element must be bigger than smallest
+• Replace smallest, heap reorganizes
+
+Why Max-Heap for K Smallest?
+• Heap top = largest among K smallest
+• New element must be smaller than largest
+                    </pre>
+                </div>
+
+                <div class="comparison-table">
+                    <table>
+                        <tr>
+                            <th>Problem</th>
+                            <th>Heap Type</th>
+                            <th>Size</th>
+                        </tr>
+                        <tr>
+                            <td>K Largest</td>
+                            <td>Min-Heap</td>
+                            <td>K</td>
+                        </tr>
+                        <tr>
+                            <td>K Smallest</td>
+                            <td>Max-Heap</td>
+                            <td>K</td>
+                        </tr>
+                        <tr>
+                            <td>K Most Frequent</td>
+                            <td>Min-Heap</td>
+                            <td>K</td>
+                        </tr>
+                        <tr>
+                            <td>K Closest Points</td>
+                            <td>Max-Heap</td>
+                            <td>K</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="code-box">
+                    <code>
+<span class="comment">// K Largest Elements</span>
+<span class="keyword">function</span> <span class="function">findKLargest</span>(nums, k) {
+    <span class="keyword">const</span> minHeap = <span class="keyword">new</span> MinPriorityQueue();
+    
+    <span class="keyword">for</span> (<span class="keyword">let</span> num <span class="keyword">of</span> nums) {
+        minHeap.<span class="function">enqueue</span>(num);
+        <span class="keyword">if</span> (minHeap.size() > k) {
+            minHeap.<span class="function">dequeue</span>(); <span class="comment">// Remove smallest</span>
+        }
+    }
+    
+    <span class="keyword">return</span> minHeap.<span class="function">toArray</span>().map(x => x.element);
+}
+
+<span class="comment">// Top K Frequent Elements</span>
+<span class="keyword">function</span> <span class="function">topKFrequent</span>(nums, k) {
+    <span class="comment">// Count frequencies</span>
+    <span class="keyword">const</span> freq = <span class="keyword">new</span> Map();
+    <span class="keyword">for</span> (<span class="keyword">let</span> num <span class="keyword">of</span> nums) {
+        freq.<span class="function">set</span>(num, (freq.<span class="function">get</span>(num) || <span class="number">0</span>) + <span class="number">1</span>);
+    }
+    
+    <span class="comment">// Min-heap by frequency</span>
+    <span class="keyword">const</span> heap = <span class="keyword">new</span> MinPriorityQueue(x => x[<span class="number">1</span>]);
+    
+    <span class="keyword">for</span> (<span class="keyword">let</span> [num, count] <span class="keyword">of</span> freq) {
+        heap.<span class="function">enqueue</span>([num, count]);
+        <span class="keyword">if</span> (heap.size() > k) heap.<span class="function">dequeue</span>();
+    }
+    
+    <span class="keyword">return</span> heap.<span class="function">toArray</span>().map(x => x[<span class="number">0</span>]);
+}
+                    </code>
+                </div>
+
+                <div class="complexity-box">
+                    <div class="complexity-item">
+                        <strong>Time:</strong> <span>O(n log K)</span>
+                    </div>
+                    <div class="complexity-item">
+                        <strong>Space:</strong> <span>O(K)</span>
+                    </div>
+                </div>
+            </div>
+            <!-- 15. Linked List Reversal -->
+            <div class="topic-card" id="linked-list">
+                <h2><span class="topic-number">15</span> Linked List Reversal</h2>
+                
+                <div class="concept-box">
+                    <h4>📌 What is it?</h4>
+                    <p>Reversing a linked list by <strong>changing pointer directions</strong>. The key is using <strong>three pointers</strong>: previous, current, and next. Like turning a train around by reconnecting each car!</p>
+                </div>
+
+                <div class="diagram-box">
+                    <pre>
+Iterative Reversal Walkthrough:
+
+Original:  1 → 2 → 3 → 4 → 5 → NULL
+          head
+
+Goal:  NULL ← 1 ← 2 ← 3 ← 4 ← 5
+                                  head
+
+Step-by-Step:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Initial State:
+    prev = NULL
+    curr = 1
+    
+    NULL    [1] → [2] → [3] → [4] → [5] → NULL
+     ↑       ↑
+    prev    curr
+
+Step 1: Reverse first link
+    next = 2 (save next node)
+    curr.next = prev (reverse link)
+    prev = curr, curr = next
+    
+    NULL ← [1]   [2] → [3] → [4] → [5] → NULL
+            ↑     ↑
+           prev  curr
+
+Step 2: Reverse second link
+    next = 3
+    curr.next = prev
+    
+    NULL ← [1] ← [2]   [3] → [4] → [5] → NULL
+                  ↑     ↑
+                 prev  curr
+
+Step 3: Reverse third link
+    
+    NULL ← [1] ← [2] ← [3]   [4] → [5] → NULL
+                        ↑     ↑
+                       prev  curr
+
+Step 4: Reverse fourth link
+    
+    NULL ← [1] ← [2] ← [3] ← [4]   [5] → NULL
+                              ↑     ↑
+                             prev  curr
+
+Step 5: Reverse fifth link
+    
+    NULL ← [1] ← [2] ← [3] ← [4] ← [5]   NULL
+                                    ↑     ↑
+                                   prev  curr
+
+Done! prev = new head (5)
+                    </pre>
+                </div>
+
+                <div class="code-box">
+                    <code>
+<span class="comment">// Iterative Reversal</span>
+<span class="keyword">function</span> <span class="function">reverseList</span>(head) {
+    <span class="keyword">let</span> prev = <span class="keyword">null</span>;
+    <span class="keyword">let</span> curr = head;
+    
+    <span class="keyword">while</span> (curr !== <span class="keyword">null</span>) {
+        <span class="keyword">let</span> next = curr.next;  <span class="comment">// Save next</span>
+        curr.next = prev;      <span class="comment">// Reverse link</span>
+        prev = curr;           <span class="comment">// Move prev forward</span>
+        curr = next;           <span class="comment">// Move curr forward</span>
+    }
+    
+    <span class="keyword">return</span> prev; <span class="comment">// New head</span>
+}
+
+<span class="comment">// Recursive Reversal</span>
+<span class="keyword">function</span> <span class="function">reverseListRecursive</span>(head) {
+    <span class="keyword">if</span> (head === <span class="keyword">null</span> || head.next === <span class="keyword">null</span>) {
+        <span class="keyword">return</span> head; <span class="comment">// Base: empty or single node</span>
+    }
+    
+    <span class="keyword">let</span> newHead = <span class="function">reverseListRecursive</span>(head.next);
+    
+    <span class="comment">// Reverse the link</span>
+    head.next.next = head;
+    head.next = <span class="keyword">null</span>;
+    
+    <span class="keyword">return</span> newHead;
+}
+
+<span class="comment">// Reverse Sublist (from m to n)</span>
+<span class="keyword">function</span> <span class="function">reverseBetween</span>(head, m, n) {
+    <span class="keyword">let</span> dummy = { next: head };
+    <span class="keyword">let</span> prev = dummy;
+    
+    <span class="comment">// Move to position m-1</span>
+    <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">1</span>; i < m; i++) prev = prev.next;
+    
+    <span class="comment">// Reverse from m to n</span>
+    <span class="keyword">let</span> curr = prev.next;
+    <span class="keyword">for</span> (<span class="keyword">let</span> i = m; i < n; i++) {
+        <span class="keyword">let</span> next = curr.next;
+        curr.next = next.next;
+        next.next = prev.next;
+        prev.next = next;
+    }
+    
+    <span class="keyword">return</span> dummy.next;
+}
+                    </code>
+                </div>
+
+                <div class="example-box">
+                    <h4>💡 Key Pattern</h4>
+                    <p>The <strong>three-pointer technique</strong> is essential:</p>
+                    <table>
+                        <tr><th>Pointer</th><th>Role</th></tr>
+                        <tr><td>prev</td><td>Previous node (already reversed)</td></tr>
+                        <tr><td>curr</td><td>Current node being processed</td></tr>
+                        <tr><td>next</td><td>Next node (saved before breaking link)</td></tr>
+                    </table>
+                </div>
+            </div>
+
+            <!-- 16. Permutations -->
+            <div class="topic-card" id="permutations">
+                <h2><span class="topic-number">16</span> Permutations</h2>
+                
+                <div class="concept-box">
+                    <h4>📌 What is it?</h4>
+                    <p>Finding <strong>all possible arrangements</strong> of elements. Use <strong>backtracking</strong> - swap elements, recurse, then swap back. Order matters! ABC ≠ BAC.</p>
+                </div>
+
+                <div class="diagram-box">
+                    <pre>
+Find All Permutations of [1, 2, 3]:
+
+Decision Tree:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+                    [1, 2, 3]
+                    /
+         ┌──────────┼──────────┐
+         ↓          ↓          ↓
+      swap(0,0)  swap(0,1)  swap(0,2)
+        [1,2,3]    [2,1,3]    [3,2,1]
+         │
+    ┌────┴────┐
+    ↓         ↓
+swap(1,1)  swap(1,2)
+ [1,2,3]   [1,3,2]
+    │
+    ↓
+swap(2,2) → ADD [1,2,3] to result
+    │
+ backtrack: undo swap
+
+Continue for all branches...
+
+All Permutations:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[1,2,3]  [1,3,2]  [2,1,3]  [2,3,1]  [3,1,2]  [3,2,1]
+  ↑         ↑        ↑        ↑        ↑        ↑
+start=0  start=0  start=0  start=0  start=0  start=0
+fix=1    fix=1    fix=2    fix=2    fix=3    fix=3
+
+n! permutations = 3! = 6
+                    </pre>
+                </div>
+
+                <div class="code-box">
+                    <code>
+<span class="keyword">function</span> <span class="function">permute</span>(nums) {
+    <span class="keyword">const</span> result = [];
+    
+    <span class="keyword">function</span> <span class="function">backtrack</span>(start) {
+        <span class="keyword">if</span> (start === nums.length) {
+            result.<span class="function">push</span>([...nums]); <span class="comment">// Found complete permutation</span>
+            <span class="keyword">return</span>;
+        }
+        
+        <span class="keyword">for</span> (<span class="keyword">let</span> i = start; i < nums.length; i++) {
+            <span class="comment">// Swap current position with each possibility</span>
+            [nums[start], nums[i]] = [nums[i], nums[start]];
+            
+            <span class="function">backtrack</span>(start + <span class="number">1</span>); <span class="comment">// Recurse for next position</span>
+            
+            <span class="comment">// Backtrack: undo the swap</span>
+            [nums[start], nums[i]] = [nums[i], nums[start]];
+        }
+    }
+    
+    <span class="function">backtrack</span>(<span class="number">0</span>);
+    <span class="keyword">return</span> result;
+}
+
+<span class="comment">// With duplicates (skip same swaps)</span>
+<span class="keyword">function</span> <span class="function">permuteUnique</span>(nums) {
+    <span class="keyword">const</span> result = [];
+    nums.<span class="function">sort</span>(); <span class="comment">// Sort to group duplicates</span>
+    
+    <span class="keyword">function</span> <span class="function">backtrack</span>(start) {
+        <span class="keyword">if</span> (start === nums.length) {
+            result.<span class="function">push</span>([...nums]);
+            <span class="keyword">return</span>;
+        }
+        
+        <span class="keyword">const</span> used = <span class="keyword">new</span> Set(); <span class="comment">// Track used values at this level</span>
+        
+        <span class="keyword">for</span> (<span class="keyword">let</span> i = start; i < nums.length; i++) {
+            <span class="keyword">if</span> (used.<span class="function">has</span>(nums[i])) <span class="keyword">continue</span>; <span class="comment">// Skip duplicates</span>
+            used.<span class="function">add</span>(nums[i]);
+            
+            [nums[start], nums[i]] = [nums[i], nums[start]];
+            <span class="function">backtrack</span>(start + <span class="number">1</span>);
+            [nums[start], nums[i]] = [nums[i], nums[start]];
+        }
+    }
+    
+    <span class="function">backtrack</span>(<span class="number">0</span>);
+    <span class="keyword">return</span> result;
+}
+                    </code>
+                </div>
+
+                <div class="complexity-box">
+                    <div class="complexity-item">
+                        <strong>Time:</strong> <span>O(n! × n)</span>
+                    </div>
+                    <div class="complexity-item">
+                        <strong>Space:</strong> <span>O(n)</span> (recursion depth)
+                    </div>
+                </div>
+            </div>
+            <!-- 17. Combinations -->
+            <div class="topic-card" id="combinations">
+                <h2><span class="topic-number">17</span> Combinations</h2>
+                
+                <div class="concept-box">
+                    <h4>📌 What is it?</h4>
+                    <p>Finding <strong>all possible selections</strong> of K elements from N elements. Order does NOT matter! [1,2] and [2,1] are the same combination. Like choosing K friends from N friends to go to movies.</p>
+                </div>
+
+                <div class="diagram-box">
+                    <pre>
+Find All Combinations: Choose 2 from [1, 2, 3, 4]
+
+Decision Tree (choose or skip each element):
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+                        []
+                       /  \
+                    1/      \skip
+                    /          \
+                 [1]            []
+                /  \           /  \
+             2/    \skip    2/    \skip
+              /      \       /      \
+           [1,2]    [1]    [2]      []
+              ✓      / \     ✓      / \
+                   3/   \skip      3/   \skip
+                    /     \        /      \
+                [1,3]    [1]     [2,3]    [2]
+                  ✓       / \      ✓       / \
+                        4/   \skip        4/   \skip
+                         /     \           /      \
+                     [1,4]    [1]       [2,4]    [2]
+                       ✓    (need 2)     ✓    (need 2)
+
+And continue from [3], [4]...
+
+All Combinations (4C2 = 6):
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[1,2]  [1,3]  [1,4]  [2,3]  [2,4]  [3,4]
+
+Formula: nCr = n! / (r! × (n-r)!)
+                    </pre>
+                </div>
+
+                <div class="step-box">
+                    <h4>🎯 Key Difference from Permutations</h4>
+                    <table>
+                        <tr><th>Aspect</th><th>Permutations</th><th>Combinations</th></tr>
+                        <tr><td>Order</td><td>Matters</td><td>Doesn't matter</td></tr>
+                        <tr><td>[1,2] vs [2,1]</td><td>Different</td><td>Same</td></tr>
+                        <tr><td>Approach</td><td>Swap positions</td><td>Choose/skip</td></tr>
+                        <tr><td>Count</td><td>nPr = n!/(n-r)!</td><td>nCr = n!/r!(n-r)!</td></tr>
+                    </table>
+                </div>
+
+                <div class="code-box">
+                    <code>
+<span class="keyword">function</span> <span class="function">combine</span>(n, k) {
+    <span class="keyword">const</span> result = [];
+    
+    <span class="keyword">function</span> <span class="function">backtrack</span>(start, current) {
+        <span class="keyword">if</span> (current.length === k) {
+            result.<span class="function">push</span>([...current]);
+            <span class="keyword">return</span>;
+        }
+        
+        <span class="keyword">for</span> (<span class="keyword">let</span> i = start; i <= n; i++) {
+            current.<span class="function">push</span>(i);          <span class="comment">// Choose</span>
+            <span class="function">backtrack</span>(i + <span class="number">1</span>, current);  <span class="comment">// Explore (i+1 ensures no repeats)</span>
+            current.<span class="function">pop</span>();             <span class="comment">// Unchoose (backtrack)</span>
+        }
+    }
+    
+    <span class="function">backtrack</span>(<span class="number">1</span>, []);
+    <span class="keyword">return</span> result;
+}
+
+<span class="comment">// Combination Sum (can reuse elements)</span>
+<span class="keyword">function</span> <span class="function">combinationSum</span>(candidates, target) {
+    <span class="keyword">const</span> result = [];
+    
+    <span class="keyword">function</span> <span class="function">backtrack</span>(start, current, sum) {
+        <span class="keyword">if</span> (sum === target) {
+            result.<span class="function">push</span>([...current]);
+            <span class="keyword">return</span>;
+        }
+        <span class="keyword">if</span> (sum > target) <span class="keyword">return</span>;
+        
+        <span class="keyword">for</span> (<span class="keyword">let</span> i = start; i < candidates.length; i++) {
+            current.<span class="function">push</span>(candidates[i]);
+            <span class="comment">// i (not i+1) because we can reuse same element</span>
+            <span class="function">backtrack</span>(i, current, sum + candidates[i]);
+            current.<span class="function">pop</span>();
+        }
+    }
+    
+    <span class="function">backtrack</span>(<span class="number">0</span>, [], <span class="number">0</span>);
+    <span class="keyword">return</span> result;
+}
+                    </code>
+                </div>
+            </div>
+
+            <!-- 18. Tree Maze (Backtracking) -->
+            <div class="topic-card" id="backtracking">
+                <h2><span class="topic-number">18</span> Tree Maze (Backtracking)</h2>
+                
+                <div class="concept-box">
+                    <h4>📌 What is it?</h4>
+                    <p>Finding paths through a grid/tree with <strong>obstacles</strong>. Try a path, if it leads to dead end, <strong>backtrack</strong> and try another. Like navigating a maze, marking visited cells, and erasing marks when retreating.</p>
+                </div>
+
+                <div class="diagram-box">
+                    <pre>
+Solve Maze: Find path from S to E
+
+Grid:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    0   1   2   3   4
+  ┌───┬───┬───┬───┬───┐
+0 │ S │   │ █ │   │   │   S = Start (0,0)
+  ├───┼───┼───┼───┼───┤   E = End (3,4)
+1 │ █ │   │ █ │   │ █ │   █ = Wall
+  ├───┼───┼───┼───┼───┤   • = Visited
+2 │   │   │   │   │ █ │   → = Path
+  ├───┼───┼───┼───┼───┤
+3 │   │ █ │ █ │   │ E │
+  └───┴───┴───┴───┴───┘
+
+Backtracking Steps:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Step 1: Start at (0,0), mark visited
+    ┌───┬───┬───┬───┬───┐
+    │ • │   │ █ │   │   │
+    └───┴───┴───┴───┴───┘
+
+Step 2: Try RIGHT to (0,1)
+    ┌───┬───┬───┬───┬───┐
+    │ • │ • │ █ │   │   │
+    └───┴───┴───┴───┴───┘
+
+Step 3: RIGHT blocked (wall), try DOWN to (1,1)
+    ┌───┬───┬───┬───┬───┐
+    │ • │ • │ █ │   │   │
+    ├───┼───┼───┼───┼───┤
+    │ █ │ • │ █ │   │ █ │
+    └───┴───┴───┴───┴───┘
+
+Step 4: Continue DOWN to (2,1), (3,1)
+    (3,1) is WALL! BACKTRACK
+
+Step 5: BACKTRACK to (2,1), try RIGHT
+    Continue to (2,2), (2,3)
+    From (2,3), DOWN to (3,3)
+    From (3,3), RIGHT to (3,4) = E ✓
+
+Final Path:
+    ┌───┬───┬───┬───┬───┐
+    │ S │ → │ █ │   │   │
+    ├───┼───┼───┼───┼───┤
+    │ █ │ ↓ │ █ │   │ █ │
+    ├───┼───┼───┼───┼───┤
+    │ → │ → │ → │ ↓ │ █ │
+    ├───┼───┼───┼───┼───┤
+    │   │ █ │ █ │ → │ E │
+    └───┴───┴───┴───┴───┘
+                    </pre>
+                </div>
+
+                <div class="code-box">
+                    <code>
+<span class="keyword">function</span> <span class="function">solveMaze</span>(maze, start, end) {
+    <span class="keyword">const</span> ROWS = maze.length, COLS = maze[<span class="number">0</span>].length;
+    <span class="keyword">const</span> path = [];
+    <span class="keyword">const</span> visited = <span class="keyword">new</span> Set();
+    <span class="keyword">const</span> dirs = [[<span class="number">0</span>,<span class="number">1</span>], [<span class="number">1</span>,<span class="number">0</span>], [<span class="number">0</span>,-<span class="number">1</span>], [-<span class="number">1</span>,<span class="number">0</span>]]; <span class="comment">// Right, Down, Left, Up</span>
+    
+    <span class="keyword">function</span> <span class="function">backtrack</span>(r, c) {
+        <span class="comment">// Base cases</span>
+        <span class="keyword">if</span> (r < <span class="number">0</span> || r >= ROWS || c < <span class="number">0</span> || c >= COLS) <span class="keyword">return false</span>;
+        <span class="keyword">if</span> (maze[r][c] === <span class="string">'█'</span>) <span class="keyword">return false</span>; <span class="comment">// Wall</span>
+        <span class="keyword">if</span> (visited.<span class="function">has</span>(`${r},${c}`)) <span class="keyword">return false</span>; <span class="comment">// Already visited</span>
+        
+        <span class="comment">// Add to path</span>
+        path.<span class="function">push</span>([r, c]);
+        visited.<span class="function">add</span>(`${r},${c}`);
+        
+        <span class="comment">// Check if reached end</span>
+        <span class="keyword">if</span> (r === end[<span class="number">0</span>] && c === end[<span class="number">1</span>]) <span class="keyword">return true</span>;
+        
+        <span class="comment">// Try all directions</span>
+        <span class="keyword">for</span> (<span class="keyword">let</span> [dr, dc] <span class="keyword">of</span> dirs) {
+            <span class="keyword">if</span> (<span class="function">backtrack</span>(r + dr, c + dc)) {
+                <span class="keyword">return true</span>; <span class="comment">// Found path!</span>
+            }
+        }
+        
+        <span class="comment">// BACKTRACK: Remove from path if no path found</span>
+        path.<span class="function">pop</span>();
+        <span class="keyword">return false</span>;
+    }
+    
+    <span class="function">backtrack</span>(start[<span class="number">0</span>], start[<span class="number">1</span>]);
+    <span class="keyword">return</span> path;
+}
+                    </code>
+                </div>
+
+                <div class="example-box">
+                    <h4>💡 Backtracking Template</h4>
+                    <ol>
+                        <li><strong>Choose:</strong> Add current to path, mark visited</li>
+                        <li><strong>Explore:</strong> Try all possible moves</li>
+                        <li><strong>Unchoose:</strong> If dead end, remove from path, unmark</li>
+                    </ol>
+                </div>
+            </div>
+            <!-- 19. Longest Common Subsequence -->
+            <div class="topic-card" id="lcs">
+                <h2><span class="topic-number">19</span> Longest Common Subsequence (LCS)</h2>
+                
+                <div class="concept-box">
+                    <h4>📌 What is it?</h4>
+                    <p>Finding the <strong>longest sequence</strong> that appears in both strings (not necessarily contiguous). Like finding the longest common story between two books - same characters, same order, but possibly with gaps.</p>
+                </div>
+
+                <div class="diagram-box">
+                    <pre>
+Find LCS of "ABCBDAB" and "BDCABAD"
+
+DP Table Construction:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        ""  B  D  C  A  B  A  D
+    ┌────┬──┬──┬──┬──┬──┬──┬──┐
+ "" │  0 │ 0│ 0│ 0│ 0│ 0│ 0│ 0│
+    ├────┼──┼──┼──┼──┼──┼──┼──┤
+ A  │  0 │ 0│ 0│ 0│ 1│ 1│ 1│ 1│
+    ├────┼──┼──┼──┼──┼──┼──┼──┤
+ B  │  0 │ 1│ 1│ 1│ 1│ 2│ 2│ 2│
+    ├────┼──┼──┼──┼──┼──┼──┼──┤
+ C  │  0 │ 1│ 1│ 2│ 2│ 2│ 2│ 2│
+    ├────┼──┼──┼──┼──┼──┼──┼──┤
+ B  │  0 │ 1│ 1│ 2│ 2│ 3│ 3│ 3│
+    ├────┼──┼──┼──┼──┼──┼──┼──┤
+ D  │  0 │ 1│ 2│ 2│ 2│ 3│ 3│ 4│
+    ├────┼──┼──┼──┼──┼──┼──┼──┤
+ A  │  0 │ 1│ 2│ 2│ 3│ 3│ 4│ 4│
+    ├────┼──┼──┼──┼──┼──┼──┼──┤
+ B  │  0 │ 1│ 2│ 2│ 3│ 4│ 4│ 4│
+    └────┴──┴──┴──┴──┴──┴──┴──┘
+                     ↑
+              Answer = 4
+
+LCS = "BCAB" or "BDAB"
+
+Rules:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+If s1[i] == s2[j]:
+    dp[i][j] = 1 + dp[i-1][j-1]  ← Match! Extend diagonal
+
+If s1[i] != s2[j]:
+    dp[i][j] = max(dp[i-1][j], dp[i][j-1])  ← No match
+                                    Take best of left/top
+
+Tracing Back:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Start at bottom-right, follow the path:
+
+    (7,7)=4 → Match 'B', go diagonal
+    (6,6)=4 → No match, go up (bigger)
+    (5,6)=4 → Match 'A', go diagonal
+    (4,5)=3 → No match, go up
+    (3,5)=3 → Match 'B', go diagonal
+    (2,3)=2 → Match 'C', go diagonal
+    ... and so on
+
+Reverse the matched chars: "BCAB"
+                    </pre>
+                </div>
+
+                <div class="code-box">
+                    <code>
+<span class="keyword">function</span> <span class="function">longestCommonSubsequence</span>(text1, text2) {
+    <span class="keyword">const</span> m = text1.length, n = text2.length;
+    <span class="keyword">const</span> dp = <span class="keyword">new</span> Array(m + <span class="number">1</span>)
+        .fill(<span class="number">0</span>)
+        .map(() => <span class="keyword">new</span> Array(n + <span class="number">1</span>).fill(<span class="number">0</span>));
+    
+    <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">1</span>; i <= m; i++) {
+        <span class="keyword">for</span> (<span class="keyword">let</span> j = <span class="number">1</span>; j <= n; j++) {
+            <span class="keyword">if</span> (text1[i-<span class="number">1</span>] === text2[j-<span class="number">1</span>]) {
+                <span class="comment">// Characters match: extend diagonal</span>
+                dp[i][j] = <span class="number">1</span> + dp[i-<span class="number">1</span>][j-<span class="number">1</span>];
+            } <span class="keyword">else</span> {
+                <span class="comment">// No match: take best of left or top</span>
+                dp[i][j] = Math.<span class="function">max</span>(dp[i-<span class="number">1</span>][j], dp[i][j-<span class="number">1</span>]);
+            }
+        }
+    }
+    
+    <span class="keyword">return</span> dp[m][n];
+}
+
+<span class="comment">// Space-optimized: O(n) space</span>
+<span class="keyword">function</span> <span class="function">lcsOptimized</span>(text1, text2) {
+    <span class="keyword">const</span> n = text2.length;
+    <span class="keyword">let</span> prev = <span class="keyword">new</span> Array(n + <span class="number">1</span>).fill(<span class="number">0</span>);
+    
+    <span class="keyword">for</span> (<span class="keyword">let</span> char <span class="keyword">of</span> text1) {
+        <span class="keyword">let</span> curr = <span class="keyword">new</span> Array(n + <span class="number">1</span>).fill(<span class="number">0</span>);
+        <span class="keyword">for</span> (<span class="keyword">let</span> j = <span class="number">1</span>; j <= n; j++) {
+            <span class="keyword">if</span> (char === text2[j-<span class="number">1</span>]) {
+                curr[j] = <span class="number">1</span> + prev[j-<span class="number">1</span>];
+            } <span class="keyword">else</span> {
+                curr[j] = Math.<span class="function">max</span>(prev[j], curr[j-<span class="number">1</span>]);
+            }
+        }
+        prev = curr;
+    }
+    
+    <span class="keyword">return</span> prev[n];
+}
+                    </code>
+                </div>
+
+                <div class="complexity-box">
+                    <div class="complexity-item">
+                        <strong>Time:</strong> <span>O(m × n)</span>
+                    </div>
+                    <div class="complexity-item">
+                        <strong>Space:</strong> <span>O(m × n) → O(min(m,n))</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 20. Monotonic Stack -->
+            <div class="topic-card" id="monotonic">
+                <h2><span class="topic-number">20</span> Monotonic Stack</h2>
+                
+                <div class="concept-box">
+                    <h4>📌 What is it?</h4>
+                    <p>A stack where elements are always <strong>sorted</strong> (increasing or decreasing). When a new element "breaks" the order, we pop elements until order is restored. Perfect for finding <strong>next greater/smaller element</strong>!</p>
+                </div>
+
+                <div class="diagram-box">
+                    <pre>
+Find Next Greater Element for each:
+Array: [2, 1, 2, 4, 3]
+
+Using Monotonic Decreasing Stack:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Process from RIGHT to LEFT:
+
+Initial: Stack = [], Result = [-1, -1, -1, -1, -1]
+
+Element 3 (index 4):
+    Stack empty → Result[4] = -1
+    Push 3 → Stack = [3]
+
+Element 4 (index 3):
+    4 > 3? YES → Pop 3
+    Stack empty → Result[3] = -1
+    Push 4 → Stack = [4]
+    
+Element 2 (index 2):
+    2 > 4? NO → Result[2] = 4 (top of stack)
+    Push 2 → Stack = [4, 2]
+
+Element 1 (index 1):
+    1 > 2? NO → Result[1] = 2
+    Push 1 → Stack = [4, 2, 1]
+
+Element 2 (index 0):
+    2 > 1? YES → Pop 1
+    2 > 2? NO → Result[0] = 2
+    Push 2 → Stack = [4, 2, 2]
+
+Result: [2, 2, 4, -1, -1]
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Visual Summary:
+Array:     [2,   1,   2,   4,   3]
+Next >:   [2,   2,   4,  -1,  -1]
+            ↑    ↑    ↑
+            │    │    └── 4 is next greater
+            │    └─────── 2 is next greater
+            └──────────── 2 is next greater
+
+                    </pre>
+                </div>
+
+                <div class="step-box">
+                    <h4>🎯 Stack Types</h4>
+                    <table>
+                        <tr><th>Stack Type</th><th>Use Case</th></tr>
+                        <tr><td>Monotonic Decreasing</td><td>Find next greater element</td></tr>
+                        <tr><td>Monotonic Increasing</td><td>Find next smaller element</td></tr>
+                        <tr><td>Strict</td><td>No duplicates allowed</td></tr>
+                        <tr><td>Non-strict</td><td>Duplicates allowed</td></tr>
+                    </table>
+                </div>
+
+                <div class="code-box">
+                    <code>
+<span class="comment">// Next Greater Element</span>
+<span class="keyword">function</span> <span class="function">nextGreaterElement</span>(nums) {
+    <span class="keyword">const</span> n = nums.length;
+    <span class="keyword">const</span> result = <span class="keyword">new</span> Array(n).fill(-<span class="number">1</span>);
+    <span class="keyword">const</span> stack = []; <span class="comment">// Indices of elements (decreasing values)</span>
+    
+    <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i < n; i++) {
+        <span class="comment">// While current is greater than stack top</span>
+        <span class="keyword">while</span> (stack.length && nums[i] > nums[stack[stack.length - <span class="number">1</span>]]) {
+            <span class="keyword">const</span> idx = stack.<span class="function">pop</span>();
+            result[idx] = nums[i]; <span class="comment">// Found next greater!</span>
+        }
+        stack.<span class="function">push</span>(i);
+    }
+    
+    <span class="keyword">return</span> result;
+}
+
+<span class="comment">// Largest Rectangle in Histogram</span>
+<span class="keyword">function</span> <span class="function">largestRectangleArea</span>(heights) {
+    <span class="keyword">let</span> maxArea = <span class="number">0</span>;
+    <span class="keyword">const</span> stack = []; <span class="comment">// Indices, increasing heights</span>
+    
+    <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i <= heights.length; i++) {
+        <span class="keyword">const</span> h = i === heights.length ? <span class="number">0</span> : heights[i];
+        
+        <span class="keyword">while</span> (stack.length && h < heights[stack[stack.length - <span class="number">1</span>]]) {
+            <span class="keyword">const</span> height = heights[stack.<span class="function">pop</span>()];
+            <span class="keyword">const</span> width = stack.length ? i - stack[stack.length - <span class="number">1</span>] - <span class="number">1</span> : i;
+            maxArea = Math.<span class="function">max</span>(maxArea, height * width);
+        }
+        stack.<span class="function">push</span>(i);
+    }
+    
+    <span class="keyword">return</span> maxArea;
+}
+                    </code>
+                </div>
+
+                <div class="example-box">
+                    <h4>💡 Key Insight</h4>
+                    <p>The stack maintains elements in sorted order. When a new element comes:</p>
+                    <ul>
+                        <li><strong>If it fits:</strong> Push it</li>
+                        <li><strong>If it doesn't:</strong> Pop until it fits, processing each popped element</li>
+                    </ul>
+                </div>
+            </div>
+            <!-- 21. Memoization -->
+            <div class="topic-card" id="memoization">
+                <h2><span class="topic-number">21</span> Memoization</h2>
+                
+                <div class="concept-box">
+                    <h4>📌 What is it?</h4>
+                    <p><strong>Caching results</strong> of expensive function calls. Before computing, check if we've seen this input before. Like having a cheat sheet that remembers all your previous answers!</p>
+                </div>
+
+                <div class="diagram-box">
+                    <pre>
+Fibonacci: Without vs With Memoization
+
+WITHOUT Memoization (Exponential):
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+                fib(5)
+               /      \
+          fib(4)      fib(3)
+          /    \      /    \
+      fib(3) fib(2) fib(2) fib(1)
+       /  \    / \    / \
+   fib(2) fib(1) ...  ... (duplicates!)
+    /  \
+ fib(1) fib(0)
+
+Total calls: 15 for fib(5)
+For fib(50): billions of calls! 💥
+
+WITH Memoization (Linear):
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Memo = {}
+
+fib(5):
+  → Check memo[5]? Not found
+  → fib(4) + fib(3)
+  
+fib(4):
+  → Check memo[4]? Not found
+  → fib(3) + fib(2)
+  
+fib(3):
+  → Check memo[3]? Not found
+  → fib(2) + fib(1)
+  
+fib(2):
+  → Check memo[2]? Not found
+  → fib(1) + fib(0) = 1 + 0 = 1
+  → memo[2] = 1 ✓ SAVED!
+  
+fib(1):
+  → Check memo[1]? Not found
+  → Return 1
+  → memo[1] = 1 ✓
+
+Back to fib(3):
+  → memo[3] = memo[2] + memo[1] = 1 + 1 = 2 ✓
+
+Back to fib(4):
+  → Need fib(2)? Check memo[2] = 1 ✓
+  → memo[4] = memo[3] + memo[2] = 2 + 1 = 3 ✓
+
+Back to fib(5):
+  → Need fib(3)? Check memo[3] = 2 ✓
+  → memo[5] = memo[4] + memo[3] = 3 + 2 = 5 ✓
+
+Total calls: 5 for fib(5) - each value computed once!
+For fib(50): only 50 calls! ✨
+                    </pre>
+                </div>
+
+                <div class="code-box">
+                    <code>
+<span class="comment">// Basic Memoization Pattern</span>
+<span class="keyword">function</span> <span class="function">fibMemo</span>(n, memo = {}) {
+    <span class="comment">// Base cases</span>
+    <span class="keyword">if</span> (n <= <span class="number">1</span>) <span class="keyword">return</span> n;
+    
+    <span class="comment">// Check cache FIRST</span>
+    <span class="keyword">if</span> (n <span class="keyword">in</span> memo) <span class="keyword">return</span> memo[n];
+    
+    <span class="comment">// Compute and cache</span>
+    memo[n] = <span class="function">fibMemo</span>(n - <span class="number">1</span>, memo) + <span class="function">fibMemo</span>(n - <span class="number">2</span>, memo);
+    
+    <span class="keyword">return</span> memo[n];
+}
+
+<span class="comment">// Generic Memoization Wrapper</span>
+<span class="keyword">function</span> <span class="function">memoize</span>(fn) {
+    <span class="keyword">const</span> cache = {};
+    
+    <span class="keyword">return</span> <span class="keyword">function</span>(...args) {
+        <span class="keyword">const</span> key = JSON.<span class="function">stringify</span>(args);
+        
+        <span class="keyword">if</span> (key <span class="keyword">in</span> cache) {
+            <span class="keyword">return</span> cache[key]; <span class="comment">// Cache HIT</span>
+        }
+        
+        cache[key] = fn.<span class="function">apply</span>(<span class="keyword">this</span>, args); <span class="comment">// Cache MISS</span>
+        <span class="keyword">return</span> cache[key];
+    };
+}
+
+<span class="comment">// Memoized Climb Stairs</span>
+<span class="keyword">const</span> climbStairs = <span class="function">memoize</span>(<span class="keyword">function</span>(n) {
+    <span class="keyword">if</span> (n <= <span class="number">2</span>) <span class="keyword">return</span> n;
+    <span class="keyword">return</span> <span class="function">climbStairs</span>(n - <span class="number">1</span>) + <span class="function">climbStairs</span>(n - <span class="number">2</span>);
+});
+                    </code>
+                </div>
+
+                <div class="step-box">
+                    <h4>🎯 Memoization Recipe</h4>
+                    <div class="visual-step">
+                        <span class="step-num">1</span>
+                        <span>Identify <strong>repeated subproblems</strong></span>
+                    </div>
+                    <div class="visual-step">
+                        <span class="step-num">2</span>
+                        <span>Create a <strong>cache</strong> (object/map)</span>
+                    </div>
+                    <div class="visual-step">
+                        <span class="step-num">3</span>
+                        <span>Before computing, <strong>check cache</strong></span>
+                    </div>
+                    <div class="visual-step">
+                        <span class="step-num">4</span>
+                        <span>After computing, <strong>store in cache</strong></span>
+                    </div>
+                </div>
+
+                <div class="complexity-box">
+                    <div class="complexity-item">
+                        <strong>Before:</strong> <span>O(2ⁿ) exponential</span>
+                    </div>
+                    <div class="complexity-item">
+                        <strong>After:</strong> <span>O(n) linear</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 22. Tabulation -->
+            <div class="topic-card" id="tabulation">
+                <h2><span class="topic-number">22</span> Tabulation</h2>
+                
+                <div class="concept-box">
+                    <h4>📌 What is it?</h4>
+                    <p><strong>Bottom-up</strong> approach: solve smallest subproblems first, build up to the answer. Uses iteration instead of recursion. Like filling out a table row by row from the beginning!</p>
+                </div>
+
+                <div class="diagram-box">
+                    <pre>
+Memoization vs Tabulation:
+
+MEMOIZATION (Top-Down):
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    Problem
+       ↓
+    Break into subproblems
+       ↓
+    Solve recursively (with caching)
+       ↓
+    Combine results
+
+    fib(5)
+      ↓
+    fib(4) + fib(3)
+      ↓
+    fib(3) + fib(2) + ...
+      ↓
+    ...base cases
+
+TABULATION (Bottom-Up):
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    Start from base cases
+       ↓
+    Build table of solutions
+       ↓
+    Each cell uses previous cells
+       ↓
+    Final answer at end
+
+    fib(0) → fib(1) → fib(2) → fib(3) → fib(4) → fib(5)
+      0        1        1        2        3        5
+      ↓        ↓        ↓        ↓        ↓        ↓
+    base    base   use prev   use prev  use prev  ANSWER
+
+Building Fibonacci Table:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Index:    0   1   2   3   4   5
+          ↓   ↓   ↓   ↓   ↓   ↓
+Table:   [0,  1,  -,  -,  -,  -]  ← Initialize base cases
+
+Step 1:  [0,  1,  1,  -,  -,  -]  ← table[2] = table[0] + table[1]
+Step 2:  [0,  1,  1,  2,  -,  -]  ← table[3] = table[1] + table[2]
+Step 3:  [0,  1,  1,  2,  3,  -]  ← table[4] = table[2] + table[3]
+Step 4:  [0,  1,  1,  2,  3,  5]  ← table[5] = table[3] + table[4]
+                                    ↑
+                                ANSWER = 5
+                    </pre>
+                </div>
+
+                <div class="code-box">
+                    <code>
+<span class="comment">// Fibonacci - Tabulation</span>
+<span class="keyword">function</span> <span class="function">fibTab</span>(n) {
+    <span class="keyword">if</span> (n <= <span class="number">1</span>) <span class="keyword">return</span> n;
+    
+    <span class="keyword">const</span> dp = [<span class="number">0</span>, <span class="number">1</span>]; <span class="comment">// Base cases</span>
+    
+    <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">2</span>; i <= n; i++) {
+        dp[i] = dp[i - <span class="number">1</span>] + dp[i - <span class="number">2</span>];
+    }
+    
+    <span class="keyword">return</span> dp[n];
+}
+
+<span class="comment">// Space Optimized (O(1) space)</span>
+<span class="keyword">function</span> <span class="function">fibOptimized</span>(n) {
+    <span class="keyword">if</span> (n <= <span class="number">1</span>) <span class="keyword">return</span> n;
+    
+    <span class="keyword">let</span> prev2 = <span class="number">0</span>, prev1 = <span class="number">1</span>;
+    
+    <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">2</span>; i <= n; i++) {
+        <span class="keyword">const</span> curr = prev1 + prev2;
+        prev2 = prev1;
+        prev1 = curr;
+    }
+    
+    <span class="keyword">return</span> prev1;
+}
+
+<span class="comment">// 0/1 Knapsack - Tabulation</span>
+<span class="keyword">function</span> <span class="function">knapsack</span>(weights, values, capacity) {
+    <span class="keyword">const</span> n = weights.length;
+    <span class="keyword">const</span> dp = <span class="keyword">new</span> Array(n + <span class="number">1</span>)
+        .fill(<span class="number">0</span>)
+        .map(() => <span class="keyword">new</span> Array(capacity + <span class="number">1</span>).fill(<span class="number">0</span>));
+    
+    <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">1</span>; i <= n; i++) {
+        <span class="keyword">for</span> (<span class="keyword">let</span> w = <span class="number">1</span>; w <= capacity; w++) {
+            <span class="keyword">const</span> weight = weights[i - <span class="number">1</span>];
+            <span class="keyword">const</span> value = values[i - <span class="number">1</span>];
+            
+            <span class="keyword">if</span> (weight <= w) {
+                <span class="comment">// Max of: skip item OR take item</span>
+                dp[i][w] = Math.<span class="function">max</span>(
+                    dp[i - <span class="number">1</span>][w],              <span class="comment">// Skip</span>
+                    value + dp[i - <span class="number">1</span>][w - weight] <span class="comment">// Take</span>
+                );
+            } <span class="keyword">else</span> {
+                dp[i][w] = dp[i - <span class="number">1</span>][w]; <span class="comment">// Can't take</span>
+            }
+        }
+    }
+    
+    <span class="keyword">return</span> dp[n][capacity];
+}
+                    </code>
+                </div>
+
+                <div class="comparison-box">
+                    <h4>⚖️ Memoization vs Tabulation</h4>
+                    <table>
+                        <tr><th>Aspect</th><th>Memoization</th><th>Tabulation</th></tr>
+                        <tr><td>Direction</td><td>Top-down</td><td>Bottom-up</td></tr>
+                        <tr><td>Method</td><td>Recursive</td><td>Iterative</td></tr>
+                        <tr><td>Stack</td><td>Uses call stack</td><td>No recursion</td></tr>
+                        <tr><td>Computation</td><td>On-demand</td><td>All subproblems</td></tr>
+                        <tr><td>Best When</td><td>Not all subproblems needed</td><td>All subproblems needed</td></tr>
+                    </table>
+                </div>
+            </div>
+            <!-- 23. Multi-Source BFS -->
+            <div class="topic-card" id="multi-bfs">
+                <h2><span class="topic-number">23</span> Multi-Source BFS</h2>
+                
+                <div class="concept-box">
+                    <h4>📌 What is it?</h4>
+                    <p>BFS starting from <strong>multiple sources simultaneously</strong>. All sources start at level 0, and we expand level by level together. Perfect for problems like "rotting oranges" or "walls and gates"!</p>
+                </div>
+
+                <div class="diagram-box">
+                    <pre>
+Rotting Oranges Problem:
+
+Grid:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    0   1   2   3
+  ┌───┬───┬───┬───┐
+0 │ 2 │ 1 │ 1 │ 0 │   2 = Rotten (source)
+  ├───┼───┼───┼───┤   1 = Fresh
+1 │ 1 │ 1 │ 1 │ 0 │   0 = Empty
+  ├───┼───┼───┼───┤
+2 │ 0 │ 1 │ 2 │ 1 │   Multiple sources: (0,0) and (2,2)
+  └───┴───┴───┴───┘
+
+Multi-Source BFS:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Initial Queue: [(0,0), (2,2)]  ← Both rotten at minute 0
+
+Minute 0 (initial state):
+    2   1   1   0
+    1   1   1   0
+    0   1   2   1
+    ↑           ↑
+  sources    sources
+
+Minute 1: Process all at distance 0, add neighbors
+    Queue: [(0,1), (1,0), (2,1), (2,3)]
+    
+    2   2   1   0       ← (0,1) rotted
+    2   1   1   0       ← (1,0) rotted
+    0   2   2   1       ← (2,1) and (2,2) spread
+        ↑       ↑
+
+Minute 2: Process all at distance 1
+    Queue: [(0,2), (1,1), (1,2), (1,1)]
+    
+    2   2   2   0
+    2   2   1   0
+    0   2   2   2       ← (2,3) rotted
+
+Minute 3:
+    2   2   2   0
+    2   2   2   0
+    0   2   2   2
+
+Result: 2 minutes to rot all oranges
+
+Key Difference from Regular BFS:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Regular BFS:    One source → distances from that point
+Multi-BFS:      Many sources → minimum distance to ANY source
+                    </pre>
+                </div>
+
+                <div class="step-box">
+                    <h4>🎯 Algorithm Steps</h4>
+                    <div class="visual-step">
+                        <span class="step-num">1</span>
+                        <span>Find ALL sources and add them to queue</span>
+                    </div>
+                    <div class="visual-step">
+                        <span class="step-num">2</span>
+                        <span>Process entire level before moving to next level</span>
+                    </div>
+                    <div class="visual-step">
+                        <span class="step-num">3</span>
+                        <span>Track distance/minutes for each level</span>
+                    </div>
+                    <div class="visual-step">
+                        <span class="step-num">4</span>
+                        <span>Continue until queue is empty</span>
+                    </div>
+                </div>
+
+                <div class="code-box">
+                    <code>
+<span class="comment">// Rotting Oranges</span>
+<span class="keyword">function</span> <span class="function">orangesRotting</span>(grid) {
+    <span class="keyword">const</span> ROWS = grid.length, COLS = grid[<span class="number">0</span>].length;
+    <span class="keyword">const</span> queue = [];
+    <span class="keyword">let</span> fresh = <span class="number">0</span>, minutes = <span class="number">0</span>;
+    
+    <span class="comment">// Find all rotten oranges (sources)</span>
+    <span class="keyword">for</span> (<span class="keyword">let</span> r = <span class="number">0</span>; r < ROWS; r++) {
+        <span class="keyword">for</span> (<span class="keyword">let</span> c = <span class="number">0</span>; c < COLS; c++) {
+            <span class="keyword">if</span> (grid[r][c] === <span class="number">2</span>) queue.<span class="function">push</span>([r, c]);
+            <span class="keyword">if</span> (grid[r][c] === <span class="number">1</span>) fresh++;
+        }
+    }
+    
+    <span class="keyword">const</span> dirs = [[<span class="number">1</span>,<span class="number">0</span>], [<span class="number">-1</span>,<span class="number">0</span>], [<span class="number">0</span>,<span class="number">1</span>], [<span class="number">0</span>,-<span class="number">1</span>]];
+    
+    <span class="keyword">while</span> (queue.length && fresh > <span class="number">0</span>) {
+        <span class="comment">// Process ALL at current level (same minute)</span>
+        <span class="keyword">const</span> size = queue.length;
+        
+        <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i < size; i++) {
+            <span class="keyword">const</span> [r, c] = queue.<span class="function">shift</span>();
+            
+            <span class="keyword">for</span> (<span class="keyword">let</span> [dr, dc] <span class="keyword">of</span> dirs) {
+                <span class="keyword">const</span> nr = r + dr, nc = c + dc;
+                
+                <span class="keyword">if</span> (nr >= <span class="number">0</span> && nr < ROWS && nc >= <span class="number">0</span> && nc < COLS
+                    && grid[nr][nc] === <span class="number">1</span>) {
+                    grid[nr][nc] = <span class="number">2</span>;    <span class="comment">// Make rotten</span>
+                    fresh--;                 <span class="comment">// Count fresh</span>
+                    queue.<span class="function">push</span>([nr, nc]); <span class="comment">// Add to queue</span>
+                }
+            }
+        }
+        
+        <span class="keyword">if</span> (queue.length) minutes++; <span class="comment">// New level processed</span>
+    }
+    
+    <span class="keyword">return</span> fresh === <span class="number">0</span> ? minutes : <span class="number">-1</span>;
+}
+
+<span class="comment">// Walls and Gates</span>
+<span class="keyword">function</span> <span class="function">wallsAndGates</span>(rooms) {
+    <span class="keyword">const</span> ROWS = rooms.length, COLS = rooms[<span class="number">0</span>].length;
+    <span class="keyword">const</span> queue = [];
+    <span class="keyword">const</span> INF = <span class="number">2147483647</span>;
+    
+    <span class="comment">// Find all gates (sources)</span>
+    <span class="keyword">for</span> (<span class="keyword">let</span> r = <span class="number">0</span>; r < ROWS; r++) {
+        <span class="keyword">for</span> (<span class="keyword">let</span> c = <span class="number">0</span>; c < COLS; c++) {
+            <span class="keyword">if</span> (rooms[r][c] === <span class="number">0</span>) queue.<span class="function">push</span>([r, c]);
+        }
+    }
+    
+    <span class="keyword">const</span> dirs = [[<span class="number">1</span>,<span class="number">0</span>], [<span class="number">-1</span>,<span class="number">0</span>], [<span class="number">0</span>,<span class="number">1</span>], [<span class="number">0</span>,-<span class="number">1</span>]];
+    
+    <span class="keyword">while</span> (queue.length) {
+        <span class="keyword">const</span> [r, c] = queue.<span class="function">shift</span>();
+        
+        <span class="keyword">for</span> (<span class="keyword">let</span> [dr, dc] <span class="keyword">of</span> dirs) {
+            <span class="keyword">const</span> nr = r + dr, nc = c + dc;
+            
+            <span class="keyword">if</span> (nr >= <span class="number">0</span> && nr < ROWS && nc >= <span class="number">0</span> && nc < COLS
+                && rooms[nr][nc] === INF) {
+                rooms[nr][nc] = rooms[r][c] + <span class="number">1</span>;
+                queue.<span class="function">push</span>([nr, nc]);
+            }
+        }
+    }
+}
+                    </code>
+                </div>
+
+                <div class="example-box">
+                    <h4>💡 When to Use Multi-Source BFS</h4>
+                    <ul>
+                        <li><strong>Rotting Oranges:</strong> Multiple rotten sources spread</li>
+                        <li><strong>Walls and Gates:</strong> Multiple gates, find nearest</li>
+                        <li><strong>01 Matrix:</strong> Find distance to nearest 0</li>
+                        <li><strong>As Far from Land as Possible:</strong> Find farthest water cell</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 24. Merge Intervals -->
+            <div class="topic-card" id="merge-intervals">
+                <h2><span class="topic-number">24</span> Merge Intervals</h2>
+                
+                <div class="concept-box">
+                    <h4>📌 What is it?</h4>
+                    <p>Given a collection of intervals, <strong>merge all overlapping</strong> intervals. The key is <strong>sorting by start time</strong>, then checking if adjacent intervals overlap. Like combining overlapping meetings on a calendar!</p>
+                </div>
+
+                <div class="diagram-box">
+                    <pre>
+Merge Intervals: [[1,3], [2,6], [8,10], [15,18]]
+
+Step 1: SORT by start time
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Already sorted: [1,3], [2,6], [8,10], [15,18]
+
+Step 2: Visualize on timeline
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Timeline:
+0  1  2  3  4  5  6  7  8  9  10 11 12 13 14 15 16 17 18
+   ├──────┤                    [1,3]
+      ├───────────┤            [2,6]  ← overlaps [1,3]!
+                     ├─────┤   [8,10]
+                                       ├─────┤ [15,18]
+
+Step 3: Merge overlapping
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Process [1,3]:
+    result = [[1,3]]
+
+Process [2,6]:
+    Does [2,6] overlap with [1,3]?
+    Check: 2 <= 3? YES (start <= last_end)
+    Merge! Extend end: max(3, 6) = 6
+    result = [[1,6]]
+
+Process [8,10]:
+    Does [8,10] overlap with [1,6]?
+    Check: 8 <= 6? NO
+    No overlap! Add new interval
+    result = [[1,6], [8,10]]
+
+Process [15,18]:
+    Does [15,18] overlap with [8,10]?
+    Check: 15 <= 10? NO
+    No overlap! Add new interval
+    result = [[1,6], [8,10], [15,18]]
+
+Final: [[1,6], [8,10], [15,18]]
+
+Visual Result:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+0  1  2  3  4  5  6  7  8  9  10 11 12 13 14 15 16 17 18
+   ├──────────────┤            [1,6] ← merged!
+                     ├─────┤   [8,10]
+                                       ├─────┤ [15,18]
+
+Overlapping Check:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Two intervals [a,b] and [c,d] overlap if:
+    c <= b (new start <= current end)
+
+When they overlap, merge to:
+    [a, max(b,d)]
+                    </pre>
+                </div>
+
+                <div class="code-box">
+                    <code>
+<span class="comment">// Merge Intervals</span>
+<span class="keyword">function</span> <span class="function">merge</span>(intervals) {
+    <span class="keyword">if</span> (!intervals.length) <span class="keyword">return</span> [];
+    
+    <span class="comment">// Sort by start time</span>
+    intervals.<span class="function">sort</span>((a, b) => a[<span class="number">0</span>] - b[<span class="number">0</span>]);
+    
+    <span class="keyword">const</span> result = [intervals[<span class="number">0</span>]];
+    
+    <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">1</span>; i < intervals.length; i++) {
+        <span class="keyword">const</span> [start, end] = intervals[i];
+        <span class="keyword">const</span> lastEnd = result[result.length - <span class="number">1</span>][<span class="number">1</span>];
+        
+        <span class="keyword">if</span> (start <= lastEnd) {
+            <span class="comment">// Overlapping - merge by extending end</span>
+            result[result.length - <span class="number">1</span>][<span class="number">1</span>] = Math.<span class="function">max</span>(lastEnd, end);
+        } <span class="keyword">else</span> {
+            <span class="comment">// Non-overlapping - add new interval</span>
+            result.<span class="function">push</span>([start, end]);
+        }
+    }
+    
+    <span class="keyword">return</span> result;
+}
+
+<span class="comment">// Insert Interval</span>
+<span class="keyword">function</span> <span class="function">insert</span>(intervals, newInterval) {
+    <span class="keyword">const</span> result = [];
+    <span class="keyword">let</span> i = <span class="number">0</span>;
+    
+    <span class="comment">// Add all intervals before newInterval</span>
+    <span class="keyword">while</span> (i < intervals.length && intervals[i][<span class="number">1</span>] < newInterval[<span class="number">0</span>]) {
+        result.<span class="function">push</span>(intervals[i]);
+        i++;
+    }
+    
+    <span class="comment">// Merge overlapping intervals</span>
+    <span class="keyword">while</span> (i < intervals.length && intervals[i][<span class="number">0</span>] <= newInterval[<span class="number">1</span>]) {
+        newInterval[<span class="number">0</span>] = Math.<span class="function">min</span>(newInterval[<span class="number">0</span>], intervals[i][<span class="number">0</span>]);
+        newInterval[<span class="number">1</span>] = Math.<span class="function">max</span>(newInterval[<span class="number">1</span>], intervals[i][<span class="number">1</span>]);
+        i++;
+    }
+    result.<span class="function">push</span>(newInterval);
+    
+    <span class="comment">// Add remaining intervals</span>
+    <span class="keyword">while</span> (i < intervals.length) {
+        result.<span class="function">push</span>(intervals[i]);
+        i++;
+    }
+    
+    <span class="keyword">return</span> result;
+}
+
+<span class="comment">// Non-overlapping Intervals (min removals)</span>
+<span class="keyword">function</span> <span class="function">eraseOverlapIntervals</span>(intervals) {
+    intervals.<span class="function">sort</span>((a, b) => a[<span class="number">1</span>] - b[<span class="number">1</span>]); <span class="comment">// Sort by end</span>
+    
+    <span class="keyword">let</span> count = <span class="number">0</span>;
+    <span class="keyword">let</span> prevEnd = intervals[<span class="number">0</span>][<span class="number">1</span>];
+    
+    <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">1</span>; i < intervals.length; i++) {
+        <span class="keyword">if</span> (intervals[i][<span class="number">0</span>] < prevEnd) {
+            count++; <span class="comment">// Remove this interval</span>
+        } <span class="keyword">else</span> {
+            prevEnd = intervals[i][<span class="number">1</span>];
+        }
+    }
+    
+    <span class="keyword">return</span> count;
+}
+                    </code>
+                </div>
+
+                <div class="example-box">
+                    <h4>💡 Interval Problems Variations</h4>
+                    <table>
+                        <tr><th>Problem</th><th>Strategy</th></tr>
+                        <tr><td>Merge Intervals</td><td>Sort by start, merge overlapping</td></tr>
+                        <tr><td>Insert Interval</td><td>Find position, merge with neighbors</td></tr>
+                        <tr><td>Non-overlapping</td><td>Sort by end, greedy selection</td></tr>
+                        <tr><td>Meeting Rooms</td><td>Check if any overlap exists</td></tr>
+                        <tr><td>Meeting Rooms II</td><td>Count concurrent meetings (heap/timeline)</td></tr>
+                    </table>
+                </div>
+
+                <div class="complexity-box">
+                    <div class="complexity-item">
+                        <strong>Time:</strong> <span>O(n log n)</span> (sorting)
+                    </div>
+                    <div class="complexity-item">
+                        <strong>Space:</strong> <span>O(n)</span> (result)
+                    </div>
+                </div>
+            </div>
+
+        </div> <!-- End topic-grid -->
+
+        <footer>
+            <p>Algorithm Patterns - Easy Learning Guide</p>
+            <p>© 2024 | Visual Guide for DSA Patterns</p>
+        </footer>
+    </div>
+</body>
+</html>

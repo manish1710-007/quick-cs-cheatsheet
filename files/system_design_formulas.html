@@ -1,0 +1,2117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System Design - Formula Sheet</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+            min-height: 100vh;
+            color: #e0e0e0;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            padding: 40px 20px;
+            background: linear-gradient(90deg, #00d4ff, #7c3aed, #f472b6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        header h1 {
+            font-size: 3em;
+            margin-bottom: 10px;
+            text-shadow: 0 0 30px rgba(0, 212, 255, 0.3);
+        }
+
+        header p {
+            font-size: 1.2em;
+            color: #8892b0;
+            -webkit-text-fill-color: #8892b0;
+        }
+
+        .section {
+            margin: 30px 0;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 15px;
+            padding: 25px;
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            backdrop-filter: blur(10px);
+        }
+
+        .section h2 {
+            color: #00d4ff;
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid rgba(0, 212, 255, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section h2::before {
+            content: '🏗️';
+        }
+
+        .subsection {
+            margin: 20px 0;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            border-left: 4px solid #7c3aed;
+        }
+
+        .subsection h3 {
+            color: #7c3aed;
+            font-size: 1.3em;
+            margin-bottom: 15px;
+        }
+
+        .formula-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+            margin-top: 15px;
+        }
+
+        .formula-box {
+            background: linear-gradient(145deg, rgba(0, 212, 255, 0.1), rgba(124, 58, 237, 0.05));
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .formula-box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 212, 255, 0.2);
+            border-color: #00d4ff;
+        }
+
+        .formula-box h4 {
+            color: #00d4ff;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        .formula {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 1em;
+            color: #10b981;
+            text-align: center;
+            margin: 10px 0;
+            border: 1px solid rgba(16, 185, 129, 0.2);
+        }
+
+        .formula-inline {
+            display: inline-block;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            color: #10b981;
+            margin: 2px;
+            font-size: 0.9em;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        th {
+            background: linear-gradient(90deg, rgba(0, 212, 255, 0.3), rgba(124, 58, 237, 0.2));
+            color: #fff;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        td {
+            padding: 12px 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        tr:hover {
+            background: rgba(0, 212, 255, 0.1);
+        }
+
+        .diagram {
+            background: rgba(0, 0, 0, 0.4);
+            padding: 25px;
+            border-radius: 10px;
+            text-align: center;
+            font-family: 'Courier New', monospace;
+            margin: 20px 0;
+            overflow-x: auto;
+            border: 1px solid rgba(0, 212, 255, 0.2);
+        }
+
+        .diagram pre {
+            color: #10b981;
+            font-size: 0.85em;
+            line-height: 1.4;
+            display: inline-block;
+            text-align: left;
+        }
+
+        .architecture-box {
+            background: linear-gradient(145deg, rgba(124, 58, 237, 0.15), rgba(0, 212, 255, 0.1));
+            padding: 25px;
+            border-radius: 15px;
+            margin: 20px 0;
+            border: 1px solid rgba(124, 58, 237, 0.3);
+        }
+
+        .architecture-box h4 {
+            color: #f472b6;
+            font-size: 1.2em;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .example {
+            background: linear-gradient(145deg, rgba(16, 185, 129, 0.1), rgba(6, 182, 212, 0.05));
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #10b981;
+            margin: 15px 0;
+        }
+
+        .example h4 {
+            color: #10b981;
+            margin-bottom: 10px;
+        }
+
+        .note {
+            background: linear-gradient(145deg, rgba(244, 114, 182, 0.1), rgba(236, 72, 153, 0.05));
+            padding: 15px 20px;
+            border-radius: 10px;
+            border-left: 4px solid #f472b6;
+            margin: 15px 0;
+        }
+
+        .note h4 {
+            color: #f472b6;
+            margin-bottom: 8px;
+        }
+
+        .warning {
+            background: linear-gradient(145deg, rgba(251, 191, 36, 0.1), rgba(245, 158, 11, 0.05));
+            padding: 15px 20px;
+            border-radius: 10px;
+            border-left: 4px solid #fbbf24;
+            margin: 15px 0;
+        }
+
+        .warning h4 {
+            color: #fbbf24;
+            margin-bottom: 8px;
+        }
+
+        .quick-ref {
+            background: linear-gradient(145deg, rgba(0, 212, 255, 0.15), rgba(124, 58, 237, 0.1));
+            padding: 25px;
+            border-radius: 15px;
+            margin-top: 30px;
+            border: 2px solid rgba(0, 212, 255, 0.3);
+        }
+
+        .quick-ref h3 {
+            color: #00d4ff;
+            font-size: 1.5em;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .quick-ref-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 15px;
+        }
+
+        .quick-ref-item {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 15px;
+            border-radius: 8px;
+        }
+
+        .quick-ref-item strong {
+            color: #10b981;
+        }
+
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .comparison-card {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            border-radius: 10px;
+            border-top: 3px solid #00d4ff;
+        }
+
+        .comparison-card h4 {
+            color: #00d4ff;
+            margin-bottom: 15px;
+        }
+
+        ul {
+            margin-left: 20px;
+            margin-top: 10px;
+        }
+
+        li {
+            margin: 5px 0;
+        }
+
+        .metric-box {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 15px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            margin: 8px 0;
+        }
+
+        .metric-label {
+            color: #a0aec0;
+        }
+
+        .metric-value {
+            font-family: 'Courier New', monospace;
+            color: #10b981;
+            font-weight: bold;
+        }
+
+        .timeline {
+            position: relative;
+            padding-left: 30px;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 10px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(180deg, #00d4ff, #7c3aed);
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 20px;
+            padding-left: 20px;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -24px;
+            top: 5px;
+            width: 12px;
+            height: 12px;
+            background: #00d4ff;
+            border-radius: 50%;
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px;
+            margin-top: 40px;
+            color: #8892b0;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .pros-cons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .pros {
+            background: rgba(16, 185, 129, 0.1);
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
+        .pros h5 {
+            color: #10b981;
+            margin-bottom: 10px;
+        }
+
+        .cons {
+            background: rgba(239, 68, 68, 0.1);
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+
+        .cons h5 {
+            color: #ef4444;
+            margin-bottom: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .pros-cons {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>System Design</h1>
+            <p>Architecture, Patterns & Scalability Reference Guide</p>
+        </header>
+
+        <!-- System Design Basics -->
+        <section class="section">
+            <h2>System Design Fundamentals</h2>
+            
+            <div class="subsection">
+                <h3>Key Metrics</h3>
+                <div class="formula-grid">
+                    <div class="formula-box">
+                        <h4>Availability (SLA)</h4>
+                        <div class="formula">Availability = (Uptime / Total Time) × 100%</div>
+                        <table>
+                            <tr><th>SLA</th><th>Downtime/Year</th><th>Downtime/Month</th></tr>
+                            <tr><td>99%</td><td>3.65 days</td><td>7.2 hours</td></tr>
+                            <tr><td>99.9%</td><td>8.7 hours</td><td>43.8 minutes</td></tr>
+                            <tr><td>99.99%</td><td>52.6 minutes</td><td>4.4 minutes</td></tr>
+                            <tr><td>99.999%</td><td>5.3 minutes</td><td>26 seconds</td></tr>
+                        </table>
+                    </div>
+                    <div class="formula-box">
+                        <h4>Reliability Calculations</h4>
+                        <div class="formula">MTBF = Total Uptime / Number of Failures</div>
+                        <div class="formula">MTTR = Total Downtime / Number of Failures</div>
+                        <div class="formula">Availability = MTBF / (MTBF + MTTR)</div>
+                        <p><strong>MTBF:</strong> Mean Time Between Failures</p>
+                        <p><strong>MTTR:</strong> Mean Time To Recovery</p>
+                    </div>
+                    <div class="formula-box">
+                        <h4>Throughput & Latency</h4>
+                        <div class="formula">Throughput = Requests / Second (RPS)</div>
+                        <div class="formula">Latency = Time for single request</div>
+                        <div class="formula">Little's Law: L = λ × W</div>
+                        <p>L = average requests in system</p>
+                        <p>λ = arrival rate, W = average wait time</p>
+                    </div>
+                    <div class="formula-box">
+                        <h4>Capacity Planning</h4>
+                        <div class="formula">Users = Daily Active Users × Requests/User/Day</div>
+                        <div class="formula">Peak RPS = Average RPS × Peak Factor (2-3x)</div>
+                        <div class="formula">Storage = Users × Data/User × Replication Factor</div>
+                        <div class="formula">Bandwidth = (Requests/sec) × Avg Response Size</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3>Estimation Techniques</h3>
+                <div class="example">
+                    <h4>Twitter-like System Estimation</h4>
+                    <div class="formula-grid">
+                        <div class="metric-box">
+                            <span class="metric-label">Monthly Active Users (MAU)</span>
+                            <span class="metric-value">300 Million</span>
+                        </div>
+                        <div class="metric-box">
+                            <span class="metric-label">Daily Active Users (DAU)</span>
+                            <span class="metric-value">100 Million</span>
+                        </div>
+                        <div class="metric-box">
+                            <span class="metric-label">Tweets/Day</span>
+                            <span class="metric-value">500 Million</span>
+                        </div>
+                        <div class="metric-box">
+                            <span class="metric-label">Avg Tweets/User/Day</span>
+                            <span class="metric-value">5</span>
+                        </div>
+                        <div class="metric-box">
+                            <span class="metric-label">Tweet Read/Write Ratio</span>
+                            <span class="metric-value">100:1</span>
+                        </div>
+                        <div class="metric-box">
+                            <span class="metric-label">Storage/Tweet</span>
+                            <span class="metric-value">~1 KB</span>
+                        </div>
+                    </div>
+                    <p><strong>QPS Calculations:</strong></p>
+                    <div class="formula">Write QPS = 500M / 86400 ≈ 5,800 tweets/sec</div>
+                    <div class="formula">Read QPS = 5,800 × 100 = 580,000 reads/sec</div>
+                    <div class="formula">Peak QPS = Average × 2 = 11,600 writes/sec</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Scalability -->
+        <section class="section">
+            <h2>Scalability Patterns</h2>
+            
+            <div class="subsection">
+                <h3>Scaling Approaches</h3>
+                <div class="comparison-grid">
+                    <div class="comparison-card">
+                        <h4>Vertical Scaling (Scale Up)</h4>
+                        <div class="diagram">
+                            <pre>
+    ┌─────────────────────┐
+    │   ┌───────────┐     │
+    │   │   App     │     │
+    │   └───────────┘     │
+    │   ┌───────────┐     │
+    │   │ Database  │     │
+    │   └───────────┘     │
+    │      More RAM,      │
+    │      More CPU       │
+    └─────────────────────┘
+                            </pre>
+                        </div>
+                        <div class="pros-cons">
+                            <div class="pros">
+                                <h5>Pros</h5>
+                                <ul>
+                                    <li>Simple to implement</li>
+                                    <li>No code changes</li>
+                                    <li>Consistent data</li>
+                                </ul>
+                            </div>
+                            <div class="cons">
+                                <h5>Cons</h5>
+                                <ul>
+                                    <li>Hardware limits</li>
+                                    <li>Expensive</li>
+                                    <li>Single point of failure</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="comparison-card">
+                        <h4>Horizontal Scaling (Scale Out)</h4>
+                        <div class="diagram">
+                            <pre>
+    ┌─────────────────────────────────┐
+    │         Load Balancer           │
+    └───────────────┬─────────────────┘
+                    │
+        ┌───────────┼───────────┐
+        ▼           ▼           ▼
+    ┌───────┐   ┌───────┐   ┌───────┐
+    │Server │   │Server │   │Server │
+    │   1   │   │   2   │   │   3   │
+    └───────┘   └───────┘   └───────┘
+        │           │           │
+        └───────────┼───────────┘
+                    ▼
+            ┌─────────────┐
+            │  Database   │
+            │  (Sharded)  │
+            └─────────────┘
+                            </pre>
+                        </div>
+                        <div class="pros-cons">
+                            <div class="pros">
+                                <h5>Pros</h5>
+                                <ul>
+                                    <li>Near infinite scale</li>
+                                    <li>Cost effective</li>
+                                    <li>Fault tolerant</li>
+                                </ul>
+                            </div>
+                            <div class="cons">
+                                <h5>Cons</h5>
+                                <ul>
+                                    <li>Complexity</li>
+                                    <li>Data consistency</li>
+                                    <li>Load balancing needed</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3>Load Balancing</h3>
+                <div class="formula-grid">
+                    <div class="formula-box">
+                        <h4>Load Balancing Algorithms</h4>
+                        <table>
+                            <tr><th>Algorithm</th><th>Description</th><th>Use Case</th></tr>
+                            <tr><td>Round Robin</td><td>Distribute sequentially</td><td>Equal server specs</td></tr>
+                            <tr><td>Weighted RR</td><td>Distribute by weight</td><td>Different specs</td></tr>
+                            <tr><td>Least Connections</td><td>Route to fewest active</td><td>Long connections</td></tr>
+                            <tr><td>IP Hash</td><td>Hash client IP</td><td>Session affinity</td></tr>
+                            <tr><td>Least Response Time</td><td>Fastest response</td><td>Latency sensitive</td></tr>
+                            <tr><td>Random</td><td>Random selection</td><td>Simple scenarios</td></tr>
+                        </table>
+                    </div>
+                    <div class="formula-box">
+                        <h4>Load Balancer Architecture</h4>
+                        <div class="diagram">
+                            <pre>
+  Users                    Load Balancer
+    │                           │
+    │    ┌──────────────────────┤
+    │    │                      │
+    ▼    ▼                      ▼
+┌───────┐ ┌───────┐ ┌───────┐ ┌───────┐
+│User 1 │ │User 2 │ │User 3 │ │User N │
+└───┬───┘ └───┬───┘ └───┬───┘ └───┬───┘
+    │         │         │         │
+    └─────────┴────┬────┴─────────┘
+                   ▼
+         ┌─────────────────┐
+         │  Load Balancer  │
+         │  (Active-Passive)│
+         └────────┬────────┘
+                  │
+      ┌───────────┼───────────┐
+      ▼           ▼           ▼
+  ┌───────┐   ┌───────┐   ┌───────┐
+  │Server │   │Server │   │Server │
+  │   1   │   │   2   │   │   3   │
+  └───────┘   └───────┘   └───────┘
+                            </pre>
+                        </div>
+                    </div>
+                    <div class="formula-box">
+                        <h4>Health Checks</h4>
+                        <div class="formula">Health Check Interval: 5-30 seconds</div>
+                        <div class="formula">Unhealthy Threshold: 2-3 failures</div>
+                        <div class="formula">Healthy Threshold: 1-2 successes</div>
+                        <p><strong>Types:</strong></p>
+                        <ul>
+                            <li><strong>Layer 3:</strong> ICMP ping</li>
+                            <li><strong>Layer 4:</strong> TCP connection</li>
+                            <li><strong>Layer 7:</strong> HTTP endpoint (/health)</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Database Design -->
+        <section class="section">
+            <h2>Database Design</h2>
+            
+            <div class="subsection">
+                <h3>SQL vs NoSQL</h3>
+                <table>
+                    <tr>
+                        <th>Feature</th>
+                        <th>SQL (Relational)</th>
+                        <th>NoSQL (Non-Relational)</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Structure</strong></td>
+                        <td>Fixed schema, tables</td>
+                        <td>Flexible schema, documents/key-value</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Scaling</strong></td>
+                        <td>Vertical</td>
+                        <td>Horizontal</td>
+                    </tr>
+                    <tr>
+                        <td><strong>ACID</strong></td>
+                        <td>Full ACID support</td>
+                        <td>BASE (eventual consistency)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Joins</strong></td>
+                        <td>Complex joins</td>
+                        <td>Limited/No joins</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Examples</strong></td>
+                        <td>MySQL, PostgreSQL, Oracle</td>
+                        <td>MongoDB, Cassandra, Redis</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Best For</strong></td>
+                        <td>Complex queries, transactions</td>
+                        <td>Large scale, flexible data</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="subsection">
+                <h3>Database Replication</h3>
+                <div class="formula-grid">
+                    <div class="formula-box">
+                        <h4>Master-Slave Replication</h4>
+                        <div class="diagram">
+                            <pre>
+          Writes                 Reads
+            │                      │
+            ▼                      ▼
+    ┌───────────────┐      ┌───────────────┐
+    │    Master     │─────▶│    Slave 1    │
+    │  (Read/Write) │      │  (Read Only)  │
+    └───────────────┘      └───────────────┘
+            │                      │
+            │              ┌───────────────┐
+            └─────────────▶│    Slave 2    │
+                           │  (Read Only)  │
+                           └───────────────┘
+
+    • Master handles all writes
+    • Slaves handle read queries
+    • Asynchronous replication
+    • Read scaling, not write scaling
+                            </pre>
+                        </div>
+                    </div>
+                    <div class="formula-box">
+                        <h4>Master-Master Replication</h4>
+                        <div class="diagram">
+                            <pre>
+    ┌───────────────┐            ┌───────────────┐
+    │   Master 1    │◀──────────▶│   Master 2    │
+    │ (Read/Write)  │            │ (Read/Write)  │
+    └───────────────┘            └───────────────┘
+            │                            │
+            ▼                            ▼
+    ┌───────────────┐            ┌───────────────┐
+    │    Slave 1    │            │    Slave 2    │
+    │  (Read Only)  │            │  (Read Only)  │
+    └───────────────┘            └───────────────┘
+
+    • Both masters can write
+    • Conflict resolution needed
+    • Better write availability
+    • More complex consistency
+                            </pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3>Database Sharding</h3>
+                <div class="formula-grid">
+                    <div class="formula-box">
+                        <h4>Horizontal Sharding</h4>
+                        <div class="diagram">
+                            <pre>
+        User Data Partitioned by User_ID
+
+    ┌─────────────────────────────────────┐
+    │          Shard Key Hash             │
+    │    user_id % number_of_shards       │
+    └──────────────────┬──────────────────┘
+                       │
+       ┌───────────────┼───────────────┐
+       ▼               ▼               ▼
+┌─────────────┐ ┌─────────────┐ ┌─────────────┐
+│   Shard 1   │ │   Shard 2   │ │   Shard 3   │
+│  ID: 0,3,6  │ │  ID: 1,4,7  │ │  ID: 2,5,8  │
+│   (US)      │ │   (EU)      │ │   (ASIA)    │
+└─────────────┘ └─────────────┘ └─────────────┘
+                       │
+                       ▼
+              Each Shard Has:
+              • Primary DB
+              • Replica DBs
+                            </pre>
+                        </div>
+                    </div>
+                    <div class="formula-box">
+                        <h4>Sharding Strategies</h4>
+                        <table>
+                            <tr><th>Strategy</th><th>Method</th><th>Pros/Cons</th></tr>
+                            <tr>
+                                <td>Hash-based</td>
+                                <td>hash(key) % n</td>
+                                <td>Even distribution, rehashing issue</td>
+                            </tr>
+                            <tr>
+                                <td>Range-based</td>
+                                <td>Key ranges</td>
+                                <td>Efficient range queries, hot spots</td>
+                            </tr>
+                            <tr>
+                                <td>Directory-based</td>
+                                <td>Lookup table</td>
+                                <td>Flexible, lookup overhead</td>
+                            </tr>
+                            <tr>
+                                <td>Geo-based</td>
+                                <td>Location</td>
+                                <td>Low latency, uneven distribution</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <div class="warning">
+                    <h4>Sharding Challenges</h4>
+                    <ul>
+                        <li><strong>Rebalancing:</strong> Adding/removing shards requires data migration</li>
+                        <li><strong>Cross-shard queries:</strong> Joins across shards are expensive</li>
+                        <li><strong>Hot spots:</strong> Uneven data distribution</li>
+                        <li><strong>Consistency:</strong> Harder to maintain ACID across shards</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3>Database Indexing</h3>
+                <div class="formula-grid">
+                    <div class="formula-box">
+                        <h4>Index Types</h4>
+                        <table>
+                            <tr><th>Type</th><th>Structure</th><th>Best For</th></tr>
+                            <tr><td>B-Tree</td><td>Balanced tree</td><td>Range queries, sorted data</td></tr>
+                            <tr><td>Hash</td><td>Hash table</td><td>Exact matches</td></tr>
+                            <tr><td>Bitmap</td><td>Bit arrays</td><td>Low cardinality columns</td></tr>
+                            <tr><td>Full-text</td><td>Inverted index</td><td>Text search</td></tr>
+                            <tr><td>Spatial (R-Tree)</td><td>Rectangle tree</td><td>Geographic data</td></tr>
+                        </table>
+                    </div>
+                    <div class="formula-box">
+                        <h4>Index Trade-offs</h4>
+                        <div class="formula">Read Benefit: O(n) → O(log n)</div>
+                        <div class="formula">Write Cost: +1 index update per insert</div>
+                        <div class="formula">Space Cost: ~10-30% of table size</div>
+                        <p><strong>When to Index:</strong></p>
+                        <ul>
+                            <li>Columns in WHERE clauses</li>
+                            <li>Columns in JOIN conditions</li>
+                            <li>Columns in ORDER BY</li>
+                            <li>High selectivity columns</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CAP Theorem -->
+        <section class="section">
+            <h2>CAP Theorem & Consistency</h2>
+            
+            <div class="subsection">
+                <h3>CAP Theorem</h3>
+                <div class="architecture-box">
+                    <h4>CAP Triangle</h4>
+                    <div class="diagram">
+                        <pre>
+                    ┌───────────┐
+                    │     C     │
+                    │(Consistency)│
+                    └───────────┘
+                         /\
+                        /  \
+                       /    \
+                      /      \
+                     /   △    \
+                    /          \
+                   /            \
+                  /              \
+           ┌─────────┐      ┌─────────┐
+           │    A    │──────│    P    │
+           │(Avail-  │      │(Partition│
+           │ ability)│      │ Tolerance)│
+           └─────────┘      └─────────┘
+
+    Pick 2 of 3 in distributed systems:
+
+    CA: Traditional RDBMS (no partition tolerance)
+    CP: MongoDB, HBase, Redis (consistent)
+    AP: Cassandra, DynamoDB, CouchDB (available)
+                        </pre>
+                    </div>
+                </div>
+                
+                <div class="comparison-grid">
+                    <div class="comparison-card">
+                        <h4>Consistency (C)</h4>
+                        <p>All nodes see same data at same time</p>
+                        <p><strong>Every read returns latest write or error</strong></p>
+                        <p><strong>Trade-off:</strong> Higher latency, may be unavailable</p>
+                    </div>
+                    <div class="comparison-card">
+                        <h4>Availability (A)</h4>
+                        <p>Every request receives a response</p>
+                        <p><strong>No guarantee it's the most recent data</strong></p>
+                        <p><strong>Trade-off:</strong> May return stale data</p>
+                    </div>
+                    <div class="comparison-card">
+                        <h4>Partition Tolerance (P)</h4>
+                        <p>System continues despite network failures</p>
+                        <p><strong>Network partitions are inevitable</strong></p>
+                        <p><strong>Reality:</strong> Must choose P in distributed systems</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3>Consistency Models</h3>
+                <table>
+                    <tr>
+                        <th>Model</th>
+                        <th>Description</th>
+                        <th>Latency</th>
+                        <th>Examples</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Strong</strong></td>
+                        <td>All reads see latest write</td>
+                        <td>High</td>
+                        <td>RDBMS, ZooKeeper</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Sequential</strong></td>
+                        <td>All nodes see same order</td>
+                        <td>Medium</td>
+                        <td>MongoDB</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Eventual</strong></td>
+                        <td>Eventually consistent</td>
+                        <td>Low</td>
+                        <td>Cassandra, DynamoDB</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Causal</strong></td>
+                        <td>Causally related ops ordered</td>
+                        <td>Medium</td>
+                        <td>COPS, Eiger</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Read-your-writes</strong></td>
+                        <td>See your own writes</td>
+                        <td>Medium</td>
+                        <td>Session-based systems</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="subsection">
+                <h3>PACELC Theorem (Extended CAP)</h3>
+                <div class="formula-box">
+                    <h4>PACELC Extension</h4>
+                    <div class="diagram">
+                        <pre>
+    If Partition (P):
+        Choose Availability (A) or Consistency (C)
+    Else (no partition):
+        Choose Latency (L) or Consistency (C)
+
+    Examples:
+    ┌────────────────────────────────────────────┐
+    │ System    │ P case │ Else case            │
+    ├────────────────────────────────────────────┤
+    │ MySQL     │ CA     │ PC (Consistency)     │
+    │ DynamoDB  │ AP     │ EL (Low Latency)     │
+    │ MongoDB   │ CP     │ PC (Consistency)     │
+    │ Cassandra │ AP     │ EL (Low Latency)     │
+    └────────────────────────────────────────────┘
+                        </pre>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Caching -->
+        <section class="section">
+            <h2>Caching Strategies</h2>
+            
+            <div class="subsection">
+                <h3>Cache Patterns</h3>
+                <div class="formula-grid">
+                    <div class="formula-box">
+                        <h4>Cache-Aside (Lazy Loading)</h4>
+                        <div class="diagram">
+                            <pre>
+    Read Flow:
+    ┌──────┐     ┌───────┐     ┌──────────┐
+    │ App  │────▶│ Cache │────▶│ Database │
+    └──────┘     └───────┘     └──────────┘
+        │            │              │
+        │    Miss    │              │
+        │◀───────────┘              │
+        │                          │
+        │─────────────────────────▶│
+        │       Get from DB        │
+        │◀─────────────────────────│
+        │                          │
+        │─────── Write to ────────▶│
+        │        Cache             │
+
+    Write Flow:
+    1. Write to database
+    2. Invalidate/delete cache
+                            </pre>
+                        </div>
+                        <p><strong>Pros:</strong> Lazy, only cached if needed</p>
+                        <p><strong>Cons:</strong> Cache miss penalty, stale data</p>
+                    </div>
+                    <div class="formula-box">
+                        <h4>Write-Through</h4>
+                        <div class="diagram">
+                            <pre>
+    Write Flow:
+    ┌──────┐     ┌───────┐     ┌──────────┐
+    │ App  │────▶│ Cache │────▶│ Database │
+    └──────┘     └───────┘     └──────────┘
+                     │
+                     │ Synchronous
+                     │
+                     ▼
+              Both updated together
+
+    Read Flow:
+    ┌──────┐     ┌───────┐
+    │ App  │────▶│ Cache │ (Always fresh)
+    └──────┘     └───────┘
+
+    Pros: Data always fresh
+    Cons: Write latency doubled
+                            </pre>
+                        </div>
+                    </div>
+                    <div class="formula-box">
+                        <h4>Write-Back (Write-Behind)</h4>
+                        <div class="diagram">
+                            <pre>
+    Write Flow:
+    ┌──────┐     ┌───────┐     ┌──────────┐
+    │ App  │────▶│ Cache │────▶│ Database │
+    └──────┘     └───────┘     └──────────┘
+                     │              ▲
+                     │  Async      │
+                     │  Write      │
+                     └──────────────┘
+
+    1. Write to cache (fast)
+    2. Async write to DB (later)
+
+    Pros: Fast writes
+    Cons: Data loss risk if cache fails
+                            </pre>
+                        </div>
+                    </div>
+                    <div class="formula-box">
+                        <h4>Write-Around</h4>
+                        <div class="diagram">
+                            <pre>
+    Write Flow:
+    ┌──────┐              ┌──────────┐
+    │ App  │─────────────▶│ Database │
+    └──────┘              └──────────┘
+                              │
+                              │ Skip cache on write
+
+    Read Flow:
+    ┌──────┐     ┌───────┐     ┌──────────┐
+    │ App  │────▶│ Cache │────▶│ Database │
+    └──────┘     └───────┘     └──────────┘
+
+    Good for: Write-heavy, read-once data
+                            </pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3>Cache Eviction Policies</h3>
+                <div class="formula-grid">
+                    <div class="formula-box">
+                        <h4>Eviction Algorithms</h4>
+                        <table>
+                            <tr><th>Algorithm</th><th>Description</th><th>Use Case</th></tr>
+                            <tr><td><strong>LRU</strong></td><td>Least Recently Used</td><td>General purpose</td></tr>
+                            <tr><td><strong>LFU</strong></td><td>Least Frequently Used</td><td>Hot data patterns</td></tr>
+                            <tr><td><strong>FIFO</strong></td><td>First In First Out</td><td>Simple queue</td></tr>
+                            <tr><td><strong>LIFO</strong></td><td>Last In First Out</td><td>Stack-like</td></tr>
+                            <tr><td><strong>TTL</strong></td><td>Time To Live</td><td>Time-based expiry</td></tr>
+                            <tr><td><strong>Random</strong></td><td>Random eviction</td><td>Simple, low overhead</td></tr>
+                        </table>
+                    </div>
+                    <div class="formula-box">
+                        <h4>Cache Hit Ratio</h4>
+                        <div class="formula">Hit Ratio = Cache Hits / Total Requests</div>
+                        <div class="formula">Miss Rate = 1 - Hit Ratio</div>
+                        <div class="formula">Avg Access Time = Hit Ratio × Cache Time + Miss Rate × DB Time</div>
+                        <div class="example">
+                            <h4>Example:</h4>
+                            <p>Cache time: 1ms, DB time: 100ms</p>
+                            <p>Hit ratio: 90%</p>
+                            <p>Avg time = 0.9 × 1 + 0.1 × 100 = 0.9 + 10 = 10.9ms</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3>Distributed Cache Architecture</h3>
+                <div class="architecture-box">
+                    <h4>Redis Cluster Architecture</h4>
+                    <div class="diagram">
+                        <pre>
+                    ┌─────────────────────────────────────┐
+                    │           Application Layer          │
+                    └────────────────────┬────────────────┘
+                                         │
+                    ┌────────────────────┴────────────────┐
+                    │        Redis Client (Smart)         │
+                    │    (Knows hash slots distribution)  │
+                    └────────────────────┬────────────────┘
+                                         │
+        ┌────────────────────────────────┼────────────────────────────────┐
+        │                                │                                │
+        ▼                                ▼                                ▼
+┌───────────────┐              ┌───────────────┐              ┌───────────────┐
+│   Shard 1     │              │   Shard 2     │              │   Shard 3     │
+│ Slots 0-5460  │              │Slots 5461-10922│             │Slots 10923-16383│
+├───────────────┤              ├───────────────┤              ├───────────────┤
+│   Primary     │              │   Primary     │              │   Primary     │
+│       │       │              │       │       │              │       │       │
+│  ┌────┴────┐  │              │  ┌────┴────┐  │              │  ┌────┴────┐  │
+│  │ Replica │  │              │  │ Replica │  │              │  │ Replica │  │
+│  └─────────┘  │              │  └─────────┘  │              │  └─────────┘  │
+└───────────────┘              └───────────────┘              └───────────────┘
+
+Hash Slot Calculation: CRC16(key) % 16384
+                    </pre>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Message Queues -->
+        <section class="section">
+            <h2>Message Queues & Event-Driven Architecture</h2>
+            
+            <div class="subsection">
+                <h3>Message Queue Patterns</h3>
+                <div class="formula-grid">
+                    <div class="formula-box">
+                        <h4>Point-to-Point (Queue)</h4>
+                        <div class="diagram">
+                            <pre>
+┌──────────┐     ┌─────────────────┐     ┌──────────┐
+│ Producer │────▶│     Queue       │────▶│Consumer 1│
+└──────────┘     │ ┌───┬───┬───┬───│     └──────────┘
+                 │ │ A │ B │ C │   │     
+┌──────────┐     │ └───┴───┴───┴───│     ┌──────────┐
+│ Producer │────▶│                 │────▶│Consumer 2│
+└──────────┘     └─────────────────┘     └──────────┘
+
+• One message consumed by ONE consumer
+• Load balancing among consumers
+• Messages acknowledged after processing
+                            </pre>
+                        </div>
+                    </div>
+                    <div class="formula-box">
+                        <h4>Publish-Subscribe (Topic)</h4>
+                        <div class="diagram">
+                            <pre>
+┌──────────┐     ┌─────────────────┐     ┌──────────┐
+│Publisher │────▶│     Topic       │────▶│Subscriber│
+└──────────┘     │     "news"      │     │    A     │
+                 │                 │     └──────────┘
+                 │ ┌───┬───┬───┬───│     
+                 │ │ M │ M │ M │   │     ┌──────────┐
+                 │ └───┴───┴───┴───│────▶│Subscriber│
+                 │                 │     │    B     │
+                 │                 │     └──────────┘
+                 │                 │     
+                 │                 │     ┌──────────┐
+                 └─────────────────┴────▶│Subscriber│
+                                         │    C     │
+                                         └──────────┘
+
+• One message delivered to ALL subscribers
+• Each subscriber gets a copy
+                            </pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3>Message Delivery Semantics</h3>
+                <table>
+                    <tr>
+                        <th>Semantic</th>
+                        <th>Description</th>
+                        <th>Guarantee</th>
+                        <th>Implementation</th>
+                    </tr>
+                    <tr>
+                        <td><strong>At-most-once</strong></td>
+                        <td>Message may be lost</td>
+                        <td>No duplicates</td>
+                        <td>Fire and forget</td>
+                    </tr>
+                    <tr>
+                        <td><strong>At-least-once</strong></td>
+                        <td>Message never lost, may duplicate</td>
+                        <td>No data loss</td>
+                        <td>Acknowledgments + retry</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Exactly-once</strong></td>
+                        <td>Message delivered exactly once</td>
+                        <td>Perfect delivery</td>
+                        <td>Idempotent + transactions</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="subsection">
+                <h3>Event-Driven Architecture</h3>
+                <div class="architecture-box">
+                    <h4>Microservices with Event Bus</h4>
+                    <div class="diagram">
+                        <pre>
+┌─────────────────────────────────────────────────────────────────┐
+│                        API Gateway                               │
+└───────────────────────────────┬─────────────────────────────────┘
+                                │
+        ┌───────────────────────┼───────────────────────┐
+        │                       │                       │
+        ▼                       ▼                       ▼
+┌───────────────┐       ┌───────────────┐       ┌───────────────┐
+│   Order       │       │   Inventory   │       │   Payment     │
+│   Service     │       │   Service     │       │   Service     │
+├───────────────┤       ├───────────────┤       ├───────────────┤
+│ - Creates     │       │ - Reserves    │       │ - Processes   │
+│   orders      │       │   stock       │       │   payments    │
+│ - Publishes   │       │ - Publishes   │       │ - Publishes   │
+│   events      │       │   events      │       │   events      │
+└───────┬───────┘       └───────┬───────┘       └───────┬───────┘
+        │                       │                       │
+        └───────────────────────┼───────────────────────┘
+                                │
+                                ▼
+            ┌───────────────────────────────────────┐
+            │           Event Bus / Message Queue    │
+            │        (Kafka / RabbitMQ / SNS)        │
+            └───────────────────────────────────────┘
+                                │
+        ┌───────────────────────┼───────────────────────┐
+        │                       │                       │
+        ▼                       ▼                       ▼
+┌───────────────┐       ┌───────────────┐       ┌───────────────┐
+│Notification   │       │   Analytics   │       │   Audit       │
+│   Service     │       │   Service     │       │   Service     │
+└───────────────┘       └───────────────┘       └───────────────┘
+
+Events: OrderCreated, InventoryReserved, PaymentProcessed
+                        </pre>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Microservices -->
+        <section class="section">
+            <h2>Microservices Architecture</h2>
+            
+            <div class="subsection">
+                <h3>Monolith vs Microservices</h3>
+                <div class="comparison-grid">
+                    <div class="comparison-card">
+                        <h4>Monolithic Architecture</h4>
+                        <div class="diagram">
+                            <pre>
+┌─────────────────────────────────────┐
+│          Monolithic App             │
+├─────────────────────────────────────┤
+│  ┌─────────┐  ┌─────────┐          │
+│  │  User   │  │  Order  │          │
+│  │ Module  │  │ Module  │          │
+│  └─────────┘  └─────────┘          │
+│  ┌─────────┐  ┌─────────┐          │
+│  │Product  │  │Payment  │          │
+│  │ Module  │  │ Module  │          │
+│  └─────────┘  └─────────┘          │
+├─────────────────────────────────────┤
+│           Single Database           │
+└─────────────────────────────────────┘
+
+• Simple deployment
+• Single codebase
+• Hard to scale independently
+• Technology lock-in
+                            </pre>
+                        </div>
+                    </div>
+                    <div class="comparison-card">
+                        <h4>Microservices Architecture</h4>
+                        <div class="diagram">
+                            <pre>
+┌──────────┐  ┌──────────┐  ┌──────────┐
+│   User   │  │  Order   │  │ Product  │
+│ Service  │  │ Service  │  │ Service  │
+└────┬─────┘  └────┬─────┘  └────┬─────┘
+     │             │             │
+┌────┴────┐   ┌────┴────┐   ┌────┴────┐
+│User DB  │   │Order DB │   │Product  │
+│         │   │         │   │  DB     │
+└─────────┘   └─────────┘   └─────────┘
+
+┌──────────┐  ┌──────────┐  ┌──────────┐
+│ Payment  │  │   Email  │  │Notification│
+│ Service  │  │ Service  │  │  Service  │
+└────┬─────┘  └────┬─────┘  └────┬─────┘
+
+• Independent deployment
+• Technology freedom
+• Complex operations
+• Network overhead
+                            </pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3>Service Communication Patterns</h3>
+                <div class="formula-grid">
+                    <div class="formula-box">
+                        <h4>Synchronous Communication</h4>
+                        <div class="diagram">
+                            <pre>
+    REST/HTTP:
+    ┌───────────┐  HTTP/REST  ┌───────────┐
+    │ Service A │────────────▶│ Service B │
+    └───────────┘◀────────────└───────────┘
+                   Response
+
+    gRPC:
+    ┌───────────┐   Protobuf  ┌───────────┐
+    │ Service A │────────────▶│ Service B │
+    └───────────┘◀────────────└───────────┘
+                 (Binary, fast)
+
+    Pros: Simple, real-time
+    Cons: Tight coupling, cascading failures
+                            </pre>
+                        </div>
+                    </div>
+                    <div class="formula-box">
+                        <h4>Asynchronous Communication</h4>
+                        <div class="diagram">
+                            <pre>
+    Message Queue:
+    ┌───────────┐            ┌───────────┐
+    │ Service A │───┐    ┌──▶│ Service B │
+    └───────────┘   │    │   └───────────┘
+                    ▼    │
+              ┌─────────┐│
+              │  Queue  ││
+              └─────────┘│
+                    │    │
+                    └────┼───▶ Service C
+
+    Event Bus:
+    ┌───────────┐  Event  ┌───────────┐
+    │ Publisher │────────▶│   Topic   │
+    └───────────┘         └─────┬─────┘
+                                │
+                    ┌───────────┼───────────┐
+                    ▼           ▼           ▼
+              ┌─────────┐ ┌─────────┐ ┌─────────┐
+              │Sub A    │ │Sub B    │ │Sub C    │
+              └─────────┘ └─────────┘ └─────────┘
+
+    Pros: Decoupled, resilient
+    Cons: Complex, eventual consistency
+                            </pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3>Service Discovery</h3>
+                <div class="formula-grid">
+                    <div class="formula-box">
+                        <h4>Client-Side Discovery</h4>
+                        <div class="diagram">
+                            <pre>
+┌──────────────┐
+│   Client     │
+└──────┬───────┘
+       │ 1. Query service location
+       ▼
+┌──────────────┐
+│  Service     │───────┐
+│  Registry    │       │
+│  (Consul)    │       │
+└──────────────┘       │
+       │               │
+       │ 2. Return instances
+       ▼               │
+┌──────────────┐       │
+│   Client     │       │
+└──────┬───────┘       │
+       │ 3. Call directly
+       ▼               ▼
+┌──────────────┐ ┌──────────────┐
+│  Service A   │ │  Service B   │
+│  Instance 1  │ │  Instance 2  │
+└──────────────┘ └──────────────┘
+
+Client queries registry, then calls directly
+                            </pre>
+                        </div>
+                    </div>
+                    <div class="formula-box">
+                        <h4>Server-Side Discovery</h4>
+                        <div class="diagram">
+                            <pre>
+┌──────────────┐
+│   Client     │
+└──────┬───────┘
+       │ 1. Call via load balancer
+       ▼
+┌──────────────┐       ┌──────────────┐
+│    Load      │◀─────▶│  Service     │
+│  Balancer    │       │  Registry    │
+└──────┬───────┘       └──────────────┘
+       │ 2. Route to instance
+       │
+       ├──────────────────┐
+       ▼                  ▼
+┌──────────────┐   ┌──────────────┐
+│  Service A   │   │  Service B   │
+│  Instance 1  │   │  Instance 2  │
+└──────────────┘   └──────────────┘
+
+Load balancer queries registry and routes
+                            </pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- API Design -->
+        <section class="section">
+            <h2>API Design</h2>
+            
+            <div class="subsection">
+                <h3>RESTful API Design</h3>
+                <div class="formula-grid">
+                    <div class="formula-box">
+                        <h4>HTTP Methods</h4>
+                        <table>
+                            <tr><th>Method</th><th>CRUD</th><th>Idempotent</th><th>Safe</th></tr>
+                            <tr><td>GET</td><td>Read</td><td>Yes</td><td>Yes</td></tr>
+                            <tr><td>POST</td><td>Create</td><td>No</td><td>No</td></tr>
+                            <tr><td>PUT</td><td>Replace</td><td>Yes</td><td>No</td></tr>
+                            <tr><td>PATCH</td><td>Update</td><td>No</td><td>No</td></tr>
+                            <tr><td>DELETE</td><td>Delete</td><td>Yes</td><td>No</td></tr>
+                        </table>
+                    </div>
+                    <div class="formula-box">
+                        <h4>Resource Naming Conventions</h4>
+                        <div class="code-block">
+<pre><span class="comment">// Good - Nouns, plural, consistent</span>
+GET    /users                  <span class="comment">// List users</span>
+GET    /users/{id}             <span class="comment">// Get user</span>
+POST   /users                  <span class="comment">// Create user</span>
+PUT    /users/{id}             <span class="comment">// Update user</span>
+DELETE /users/{id}             <span class="comment">// Delete user</span>
+GET    /users/{id}/orders      <span class="comment">// User's orders</span>
+
+<span class="comment">// Bad - Verbs, inconsistent</span>
+GET    /getUsers
+POST   /createUser
+GET    /user-order/{id}</pre>
+                        </div>
+                    </div>
+                    <div class="formula-box">
+                        <h4>HTTP Status Codes</h4>
+                        <table>
+                            <tr><th>Code</th><th>Meaning</th><th>Use Case</th></tr>
+                            <tr><td>200</td><td>OK</td><td>Successful GET, PUT</td></tr>
+                            <tr><td>201</td><td>Created</td><td>Successful POST</td></tr>
+                            <tr><td>204</td><td>No Content</td><td>Successful DELETE</td></tr>
+                            <tr><td>400</td><td>Bad Request</td><td>Invalid input</td></tr>
+                            <tr><td>401</td><td>Unauthorized</td><td>Not authenticated</td></tr>
+                            <tr><td>403</td><td>Forbidden</td><td>Not authorized</td></tr>
+                            <tr><td>404</td><td>Not Found</td><td>Resource missing</td></tr>
+                            <tr><td>429</td><td>Too Many Requests</td><td>Rate limited</td></tr>
+                            <tr><td>500</td><td>Internal Error</td><td>Server error</td></tr>
+                        </table>
+                    </div>
+                    <div class="formula-box">
+                        <h4>API Versioning</h4>
+                        <div class="code-block">
+<pre><span class="comment">// URL Versioning</span>
+GET /v1/users
+GET /v2/users
+
+<span class="comment">// Header Versioning</span>
+GET /users
+Accept: application/vnd.api+json;version=1
+
+<span class="comment">// Query Parameter</span>
+GET /users?version=1</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3>API Styles Comparison</h3>
+                <table>
+                    <tr>
+                        <th>Aspect</th>
+                        <th>REST</th>
+                        <th>GraphQL</th>
+                        <th>gRPC</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Protocol</strong></td>
+                        <td>HTTP/HTTPS</td>
+                        <td>HTTP/HTTPS</td>
+                        <td>HTTP/2</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Data Format</strong></td>
+                        <td>JSON/XML</td>
+                        <td>JSON</td>
+                        <td>Protocol Buffers</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Flexibility</strong></td>
+                        <td>Fixed endpoints</td>
+                        <td>Query what you need</td>
+                        <td>Service definitions</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Performance</strong></td>
+                        <td>Good</td>
+                        <td>Good</td>
+                        <td>Excellent (binary)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Caching</strong></td>
+                        <td>Built-in HTTP</td>
+                        <td>Complex</td>
+                        <td>Limited</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Best For</strong></td>
+                        <td>Public APIs, CRUD</td>
+                        <td>Complex queries</td>
+                        <td>Microservices, high perf</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="subsection">
+                <h3>Rate Limiting</h3>
+                <div class="formula-grid">
+                    <div class="formula-box">
+                        <h4>Rate Limiting Algorithms</h4>
+                        <table>
+                            <tr><th>Algorithm</th><th>Description</th><th>Pros/Cons</th></tr>
+                            <tr>
+                                <td>Token Bucket</td>
+                                <td>Tokens refill at rate r, max b tokens</td>
+                                <td>Burst allowed, memory efficient</td>
+                            </tr>
+                            <tr>
+                                <td>Leaky Bucket</td>
+                                <td>Requests queue, process at rate r</td>
+                                <td>Smooth output, no burst</td>
+                            </tr>
+                            <tr>
+                                <td>Fixed Window</td>
+                                <td>Count in fixed time windows</td>
+                                <td>Simple, spike at boundaries</td>
+                            </tr>
+                            <tr>
+                                <td>Sliding Window</td>
+                                <td>Weighted count over sliding period</td>
+                                <td>Smooth, more memory</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="formula-box">
+                        <h4>Token Bucket Algorithm</h4>
+                        <div class="diagram">
+                            <pre>
+    Bucket (Capacity: b tokens)
+    ┌─────────────────────────────┐
+    │ ● ● ● ● ● ● ○ ○ ○ ○ ○      │  Rate: r tokens/sec
+    │         Current: 6          │
+    └─────────────────────────────┘
+              ▲
+              │ Refill at rate r
+              │
+    ──────────┴─────────────────▶ Time
+
+    Each request:
+    1. If tokens available: consume 1, allow
+    2. If no tokens: reject (429)
+
+    Example: 100 requests/min, burst 20
+    r = 100/60 = 1.67 tokens/sec
+    b = 20 tokens max
+                            </pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CDN & Edge -->
+        <section class="section">
+            <h2>CDN & Edge Computing</h2>
+            
+            <div class="subsection">
+                <h3>Content Delivery Network (CDN)</h3>
+                <div class="architecture-box">
+                    <h4>CDN Architecture</h4>
+                    <div class="diagram">
+                        <pre>
+                           Origin Server
+                    ┌─────────────────────┐
+                    │  Static Assets      │
+                    │  (Images, CSS, JS)  │
+                    └──────────┬──────────┘
+                               │
+              ┌────────────────┼────────────────┐
+              │                │                │
+              ▼                ▼                ▼
+      ┌───────────────┐┌───────────────┐┌───────────────┐
+      │  Edge Node    ││  Edge Node    ││  Edge Node    │
+      │   (US-East)   ││   (EU-West)   ││   (Asia)      │
+      │  ┌─────────┐  ││  ┌─────────┐  ││  ┌─────────┐  │
+      │  │ Cached  │  ││  │ Cached  │  ││  │ Cached  │  │
+      │  │ Content │  ││  │ Content │  ││  │ Content │  │
+      │  └─────────┘  ││  └─────────┘  ││  └─────────┘  │
+      └───────┬───────┘└───────┬───────┘└───────┬───────┘
+              │                │                │
+              ▼                ▼                ▼
+         ┌────────┐       ┌────────┐       ┌────────┐
+         │ Users  │       │ Users  │       │ Users  │
+         │(US)    │       │(EU)    │       │(Asia)  │
+         └────────┘       └────────┘       └────────┘
+
+    Benefits:
+    • Reduced latency (served from nearest edge)
+    • Reduced origin load
+    • DDoS protection
+    • SSL termination
+                        </pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3>Cache Strategies for CDN</h3>
+                <div class="formula-grid">
+                    <div class="formula-box">
+                        <h4>Cache Control Headers</h4>
+                        <div class="code-block">
+<pre><span class="comment"># Cache for 1 year (immutable assets)</span>
+Cache-Control: public, max-age=31536000, immutable
+
+<span class="comment"># Cache for 1 hour, must revalidate</span>
+Cache-Control: public, max-age=3600, must-revalidate
+
+<span class="comment"># No caching</span>
+Cache-Control: no-store, no-cache, must-revalidate
+
+<span class="comment"># Private (browser only, no CDN)</span>
+Cache-Control: private, max-age=3600</pre>
+                        </div>
+                    </div>
+                    <div class="formula-box">
+                        <h4>Cache Invalidation</h4>
+                        <ul>
+                            <li><strong>Time-based:</strong> TTL expiration</li>
+                            <li><strong>Versioning:</strong> /v1.2.3/asset.js</li>
+                            <li><strong>Hashing:</strong> /app.a1b2c3.js</li>
+                            <li><strong>Purge API:</strong> Manual invalidation</li>
+                        </ul>
+                        <div class="formula">Cache Hit Rate Target: > 95%</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- System Design Patterns -->
+        <section class="section">
+            <h2>System Design Patterns</h2>
+            
+            <div class="subsection">
+                <h3>Common Patterns</h3>
+                <div class="formula-grid">
+                    <div class="formula-box">
+                        <h4>Circuit Breaker</h4>
+                        <div class="diagram">
+                            <pre>
+         Request Flow:
+    ┌──────────┐    ┌──────────────────┐
+    │  Client  │───▶│ Circuit Breaker  │
+    └──────────┘    └────────┬─────────┘
+                             │
+              ┌──────────────┼──────────────┐
+              ▼              ▼              ▼
+        ┌──────────┐  ┌──────────┐  ┌──────────┐
+        │  CLOSED  │  │   HALF   │  │   OPEN   │
+        │          │  │   OPEN   │  │          │
+        └──────────┘  └──────────┘  └──────────┘
+              │              │              │
+              ▼              ▼              ▼
+         Requests      Test requests    Fail fast
+         go through    allowed          (return error)
+         
+    States:
+    • CLOSED: Normal operation
+    • OPEN: Fail fast, no calls
+    • HALF-OPEN: Test if recovered
+                            </pre>
+                        </div>
+                    </div>
+                    <div class="formula-box">
+                        <h4>Bulkhead Pattern</h4>
+                        <div class="diagram">
+                            <pre>
+    Isolate components to prevent cascading failures
+
+    ┌────────────────────────────────────────┐
+    │              Application               │
+    │  ┌─────────┐ ┌─────────┐ ┌─────────┐  │
+    │  │Bulkhead │ │Bulkhead │ │Bulkhead │  │
+    │  │    A    │ │    B    │ │    C    │  │
+    │  │ ┌─────┐ │ │ ┌─────┐ │ │ ┌─────┐ │  │
+    │  │ │Pool │ │ │ │Pool │ │ │ │Pool │ │  │
+    │  │ │  5  │ │ │ │ 10  │ │ │ │  8  │ │  │
+    │  │ └─────┘ │ │ └─────┘ │ │ └─────┘ │  │
+    │  └─────────┘ └─────────┘ └─────────┘  │
+    └────────────────────────────────────────┘
+
+    Each service has isolated thread pool
+    If A fails, B and C continue working
+                            </pre>
+                        </div>
+                    </div>
+                    <div class="formula-box">
+                        <h4>Saga Pattern (Distributed Transactions)</h4>
+                        <div class="diagram">
+                            <pre>
+    Choreography (Event-based):
+    
+    Order Service         Inventory Service
+         │                      │
+         │ OrderCreated         │
+         │─────────────────────▶│
+         │                      │
+         │         InventoryReserved
+         │◀─────────────────────│
+         │                      │
+    Payment Service              │
+         │                      │
+         │InventoryReserved     │
+         │◀─────────────────────│
+         │                      │
+         │PaymentProcessed      │
+         │─────────────────────▶│
+
+    Compensation on failure:
+    • Each step has compensating action
+    • Rollback in reverse order
+                            </pre>
+                        </div>
+                    </div>
+                    <div class="formula-box">
+                        <h4>CQRS (Command Query Separation)</h4>
+                        <div class="diagram">
+                            <pre>
+    ┌─────────────┐            ┌─────────────┐
+    │   Commands  │            │   Queries   │
+    │   (Writes)  │            │   (Reads)   │
+    └──────┬──────┘            └──────┬──────┘
+           │                          │
+           ▼                          ▼
+    ┌─────────────┐            ┌─────────────┐
+    │   Write     │  Events    │   Read      │
+    │   Model     │───────────▶│   Model     │
+    │             │            │  (Denormal- │
+    │ (Normalized)│            │   ized)     │
+    └─────────────┘            └─────────────┘
+           │                          │
+           ▼                          ▼
+    ┌─────────────┐            ┌─────────────┐
+    │  Write DB   │            │   Read DB   │
+    │             │            │   (Cache)   │
+    └─────────────┘            └─────────────┘
+
+    Benefits: Optimized read/write separately
+                            </pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3>Database Per Service</h3>
+                <div class="formula-grid">
+                    <div class="formula-box">
+                        <h4>Shared Database</h4>
+                        <div class="diagram">
+                            <pre>
+    ┌──────────┐ ┌──────────┐ ┌──────────┐
+    │ Service A│ │ Service B│ │ Service C│
+    └────┬─────┘ └────┬─────┘ └────┬─────┘
+         │            │            │
+         └────────────┼────────────┘
+                      ▼
+              ┌───────────────┐
+              │    Shared     │
+              │   Database    │
+              └───────────────┘
+
+    Cons: Tight coupling, single point of failure
+                            </pre>
+                        </div>
+                    </div>
+                    <div class="formula-box">
+                        <h4>Database Per Service</h4>
+                        <div class="diagram">
+                            <pre>
+    ┌──────────┐ ┌──────────┐ ┌──────────┐
+    │ Service A│ │ Service B│ │ Service C│
+    └────┬─────┘ └────┬─────┘ └────┬─────┘
+         │            │            │
+         ▼            ▼            ▼
+    ┌──────────┐┌──────────┐┌──────────┐
+    │  DB A    ││  DB B    ││  DB C    │
+    │ (SQL)    ││(NoSQL)   ││ (Graph)  │
+    └──────────┘└──────────┘└──────────┘
+
+    Pros: Loose coupling, polyglot persistence
+    Cons: Data consistency, complex queries
+                            </pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Real-World Architectures -->
+        <section class="section">
+            <h2>Real-World System Architectures</h2>
+            
+            <div class="subsection">
+                <h3>URL Shortener (TinyURL)</h3>
+                <div class="architecture-box">
+                    <h4>Architecture Overview</h4>
+                    <div class="diagram">
+                        <pre>
+┌────────────────────────────────────────────────────────────────┐
+│                         Client                                  │
+└───────────────────────────────┬────────────────────────────────┘
+                                │
+                                ▼
+                    ┌───────────────────────┐
+                    │     Load Balancer     │
+                    └───────────┬───────────┘
+                                │
+            ┌───────────────────┼───────────────────┐
+            ▼                   ▼                   ▼
+    ┌───────────────┐   ┌───────────────┐   ┌───────────────┐
+    │   Web Server  │   │   Web Server  │   │   Web Server  │
+    └───────┬───────┘   └───────┬───────┘   └───────┬───────┘
+            │                   │                   │
+            └───────────────────┼───────────────────┘
+                                │
+            ┌───────────────────┼───────────────────┐
+            ▼                   ▼                   ▼
+    ┌───────────────┐   ┌───────────────┐   ┌───────────────┐
+    │    Cache      │   │   NoSQL DB    │   │   Counter     │
+    │   (Redis)     │   │  (DynamoDB)   │   │   Service     │
+    │               │   │               │   │  (KGS)        │
+    │ short→long    │   │ long_url,     │   │               │
+    │ mapping       │   │ created_at    │   │ Pre-generate  │
+    └───────────────┘   └───────────────┘   │ unique keys   │
+                                            └───────────────┘
+
+    Key Generation Service (KGS):
+    • Pre-generate random 7-char strings
+    • Store in two tables: used/unused
+    • Services get keys from unused pool
+
+    Short URL = Base62(random 7 chars)
+    Total URLs = 62^7 = 3.5 trillion
+                        </pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3>Rate Limiter</h3>
+                <div class="architecture-box">
+                    <h4>Distributed Rate Limiter</h4>
+                    <div class="diagram">
+                        <pre>
+┌────────────────────────────────────────────────────────────────┐
+│                         Client                                  │
+└───────────────────────────────┬────────────────────────────────┘
+                                │
+                                ▼
+                    ┌───────────────────────┐
+                    │     Load Balancer     │
+                    └───────────┬───────────┘
+                                │
+                                ▼
+                    ┌───────────────────────┐
+                    │   Rate Limiter        │
+                    │   Middleware          │
+                    │                       │
+                    │  ┌─────────────────┐  │
+                    │  │ Extract API Key │  │
+                    │  │ or User ID      │  │
+                    │  └────────┬────────┘  │
+                    │           │           │
+                    │           ▼           │
+                    │  ┌─────────────────┐  │
+                    │  │ Check Redis     │  │
+                    │  │ Token Bucket    │  │
+                    │  └────────┬────────┘  │
+                    │           │           │
+                    │    Allow/Reject       │
+                    └───────────┬───────────┘
+                                │
+        ┌───────────────────────┼───────────────────────┐
+        ▼                       ▼                       ▼
+┌───────────────┐       ┌───────────────┐       ┌───────────────┐
+│  Redis Node 1 │◀─────▶│  Redis Node 2 │◀─────▶│  Redis Node 3 │
+│  (Shard 1)    │       │  (Shard 2)    │       │  (Shard 3)    │
+└───────────────┘       └───────────────┘       └───────────────┘
+
+Redis Data Structure for Token Bucket:
+Key: "ratelimit:{user_id}"
+Value: {tokens: 10, last_update: timestamp}
+                        </pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3>Chat System (WhatsApp-like)</h3>
+                <div class="architecture-box">
+                    <h4>Real-time Messaging Architecture</h4>
+                    <div class="diagram">
+                        <pre>
+┌────────────────────────────────────────────────────────────────┐
+│                      Mobile Clients                             │
+│              (iOS, Android, Web)                                │
+└───────────────────────────────┬────────────────────────────────┘
+                                │ WebSocket
+                                ▼
+                    ┌───────────────────────┐
+                    │   Connection Manager  │
+                    │   (WebSocket Server)  │
+                    │                       │
+                    │  • Maintains          │
+                    │    connections        │
+                    │  • Heartbeat          │
+                    │  • Presence status    │
+                    └───────────┬───────────┘
+                                │
+            ┌───────────────────┼───────────────────┐
+            ▼                   ▼                   ▼
+    ┌───────────────┐   ┌───────────────┐   ┌───────────────┐
+    │   Chat        │   │   Message     │   │   Push        │
+    │   Service     │   │   Queue       │   │   Service     │
+    │               │   │               │   │               │
+    │ • 1:1 chat    │   │ (Kafka)       │   │ (FCM/APNS)    │
+    │ • Group chat  │   │               │   │               │
+    └───────┬───────┘   └───────┬───────┘   └───────────────┘
+            │                   │
+            ▼                   ▼
+    ┌───────────────┐   ┌───────────────┐
+    │   Message     │   │   User        │
+    │   Storage     │   │   Service     │
+    │   (Cassandra) │   │   (Redis)     │
+    │               │   │               │
+    │ • Messages    │   │ • Online/     │
+    │ • Attachments │   │   Offline     │
+    └───────────────┘   └───────────────┘
+
+Message Flow:
+1. User A sends message → Connection Manager
+2. Message queued in Kafka
+3. Chat Service processes
+4. Check recipient online status
+5. If online: push via WebSocket
+6. If offline: push notification
+7. Store in Cassandra for history
+                        </pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3>Video Streaming (YouTube-like)</h3>
+                <div class="architecture-box">
+                    <h4>Video Streaming Architecture</h4>
+                    <div class="diagram">
+                        <pre>
+┌─────────────────────────────────────────────────────────────────┐
+│                        Client (Player)                           │
+└───────────────────────────────┬─────────────────────────────────┘
+                                │
+                                ▼
+                    ┌───────────────────────┐
+                    │       CDN Edge        │
+                    │   (Video Segments)    │
+                    └───────────┬───────────┘
+                                │
+        ┌───────────────────────┴───────────────────────┐
+        │                                               │
+        ▼                                               ▼
+┌───────────────┐                              ┌───────────────┐
+│   Origin      │                              │   Metadata    │
+│   Storage     │                              │   Service     │
+│   (S3/GCS)    │                              │               │
+│               │                              │ • Video info  │
+│ • Raw videos  │                              │ • Thumbnails  │
+│ • Transcoded  │                              │ • User data   │
+└───────┬───────┘                              └───────────────┘
+        │
+        ▼
+┌───────────────┐   ┌───────────────┐   ┌───────────────┐
+│ Transcoding   │   │   Message     │   │   Search      │
+│   Service     │   │   Queue       │   │   Service     │
+│               │   │               │   │               │
+│ • 360p-4K     │──▶│ (SQS/Kafka)   │   │ (Elasticsearch)│
+│ • HLS/DASH    │   │               │   │               │
+└───────────────┘   └───────────────┘   └───────────────┘
+
+Video Upload Flow:
+1. User uploads video → Origin Storage
+2. Message sent to queue
+3. Transcoding Service picks up
+4. Create multiple resolutions
+5. Generate HLS/DASH segments
+6. Upload segments to CDN
+7. Update metadata
+
+Adaptive Bitrate Streaming:
+• Player requests manifest (m3u8/mpd)
+• Player selects quality based on bandwidth
+• Seamless switching between qualities
+                        </pre>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Quick Reference -->
+        <section class="section quick-ref">
+            <h3>Quick Reference Summary</h3>
+            <div class="quick-ref-grid">
+                <div class="quick-ref-item">
+                    <strong>Availability:</strong> Uptime / Total Time × 100%
+                </div>
+                <div class="quick-ref-item">
+                    <strong>99.9% SLA:</strong> 8.7 hours downtime/year
+                </div>
+                <div class="quick-ref-item">
+                    <strong>CAP Theorem:</strong> Pick 2: Consistency, Availability, Partition Tolerance
+                </div>
+                <div class="quick-ref-item">
+                    <strong>Cache Hit Ratio:</strong> Hits / Total Requests
+                </div>
+                <div class="quick-ref-item">
+                    <strong>Sharding:</strong> hash(key) % num_shards
+                </div>
+                <div class="quick-ref-item">
+                    <strong>Load Balancing:</strong> Round Robin, Least Connections, IP Hash
+                </div>
+                <div class="quick-ref-item">
+                    <strong>Message Delivery:</strong> At-most-once, At-least-once, Exactly-once
+                </div>
+                <div class="quick-ref-item">
+                    <strong>HTTP Methods:</strong> GET(read), POST(create), PUT(replace), DELETE
+                </div>
+                <div class="quick-ref-item">
+                    <strong>Circuit Breaker:</strong> Closed → Open → Half-Open → Closed
+                </div>
+                <div class="quick-ref-item">
+                    <strong>Cache Patterns:</strong> Cache-Aside, Write-Through, Write-Back
+                </div>
+                <div class="quick-ref-item">
+                    <strong>SQL vs NoSQL:</strong> ACID vs BASE, Vertical vs Horizontal
+                </div>
+                <div class="quick-ref-item">
+                    <strong>CDN:</strong> Edge nodes cache content close to users
+                </div>
+                <div class="quick-ref-item">
+                    <strong>Rate Limiting:</strong> Token Bucket, Leaky Bucket, Sliding Window
+                </div>
+                <div class="quick-ref-item">
+                    <strong>Microservices:</strong> Independent deploy, own database, async comm
+                </div>
+                <div class="quick-ref-item">
+                    <strong>Replication:</strong> Master-Slave (read scaling), Master-Master (write)
+                </div>
+                <div class="quick-ref-item">
+                    <strong>Saga Pattern:</strong> Distributed transactions with compensation
+                </div>
+                <div class="quick-ref-item">
+                    <strong>CQRS:</strong> Separate read and write models
+                </div>
+                <div class="quick-ref-item">
+                    <strong>Idempotency:</strong> Same operation multiple times = same result
+                </div>
+            </div>
+        </section>
+
+        <footer>
+            <p>System Design Formula Sheet | Architecture & Patterns Reference</p>
+            <p>© 2024 | Comprehensive Guide for System Design Interviews</p>
+        </footer>
+    </div>
+</body>
+</html>
