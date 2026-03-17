@@ -1,0 +1,2125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Backend Development & SaaS Production Guide</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f0f1a 0%, #1a1a2e 50%, #16213e 100%);
+            min-height: 100vh;
+            color: #e4e4e4;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            padding: 40px 0;
+            margin-bottom: 30px;
+            background: linear-gradient(135deg, #1e3a5f 0%, #0d2137 100%);
+            border-radius: 15px;
+            border: 2px solid #f39c12;
+        }
+
+        h1 {
+            font-size: 2.8em;
+            background: linear-gradient(90deg, #f39c12, #e74c3c, #9b59b6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #3498db;
+            font-size: 1.2em;
+        }
+
+        .badges {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+
+        .badge-arch { background: #3498db; color: #fff; }
+        .badge-security { background: #e74c3c; color: #fff; }
+        .badge-scale { background: #2ecc71; color: #fff; }
+        .badge-saas { background: #9b59b6; color: #fff; }
+        .badge-devops { background: #f39c12; color: #000; }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(480px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .card {
+            background: linear-gradient(145deg, #1e272e 0%, #2d3436 100%);
+            border-radius: 15px;
+            padding: 25px;
+            border: 1px solid #4a4a6a;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(243, 156, 18, 0.2);
+            border-color: #f39c12;
+        }
+
+        h2 {
+            color: #f39c12;
+            font-size: 1.4em;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #4a4a6a;
+        }
+
+        h3 {
+            color: #3498db;
+            font-size: 1.1em;
+            margin: 15px 0 10px 0;
+        }
+
+        h4 {
+            color: #2ecc71;
+            font-size: 1em;
+            margin: 12px 0 8px 0;
+        }
+
+        .formula-box {
+            background: #0d1117;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 10px 0;
+            border-left: 4px solid #f39c12;
+            font-family: 'Fira Code', 'Consolas', monospace;
+            overflow-x: auto;
+            font-size: 0.9em;
+        }
+
+        .code-block {
+            background: #161b22;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 10px 0;
+            font-family: 'Fira Code', 'Consolas', monospace;
+            font-size: 0.88em;
+            overflow-x: auto;
+            border: 1px solid #30363d;
+            line-height: 1.5;
+        }
+
+        .code-block .comment { color: #8b949e; }
+        .code-block .keyword { color: #ff7b72; }
+        .code-block .string { color: #a5d6ff; }
+        .code-block .function { color: #d2a8ff; }
+        .code-block .variable { color: #ffa657; }
+        .code-block .const { color: #79c0ff; }
+
+        .yaml-block {
+            background: #0d1117;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 10px 0;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9em;
+            border-left: 4px solid #9b59b6;
+            overflow-x: auto;
+        }
+
+        .yaml-block .key { color: #7ee787; }
+        .yaml-block .value { color: #a5d6ff; }
+        .yaml-block .comment { color: #8b949e; }
+
+        .note {
+            background: linear-gradient(135deg, #2d3436 0%, #1e272e 100%);
+            border-left: 4px solid #3498db;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 0 10px 10px 0;
+        }
+
+        .note-title {
+            color: #3498db;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .tip-box {
+            background: linear-gradient(135deg, #0d4f3c 0%, #0a3d2e 100%);
+            border-left: 4px solid #2ecc71;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 0 10px 10px 0;
+        }
+
+        .warning-box {
+            background: linear-gradient(135deg, #4f3d0d 0%, #3d2e0a 100%);
+            border-left: 4px solid #f39c12;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 0 10px 10px 0;
+        }
+
+        .critical-box {
+            background: linear-gradient(135deg, #4f1d0d 0%, #3d1e0a 100%);
+            border-left: 4px solid #e74c3c;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 0 10px 10px 0;
+        }
+
+        .saas-box {
+            background: linear-gradient(135deg, #3d0d4f 0%, #2e0a3d 100%);
+            border-left: 4px solid #9b59b6;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 0 10px 10px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 10px 0;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #4a4a6a;
+        }
+
+        th {
+            background: #2d3436;
+            color: #f39c12;
+        }
+
+        td {
+            background: #1e272e;
+        }
+
+        td:first-child {
+            color: #3498db;
+            font-family: monospace;
+        }
+
+        .ascii-diagram {
+            background: #0d1117;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 15px 0;
+            font-family: monospace;
+            font-size: 0.82em;
+            white-space: pre;
+            overflow-x: auto;
+            color: #58a6ff;
+            border: 1px solid #30363d;
+        }
+
+        .quick-ref {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 10px;
+            margin: 10px 0;
+        }
+
+        .quick-ref-item {
+            background: #0d1117;
+            padding: 12px;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid #30363d;
+        }
+
+        .quick-ref-item .label {
+            color: #f39c12;
+            font-size: 0.85em;
+        }
+
+        .quick-ref-item .value {
+            color: #7ee787;
+            font-family: monospace;
+            font-size: 1em;
+            margin-top: 5px;
+        }
+
+        .full-width {
+            grid-column: 1 / -1;
+        }
+
+        .checklist {
+            list-style: none;
+            padding: 0;
+        }
+
+        .checklist li {
+            padding: 8px 0;
+            border-bottom: 1px solid #333;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .checklist li::before {
+            content: "✓";
+            color: #2ecc71;
+            font-weight: bold;
+        }
+
+        .checklist-x li::before {
+            content: "✗";
+            color: #e74c3c;
+        }
+
+        ul {
+            margin-left: 20px;
+            line-height: 1.8;
+        }
+
+        li::marker {
+            color: #f39c12;
+        }
+
+        .tier-table td:nth-child(1) {
+            font-weight: bold;
+        }
+
+        .status-pill {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 0.8em;
+            font-weight: bold;
+        }
+
+        .status-critical { background: #e74c3c; color: #fff; }
+        .status-high { background: #f39c12; color: #000; }
+        .status-medium { background: #3498db; color: #fff; }
+        .status-low { background: #2ecc71; color: #000; }
+
+        .metric-box {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin: 10px 0;
+        }
+
+        .metric {
+            background: #0d1117;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .metric-value {
+            font-size: 1.8em;
+            color: #2ecc71;
+            font-weight: bold;
+        }
+
+        .metric-label {
+            color: #8b949e;
+            font-size: 0.85em;
+        }
+
+        .layer-stack {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            margin: 15px 0;
+        }
+
+        .layer {
+            padding: 12px;
+            text-align: center;
+            border-radius: 8px;
+            font-weight: bold;
+        }
+
+        .layer-client { background: #3498db; color: #fff; }
+        .layer-cdn { background: #1abc9c; color: #fff; }
+        .layer-lb { background: #9b59b6; color: #fff; }
+        .layer-api { background: #e74c3c; color: #fff; }
+        .layer-service { background: #f39c12; color: #000; }
+        .layer-cache { background: #e67e22; color: #fff; }
+        .layer-queue { background: #2ecc71; color: #000; }
+        .layer-db { background: #34495e; color: #fff; }
+
+        .arrow {
+            text-align: center;
+            color: #f39c12;
+            font-size: 1.2em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🚀 Backend Development & SaaS Production Guide</h1>
+            <p class="subtitle">Essential Patterns • Best Practices • Production-Ready Architecture</p>
+            <div class="badges">
+                <span class="badge badge-arch">🏛️ Architecture</span>
+                <span class="badge badge-security">🔒 Security</span>
+                <span class="badge badge-scale">📈 Scalability</span>
+                <span class="badge badge-saas">💼 SaaS Patterns</span>
+                <span class="badge badge-devops">⚙️ DevOps</span>
+            </div>
+        </header>
+
+        <!-- Quick Reference Bar -->
+        <div class="card full-width">
+            <h2>⚡ Production Checklist Overview</h2>
+            <div class="quick-ref">
+                <div class="quick-ref-item">
+                    <div class="label">API Response Time</div>
+                    <div class="value">&lt; 200ms p95</div>
+                </div>
+                <div class="quick-ref-item">
+                    <div class="label">Uptime SLA</div>
+                    <div class="value">99.9%+</div>
+                </div>
+                <div class="quick-ref-item">
+                    <div class="label">Error Rate</div>
+                    <div class="value">&lt; 0.1%</div>
+                </div>
+                <div class="quick-ref-item">
+                    <div class="label">Test Coverage</div>
+                    <div class="value">&gt; 80%</div>
+                </div>
+                <div class="quick-ref-item">
+                    <div class="label">Deploy Frequency</div>
+                    <div class="value">Multiple/day</div>
+                </div>
+                <div class="quick-ref-item">
+                    <div class="label">Rollback Time</div>
+                    <div class="value">&lt; 5 min</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Production Architecture -->
+        <div class="card full-width">
+            <h2>🏛️ Production Architecture Overview</h2>
+            
+            <div class="ascii-diagram">
+┌─────────────────────────────────────────────────────────────────────────────────────────┐
+│                           PRODUCTION SAAS ARCHITECTURE                                    │
+├─────────────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                          │
+│    ┌──────────┐    ┌──────────┐    ┌──────────┐                                          │
+│    │  Mobile  │    │   Web    │    │  IoT/    │     CLIENTS                              │
+│    │   App    │    │  Client  │    │ Devices  │                                          │
+│    └────┬─────┘    └────┬─────┘    └────┬─────┘                                          │
+│         │               │               │                                                 │
+│         └───────────────┼───────────────┘                                                 │
+│                         │                                                                 │
+│                         ▼                                                                 │
+│              ┌─────────────────────┐                                                      │
+│              │        CDN          │  ← Static Assets, Edge Caching                       │
+│              │  (CloudFront/Akamai)│                                                      │
+│              └──────────┬──────────┘                                                      │
+│                         │                                                                 │
+│                         ▼                                                                 │
+│              ┌─────────────────────┐                                                      │
+│              │    Load Balancer    │  ← SSL Termination, DDoS Protection                  │
+│              │      (ALB/Nginx)    │                                                      │
+│              └──────────┬──────────┘                                                      │
+│                         │                                                                 │
+│         ┌───────────────┼───────────────┐                                                 │
+│         ▼               ▼               ▼                                                 │
+│    ┌─────────┐    ┌─────────┐    ┌─────────┐     API SERVERS (Auto-scaling)              │
+│    │ API #1  │    │ API #2  │    │ API #N  │                                             │
+│    └────┬────┘    └────┬────┘    └────┬────┘                                             │
+│         │               │               │                                                 │
+│         └───────────────┼───────────────┘                                                 │
+│                         │                                                                 │
+│         ┌───────────────┼───────────────┬───────────────┐                                │
+│         ▼               ▼               ▼               ▼                                │
+│    ┌─────────┐    ┌─────────┐    ┌─────────┐    ┌─────────┐                              │
+│    │  Redis  │    │ Message │    │   DB    │    │ Object  │                              │
+│    │  Cache  │    │  Queue  │    │ Cluster │    │ Storage │                              │
+│    │ Cluster │    │(RabbitMQ│    │(Primary │    │  (S3)   │                              │
+│    │         │    │ /Kafka) │    │ + Replica│   │         │                              │
+│    └─────────┘    └─────────┘    └─────────┘    └─────────┘                              │
+│                                                                                          │
+│    ┌─────────────────────────────────────────────────────────────────┐                   │
+│    │                    OBSERVABILITY STACK                           │                   │
+│    │  ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌──────────┐        │                   │
+│    │  │ Metrics  │  │  Logs    │  │  Traces  │  │ Alerts   │        │                   │
+│    │  │(Prometheus│  │(ELK/Loki│  │(Jaeger)  │  │(PagerDuty│        │                   │
+│    │  └──────────┘  └──────────┘  └──────────┘  └──────────┘        │                   │
+│    └─────────────────────────────────────────────────────────────────┘                   │
+│                                                                                          │
+└─────────────────────────────────────────────────────────────────────────────────────────┘</div>
+
+            <div class="layer-stack">
+                <div class="layer layer-client">🌐 Client Layer - Web/Mobile Apps</div>
+                <div class="arrow">↓ HTTPS</div>
+                <div class="layer layer-cdn">📦 CDN Layer - Static Assets, Edge Caching</div>
+                <div class="arrow">↓</div>
+                <div class="layer layer-lb">⚖️ Load Balancer - SSL, DDoS Protection, Routing</div>
+                <div class="arrow">↓</div>
+                <div class="layer layer-api">🔌 API Gateway - Rate Limiting, Auth, Routing</div>
+                <div class="arrow">↓</div>
+                <div class="layer layer-service">⚙️ Service Layer - Business Logic (Auto-scaling)</div>
+                <div class="arrow">↓</div>
+                <div class="layer layer-cache">🔴 Cache Layer - Redis/Memcached</div>
+                <div class="arrow">↓</div>
+                <div class="layer layer-queue">📨 Message Queue - Async Processing</div>
+                <div class="arrow">↓</div>
+                <div class="layer layer-db">💾 Database Layer - Primary + Read Replicas</div>
+            </div>
+        </div>
+
+        <div class="grid">
+            <!-- API Design Principles -->
+            <div class="card">
+                <h2>📐 RESTful API Design Principles</h2>
+                
+                <h3>Resource Naming Conventions</h3>
+                <div class="formula-box">
+<span class="comment"># ✅ GOOD - Nouns, plural, lowercase</span>
+GET    /users                    # List all users
+GET    /users/{id}               # Get specific user
+POST   /users                    # Create new user
+PUT    /users/{id}               # Update entire user
+PATCH  /users/{id}               # Partial update
+DELETE /users/{id}               # Delete user
+
+<span class="comment"># Nested resources</span>
+GET    /users/{id}/orders        # User's orders
+POST   /users/{id}/orders        # Create order for user
+GET    /orders/{orderId}/items   # Order items
+
+<span class="comment"># ❌ BAD - Verbs, inconsistent</span>
+GET    /getUsers                 # Don't use verbs
+POST   /createUser               # HTTP method indicates action
+GET    /user                     # Use plural
+GET    /Users                    # Use lowercase
+                </div>
+
+                <h3>HTTP Status Codes Reference</h3>
+                <table>
+                    <tr><th>Code</th><th>Meaning</th><th>When to Use</th></tr>
+                    <tr><td>200</td><td>OK</td><td>Successful GET, PUT, PATCH</td></tr>
+                    <tr><td>201</td><td>Created</td><td>Successful POST that creates resource</td></tr>
+                    <tr><td>204</td><td>No Content</td><td>Successful DELETE</td></tr>
+                    <tr><td>400</td><td>Bad Request</td><td>Invalid request payload</td></tr>
+                    <tr><td>401</td><td>Unauthorized</td><td>Missing or invalid authentication</td></tr>
+                    <tr><td>403</td><td>Forbidden</td><td>Authenticated but not authorized</td></tr>
+                    <tr><td>404</td><td>Not Found</td><td>Resource doesn't exist</td></tr>
+                    <tr><td>409</td><td>Conflict</td><td>Duplicate resource, version conflict</td></tr>
+                    <tr><td>422</td><td>Unprocessable</td><td>Validation errors</td></tr>
+                    <tr><td>429</td><td>Too Many Requests</td><td>Rate limit exceeded</td></tr>
+                    <tr><td>500</td><td>Internal Error</td><td>Server-side error</td></tr>
+                    <tr><td>502</td><td>Bad Gateway</td><td>Upstream service error</td></tr>
+                    <tr><td>503</td><td>Service Unavailable</td><td>Service temporarily down</td></tr>
+                </table>
+
+                <h3>Standard Response Format</h3>
+                <div class="code-block">
+<span class="comment">// Success Response</span>
+{
+  <span class="key">"success"</span>: <span class="const">true</span>,
+  <span class="key">"data"</span>: {
+    <span class="key">"id"</span>: <span class="string">"123"</span>,
+    <span class="key">"name"</span>: <span class="string">"John Doe"</span>
+  },
+  <span class="key">"meta"</span>: {
+    <span class="key">"timestamp"</span>: <span class="string">"2024-01-15T10:30:00Z"</span>,
+    <span class="key">"requestId"</span>: <span class="string">"req-abc123"</span>
+  }
+}
+
+<span class="comment">// Error Response</span>
+{
+  <span class="key">"success"</span>: <span class="const">false</span>,
+  <span class="key">"error"</span>: {
+    <span class="key">"code"</span>: <span class="string">"VALIDATION_ERROR"</span>,
+    <span class="key">"message"</span>: <span class="string">"Invalid email format"</span>,
+    <span class="key">"details"</span>: [
+      { <span class="key">"field"</span>: <span class="string">"email"</span>, <span class="key">"message"</span>: <span class="string">"Must be valid email"</span> }
+    ]
+  },
+  <span class="key">"meta"</span>: {
+    <span class="key">"timestamp"</span>: <span class="string">"2024-01-15T10:30:00Z"</span>,
+    <span class="key">"requestId"</span>: <span class="string">"req-abc123"</span>
+  }
+}
+                </div>
+
+                <h3>Pagination Standards</h3>
+                <div class="code-block">
+<span class="comment">// Request: GET /users?page=2&limit=20&sort=-createdAt</span>
+
+<span class="comment">// Response</span>
+{
+  <span class="key">"success"</span>: <span class="const">true</span>,
+  <span class="key">"data"</span>: [...],
+  <span class="key">"pagination"</span>: {
+    <span class="key">"page"</span>: <span class="const">2</span>,
+    <span class="key">"limit"</span>: <span class="const">20</span>,
+    <span class="key">"totalItems"</span>: <span class="const">150</span>,
+    <span class="key">"totalPages"</span>: <span class="const">8</span>,
+    <span class="key">"hasNextPage"</span>: <span class="const">true</span>,
+    <span class="key">"hasPrevPage"</span>: <span class="const">true</span>
+  },
+  <span class="key">"links"</span>: {
+    <span class="key">"self"</span>: <span class="string">"/users?page=2&limit=20"</span>,
+    <span class="key">"next"</span>: <span class="string">"/users?page=3&limit=20"</span>,
+    <span class="key">"prev"</span>: <span class="string">"/users?page=1&limit=20"</span>,
+    <span class="key">"first"</span>: <span class="string">"/users?page=1&limit=20"</span>,
+    <span class="key">"last"</span>: <span class="string">"/users?page=8&limit=20"</span>
+  }
+}
+                </div>
+            </div>
+
+            <!-- API Versioning -->
+            <div class="card">
+                <h2>🔄 API Versioning Strategies</h2>
+                
+                <h3>1. URL Path Versioning (Most Common)</h3>
+                <div class="formula-box">
+GET /api/v1/users
+GET /api/v2/users
+
+<span class="comment"># Pros: Clear, easy to implement, cacheable</span>
+<span class="comment"># Cons: URL changes between versions</span>
+                </div>
+
+                <h3>2. Header Versioning</h3>
+                <div class="formula-box">
+GET /api/users
+Accept: application/vnd.myapi.v2+json
+
+<span class="comment"># Pros: Clean URLs</span>
+<span class="comment"># Cons: Less discoverable, harder to test in browser</span>
+                </div>
+
+                <h3>3. Query Parameter</h3>
+                <div class="formula-box">
+GET /api/users?version=2
+
+<span class="comment"># Pros: Easy to test</span>
+<span class="comment"># Cons: Can be confused with filters</span>
+                </div>
+
+                <div class="tip-box">
+                    <strong>💡 Recommendation:</strong> Use URL path versioning for public APIs. It's the most explicit and widely adopted approach. Start with v1 and only introduce v2 when you have breaking changes.
+                </div>
+
+                <h3>Version Lifecycle Management</h3>
+                <div class="code-block">
+<span class="comment"># Version deprecation cycle</span>
+v1 Released:    Jan 2023
+v2 Released:    Jan 2024  ← v1 deprecated, 6-month sunset
+v1 Sunset:      Jul 2024  ← v1 no longer available
+
+<span class="comment"># Deprecation headers</span>
+Deprecation: true
+Sunset: Sat, 01 Jul 2024 00:00:00 GMT
+Link: &lt;/api/v2/users&gt;; rel="successor-version"
+                </div>
+            </div>
+
+            <!-- Security Best Practices -->
+            <div class="card">
+                <h2>🔒 Security Best Practices</h2>
+                
+                <h3>OWASP Top 10 Protection</h3>
+                <table>
+                    <tr><th>Vulnerability</th><th>Protection Strategy</th></tr>
+                    <tr><td>Injection</td><td>Parameterized queries, ORM, input validation</td></tr>
+                    <tr><td>Broken Auth</td><td>MFA, secure session management, JWT best practices</td></tr>
+                    <tr><td>Sensitive Data</td><td>Encryption at rest & transit, key management</td></tr>
+                    <tr><td>XXE</td><td>Disable DTDs, disable external entities</td></tr>
+                    <tr><td>Broken Access</td><td>RBAC, principle of least privilege</td></tr>
+                    <tr><td>Security Misconfig</td><td>Security headers, remove defaults, hardening</td></tr>
+                    <tr><td>XSS</td><td>Output encoding, CSP headers, sanitize input</td></tr>
+                    <tr><td>Insecure Deserialization</td><td>Don't accept serialized objects from untrusted sources</td></tr>
+                    <tr><td>Known Vulnerabilities</td><td>Dependency scanning, keep updated</td></tr>
+                    <tr><td>Insufficient Logging</td><td>Comprehensive logging, alerting</td></tr>
+                </table>
+
+                <h3>Essential Security Headers</h3>
+                <div class="code-block">
+<span class="comment">// Express.js security headers (use helmet)</span>
+<span class="keyword">const</span> <span class="const">helmet</span> = <span class="function">require</span>(<span class="string">'helmet'</span>);
+
+app.<span class="function">use</span>(helmet());
+
+<span class="comment">// Equivalent manual headers</span>
+X-Content-Type-Options: nosniff
+X-Frame-Options: DENY
+X-XSS-Protection: 1; mode=block
+Strict-Transport-Security: max-age=31536000; includeSubDomains
+Content-Security-Policy: default-src 'self'
+Referrer-Policy: strict-origin-when-cross-origin
+Permissions-Policy: geolocation=(), microphone=(), camera=()
+                </div>
+
+                <h3>JWT Security</h3>
+                <div class="code-block">
+<span class="comment">// ✅ DO</span>
+- Use strong secret (256+ bits) or RS256
+- Short expiration (15-60 min for access token)
+- Use refresh tokens
+- Validate all claims
+- Store in httpOnly cookies (not localStorage)
+- Include jti (JWT ID) for revocation
+
+<span class="comment">// ❌ DON'T</span>
+- Store sensitive data in payload
+- Accept tokens from URL params
+- Use none algorithm
+- Ignore expiration
+- Use same secret across environments
+                </div>
+
+                <h3>Rate Limiting</h3>
+                <div class="code-block">
+<span class="keyword">const</span> <span class="const">rateLimit</span> = <span class="function">require</span>(<span class="string">'express-rate-limit'</span>);
+
+<span class="comment">// General API rate limit</span>
+<span class="keyword">const</span> <span class="const">apiLimiter</span> = <span class="function">rateLimit</span>({
+  windowMs: <span class="const">15</span> * <span class="const">60</span> * <span class="const">1000</span>,  <span class="comment">// 15 minutes</span>
+  max: <span class="const">100</span>,                  <span class="comment">// requests per window</span>
+  message: { error: <span class="string">'Too many requests'</span> },
+  standardHeaders: <span class="const">true</span>,
+  legacyHeaders: <span class="const">false</span>
+});
+
+<span class="comment">// Stricter for auth endpoints</span>
+<span class="keyword">const</span> <span class="const">authLimiter</span> = <span class="function">rateLimit</span>({
+  windowMs: <span class="const">60</span> * <span class="const">60</span> * <span class="const">1000</span>,  <span class="comment">// 1 hour</span>
+  max: <span class="const">5</span>,                   <span class="comment">// 5 attempts</span>
+  skipSuccessfulRequests: <span class="const">true</span>
+});
+
+app.<span class="function">use</span>(<span class="string">'/api/'</span>, apiLimiter);
+app.<span class="function">use</span>(<span class="string">'/api/auth/login'</span>, authLimiter);
+                </div>
+            </div>
+
+            <!-- Database Design -->
+            <div class="card">
+                <h2>💾 Database Design Best Practices</h2>
+                
+                <h3>Indexing Strategy</h3>
+                <div class="formula-box">
+<span class="comment"># Rules for indexes</span>
+1. Index all WHERE clause columns
+2. Index JOIN columns
+3. Index ORDER BY columns
+4. Use composite indexes for multi-column queries
+5. Consider index order (leftmost prefix rule)
+
+<span class="comment"># MongoDB example</span>
+db.users.createIndex({ email: 1 }, { unique: true })
+db.orders.createIndex({ userId: 1, createdAt: -1 })
+
+<span class="comment"># SQL example</span>
+CREATE INDEX idx_user_email ON users(email);
+CREATE INDEX idx_orders_user_date ON orders(user_id, created_at DESC);
+                </div>
+
+                <h3>Query Optimization Checklist</h3>
+                <ul class="checklist">
+                    <li>Avoid SELECT * - select only needed columns</li>
+                    <li>Use EXPLAIN/EXPLAIN ANALYZE for query analysis</li>
+                    <li>Implement pagination for large result sets</li>
+                    <li>Use connection pooling</li>
+                    <li>Avoid N+1 queries with proper joins/eager loading</li>
+                    <li>Use database-level constraints</li>
+                    <li>Denormalize for read-heavy workloads</li>
+                    <li>Archive old data to maintain table size</li>
+                </ul>
+
+                <h3>Connection Pooling</h3>
+                <div class="code-block">
+<span class="comment">// Node.js with pg (PostgreSQL)</span>
+<span class="keyword">const</span> { Pool } = <span class="function">require</span>(<span class="string">'pg'</span>);
+
+<span class="keyword">const</span> <span class="const">pool</span> = <span class="keyword">new</span> <span class="function">Pool</span>({
+  max: <span class="const">20</span>,                    <span class="comment">// Max connections</span>
+  idleTimeoutMillis: <span class="const">30000</span>,
+  connectionTimeoutMillis: <span class="const">2000</span>
+});
+
+<span class="comment">// Mongoose (MongoDB)</span>
+mongoose.<span class="function">connect</span>(uri, {
+  maxPoolSize: <span class="const">50</span>,
+  minPoolSize: <span class="const">5</span>,
+  connectTimeoutMS: <span class="const">10000</span>
+});
+                </div>
+
+                <h3>Database Scaling Strategies</h3>
+                <table>
+                    <tr><th>Strategy</th><th>When to Use</th><th>Complexity</th></tr>
+                    <tr><td>Read Replicas</td><td>Read-heavy workloads</td><td>Low</td></tr>
+                    <tr><td>Vertical Scaling</td><td>Single server capacity</td><td>Low</td></tr>
+                    <tr><td>Connection Pooling</td><td>Many concurrent connections</td><td>Low</td></tr>
+                    <tr><td>Caching</td><td>Frequent same queries</td><td>Medium</td></tr>
+                    <tr><td>Sharding</td><td>Write-heavy, large datasets</td><td>High</td></tr>
+                    <tr><td>CQRS</td><td>Complex read/write patterns</td><td>High</td></tr>
+                </table>
+            </div>
+
+            <!-- Caching Strategies -->
+            <div class="card">
+                <h2>🔴 Caching Strategies</h2>
+                
+                <h3>Cache Patterns</h3>
+                <div class="ascii-diagram">
+CACHE ASIDE (Lazy Loading)
+┌─────────┐     1. Request     ┌─────────┐
+│  Client │ ──────────────────>│   App   │
+└─────────┘                    └────┬────┘
+                                    │ 2. Check Cache
+                                    ▼
+                              ┌─────────┐
+                              │  Cache  │ ← 3a. Hit: Return
+                              └────┬────┘
+                                   │ 3b. Miss
+                                   ▼
+                              ┌─────────┐
+                              │   DB    │ ← 4. Query DB, Update Cache
+                              └─────────┘
+
+WRITE THROUGH
+┌─────────┐     Write      ┌─────────┐
+│  Client │ ──────────────>│   App   │
+└─────────┘                └────┬────┘
+                                │
+                 ┌──────────────┼──────────────┐
+                 ▼              ▼              ▼
+           ┌─────────┐   ┌─────────┐    ┌─────────┐
+           │  Cache  │   │   DB    │    │  Both   │
+           └─────────┘   └─────────┘    │ Updated │
+                                       └─────────┘
+
+WRITE BEHIND (Write Back)
+App writes to Cache → Background sync to DB (async)</div>
+
+                <h3>Redis Implementation</h3>
+                <div class="code-block">
+<span class="keyword">const</span> <span class="const">Redis</span> = <span class="function">require</span>(<span class="string">'ioredis'</span>);
+<span class="keyword">const</span> <span class="const">redis</span> = <span class="keyword">new</span> <span class="function">Redis</span>();
+
+<span class="comment">// Cache-aside pattern</span>
+<span class="keyword">async function</span> <span class="function">getUser</span>(id) {
+  <span class="comment">// 1. Check cache</span>
+  <span class="keyword">const</span> <span class="const">cached</span> = <span class="keyword">await</span> redis.<span class="function">get</span>(<span class="string">`user:${id}`</span>);
+  <span class="keyword">if</span> (cached) <span class="keyword">return</span> <span class="function">JSON.parse</span>(cached);
+  
+  <span class="comment">// 2. Query database</span>
+  <span class="keyword">const</span> <span class="const">user</span> = <span class="keyword">await</span> db.<span class="function">findOne</span>({ _id: id });
+  
+  <span class="comment">// 3. Set cache with TTL</span>
+  <span class="keyword">await</span> redis.<span class="function">setex</span>(
+    <span class="string">`user:${id}`</span>,
+    <span class="const">3600</span>,              <span class="comment">// 1 hour TTL</span>
+    <span class="function">JSON.stringify</span>(user)
+  );
+  
+  <span class="keyword">return</span> user;
+}
+
+<span class="comment">// Cache invalidation</span>
+<span class="keyword">async function</span> <span class="function">updateUser</span>(id, data) {
+  <span class="keyword">const</span> <span class="const">user</span> = <span class="keyword">await</span> db.<span class="function">updateOne</span>({ _id: id }, data);
+  <span class="keyword">await</span> redis.<span class="function">del</span>(<span class="string">`user:${id}`</span>);  <span class="comment">// Invalidate cache</span>
+  <span class="keyword">return</span> user;
+}
+                </div>
+
+                <h3>What to Cache</h3>
+                <div class="tip-box">
+                    <strong>✅ Cache These:</strong>
+                    <ul>
+                        <li>User sessions and profiles</li>
+                        <li>Configuration/settings</li>
+                        <li>Expensive query results</li>
+                        <li>API rate limit counters</li>
+                        <li>Precomputed aggregations</li>
+                    </ul>
+                </div>
+
+                <div class="warning-box">
+                    <strong>⚠️ Don't Cache These:</strong>
+                    <ul>
+                        <li>Sensitive data (without encryption)</li>
+                        <li>Real-time data (stock prices, etc.)</li>
+                        <li>Large objects (use CDN instead)</li>
+                        <li>Data that changes frequently</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Error Handling -->
+            <div class="card">
+                <h2>⚠️ Error Handling Patterns</h2>
+                
+                <h3>Structured Error Handling</h3>
+                <div class="code-block">
+<span class="comment">// Custom error classes</span>
+<span class="keyword">class</span> <span class="function">AppError</span> <span class="keyword">extends</span> Error {
+  <span class="function">constructor</span>(message, statusCode, code) {
+    <span class="keyword">super</span>(message);
+    <span class="keyword">this</span>.statusCode = statusCode;
+    <span class="keyword">this</span>.code = code;
+    <span class="keyword">this</span>.isOperational = <span class="const">true</span>;
+    Error.<span class="function">captureStackTrace</span>(<span class="keyword">this</span>, <span class="keyword">this</span>.constructor);
+  }
+}
+
+<span class="keyword">class</span> <span class="function">ValidationError</span> <span class="keyword">extends</span> AppError {
+  <span class="function">constructor</span>(message, details = []) {
+    <span class="keyword">super</span>(message, <span class="const">422</span>, <span class="string">'VALIDATION_ERROR'</span>);
+    <span class="keyword">this</span>.details = details;
+  }
+}
+
+<span class="keyword">class</span> <span class="function">NotFoundError</span> <span class="keyword">extends</span> AppError {
+  <span class="function">constructor</span>(resource) {
+    <span class="keyword">super</span>(<span class="string">`${resource} not found`</span>, <span class="const">404</span>, <span class="string">'NOT_FOUND'</span>);
+  }
+}
+
+<span class="keyword">class</span> <span class="function">ConflictError</span> <span class="keyword">extends</span> AppError {
+  <span class="function">constructor</span>(message) {
+    <span class="keyword">super</span>(message, <span class="const">409</span>, <span class="string">'CONFLICT'</span>);
+  }
+}
+                </div>
+
+                <h3>Global Error Handler</h3>
+                <div class="code-block">
+<span class="comment">// Error handling middleware</span>
+<span class="keyword">const</span> <span class="function">errorHandler</span> = (err, req, res, next) => {
+  err.statusCode = err.statusCode || <span class="const">500</span>;
+  err.code = err.code || <span class="string">'INTERNAL_ERROR'</span>;
+
+  <span class="comment">// Log error</span>
+  logger.<span class="function">error</span>({
+    message: err.message,
+    stack: err.stack,
+    requestId: req.<span class="string">id</span>,
+    path: req.path,
+    method: req.method,
+    user: req.user?.id
+  });
+
+  <span class="comment">// Operational vs Programming errors</span>
+  <span class="keyword">if</span> (!err.isOperational) {
+    <span class="comment">// Programming error - don't leak details</span>
+    <span class="keyword">return</span> res.<span class="function">status</span>(<span class="const">500</span>).<span class="function">json</span>({
+      success: <span class="const">false</span>,
+      error: {
+        code: <span class="string">'INTERNAL_ERROR'</span>,
+        message: <span class="string">'Something went wrong'</span>
+      }
+    });
+  }
+
+  <span class="comment">// Send response</span>
+  res.<span class="function">status</span>(err.statusCode).<span class="function">json</span>({
+    success: <span class="const">false</span>,
+    error: {
+      code: err.code,
+      message: err.message,
+      ...(err.details && { details: err.details })
+    },
+    ...(process.env.NODE_ENV === <span class="string">'development'</span> && { stack: err.stack })
+  });
+};
+                </div>
+
+                <h3>Async Handler Wrapper</h3>
+                <div class="code-block">
+<span class="comment">// Wrapper for async route handlers</span>
+<span class="keyword">const</span> <span class="function">asyncHandler</span> = fn => (req, res, next) =>
+  Promise.<span class="function">resolve</span>(<span class="function">fn</span>(req, res, next)).<span class="function">catch</span>(next);
+
+<span class="comment">// Usage</span>
+app.<span class="function">get</span>(<span class="string">'/users/:id'</span>, <span class="function">asyncHandler</span>(<span class="keyword">async</span> (req, res) => {
+  <span class="keyword">const</span> user = <span class="keyword">await</span> User.<span class="function">findById</span>(req.params.id);
+  <span class="keyword">if</span> (!user) <span class="keyword">throw new</span> <span class="function">NotFoundError</span>(<span class="string">'User'</span>);
+  res.<span class="function">json</span>({ success: <span class="const">true</span>, data: user });
+}));
+                </div>
+            </div>
+
+            <!-- Logging & Monitoring -->
+            <div class="card">
+                <h2>📊 Logging & Observability</h2>
+                
+                <h3>Structured Logging</h3>
+                <div class="code-block">
+<span class="keyword">const</span> <span class="const">winston</span> = <span class="function">require</span>(<span class="string">'winston'</span>);
+
+<span class="keyword">const</span> <span class="const">logger</span> = winston.<span class="function">createLogger</span>({
+  level: process.env.LOG_LEVEL || <span class="string">'info'</span>,
+  format: winston.format.<span class="function">combine</span>(
+    winston.format.<span class="function">timestamp</span>(),
+    winston.format.<span class="function">errors</span>({ stack: <span class="const">true</span> }),
+    winston.format.<span class="function">json</span>()
+  ),
+  defaultMeta: { 
+    service: <span class="string">'api-server'</span>,
+    environment: process.env.NODE_ENV 
+  },
+  transports: [
+    <span class="keyword">new</span> winston.transports.<span class="function">Console</span>(),
+    <span class="keyword">new</span> winston.transports.<span class="function">File</span>({ filename: <span class="string">'error.log'</span>, level: <span class="string">'error'</span> }),
+    <span class="keyword">new</span> winston.transports.<span class="function">File</span>({ filename: <span class="string">'combined.log'</span> })
+  ]
+});
+
+<span class="comment">// Usage</span>
+logger.<span class="function">info</span>(<span class="string">'User login'</span>, { 
+  userId: user.id, 
+  ip: req.ip,
+  userAgent: req.headers[<span class="string">'user-agent'</span>]
+});
+
+logger.<span class="function">error</span>(<span class="string">'Database connection failed'</span>, { 
+  error: err.message,
+  stack: err.stack 
+});
+                </div>
+
+                <h3>Log Levels & When to Use</h3>
+                <table>
+                    <tr><th>Level</th><th>When to Use</th><th>Example</th></tr>
+                    <tr><td>ERROR</td><td>Application errors, exceptions</td><td>Database connection failed</td></tr>
+                    <tr><td>WARN</td><td>Potential issues, deprecations</td><td>Slow query detected</td></tr>
+                    <tr><td>INFO</td><td>Significant events</td><td>User logged in, order created</td></tr>
+                    <tr><td>DEBUG</td><td>Detailed diagnostic info</td><td>Request/response data</td></tr>
+                    <tr><td>TRACE</td><td>Very detailed tracing</td><td>Function entry/exit</td></tr>
+                </table>
+
+                <h3>Request Tracing</h3>
+                <div class="code-block">
+<span class="comment">// Add request ID for tracing</span>
+<span class="keyword">const</span> { v4: uuidv4 } = <span class="function">require</span>(<span class="string">'uuid'</span>);
+
+app.<span class="function">use</span>((req, res, next) => {
+  req.<span class="string">id</span> = uuidv4();
+  res.<span class="function">setHeader</span>(<span class="string">'X-Request-Id'</span>, req.id);
+  next();
+});
+
+<span class="comment">// Log request/response</span>
+app.<span class="function">use</span>((req, res, next) => {
+  <span class="keyword">const</span> <span class="const">start</span> = Date.<span class="string">now</span>();
+  
+  res.<span class="function">on</span>(<span class="string">'finish'</span>, () => {
+    logger.<span class="function">info</span>(<span class="string">'HTTP Request'</span>, {
+      requestId: req.id,
+      method: req.method,
+      path: req.path,
+      statusCode: res.statusCode,
+      duration: Date.<span class="string">now</span>() - start,
+      userId: req.user?.id
+    });
+  });
+  
+  next();
+});
+                </div>
+
+                <h3>Metrics to Track</h3>
+                <div class="metric-box">
+                    <div class="metric">
+                        <div class="metric-value">p95</div>
+                        <div class="metric-label">Latency</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value">%</div>
+                        <div class="metric-label">Error Rate</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value">req/s</div>
+                        <div class="metric-label">Throughput</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value">%</div>
+                        <div class="metric-label">CPU/Memory</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Background Jobs -->
+            <div class="card">
+                <h2>📨 Background Jobs & Queues</h2>
+                
+                <h3>When to Use Background Jobs</h3>
+                <ul class="checklist">
+                    <li>Email sending (notifications, newsletters)</li>
+                    <li>File processing (image resizing, PDF generation)</li>
+                    <li>Third-party API calls (webhooks, integrations)</li>
+                    <li>Report generation (CSV exports, analytics)</li>
+                    <li>Scheduled tasks (daily cleanup, aggregations)</li>
+                    <li>Heavy computations (data processing, ML inference)</li>
+                </ul>
+
+                <h3>Bull Queue (Redis-based)</h3>
+                <div class="code-block">
+<span class="keyword">const</span> <span class="const">Queue</span> = <span class="function">require</span>(<span class="string">'bull'</span>);
+
+<span class="comment">// Create queue</span>
+<span class="keyword">const</span> <span class="const">emailQueue</span> = <span class="keyword">new</span> <span class="function">Queue</span>(<span class="string">'email sending'</span>, {
+  redis: { host: <span class="string">'localhost'</span>, port: <span class="const">6379</span> }
+});
+
+<span class="comment">// Add job</span>
+<span class="keyword">await</span> emailQueue.<span class="function">add</span>(<span class="string">'send-welcome'</span>, {
+  to: user.email,
+  template: <span class="string">'welcome'</span>,
+  data: { name: user.name }
+}, {
+  attempts: <span class="const">3</span>,
+  backoff: { type: <span class="string">'exponential'</span>, delay: <span class="const">1000</span> },
+  removeOnComplete: <span class="const">100</span>,
+  removeOnFail: <span class="const">50</span>
+});
+
+<span class="comment">// Process job</span>
+emailQueue.<span class="function">process</span>(<span class="string">'send-welcome'</span>, <span class="keyword">async</span> (job) => {
+  <span class="keyword">const</span> { to, template, data } = job.data;
+  <span class="keyword">await</span> sendEmail(to, template, data);
+});
+
+<span class="comment">// Error handling</span>
+emailQueue.<span class="function">on</span>(<span class="string">'failed'</span>, (job, err) => {
+  logger.<span class="function">error</span>(<span class="string">'Job failed'</span>, { jobId: job.id, error: err.message });
+});
+                </div>
+
+                <h3>Job Patterns</h3>
+                <table>
+                    <tr><th>Pattern</th><th>Use Case</th></tr>
+                    <tr><td>Fire-and-forget</td><td>Send email after user action</td></tr>
+                    <tr><td>Delayed jobs</td><td>Send reminder after 24 hours</td></tr>
+                    <tr><td>Recurring jobs</td><td>Daily report generation</td></tr>
+                    <tr><td>Job chains</td><td>Process → Transform → Store</td></tr>
+                    <tr><td>Priority queues</td><td>VIP users get priority</td></tr>
+                </table>
+            </div>
+
+            <!-- SaaS Multi-tenancy -->
+            <div class="card">
+                <h2>🏢 SaaS Multi-tenancy Patterns</h2>
+                
+                <h3>Multi-tenancy Architecture Options</h3>
+                <table class="tier-table">
+                    <tr><th>Approach</th><th>Isolation</th><th>Cost</th><th>Complexity</th><th>Best For</th></tr>
+                    <tr><td>Shared DB, Shared Schema</td><td>Low</td><td>$</td><td>Low</td><td>Small SaaS, MVP</td></tr>
+                    <tr><td>Shared DB, Separate Schema</td><td>Medium</td><td>$$</td><td>Medium</td><td>Mid-market SaaS</td></tr>
+                    <tr><td>Separate Database</td><td>High</td><td>$$$</td><td>High</td><td>Enterprise, Regulated</td></tr>
+                    <tr><td>Fully Isolated Stack</td><td>Highest</td><td>$$$$</td><td>Highest</td><td>Government, Healthcare</td></tr>
+                </table>
+
+                <h3>Tenant Context Middleware</h3>
+                <div class="code-block">
+<span class="comment">// Tenant identification</span>
+<span class="keyword">const</span> <span class="function">tenantMiddleware</span> = <span class="keyword">async</span> (req, res, next) => {
+  <span class="comment">// From subdomain: tenant1.myapp.com</span>
+  <span class="keyword">const</span> <span class="const">subdomain</span> = req.hostname.<span class="function">split</span>(<span class="string">'.'</span>)[<span class="const">0</span>];
+  
+  <span class="comment">// Or from header: X-Tenant-ID</span>
+  <span class="keyword">const</span> <span class="const">tenantId</span> = req.headers[<span class="string">'x-tenant-id'</span>];
+  
+  <span class="comment">// Or from JWT claims</span>
+  <span class="keyword">const</span> <span class="const">tenantFromToken</span> = req.user?.tenantId;
+
+  <span class="keyword">const</span> <span class="const">tenant</span> = <span class="keyword">await</span> Tenant.<span class="function">findById</span>(tenantId);
+  
+  <span class="keyword">if</span> (!tenant || !tenant.active) {
+    <span class="keyword">return</span> res.<span class="function">status</span>(<span class="const">403</span>).<span class="function">json</span>({ 
+      error: <span class="string">'Tenant not found or inactive'</span> 
+    });
+  }
+
+  req.<span class="string">tenant</span> = tenant;
+  next();
+};
+
+<span class="comment">// Apply to routes</span>
+app.<span class="function">use</span>(<span class="string">'/api'</span>, tenantMiddleware);
+                </div>
+
+                <h3>Data Isolation in Queries</h3>
+                <div class="code-block">
+<span class="comment">// Every query includes tenant filter</span>
+<span class="keyword">const</span> <span class="function">getUsers</span> = <span class="keyword">async</span> (req) => {
+  <span class="keyword">return await</span> User.<span class="function">find</span>({ 
+    tenantId: req.tenant.id  <span class="comment">// Always filter by tenant</span>
+  });
+};
+
+<span class="comment">// Mongoose middleware for automatic filtering</span>
+schema.<span class="function">pre</span>(<span class="string">'find'</span>, <span class="keyword">function</span>() {
+  <span class="keyword">this</span>.<span class="function">where</span>({ tenantId: <span class="keyword">this</span>.options.tenantId });
+});
+
+schema.<span class="function">pre</span>(<span class="string">'save'</span>, <span class="keyword">function</span>() {
+  <span class="keyword">this</span>.tenantId = <span class="keyword">this</span>.$__tenantId; <span class="comment">// From context</span>
+});
+                </div>
+
+                <h3>SaaS Subscription Tiers</h3>
+                <div class="code-block">
+<span class="keyword">const</span> <span class="const">TIERS</span> = {
+  FREE: {
+    name: <span class="string">'Free'</span>,
+    price: <span class="const">0</span>,
+    limits: {
+      users: <span class="const">1</span>,
+      storage: <span class="const">100</span> * <span class="const">1024</span> * <span class="const">1024</span>, <span class="comment">// 100MB</span>
+      apiCalls: <span class="const">1000</span>,
+      features: [<span class="string">'basic'</span>]
+    }
+  },
+  PRO: {
+    name: <span class="string">'Pro'</span>,
+    price: <span class="const">29</span>,
+    limits: {
+      users: <span class="const">10</span>,
+      storage: <span class="const">10</span> * <span class="const">1024</span> * <span class="const">1024</span> * <span class="const">1024</span>, <span class="comment">// 10GB</span>
+      apiCalls: <span class="const">50000</span>,
+      features: [<span class="string">'basic'</span>, <span class="string">'analytics'</span>, <span class="string">'integrations'</span>]
+    }
+  },
+  ENTERPRISE: {
+    name: <span class="string">'Enterprise'</span>,
+    price: <span class="string">'custom'</span>,
+    limits: {
+      users: <span class="const">Infinity</span>,
+      storage: <span class="const">Infinity</span>,
+      apiCalls: <span class="const">Infinity</span>,
+      features: [<span class="string">'all'</span>]
+    }
+  }
+};
+
+<span class="comment">// Check limits middleware</span>
+<span class="keyword">const</span> <span class="function">checkLimit</span> = (resource) => <span class="keyword">async</span> (req, res, next) => {
+  <span class="keyword">const</span> <span class="const">usage</span> = <span class="keyword">await</span> <span class="function">getUsage</span>(req.tenant.id);
+  <span class="keyword">const</span> <span class="const">limit</span> = TIERS[req.tenant.tier].limits[resource];
+  
+  <span class="keyword">if</span> (usage[resource] >= limit) {
+    <span class="keyword">return</span> res.<span class="function">status</span>(<span class="const">402</span>).<span class="function">json</span>({
+      error: <span class="string">'Limit exceeded'</span>,
+      upgradeUrl: <span class="string">'/pricing'</span>
+    });
+  }
+  next();
+};
+                </div>
+            </div>
+
+            <!-- CI/CD Pipeline -->
+            <div class="card">
+                <h2>🔄 CI/CD Pipeline</h2>
+                
+                <h3>Production Pipeline Stages</h3>
+                <div class="ascii-diagram">
+┌────────────────────────────────────────────────────────────────────────────┐
+│                           CI/CD PIPELINE                                     │
+├────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│  ┌─────────┐   ┌─────────┐   ┌─────────┐   ┌─────────┐   ┌─────────┐       │
+│  │  Lint   │──▶│  Test   │──▶│ Build   │──▶│ Security│──▶│ Deploy  │       │
+│  │         │   │         │   │         │   │  Scan   │   │         │       │
+│  └─────────┘   └─────────┘   └─────────┘   └─────────┘   └─────────┘       │
+│       │             │             │             │             │             │
+│       ▼             ▼             ▼             ▼             ▼             │
+│   ESLint/        Jest/        Webpack/      SAST/       Kubernetes/        │
+│   Prettier       Mocha        Vite          SCA         AWS/EKS            │
+│                                                                              │
+│  ┌─────────────────────────────────────────────────────────────────┐       │
+│  │                      QUALITY GATES                               │       │
+│  │  • Code coverage > 80%                                          │       │
+│  │  • No critical security vulnerabilities                         │       │
+│  │  • All tests passing                                            │       │
+│  │  • Code review approved                                         │       │
+│  └─────────────────────────────────────────────────────────────────┘       │
+│                                                                              │
+│  ┌─────────────────────────────────────────────────────────────────┐       │
+│  │                    DEPLOYMENT STRATEGIES                         │       │
+│  │                                                                   │       │
+│  │  Blue-Green    │    Canary     │    Rolling    │   Feature Flags │       │
+│  │  ┌───┐ ┌───┐   │  ┌─┐ ┌─────┐ │  ┌───┐        │   ┌───────────┐ │       │
+│  │  │Old│ │New│   │  │5%│ │ 95% │ │  │v1│→│v2│   │   │ newFeature│ │       │
+│  │  └───┘ └───┘   │  └─┘ └─────┘ │  └───┘        │   │  = true   │ │       │
+│  └─────────────────────────────────────────────────────────────────┘       │
+│                                                                              │
+└────────────────────────────────────────────────────────────────────────────┘</div>
+
+                <h3>GitHub Actions Example</h3>
+                <div class="yaml-block">
+<span class="key">name:</span> <span class="value">CI/CD Pipeline</span>
+
+<span class="key">on:</span>
+  <span class="key">push:</span>
+    <span class="key">branches:</span> <span class="value">[main, develop]</span>
+  <span class="key">pull_request:</span>
+    <span class="key">branches:</span> <span class="value">[main]</span>
+
+<span class="key">jobs:</span>
+  <span class="key">test:</span>
+    <span class="key">runs-on:</span> <span class="value">ubuntu-latest</span>
+    <span class="key">steps:</span>
+      - <span class="key">uses:</span> <span class="value">actions/checkout@v4</span>
+      - <span class="key">uses:</span> <span class="value">actions/setup-node@v4</span>
+        <span class="key">with:</span>
+          <span class="key">node-version:</span> <span class="value">'20'</span>
+      - <span class="key">run:</span> <span class="value">npm ci</span>
+      - <span class="key">run:</span> <span class="value">npm run lint</span>
+      - <span class="key">run:</span> <span class="value">npm run test:coverage</span>
+      - <span class="key">name:</span> <span class="value">Upload coverage</span>
+        <span class="key">uses:</span> <span class="value">codecov/codecov-action@v3</span>
+
+  <span class="key">security:</span>
+    <span class="key">runs-on:</span> <span class="value">ubuntu-latest</span>
+    <span class="key">steps:</span>
+      - <span class="key">uses:</span> <span class="value">actions/checkout@v4</span>
+      - <span class="key">name:</span> <span class="value">Run Snyk</span>
+        <span class="key">uses:</span> <span class="value">snyk/actions/node@master</span>
+        <span class="key">env:</span>
+          <span class="key">SNYK_TOKEN:</span> <span class="value">${{ secrets.SNYK_TOKEN }}</span>
+
+  <span class="key">deploy:</span>
+    <span class="key">needs:</span> <span class="value">[test, security]</span>
+    <span class="key">if:</span> <span class="value">github.ref == 'refs/heads/main'</span>
+    <span class="key">runs-on:</span> <span class="value">ubuntu-latest</span>
+    <span class="key">steps:</span>
+      - <span class="key">name:</span> <span class="value">Deploy to Production</span>
+        <span class="key">run:</span> <span class="value">./deploy.sh</span>
+                </div>
+            </div>
+
+            <!-- Docker & Containerization -->
+            <div class="card">
+                <h2>🐳 Docker & Containerization</h2>
+                
+                <h3>Production Dockerfile</h3>
+                <div class="code-block">
+<span class="comment"># Multi-stage build</span>
+FROM node:20-alpine AS builder
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci --only=production
+COPY . .
+RUN npm run build
+
+<span class="comment"># Production image</span>
+FROM node:20-alpine
+WORKDIR /app
+
+<span class="comment"># Security: Run as non-root user</span>
+RUN addgroup -g 1001 -S nodejs
+RUN adduser -S nodejs -u 1001
+
+<span class="comment"># Copy only production files</span>
+COPY --from=builder --chown=nodejs:nodejs /app/node_modules ./node_modules
+COPY --from=builder --chown=nodejs:nodejs /app/dist ./dist
+COPY --from=builder --chown=nodejs:nodejs /app/package.json ./
+
+USER nodejs
+
+<span class="comment"># Health check</span>
+HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
+  CMD wget --no-verbose --tries=1 --spider http://localhost:3000/health || exit 1
+
+EXPOSE 3000
+CMD ["node", "dist/server.js"]
+                </div>
+
+                <h3>docker-compose.yml (Development)</h3>
+                <div class="yaml-block">
+<span class="key">version:</span> <span class="value">'3.8'</span>
+
+<span class="key">services:</span>
+  <span class="key">api:</span>
+    <span class="key">build:</span> <span class="value">.</span>
+    <span class="key">ports:</span>
+      - <span class="value">"3000:3000"</span>
+    <span class="key">environment:</span>
+      - <span class="value">DATABASE_URL=postgres://db:5432/app</span>
+      - <span class="value">REDIS_URL=redis://redis:6379</span>
+    <span class="key">depends_on:</span>
+      - <span class="value">db</span>
+      - <span class="value">redis</span>
+    <span class="key">volumes:</span>
+      - <span class="value">.:/app</span>
+      - <span class="value">/app/node_modules</span>
+
+  <span class="key">db:</span>
+    <span class="key">image:</span> <span class="value">postgres:16-alpine</span>
+    <span class="key">environment:</span>
+      - <span class="value">POSTGRES_DB=app</span>
+      - <span class="value">POSTGRES_PASSWORD=secret</span>
+    <span class="key">volumes:</span>
+      - <span class="value">postgres_data:/var/lib/postgresql/data</span>
+
+  <span class="key">redis:</span>
+    <span class="key">image:</span> <span class="value">redis:7-alpine</span>
+    <span class="key">volumes:</span>
+      - <span class="value">redis_data:/data</span>
+
+<span class="key">volumes:</span>
+  <span class="key">postgres_data:</span>
+  <span class="key">redis_data:</span>
+                </div>
+
+                <h3>Container Best Practices</h3>
+                <div class="tip-box">
+                    <strong>🐳 Container Guidelines:</strong>
+                    <ul>
+                        <li>Use multi-stage builds to reduce image size</li>
+                        <li>Run as non-root user</li>
+                        <li>Use specific version tags (not :latest)</li>
+                        <li>Minimize layers, combine RUN commands</li>
+                        <li>Use .dockerignore to exclude unnecessary files</li>
+                        <li>Set memory and CPU limits</li>
+                        <li>Implement health checks</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Testing Strategies -->
+            <div class="card">
+                <h2>🧪 Testing Strategies</h2>
+                
+                <h3>Testing Pyramid</h3>
+                <div class="ascii-diagram">
+                    ┌─────────────────────────────────────┐
+                    │           E2E Tests                 │  ← Few, Slow, Expensive
+                    │        (User Workflows)             │     Playwright, Cypress
+                    ├─────────────────────────────────────┤
+                    │       Integration Tests             │  ← Some, Medium
+                    │     (API + Database + Services)     │     Jest, Supertest
+                    ├─────────────────────────────────────┤
+                    │          Unit Tests                 │  ← Many, Fast, Cheap
+                    │    (Functions, Components, Logic)   │     Jest, Mocha
+                    └─────────────────────────────────────┘</div>
+
+                <h3>Unit Test Example</h3>
+                <div class="code-block">
+<span class="comment">// userService.test.js</span>
+<span class="keyword">const</span> { createUser, getUser } = <span class="function">require</span>(<span class="string">'./userService'</span>);
+<span class="keyword">const</span> User = <span class="function">require</span>(<span class="string">'../models/User'</span>);
+
+<span class="comment">// Mock the model</span>
+jest.<span class="function">mock</span>(<span class="string">'../models/User'</span>);
+
+<span class="function">describe</span>(<span class="string">'UserService'</span>, () => {
+  <span class="function">beforeEach</span>(() => {
+    jest.<span class="function">clearAllMocks</span>();
+  });
+
+  <span class="function">describe</span>(<span class="string">'createUser'</span>, () => {
+    <span class="function">it</span>(<span class="string">'should create a new user with hashed password'</span>, <span class="keyword">async</span> () => {
+      <span class="keyword">const</span> <span class="const">mockUser</span> = { _id: <span class="string">'123'</span>, email: <span class="string">'test@test.com'</span> };
+      User.create.mock.<span class="function">ResolvedValue</span>(mockUser);
+
+      <span class="keyword">const</span> <span class="const">result</span> = <span class="keyword">await</span> <span class="function">createUser</span>({
+        email: <span class="string">'test@test.com'</span>,
+        password: <span class="string">'password123'</span>
+      });
+
+      <span class="function">expect</span>(User.create).<span class="function">toHaveBeenCalledWith</span>(
+        <span class="function">expect.objectContaining</span>({ email: <span class="string">'test@test.com'</span> })
+      );
+      <span class="function">expect</span>(result).<span class="function">toEqual</span>(mockUser);
+    });
+
+    <span class="function">it</span>(<span class="string">'should throw error if email exists'</span>, <span class="keyword">async</span> () => {
+      User.create.mock.<span class="function">RejectedValue</span>({ code: <span class="string">'DUPLICATE'</span> });
+      
+      <span class="keyword">await</span> <span class="function">expect</span>(<span class="function">createUser</span>({}))
+        .rejects.<span class="function">toThrow</span>(<span class="string">'Email already exists'</span>);
+    });
+  });
+});
+                </div>
+
+                <h3>Integration Test Example</h3>
+                <div class="code-block">
+<span class="comment">// api.test.js</span>
+<span class="keyword">const</span> request = <span class="function">require</span>(<span class="string">'supertest'</span>);
+<span class="keyword">const</span> app = <span class="function">require</span>(<span class="string">'../app'</span>);
+<span class="keyword">const</span> mongoose = <span class="function">require</span>(<span class="string">'mongoose'</span>);
+
+<span class="function">describe</span>(<span class="string">'User API'</span>, () => {
+  <span class="function">beforeAll</span>(<span class="keyword">async</span> () => {
+    <span class="keyword">await</span> mongoose.<span class="function">connect</span>(process.env.TEST_DB_URI);
+  });
+
+  <span class="function">afterAll</span>(<span class="keyword">async</span> () => {
+    <span class="keyword">await</span> mongoose.<span class="function">connection</span>.<span class="function">close</span>();
+  });
+
+  <span class="function">afterEach</span>(<span class="keyword">async</span> () => {
+    <span class="keyword">await</span> User.<span class="function">deleteMany</span>({});
+  });
+
+  <span class="function">it</span>(<span class="string">'POST /api/users should create user'</span>, <span class="keyword">async</span> () => {
+    <span class="keyword">const</span> <span class="const">res</span> = <span class="keyword">await</span> <span class="function">request</span>(app)
+      .<span class="function">post</span>(<span class="string">'/api/users'</span>)
+      .<span class="function">send</span>({ email: <span class="string">'test@test.com'</span>, password: <span class="string">'password123'</span> })
+      .<span class="function">expect</span>(<span class="const">201</span>);
+
+    <span class="function">expect</span>(res.body.data.email).<span class="function">toBe</span>(<span class="string">'test@test.com'</span>);
+  });
+});
+                </div>
+            </div>
+
+            <!-- Environment Management -->
+            <div class="card">
+                <h2>🔧 Environment Management</h2>
+                
+                <h3>Environment Strategy</h3>
+                <table>
+                    <tr><th>Environment</th><th>Purpose</th><th>Data</th><th>Scale</th></tr>
+                    <tr><td>Development</td><td>Local development</td><td>Mock/Seed</td><td>Single instance</td></tr>
+                    <tr><td>Testing</td><td>CI/CD tests</td><td>Fresh seed</td><td>Ephemeral</td></tr>
+                    <tr><td>Staging</td><td>Pre-production testing</td><td>Sanitized prod</td><td>Prod-like</td></tr>
+                    <tr><td>Production</td><td>Live users</td><td>Real data</td><td>Auto-scaled</td></tr>
+                </table>
+
+                <h3>Configuration Management</h3>
+                <div class="code-block">
+<span class="comment">// config/index.js</span>
+<span class="keyword">const</span> <span class="const">config</span> = {
+  development: {
+    db: {
+      url: process.env.DEV_DB_URL,
+      poolSize: <span class="const">5</span>
+    },
+    redis: {
+      url: process.env.DEV_REDIS_URL
+    },
+    logging: {
+      level: <span class="string">'debug'</span>
+    }
+  },
+  production: {
+    db: {
+      url: process.env.PROD_DB_URL,
+      poolSize: <span class="const">50</span>
+    },
+    redis: {
+      url: process.env.PROD_REDIS_URL
+    },
+    logging: {
+      level: <span class="string">'info'</span>
+    }
+  }
+};
+
+<span class="keyword">module</span>.exports = config[process.env.NODE_ENV || <span class="string">'development'</span>];
+                </div>
+
+                <h3>Secrets Management</h3>
+                <div class="warning-box">
+                    <strong>🔐 Never commit secrets! Use:</strong>
+                    <ul>
+                        <li><strong>Development:</strong> .env files (add to .gitignore)</li>
+                        <li><strong>CI/CD:</strong> GitHub Secrets, GitLab Variables</li>
+                        <li><strong>Production:</strong> AWS Secrets Manager, HashiCorp Vault</li>
+                        <li><strong>Kubernetes:</strong> Kubernetes Secrets (sealed-secrets)</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Performance Optimization -->
+            <div class="card">
+                <h2>⚡ Performance Optimization</h2>
+                
+                <h3>Backend Performance Checklist</h3>
+                <ul class="checklist">
+                    <li>Enable gzip/brotli compression</li>
+                    <li>Implement response caching</li>
+                    <li>Use connection pooling for databases</li>
+                    <li>Optimize database queries with indexes</li>
+                    <li>Implement pagination for list endpoints</li>
+                    <li>Use CDN for static assets</li>
+                    <li>Enable HTTP/2</li>
+                    <li>Implement request queuing under load</li>
+                    <li>Use async processing for heavy operations</li>
+                    <li>Monitor and optimize memory usage</li>
+                </ul>
+
+                <h3>Database Query Optimization</h3>
+                <div class="code-block">
+<span class="comment">// ❌ Bad: N+1 problem</span>
+<span class="keyword">const</span> <span class="const">users</span> = <span class="keyword">await</span> User.<span class="function">find</span>();
+<span class="keyword">for</span> (<span class="keyword">const</span> user <span class="keyword">of</span> users) {
+  user.orders = <span class="keyword">await</span> Order.<span class="function">find</span>({ userId: user._id });
+}
+
+<span class="comment">// ✅ Good: Single query with population</span>
+<span class="keyword">const</span> <span class="const">users</span> = <span class="keyword">await</span> User.<span class="function">find</span>()
+  .<span class="function">populate</span>(<span class="string">'orders'</span>);
+
+<span class="comment">// ✅ Better: Aggregation pipeline</span>
+<span class="keyword">const</span> <span class="const">result</span> = <span class="keyword">await</span> User.<span class="function">aggregate</span>([
+  { $lookup: {
+      from: <span class="string">'orders'</span>,
+      localField: <span class="string">'_id'</span>,
+      foreignField: <span class="string">'userId'</span>,
+      as: <span class="string">'orders'</span>
+  }},
+  { $project: { name: <span class="const">1</span>, orderCount: { $size: <span class="string">'$orders'</span> } }}
+]);
+                </div>
+
+                <h3>Performance Targets</h3>
+                <div class="metric-box">
+                    <div class="metric">
+                        <div class="metric-value">&lt;200ms</div>
+                        <div class="metric-label">p95 Latency</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value">&lt;500ms</div>
+                        <div class="metric-label">p99 Latency</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value">&lt;0.1%</div>
+                        <div class="metric-label">Error Rate</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value">&gt;99.9%</div>
+                        <div class="metric-label">Uptime</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Incident Response -->
+            <div class="card">
+                <h2>🚨 Incident Response</h2>
+                
+                <h3>Incident Severity Levels</h3>
+                <table>
+                    <tr><th>Level</th><th>Description</th><th>Response Time</th></tr>
+                    <tr><td><span class="status-pill status-critical">SEV1</span></td><td>Complete outage</td><td>Immediate (&lt;5 min)</td></tr>
+                    <tr><td><span class="status-pill status-high">SEV2</span></td><td>Major feature broken</td><td>&lt;30 min</td></tr>
+                    <tr><td><span class="status-pill status-medium">SEV3</span></td><td>Partial degradation</td><td>&lt;2 hours</td></tr>
+                    <tr><td><span class="status-pill status-low">SEV4</span></td><td>Minor issue</td><td>Next business day</td></tr>
+                </table>
+
+                <h3>Incident Response Process</h3>
+                <div class="ascii-diagram">
+┌─────────────────────────────────────────────────────────────────┐
+│                    INCIDENT RESPONSE LIFECYCLE                    │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                   │
+│   1. DETECT          2. RESPOND         3. RESOLVE              │
+│   ┌─────────┐        ┌─────────┐        ┌─────────┐             │
+│   │ Alert   │───────▶│ Triage  │───────▶│  Fix    │             │
+│   │Triggered│        │ Assign  │        │ Deploy  │             │
+│   └─────────┘        └─────────┘        └────┬────┘             │
+│                                              │                   │
+│                                              ▼                   │
+│   4. LEARN                                                   │
+│   ┌─────────────────────────────────────────────────┐         │
+│   │  • Post-mortem analysis                          │         │
+│   │  • Root cause identification                     │         │
+│   │  • Action items to prevent recurrence            │         │
+│   │  • Update runbooks and documentation             │         │
+│   └─────────────────────────────────────────────────┘         │
+│                                                                   │
+└─────────────────────────────────────────────────────────────────┘</div>
+
+                <h3>On-Runbook Template</h3>
+                <div class="code-block">
+<span class="comment"># Alert: High Error Rate</span>
+
+## Symptoms
+- Error rate > 1% for 5 minutes
+- Multiple 500 errors in logs
+
+## Impact
+- Users unable to complete actions
+- Potential data inconsistency
+
+## Investigation Steps
+1. Check application logs: `kubectl logs -f deployment/api`
+2. Check database connections: `SHOW PROCESSLIST;`
+3. Check Redis status: `redis-cli ping`
+4. Review recent deployments: `kubectl rollout history`
+
+## Resolution
+1. If DB issue: Scale up read replicas
+2. If memory leak: Restart pods
+3. If bad deploy: Rollback `kubectl rollout undo`
+
+## Escalation
+- @oncall-engineer (immediate)
+- @team-lead (after 30 min)
+- @engineering-manager (after 1 hour)
+                </div>
+            </div>
+
+            <!-- Production Checklist -->
+            <div class="card full-width">
+                <h2>✅ Production Readiness Checklist</h2>
+                
+                <div class="grid" style="margin-top: 15px;">
+                    <div>
+                        <h3>🔒 Security</h3>
+                        <ul class="checklist">
+                            <li>HTTPS enforced everywhere</li>
+                            <li>Security headers configured (Helmet)</li>
+                            <li>Input validation on all endpoints</li>
+                            <li>Rate limiting implemented</li>
+                            <li>Authentication/authorization tested</li>
+                            <li>Secrets in secure storage</li>
+                            <li>Dependencies scanned for vulnerabilities</li>
+                            <li>CORS configured correctly</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3>📊 Observability</h3>
+                        <ul class="checklist">
+                            <li>Structured logging implemented</li>
+                            <li>Log levels configured correctly</li>
+                            <li>Metrics collection enabled</li>
+                            <li>Distributed tracing configured</li>
+                            <li>Alerts set up for critical metrics</li>
+                            <li>Dashboards for key metrics</li>
+                            <li>Error tracking (Sentry) enabled</li>
+                            <li>Request ID tracing</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3>🚀 Deployment</h3>
+                        <ul class="checklist">
+                            <li>CI/CD pipeline configured</li>
+                            <li>Automated tests in pipeline</li>
+                            <li>Rollback procedure documented</li>
+                            <li>Health check endpoints</li>
+                            <li>Graceful shutdown handling</li>
+                            <li>Database migrations automated</li>
+                            <li>Environment parity verified</li>
+                            <li>Feature flags for risky changes</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3>⚡ Performance</h3>
+                        <ul class="checklist">
+                            <li>Database indexes optimized</li>
+                            <li>Connection pooling configured</li>
+                            <li>Caching strategy implemented</li>
+                            <li>Compression enabled</li>
+                            <li>CDN for static assets</li>
+                            <li>Load testing completed</li>
+                            <li>Auto-scaling configured</li>
+                            <li>Resource limits set</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SaaS Architecture Patterns -->
+            <div class="card">
+                <h2>💼 SaaS Architecture Patterns</h2>
+                
+                <h3>Core SaaS Components</h3>
+                <div class="ascii-diagram">
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                         SAAS APPLICATION STACK                               │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                               │
+│  ┌─────────────────────────────────────────────────────────────────────────┐│
+│  │                         TENANT-FACING LAYER                              ││
+│  │  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐    ││
+│  │  │   Web App   │  │ Mobile App  │  │  Public API │  │  Webhooks   │    ││
+│  │  └─────────────┘  └─────────────┘  └─────────────┘  └─────────────┘    ││
+│  └─────────────────────────────────────────────────────────────────────────┘│
+│                                    │                                          │
+│  ┌─────────────────────────────────────────────────────────────────────────┐│
+│  │                          PLATFORM LAYER                                  ││
+│  │  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐    ││
+│  │  │   Tenant    │  │   Billing   │  │   Auth &    │  │    API      │    ││
+│  │  │  Management │  │  & Payments │  │  Identity   │  │  Gateway    │    ││
+│  │  └─────────────┘  └─────────────┘  └─────────────┘  └─────────────┘    ││
+│  └─────────────────────────────────────────────────────────────────────────┘│
+│                                    │                                          │
+│  ┌─────────────────────────────────────────────────────────────────────────┐│
+│  │                          SERVICE LAYER                                   ││
+│  │  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐    ││
+│  │  │  User Svc   │  │  Order Svc  │  │ Notification│  │  Analytics  │    ││
+│  │  │             │  │             │  │    Svc      │  │    Svc      │    ││
+│  │  └─────────────┘  └─────────────┘  └─────────────┘  └─────────────┘    ││
+│  └─────────────────────────────────────────────────────────────────────────┘│
+│                                    │                                          │
+│  ┌─────────────────────────────────────────────────────────────────────────┐│
+│  │                          DATA LAYER                                      ││
+│  │  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐    ││
+│  │  │  Tenant DB  │  │   Redis     │  │Object Store │  │Search Engine│    ││
+│  │  │  (Isolated) │  │   Cache     │  │    (S3)     │  │(Elasticsearch)│  ││
+│  │  └─────────────┘  └─────────────┘  └─────────────┘  └─────────────┘    ││
+│  └─────────────────────────────────────────────────────────────────────────┘│
+│                                                                               │
+└─────────────────────────────────────────────────────────────────────────────┘</div>
+
+                <h3>Billing Integration (Stripe)</h3>
+                <div class="code-block">
+<span class="keyword">const</span> <span class="const">stripe</span> = <span class="function">require</span>(<span class="string">'stripe'</span>)(process.env.STRIPE_SECRET_KEY);
+
+<span class="comment">// Create subscription</span>
+<span class="keyword">const</span> <span class="function">createSubscription</span> = <span class="keyword">async</span> (tenantId, planId, paymentMethodId) => {
+  <span class="keyword">const</span> <span class="const">tenant</span> = <span class="keyword">await</span> Tenant.<span class="function">findById</span>(tenantId);
+  
+  <span class="comment">// Create Stripe customer if needed</span>
+  <span class="keyword">if</span> (!tenant.stripeCustomerId) {
+    <span class="keyword">const</span> <span class="const">customer</span> = <span class="keyword">await</span> stripe.customers.<span class="function">create</span>({
+      email: tenant.email,
+      metadata: { tenantId }
+    });
+    tenant.stripeCustomerId = customer.id;
+    <span class="keyword">await</span> tenant.<span class="function">save</span>();
+  }
+
+  <span class="comment">// Attach payment method</span>
+  <span class="keyword">await</span> stripe.paymentMethods.<span class="function">attach</span>(paymentMethodId, {
+    customer: tenant.stripeCustomerId
+  });
+
+  <span class="comment">// Create subscription</span>
+  <span class="keyword">const</span> <span class="const">subscription</span> = <span class="keyword">await</span> stripe.subscriptions.<span class="function">create</span>({
+    customer: tenant.stripeCustomerId,
+    items: [{ price: planId }],
+    default_payment_method: paymentMethodId
+  });
+
+  <span class="keyword">return</span> subscription;
+};
+
+<span class="comment">// Webhook handler</span>
+app.<span class="function">post</span>(<span class="string">'/webhooks/stripe'</span>, <span class="keyword">async</span> (req, res) => {
+  <span class="keyword">const</span> <span class="const">sig</span> = req.headers[<span class="string">'stripe-signature'</span>];
+  <span class="keyword">const</span> <span class="const">event</span> = stripe.webhooks.<span class="function">constructEvent</span>(
+    req.body, sig, process.env.STRIPE_WEBHOOK_SECRET
+  );
+
+  <span class="keyword">switch</span> (event.type) {
+    <span class="keyword">case</span> <span class="string">'invoice.paid'</span>:
+      <span class="comment">// Activate tenant features</span>
+      <span class="keyword">await</span> <span class="function">activateTenant</span>(event.data.object.customer);
+      <span class="keyword">break</span>;
+    <span class="keyword">case</span> <span class="string">'invoice.payment_failed'</span>:
+      <span class="comment">// Handle failed payment</span>
+      <span class="keyword">await</span> <span class="function">handleFailedPayment</span>(event.data.object.customer);
+      <span class="keyword">break</span>;
+  }
+
+  res.<span class="function">json</span>({ received: <span class="const">true</span> });
+});
+                </div>
+            </div>
+
+            <!-- Feature Flags -->
+            <div class="card">
+                <h2>🚩 Feature Flags & Rollout</h2>
+                
+                <h3>Feature Flag Implementation</h3>
+                <div class="code-block">
+<span class="comment">// Feature flag service</span>
+<span class="keyword">class</span> <span class="function">FeatureFlags</span> {
+  <span class="keyword">constructor</span>() {
+    <span class="keyword">this</span>.flags = {
+      <span class="string">'new-dashboard'</span>: {
+        enabled: <span class="const">true</span>,
+        rolloutPercentage: <span class="const">50</span>,
+        whitelist: [<span class="string">'user_123'</span>],
+        blacklist: []
+      },
+      <span class="string">'beta-feature'</span>: {
+        enabled: <span class="const">false</span>,
+        whitelist: [<span class="string">'admin'</span>]  <span class="comment">// Only for admins</span>
+      }
+    };
+  }
+
+  <span class="function">isEnabled</span>(flagName, user) {
+    <span class="keyword">const</span> <span class="const">flag</span> = <span class="keyword">this</span>.flags[flagName];
+    <span class="keyword">if</span> (!flag || !flag.enabled) <span class="keyword">return</span> <span class="const">false</span>;
+
+    <span class="comment">// Whitelist check</span>
+    <span class="keyword">if</span> (flag.whitelist?.length) {
+      <span class="keyword">return</span> flag.whitelist.<span class="function">includes</span>(user.id) ||
+             flag.whitelist.<span class="function">includes</span>(user.role);
+    }
+
+    <span class="comment">// Blacklist check</span>
+    <span class="keyword">if</span> (flag.blacklist?.<span class="function">includes</span>(user.id)) {
+      <span class="keyword">return</span> <span class="const">false</span>;
+    }
+
+    <span class="comment">// Percentage rollout</span>
+    <span class="keyword">if</span> (flag.rolloutPercentage) {
+      <span class="keyword">return</span> <span class="keyword">this</span>.<span class="function">hashUserId</span>(user.id) < flag.rolloutPercentage;
+    }
+
+    <span class="keyword">return</span> <span class="const">true</span>;
+  }
+
+  <span class="function">hashUserId</span>(id) {
+    <span class="comment">// Consistent hash for same user</span>
+    <span class="keyword">return</span> <span class="function">parseInt</span>(crypto.<span class="function">createHash</span>(<span class="string">'md5'</span>)
+      .<span class="function">update</span>(id)
+      .<span class="function">digest</span>(<span class="string">'hex'</span>)
+      .<span class="function">substring</span>(<span class="const">0</span>, <span class="const">2</span>), <span class="const">16</span>) % <span class="const">100</span>;
+  }
+}
+
+<span class="comment">// Middleware</span>
+<span class="keyword">const</span> <span class="function">featureFlag</span> = (flagName) => (req, res, next) => {
+  <span class="keyword">if</span> (!flags.<span class="function">isEnabled</span>(flagName, req.user)) {
+    <span class="keyword">return</span> res.<span class="function">status</span>(<span class="const">404</span>).<span class="function">json</span>({ error: <span class="string">'Not found'</span> });
+  }
+  next();
+};
+
+<span class="comment">// Usage</span>
+app.<span class="function">get</span>(<span class="string">'/new-dashboard'</span>, <span class="function">featureFlag</span>(<span class="string">'new-dashboard'</span>), handler);
+                </div>
+
+                <h3>Use Cases for Feature Flags</h3>
+                <ul class="checklist">
+                    <li>Gradual rollout of new features</li>
+                    <li>A/B testing different implementations</li>
+                    <li>Kill switches for problematic features</li>
+                    <li>Beta access for specific users</li>
+                    <li>Environment-specific features</li>
+                    <li>Release features without code deployment</li>
+                </ul>
+            </div>
+
+            <!-- Documentation -->
+            <div class="card">
+                <h2>📚 API Documentation</h2>
+                
+                <h3>OpenAPI/Swagger Specification</h3>
+                <div class="yaml-block">
+<span class="key">openapi:</span> <span class="value">3.0.0</span>
+<span class="key">info:</span>
+  <span class="key">title:</span> <span class="value">My SaaS API</span>
+  <span class="key">version:</span> <span class="value">1.0.0</span>
+  <span class="key">description:</span> <span class="value">API documentation for My SaaS</span>
+
+<span class="key">servers:</span>
+  - <span class="key">url:</span> <span class="value">https://api.mysaas.com/v1</span>
+    <span class="key">description:</span> <span class="value">Production</span>
+
+<span class="key">paths:</span>
+  <span class="key">/users:</span>
+    <span class="key">get:</span>
+      <span class="key">summary:</span> <span class="value">List all users</span>
+      <span class="key">tags:</span> <span class="value">[Users]</span>
+      <span class="key">parameters:</span>
+        - <span class="key">name:</span> <span class="value">page</span>
+          <span class="key">in:</span> <span class="value">query</span>
+          <span class="key">schema:</span>
+            <span class="key">type:</span> <span class="value">integer</span>
+            <span class="key">default:</span> <span class="value">1</span>
+      <span class="key">responses:</span>
+        <span class="key">'200':</span>
+          <span class="key">description:</span> <span class="value">Successful response</span>
+          <span class="key">content:</span>
+            <span class="key">application/json:</span>
+              <span class="key">schema:</span>
+                <span class="key">$ref:</span> <span class="value">'#/components/schemas/UsersResponse'</span>
+      <span class="key">security:</span>
+        - <span class="key">bearerAuth:</span> <span class="value">[]</span>
+
+<span class="key">components:</span>
+  <span class="key">securitySchemes:</span>
+    <span class="key">bearerAuth:</span>
+      <span class="key">type:</span> <span class="value">http</span>
+      <span class="key">scheme:</span> <span class="value">bearer</span>
+      <span class="key">bearerFormat:</span> <span class="value">JWT</span>
+                </div>
+            </div>
+
+            <!-- Common Anti-Patterns -->
+            <div class="card">
+                <h2>❌ Common Anti-Patterns to Avoid</h2>
+                
+                <div class="critical-box">
+                    <strong>🚫 Architecture Anti-Patterns:</strong>
+                    <ul class="checklist checklist-x">
+                        <li>Monolithic database for microservices</li>
+                        <li>Shared state between services</li>
+                        <li>Synchronous calls for everything</li>
+                        <li>No circuit breakers for external calls</li>
+                        <li>Hardcoded configuration values</li>
+                    </ul>
+                </div>
+
+                <div class="critical-box">
+                    <strong>🚫 Security Anti-Patterns:</strong>
+                    <ul class="checklist checklist-x">
+                        <li>Storing passwords in plain text</li>
+                        <li>Using JWT in localStorage (use httpOnly cookies)</li>
+                        <li>Trusting client-side validation only</li>
+                        <li>Exposing internal errors to clients</li>
+                        <li>No rate limiting on auth endpoints</li>
+                    </ul>
+                </div>
+
+                <div class="critical-box">
+                    <strong>🚫 Performance Anti-Patterns:</strong>
+                    <ul class="checklist checklist-x">
+                        <li>SELECT * from database</li>
+                        <li>No pagination on list endpoints</li>
+                        <li>N+1 query problem</li>
+                        <li>Synchronous heavy operations in request</li>
+                        <li>No caching strategy</li>
+                    </ul>
+                </div>
+
+                <div class="critical-box">
+                    <strong>🚫 Code Anti-Patterns:</strong>
+                    <ul class="checklist checklist-x">
+                        <li>Catching and ignoring exceptions</li>
+                        <li>Global mutable state</li>
+                        <li>God classes/functions</li>
+                        <li>Copy-paste code instead of abstraction</li>
+                        <li>No input validation</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Scaling Strategies -->
+            <div class="card">
+                <h2>📈 Scaling Strategies</h2>
+                
+                <h3>Vertical vs Horizontal Scaling</h3>
+                <table>
+                    <tr><th>Aspect</th><th>Vertical (Scale Up)</th><th>Horizontal (Scale Out)</th></tr>
+                    <tr><td>Approach</td><td>Bigger server</td><td>More servers</td></tr>
+                    <tr><td>Cost</td><td>Expensive at scale</td><td>Linear cost</td></tr>
+                    <tr><td>Complexity</td><td>Simple</td><td>More complex</td></tr>
+                    <tr><td>Downtime</td><td>Required for upgrade</td><td>None</td></tr>
+                    <tr><td>Limit</td><td>Hardware limits</td><td>Theoretically unlimited</td></tr>
+                    <tr><td>Best For</td><td>Databases, small apps</td><td>Stateless services</td></tr>
+                </table>
+
+                <h3>Scaling Decision Matrix</h3>
+                <div class="code-block">
+<span class="comment">// When to scale horizontally:</span>
+- Stateless services (API servers)
+- Read-heavy workloads
+- Need for fault tolerance
+- Unpredictable traffic patterns
+
+<span class="comment">// When to scale vertically:</span>
+- Stateful services (databases)
+- Write-heavy workloads
+- Complex queries
+- Strong consistency requirements
+
+<span class="comment">// When to use both:</span>
+- Database: Primary (vertical) + Read replicas (horizontal)
+- API: Auto-scaling group (horizontal) with adequate resources (vertical)
+                </div>
+
+                <h3>Autoscaling Configuration</h3>
+                <div class="yaml-block">
+<span class="comment"># Kubernetes HPA</span>
+<span class="key">apiVersion:</span> <span class="value">autoscaling/v2</span>
+<span class="key">kind:</span> <span class="value">HorizontalPodAutoscaler</span>
+<span class="key">metadata:</span>
+  <span class="key">name:</span> <span class="value">api-hpa</span>
+<span class="key">spec:</span>
+  <span class="key">scaleTargetRef:</span>
+    <span class="key">apiVersion:</span> <span class="value">apps/v1</span>
+    <span class="key">kind:</span> <span class="value">Deployment</span>
+    <span class="key">name:</span> <span class="value">api</span>
+  <span class="key">minReplicas:</span> <span class="value">2</span>
+  <span class="key">maxReplicas:</span> <span class="value">10</span>
+  <span class="key">metrics:</span>
+    - <span class="key">type:</span> <span class="value">Resource</span>
+      <span class="key">resource:</span>
+        <span class="key">name:</span> <span class="value">cpu</span>
+        <span class="key">target:</span>
+          <span class="key">type:</span> <span class="value">Utilization</span>
+          <span class="key">averageUtilization:</span> <span class="value">70</span>
+                </div>
+            </div>
+
+            <!-- Quick Reference Commands -->
+            <div class="card full-width">
+                <h2>⚡ Quick Reference Commands</h2>
+                <div class="formula-box">
+<span class="comment"># === Docker ===</span>
+docker build -t myapp:latest .
+docker run -p 3000:3000 myapp:latest
+docker-compose up -d
+docker logs -f container_name
+docker exec -it container_name sh
+
+<span class="comment"># === Kubernetes ===</span>
+kubectl get pods -n namespace
+kubectl logs -f deployment/api
+kubectl rollout restart deployment/api
+kubectl rollout undo deployment/api          # Rollback
+kubectl scale deployment/api --replicas=5
+kubectl apply -f k8s/
+
+<span class="comment"># === Database ===</span>
+mongosh "mongodb://localhost:27017/mydb"
+psql -h localhost -U postgres -d mydb
+redis-cli MONITOR                           # Watch Redis commands
+
+<span class="comment"># === Monitoring ===</span>
+curl http://localhost:3000/health            # Health check
+curl http://localhost:3000/metrics           # Prometheus metrics
+
+<span class="comment"># === Performance ===</span>
+ab -n 1000 -c 100 http://localhost:3000/api  # Apache bench
+wrk -t4 -c100 -d30s http://localhost:3000    # wrk load test
+                </div>
+            </div>
+
+        </div>
+
+        <footer style="text-align: center; padding: 20px; color: #3498db;">
+            <p>🚀 Backend Development & SaaS Production Guide | Build Production-Ready Applications</p>
+        </footer>
+    </div>
+</body>
+</html>

@@ -1,0 +1,1582 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The 10X Developer - Mastery Guide</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 50%, #0f0f1a 100%);
+            min-height: 100vh;
+            color: #e4e4e4;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1700px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            padding: 50px 0;
+            margin-bottom: 30px;
+            background: linear-gradient(135deg, #1a1a2e 0%, #0f0f1a 100%);
+            border-radius: 20px;
+            border: 2px solid #f39c12;
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 30% 50%, rgba(243, 156, 18, 0.1) 0%, transparent 50%),
+                        radial-gradient(circle at 70% 50%, rgba(155, 89, 182, 0.1) 0%, transparent 50%);
+        }
+
+        h1 {
+            font-size: 3.2em;
+            background: linear-gradient(90deg, #f39c12, #e74c3c, #9b59b6, #3498db);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 15px;
+            position: relative;
+        }
+
+        .subtitle {
+            color: #f39c12;
+            font-size: 1.3em;
+            position: relative;
+        }
+
+        .legend-bar {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 25px;
+            flex-wrap: wrap;
+            position: relative;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 20px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 30px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .legend-item .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+
+        .legend-item .name {
+            font-weight: bold;
+            color: #fff;
+        }
+
+        .legend-item .achievement {
+            font-size: 0.85em;
+            color: #888;
+        }
+
+        .linus { background: linear-gradient(135deg, #f39c12, #e67e22); color: #000; }
+        .fabrice { background: linear-gradient(135deg, #9b59b6, #8e44ad); color: #fff; }
+        .chris { background: linear-gradient(135deg, #e74c3c, #c0392b); color: #fff; }
+        .primeagen { background: linear-gradient(135deg, #3498db, #2980b9); color: #fff; }
+        .john { background: linear-gradient(135deg, #2ecc71, #27ae60); color: #000; }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 25px;
+            margin-bottom: 25px;
+        }
+
+        .card {
+            background: linear-gradient(145deg, #1e272e 0%, #2d3436 100%);
+            border-radius: 15px;
+            padding: 30px;
+            border: 1px solid #4a4a6a;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(243, 156, 18, 0.15);
+            border-color: #f39c12;
+        }
+
+        h2 {
+            color: #f39c12;
+            font-size: 1.5em;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #4a4a6a;
+        }
+
+        h3 {
+            color: #3498db;
+            font-size: 1.15em;
+            margin: 20px 0 12px 0;
+        }
+
+        h4 {
+            color: #9b59b6;
+            font-size: 1.05em;
+            margin: 15px 0 10px 0;
+        }
+
+        .formula-box {
+            background: #0d1117;
+            border-radius: 10px;
+            padding: 18px;
+            margin: 12px 0;
+            border-left: 4px solid #f39c12;
+            font-family: 'Fira Code', 'Consolas', monospace;
+            overflow-x: auto;
+            font-size: 0.92em;
+        }
+
+        .code-block {
+            background: #161b22;
+            border-radius: 8px;
+            padding: 18px;
+            margin: 12px 0;
+            font-family: 'Fira Code', 'Consolas', monospace;
+            font-size: 0.9em;
+            overflow-x: auto;
+            border: 1px solid #30363d;
+            line-height: 1.6;
+        }
+
+        .code-block .comment { color: #8b949e; }
+        .code-block .keyword { color: #ff7b72; }
+        .code-block .string { color: #a5d6ff; }
+        .code-block .function { color: #d2a8ff; }
+        .code-block .number { color: #ffa657; }
+
+        .quote-box {
+            background: linear-gradient(135deg, #2d3436 0%, #1e272e 100%);
+            border-left: 4px solid #9b59b6;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 0 12px 12px 0;
+            font-style: italic;
+        }
+
+        .quote-box .quote {
+            color: #e4e4e4;
+            font-size: 1.1em;
+            line-height: 1.6;
+        }
+
+        .quote-box .author {
+            color: #f39c12;
+            font-weight: bold;
+            margin-top: 12px;
+            font-style: normal;
+        }
+
+        .tip-box {
+            background: linear-gradient(135deg, #0d4f3c 0%, #0a3d2e 100%);
+            border-left: 4px solid #2ecc71;
+            padding: 18px;
+            margin: 12px 0;
+            border-radius: 0 12px 12px 0;
+        }
+
+        .warning-box {
+            background: linear-gradient(135deg, #4f3d0d 0%, #3d2e0a 100%);
+            border-left: 4px solid #f39c12;
+            padding: 18px;
+            margin: 12px 0;
+            border-radius: 0 12px 12px 0;
+        }
+
+        .legend-box {
+            background: linear-gradient(135deg, #3d0d4f 0%, #2e0a3d 100%);
+            border-left: 4px solid #9b59b6;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 0 12px 12px 0;
+        }
+
+        .mindset-box {
+            background: linear-gradient(135deg, #4f1d0d 0%, #3d1e0a 100%);
+            border-left: 4px solid #e74c3c;
+            padding: 18px;
+            margin: 12px 0;
+            border-radius: 0 12px 12px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 12px 0;
+        }
+
+        th, td {
+            padding: 14px;
+            text-align: left;
+            border-bottom: 1px solid #4a4a6a;
+        }
+
+        th {
+            background: #2d3436;
+            color: #f39c12;
+        }
+
+        td {
+            background: #1e272e;
+        }
+
+        td:first-child {
+            color: #3498db;
+            font-weight: bold;
+        }
+
+        .ascii-diagram {
+            background: #0d1117;
+            border-radius: 12px;
+            padding: 25px;
+            margin: 15px 0;
+            font-family: monospace;
+            font-size: 0.8em;
+            white-space: pre;
+            overflow-x: auto;
+            color: #58a6ff;
+            border: 1px solid #30363d;
+        }
+
+        .quick-ref {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+            margin: 15px 0;
+        }
+
+        .quick-ref-item {
+            background: #0d1117;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            border: 1px solid #30363d;
+            transition: transform 0.2s;
+        }
+
+        .quick-ref-item:hover {
+            transform: scale(1.02);
+            border-color: #f39c12;
+        }
+
+        .quick-ref-item .label {
+            color: #888;
+            font-size: 0.85em;
+            margin-bottom: 5px;
+        }
+
+        .quick-ref-item .value {
+            color: #7ee787;
+            font-family: monospace;
+            font-size: 1.1em;
+        }
+
+        .full-width {
+            grid-column: 1 / -1;
+        }
+
+        .checklist {
+            list-style: none;
+            padding: 0;
+        }
+
+        .checklist li {
+            padding: 10px 0;
+            border-bottom: 1px solid #333;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            line-height: 1.6;
+        }
+
+        .checklist li::before {
+            content: "✓";
+            color: #2ecc71;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+        .checklist-x li::before {
+            content: "✗";
+            color: #e74c3c;
+        }
+
+        ul {
+            margin-left: 20px;
+            line-height: 1.9;
+        }
+
+        li::marker {
+            color: #f39c12;
+        }
+
+        .metric-row {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 15px;
+            margin: 15px 0;
+        }
+
+        .metric {
+            background: #0d1117;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            border: 1px solid #30363d;
+        }
+
+        .metric-value {
+            font-size: 2em;
+            color: #f39c12;
+            font-weight: bold;
+        }
+
+        .metric-label {
+            color: #888;
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+
+        .legend-profile {
+            background: #0d1117;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 15px 0;
+            border: 1px solid #30363d;
+        }
+
+        .legend-header {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .legend-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2em;
+            font-weight: bold;
+        }
+
+        .legend-info h3 {
+            margin: 0;
+            color: #fff;
+            font-size: 1.4em;
+        }
+
+        .legend-info .titles {
+            color: #f39c12;
+            font-size: 1em;
+            margin-top: 5px;
+        }
+
+        .legend-stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 10px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 8px;
+        }
+
+        .stat-item .stat-value {
+            color: #7ee787;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+
+        .stat-item .stat-label {
+            color: #888;
+            font-size: 0.85em;
+        }
+
+        .principle-card {
+            background: linear-gradient(145deg, #1a1a2e 0%, #16213e 100%);
+            border-radius: 15px;
+            padding: 25px;
+            margin: 15px 0;
+            border-left: 5px solid #f39c12;
+        }
+
+        .principle-number {
+            font-size: 3em;
+            color: rgba(243, 156, 18, 0.3);
+            font-weight: bold;
+            float: left;
+            margin-right: 15px;
+            line-height: 0.8;
+        }
+
+        .principle-title {
+            color: #f39c12;
+            font-size: 1.3em;
+            margin-bottom: 10px;
+        }
+
+        .skill-bar {
+            background: #2d3436;
+            border-radius: 10px;
+            height: 25px;
+            margin: 10px 0;
+            overflow: hidden;
+        }
+
+        .skill-fill {
+            height: 100%;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            padding-left: 10px;
+            font-size: 0.85em;
+            font-weight: bold;
+            color: #000;
+        }
+
+        .workflow-step {
+            display: flex;
+            align-items: flex-start;
+            gap: 20px;
+            padding: 20px;
+            background: rgba(255,255,255,0.03);
+            border-radius: 12px;
+            margin: 10px 0;
+        }
+
+        .step-number {
+            width: 40px;
+            height: 40px;
+            background: #f39c12;
+            color: #000;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2em;
+            flex-shrink: 0;
+        }
+
+        .tool-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+            margin: 15px 0;
+        }
+
+        .tool-item {
+            background: #0d1117;
+            padding: 12px;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid #30363d;
+            transition: all 0.2s;
+        }
+
+        .tool-item:hover {
+            border-color: #3498db;
+            background: rgba(52, 152, 219, 0.1);
+        }
+
+        .tool-item .tool-name {
+            color: #3498db;
+            font-weight: bold;
+        }
+
+        .tool-item .tool-desc {
+            color: #888;
+            font-size: 0.8em;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🚀 The 10X Developer</h1>
+            <p class="subtitle">Mindset • Habits • Tools • Principles from Legendary Engineers</p>
+            <div class="legend-bar">
+                <div class="legend-item">
+                    <div class="avatar linus">LT</div>
+                    <div>
+                        <div class="name">Linus Torvalds</div>
+                        <div class="achievement">Linux • Git</div>
+                    </div>
+                </div>
+                <div class="legend-item">
+                    <div class="avatar fabrice">FB</div>
+                    <div>
+                        <div class="name">Fabrice Bellard</div>
+                        <div class="achievement">FFmpeg • QEMU</div>
+                    </div>
+                </div>
+                <div class="legend-item">
+                    <div class="avatar chris">CL</div>
+                    <div>
+                        <div class="name">Chris Lattner</div>
+                        <div class="achievement">LLVM • Swift</div>
+                    </div>
+                </div>
+                <div class="legend-item">
+                    <div class="avatar primeagen">PG</div>
+                    <div>
+                        <div class="name">ThePrimeagen</div>
+                        <div class="achievement">Vim • Productivity</div>
+                    </div>
+                </div>
+                <div class="legend-item">
+                    <div class="avatar john">JC</div>
+                    <div>
+                        <div class="name">John Carmack</div>
+                        <div class="achievement">Doom • Quake • VR</div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- What is 10X -->
+        <div class="card full-width">
+            <h2>🎯 What Makes a 10X Developer?</h2>
+            
+            <div class="ascii-diagram">
+┌─────────────────────────────────────────────────────────────────────────────────────────┐
+│                           THE 10X DEVELOPER SPECTRUM                                      │
+├─────────────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                          │
+│   1X                    5X                    10X                   100X                  │
+│   │                      │                      │                     │                    │
+│   ▼                      ▼                      ▼                     ▼                    │
+│   ┌──────────┐     ┌──────────┐         ┌──────────┐          ┌──────────┐              │
+│   │  Code    │     │  Code +  │         │ Code +   │          │ Create   │              │
+│   │  Writer  │────▶│  Debug   │────────▶│ Architect│─────────▶│  Tools   │              │
+│   │          │     │          │         │          │          │ & Impact │              │
+│   └──────────┘     └──────────┘         └──────────┘          └──────────┘              │
+│                                                                                          │
+│   Features:           Features:           Features:            Features:                 │
+│   • Completes         • Solves hard       • System design      • Creates languages       │
+│     assigned            problems           expertise           • Builds platforms         │
+│     tasks              • Anticipates      • Mentors team       • Industry impact          │
+│   • Follows             edge cases        • Reduces complexity • Open source legend       │
+│     instructions      • Writes           • Cross-functional   • Multiplier effect        │
+│   • Asks for           maintainable       expertise                                      │
+│     help               code                                                              │
+│                                                                                          │
+│   ════════════════════════════════════════════════════════════════════════════════════   │
+│                                                                                          │
+│   "A 10X developer isn't 10x faster at typing.                                            │
+│    They're 10x better at choosing what NOT to do."                                        │
+│                                                                                          │
+└─────────────────────────────────────────────────────────────────────────────────────────┘</div>
+
+            <div class="metric-row">
+                <div class="metric">
+                    <div class="metric-value">10x</div>
+                    <div class="metric-label">Output Impact</div>
+                </div>
+                <div class="metric">
+                    <div class="metric-value">100x</div>
+                    <div class="metric-label">Bug Prevention</div>
+                </div>
+                <div class="metric">
+                    <div class="metric-value">5x</div>
+                    <div class="metric-label">Team Velocity</div>
+                </div>
+                <div class="metric">
+                    <div class="metric-value">90%</div>
+                    <div class="metric-label">Right Decisions</div>
+                </div>
+                <div class="metric">
+                    <div class="metric-value">∞</div>
+                    <div class="metric-label">Curiosity</div>
+                </div>
+            </div>
+
+            <div class="quote-box">
+                <div class="quote">"The best programmers are not marginally better than merely good ones. They are an order-of-magnitude better, measured by whatever standard: conceptual creativity, speed, ingenuity of design, or problem-solving ability."</div>
+                <div class="author">— Randall E. Stross</div>
+            </div>
+        </div>
+
+        <div class="grid">
+            <!-- Core Mindset -->
+            <div class="card">
+                <h2>🧠 The 10X Mindset</h2>
+                
+                <div class="principle-card">
+                    <div class="principle-number">1</div>
+                    <div class="principle-title">Deep Understanding Over Quick Fixes</div>
+                    <p>10X developers understand systems deeply. They don't just fix symptoms—they find and eliminate root causes. When something breaks, they understand WHY it broke.</p>
+                </div>
+
+                <div class="principle-card">
+                    <div class="principle-number">2</div>
+                    <div class="principle-title">Leverage Over Effort</div>
+                    <p>They build tools that multiply their output. One hour building a script might save 100 hours over time. They automate repetitive tasks relentlessly.</p>
+                </div>
+
+                <div class="principle-card">
+                    <div class="principle-number">3</div>
+                    <div class="principle-title">Simplicity Over Cleverness</div>
+                    <p>They write code that's easy to understand, not code that shows off. Simple code has fewer bugs, is easier to maintain, and onboards new developers faster.</p>
+                </div>
+
+                <div class="principle-card">
+                    <div class="principle-number">4</div>
+                    <div class="principle-title">Prevention Over Cure</div>
+                    <p>They spend time on architecture, testing, and code review to prevent bugs rather than fixing them. They think about edge cases before they happen.</p>
+                </div>
+
+                <div class="mindset-box">
+                    <strong>🔥 The Multiplier Effect:</strong>
+                    <p>A 10X developer doesn't just produce 10x code—they make everyone around them more productive through:</p>
+                    <ul>
+                        <li>Building internal tools and libraries</li>
+                        <li>Mentoring and knowledge sharing</li>
+                        <li>Setting up better processes</li>
+                        <li>Creating documentation and runbooks</li>
+                        <li>Identifying and fixing architectural problems</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Daily Habits -->
+            <div class="card">
+                <h2>📅 Daily Habits of Elite Engineers</h2>
+                
+                <h3>Morning Routine</h3>
+                <div class="workflow-step">
+                    <div class="step-number">1</div>
+                    <div>
+                        <strong>Review & Plan (15-30 min)</strong>
+                        <p>Review yesterday's work, check PRs, plan today's priorities. Clear mental model of what needs to be done.</p>
+                    </div>
+                </div>
+                <div class="workflow-step">
+                    <div class="step-number">2</div>
+                    <div>
+                        <strong>Deep Work Block (3-4 hours)</strong>
+                        <p>No meetings, no Slack. Pure coding time on the hardest problem of the day. Fresh mental energy on hardest tasks.</p>
+                    </div>
+                </div>
+                <div class="workflow-step">
+                    <div class="step-number">3</div>
+                    <div>
+                        <strong>Collaboration Window</strong>
+                        <p>Code reviews, meetings, pair programming. Schedule meetings in afternoon when deep work energy dips.</p>
+                    </div>
+                </div>
+                <div class="workflow-step">
+                    <div class="step-number">4</div>
+                    <div>
+                        <strong>Learning Hour</strong>
+                        <p>Read code, explore new tech, write documentation. Continuous improvement is non-negotiable.</p>
+                    </div>
+                </div>
+
+                <h3>The "No Meeting" Principle</h3>
+                <div class="quote-box">
+                    <div class="quote">"Developers need long, uninterrupted blocks of time to be productive. A 30-minute meeting in the middle of the day doesn't cost 30 minutes—it costs 2 hours of productive work."</div>
+                    <div class="author">— Paul Graham (Maker's Schedule)</div>
+                </div>
+
+                <h3>Focus Techniques</h3>
+                <div class="tip-box">
+                    <ul>
+                        <li><strong>Pomodoro Technique:</strong> 25 min work, 5 min break (some prefer 50/10)</li>
+                        <li><strong>Time Blocking:</strong> Schedule deep work on calendar, protect it</li>
+                        <li><strong>Notification Fast:</strong> Turn off ALL notifications during deep work</li>
+                        <li><strong>Single Tasking:</strong> One task at a time, no context switching</li>
+                        <li><strong>Environment:</strong> Same spot, same setup, brain associates with work</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Technical Mastery -->
+            <div class="card">
+                <h2>⚔️ Technical Mastery Areas</h2>
+                
+                <h3>1. Editor Mastery (Vim/Emacs/IDE)</h3>
+                <div class="formula-box">
+<span class="comment">// ThePrimeagen's Vim Philosophy:</span>
+
+"Your editor is an extension of your brain.
+ If you think it, it should appear on screen."
+
+<span class="comment">// Key skills:</span>
+• Touch typing (100+ WPM)
+• Editor shortcuts (no mouse)
+• Custom keybindings
+• Snippets and templates
+• Multi-file navigation
+• Search and replace mastery
+• Git integration in editor
+                </div>
+
+                <div class="quote-box">
+                    <div class="quote">"I don't use Vim because it's cool. I use it because after 20 years, my fingers think in Vim. The editor disappears, and I just think code into existence."</div>
+                    <div class="author">— ThePrimeagen</div>
+                </div>
+
+                <h3>2. Command Line Fluency</h3>
+                <div class="code-block">
+<span class="comment"># Essential CLI mastery</span>
+<span class="keyword">find</span> . -name <span class="string">"*.js"</span> | xargs grep <span class="string">"pattern"</span>
+<span class="keyword">awk</span> <span class="string">'{print $1}'</span> file | sort | uniq -c | sort -rn
+<span class="keyword">sed</span> -i <span class="string">'s/old/new/g'</span> file.txt
+<span class="keyword">jq</span> <span class="string">'.data[] | select(.id > 100)'</span> response.json
+<span class="keyword">tmux</span> new -s dev   <span class="comment"># Persistent sessions</span>
+<span class="keyword">ssh</span> -L 8080:localhost:8080 server  <span class="comment"># Tunneling</span>
+
+<span class="comment"># Git mastery</span>
+<span class="keyword">git</span> rebase -i HEAD~5
+<span class="keyword">git</span> bisect start  <span class="comment"># Find bug by binary search</span>
+<span class="keyword">git</span> reflog        <span class="comment"># Recover from mistakes</span>
+<span class="keyword">git</span> cherry-pick   <span class="comment"># Selective commits</span>
+                </div>
+
+                <h3>3. Debugging Superpowers</h3>
+                <div class="tip-box">
+                    <strong>🔍 Debugging Hierarchy:</strong>
+                    <ol>
+                        <li><strong>Read the error message</strong> - Actually read it, carefully</li>
+                        <li><strong>Reproduce consistently</strong> - Can't fix what you can't reproduce</li>
+                        <li><strong>Isolate the problem</strong> - Binary search your code</li>
+                        <li><strong>Form hypothesis</strong> - What could cause this?</li>
+                        <li><strong>Test hypothesis</strong> - Prove yourself wrong</li>
+                        <li><strong>Understand root cause</strong> - Not just the symptom</li>
+                    </ol>
+                </div>
+
+                <h3>Skill Mastery Levels</h3>
+                <div>
+                    <strong>Programming Languages</strong>
+                    <div class="skill-bar">
+                        <div class="skill-fill" style="width: 95%; background: linear-gradient(90deg, #f39c12, #e67e22);">Master: 1-2 | Proficient: 3-5</div>
+                    </div>
+                    <strong>System Design</strong>
+                    <div class="skill-bar">
+                        <div class="skill-fill" style="width: 90%; background: linear-gradient(90deg, #3498db, #2980b9);">Architecture, Scalability, Trade-offs</div>
+                    </div>
+                    <strong>Problem Solving</strong>
+                    <div class="skill-bar">
+                        <div class="skill-fill" style="width: 95%; background: linear-gradient(90deg, #2ecc71, #27ae60);">Decomposition, Pattern Recognition</div>
+                    </div>
+                    <strong>Communication</strong>
+                    <div class="skill-bar">
+                        <div class="skill-fill" style="width: 85%; background: linear-gradient(90deg, #9b59b6, #8e44ad);">Technical Writing, Mentoring</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Learning Strategy -->
+            <div class="card">
+                <h2>📚 Learning Strategy</h2>
+                
+                <h3>The T-Shaped Knowledge Model</h3>
+                <div class="ascii-diagram">
+                    T-SHAPPED DEVELOPER
+                    ─────────────────────────────────
+                    
+                         DEEP EXPERTISE
+                              │
+                              │
+                    ─────────┴─────────────────────
+                    BROAD KNOWLEDGE ACROSS DOMAINS
+                    
+                    Example:
+                    
+                         ┌───┐
+                         │ JS│  ← Deep: JavaScript/TypeScript
+                         │   │     Expert-level knowledge
+                         │   │     Can build anything
+                         └───┘
+    ─────────────────────────┼────────────────────────────
+    Python   Go   Rust   DevOps   DB   UI/UX   Security
+      ▲       ▲     ▲       ▲       ▲     ▲       ▲
+      └───────┴─────┴───────┴───────┴─────┴───────┘
+                   Broad: Know enough to be dangerous</div>
+
+                <h3>Just-in-Time Learning</h3>
+                <div class="formula-box">
+<span class="comment">// Learn deeply when you NEED it, not before</span>
+
+❌ WRONG: "I'll learn Kubernetes just in case"
+✅ RIGHT: "I need to deploy this app → Learn K8s now"
+
+<span class="comment">// The learning loop:</span>
+1. Encounter problem
+2. Learn minimum to solve
+3. Implement solution
+4. Reflect and deepen
+5. Document learnings
+                </div>
+
+                <h3>Reading Code > Writing Code</h3>
+                <div class="quote-box">
+                    <div class="quote">"I spend 80% of my time reading code and only 20% writing. Understanding what's there is harder than adding new code."</div>
+                    <div class="author">— Fabrice Bellard</div>
+                </div>
+
+                <div class="tip-box">
+                    <strong>📖 Code Reading Practice:</strong>
+                    <ul>
+                        <li>Read source code of libraries you use</li>
+                        <li>Study well-written open source projects</li>
+                        <li>Trace execution paths with debugger</li>
+                        <li>Ask "Why did they do it this way?"</li>
+                        <li>Look for patterns and anti-patterns</li>
+                    </ul>
+                </div>
+
+                <h3>Knowledge Capture System</h3>
+                <div class="code-block">
+<span class="comment">// Personal Knowledge Management</span>
+
+<span class="keyword">1. Code Snippets</span>
+   - Save useful patterns (with context!)
+   - Tag and categorize
+   - Tools: GitHub Gists, personal repo
+
+<span class="keyword">2. Technical Notes</span>
+   - "Today I Learned" entries
+   - Problem-solution pairs
+   - Tools: Obsidian, Notion, Logseq
+
+<span class="keyword">3. Mental Models</span>
+   - System diagrams
+   - Architecture patterns
+   - Decision frameworks
+
+<span class="keyword">4. Failure Log</span>
+   - What went wrong
+   - Why it went wrong
+   - How to prevent
+                </div>
+            </div>
+
+            <!-- Linus Torvalds Profile -->
+            <div class="legend-profile">
+                <div class="legend-header">
+                    <div class="legend-avatar linus">LT</div>
+                    <div class="legend-info">
+                        <h3>Linus Torvalds</h3>
+                        <div class="titles">Creator of Linux Kernel • Git • Tech Influencer</div>
+                    </div>
+                </div>
+                
+                <div class="legend-stats">
+                    <div class="stat-item">
+                        <div class="stat-value">~30B</div>
+                        <div class="stat-label">Devices Run Linux</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">100%</div>
+                        <div class="stat-label">Supercomputers</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">2 Weeks</div>
+                        <div class="stat-label">Git Created In</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">30+ Years</div>
+                        <div class="stat-label">Maintaining Linux</div>
+                    </div>
+                </div>
+
+                <h3>Core Principles</h3>
+                <div class="quote-box">
+                    <div class="quote">"Bad programmers worry about the code. Good programmers worry about data structures and their relationships."</div>
+                    <div class="author">— Linus Torvalds</div>
+                </div>
+
+                <div class="tip-box">
+                    <strong>🔥 Linus's Approach:</strong>
+                    <ul>
+                        <li><strong>Taste in Code:</strong> Code should be elegant, not clever. Simple, readable, correct.</li>
+                        <li><strong>Data-First Design:</strong> Get the data structures right, code flows naturally</li>
+                        <li><strong>Decentralized Development:</strong> Git's design enables massive collaboration</li>
+                        <li><strong>No Abstraction for Abstraction's Sake:</strong> Every layer must earn its existence</li>
+                        <li><strong>Blunt Honesty:</strong> Better to hurt feelings than ship bad code</li>
+                    </ul>
+                </div>
+
+                <h4>What Made Git Possible in 2 Weeks:</h4>
+                <div class="formula-box">
+<span class="comment">// Linus's approach to building Git:</span>
+
+1. Understood the problem deeply (BitKeeper withdrawal)
+2. Focused on merge algorithm (the hard part)
+3. Simple data model (content-addressable storage)
+4. Everything is a hash (integrity built-in)
+5. Distributed by design (no single point of failure)
+6. Solve YOUR problem first, generalize later
+
+<span class="comment">// Key insight:</span>
+"I didn't try to make Git 'good'. I tried to make it
+solve my problem. Good emerged from solving real needs."</div>
+            </div>
+
+            <!-- Fabrice Bellard Profile -->
+            <div class="legend-profile">
+                <div class="legend-header">
+                    <div class="legend-avatar fabrice">FB</div>
+                    <div class="legend-info">
+                        <h3>Fabrice Bellard</h3>
+                        <div class="titles">Creator of FFmpeg • QEMU • TinyCC • Many More</div>
+                    </div>
+                </div>
+                
+                <div class="legend-stats">
+                    <div class="stat-item">
+                        <div class="stat-value">FFmpeg</div>
+                        <div class="stat-label">90%+ Video Software</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">QEMU</div>
+                        <div class="stat-label">Standard Emulator</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">π Record</div>
+                        <div class="stat-label">2.7T Digits (2019)</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">50+</div>
+                        <div class="stat-label">Major Projects</div>
+                    </div>
+                </div>
+
+                <h3>The One-Man Army</h3>
+                <div class="quote-box">
+                    <div class="quote">"I work alone because it's more efficient. Communication overhead in teams is underestimated."</div>
+                    <div class="author">— Fabrice Bellard</div>
+                </div>
+
+                <div class="legend-box">
+                    <strong>🏆 Fabrice's Hall of Creations:</strong>
+                    <table>
+                        <tr><th>Project</th><th>Impact</th></tr>
+                        <tr><td>FFmpeg</td><td>Foundation of all video processing</td></tr>
+                        <tr><td>QEMU</td><td>Standard for machine emulation</td></tr>
+                        <tr><td>TinyCC</td><td>Smallest C compiler</td></tr>
+                        <tr><td>QuickJS</td><td>Lightweight JavaScript engine</td></tr>
+                        <tr><td>TinyGL</td><td>Software OpenGL implementation</td></tr>
+                        <tr><td>Pi calculation</td><td>World record computations</td></tr>
+                    </table>
+                </div>
+
+                <h4>Bellard's Philosophy:</h4>
+                <div class="formula-box">
+<span class="comment">// How he does it:</span>
+
+1. Deep understanding of fundamentals
+2. Code generation over manual coding
+3. Reuse his own tools
+4. Work in isolation (no meetings, no deadlines)
+5. Perfect is better than done
+6. Read specifications carefully
+7. Write minimal code that's correct
+
+<span class="comment">// His approach to learning:</span>
+"I read the spec. I implement. I test.
+Most people don't read specs carefully enough."</div>
+            </div>
+
+            <!-- Chris Lattner Profile -->
+            <div class="legend-profile">
+                <div class="legend-header">
+                    <div class="legend-avatar chris">CL</div>
+                    <div class="legend-info">
+                        <h3>Chris Lattner</h3>
+                        <div class="titles">Creator of LLVM • Swift • MLIR • Compiler Legend</div>
+                    </div>
+                </div>
+                
+                <div class="legend-stats">
+                    <div class="stat-item">
+                        <div class="stat-value">LLVM</div>
+                        <div class="stat-label">All Apple Devices</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">Swift</div>
+                        <div class="stat-label">Top 10 Language</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">MLIR</div>
+                        <div class="stat-label">AI Compiler Infra</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">SIGPLAN</div>
+                        <div class="stat-label">Award Winner</div>
+                    </div>
+                </div>
+
+                <h3>Building Infrastructure That Lasts</h3>
+                <div class="quote-box">
+                    <div class="quote">"The key to LLVM was not technical brilliance, but getting the abstractions right. The IR is simple enough to reason about, but powerful enough to represent everything."</div>
+                    <div class="author">— Chris Lattner</div>
+                </div>
+
+                <div class="tip-box">
+                    <strong>🔧 Lattner's Design Principles:</strong>
+                    <ul>
+                        <li><strong>Right Abstractions:</strong> LLVM IR is the gold standard of intermediate representation</li>
+                        <li><strong>Modular Design:</strong> Each pass does one thing, composable</li>
+                        <li><strong>Build Communities:</strong> LLVM succeeded because many could contribute</li>
+                        <li><strong>Think in Decades:</strong> Swift wasn't built for iOS 8, it was built for the next 30 years</li>
+                        <li><strong>Developer Experience:</strong> Swift prioritized readability and safety</li>
+                    </ul>
+                </div>
+
+                <h4>The LLVM Insight:</h4>
+                <div class="ascii-diagram">
+    TRADITIONAL COMPILERS                  LLVM APPROACH
+    ─────────────────────                  ─────────────
+                                           
+    C ──▶ Frontend ──▶ x86                C ──▶ Frontend ──▶┐
+                                                             │
+                                                             ├──▶ LLVM IR ──▶ Optimizations ──▶ Backend ──▶ x86/ARM/GPU
+                                                             │
+    C++──▶ Frontend ──▶ x86                C++──▶ Frontend ──▶┘
+                                          
+    Rust ──▶ Frontend ──▶ x86              Rust ──▶ Frontend ──▶┘
+    
+    Problem: N×M compilers                 Solution: N+M components
+    Each language needs each backend        Share optimizations across all</div>
+            </div>
+
+            <!-- John Carmack Profile -->
+            <div class="legend-profile">
+                <div class="legend-header">
+                    <div class="legend-avatar john">JC</div>
+                    <div class="legend-info">
+                        <h3>John Carmack</h3>
+                        <div class="titles">Creator of Doom • Quake • VR Pioneer • Game Legend</div>
+                    </div>
+                </div>
+                
+                <div class="legend-stats">
+                    <div class="stat-item">
+                        <div class="stat-value">Doom</div>
+                        <div class="stat-label">Defined FPS Genre</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">Quake</div>
+                        <div class="stat-label">3D Engine Pioneer</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">id Tech</div>
+                        <div class="stat-label">Engine Legacy</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">VR</div>
+                        <div class="stat-label">Oculus CTO</div>
+                    </div>
+                </div>
+
+                <h3>Pragmatic Perfectionism</h3>
+                <div class="quote-box">
+                    <div class="quote">"Low-level thinking, even when you're working in a high-level language."</div>
+                    <div class="author">— John Carmack</div>
+                </div>
+
+                <div class="mindset-box">
+                    <strong>🎮 Carmack's Engineering Philosophy:</strong>
+                    <ul>
+                        <li><strong>Understand Hardware:</strong> Know what your code compiles to</li>
+                        <li><strong>Profile Everything:</strong> Measure, don't guess performance</li>
+                        <li><strong>Iterate Rapidly:</strong> Fast compile-test cycles are critical</li>
+                        <li><strong>Read the Code:</strong> Read assembly output to understand what's happening</li>
+                        <li><strong>Simplicity Wins:</strong> Simple algorithms with good data beat complex ones</li>
+                    </ul>
+                </div>
+
+                <h4>Quake's Fast Inverse Square Root:</h4>
+                <div class="code-block">
+<span class="comment">// The legendary "magic" constant</span>
+<span class="keyword">float</span> <span class="function">Q_rsqrt</span>(<span class="keyword">float</span> number) {
+    <span class="keyword">long</span> i;
+    <span class="keyword">float</span> x2, y;
+    <span class="keyword">const</span> <span class="keyword">float</span> threehalfs = <span class="number">1.5F</span>;
+
+    x2 = number * <span class="number">0.5F</span>;
+    y  = number;
+    i  = * (<span class="keyword">long</span> *) &y;                       <span class="comment">// Evil floating point bit level hacking</span>
+    i  = <span class="number">0x5f3759df</span> - ( i >> <span class="number">1</span> );               <span class="comment">// What the fuck?</span>
+    y  = * (<span class="keyword">float</span> *) &i;
+    y  = y * ( threehalfs - ( x2 * y * y ) );   <span class="comment">// 1st iteration</span>
+    
+    <span class="keyword">return</span> y;
+}
+
+<span class="comment">// 4x faster than standard, good enough for games</span>
+<span class="comment">// Demonstrates: understand your problem, optimize what matters</span></div>
+            </div>
+
+            <!-- ThePrimeagen Philosophy -->
+            <div class="card">
+                <h2>⚡ ThePrimeagen's Productivity Philosophy</h2>
+                
+                <h3>Editor as Extension of Mind</h3>
+                <div class="quote-box">
+                    <div class="quote">"When I see someone use a mouse to navigate code, I see wasted potential. Every second your hand leaves the keyboard is a second you're not coding."</div>
+                    <div class="author">— ThePrimeagen</div>
+                </div>
+
+                <div class="formula-box">
+<span class="comment">// The Vim Investment:</span>
+
+Year 1:   Slower than IDE users (learning curve)
+Year 2:   Break even
+Year 3+:  2-3x faster editing speed
+Lifetime: Compound returns on every keystroke
+
+<span class="comment">// Core Vim skills for 10X editing:</span>
+• Motions + Operators = Composable editing
+• Text objects (ci", da(, yip)
+• Macros for repetitive tasks
+• Regex search/replace
+• Split windows and tabs
+• Netrw/NERDTree alternative (built-in)
+• Quickfix/Location lists
+                </div>
+
+                <h3>The Speed Philosophy</h3>
+                <div class="tip-box">
+                    <strong>🏎️ Why Speed Matters:</strong>
+                    <ul>
+                        <li>Fast feedback loops mean more iterations</li>
+                        <li>More iterations mean better solutions</li>
+                        <li>Editing speed removes friction from thinking</li>
+                        <li>When coding feels slow, you lose flow state</li>
+                    </ul>
+                </div>
+
+                <h3>Primeagen's Workflow</h3>
+                <div class="code-block">
+<span class="comment">// Daily setup:</span>
+1. Open tmux session with project layout
+2. Vim with all buffers from last session
+3. Git status in split (always visible)
+4. Quick file navigation (Telescope/fzf)
+5. LSP ready for go-to-definition
+
+<span class="comment">// The "flow" requirement:</span>
+- No mouse reachable
+- No context switching
+- Everything in muscle memory
+- Errors visible instantly
+- Tests run on save
+                </div>
+            </div>
+
+            <!-- Problem Solving Framework -->
+            <div class="card">
+                <h2>🧩 Problem-Solving Framework</h2>
+                
+                <h3>The 10X Problem-Solving Process</h3>
+                <div class="ascii-diagram">
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                     PROBLEM-SOLVING FRAMEWORK                                 │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                               │
+│   ┌─────────┐    ┌─────────┐    ┌─────────┐    ┌─────────┐    ┌─────────┐   │
+│   │UNDERSTAND│───▶│  DEFINE │───▶│EXPLORE  │───▶│IMPLEMENT│───▶│ REFLECT │   │
+│   └─────────┘    └─────────┘    └─────────┘    └─────────┘    └─────────┘   │
+│        │              │              │              │              │        │
+│        ▼              ▼              ▼              ▼              ▼        │
+│   ───────────────────────────────────────────────────────────────────────   │
+│   Read problem   Write test    List options   Start simple   What worked?   │
+│   Ask questions  cases         Trade-offs     Iterate        What didn't?   │
+│   Talk to users  Define done   Research       Test often     Document it    │
+│   Check history  Success crit  Prototype      Refactor       Share it       │
+│                                                                               │
+│   ════════════════════════════════════════════════════════════════════════   │
+│                                                                               │
+│   KEY INSIGHT: Spend 70% of time on UNDERSTAND and DEFINE                    │
+│                Most bugs are caused by not understanding the problem          │
+│                                                                               │
+└─────────────────────────────────────────────────────────────────────────────┘</div>
+
+                <h3>The Rubber Duck Technique</h3>
+                <div class="tip-box">
+                    <strong>🦆 Explain It To A Duck:</strong>
+                    <p>Before asking for help, explain your problem out loud to an inanimate object. 80% of the time, you'll solve it yourself while explaining. This forces you to organize your thoughts and often reveals assumptions you didn't know you were making.</p>
+                </div>
+
+                <h3>Decision-Making Framework</h3>
+                <div class="formula-box">
+<span class="comment">// When facing a decision:</span>
+
+1. What are the options? (List at least 3)
+2. What's the worst case for each?
+3. What's the reversibility? (Easy to undo?)
+4. What's the cost of delay?
+5. What would happen if I did nothing?
+
+<span class="comment">// Reversible decisions: Decide quickly</span>
+<span class="comment">// Irreversible decisions: Take time, get input</span>
+
+<span class="comment">// Jeff Bezos' Type 1 vs Type 2 decisions:</span>
+Type 1: Door only opens one way (irreversible)
+        → Take time, be careful
+        
+Type 2: Door swings both ways (reversible)  
+        → Decide fast, iterate
+        → Most decisions are Type 2!</div>
+            </div>
+
+            <!-- Code Quality -->
+            <div class="card">
+                <h2>💎 Code Quality Standards</h2>
+                
+                <h3>The 10X Code Review Checklist</h3>
+                <div class="checklist">
+                    <li>Does this solve the actual problem?</li>
+                    <li>Can someone else understand this in 6 months?</li>
+                    <li>Are edge cases handled?</li>
+                    <li>Is error handling comprehensive?</li>
+                    <li>Are there enough tests? Do they test behavior?</li>
+                    <li>Is the code in the right place (architecture)?</li>
+                    <li>Are there any magic numbers or strings?</li>
+                    <li>Is the naming clear and consistent?</li>
+                    <li>Are there any potential performance issues?</li>
+                    <li>Is the diff reasonable in size?</li>
+                </div>
+
+                <h3>Self-Review Before PR</h3>
+                <div class="code-block">
+<span class="comment">// Before requesting review, check:</span>
+
+☑️ I read my own diff (seriously, read every line)
+☑️ I ran tests locally (not just CI)
+☑️ I tested the happy path manually
+☑️ I tested error cases
+☑️ I updated documentation
+☑️ I removed debug code and comments
+☑️ I checked for secrets/credentials
+☑️ Commit messages are clear
+☑️ PR description explains WHY, not just what
+                </div>
+
+                <h3>Naming Things (The Hard Problem)</h3>
+                <div class="warning-box">
+                    <strong>📛 Naming Guidelines:</strong>
+                    <ul>
+                        <li><strong>Variables:</strong> Nouns that describe what it IS</li>
+                        <li><strong>Functions:</strong> Verbs that describe what it DOES</li>
+                        <li><strong>Classes:</strong> Nouns that describe what it REPRESENTS</li>
+                        <li><strong>Booleans:</strong> Questions (isEmpty, hasPermission, canEdit)</li>
+                        <li><strong>Avoid:</strong> data, info, temp, thing, stuff, util, helper</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Tools & Automation -->
+            <div class="card full-width">
+                <h2>🛠️ Essential Tools & Automation</h2>
+                
+                <h3>The 10X Toolkit</h3>
+                <div class="tool-grid">
+                    <div class="tool-item">
+                        <div class="tool-name">Vim/Neovim</div>
+                        <div class="tool-desc">Editor mastery</div>
+                    </div>
+                    <div class="tool-item">
+                        <div class="tool-name">Tmux</div>
+                        <div class="tool-desc">Terminal multiplexer</div>
+                    </div>
+                    <div class="tool-item">
+                        <div class="tool-name">Git</div>
+                        <div class="tool-desc">Version control</div>
+                    </div>
+                    <div class="tool-item">
+                        <div class="tool-name">Docker</div>
+                        <div class="tool-desc">Containerization</div>
+                    </div>
+                    <div class="tool-item">
+                        <div class="tool-name">ripgrep</div>
+                        <div class="tool-desc">Fast search</div>
+                    </div>
+                    <div class="tool-item">
+                        <div class="tool-name">jq</div>
+                        <div class="tool-desc">JSON processing</div>
+                    </div>
+                    <div class="tool-item">
+                        <div class="tool-name">fzf</div>
+                        <div class="tool-desc">Fuzzy finder</div>
+                    </div>
+                    <div class="tool-item">
+                        <div class="tool-name">bat</div>
+                        <div class="tool-desc">Better cat</div>
+                    </div>
+                    <div class="tool-item">
+                        <div class="tool-name">exa</div>
+                        <div class="tool-desc">Better ls</div>
+                    </div>
+                    <div class="tool-item">
+                        <div class="tool-name">htop</div>
+                        <div class="tool-desc">Process monitor</div>
+                    </div>
+                    <div class="tool-item">
+                        <div class="tool-name">tldr</div>
+                        <div class="tool-desc">Simplified man</div>
+                    </div>
+                    <div class="tool-item">
+                        <div class="tool-name">direnv</div>
+                        <div class="tool-desc">Env per directory</div>
+                    </div>
+                </div>
+
+                <h3>Automation Mindset</h3>
+                <div class="formula-box">
+<span class="comment">// The Automation Rule:</span>
+If you do it 3+ times, automate it.
+
+<span class="comment">// Time investment calculation:</span>
+Task takes: 5 minutes
+Frequency: 10 times/week
+Annual cost: 5 × 10 × 52 = 2,600 minutes = 43 hours
+
+If automation takes 2 hours → Worth it!
+
+<span class="comment">// What to automate:</span>
+• Build and deployment
+• Testing (unit, integration, e2e)
+• Code formatting and linting
+• Database migrations
+• Environment setup
+• Documentation generation
+• Status reports and updates
+• Repetitive code patterns (snippets)</div>
+
+                <h3>Dotfiles Philosophy</h3>
+                <div class="tip-box">
+                    <strong>📁 Your Configs Are Your Legacy:</strong>
+                    <ul>
+                        <li>Version control your dotfiles (.bashrc, .vimrc, .gitconfig)</li>
+                        <li>Document WHY you made each customization</li>
+                        <li>Share and learn from others' dotfiles</li>
+                        <li>Reproducible setup on any machine in minutes</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Communication -->
+            <div class="card">
+                <h2>💬 Communication Mastery</h2>
+                
+                <h3>Technical Writing</h3>
+                <div class="formula-box">
+<span class="comment">// Writing specs and docs:</span>
+
+Structure:
+1. Summary (TL;DR) - What and why
+2. Problem - Context and motivation
+3. Solution - Approach and rationale
+4. Trade-offs - What we considered
+5. Implementation - How to do it
+6. Testing - How to verify
+
+<span class="comment">// Key principle:</span>
+"Write for your future self who knows nothing."</div>
+
+                <h3>Code Review Feedback</h3>
+                <div class="code-block">
+<span class="comment">// Good feedback:</span>
+✅ "This function does three things. Consider splitting 
+    into validateInput(), processData(), and formatOutput() 
+    for better testability."
+
+✅ "I'm concerned about performance here. This runs in O(n²).
+    For 100k items, that's 10B operations. Consider using 
+    a Map for O(1) lookups."
+
+<span class="comment">// Bad feedback:</span>
+❌ "This is bad."
+❌ "LGTM" (without actually reviewing)
+❌ "Why did you do it this way?" (aggressive tone)</div>
+
+                <h3>Asking Questions Effectively</h3>
+                <div class="tip-box">
+                    <strong>❓ The Good Question Template:</strong>
+                    <ol>
+                        <li>What I'm trying to accomplish</li>
+                        <li>What I've already tried</li>
+                        <li>What I expected vs what happened</li>
+                        <li>Minimal reproducible example</li>
+                        <li>Relevant environment details</li>
+                    </ol>
+                    <p><em>Bad:</em> "It doesn't work, help?"</p>
+                    <p><em>Good:</em> "I'm trying to connect to PostgreSQL from Node.js. I've checked the connection string and credentials are correct. Error: 'connection refused'. Here's my code: [minimal example]. Running on Ubuntu 22.04, Node 20, PostgreSQL 15."</p>
+                </div>
+            </div>
+
+            <!-- What NOT to Do -->
+            <div class="card">
+                <h2>❌ What 10X Developers DON'T Do</h2>
+                
+                <div class="checklist checklist-x">
+                    <li>Write clever code that others can't read</li>
+                    <li>Skip tests to move faster</li>
+                    <li>Say "it works on my machine"</li>
+                    <li>Commit directly to main/master</li>
+                    <li>Ignore code review feedback</li>
+                    <li>Copy-paste code without understanding</li>
+                    <li>Prematurely optimize</li>
+                    <li>Over-engineer simple solutions</li>
+                    <li>Hoard knowledge instead of sharing</li>
+                    <li>Blame others for bugs</li>
+                    <li>Work in isolation without communication</li>
+                    <li>Ignore documentation</li>
+                    <li>Use unfamiliar tech without team buy-in</li>
+                    <li>Refactor "just because"</li>
+                </div>
+
+                <h3>The Ego Trap</h3>
+                <div class="quote-box">
+                    <div class="quote">"The biggest trap for senior engineers is thinking they know best. The best engineers I know are the most humble. They ask questions. They admit when they're wrong. They learn from everyone, including juniors."</div>
+                    <div class="author">— Advice from a Principal Engineer</div>
+                </div>
+            </div>
+
+            <!-- Growth Path -->
+            <div class="card full-width">
+                <h2>📈 Your Growth Path</h2>
+                
+                <div class="ascii-diagram">
+┌─────────────────────────────────────────────────────────────────────────────────────────┐
+│                           DEVELOPER GROWTH STAGES                                         │
+├─────────────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                          │
+│  STAGE 1          STAGE 2          STAGE 3          STAGE 4          STAGE 5             │
+│  ────────         ────────         ────────         ────────         ────────            │
+│  LEARNING         PRODUCTIVE       INFLUENTIAL      MULTIPLIER      LEGENDARY            │
+│                                                                                          │
+│  ┌─────────┐     ┌─────────┐     ┌─────────┐     ┌─────────┐     ┌─────────┐           │
+│  │ 0-2 yrs │────▶│ 2-5 yrs │────▶│ 5-8 yrs │────▶│ 8-12 yrs│────▶│ 12+ yrs │           │
+│  └─────────┘     └─────────┘     └─────────┘     └─────────┘     └─────────┘           │
+│                                                                                          │
+│  Focus:           Focus:           Focus:           Focus:           Focus:              │
+│  • Learn syntax   • Deliver        • Architect      • Lead          • Create            │
+│  • Follow guides  • Solve bugs     • Mentor         • Multiply      • Industry          │
+│  • Ask questions  • Write tests    • Influence      • Strategize      impact            │
+│  • Build basics   • Own features   • Standards      • Vision        • Legacy            │
+│                                                                                          │
+│  ════════════════════════════════════════════════════════════════════════════════════   │
+│                                                                                          │
+│  DAILY TIME ALLOCATION BY STAGE:                                                         │
+│                                                                                          │
+│  Stage 1: 80% Learning, 15% Coding, 5% Reviewing                                         │
+│  Stage 2: 30% Learning, 50% Coding, 20% Reviewing                                        │
+│  Stage 3: 15% Learning, 40% Coding, 25% Reviewing, 20% Mentoring                         │
+│  Stage 4: 10% Learning, 30% Coding, 20% Reviewing, 30% Mentoring, 10% Strategy           │
+│  Stage 5: 5% Learning, 20% Coding, 10% Reviewing, 25% Mentoring, 40% Vision/Creation     │
+│                                                                                          │
+└─────────────────────────────────────────────────────────────────────────────────────────┘</div>
+
+                <h3>Stage-by-Stage Advice</h3>
+                <table>
+                    <tr><th>Stage</th><th>Key Actions</th><th>Pitfalls to Avoid</th></tr>
+                    <tr><td>1 - Learning</td><td>Build projects, read code, learn fundamentals deeply</td><td>Tutorial hell, jumping between technologies</td></tr>
+                    <tr><td>2 - Productive</td><td>Own features end-to-end, write tests, code review</td><td>Specializing too early, ignoring soft skills</td></tr>
+                    <tr><td>3 - Influential</td><td>Mentor juniors, set standards, drive architecture</td><td>Being the hero, hoarding knowledge</td></tr>
+                    <tr><td>4 - Multiplier</td><td>Build tools, remove blockers, strategic thinking</td><td>Micro-management, losing touch with code</td></tr>
+                    <tr><td>5 - Legendary</td><td>Create platforms, industry influence, legacy</td><td>Resting on laurels, losing curiosity</td></tr>
+                </table>
+            </div>
+
+            <!-- Quick Reference -->
+            <div class="card full-width">
+                <h2>⚡ Daily 10X Checklist</h2>
+                
+                <div class="quick-ref">
+                    <div class="quick-ref-item">
+                        <div class="label">Morning</div>
+                        <div class="value">Plan 3 priorities</div>
+                    </div>
+                    <div class="quick-ref-item">
+                        <div class="label">Deep Work</div>
+                        <div class="value">3-4 hour block</div>
+                    </div>
+                    <div class="quick-ref-item">
+                        <div class="label">Learning</div>
+                        <div class="value">1 hour minimum</div>
+                    </div>
+                    <div class="quick-ref-item">
+                        <div class="label">Code Review</div>
+                        <div class="value">Thoughtful, not rushed</div>
+                    </div>
+                    <div class="quick-ref-item">
+                        <div class="label">Documentation</div>
+                        <div class="value">Update as you go</div>
+                    </div>
+                    <div class="quick-ref-item">
+                        <div class="label">Communication</div>
+                        <div class="value">Over-communicate</div>
+                    </div>
+                    <div class="quick-ref-item">
+                        <div class="label">Refactoring</div>
+                        <div class="value">Leave code better</div>
+                    </div>
+                    <div class="quick-ref-item">
+                        <div class="label">Evening</div>
+                        <div class="value">Reflect & prepare</div>
+                    </div>
+                </div>
+
+                <div class="quote-box">
+                    <div class="quote">"The difference between a good programmer and a great one is not how many lines of code they write, but how much complexity they can remove."</div>
+                    <div class="author">— The 10X Truth</div>
+                </div>
+            </div>
+
+        </div>
+
+        <footer style="text-align: center; padding: 30px; color: #f39c12;">
+            <p>🚀 The 10X Developer Guide | Learn from Legends • Build with Purpose • Create Impact</p>
+        </footer>
+    </div>
+</body>
+</html>
