@@ -1,0 +1,2146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Microservices Architecture - Complete Reference Guide</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            color: #e4e4e7;
+            line-height: 1.7;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            padding: 40px 20px;
+            background: linear-gradient(180deg, rgba(99, 102, 241, 0.2) 0%, transparent 100%);
+            border-bottom: 1px solid rgba(99, 102, 241, 0.3);
+            margin-bottom: 30px;
+        }
+        
+        h1 {
+            font-size: 2.8rem;
+            background: linear-gradient(135deg, #818cf8, #c084fc, #f472b6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 15px;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            color: #94a3b8;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .section {
+            background: rgba(30, 41, 59, 0.7);
+            border-radius: 16px;
+            padding: 25px;
+            margin-bottom: 25px;
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            backdrop-filter: blur(10px);
+        }
+        
+        h2 {
+            font-size: 1.6rem;
+            color: #818cf8;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid rgba(99, 102, 241, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        h2::before {
+            content: '';
+            width: 4px;
+            height: 24px;
+            background: linear-gradient(180deg, #818cf8, #c084fc);
+            border-radius: 2px;
+        }
+        
+        h3 {
+            font-size: 1.2rem;
+            color: #c084fc;
+            margin: 20px 0 12px 0;
+        }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+        }
+        
+        .card {
+            background: rgba(15, 23, 42, 0.8);
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid rgba(71, 85, 105, 0.4);
+            transition: all 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-3px);
+            border-color: rgba(99, 102, 241, 0.5);
+            box-shadow: 0 10px 40px rgba(99, 102, 241, 0.15);
+        }
+        
+        .card h4 {
+            color: #f472b6;
+            margin-bottom: 12px;
+            font-size: 1.1rem;
+        }
+        
+        .formula-box {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.15), rgba(192, 132, 252, 0.1));
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            border-radius: 10px;
+            padding: 15px;
+            margin: 15px 0;
+            font-family: 'Fira Code', 'Consolas', monospace;
+            font-size: 0.9rem;
+            overflow-x: auto;
+        }
+        
+        .code-block {
+            background: #0d1117;
+            border-radius: 10px;
+            padding: 18px;
+            margin: 15px 0;
+            font-family: 'Fira Code', 'Consolas', monospace;
+            font-size: 0.85rem;
+            overflow-x: auto;
+            border: 1px solid #30363d;
+        }
+        
+        .code-block .comment { color: #8b949e; }
+        .code-block .keyword { color: #ff7b72; }
+        .code-block .string { color: #a5d6ff; }
+        .code-block .function { color: #d2a8ff; }
+        .code-block .variable { color: #ffa657; }
+        .code-block .type { color: #79c0ff; }
+        
+        .ascii-diagram {
+            background: #0d1117;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 15px 0;
+            font-family: 'Fira Code', 'Consolas', monospace;
+            font-size: 0.8rem;
+            overflow-x: auto;
+            white-space: pre;
+            color: #58a6ff;
+            border: 1px solid #30363d;
+        }
+        
+        .pattern-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 15px;
+        }
+        
+        .pattern-card {
+            background: linear-gradient(135deg, rgba(30, 41, 59, 0.9), rgba(15, 23, 42, 0.9));
+            border-radius: 10px;
+            padding: 18px;
+            border-left: 4px solid;
+        }
+        
+        .pattern-card.creational { border-color: #10b981; }
+        .pattern-card.structural { border-color: #f59e0b; }
+        .pattern-card.behavioral { border-color: #8b5cf6; }
+        .pattern-card.resilience { border-color: #ef4444; }
+        .pattern-card.data { border-color: #06b6d4; }
+        
+        .tag {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-right: 5px;
+            margin-bottom: 5px;
+        }
+        
+        .tag.green { background: rgba(16, 185, 129, 0.2); color: #10b981; }
+        .tag.blue { background: rgba(59, 130, 246, 0.2); color: #3b82f6; }
+        .tag.purple { background: rgba(139, 92, 246, 0.2); color: #8b5cf6; }
+        .tag.red { background: rgba(239, 68, 68, 0.2); color: #ef4444; }
+        .tag.yellow { background: rgba(245, 158, 11, 0.2); color: #f59e0b; }
+        .tag.cyan { background: rgba(6, 182, 212, 0.2); color: #06b6d4; }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            font-size: 0.9rem;
+        }
+        
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid rgba(71, 85, 105, 0.4);
+        }
+        
+        th {
+            background: rgba(99, 102, 241, 0.2);
+            color: #818cf8;
+            font-weight: 600;
+        }
+        
+        tr:hover {
+            background: rgba(99, 102, 241, 0.05);
+        }
+        
+        .highlight-box {
+            background: linear-gradient(135deg, rgba(244, 114, 182, 0.15), rgba(192, 132, 252, 0.1));
+            border-left: 4px solid #f472b6;
+            padding: 15px 20px;
+            margin: 15px 0;
+            border-radius: 0 10px 10px 0;
+        }
+        
+        .warning-box {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.15), rgba(249, 115, 22, 0.1));
+            border-left: 4px solid #ef4444;
+            padding: 15px 20px;
+            margin: 15px 0;
+            border-radius: 0 10px 10px 0;
+        }
+        
+        .success-box {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(34, 197, 94, 0.1));
+            border-left: 4px solid #10b981;
+            padding: 15px 20px;
+            margin: 15px 0;
+            border-radius: 0 10px 10px 0;
+        }
+        
+        ul, ol {
+            margin: 10px 0;
+            padding-left: 25px;
+        }
+        
+        li {
+            margin: 8px 0;
+        }
+        
+        .quick-ref {
+            background: rgba(6, 182, 212, 0.1);
+            border: 1px solid rgba(6, 182, 212, 0.3);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .quick-ref h4 {
+            color: #06b6d4;
+            margin-bottom: 12px;
+        }
+        
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 15px 0;
+        }
+        
+        .comparison-item {
+            background: rgba(15, 23, 42, 0.6);
+            padding: 15px;
+            border-radius: 8px;
+        }
+        
+        .comparison-item h5 {
+            color: #f472b6;
+            margin-bottom: 8px;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 30px;
+            color: #64748b;
+            border-top: 1px solid rgba(99, 102, 241, 0.2);
+            margin-top: 40px;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 15px 0;
+        }
+
+        .metric-card {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(192, 132, 252, 0.05));
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            border: 1px solid rgba(99, 102, 241, 0.2);
+        }
+
+        .metric-card .value {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #818cf8;
+        }
+
+        .metric-card .label {
+            color: #94a3b8;
+            font-size: 0.85rem;
+            margin-top: 5px;
+        }
+
+        .step-list {
+            counter-reset: step-counter;
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .step-list li {
+            counter-increment: step-counter;
+            position: relative;
+            padding-left: 45px;
+            margin: 15px 0;
+        }
+
+        .step-list li::before {
+            content: counter(step-counter);
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, #818cf8, #c084fc);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🏗️ Microservices Architecture</h1>
+            <p class="subtitle">Complete Reference Guide: Patterns, Communication, Deployment & Production Best Practices for Building Scalable Distributed Systems</p>
+        </header>
+
+        <!-- Quick Reference Summary -->
+        <section class="section">
+            <h2>⚡ Quick Reference Summary</h2>
+            <div class="quick-ref">
+                <h4>🎯 Core Principles</h4>
+                <div class="grid">
+                    <div class="card">
+                        <h4>Single Responsibility</h4>
+                        <p>Each service owns one business capability and does one thing well. Services are loosely coupled but highly cohesive internally.</p>
+                    </div>
+                    <div class="card">
+                        <h4>Independent Deployment</h4>
+                        <p>Services can be deployed independently without affecting others. Enables continuous delivery and faster release cycles.</p>
+                    </div>
+                    <div class="card">
+                        <h4>Decentralized Data</h4>
+                        <p>Each service manages its own database. No shared databases between services. Data consistency via eventual consistency patterns.</p>
+                    </div>
+                    <div class="card">
+                        <h4>Failure Isolation</h4>
+                        <p>Services are designed to fail gracefully. Circuit breakers, bulkheads, and fallbacks prevent cascade failures.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="ascii-diagram">┌─────────────────────────────────────────────────────────────────────────────┐
+│                        MICROSERVICES ARCHITECTURE                           │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│    ┌─────────────┐     ┌─────────────────────────────────────────┐         │
+│    │   Clients   │────▶│            API GATEWAY                  │         │
+│    │ (Web/Mobile)│     │  (Auth, Rate Limit, Routing, Load Bal)  │         │
+│    └─────────────┘     └──────────────────┬──────────────────────┘         │
+│                                           │                                 │
+│           ┌───────────────────────────────┼───────────────────────────┐    │
+│           │                               │                           │    │
+│           ▼                               ▼                           ▼    │
+│    ┌─────────────┐               ┌─────────────┐             ┌──────────┐  │
+│    │   User      │               │   Order     │             │ Payment  │  │
+│    │   Service   │◀─────────────▶│   Service   │◀───────────▶│ Service  │  │
+│    └──────┬──────┘               └──────┬──────┘             └────┬─────┘  │
+│           │                             │                         │        │
+│           ▼                             ▼                         ▼        │
+│    ┌─────────────┐               ┌─────────────┐             ┌──────────┐  │
+│    │  User DB    │               │  Order DB   │             │Payment DB│  │
+│    │ (PostgreSQL)│               │  (MongoDB)  │             │ (MySQL)  │  │
+│    └─────────────┘               └─────────────┘             └──────────┘  │
+│                                                                             │
+│    ┌─────────────────────────────────────────────────────────────────┐    │
+│    │                    MESSAGE BROKER (Kafka/RabbitMQ)              │    │
+│    └─────────────────────────────────────────────────────────────────┘    │
+│                                                                             │
+│    ┌─────────────┐               ┌─────────────┐             ┌──────────┐  │
+│    │   Service   │               │   Service   │             │ Config   │  │
+│    │  Discovery  │               │    Mesh     │             │  Server  │  │
+│    │ (Consul/Eureka)│            │  (Istio)    │             │(Consul)  │  │
+│    └─────────────┘               └─────────────┘             └──────────┘  │
+└─────────────────────────────────────────────────────────────────────────────┘</div>
+        </section>
+
+        <!-- Architecture Patterns -->
+        <section class="section">
+            <h2>🏛️ Architecture Patterns</h2>
+            
+            <h3>Decomposition Strategies</h3>
+            <div class="pattern-grid">
+                <div class="pattern-card structural">
+                    <h4>By Business Capability</h4>
+                    <p>Decompose around business functions: Order Management, Inventory, Shipping, User Account. Each service aligns with business domain.</p>
+                    <div class="tag blue">Recommended</div>
+                    <div class="tag green">DDD Aligned</div>
+                </div>
+                <div class="pattern-card structural">
+                    <h4>By Subdomain (DDD)</h4>
+                    <p>Use Domain-Driven Design bounded contexts. Identify aggregates, entities, and value objects to define service boundaries.</p>
+                    <div class="tag purple">DDD</div>
+                    <div class="tag blue">Strategic</div>
+                </div>
+                <div class="pattern-card structural">
+                    <h4>Strangler Fig Pattern</h4>
+                    <p>Gradually migrate monolith by creating new services and "strangling" old functionality. Route traffic progressively.</p>
+                    <div class="tag yellow">Migration</div>
+                    <div class="tag green">Incremental</div>
+                </div>
+                <div class="pattern-card structural">
+                    <h4>By Team (Conway's Law)</h4>
+                    <p>Align services with team structure. Two-pizza team rule: each service owned by a team that can be fed by two pizzas.</p>
+                    <div class="tag cyan">Organizational</div>
+                </div>
+            </div>
+
+            <h3>Service Types</h3>
+            <table>
+                <tr>
+                    <th>Service Type</th>
+                    <th>Purpose</th>
+                    <th>Characteristics</th>
+                    <th>Examples</th>
+                </tr>
+                <tr>
+                    <td><strong>Core Services</strong></td>
+                    <td>Business-critical functionality</td>
+                    <td>High availability, complex logic</td>
+                    <td>Order, Payment, Inventory</td>
+                </tr>
+                <tr>
+                    <td><strong>Supporting Services</strong></td>
+                    <td>Non-differentiating functions</td>
+                    <td>Can be outsourced/replaced</td>
+                    <td>Email, SMS, Notification</td>
+                </tr>
+                <tr>
+                    <td><strong>Generic Services</strong></td>
+                    <td>Cross-cutting concerns</td>
+                    <td>Shared infrastructure</td>
+                    <td>Auth, Logging, Config</td>
+                </tr>
+                <tr>
+                    <td><strong>Edge Services</strong></td>
+                    <td>External interface</td>
+                    <td>API Gateway, BFF</td>
+                    <td>Gateway, Aggregator</td>
+                </tr>
+            </table>
+
+            <div class="highlight-box">
+                <strong>🎯 Service Granularity Guidelines:</strong>
+                <ul>
+                    <li><strong>Too Fine-grained:</strong> Excessive network calls, distributed transactions, operational complexity</li>
+                    <li><strong>Too Coarse-grained:</strong> Coupling, deployment bottlenecks, scaling issues</li>
+                    <li><strong>Right Size:</strong> Single business capability, independent deployment, team ownership</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Communication Patterns -->
+        <section class="section">
+            <h2>📡 Communication Patterns</h2>
+            
+            <h3>Synchronous vs Asynchronous</h3>
+            <div class="comparison-grid">
+                <div class="comparison-item">
+                    <h5>Synchronous (Request/Response)</h5>
+                    <span class="tag blue">REST/gRPC</span>
+                    <ul>
+                        <li>Simple, familiar model</li>
+                        <li>Immediate response</li>
+                        <li>Tightly coupled in time</li>
+                        <li>Cascade failures risk</li>
+                    </ul>
+                </div>
+                <div class="comparison-item">
+                    <h5>Asynchronous (Message-Based)</h5>
+                    <span class="tag green">Event-Driven</span>
+                    <ul>
+                        <li>Loose coupling</li>
+                        <li>Better fault tolerance</li>
+                        <li>Eventual consistency</li>
+                        <li>Complexity in debugging</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h3>Communication Styles Matrix</h3>
+            <div class="ascii-diagram">┌─────────────────────────────────────────────────────────────────────────┐
+│                    INTER-SERVICE COMMUNICATION MATRIX                   │
+├─────────────────────┬──────────────────┬──────────────────┬─────────────┤
+│      Pattern        │   Coupling       │   Use Case       │  Protocol   │
+├─────────────────────┼──────────────────┼──────────────────┼─────────────┤
+│ REST/HTTP           │ Tight (sync)     │ CRUD operations  │ HTTP/1.1    │
+│ gRPC                │ Tight (sync)     │ High performance │ HTTP/2      │
+│ GraphQL             │ Tight (sync)     │ Flexible queries │ HTTP        │
+│ Message Queue       │ Loose (async)    │ Background jobs  │ AMQP/Kafka  │
+│ Event Streaming     │ Loose (async)    │ Real-time data   │ Kafka       │
+│ Event Sourcing      │ Loose (async)    │ Audit, replay    │ Custom      │
+│ CQRS                │ Mixed            │ Read/write split │ Multiple    │
+└─────────────────────┴──────────────────┴──────────────────┴─────────────┘</div>
+
+            <h3>REST API Design Standards</h3>
+            <div class="code-block">
+<span class="comment">// Resource Naming Conventions</span>
+
+<span class="comment">// ✅ Good: Nouns, plural, hierarchical</span>
+GET    <span class="string">/api/v1/orders</span>                    <span class="comment">// List orders</span>
+GET    <span class="string">/api/v1/orders/{orderId}</span>           <span class="comment">// Get specific order</span>
+POST   <span class="string">/api/v1/orders</span>                    <span class="comment">// Create order</span>
+PUT    <span class="string">/api/v1/orders/{orderId}</span>           <span class="comment">// Full update</span>
+PATCH  <span class="string">/api/v1/orders/{orderId}</span>           <span class="comment">// Partial update</span>
+DELETE <span class="string">/api/v1/orders/{orderId}</span>           <span class="comment">// Delete order</span>
+
+<span class="comment">// Nested resources</span>
+GET    <span class="string">/api/v1/orders/{orderId}/items</span>     <span class="comment">// Order items</span>
+GET    <span class="string">/api/v1/customers/{id}/orders</span>      <span class="comment">// Customer's orders</span>
+
+<span class="comment">// ❌ Avoid: Verbs in URLs</span>
+GET    <span class="string">/api/v1/getOrders</span>                  <span class="comment">// Bad</span>
+POST   <span class="string">/api/v1/createOrder</span>                <span class="comment">// Bad</span>
+
+<span class="comment">// ✅ Use query parameters for filtering, sorting, pagination</span>
+GET    <span class="string">/api/v1/orders?status=pending&sort=-createdAt&page=1&limit=20</span>
+
+<span class="comment">// Standard Response Codes</span>
+<span class="type">200</span> OK                    <span class="comment">// Successful GET, PUT, PATCH</span>
+<span class="type">201</span> Created               <span class="comment">// Successful POST</span>
+<span class="type">204</span> No Content            <span class="comment">// Successful DELETE</span>
+<span class="type">400</span> Bad Request           <span class="comment">// Validation error</span>
+<span class="type">401</span> Unauthorized          <span class="comment">// Authentication required</span>
+<span class="type">403</span> Forbidden             <span class="comment">// No permission</span>
+<span class="type">404</span> Not Found             <span class="comment">// Resource doesn't exist</span>
+<span class="type">409</span> Conflict              <span class="comment">// Duplicate resource</span>
+<span class="type">422</span> Unprocessable Entity  <span class="comment">// Validation failed</span>
+<span class="type">429</span> Too Many Requests     <span class="comment">// Rate limited</span>
+<span class="type">500</span> Internal Server Error <span class="comment">// Server error</span>
+<span class="type">503</span> Service Unavailable   <span class="comment">// Service down</span></div>
+
+            <h3>gRPC for High-Performance Services</h3>
+            <div class="code-block">
+<span class="comment">// Protocol Buffer Definition (order.proto)</span>
+
+<span class="keyword">syntax</span> = <span class="string">"proto3"</span>;
+
+<span class="keyword">package</span> <span class="type">order</span>;
+
+<span class="keyword">service</span> <span class="type">OrderService</span> {
+    <span class="keyword">rpc</span> <span class="function">CreateOrder</span>(<span class="type">CreateOrderRequest</span>) <span class="keyword">returns</span> (<span class="type">Order</span>);
+    <span class="keyword">rpc</span> <span class="function">GetOrder</span>(<span class="type">GetOrderRequest</span>) <span class="keyword">returns</span> (<span class="type">Order</span>);
+    <span class="keyword">rpc</span> <span class="function">ListOrders</span>(<span class="type">ListOrdersRequest</span>) <span class="keyword">returns</span> (<span class="keyword">stream</span> <span class="type">Order</span>);  <span class="comment">// Server streaming</span>
+    <span class="keyword">rpc</span> <span class="function">StreamOrders</span>(<span class="keyword">stream</span> <span class="type">OrderRequest</span>) <span class="keyword">returns</span> (<span class="type">OrderSummary</span>); <span class="comment">// Client streaming</span>
+}
+
+<span class="keyword">message</span> <span class="type">Order</span> {
+    <span class="keyword">string</span> <span class="variable">id</span> = <span class="string">1</span>;
+    <span class="keyword">string</span> <span class="variable">customer_id</span> = <span class="string">2</span>;
+    <span class="keyword">repeated</span> <span class="type">OrderItem</span> <span class="variable">items</span> = <span class="string">3</span>;
+    <span class="keyword">double</span> <span class="variable">total</span> = <span class="string">4</span>;
+    <span class="type">OrderStatus</span> <span class="variable">status</span> = <span class="string">5</span>;
+    <span class="keyword">int64</span> <span class="variable">created_at</span> = <span class="string">6</span>;
+}</div>
+
+            <div class="formula-box">
+<strong>gRPC vs REST Decision:</strong>
+Choose gRPC when: Low latency required (>10x faster), Internal service-to-service, Streaming needed, Strong typing preferred
+Choose REST when: Public APIs, Browser clients, Simple CRUD, Wide compatibility needed, Debugging simplicity required
+            </div>
+        </section>
+
+        <!-- API Gateway -->
+        <section class="section">
+            <h2>🚪 API Gateway Pattern</h2>
+            
+            <div class="ascii-diagram">┌─────────────────────────────────────────────────────────────────────────┐
+│                         API GATEWAY ARCHITECTURE                        │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                         │
+│    ┌─────────┐  ┌─────────┐  ┌─────────┐                               │
+│    │  Web    │  │ Mobile  │  │  IoT    │   Different clients with      │
+│    │  App    │  │  App    │  │ Device  │   different requirements      │
+│    └────┬────┘  └────┬────┘  └────┬────┘                               │
+│         │            │            │                                     │
+│         └────────────┼────────────┘                                     │
+│                      │                                                  │
+│                      ▼                                                  │
+│    ┌─────────────────────────────────────────────────────────┐         │
+│    │                    API GATEWAY                          │         │
+│    │  ┌─────────┐ ┌─────────┐ ┌─────────┐ ┌─────────┐       │         │
+│    │  │ Routing │ │  Auth   │ │  Rate   │ │ Circuit │       │         │
+│    │  │         │ │  JWT    │ │ Limiting│ │ Breaker │       │         │
+│    │  └─────────┘ └─────────┘ └─────────┘ └─────────┘       │         │
+│    │  ┌─────────┐ ┌─────────┐ ┌─────────┐ ┌─────────┐       │         │
+│    │  │Request  │ │Response │ │ Load    │ │ Request │       │         │
+│    │  │Transform│ │ Transform│ │ Balance │ │  Cache  │       │         │
+│    │  └─────────┘ └─────────┘ └─────────┘ └─────────┘       │         │
+│    └─────────────────────┬───────────────────────────────────┘         │
+│                          │                                             │
+│         ┌────────────────┼────────────────┐                           │
+│         │                │                │                           │
+│         ▼                ▼                ▼                           │
+│    ┌─────────┐     ┌─────────┐     ┌─────────┐                        │
+│    │  User   │     │  Order  │     │ Payment │                        │
+│    │ Service │     │ Service │     │ Service │                        │
+│    └─────────┘     └─────────┘     └─────────┘                        │
+└─────────────────────────────────────────────────────────────────────────┘</div>
+
+            <h3>Gateway Responsibilities</h3>
+            <div class="grid">
+                <div class="card">
+                    <h4>🔐 Authentication & Authorization</h4>
+                    <p>Centralize auth logic. Validate JWT tokens, check permissions, inject user context into requests before forwarding to services.</p>
+                    <div class="code-block">
+<span class="comment">// JWT Validation Middleware</span>
+<span class="keyword">const</span> <span class="function">validateJWT</span> = <span class="keyword">async</span> (token) => {
+    <span class="keyword">const</span> decoded = jwt.<span class="function">verify</span>(token, SECRET);
+    <span class="keyword">return</span> { userId: decoded.sub, roles: decoded.roles };
+};</div>
+                </div>
+                <div class="card">
+                    <h4>⚡ Rate Limiting</h4>
+                    <p>Protect services from abuse. Implement token bucket or sliding window algorithms per user/IP/API key.</p>
+                    <div class="code-block">
+<span class="comment">// Rate Limit Config</span>
+limits:
+  standard: <span class="string">100 req/min</span>
+  premium:  <span class="string">1000 req/min</span>
+  burst:    <span class="string">+20% allowance</span></div>
+                </div>
+                <div class="card">
+                    <h4>🔄 Request/Response Transformation</h4>
+                    <p>Transform between formats, aggregate responses, adapt legacy APIs. Enables API versioning without service changes.</p>
+                </div>
+                <div class="card">
+                    <h4>📊 Monitoring & Analytics</h4>
+                    <p>Centralized logging, metrics collection, request tracing. Single point for observability across all services.</p>
+                </div>
+            </div>
+
+            <h3>Popular API Gateway Solutions</h3>
+            <table>
+                <tr>
+                    <th>Gateway</th>
+                    <th>Type</th>
+                    <th>Best For</th>
+                    <th>Key Features</th>
+                </tr>
+                <tr>
+                    <td><strong>Kong</strong></td>
+                    <td>Open Source / Enterprise</td>
+                    <td>High-performance, plugin ecosystem</td>
+                    <td>Lua plugins, declarative config, Kubernetes native</td>
+                </tr>
+                <tr>
+                    <td><strong>AWS API Gateway</strong></td>
+                    <td>Managed Cloud</td>
+                    <td>AWS-native deployments</td>
+                    <td>Lambda integration, WAF, throttling</td>
+                </tr>
+                <tr>
+                    <td><strong>Envoy</strong></td>
+                    <td>Open Source</td>
+                    <td>Service mesh data plane</td>
+                    <td>L7 proxy, xDS API, observability</td>
+                </tr>
+                <tr>
+                    <td><strong>NGINX Plus</strong></td>
+                    <td>Commercial</td>
+                    <td>High performance, simple setups</td>
+                    <td>Load balancing, caching, health checks</td>
+                </tr>
+                <tr>
+                    <td><strong>Traefik</strong></td>
+                    <td>Open Source</td>
+                    <td>Container environments</td>
+                    <td>Auto-discovery, Let's Encrypt, middleware</td>
+                </tr>
+            </table>
+        </section>
+
+        <!-- Service Discovery -->
+        <section class="section">
+            <h2>🔍 Service Discovery</h2>
+            
+            <h3>Client-Side vs Server-Side Discovery</h3>
+            <div class="ascii-diagram">┌─────────────────────────────────────────────────────────────────────────┐
+│                SERVICE DISCOVERY PATTERNS                               │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                         │
+│  CLIENT-SIDE DISCOVERY              SERVER-SIDE DISCOVERY               │
+│                                                                         │
+│  ┌───────────┐                     ┌───────────┐                       │
+│  │  Client   │                     │  Client   │                       │
+│  └─────┬─────┘                     └─────┬─────┘                       │
+│        │                                 │                             │
+│        ▼                                 ▼                             │
+│  ┌───────────────┐                 ┌───────────────┐                   │
+│  │   Service     │                 │   Load        │                   │
+│  │   Registry    │                 │   Balancer    │                   │
+│  │   (Consul)    │                 │   (nginx/ALB) │                   │
+│  └───────┬───────┘                 └───────┬───────┘                   │
+│          │                                 │                           │
+│    ┌─────┴─────┐                     ┌─────┴─────┐                     │
+│    │           │                     │           │                     │
+│    ▼           ▼                     ▼           ▼                     │
+│ ┌────┐     ┌────┐                 ┌────┐     ┌────┐                   │
+│ │ S1 │     │ S2 │                 │ S1 │     │ S2 │                   │
+│ └────┘     └────┘                 └────┘     └────┘                   │
+│                                                                         │
+│ Pros: No extra hop,               Pros: Client-agnostic,               │
+│       Language aware                    Centralized control            │
+│ Cons: Client complexity,          Cons: Extra network hop,             │
+│       Language specific                 Single point of failure        │
+└─────────────────────────────────────────────────────────────────────────┘</div>
+
+            <div class="code-block">
+<span class="comment">// Service Registration (Consul Example)</span>
+
+<span class="comment">// Service registers itself on startup</span>
+<span class="keyword">const</span> <span class="variable">service</span> = {
+    ID: <span class="string">"order-service-1"</span>,
+    Name: <span class="string">"order-service"</span>,
+    Tags: [<span class="string">"v1"</span>, <span class="string">"primary"</span>],
+    Address: <span class="string">"10.0.0.5"</span>,
+    Port: <span class="string">8080</span>,
+    Check: {
+        HTTP: <span class="string">"http://10.0.0.5:8080/health"</span>,
+        Interval: <span class="string">"10s"</span>,
+        Timeout: <span class="string">"5s"</span>
+    }
+};
+
+<span class="comment">// Discover service instances</span>
+<span class="keyword">const</span> <span class="function">discoverService</span> = <span class="keyword">async</span> (serviceName) => {
+    <span class="keyword">const</span> instances = <span class="keyword">await</span> consul.<span class="function">catalog.service.nodes</span>(serviceName);
+    <span class="keyword">return</span> instances.<span class="function">map</span>(i => `${i.Address}:${i.Port}`);
+};</div>
+
+            <h3>Service Registry Options</h3>
+            <div class="pattern-grid">
+                <div class="pattern-card structural">
+                    <h4>Consul (HashiCorp)</h4>
+                    <ul>
+                        <li>Service mesh + discovery</li>
+                        <li>Health checking</li>
+                        <li>KV store included</li>
+                        <li>DNS interface</li>
+                    </ul>
+                    <span class="tag green">Recommended</span>
+                </div>
+                <div class="pattern-card structural">
+                    <h4>Eureka (Netflix)</h4>
+                    <ul>
+                        <li>Spring Cloud integration</li>
+                        <li>Client-side load balancing</li>
+                        <li>AP system (availability first)</li>
+                    </ul>
+                    <span class="tag blue">Java/Spring</span>
+                </div>
+                <div class="pattern-card structural">
+                    <h4>Kubernetes DNS</h4>
+                    <ul>
+                        <li>Built-in service discovery</li>
+                        <li>DNS-based resolution</li>
+                        <li>Native k8s integration</li>
+                    </ul>
+                    <span class="tag purple">K8s Native</span>
+                </div>
+                <div class="pattern-card structural">
+                    <h4>Zookeeper</h4>
+                    <ul>
+                        <li>CP system (consistency first)</li>
+                        <li>Kafka dependency</li>
+                        <li>Complex operations</li>
+                    </ul>
+                    <span class="tag yellow">Legacy</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Resilience Patterns -->
+        <section class="section">
+            <h2>🛡️ Resilience Patterns</h2>
+            
+            <h3>Circuit Breaker Pattern</h3>
+            <div class="ascii-diagram">┌─────────────────────────────────────────────────────────────────────────┐
+│                     CIRCUIT BREAKER STATE MACHINE                       │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                         │
+│                          ┌───────────────┐                             │
+│                          │    CLOSED     │                             │
+│                          │  (Normal)     │                             │
+│                          │ Requests →    │                             │
+│                          │ pass through  │                             │
+│                          └───────┬───────┘                             │
+│                                  │                                     │
+│                    Failure rate  │                                     │
+│                    > threshold   │ Success                             │
+│                                  │                                     │
+│                                  ▼                                     │
+│    ┌──────────────┐       ┌───────────────┐       ┌──────────────┐    │
+│    │    OPEN      │◄──────│    HALF-OPEN  │──────▶│   CLOSED     │    │
+│    │  (Failing)   │       │   (Testing)   │       │  (Recovered) │    │
+│    │ Requests →   │       │ Limited test  │       │              │    │
+│    │ fail fast    │       │ requests      │       │              │    │
+│    └──────┬───────┘       └───────────────┘       └──────────────┘    │
+│           │                      ▲                                     │
+│           │ Timeout              │ Test fails                          │
+│           │ expires              │                                     │
+│           └──────────────────────┘                                     │
+│                                                                         │
+│    Configuration:                                                       │
+│    - Failure threshold: 5 failures in 10 seconds                       │
+│    - Open timeout: 30 seconds (before half-open)                       │
+│    - Half-open max calls: 3 test requests                              │
+└─────────────────────────────────────────────────────────────────────────┘</div>
+
+            <div class="code-block">
+<span class="comment">// Circuit Breaker Implementation (Resilience4j)</span>
+
+<span class="keyword">import</span> { CircuitBreaker } <span class="keyword">from</span> <span class="string">'resilience4j'</span>;
+
+<span class="keyword">const</span> <span class="variable">circuitBreaker</span> = <span class="keyword">new</span> <span class="type">CircuitBreaker</span>({
+    name: <span class="string">'orderService'</span>,
+    failureRateThreshold: <span class="string">50</span>,        <span class="comment">// 50% failure rate triggers open</span>
+    slowCallRateThreshold: <span class="string">80</span>,        <span class="comment">// 80% slow calls triggers open</span>
+    slowCallDurationThreshold: <span class="string">2000</span>,  <span class="comment">// 2 seconds = slow call</span>
+    waitDurationInOpenState: <span class="string">30000</span>,    <span class="comment">// 30 seconds before half-open</span>
+    permittedNumberOfCallsInHalfOpenState: <span class="string">3</span>,
+    slidingWindowSize: <span class="string">10</span>,             <span class="comment">// Last 10 calls for calculation</span>
+    minimumNumberOfCalls: <span class="string">5</span>,           <span class="comment">// Minimum calls before calculation</span>
+});
+
+<span class="comment">// Usage with fallback</span>
+<span class="keyword">const</span> <span class="function">getOrder</span> = <span class="keyword">async</span> (orderId) => {
+    <span class="keyword">return await</span> circuitBreaker.<span class="function">execute</span>(
+        () => orderClient.<span class="function">get</span>(orderId),
+        () => <span class="function">getOrderFromCache</span>(orderId)  <span class="comment">// Fallback</span>
+    );
+};</div>
+
+            <h3>Essential Resilience Patterns</h3>
+            <div class="pattern-grid">
+                <div class="pattern-card resilience">
+                    <h4>⚡ Retry with Exponential Backoff</h4>
+                    <p>Retry transient failures with increasing delays. Add jitter to prevent thundering herd.</p>
+                    <div class="formula-box">
+<strong>Delay:</strong> min(baseDelay × 2^attempt, maxDelay) + random(0, jitter)
+<strong>Example:</strong> 100ms → 200ms → 400ms → 800ms → give up
+                    </div>
+                    <span class="tag red">Transient Failures</span>
+                </div>
+                <div class="pattern-card resilience">
+                    <h4>🧱 Bulkhead Pattern</h4>
+                    <p>Isolate failures by limiting concurrent calls per service. Prevent one failure from consuming all resources.</p>
+                    <div class="code-block">
+<span class="comment">// Thread pool per service</span>
+orderService: max 20 threads
+paymentService: max 10 threads
+<span class="comment">// If payment fails, order still works</span></div>
+                    <span class="tag red">Isolation</span>
+                </div>
+                <div class="pattern-card resilience">
+                    <h4>🔄 Timeout Pattern</h4>
+                    <p>Set aggressive timeouts. Long waits consume resources and indicate problems.</p>
+                    <div class="code-block">
+<span class="comment">// Timeout recommendations</span>
+Service call: 2-5 seconds
+Database query: 1-3 seconds
+External API: 5-10 seconds
+Read vs Write: Read shorter</div>
+                    <span class="tag red">Resource Protection</span>
+                </div>
+                <div class="pattern-card resilience">
+                    <h4>📉 Fallback Pattern</h4>
+                    <p>Provide degraded functionality when service fails. Cache, default values, or queue for later.</p>
+                    <span class="tag red">Degradation</span>
+                </div>
+            </div>
+
+            <div class="highlight-box">
+                <strong>🎯 Resilience Configuration Matrix:</strong>
+                <table>
+                    <tr>
+                        <th>Pattern</th>
+                        <th>When to Use</th>
+                        <th>Key Metrics</th>
+                    </tr>
+                    <tr>
+                        <td>Circuit Breaker</td>
+                        <td>All external calls</td>
+                        <td>Failure rate, state transitions</td>
+                    </tr>
+                    <tr>
+                        <td>Retry</td>
+                        <td>Transient failures (network, timeout)</td>
+                        <td>Retry count, success rate</td>
+                    </tr>
+                    <tr>
+                        <td>Bulkhead</td>
+                        <td>Critical services with capacity limits</td>
+                        <td>Queue depth, rejection rate</td>
+                    </tr>
+                    <tr>
+                        <td>Timeout</td>
+                        <td>All network calls</td>
+                        <td>P99 latency, timeout rate</td>
+                    </tr>
+                    <tr>
+                        <td>Fallback</td>
+                        <td>Non-critical features</td>
+                        <td>Fallback invocation rate</td>
+                    </tr>
+                </table>
+            </div>
+        </section>
+
+        <!-- Data Management -->
+        <section class="section">
+            <h2>💾 Data Management Patterns</h2>
+            
+            <h3>Database per Service</h3>
+            <div class="ascii-diagram">┌─────────────────────────────────────────────────────────────────────────┐
+│                    DATABASE PER SERVICE PATTERN                         │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                         │
+│    ❌ SHARED DATABASE (Anti-Pattern)           ✅ DATABASE PER SERVICE  │
+│                                                                         │
+│    ┌─────────────────────────────────┐         ┌─────────────────┐     │
+│    │      MONOLITHIC DATABASE        │         │   Order Service │     │
+│    │                                 │         └────────┬────────┘     │
+│    │  ┌─────────┐ ┌─────────┐       │                  │              │
+│    │  │ Orders  │ │ Users   │       │                  ▼              │
+│    │  │ Table   │ │ Table   │       │         ┌──────────────┐        │
+│    │  └─────────┘ └─────────┘       │         │  Order DB    │        │
+│    │  ┌─────────┐ ┌─────────┐       │         │ (PostgreSQL) │        │
+│    │  │ Products│ │ Payments│       │         └──────────────┘        │
+│    │  └─────────┘ └─────────┘       │                                 │
+│    └─────────────────────────────────┘         ┌─────────────────┐     │
+│            ▲                                  │   User Service  │     │
+│            │ Coupling,                        └────────┬────────┘     │
+│            │ Schema conflicts,                         │              │
+│            │ Scaling issues                             ▼              │
+│                                          ┌──────────────┐            │
+│                                          │   User DB    │            │
+│                                          │   (MySQL)    │            │
+│                                          └──────────────┘            │
+│                                                                       │
+│                                          ┌─────────────────┐          │
+│                                          │ Catalog Service │          │
+│                                          └────────┬────────┘          │
+│                                                   │                   │
+│                                                   ▼                   │
+│                                          ┌──────────────┐            │
+│                                          │  Catalog DB  │            │
+│                                          │  (MongoDB)   │            │
+│                                          └──────────────┘            │
+└─────────────────────────────────────────────────────────────────────────┘</div>
+
+            <h3>CQRS (Command Query Responsibility Segregation)</h3>
+            <div class="grid">
+                <div class="card">
+                    <h4>Write Model (Commands)</h4>
+                    <p>Optimized for writes. Normalized schema, strict validation, transactional consistency.</p>
+                    <div class="code-block">
+<span class="comment">// Command Handler</span>
+<span class="keyword">class</span> <span class="type">CreateOrderCommand</span> {
+    <span class="keyword">constructor</span>(customerId, items) {
+        <span class="keyword">this</span>.customerId = customerId;
+        <span class="keyword">this</span>.items = items;
+        <span class="keyword">this</span>.createdAt = <span class="keyword">new</span> <span class="type">Date</span>();
+    }
+}
+
+<span class="comment">// Writes to master DB</span>
+<span class="keyword">await</span> orderRepository.<span class="function">save</span>(order);</div>
+                </div>
+                <div class="card">
+                    <h4>Read Model (Queries)</h4>
+                    <p>Optimized for reads. Denormalized views, pre-computed aggregates, eventually consistent.</p>
+                    <div class="code-block">
+<span class="comment">// Read Model - Denormalized View</span>
+{
+    <span class="string">"orderId"</span>: <span class="string">"ORD-123"</span>,
+    <span class="string">"customerName"</span>: <span class="string">"John Doe"</span>,  <span class="comment">// Pre-joined</span>
+    <span class="string">"totalAmount"</span>: <span class="string">150.00</span>,     <span class="comment">// Pre-computed</span>
+    <span class="string">"itemCount"</span>: <span class="string">3</span>,             <span class="comment">// Pre-aggregated</span>
+    <span class="string">"status"</span>: <span class="string">"SHIPPED"</span>
+}
+
+<span class="comment">// Reads from replica/ES</span>
+<span class="keyword">await</span> orderViewStore.<span class="function">findByCustomer</span>(id);</div>
+                </div>
+            </div>
+
+            <h3>Saga Pattern for Distributed Transactions</h3>
+            <div class="ascii-diagram">┌─────────────────────────────────────────────────────────────────────────┐
+│                          SAGA PATTERN                                  │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                         │
+│    ORDER SAGA: Create Order → Reserve Inventory → Process Payment      │
+│                                                                         │
+│    ┌──────────────────────────────────────────────────────────────┐    │
+│    │                    CHOREOGRAPHY (Event-Based)                 │    │
+│    │                                                               │    │
+│    │  Order Service    Inventory Service    Payment Service       │    │
+│    │       │                   │                   │              │    │
+│    │       │ OrderCreated      │                   │              │    │
+│    │       │──────────────────▶│                   │              │    │
+│    │       │                   │ InventoryReserved │              │    │
+│    │       │                   │──────────────────▶│              │    │
+│    │       │                   │                   │              │    │
+│    │       │  PaymentFailed    │                   │              │    │
+│    │       │◀──────────────────│◀──────────────────│              │    │
+│    │       │                   │                   │              │    │
+│    │       │                   │ InventoryReleased │              │    │
+│    │       │ OrderCancelled    │                   │              │    │
+│    │       │◀──────────────────│                   │              │    │
+│    └──────────────────────────────────────────────────────────────┘    │
+│                                                                         │
+│    ┌──────────────────────────────────────────────────────────────┐    │
+│    │                    ORCHESTRATION (Centralized)                 │    │
+│    │                                                               │    │
+│    │                    ┌─────────────┐                           │    │
+│    │                    │ Saga        │                           │    │
+│    │                    │ Orchestrator│                           │    │
+│    │                    └──────┬──────┘                           │    │
+│    │                           │                                   │    │
+│    │       ┌───────────────────┼───────────────────┐              │    │
+│    │       │                   │                   │              │    │
+│    │       ▼                   ▼                   ▼              │    │
+│    │  ┌─────────┐        ┌─────────┐        ┌─────────┐          │    │
+│    │  │ Order   │        │Inventory│        │ Payment │          │    │
+│    │  │ Service │        │ Service │        │ Service │          │    │
+│    │  └─────────┘        └─────────┘        └─────────┘          │    │
+│    └──────────────────────────────────────────────────────────────┘    │
+└─────────────────────────────────────────────────────────────────────────┘</div>
+
+            <div class="code-block">
+<span class="comment">// Saga Orchestrator Example</span>
+
+<span class="keyword">class</span> <span class="type">OrderSagaOrchestrator</span> {
+    <span class="keyword">async</span> <span class="function">execute</span>(orderId) {
+        <span class="keyword">const</span> saga = <span class="keyword">new</span> <span class="type">Saga</span>(orderId);
+        
+        <span class="keyword">try</span> {
+            <span class="comment">// Step 1: Create Order</span>
+            <span class="keyword">await</span> <span class="keyword">this</span>.<span class="function">createOrder</span>(orderId);
+            saga.<span class="function">addCompensation</span>(() => <span class="keyword">this</span>.<span class="function">cancelOrder</span>(orderId));
+            
+            <span class="comment">// Step 2: Reserve Inventory</span>
+            <span class="keyword">await</span> <span class="keyword">this</span>.<span class="function">reserveInventory</span>(orderId);
+            saga.<span class="function">addCompensation</span>(() => <span class="keyword">this</span>.<span class="function">releaseInventory</span>(orderId));
+            
+            <span class="comment">// Step 3: Process Payment</span>
+            <span class="keyword">await</span> <span class="keyword">this</span>.<span class="function">processPayment</span>(orderId);
+            saga.<span class="function">addCompensation</span>(() => <span class="keyword">this</span>.<span class="function">refundPayment</span>(orderId));
+            
+            <span class="keyword">return</span> { success: <span class="keyword">true</span> };
+        } <span class="keyword">catch</span> (error) {
+            <span class="comment">// Execute compensating transactions in reverse order</span>
+            <span class="keyword">await</span> saga.<span class="function">compensate</span>();
+            <span class="keyword">return</span> { success: <span class="keyword">false</span>, error };
+        }
+    }
+}</div>
+
+            <h3>Event Sourcing</h3>
+            <div class="card">
+                <h4>📜 Store Events, Not State</h4>
+                <p>Instead of storing current state, store all state-changing events. Current state is derived by replaying events.</p>
+                <div class="code-block">
+<span class="comment">// Traditional: Store current state</span>
+<span class="keyword">UPDATE</span> orders <span class="keyword">SET</span> status = <span class="string">'SHIPPED'</span> <span class="keyword">WHERE</span> id = <span class="string">123</span>;
+
+<span class="comment">// Event Sourcing: Store events</span>
+<span class="keyword">INSERT INTO</span> events (type, aggregate_id, data, timestamp)
+<span class="keyword">VALUES</span> (<span class="string">'OrderShipped'</span>, <span class="string">123</span>, {<span class="string">"shippedAt"</span>: <span class="string">"2024-01-15"</span>}, <span class="string">"2024-01-15T10:30:00Z"</span>);
+
+<span class="comment">// Event Store</span>
+events = [
+    { type: <span class="string">"OrderCreated"</span>,     data: { items: [...] },     timestamp: <span class="string">"10:00"</span> },
+    { type: <span class="string">"PaymentProcessed"</span>, data: { amount: 150 },     timestamp: <span class="string">"10:05"</span> },
+    { type: <span class="string">"OrderShipped"</span>,     data: { trackingId: <span class="string">"ABC"</span> }, timestamp: <span class="string">"10:30"</span> }
+]
+
+<span class="comment">// Reconstruct state by replaying events</span>
+<span class="keyword">const</span> <span class="function">rebuildOrder</span> = (events) => {
+    <span class="keyword">return</span> events.<span class="function">reduce</span>((state, event) => {
+        <span class="keyword">switch</span>(event.type) {
+            <span class="keyword">case</span> <span class="string">'OrderCreated'</span>: <span class="keyword">return</span> { ...state, status: <span class="string">'CREATED'</span>, ...event.data };
+            <span class="keyword">case</span> <span class="string">'PaymentProcessed'</span>: <span class="keyword">return</span> { ...state, status: <span class="string">'PAID'</span> };
+            <span class="keyword">case</span> <span class="string">'OrderShipped'</span>: <span class="keyword">return</span> { ...state, status: <span class="string">'SHIPPED'</span>, ...event.data };
+        }
+    }, {});
+};</div>
+            </div>
+
+            <div class="highlight-box">
+                <strong>💡 Event Sourcing Benefits:</strong>
+                <ul>
+                    <li><strong>Complete Audit Trail:</strong> Every change is recorded with timestamp and context</li>
+                    <li><strong>Time Travel:</strong> Reconstruct state at any point in time</li>
+                    <li><strong>Debugging:</strong> Replay events to reproduce issues</li>
+                    <li><strong>Event Replay:</strong> Rebuild read models when schema changes</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Message Broker -->
+        <section class="section">
+            <h2>📨 Message Broker & Event Streaming</h2>
+            
+            <h3>Kafka vs RabbitMQ</h3>
+            <table>
+                <tr>
+                    <th>Feature</th>
+                    <th>Apache Kafka</th>
+                    <th>RabbitMQ</th>
+                </tr>
+                <tr>
+                    <td><strong>Architecture</strong></td>
+                    <td>Distributed event log</td>
+                    <td>Traditional message broker</td>
+                </tr>
+                <tr>
+                    <td><strong>Message Retention</strong></td>
+                    <td>Configurable, days to forever</td>
+                    <td>Deleted after consumption</td>
+                </tr>
+                <tr>
+                    <td><strong>Throughput</strong></td>
+                    <td>Very high (millions/sec)</td>
+                    <td>High (hundreds of thousands/sec)</td>
+                </tr>
+                <tr>
+                    <td><strong>Ordering</strong></td>
+                    <td>Per-partition ordering</td>
+                    <td>Per-queue ordering</td>
+                </tr>
+                <tr>
+                    <td><strong>Use Case</strong></td>
+                    <td>Event streaming, log aggregation, real-time</td>
+                    <td>Task queues, RPC, simple pub/sub</td>
+                </tr>
+                <tr>
+                    <td><strong>Consumer Model</strong></td>
+                    <td>Pull-based</td>
+                    <td>Push-based</td>
+                </tr>
+                <tr>
+                    <td><strong>Replay</strong></td>
+                    <td>Yes, from any offset</td>
+                    <td>No (once consumed)</td>
+                </tr>
+            </table>
+
+            <div class="ascii-diagram">┌─────────────────────────────────────────────────────────────────────────┐
+│                      KAFKA ARCHITECTURE                                 │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                         │
+│    ┌─────────────────────────────────────────────────────────────┐     │
+│    │                      KAFKA CLUSTER                          │     │
+│    │                                                             │     │
+│    │   ┌─────────────────────────────────────────────────────┐   │     │
+│    │   │                    TOPIC: orders                    │   │     │
+│    │   │                                                     │   │     │
+│    │   │  ┌─────────────┐ ┌─────────────┐ ┌─────────────┐   │   │     │
+│    │   │  │  Partition  │ │  Partition  │ │  Partition  │   │   │     │
+│    │   │  │      0      │ │      1      │ │      2      │   │   │     │
+│    │   │  │ ┌─────────┐ │ │ ┌─────────┐ │ │ ┌─────────┐ │   │   │     │
+│    │   │  │ │ msg 1   │ │ │ │ msg 1   │ │ │ │ msg 1   │ │   │   │     │
+│    │   │  │ │ msg 2   │ │ │ │ msg 2   │ │ │ │ msg 2   │ │   │   │     │
+│    │   │  │ │ msg 3   │ │ │ │ msg 3   │ │ │ │ ...     │ │   │   │     │
+│    │   │  │ └─────────┘ │ │ └─────────┘ │ │ └─────────┘ │   │   │     │
+│    │   │  └─────────────┘ └─────────────┘ └─────────────┘   │   │     │
+│    │   └─────────────────────────────────────────────────────┘   │     │
+│    │                                                             │     │
+│    │   Broker 1        Broker 2        Broker 3                 │     │
+│    │   (Leader P0)     (Leader P1)     (Leader P2)              │     │
+│    │   (Replica P1)    (Replica P2)    (Replica P0)             │     │
+│    │                                                             │     │
+│    └─────────────────────────────────────────────────────────────┘     │
+│                                                                         │
+│    Producer Groups              Consumer Groups                        │
+│    ┌───────────┐                ┌───────────┐ ┌───────────┐           │
+│    │ Producer  │───────────────▶│ Consumer  │ │ Consumer  │           │
+│    │ Group A   │                │ Group A   │ │ Group A   │           │
+│    └───────────┘                │ (P0, P1)  │ │ (P2)      │           │
+│                                 └───────────┘ └───────────┘           │
+└─────────────────────────────────────────────────────────────────────────┘</div>
+
+            <div class="code-block">
+<span class="comment">// Kafka Producer Configuration</span>
+<span class="keyword">const</span> <span class="variable">producer</span> = kafka.<span class="function">producer</span>({
+    ack: <span class="string">'all'</span>,                    <span class="comment">// Wait for all replicas</span>
+    compression: <span class="type">CompressionTypes.GZIP</span>,
+    maxInFlightRequests: <span class="string">5</span>,
+    idempotent: <span class="keyword">true</span>              <span class="comment">// Exactly-once semantics</span>
+});
+
+<span class="comment">// Kafka Consumer Configuration</span>
+<span class="keyword">const</span> <span class="variable">consumer</span> = kafka.<span class="function">consumer</span>({
+    groupId: <span class="string">'order-processor-group'</span>,
+    autoCommit: <span class="keyword">false</span>,            <span class="comment">// Manual offset commit</span>
+    fromBeginning: <span class="keyword">false</span>,          <span class="comment">// Start from latest</span>
+    sessionTimeout: <span class="string">30000</span>,        <span class="comment">// 30 seconds</span>
+    heartbeatInterval: <span class="string">3000</span>       <span class="comment">// 3 seconds</span>
+});
+
+<span class="comment">// Consuming with Manual Commit</span>
+<span class="keyword">await</span> consumer.<span class="function">run</span>({
+    eachMessage: <span class="keyword">async</span> ({ topic, partition, message }) => {
+        <span class="keyword">try</span> {
+            <span class="keyword">await</span> <span class="function">processMessage</span>(message);
+            <span class="keyword">await</span> consumer.<span class="function">commitOffsets</span>([{ topic, partition, offset: message.offset + <span class="string">1</span> }]);
+        } <span class="keyword">catch</span> (error) {
+            <span class="comment">// Don't commit - will be redelivered</span>
+            logger.<span class="function">error</span>(<span class="string">'Processing failed'</span>, error);
+        }
+    }
+});</div>
+
+            <h3>Message Patterns</h3>
+            <div class="pattern-grid">
+                <div class="pattern-card behavioral">
+                    <h4>📨 Point-to-Point</h4>
+                    <p>One producer, one consumer. Message processed by single consumer. Use for task queues.</p>
+                </div>
+                <div class="pattern-card behavioral">
+                    <h4>📢 Publish-Subscribe</h4>
+                    <p>One producer, multiple consumers. Each consumer gets a copy. Use for event broadcasting.</p>
+                </div>
+                <div class="pattern-card behavioral">
+                    <h4>🔄 Request-Reply</h4>
+                    <p>Send request, wait for reply on correlation ID. Use for synchronous over async.</p>
+                </div>
+                <div class="pattern-card behavioral">
+                    <h4>⚖️ Competing Consumers</h4>
+                    <p>Multiple consumers, one gets each message. Enables horizontal scaling.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Service Mesh -->
+        <section class="section">
+            <h2>🔗 Service Mesh</h2>
+            
+            <div class="ascii-diagram">┌─────────────────────────────────────────────────────────────────────────┐
+│                      SERVICE MESH ARCHITECTURE                          │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                         │
+│    WITHOUT SERVICE MESH              WITH SERVICE MESH                  │
+│                                                                         │
+│    ┌───────────┐                    ┌───────────┐                       │
+│    │ Service A │                    │ Service A │                       │
+│    │ ┌───────┐ │                    │ ┌───────┐ │                       │
+│    │ │ Retry │ │                    │ │ Proxy │ │ ←─ Sidecar (Envoy)   │
+│    │ │ CB    │ │                    │ │(Envoy)│ │                       │
+│    │ │ Auth  │ │                    │ └───┬───┘ │                       │
+│    │ │ Trace │ │                    └─────┼─────┘                       │
+│    │ └───────┘ │                          │                             │
+│    └─────┬─────┘                          │                             │
+│          │                                │                             │
+│          │ Network call                   │                             │
+│          │ with all logic                 │                             │
+│          │                                │                             │
+│    ┌─────▼─────┐                    ┌─────▼─────┐                       │
+│    │ Service B │                    │ Service B │                       │
+│    │ ┌───────┐ │                    │ ┌───────┐ │                       │
+│    │ │ Retry │ │                    │ │ Proxy │ │                       │
+│    │ │ CB    │ │                    │ │(Envoy)│ │                       │
+│    │ │ Auth  │ │                    │ └───────┘ │                       │
+│    │ └───────┘ │                    └───────────┘                       │
+│    └───────────┘                                                        │
+│                                                                         │
+│    Each service handles:            Service Mesh handles:               │
+│    - Retry logic                    - Traffic management                │
+│    - Circuit breaking               - Security (mTLS)                   │
+│    - Authentication                 - Observability                     │
+│    - Tracing                        - Policy enforcement                │
+│    - Load balancing                 - Load balancing                    │
+└─────────────────────────────────────────────────────────────────────────┘</div>
+
+            <h3>Istio Architecture</h3>
+            <div class="grid">
+                <div class="card">
+                    <h4>Control Plane (Istiod)</h4>
+                    <ul>
+                        <li><strong>Pilot:</strong> Service discovery, traffic management</li>
+                        <li><strong>Citadel:</strong> Certificate management, mTLS</li>
+                        <li><strong>Galley:</strong> Configuration validation</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h4>Data Plane (Envoy Proxies)</h4>
+                    <ul>
+                        <li>Sidecar container per pod</li>
+                        <li>Intercepts all traffic</li>
+                        <li>L7 load balancing</li>
+                        <li>Circuit breaking, retries</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="code-block">
+<span class="comment">// Istio Traffic Management - VirtualService</span>
+<span class="keyword">apiVersion</span>: networking.istio.io/v1beta1
+<span class="keyword">kind</span>: VirtualService
+<span class="keyword">metadata</span>:
+  <span class="variable">name</span>: order-service
+<span class="keyword">spec</span>:
+  <span class="variable">hosts</span>:
+    - order-service
+  <span class="variable">http</span>:
+    - <span class="variable">match</span>:
+        - <span class="variable">headers</span>:
+            x-version:
+              <span class="variable">exact</span>: v2
+      <span class="variable">route</span>:
+        - <span class="variable">destination</span>:
+            <span class="variable">host</span>: order-service
+            <span class="variable">subset</span>: v2
+    - <span class="variable">route</span>:
+        - <span class="variable">destination</span>:
+            <span class="variable">host</span>: order-service
+            <span class="variable">subset</span>: v1
+          <span class="variable">weight</span>: 90
+        - <span class="variable">destination</span>:
+            <span class="variable">host</span>: order-service
+            <span class="variable">subset</span>: v2
+          <span class="variable">weight</span>: 10
+    - <span class="variable">retries</span>:
+        <span class="variable">attempts</span>: 3
+        <span class="variable">perTryTimeout</span>: 2s
+      <span class="variable">timeout</span>: 10s
+
+---
+<span class="comment">// DestinationRule for Subsets</span>
+<span class="keyword">apiVersion</span>: networking.istio.io/v1beta1
+<span class="keyword">kind</span>: DestinationRule
+<span class="keyword">metadata</span>:
+  <span class="variable">name</span>: order-service
+<span class="keyword">spec</span>:
+  <span class="variable">host</span>: order-service
+  <span class="variable">subsets</span>:
+    - <span class="variable">name</span>: v1
+      <span class="variable">labels</span>:
+        version: v1
+    - <span class="variable">name</span>: v2
+      <span class="variable">labels</span>:
+        version: v2
+  <span class="variable">trafficPolicy</span>:
+    <span class="variable">connectionPool</span>:
+      <span class="variable">tcp</span>:
+        <span class="variable">maxConnections</span>: 100
+      <span class="variable">http</span>:
+        <span class="variable">h2UpgradePolicy</span>: UPGRADE
+    <span class="variable">outlierDetection</span>:
+      <span class="variable">consecutive5xxErrors</span>: 3
+      <span class="variable">interval</span>: 30s
+      <span class="variable">ejectionTime</span>: 30s</div>
+        </section>
+
+        <!-- Observability -->
+        <section class="section">
+            <h2>📊 Observability (Three Pillars)</h2>
+            
+            <div class="ascii-diagram">┌─────────────────────────────────────────────────────────────────────────┐
+│                    THREE PILLARS OF OBSERVABILITY                       │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                         │
+│  ┌─────────────────┐ ┌─────────────────┐ ┌─────────────────┐           │
+│  │    METRICS      │ │     LOGS        │ │    TRACES       │           │
+│  │                 │ │                 │ │                 │           │
+│  │ "What happened?"│ │ "Why it         │ │ "Where did the  │           │
+│  │                 │ │  happened?"     │ │  request go?"   │           │
+│  │                 │ │                 │ │                 │           │
+│  │ Aggregated      │ │ Discrete        │ │ Request flow    │           │
+│  │ numerical data  │ │ event records   │ │ across services │           │
+│  │                 │ │                 │ │                 │           │
+│  │ • CPU, Memory   │ │ • Error logs    │ │ • Span ID       │           │
+│  │ • Request rate  │ │ • Access logs   │ │ • Parent Span   │           │
+│  │ • Error rate    │ │ • Audit logs    │ │ • Duration      │           │
+│  │ • Latency       │ │ • Debug logs    │ │ • Tags/Labels   │           │
+│  │                 │ │                 │ │                 │           │
+│  │ Tools:          │ │ Tools:          │ │ Tools:          │           │
+│  │ Prometheus      │ │ ELK Stack       │ │ Jaeger          │           │
+│  │ Grafana         │ │ Loki            │ │ Zipkin          │           │
+│  │ Datadog         │ │ Splunk          │ │ OpenTelemetry   │           │
+│  └─────────────────┘ └─────────────────┘ └─────────────────┘           │
+│                                                                         │
+│                    ┌─────────────────────┐                              │
+│                    │   CORRELATION ID    │                              │
+│                    │   (Connects All)    │                              │
+│                    └─────────────────────┘                              │
+└─────────────────────────────────────────────────────────────────────────┘</div>
+
+            <h3>Distributed Tracing</h3>
+            <div class="ascii-diagram">┌─────────────────────────────────────────────────────────────────────────┐
+│                    DISTRIBUTED TRACE EXAMPLE                            │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                         │
+│  Trace ID: abc123 | Total Duration: 150ms                               │
+│                                                                         │
+│  Service       Operation           Duration    Status                   │
+│  ─────────────────────────────────────────────────────────────         │
+│                                                                         │
+│  API Gateway   POST /orders        │████████│  150ms    200            │
+│       │                                                                │
+│       ├── Order   createOrder      │████│     45ms     200             │
+│       │       │                                                        │
+│       │       ├── DB    insert     │██│       20ms     200             │
+│       │                                                                │
+│       ├── Inventory  checkStock    │███│      35ms     200             │
+│       │       │                                                        │
+│       │       ├── Cache   get      ││         5ms      MISS            │
+│       │       └── DB      query    ││         10ms     200             │
+│       │                                                                │
+│       ├── Payment   charge         │██████│   60ms     200             │
+│       │       │                                                        │
+│       │       └── Stripe  API      │█████│    55ms     200             │
+│       │                                                                │
+│       └── Kafka   publish          ││         8ms      200             │
+│                                                                         │
+│  Span Context Propagation:                                              │
+│  Headers: trace-id: abc123, span-id: xyz789, parent-span-id: parent    │
+└─────────────────────────────────────────────────────────────────────────┘</div>
+
+            <h3>Essential Metrics (RED Method)</h3>
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="value">R</div>
+                    <div class="label"><strong>Rate</strong> - Requests per second</div>
+                </div>
+                <div class="metric-card">
+                    <div class="value">E</div>
+                    <div class="label"><strong>Errors</strong> - Failed requests per second</div>
+                </div>
+                <div class="metric-card">
+                    <div class="value">D</div>
+                    <div class="label"><strong>Duration</strong> - Latency distribution (p50, p95, p99)</div>
+                </div>
+            </div>
+
+            <h3>USE Method (For Resources)</h3>
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="value">U</div>
+                    <div class="label"><strong>Utilization</strong> - % time resource busy</div>
+                </div>
+                <div class="metric-card">
+                    <div class="value">S</div>
+                    <div class="label"><strong>Saturation</strong> - Queue length / backlog</div>
+                </div>
+                <div class="metric-card">
+                    <div class="value">E</div>
+                    <div class="label"><strong>Errors</strong> - Error event count</div>
+                </div>
+            </div>
+
+            <div class="code-block">
+<span class="comment">// OpenTelemetry Instrumentation</span>
+<span class="keyword">import</span> { trace, metrics } <span class="keyword">from</span> <span class="string">'@opentelemetry/api'</span>;
+
+<span class="keyword">const</span> <span class="variable">tracer</span> = trace.<span class="function">getTracer</span>(<span class="string">'order-service'</span>);
+<span class="keyword">const</span> <span class="variable">meter</span> = metrics.<span class="function">getMeter</span>(<span class="string">'order-service'</span>);
+
+<span class="comment">// Create metrics</span>
+<span class="keyword">const</span> <span class="variable">requestCounter</span> = meter.<span class="function">createCounter</span>(<span class="string">'orders.created'</span>, {
+    description: <span class="string">'Number of orders created'</span>
+});
+
+<span class="keyword">const</span> <span class="variable">latencyHistogram</span> = meter.<span class="function">createHistogram</span>(<span class="string">'order.duration'</span>, {
+    description: <span class="string">'Order processing duration'</span>,
+    unit: <span class="string">'ms'</span>
+});
+
+<span class="comment">// Create span with attributes</span>
+<span class="keyword">const</span> <span class="variable">span</span> = tracer.<span class="function">startSpan</span>(<span class="string">'createOrder'</span>, {
+    attributes: {
+        <span class="string">'order.id'</span>: orderId,
+        <span class="string">'customer.id'</span>: customerId,
+        <span class="string">'order.items.count'</span>: items.length
+    }
+});
+
+<span class="keyword">try</span> {
+    <span class="keyword">const</span> startTime = Date.<span class="function">now</span>();
+    <span class="keyword">const</span> order = <span class="keyword">await</span> <span class="function">processOrder</span>(orderData);
+    
+    requestCounter.<span class="function">add</span>(<span class="string">1</span>, { status: <span class="string">'success'</span> });
+    latencyHistogram.<span class="function">record</span>(Date.<span class="function">now</span>() - startTime);
+    span.<span class="function">setStatus</span>({ code: SpanStatusCode.OK });
+    
+    <span class="keyword">return</span> order;
+} <span class="keyword">catch</span> (error) {
+    span.<span class="function">recordException</span>(error);
+    span.<span class="function">setStatus</span>({ code: SpanStatusCode.ERROR, message: error.message });
+    requestCounter.<span class="function">add</span>(<span class="string">1</span>, { status: <span class="string">'error'</span> });
+    <span class="keyword">throw</span> error;
+} <span class="keyword">finally</span> {
+    span.<span class="function">end</span>();
+}</div>
+        </section>
+
+        <!-- Deployment -->
+        <section class="section">
+            <h2>🚀 Deployment Strategies</h2>
+            
+            <h3>Deployment Patterns Comparison</h3>
+            <div class="ascii-diagram">┌─────────────────────────────────────────────────────────────────────────┐
+│                    DEPLOYMENT STRATEGIES                                │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                         │
+│  ROLLING UPDATE           BLUE-GREEN          CANARY                    │
+│  ┌────────────────┐      ┌────────────────┐   ┌────────────────┐       │
+│  │ v1 v1 v1 v1    │      │ Blue (v1)      │   │ v1 v1 v1 v1    │       │
+│  │      ↓         │      │ ████████████   │   │      ↓         │       │
+│  │ v2 v1 v1 v1    │      │                │   │ v2 v1 v1 v1    │       │
+│  │      ↓         │      │ Green (v2)     │   │ (5% traffic)   │       │
+│  │ v2 v2 v1 v1    │      │ ░░░░░░░░░░░░░░ │   │      ↓         │       │
+│  │      ↓         │      │      ↓         │   │ v2 v2 v1 v1    │       │
+│  │ v2 v2 v2 v1    │      │ Switch traffic │   │ (20% traffic)  │       │
+│  │      ↓         │      │      ↓         │   │      ↓         │       │
+│  │ v2 v2 v2 v2    │      │ Green (v2)     │   │ v2 v2 v2 v2    │       │
+│  └────────────────┘      │ ████████████   │   │ (100% traffic) │       │
+│                          └────────────────┘   └────────────────┘       │
+│                                                                         │
+│  Pros:                   Pros:                Pros:                     │
+│  - Zero downtime         - Instant rollback   - Gradual rollout         │
+│  - Resource efficient    - Full testing       - Risk mitigation         │
+│                          before switch        - Real user testing       │
+│                                                                         │
+│  Cons:                   Cons:                Cons:                     │
+│  - Slow rollback         - 2x resources       - Complex routing         │
+│  - Mixed versions        - Resource waste     - Longer deployment       │
+│    during rollout                                                       │
+└─────────────────────────────────────────────────────────────────────────┘</div>
+
+            <h3>Kubernetes Deployment Configuration</h3>
+            <div class="code-block">
+<span class="comment">// Kubernetes Deployment with Rolling Update</span>
+<span class="keyword">apiVersion</span>: apps/v1
+<span class="keyword">kind</span>: Deployment
+<span class="keyword">metadata</span>:
+  <span class="variable">name</span>: order-service
+<span class="keyword">spec</span>:
+  <span class="variable">replicas</span>: 4
+  <span class="variable">strategy</span>:
+    <span class="variable">type</span>: RollingUpdate
+    <span class="variable">rollingUpdate</span>:
+      <span class="variable">maxSurge</span>: 1          <span class="comment"># Max pods over desired count</span>
+      <span class="variable">maxUnavailable</span>: 1   <span class="comment"># Max pods that can be unavailable</span>
+  <span class="variable">selector</span>:
+    <span class="variable">matchLabels</span>:
+      app: order-service
+  <span class="variable">template</span>:
+    <span class="variable">metadata</span>:
+      <span class="variable">labels</span>:
+        app: order-service
+        version: v1
+    <span class="variable">spec</span>:
+      <span class="variable">containers</span>:
+        - <span class="variable">name</span>: order-service
+          <span class="variable">image</span>: order-service:v1
+          <span class="variable">ports</span>:
+            - <span class="variable">containerPort</span>: 8080
+          <span class="variable">resources</span>:
+            <span class="variable">requests</span>:
+              memory: <span class="string">"256Mi"</span>
+              cpu: <span class="string">"250m"</span>
+            <span class="variable">limits</span>:
+              memory: <span class="string">"512Mi"</span>
+              cpu: <span class="string">"500m"</span>
+          <span class="variable">livenessProbe</span>:
+            <span class="variable">httpGet</span>:
+              path: /health/live
+              port: 8080
+            <span class="variable">initialDelaySeconds</span>: 30
+            <span class="variable">periodSeconds</span>: 10
+          <span class="variable">readinessProbe</span>:
+            <span class="variable">httpGet</span>:
+              path: /health/ready
+              port: 8080
+            <span class="variable">initialDelaySeconds</span>: 5
+            <span class="variable">periodSeconds</span>: 5
+          <span class="variable">env</span>:
+            - <span class="variable">name</span>: DB_HOST
+              <span class="variable">valueFrom</span>:
+                <span class="variable">configMapKeyRef</span>:
+                  name: order-config
+                  key: db_host
+            - <span class="variable">name</span>: DB_PASSWORD
+              <span class="variable">valueFrom</span>:
+                <span class="variable">secretKeyRef</span>:
+                  name: order-secrets
+                  key: db_password
+
+---
+<span class="comment">// Horizontal Pod Autoscaler</span>
+<span class="keyword">apiVersion</span>: autoscaling/v2
+<span class="keyword">kind</span>: HorizontalPodAutoscaler
+<span class="keyword">metadata</span>:
+  <span class="variable">name</span>: order-service-hpa
+<span class="keyword">spec</span>:
+  <span class="variable">scaleTargetRef</span>:
+    <span class="variable">apiVersion</span>: apps/v1
+    <span class="variable">kind</span>: Deployment
+    <span class="variable">name</span>: order-service
+  <span class="variable">minReplicas</span>: 2
+  <span class="variable">maxReplicas</span>: 10
+  <span class="variable">metrics</span>:
+    - <span class="variable">type</span>: Resource
+      <span class="variable">resource</span>:
+        <span class="variable">name</span>: cpu
+        <span class="variable">target</span>:
+          <span class="variable">type</span>: Utilization
+          <span class="variable">averageUtilization</span>: 70
+    - <span class="variable">type</span>: Resource
+      <span class="variable">resource</span>:
+        <span class="variable">name</span>: memory
+        <span class="variable">target</span>:
+          <span class="variable">type</span>: Utilization
+          <span class="variable">averageUtilization</span>: 80</div>
+
+            <h3>CI/CD Pipeline for Microservices</h3>
+            <div class="ascii-diagram">┌─────────────────────────────────────────────────────────────────────────┐
+│                    CI/CD PIPELINE                                       │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                         │
+│  Git Push → Build → Test → Security → Package → Deploy → Monitor      │
+│                                                                         │
+│  ┌──────┐   ┌────────┐   ┌────────┐   ┌────────┐   ┌────────┐          │
+│  │ Code │──▶│ Build  │──▶│ Test   │──▶│ Scan   │──▶│ Docker │          │
+│  │ Push │   │        │   │        │   │        │   │ Build  │          │
+│  └──────┘   └────────┘   └────────┘   └────────┘   └───┬────┘          │
+│    │           │            │            │             │               │
+│    │        Compile      Unit Test   SAST/DAST      Image             │
+│    │        Lint         Integration Dependency     Push              │
+│    │        Deps         E2E Test    Scan          to Registry        │
+│    │                                                     │            │
+│    │                                                     ▼            │
+│    │           ┌────────────────────────────────────────────────┐     │
+│    │           │              DEPLOYMENT STAGES                  │     │
+│    │           │                                              │     │
+│    │           │  Dev → Staging → Canary → Production          │     │
+│    │           │                                              │     │
+│    │           │  ┌─────┐   ┌───────┐   ┌───────┐   ┌──────┐  │     │
+│    │           │  │ Dev │──▶│ Stage │──▶│Canary │──▶│ Prod │  │     │
+│    │           │  └─────┘   └───────┘   └───────┘   └──────┘  │     │
+│    │           │     │          │           │           │      │     │
+│    │           │  Auto      Manual      Auto        Manual    │     │
+│    │           │  deploy    approval    canary      promote   │     │
+│    │           │                        (5% test)             │     │
+│    │           └────────────────────────────────────────────────┘     │
+│    │                                                                  │
+│    │           ┌────────────────────────────────────────────────┐     │
+│    └──────────▶│              OBSERVABILITY                      │     │
+│                │  Metrics │ Logs │ Traces │ Alerts │ Dashboards │     │
+│                └────────────────────────────────────────────────┘     │
+└─────────────────────────────────────────────────────────────────────────┘</div>
+        </section>
+
+        <!-- Security -->
+        <section class="section">
+            <h2>🔐 Security Patterns</h2>
+            
+            <h3>Zero Trust Architecture</h3>
+            <div class="ascii-diagram">┌─────────────────────────────────────────────────────────────────────────┐
+│                    ZERO TRUST SECURITY MODEL                            │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                         │
+│    Traditional: "Trust but verify" inside perimeter                     │
+│    Zero Trust: "Never trust, always verify" everywhere                  │
+│                                                                         │
+│    ┌──────────────────────────────────────────────────────────────┐    │
+│    │                    IDENTITY LAYER                             │    │
+│    │         Identity Provider (OAuth2/OIDC/SSO)                  │    │
+│    │                    /           \                              │    │
+│    │           User Identity    Service Identity                   │    │
+│    └──────────────────────────────────────────────────────────────┘    │
+│                                  │                                     │
+│                                  ▼                                     │
+│    ┌──────────────────────────────────────────────────────────────┐    │
+│    │                    POLICY ENGINE                              │    │
+│    │         "Who can do what to which resource?"                 │    │
+│    │                                                              │    │
+│    │    ┌──────────┐  ┌──────────┐  ┌──────────┐                 │    │
+│    │    │  User A  │  │ Service X│  │  Admin   │                 │    │
+│    │    │→ Order:R│  │→ Order:RW│  │→ *:*     │                 │    │
+│    │    └──────────┘  └──────────┘  └──────────┘                 │    │
+│    └──────────────────────────────────────────────────────────────┘    │
+│                                  │                                     │
+│                                  ▼                                     │
+│    ┌──────────────────────────────────────────────────────────────┐    │
+│    │                    NETWORK SECURITY                           │    │
+│    │                                                              │    │
+│    │    ┌─────────────────┐    ┌─────────────────┐                │    │
+│    │    │   mTLS enabled  │    │ Network Policies│                │    │
+│    │    │   (Service Mesh)│    │   (K8s NS)      │                │    │
+│    │    └─────────────────┘    └─────────────────┘                │    │
+│    │                                                              │    │
+│    │    Service A ←──mTLS──→ Service B ←──mTLS──→ Service C      │    │
+│    └──────────────────────────────────────────────────────────────┘    │
+└─────────────────────────────────────────────────────────────────────────┘</div>
+
+            <h3>Authentication & Authorization</h3>
+            <div class="grid">
+                <div class="card">
+                    <h4>🎫 OAuth 2.0 / OIDC</h4>
+                    <div class="code-block">
+<span class="comment">// OAuth 2.0 Flows</span>
+Authorization Code  <span class="comment">// Server-side apps</span>
+  → User → Auth Server
+  → Code → Token Exchange
+
+Client Credentials  <span class="comment">// Service-to-service</span>
+  → Service ID + Secret
+  → Access Token
+
+PKCE               <span class="comment">// Mobile/SPA</span>
+  → Code + Challenge
+  → Token</div>
+                </div>
+                <div class="card">
+                    <h4>🔑 JWT Token Structure</h4>
+                    <div class="code-block">
+<span class="comment">// JWT Payload</span>
+{
+  <span class="string">"sub"</span>: <span class="string">"user-123"</span>,      <span class="comment">// Subject</span>
+  <span class="string">"iss"</span>: <span class="string">"auth.service"</span>, <span class="comment">// Issuer</span>
+  <span class="string">"aud"</span>: <span class="string">"api.myapp.com"</span>,<span class="comment">// Audience</span>
+  <span class="string">"exp"</span>: <span class="string">1704067200</span>,    <span class="comment">// Expiry</span>
+  <span class="string">"iat"</span>: <span class="string">1704063600</span>,    <span class="comment">// Issued at</span>
+  <span class="string">"scope"</span>: <span class="string">"read:orders write:orders"</span>,
+  <span class="string">"roles"</span>: [<span class="string">"user"</span>, <span class="string">"admin"</span>]
+}</div>
+                </div>
+            </div>
+
+            <h3>Security Best Practices Checklist</h3>
+            <div class="pattern-grid">
+                <div class="pattern-card resilience">
+                    <h4>🔐 Transport Security</h4>
+                    <ul>
+                        <li>mTLS for all service-to-service</li>
+                        <li>TLS 1.3 for external APIs</li>
+                        <li>Certificate rotation automation</li>
+                        <li>No plain-text communication</li>
+                    </ul>
+                </div>
+                <div class="pattern-card resilience">
+                    <h4>🎫 Token Security</h4>
+                    <ul>
+                        <li>Short-lived access tokens (15min)</li>
+                        <li>Refresh token rotation</li>
+                        <li>Token revocation mechanism</li>
+                        <li>Secure token storage</li>
+                    </ul>
+                </div>
+                <div class="pattern-card resilience">
+                    <h4>📝 Input Validation</h4>
+                    <ul>
+                        <li>Validate all inputs at API gateway</li>
+                        <li>Sanitize for SQL injection</li>
+                        <li>Escape for XSS</li>
+                        <li>Rate limiting per user/IP</li>
+                    </ul>
+                </div>
+                <div class="pattern-card resilience">
+                    <h4>🔒 Secrets Management</h4>
+                    <ul>
+                        <li>Vault/Secrets Manager</li>
+                        <li>No secrets in code/env files</li>
+                        <li>Automatic secret rotation</li>
+                        <li>Audit logging for access</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Testing -->
+        <section class="section">
+            <h2>🧪 Testing Strategies</h2>
+            
+            <h3>Testing Pyramid for Microservices</h3>
+            <div class="ascii-diagram">┌─────────────────────────────────────────────────────────────────────────┐
+│                    MICROSERVICES TEST PYRAMID                           │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                         │
+│                         ╱╲                                              │
+│                        ╱  ╲        End-to-End Tests                     │
+│                       ╱ E2E╲       - Full system flow                   │
+│                      ╱──────╲      - User journey simulation            │
+│                     ╱        ╲     - 5% of tests, slowest               │
+│                    ╱──────────╲                                         │
+│                   ╱  Contract   ╲    Contract Tests                     │
+│                  ╱    Tests     ╲    - API compatibility                │
+│                 ╱────────────────╲   - Consumer-driven                  │
+│                ╱                  ╲  - 15% of tests                     │
+│               ╱  Integration Tests ╲                                    │
+│              ╱────────────────────────╲ Service integration             │
+│             ╱                          ╲ - External dependencies        │
+│            ╱────────────────────────────╲ - 25% of tests               │
+│           ╱                              ╲                              │
+│          ╱       Unit Tests               ╲ Fast, isolated              │
+│         ╱__________________________________╲ - Mock dependencies        │
+│        ╱                                    ╲ - 55% of tests, fastest  │
+│       ╱______________________________________╲                         │
+│                                                                         │
+│   Speed: Fast (ms) ←←←←←←←←←←←←←←←←←←←←← Slow (min)                   │
+│   Cost:  Low    ←←←←←←←←←←←←←←←←←←←←←←←← High                        │
+│   Scope: Narrow  ←←←←←←←←←←←←←←←←←←←←←←← Wide                         │
+└─────────────────────────────────────────────────────────────────────────┘</div>
+
+            <h3>Contract Testing (Consumer-Driven)</h3>
+            <div class="code-block">
+<span class="comment">// Pact Contract Test - Consumer Side</span>
+
+<span class="keyword">describe</span>(<span class="string">'Order Service Consumer'</span>, () => {
+    <span class="keyword">let</span> provider;
+
+    <span class="keyword">beforeAll</span>(() => {
+        provider = <span class="keyword">new</span> <span class="type">Pact</span>({
+            consumer: <span class="string">'OrderService'</span>,
+            provider: <span class="string">'PaymentService'</span>,
+            port: <span class="string">1234</span>
+        });
+    });
+
+    <span class="keyword">test</span>(<span class="string">'should process payment'</span>, <span class="keyword">async</span> () => {
+        <span class="comment">// Define expected interaction</span>
+        <span class="keyword">await</span> provider.<span class="function">addInteraction</span>({
+            state: <span class="string">'payment method exists'</span>,
+            uponReceiving: <span class="string">'a request to process payment'</span>,
+            withRequest: {
+                method: <span class="string">'POST'</span>,
+                path: <span class="string">'/payments'</span>,
+                headers: { <span class="string">'Content-Type'</span>: <span class="string">'application/json'</span> },
+                body: { orderId: <span class="string">'123'</span>, amount: <span class="string">100</span> }
+            },
+            willRespondWith: {
+                status: <span class="string">200</span>,
+                body: { 
+                    paymentId: <span class="type">like</span>(<span class="string">'pay-abc'</span>),
+                    status: <span class="string">'SUCCESS'</span>
+                }
+            }
+        });
+
+        <span class="comment">// Test the consumer</span>
+        <span class="keyword">const</span> result = <span class="keyword">await</span> paymentClient.<span class="function">processPayment</span>({
+            orderId: <span class="string">'123'</span>,
+            amount: <span class="string">100</span>
+        });
+
+        <span class="function">expect</span>(result.status).<span class="function">toBe</span>(<span class="string">'SUCCESS'</span>>);
+    });
+});
+
+<span class="comment">// Provider Verification - Payment Service Side</span>
+<span class="keyword">describe</span>(<span class="string">'Payment Service Provider'</span>, () => {
+    <span class="keyword">test</span>(<span class="string">'should verify contract'</span>, <span class="keyword">async</span> () => {
+        <span class="keyword">await</span> <span class="keyword">new</span> <span class="type">Verifier</span>({
+            providerBaseUrl: <span class="string">'http://localhost:8080'</span>,
+            pactUrls: [<span class="string">'pacts/orderservice-paymentservice.json'</span>],
+            providerStatesSetupUrl: <span class="string">'http://localhost:8080/setup'</span>
+        }).<span class="function">verifyProvider</span>();
+    });
+});</div>
+
+            <h3>Chaos Engineering</h3>
+            <div class="grid">
+                <div class="card">
+                    <h4>💥 Chaos Experiments</h4>
+                    <ul>
+                        <li><strong>Pod Kill:</strong> Random pod termination</li>
+                        <li><strong>Network Latency:</strong> Add 100ms latency</li>
+                        <li><strong>CPU Stress:</strong> Spike CPU usage</li>
+                        <li><strong>Dependency Failure:</strong> Kill database connection</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h4>🛠️ Tools</h4>
+                    <ul>
+                        <li><strong>Chaos Monkey:</strong> Netflix, random termination</li>
+                        <li><strong>Chaos Mesh:</strong> Kubernetes native</li>
+                        <li><strong>Gremlin:</strong> Enterprise chaos platform</li>
+                        <li><strong>Litmus:</strong> Cloud-native chaos</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Anti-Patterns & Best Practices -->
+        <section class="section">
+            <h2>⚠️ Anti-Patterns & Best Practices</h2>
+            
+            <h3>Common Anti-Patterns</h3>
+            <div class="grid">
+                <div class="card" style="border-left: 4px solid #ef4444;">
+                    <h4>❌ Distributed Monolith</h4>
+                    <p><strong>Symptom:</strong> Services tightly coupled, deploy together, change together.</p>
+                    <p><strong>Fix:</strong> Proper service boundaries, async communication, independent data stores.</p>
+                </div>
+                <div class="card" style="border-left: 4px solid #ef4444;">
+                    <h4>❌ Shared Database</h4>
+                    <p><strong>Symptom:</strong> Multiple services access same database tables.</p>
+                    <p><strong>Fix:</strong> Database per service, API for data access, event-driven sync.</p>
+                </div>
+                <div class="card" style="border-left: 4px solid #ef4444;">
+                    <h4>❌ Chatty Services</h4>
+                    <p><strong>Symptom:</strong> Too many fine-grained API calls between services.</p>
+                    <p><strong>Fix:</strong> Batch APIs, GraphQL, event-driven aggregation, API composition.</p>
+                </div>
+                <div class="card" style="border-left: 4px solid #ef4444;">
+                    <h4>❌ God Service</h4>
+                    <p><strong>Symptom:</strong> One service does too much, becomes a mini-monolith.</p>
+                    <p><strong>Fix:</strong> Split by business capability, apply DDD bounded contexts.</p>
+                </div>
+            </div>
+
+            <h3>Best Practices Summary</h3>
+            <div class="success-box">
+                <strong>✅ DO:</strong>
+                <ul>
+                    <li>Design for failure - assume everything will fail</li>
+                    <li>Keep services small and focused (single responsibility)</li>
+                    <li>Use async communication when possible</li>
+                    <li>Implement proper observability from day one</li>
+                    <li>Automate everything (CI/CD, infrastructure, testing)</li>
+                    <li>Version your APIs from the start</li>
+                    <li>Implement proper security at every layer</li>
+                    <li>Document service contracts and dependencies</li>
+                </ul>
+            </div>
+
+            <div class="warning-box">
+                <strong>⛔ DON'T:</strong>
+                <ul>
+                    <li>Don't start with microservices if you don't need them</li>
+                    <li>Don't share databases between services</li>
+                    <li>Don't use synchronous calls for everything</li>
+                    <li>Don't ignore operational complexity</li>
+                    <li>Don't skip automated testing</li>
+                    <li>Don't hardcode service locations</li>
+                    <li>Don't forget about data consistency</li>
+                    <li>Don't create too many services too early</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Technology Stack -->
+        <section class="section">
+            <h2>🛠️ Technology Stack Reference</h2>
+            
+            <h3>Framework & Language Choices</h3>
+            <table>
+                <tr>
+                    <th>Category</th>
+                    <th>Options</th>
+                    <th>Best For</th>
+                </tr>
+                <tr>
+                    <td><strong>Java/Kotlin</strong></td>
+                    <td>Spring Boot, Quarkus, Micronaut</td>
+                    <td>Enterprise, JVM ecosystem, mature tooling</td>
+                </tr>
+                <tr>
+                    <td><strong>Go</strong></td>
+                    <td>Gin, Echo, Fiber, go-kit</td>
+                    <td>High performance, cloud-native, Kubernetes</td>
+                </tr>
+                <tr>
+                    <td><strong>Node.js</strong></td>
+                    <td>NestJS, Express, Fastify</td>
+                    <td>Fast development, I/O heavy, JavaScript full-stack</td>
+                </tr>
+                <tr>
+                    <td><strong>Python</strong></td>
+                    <td>FastAPI, Django, Flask</td>
+                    <td>Data services, ML integration, rapid prototyping</td>
+                </tr>
+                <tr>
+                    <td><strong>Rust</strong></td>
+                    <td>Actix, Axum, Warp</td>
+                    <td>Performance critical, memory safety, systems</td>
+                </tr>
+                <tr>
+                    <td><strong>C#</strong></td>
+                    <td>.NET Core, ASP.NET Core</td>
+                    <td>Microsoft ecosystem, enterprise</td>
+                </tr>
+            </table>
+
+            <h3>Infrastructure Components</h3>
+            <div class="comparison-grid">
+                <div class="comparison-item">
+                    <h5>Container Orchestration</h5>
+                    <span class="tag blue">Kubernetes</span>
+                    <span class="tag green">Docker Swarm</span>
+                    <span class="tag purple">Nomad</span>
+                </div>
+                <div class="comparison-item">
+                    <h5>Service Mesh</h5>
+                    <span class="tag blue">Istio</span>
+                    <span class="tag green">Linkerd</span>
+                    <span class="tag purple">Consul Connect</span>
+                </div>
+                <div class="comparison-item">
+                    <h5>Message Broker</h5>
+                    <span class="tag blue">Kafka</span>
+                    <span class="tag green">RabbitMQ</span>
+                    <span class="tag purple">NATS</span>
+                    <span class="tag yellow">Pulsar</span>
+                </div>
+                <div class="comparison-item">
+                    <h5>API Gateway</h5>
+                    <span class="tag blue">Kong</span>
+                    <span class="tag green">Envoy</span>
+                    <span class="tag purple">Traefik</span>
+                    <span class="tag yellow">NGINX</span>
+                </div>
+                <div class="comparison-item">
+                    <h5>Monitoring</h5>
+                    <span class="tag blue">Prometheus</span>
+                    <span class="tag green">Grafana</span>
+                    <span class="tag purple">Datadog</span>
+                </div>
+                <div class="comparison-item">
+                    <h5>Tracing</h5>
+                    <span class="tag blue">Jaeger</span>
+                    <span class="tag green">Zipkin</span>
+                    <span class="tag purple">OpenTelemetry</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Quick Decision Guide -->
+        <section class="section">
+            <h2>🎯 Quick Decision Guide</h2>
+            
+            <div class="formula-box">
+<strong>When to Choose Microservices?</strong>
+
+✅ <strong>Choose Microservices when:</strong>
+• Team size > 20 developers
+• Different services need different scaling
+• Clear domain boundaries exist
+• Multiple technology stacks needed
+• Independent deployment is critical
+• Services have different reliability requirements
+
+❌ <strong>Stay with Monolith when:</strong>
+• Small team (< 10 developers)
+• Early-stage startup (PMF search)
+• Simple domain, no clear boundaries
+• Single deployment unit is acceptable
+• No scaling challenges yet
+• Limited operational expertise
+
+🔄 <strong>Migrate to Microservices when:</strong>
+• Monolith becomes hard to maintain
+• Deployment frequency needs to increase
+• Different parts need different scaling
+• Team size and complexity grows
+• Clear bounded contexts emerge
+            </div>
+
+            <h3>Decision Matrix</h3>
+            <table>
+                <tr>
+                    <th>Requirement</th>
+                    <th>Monolith</th>
+                    <th>Microservices</th>
+                </tr>
+                <tr>
+                    <td>Development Speed (Early)</td>
+                    <td>✅ Faster</td>
+                    <td>❌ Slower</td>
+                </tr>
+                <tr>
+                    <td>Scaling Flexibility</td>
+                    <td>❌ Scale whole app</td>
+                    <td>✅ Scale per service</td>
+                </tr>
+                <tr>
+                    <td>Deployment Independence</td>
+                    <td>❌ All or nothing</td>
+                    <td>✅ Per service</td>
+                </tr>
+                <tr>
+                    <td>Technology Freedom</td>
+                    <td>❌ Single stack</td>
+                    <td>✅ Polyglot</td>
+                </tr>
+                <tr>
+                    <td>Operational Complexity</td>
+                    <td>✅ Simple</td>
+                    <td>❌ Complex</td>
+                </tr>
+                <tr>
+                    <td>Team Autonomy</td>
+                    <td>❌ Coupled teams</td>
+                    <td>✅ Independent teams</td>
+                </tr>
+                <tr>
+                    <td>Fault Isolation</td>
+                    <td>❌ Single point</td>
+                    <td>✅ Isolated failures</td>
+                </tr>
+            </table>
+        </section>
+
+        <footer>
+            <p>Microservices Architecture Reference Guide | Built for Production-Ready Distributed Systems</p>
+            <p>Remember: "Microservices are not a free lunch. They solve some problems but introduce others. Choose wisely." - Martin Fowler</p>
+        </footer>
+    </div>
+</body>
+</html>

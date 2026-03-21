@@ -1,0 +1,2128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Distributed Systems - Complete Reference Guide</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+            min-height: 100vh;
+            color: #e4e4e7;
+            line-height: 1.7;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            padding: 40px 20px;
+            background: linear-gradient(180deg, rgba(139, 92, 246, 0.2) 0%, transparent 100%);
+            border-bottom: 1px solid rgba(139, 92, 246, 0.3);
+            margin-bottom: 30px;
+        }
+        
+        h1 {
+            font-size: 2.8rem;
+            background: linear-gradient(135deg, #a78bfa, #818cf8, #38bdf8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 15px;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            color: #94a3b8;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .section {
+            background: rgba(30, 27, 75, 0.7);
+            border-radius: 16px;
+            padding: 25px;
+            margin-bottom: 25px;
+            border: 1px solid rgba(139, 92, 246, 0.2);
+            backdrop-filter: blur(10px);
+        }
+        
+        h2 {
+            font-size: 1.6rem;
+            color: #a78bfa;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid rgba(139, 92, 246, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        h2::before {
+            content: '';
+            width: 4px;
+            height: 24px;
+            background: linear-gradient(180deg, #a78bfa, #38bdf8);
+            border-radius: 2px;
+        }
+        
+        h3 {
+            font-size: 1.2rem;
+            color: #38bdf8;
+            margin: 20px 0 12px 0;
+        }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+        }
+        
+        .card {
+            background: rgba(15, 12, 41, 0.8);
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid rgba(71, 85, 105, 0.4);
+            transition: all 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-3px);
+            border-color: rgba(139, 92, 246, 0.5);
+            box-shadow: 0 10px 40px rgba(139, 92, 246, 0.15);
+        }
+        
+        .card h4 {
+            color: #f472b6;
+            margin-bottom: 12px;
+            font-size: 1.1rem;
+        }
+        
+        .formula-box {
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.15), rgba(56, 189, 248, 0.1));
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            border-radius: 10px;
+            padding: 15px;
+            margin: 15px 0;
+            font-family: 'Fira Code', 'Consolas', monospace;
+            font-size: 0.9rem;
+            overflow-x: auto;
+        }
+        
+        .code-block {
+            background: #0d1117;
+            border-radius: 10px;
+            padding: 18px;
+            margin: 15px 0;
+            font-family: 'Fira Code', 'Consolas', monospace;
+            font-size: 0.85rem;
+            overflow-x: auto;
+            border: 1px solid #30363d;
+        }
+        
+        .code-block .comment { color: #8b949e; }
+        .code-block .keyword { color: #ff7b72; }
+        .code-block .string { color: #a5d6ff; }
+        .code-block .function { color: #d2a8ff; }
+        .code-block .variable { color: #ffa657; }
+        .code-block .type { color: #79c0ff; }
+        
+        .ascii-diagram {
+            background: #0d1117;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 15px 0;
+            font-family: 'Fira Code', 'Consolas', monospace;
+            font-size: 0.8rem;
+            overflow-x: auto;
+            white-space: pre;
+            color: #38bdf8;
+            border: 1px solid #30363d;
+        }
+        
+        .pattern-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 15px;
+        }
+        
+        .pattern-card {
+            background: linear-gradient(135deg, rgba(30, 27, 75, 0.9), rgba(15, 12, 41, 0.9));
+            border-radius: 10px;
+            padding: 18px;
+            border-left: 4px solid;
+        }
+        
+        .pattern-card.consensus { border-color: #10b981; }
+        .pattern-card.consistency { border-color: #f59e0b; }
+        .pattern-card.failure { border-color: #ef4444; }
+        .pattern-card.time { border-color: #8b5cf6; }
+        .pattern-card.coordination { border-color: #06b6d4; }
+        
+        .tag {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-right: 5px;
+            margin-bottom: 5px;
+        }
+        
+        .tag.green { background: rgba(16, 185, 129, 0.2); color: #10b981; }
+        .tag.blue { background: rgba(59, 130, 246, 0.2); color: #3b82f6; }
+        .tag.purple { background: rgba(139, 92, 246, 0.2); color: #8b5cf6; }
+        .tag.red { background: rgba(239, 68, 68, 0.2); color: #ef4444; }
+        .tag.yellow { background: rgba(245, 158, 11, 0.2); color: #f59e0b; }
+        .tag.cyan { background: rgba(6, 182, 212, 0.2); color: #06b6d4; }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            font-size: 0.9rem;
+        }
+        
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid rgba(71, 85, 105, 0.4);
+        }
+        
+        th {
+            background: rgba(139, 92, 246, 0.2);
+            color: #a78bfa;
+            font-weight: 600;
+        }
+        
+        tr:hover {
+            background: rgba(139, 92, 246, 0.05);
+        }
+        
+        .highlight-box {
+            background: linear-gradient(135deg, rgba(244, 114, 182, 0.15), rgba(139, 92, 246, 0.1));
+            border-left: 4px solid #f472b6;
+            padding: 15px 20px;
+            margin: 15px 0;
+            border-radius: 0 10px 10px 0;
+        }
+        
+        .warning-box {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.15), rgba(249, 115, 22, 0.1));
+            border-left: 4px solid #ef4444;
+            padding: 15px 20px;
+            margin: 15px 0;
+            border-radius: 0 10px 10px 0;
+        }
+        
+        .success-box {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(34, 197, 94, 0.1));
+            border-left: 4px solid #10b981;
+            padding: 15px 20px;
+            margin: 15px 0;
+            border-radius: 0 10px 10px 0;
+        }
+        
+        ul, ol {
+            margin: 10px 0;
+            padding-left: 25px;
+        }
+        
+        li {
+            margin: 8px 0;
+        }
+        
+        .quick-ref {
+            background: rgba(6, 182, 212, 0.1);
+            border: 1px solid rgba(6, 182, 212, 0.3);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .quick-ref h4 {
+            color: #06b6d4;
+            margin-bottom: 12px;
+        }
+        
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 15px 0;
+        }
+        
+        .comparison-item {
+            background: rgba(15, 12, 41, 0.6);
+            padding: 15px;
+            border-radius: 8px;
+        }
+        
+        .comparison-item h5 {
+            color: #f472b6;
+            margin-bottom: 8px;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 30px;
+            color: #64748b;
+            border-top: 1px solid rgba(139, 92, 246, 0.2);
+            margin-top: 40px;
+        }
+
+        .theorem-box {
+            background: linear-gradient(135deg, rgba(251, 191, 36, 0.15), rgba(245, 158, 11, 0.1));
+            border: 1px solid rgba(251, 191, 36, 0.3);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 15px 0;
+        }
+
+        .theorem-box h4 {
+            color: #fbbf24;
+            margin-bottom: 10px;
+        }
+
+        .math-formula {
+            font-family: 'Times New Roman', serif;
+            font-size: 1.1rem;
+            text-align: center;
+            padding: 15px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 8px;
+            margin: 10px 0;
+        }
+
+        .algorithm-box {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 15px 0;
+        }
+
+        .algorithm-box h4 {
+            color: #10b981;
+            margin-bottom: 10px;
+        }
+
+        .step-flow {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 15px 0;
+            align-items: center;
+        }
+
+        .step-flow .step {
+            background: rgba(139, 92, 246, 0.2);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+
+        .step-flow .arrow {
+            color: #a78bfa;
+            font-size: 1.2rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🌐 Distributed Systems</h1>
+            <p class="subtitle">Complete Reference Guide: Theoretical Foundations, Consensus Algorithms, Consistency Models, Fault Tolerance & Real-World System Design</p>
+        </header>
+
+        <!-- Quick Reference Summary -->
+        <section class="section">
+            <h2>⚡ Quick Reference Summary</h2>
+            <div class="quick-ref">
+                <h4>🎯 Fundamental Properties</h4>
+                <div class="grid">
+                    <div class="card">
+                        <h4>CAP Theorem</h4>
+                        <p>Of Consistency, Availability, Partition Tolerance — choose at most two in a distributed system during a network partition.</p>
+                        <div class="tag yellow">Foundation</div>
+                    </div>
+                    <div class="card">
+                        <h4>FLP Impossibility</h4>
+                        <p>In an async distributed system, no deterministic algorithm can guarantee consensus even with one faulty process.</p>
+                        <div class="tag red">Impossibility</div>
+                    </div>
+                    <div class="card">
+                        <h4>Fallacies of Distributed Computing</h4>
+                        <p>Network is reliable, latency is zero, bandwidth is infinite... All false assumptions that cause failures.</p>
+                        <div class="tag purple">Reality Check</div>
+                    </div>
+                    <div class="card">
+                        <h4>Two Generals Problem</h4>
+                        <p>Perfect reliable communication over unreliable link is impossible. Used to illustrate consensus challenges.</p>
+                        <div class="tag blue">Classic Problem</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="ascii-diagram">┌─────────────────────────────────────────────────────────────────────────────┐
+│                    DISTRIBUTED SYSTEM OVERVIEW                               │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│    ┌──────────────────────────────────────────────────────────────────┐    │
+│    │                     DISTRIBUTED SYSTEM                            │    │
+│    │                                                                  │    │
+│    │    ┌─────────┐         ┌─────────┐         ┌─────────┐          │    │
+│    │    │  Node A │◄───────▶│  Node B │◄───────▶│  Node C │          │    │
+│    │    │ (Leader)│         │(Follower)│        │(Follower)│          │    │
+│    │    └────┬────┘         └────┬────┘         └────┬────┘          │    │
+│    │         │                   │                   │                │    │
+│    │         │    ┌──────────────────────────┐      │                │    │
+│    │         └───▶│   SHARED NOTHING         │◀─────┘                │    │
+│    │              │   - No shared memory     │                       │    │
+│    │              │   - No shared clock      │                       │    │
+│    │              │   - Message passing only │                       │    │
+│    │              └──────────────────────────┘                       │    │
+│    │                                                                  │    │
+│    │    KEY CHALLENGES:                                               │    │
+│    │    ┌──────────────┐ ┌──────────────┐ ┌──────────────┐          │    │
+│    │    │ Coordination │ │  Consistency │ │ Fault Tolerance│         │    │
+│    │    │ - Consensus  │ │ - Models     │ │ - Detection    │         │    │
+│    │    │ - Leader     │ │ - Levels     │ │ - Recovery     │         │    │
+│    │    │   Election   │ │ - Trade-offs │ │ - Replication  │         │    │
+│    │    └──────────────┘ └──────────────┘ └──────────────┘          │    │
+│    └──────────────────────────────────────────────────────────────────┘    │
+│                                                                             │
+│    Communication: Message Passing (RPC, HTTP, gRPC, Message Queues)        │
+│    Coordination: Consensus, Locks, Leader Election, Barriers              │
+│    Consistency: Strong, Eventual, Causal, Linearizable                    │
+│    Fault Tolerance: Replication, Checkpointing, Recovery                  │
+└─────────────────────────────────────────────────────────────────────────────┘</div>
+        </section>
+
+        <!-- Theoretical Foundations -->
+        <section class="section">
+            <h2>📚 Theoretical Foundations</h2>
+            
+            <h3>CAP Theorem (Brewer's Theorem)</h3>
+            <div class="ascii-diagram">┌─────────────────────────────────────────────────────────────────────────┐
+│                         CAP THEOREM                                     │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                         │
+│                          Consistency (C)                                │
+│                               ▲                                         │
+│                              /│\                                        │
+│                             / │ \                                       │
+│                            /  │  \                                      │
+│                           /   │   \                                     │
+│                          /    │    \                                    │
+│                         /     │     \                                   │
+│                        /      │      \                                  │
+│                       /       │       \                                 │
+│         CA System ◀──┘        │        └──▶ CP System                  │
+│         (Traditional          │            (MongoDB,                    │
+│          RDBMS)               │             HBase,                      │
+│                               │             ZooKeeper)                  │
+│                               │                                         │
+│                               │                                         │
+│         Availability ◀────────┼──────────▶ Partition                   │
+│               (A)             │            Tolerance (P)               │
+│                               │                                         │
+│                               │                                         │
+│         AP System ◀──┐        │        └──▶ Must choose C or A         │
+│         (Cassandra,  │        │             when P occurs              │
+│          DynamoDB,   │        │                                         │
+│          CouchDB)    │        │                                         │
+│                       \       │       /                                 │
+│                        \      │      /                                  │
+│                         \     │     /                                   │
+│                          \    │    /                                    │
+│                           \   │   /                                     │
+│                            \  │  /                                      │
+│                             \ │ /                                       │
+│                              \│/                                        │
+│                               ▼                                         │
+│                          Network                                        │
+│                          Partition                                      │
+│                                                                         │
+│    In reality: P is mandatory in distributed systems                    │
+│    → Real choice is between CP and AP                                   │
+└─────────────────────────────────────────────────────────────────────────┘</div>
+
+            <div class="comparison-grid">
+                <div class="comparison-item">
+                    <h5>Consistency (C)</h5>
+                    <p>All nodes see the same data at the same time. Every read returns the most recent write or an error.</p>
+                    <span class="tag yellow">Linearizable</span>
+                </div>
+                <div class="comparison-item">
+                    <h5>Availability (A)</h5>
+                    <p>Every request receives a response (success or failure), without guarantee it contains the most recent write.</p>
+                    <span class="tag green">Always Respond</span>
+                </div>
+                <div class="comparison-item">
+                    <h5>Partition Tolerance (P)</h5>
+                    <p>System continues to operate despite arbitrary message loss or partial failure.</p>
+                    <span class="tag red">Network Reality</span>
+                </div>
+            </div>
+
+            <h3>FLP Impossibility Result</h3>
+            <div class="theorem-box">
+                <h4>📐 Fischer, Lynch, Paterson (1985)</h4>
+                <p><strong>Theorem:</strong> In an asynchronous distributed system where at least one process may crash, there is no deterministic algorithm that can solve consensus.</p>
+                <div class="math-formula">
+                    Async System + One Faulty Process → No Deterministic Consensus
+                </div>
+                <p><strong>Implications:</strong></p>
+                <ul>
+                    <li>Cannot distinguish between a slow process and a crashed one</li>
+                    <li>Any consensus algorithm must either use randomness or timeouts</li>
+                    <li>Practical systems use partial synchrony assumptions</li>
+                </ul>
+            </div>
+
+            <h3>PACELC Theorem (Extended CAP)</h3>
+            <div class="formula-box">
+<strong>PACELC:</strong> Partition (P), Availability (A), Consistency (C), Else (E), Latency (L), Consistency (C)
+
+<strong>If Partition (P):</strong> Choose Availability (A) or Consistency (C)
+<strong>Else (E):</strong> Choose Latency (L) or Consistency (C)
+
+Examples:
+- DynamoDB: PA/EL (Available during partition, Low latency normally)
+- MySQL: PC/EC (Consistent during partition, Consistent normally)
+- Cassandra: PA/EL (Available during partition, Low latency normally)
+            </div>
+
+            <h3>Fallacies of Distributed Computing</h3>
+            <div class="grid">
+                <div class="card" style="border-left: 4px solid #ef4444;">
+                    <h4>❌ The Network is Reliable</h4>
+                    <p>Networks fail. Cables get cut, routers crash, DNS has issues. Design for network failures with retries, timeouts, and fallbacks.</p>
+                </div>
+                <div class="card" style="border-left: 4px solid #ef4444;">
+                    <h4>❌ Latency is Zero</h4>
+                    <p>Network latency is real and variable. Light in fiber: ~5ms per 1000km. Add protocol overhead, queuing, processing.</p>
+                </div>
+                <div class="card" style="border-left: 4px solid #ef4444;">
+                    <h4>❌ Bandwidth is Infinite</h4>
+                    <p>Bandwidth limits exist. Large data transfers compete with other traffic. Consider compression, pagination, streaming.</p>
+                </div>
+                <div class="card" style="border-left: 4px solid #ef4444;">
+                    <h4>❌ The Network is Secure</h4>
+                    <p>Networks are hostile. Assume attackers exist. Encrypt in transit, authenticate all parties, validate all inputs.</p>
+                </div>
+                <div class="card" style="border-left: 4px solid #ef4444;">
+                    <h4>❌ Topology Doesn't Change</h4>
+                    <p>Networks are dynamic. Services come and go, load balancers change, routes shift. Use service discovery.</p>
+                </div>
+                <div class="card" style="border-left: 4px solid #ef4444;">
+                    <h4>❌ There is One Administrator</h4>
+                    <p>Multiple teams, vendors, and systems. Configuration conflicts happen. Document everything, automate configs.</p>
+                </div>
+                <div class="card" style="border-left: 4px solid #ef4444;">
+                    <h4>❌ Transport Cost is Zero</h4>
+                    <p>Data transfer costs money. Cloud egress fees, CDN costs, inter-region traffic. Optimize data movement.</p>
+                </div>
+                <div class="card" style="border-left: 4px solid #ef4444;">
+                    <h4>❌ The Network is Homogeneous</h4>
+                    <p>Different protocols, versions, vendors. Interoperability is hard. Use standard protocols, handle versioning.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Consistency Models -->
+        <section class="section">
+            <h2>⚖️ Consistency Models</h2>
+            
+            <h3>Consistency Model Hierarchy</h3>
+            <div class="ascii-diagram">┌─────────────────────────────────────────────────────────────────────────┐
+│                CONSISTENCY MODEL HIERARCHY                              │
+│                  (Stronger → Weaker)                                    │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                         │
+│    ┌────────────────────────────────────────────────────────────────┐  │
+│    │  LINEARIZABLE (Strongest)                                      │  │
+│    │  - Real-time ordering guarantee                                │  │
+│    │  - Every operation appears atomic at a single point in time    │  │
+│    │  - Most expensive to implement                                 │  │
+│    │  - Example: etcd, ZooKeeper                                    │  │
+│    └────────────────────────────────────────────────────────────────┘  │
+│                                    │                                    │
+│                                    ▼                                    │
+│    ┌────────────────────────────────────────────────────────────────┐  │
+│    │  SEQUENTIAL CONSISTENCY                                        │  │
+│    │  - All processes see same order                                │  │
+│    │  - Order respects each process's program order                 │  │
+│    │  - No real-time guarantee                                      │  │
+│    │  - Example: Some distributed file systems                      │  │
+│    └────────────────────────────────────────────────────────────────┘  │
+│                                    │                                    │
+│                                    ▼                                    │
+│    ┌────────────────────────────────────────────────────────────────┐  │
+│    │  CAUSAL CONSISTENCY                                            │  │
+│    │  - Causally related ops seen in same order by all              │  │
+│    │  - Concurrent ops can be seen in different orders              │  │
+│    │  - Uses vector clocks for tracking                             │  │
+│    │  - Example: COPS, Eiger, Bayou                                 │  │
+│    └────────────────────────────────────────────────────────────────┘  │
+│                                    │                                    │
+│                                    ▼                                    │
+│    ┌────────────────────────────────────────────────────────────────┐  │
+│    │  EVENTUAL CONSISTENCY (Weakest practical)                      │  │
+│    │  - If no new updates, eventually all reads return last value   │  │
+│    │  - No guarantees on when convergence happens                   │  │
+│    │  - Highest availability, lowest latency                        │  │
+│    │  - Example: Cassandra, DynamoDB, DNS                           │  │
+│    └────────────────────────────────────────────────────────────────┘  │
+│                                                                         │
+│    Trade-off: Stronger consistency = Higher latency, Lower availability│
+└─────────────────────────────────────────────────────────────────────────┘</div>
+
+            <h3>Consistency Models Comparison</h3>
+            <table>
+                <tr>
+                    <th>Model</th>
+                    <th>Guarantee</th>
+                    <th>Cost</th>
+                    <th>Use Case</th>
+                </tr>
+                <tr>
+                    <td><strong>Linearizable</strong></td>
+                    <td>Real-time total order</td>
+                    <td>Very High (2-3 RTT)</td>
+                    <td>Coordination, locks, leader election</td>
+                </tr>
+                <tr>
+                    <td><strong>Sequential</strong></td>
+                    <td>Total order (not real-time)</td>
+                    <td>High</td>
+                    <td>Distributed file systems</td>
+                </tr>
+                <tr>
+                    <td><strong>Causal</strong></td>
+                    <td>Causality preserved</td>
+                    <td>Medium</td>
+                    <td>Social feeds, collaborative editing</td>
+                </tr>
+                <tr>
+                    <td><strong>Session (RYOW)</strong></td>
+                    <td>Read Your Own Writes</td>
+                    <td>Low</td>
+                    <td>User-specific data, shopping carts</td>
+                </tr>
+                <tr>
+                    <td><strong>Eventual</strong></td>
+                    <td>Eventually converge</td>
+                    <td>Lowest</td>
+                    <td>Caching, CDN, high availability</td>
+                </tr>
+            </table>
+
+            <h3>Vector Clocks for Causal Ordering</h3>
+            <div class="code-block">
+<span class="comment">// Vector Clock Implementation</span>
+
+<span class="keyword">class</span> <span class="type">VectorClock</span> {
+    <span class="keyword">constructor</span>(nodeIds) {
+        <span class="keyword">this</span>.clock = {};
+        nodeIds.<span class="function">forEach</span>(id => <span class="keyword">this</span>.clock[id] = <span class="string">0</span>);
+    }
+
+    <span class="comment">// Increment local clock on event</span>
+    <span class="function">increment</span>(nodeId) {
+        <span class="keyword">this</span>.clock[nodeId] = (<span class="keyword">this</span>.clock[nodeId] || <span class="string">0</span>) + <span class="string">1</span>;
+        <span class="keyword">return this</span>;
+    }
+
+    <span class="comment">// Merge clocks on receive</span>
+    <span class="function">merge</span>(otherClock) {
+        <span class="keyword">for</span> (<span class="keyword">const</span> [node, time] <span class="keyword">of</span> Object.<span class="function">entries</span>(otherClock)) {
+            <span class="keyword">this</span>.clock[node] = Math.<span class="function">max</span>(
+                <span class="keyword">this</span>.clock[node] || <span class="string">0</span>,
+                time
+            );
+        }
+        <span class="keyword">return this</span>;
+    }
+
+    <span class="comment">// Compare: returns 'before', 'after', 'concurrent', or 'equal'</span>
+    <span class="function">compare</span>(other) {
+        <span class="keyword">let</span> allLessOrEqual = <span class="keyword">true</span>;
+        <span class="keyword">let</span> allGreaterOrEqual = <span class="keyword">true</span>;
+        <span class="keyword">let</span> allEqual = <span class="keyword">true</span>;
+
+        <span class="keyword">const</span> allKeys = <span class="keyword">new</span> <span class="type">Set</span>([
+            ...Object.<span class="function">keys</span>(<span class="keyword">this</span>.clock),
+            ...Object.<span class="function">keys</span>(other.clock)
+        ]);
+
+        <span class="keyword">for</span> (<span class="keyword">const</span> key <span class="keyword">of</span> allKeys) {
+            <span class="keyword">const</span> a = <span class="keyword">this</span>.clock[key] || <span class="string">0</span>;
+            <span class="keyword">const</span> b = other[key] || <span class="string">0</span>;
+            
+            <span class="keyword">if</span> (a > b) allLessOrEqual = <span class="keyword">false</span>;
+            <span class="keyword">if</span> (a < b) allGreaterOrEqual = <span class="keyword">false</span>;
+            <span class="keyword">if</span> (a !== b) allEqual = <span class="keyword">false</span>;
+        }
+
+        <span class="keyword">if</span> (allEqual) <span class="keyword">return</span> <span class="string">'equal'</span>;
+        <span class="keyword">if</span> (allLessOrEqual) <span class="keyword">return</span> <span class="string">'before'</span>;
+        <span class="keyword">if</span> (allGreaterOrEqual) <span class="keyword">return</span> <span class="string">'after'</span>;
+        <span class="keyword">return</span> <span class="string">'concurrent'</span>;
+    }
+}
+
+<span class="comment">// Usage Example</span>
+<span class="comment">// Node A writes: VC = {A: 1}</span>
+<span class="comment">// Node B receives from A, writes: VC = {A: 1, B: 1}</span>
+<span class="comment">// Node C writes independently: VC = {C: 1}</span>
+<span class="comment">// {A:1, B:1} and {C:1} are CONCURRENT (no causal relationship)</span></div>
+
+            <div class="highlight-box">
+                <strong>💡 Causal Consistency with Vector Clocks:</strong>
+                <ul>
+                    <li>Each node maintains a vector clock tracking its view of all nodes</li>
+                    <li>On local event: increment own entry</li>
+                    <li>On send: attach current vector clock to message</li>
+                    <li>On receive: merge received clock, increment own entry</li>
+                    <li>Concurrent events can be delivered in any order</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Consensus Algorithms -->
+        <section class="section">
+            <h2>🤝 Consensus Algorithms</h2>
+            
+            <h3>What is Consensus?</h3>
+            <div class="formula-box">
+<strong>Consensus Problem:</strong> Multiple nodes need to agree on a single value.
+
+<strong>Properties:</strong>
+- Agreement: All correct nodes decide the same value
+- Validity: Decided value was proposed by some node
+- Termination: All correct nodes eventually decide
+
+<strong>Use Cases:</strong> Leader election, atomic broadcast, distributed transactions, configuration management
+            </div>
+
+            <h3>Paxos Algorithm</h3>
+            <div class="ascii-diagram">┌─────────────────────────────────────────────────────────────────────────┐
+│                    PAXOS ALGORITHM FLOW                                 │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                         │
+│    ROLES:                                                               │
+│    - Proposer: Proposes values, coordinates the protocol               │
+│    - Acceptor: Votes on proposals, stores accepted values              │
+│    - Learner: Lears the decided value                                  │
+│                                                                         │
+│    PHASE 1: PREPARE                                                     │
+│    ┌──────────┐         ┌──────────┐         ┌──────────┐             │
+│    │ Proposer │         │ Acceptor │         │ Acceptor │             │
+│    │          │         │    1     │         │    2     │             │
+│    └────┬─────┘         └────┬─────┘         └────┬─────┘             │
+│         │  Prepare(n)        │                    │                    │
+│         │───────────────────▶│                    │                    │
+│         │───────────────────────────────────────▶│                    │
+│         │                    │                    │                    │
+│         │  Promise(n, v)     │                    │                    │
+│         │◀───────────────────│                    │                    │
+│         │◀───────────────────────────────────────│                    │
+│                                                                         │
+│    PHASE 2: ACCEPT                                                      │
+│         │                    │                    │                    │
+│         │  Accept(n, v)      │                    │                    │
+│         │───────────────────▶│                    │                    │
+│         │───────────────────────────────────────▶│                    │
+│         │                    │                    │                    │
+│         │  Accepted(n, v)    │                    │                    │
+│         │◀───────────────────│                    │                    │
+│         │◀───────────────────────────────────────│                    │
+│         │                    │                    │                    │
+│                                                                         │
+│    n = proposal number (unique, increasing)                            │
+│    v = proposed value (or highest previously accepted)                 │
+│                                                                         │
+│    KEY INSIGHT: Majority quorum ensures safety                          │
+│    If any value was chosen, future proposals must use that value       │
+└─────────────────────────────────────────────────────────────────────────┘</div>
+
+            <div class="code-block">
+<span class="comment">// Paxos Pseudocode - Proposer</span>
+
+<span class="keyword">class</span> <span class="type">Proposer</span> {
+    <span class="keyword">async</span> <span class="function">propose</span>(value) {
+        <span class="comment">// Phase 1: Prepare</span>
+        <span class="keyword">const</span> proposalNum = <span class="keyword">this</span>.<span class="function">generateProposalNumber</span>();
+        <span class="keyword">const</span> promises = <span class="keyword">await this</span>.<span class="function">sendPrepare</span>(proposalNum);
+        
+        <span class="keyword">if</span> (promises.length < <span class="keyword">this</span>.quorumSize) {
+            <span class="keyword">throw new</span> <span class="type">Error</span>(<span class="string">'No quorum achieved'</span>);
+        }
+        
+        <span class="comment">// Use highest previously accepted value (if any)</span>
+        <span class="keyword">const</span> highestAccepted = <span class="keyword">this</span>.<span class="function">findHighestAccepted</span>(promises);
+        <span class="keyword">const</span> proposeValue = highestAccepted ? highestAccepted.value : value;
+        
+        <span class="comment">// Phase 2: Accept</span>
+        <span class="keyword">const</span> accepts = <span class="keyword">await this</span>.<span class="function">sendAccept</span>(proposalNum, proposeValue);
+        
+        <span class="keyword">if</span> (accepts.length >= <span class="keyword">this</span>.quorumSize) {
+            <span class="keyword">return</span> proposeValue; <span class="comment">// Value chosen!</span>
+        }
+        
+        <span class="keyword">throw new</span> <span class="type">Error</span>(<span class="string">'Accept failed, retry with higher proposal number'</span>);
+    }
+}
+
+<span class="comment">// Paxos Pseudocode - Acceptor</span>
+
+<span class="keyword">class</span> <span class="type">Acceptor</span> {
+    <span class="function">onPrepare</span>(proposalNum) {
+        <span class="keyword">if</span> (proposalNum > <span class="keyword">this</span>.highestPromised) {
+            <span class="keyword">this</span>.highestPromised = proposalNum;
+            <span class="keyword">return</span> { 
+                promise: <span class="keyword">true</span>, 
+                acceptedValue: <span class="keyword">this</span>.acceptedValue,
+                acceptedNum: <span class="keyword">this</span>.acceptedNum 
+            };
+        }
+        <span class="keyword">return</span> { promise: <span class="keyword">false</span> };
+    }
+    
+    <span class="function">onAccept</span>(proposalNum, value) {
+        <span class="keyword">if</span> (proposalNum >= <span class="keyword">this</span>.highestPromised) {
+            <span class="keyword">this</span>.highestPromised = proposalNum;
+            <span class="keyword">this</span>.acceptedNum = proposalNum;
+            <span class="keyword">this</span>.acceptedValue = value;
+            <span class="keyword">return</span> { accepted: <span class="keyword">true</span> };
+        }
+        <span class="keyword">return</span> { accepted: <span class="keyword">false</span> };
+    }
+}</div>
+
+            <h3>Raft Algorithm (Easier to Understand)</h3>
+            <div class="ascii-diagram">┌─────────────────────────────────────────────────────────────────────────┐
+│                    RAFT ALGORITHM OVERVIEW                              │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                         │
+│    NODE STATES:                                                         │
+│                                                                         │
+│    ┌──────────────┐  starts election  ┌──────────────┐                 │
+│    │   FOLLOWER   │ ─────────────────▶│  CANDIDATE   │                 │
+│    │              │                    │              │                 │
+│    │ - Responds   │◀───────────────────│ - Requests   │                 │
+│    │   to leaders │  discovers leader  │   votes      │                 │
+│    │ - Heartbeat  │  or wins election  │ - Increments │                 │
+│    │   timeout    │                    │   term       │                 │
+│    └──────────────┘                    └──────┬───────┘                 │
+│           ▲                                   │                         │
+│           │ receives majority                 │ wins election           │
+│           │                                   ▼                         │
+│           │                          ┌──────────────┐                   │
+│           │                          │    LEADER    │                   │
+│           │                          │              │                   │
+│           │                          │ - Sends      │                   │
+│           └──────────────────────────│   heartbeats │                   │
+│                  receives heartbeat  │ - Appends    │                   │
+│                                      │   log entries│                   │
+│                                      └──────────────┘                   │
+│                                                                         │
+│    TERM: Logical time period, incremented on each election             │
+│    QUORUM: Majority of nodes (N/2 + 1)                                 │
+│    LOG: Replicated state machine commands                              │
+│                                                                         │
+├─────────────────────────────────────────────────────────────────────────┤
+│    LOG REPLICATION:                                                     │
+│                                                                         │
+│    Client          Leader              Followers                        │
+│      │               │                     │                           │
+│      │   Request     │                     │                           │
+│      │──────────────▶│                     │                           │
+│      │               │  AppendEntries RPC  │                           │
+│      │               │────────────────────▶│                           │
+│      │               │  AppendEntries ACK  │                           │
+│      │               │◀────────────────────│                           │
+│      │               │                     │                           │
+│      │               │ (Commit when majority received)                 │
+│      │               │                     │                           │
+│      │   Response    │                     │                           │
+│      │◀──────────────│                     │                           │
+└─────────────────────────────────────────────────────────────────────────┘</div>
+
+            <div class="code-block">
+<span class="comment">// Raft Leader Election Pseudocode</span>
+
+<span class="keyword">class</span> <span class="type">RaftNode</span> {
+    <span class="comment">// Election timeout: 150-300ms random</span>
+    <span class="variable">electionTimeout</span> = <span class="function">random</span>(<span class="string">150</span>, <span class="string">300</span>);
+    <span class="variable">heartbeatInterval</span> = <span class="string">50</span>;
+    
+    <span class="function">startElection</span>() {
+        <span class="keyword">this</span>.state = <span class="string">'candidate'</span>;
+        <span class="keyword">this</span>.currentTerm++;
+        <span class="keyword">this</span>.votedFor = <span class="keyword">this</span>.id;
+        <span class="keyword">this</span>.votesReceived = <span class="string">1</span>;
+        
+        <span class="comment">// Request votes from all peers</span>
+        <span class="keyword">for</span> (<span class="keyword">const</span> peer <span class="keyword">of</span> <span class="keyword">this</span>.peers) {
+            <span class="keyword">const</span> response = <span class="keyword">await</span> peer.<span class="function">requestVote</span>({
+                term: <span class="keyword">this</span>.currentTerm,
+                candidateId: <span class="keyword">this</span>.id,
+                lastLogIndex: <span class="keyword">this</span>.log.<span class="function">last</span>().index,
+                lastLogTerm: <span class="keyword">this</span>.log.<span class="function">last</span>().term
+            });
+            
+            <span class="keyword">if</span> (response.voteGranted) {
+                <span class="keyword">this</span>.votesReceived++;
+            }
+        }
+        
+        <span class="comment">// Check if won election</span>
+        <span class="keyword">if</span> (<span class="keyword">this</span>.votesReceived > <span class="keyword">this</span>.peers.length / <span class="string">2</span>) {
+            <span class="keyword">this</span>.<span class="function">becomeLeader</span>();
+        }
+    }
+    
+    <span class="function">onRequestVote</span>(request) {
+        <span class="comment">// Grant vote if:</span>
+        <span class="comment">// 1. Candidate's term >= our term</span>
+        <span class="comment">// 2. Haven't voted this term OR already voted for candidate</span>
+        <span class="comment">// 3. Candidate's log is at least as up-to-date as ours</span>
+        
+        <span class="keyword">const</span> logOk = request.lastLogTerm > <span class="keyword">this</span>.log.<span class="function">last</span>().term ||
+            (request.lastLogTerm === <span class="keyword">this</span>.log.<span class="function">last</span>().term &&
+             request.lastLogIndex >= <span class="keyword">this</span>.log.<span class="function">last</span>().index);
+        
+        <span class="keyword">if</span> (request.term >= <span class="keyword">this</span>.currentTerm &&
+            (<span class="keyword">this</span>.votedFor === <span class="keyword">null</span> || <span class="keyword">this</span>.votedFor === request.candidateId) &&
+            logOk) {
+            
+            <span class="keyword">this</span>.votedFor = request.candidateId;
+            <span class="keyword">this</span>.<span class="function">resetElectionTimeout</span>();
+            <span class="keyword">return</span> { term: <span class="keyword">this</span>.currentTerm, voteGranted: <span class="keyword">true</span> };
+        }
+        
+        <span class="keyword">return</span> { term: <span class="keyword">this</span>.currentTerm, voteGranted: <span class="keyword">false</span> };
+    }
+}</div>
+
+            <h3>Consensus Algorithm Comparison</h3>
+            <table>
+                <tr>
+                    <th>Algorithm</th>
+                    <th>Messages per Decision</th>
+                    <th>Fault Tolerance</th>
+                    <th>Use Case</th>
+                    <th>Complexity</th>
+                </tr>
+                <tr>
+                    <td><strong>Paxos</strong></td>
+                    <td>2 rounds (Prepare + Accept)</td>
+                    <td>f < n/2 crash faults</td>
+                    <td>Chubby, Spanner</td>
+                    <td>High</td>
+                </tr>
+                <tr>
+                    <td><strong>Raft</strong></td>
+                    <td>1 round (leader-based)</td>
+                    <td>f < n/2 crash faults</td>
+                    <td>etcd, Consul, TiKV</td>
+                    <td>Medium</td>
+                </tr>
+                <tr>
+                    <td><strong>Zab (ZooKeeper)</strong></td>
+                    <td>1 round (leader-based)</td>
+                    <td>f < n/2 crash faults</td>
+                    <td>ZooKeeper, Kafka (was)</td>
+                    <td>Medium</td>
+                </tr>
+                <tr>
+                    <td><strong>PBFT</strong></td>
+                    <td>3 rounds (pre-prepare, prepare, commit)</td>
+                    <td>f < n/3 Byzantine faults</td>
+                    <td>Hyperledger, permissioned chains</td>
+                    <td>Very High</td>
+                </tr>
+                <tr>
+                    <td><strong>Nakamoto (PoW)</strong></td>
+                    <td>Gossip + probabilistic finality</td>
+                    <td>< n/2 hash power</td>
+                    <td>Bitcoin, Ethereum (was)</td>
+                    <td>Medium</td>
+                </tr>
+            </table>
+
+            <h3>Byzantine Fault Tolerance</h3>
+            <div class="ascii-diagram">┌─────────────────────────────────────────────────────────────────────────┐
+│                    BYZANTINE FAULT TOLERANCE                            │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                         │
+│    CRASH FAULTS: Node stops responding (Paxos, Raft handle this)       │
+│    BYZANTINE FAULTS: Node behaves arbitrarily (malicious, buggy)       │
+│                                                                         │
+│    BYZANTINE GENERALS PROBLEM:                                          │
+│                                                                         │
+│           General A                    General B                        │
+│              │  "Attack at dawn"          │                            │
+│              │───────────────────────────▶│                            │
+│              │                            │                            │
+│    Traitor: │  "Attack at noon"          │                            │
+│    General C│───────────────────────────▶│                            │
+│              │                            │                            │
+│              │◀─── "I heard A say dawn" ──│                            │
+│              │◀─── "I heard A say noon" ──│ (Traitor lies!)            │
+│              │                            │                            │
+│    PROBLEM: How do loyal generals agree when traitors lie?             │
+│                                                                         │
+│    SOLUTION: Requires n ≥ 3f + 1 nodes to tolerate f Byzantine faults │
+│                                                                         │
+│    Example: 4 nodes needed for 1 Byzantine fault                       │
+│             7 nodes needed for 2 Byzantine faults                      │
+│            10 nodes needed for 3 Byzantine faults                      │
+│                                                                         │
+├─────────────────────────────────────────────────────────────────────────┤
+│    PBFT (Practical Byzantine Fault Tolerance):                          │
+│                                                                         │
+│    Client ──▶ Primary ──▶ [PRE-PREPARE] ──▶ All Replicas              │
+│                           [PREPARE] ──▶ 2f+ matching messages          │
+│                           [COMMIT] ──▶ 2f+1 matching messages         │
+│                           [REPLY] ──▶ Client                           │
+│                                                                         │
+│    Total: 3 message rounds, n ≥ 3f + 1 nodes required                  │
+└─────────────────────────────────────────────────────────────────────────┘</div>
+        </section>
+
+        <!-- Time & Clocks -->
+        <section class="section">
+            <h2>🕐 Time & Clocks</h2>
+            
+            <h3>The Problem with Clocks in Distributed Systems</h3>
+            <div class="warning-box">
+                <strong>⚠️ Why Physical Clocks Fail:</strong>
+                <ul>
+                    <li><strong>Clock Drift:</strong> Hardware clocks drift ~1 second/day</li>
+                    <li><strong>Clock Skew:</strong> Different nodes have different times</li>
+                    <li><strong>NTP Issues:</strong> Network delays, clock jumps, backward time</li>
+                    <li><strong>Relativity:</strong> No global notion of "now" in distributed systems</li>
+                </ul>
+            </div>
+
+            <h3>Logical Clocks (Lamport Timestamps)</h3>
+            <div class="code-block">
+<span class="comment">// Lamport Clock Implementation</span>
+
+<span class="keyword">class</span> <span class="type">LamportClock</span> {
+    <span class="keyword">constructor</span>() {
+        <span class="keyword">this</span>.time = <span class="string">0</span>;
+    }
+
+    <span class="comment">// Increment on local event</span>
+    <span class="function">increment</span>() {
+        <span class="keyword">this</span>.time++;
+        <span class="keyword">return this</span>.time;
+    }
+
+    <span class="comment">// On sending message</span>
+    <span class="function">send</span>() {
+        <span class="keyword">this</span>.time++;
+        <span class="keyword">return this</span>.time;
+    }
+
+    <span class="comment">// On receiving message with timestamp</span>
+    <span class="function">receive</span>(receivedTime) {
+        <span class="keyword">this</span>.time = Math.<span class="function">max</span>(<span class="keyword">this</span>.time, receivedTime) + <span class="string">1</span>;
+        <span class="keyword">return this</span>.time;
+    }
+}
+
+<span class="comment">// Usage Example:</span>
+<span class="comment">// Process P1: local event (t=1), send (t=2)</span>
+<span class="comment">// Process P2: receive from P1 (t=max(0,2)+1=3), local event (t=4)</span>
+<span class="comment">// Process P3: local event (t=1), receive from P2 (t=max(1,4)+1=5)</span>
+
+<span class="comment">// Properties:</span>
+<span class="comment">// - If A → B (A happens before B), then L(A) < L(B)</span>
+<span class="comment">// - But L(A) < L(B) does NOT mean A → B (could be concurrent)</span></div>
+
+            <h3>Happens-Before Relation (→)</h3>
+            <div class="ascii-diagram">┌─────────────────────────────────────────────────────────────────────────┐
+│                    HAPPENS-BEFORE RELATION                              │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                         │
+│    Definition: A → B (A happens before B) if:                          │
+│    1. A and B are in same process, and A occurred before B             │
+│    2. A is a send, B is the corresponding receive                      │
+│    3. A → B and B → C implies A → C (transitivity)                     │
+│                                                                         │
+│    Process P1    Process P2    Process P3                               │
+│                                                                         │
+│       e1            e4            e7                                    │
+│        │             │             │                                    │
+│       e2────────────▶e5            │                                    │
+│        │             │             │                                    │
+│       e3             e6───────────▶e8                                   │
+│                                                                         │
+│    Happens-before relationships:                                        │
+│    e1 → e2 → e3         (same process)                                  │
+│    e4 → e5 → e6         (same process)                                  │
+│    e2 → e5              (send-receive)                                  │
+│    e6 → e8              (send-receive)                                  │
+│    e1 → e2 → e5 → e6 → e8 (transitivity)                               │
+│                                                                         │
+│    Concurrent events: e1 || e4, e3 || e4, e7 || e3                     │
+│    (neither happens before the other)                                   │
+└─────────────────────────────────────────────────────────────────────────┘</div>
+
+            <h3>TrueTime (Google Spanner)</h3>
+            <div class="card">
+                <h4>🕐 TrueTime API</h4>
+                <p>Google Spanner uses GPS and atomic clocks to bound clock uncertainty. Returns an interval [earliest, latest] that contains the true time.</p>
+                <div class="code-block">
+<span class="comment">// TrueTime API</span>
+<span class="keyword">interface</span> <span class="type">TimeInterval</span> {
+    earliest: <span class="type">Timestamp</span>;
+    latest: <span class="type">Timestamp</span>;
+}
+
+<span class="comment">// Returns current time as an interval</span>
+<span class="keyword">function</span> <span class="function">now</span>(): <span class="type">TimeInterval</span>;
+
+<span class="comment">// Example: TT.now() = [2024-01-15 10:00:00.000, 2024-01-15 10:00:00.010]</span>
+<span class="comment">// Uncertainty bound: typically 2-10ms</span>
+
+<span class="comment">// Wait until we're certain time has passed</span>
+<span class="keyword">function</span> <span class="function">commit</span>(transaction) {
+    <span class="keyword">const</span> start = TT.<span class="function">now</span>();
+    <span class="comment">// ... do transaction work ...</span>
+    <span class="keyword">while</span> (TT.<span class="function">now</span>().earliest < start.latest) {
+        <span class="comment">// Wait until we're sure commit timestamp is in the past</span>
+    }
+    <span class="comment">// Now safe to commit</span>
+}</div>
+            </div>
+
+            <h3>Hybrid Logical Clocks (HLC)</h3>
+            <div class="formula-box">
+<strong>HLC = Physical Time + Logical Counter</strong>
+
+Structure: (physical_time, logical_counter)
+
+Rules:
+1. On local event: if pt > physical: (pt, 0), else (physical, counter+1)
+2. On send: increment logical counter
+3. On receive: physical = max(local_pt, msg_pt, received_physical)
+   if physical changed: counter = max(local_counter, received_counter)
+   else: counter = max(local_counter, received_counter) + 1
+
+Benefits:
+- Bounded drift from physical time
+- Monotonically increasing
+- Captures causality like Lamport clocks
+- Used in CockroachDB, YugabyteDB
+            </div>
+        </section>
+
+        <!-- Fault Tolerance -->
+        <section class="section">
+            <h2>🛡️ Fault Tolerance</h2>
+            
+            <h3>Types of Failures</h3>
+            <div class="comparison-grid">
+                <div class="comparison-item">
+                    <h5>Crash Failure</h5>
+                    <p>Node stops responding completely. Detectable via heartbeat/timeouts.</p>
+                    <span class="tag green">Handleable</span>
+                </div>
+                <div class="comparison-item">
+                    <h5>Fail-Stop</h5>
+                    <p>Node crashes and stays crashed. Detectable and permanent.</p>
+                    <span class="tag green">Handleable</span>
+                </div>
+                <div class="comparison-item">
+                    <h5>Omission Failure</h5>
+                    <p>Node fails to send/receive messages. Intermittent.</p>
+                    <span class="tag yellow">Partially Handleable</span>
+                </div>
+                <div class="comparison-item">
+                    <h5>Byzantine Failure</h5>
+                    <p>Node behaves arbitrarily. May send conflicting messages.</p>
+                    <span class="tag red">Requires BFT</span>
+                </div>
+            </div>
+
+            <h3>Fault Tolerance Requirements</h3>
+            <div class="formula-box">
+<strong>Crash Fault Tolerance (CFT):</strong>
+- Tolerates f crash failures with n ≥ 2f + 1 nodes (quorum-based)
+- Examples: Paxos, Raft, ZooKeeper
+- Majority quorum ensures at least one correct node
+
+<strong>Byzantine Fault Tolerance (BFT):</strong>
+- Tolerates f Byzantine failures with n ≥ 3f + 1 nodes
+- Examples: PBFT, HotStuff, Tendermint
+- Need 2f+1 matching messages to outvote f malicious nodes
+
+<strong>Quorum Formula:</strong>
+- Simple majority: n/2 + 1
+- Read quorum (R) + Write quorum (W) > N (for consistency)
+- R = W = majority for strong consistency
+- R = 1, W = N for highest write consistency
+- R = N, W = 1 for highest read consistency
+            </div>
+
+            <h3>Replication Strategies</h3>
+            <div class="ascii-diagram">┌─────────────────────────────────────────────────────────────────────────┐
+│                    REPLICATION STRATEGIES                               │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                         │
+│    PRIMARY-BACKUP (Leader-Follower)                                     │
+│                                                                         │
+│    ┌─────────┐      Replicate       ┌─────────┐      Replicate        │
+│    │ Primary │──────────────────────▶│ Backup1 │──────────────────────▶│
+│    │(Leader) │                       │(Follower)                       │
+│    └────┬────┘                       └─────────┘                       │
+│         │                                          ┌─────────┐         │
+│         │ Write                                    │ Backup2 │         │
+│         ▼                                          │(Follower)│        │
+│    ┌─────────┐                                     └─────────┘         │
+│    │  Client │                                                         │
+│    └─────────┘                                                         │
+│                                                                         │
+│    - All writes go through primary                                     │
+│    - Primary synchronously replicates to backups                       │
+│    - Failover: backup becomes primary                                  │
+│    - Used in: MySQL replication, PostgreSQL streaming                  │
+│                                                                         │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                         │
+│    MULTI-PRIMARY (Multi-Leader / Active-Active)                        │
+│                                                                         │
+│    ┌─────────┐         Sync         ┌─────────┐                        │
+│    │ Leader1 │◀────────────────────▶│ Leader2 │                        │
+│    │(Region A)│                     │(Region B)│                       │
+│    └────┬────┘                      └────┬────┘                        │
+│         │ Write                          │ Write                       │
+│         ▼                                ▼                             │
+│    ┌─────────┐                      ┌─────────┐                        │
+│    │  Client │                      │  Client │                        │
+│    │(Region A)│                     │(Region B)│                       │
+│    └─────────┘                      └─────────┘                        │
+│                                                                         │
+│    - Writes accepted at any leader                                     │
+│    - Conflict resolution needed (Last-Write-Wins, CRDTs)               │
+│    - Higher availability, complexity in conflict handling              │
+│    - Used in: Cassandra, CouchDB, multi-region MySQL                   │
+│                                                                         │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                         │
+│    LEADERLESS (Dynamo-style)                                           │
+│                                                                         │
+│    ┌─────────┐     ┌─────────┐     ┌─────────┐                        │
+│    │  Node A │     │  Node B │     │  Node C │                        │
+│    │(Replica)│     │(Replica)│     │(Replica)│                        │
+│    └────▲────┘     └────▲────┘     └────▲────┘                        │
+│         │               │               │                              │
+│         └───────────────┴───────────────┘                              │
+│                         │                                              │
+│                    Write/Read                                          │
+│                         │                                              │
+│                    ┌────┴────┐                                         │
+│                    │  Client │                                         │
+│                    └─────────┘                                         │
+│                                                                         │
+│    - No leader, any node can accept reads/writes                       │
+│    - Quorum: W + R > N for consistency                                 │
+│    - W = write quorum, R = read quorum, N = replication factor         │
+│    - Hinted handoff, read repair, anti-entropy for healing             │
+│    - Used in: Cassandra, DynamoDB, Riak                                │
+└─────────────────────────────────────────────────────────────────────────┘</div>
+
+            <h3>Quorum Systems</h3>
+            <div class="code-block">
+<span class="comment">// Quorum Configuration</span>
+
+<span class="comment">// N = Replication Factor (total replicas)</span>
+<span class="comment">// W = Write Quorum (nodes to acknowledge write)</span>
+<span class="comment">// R = Read Quorum (nodes to respond to read)</span>
+
+<span class="comment">// Consistency Level Formulas</span>
+W + R > N    <span class="comment">// Strong consistency guarantee</span>
+W = N        <span class="comment">// All replicas must respond (highest write consistency)</span>
+R = N        <span class="comment">// Read from all replicas (highest read consistency)</span>
+W + R ≤ N    <span class="comment">// Eventual consistency possible</span>
+
+<span class="comment">// Common Configurations for N=3</span>
+<span class="keyword">const</span> <span class="variable">configs</span> = {
+    <span class="comment">// Strong consistency</span>
+    strongWrite: { W: <span class="string">3</span>, R: <span class="string">1</span> },  <span class="comment">// All replicas for write</span>
+    strongRead:  { W: <span class="string">1</span>, R: <span class="string">3</span> },  <span class="comment">// All replicas for read</span>
+    quorum:      { W: <span class="string">2</span>, R: <span class="string">2</span> },  <span class="comment">// Majority quorum (most common)</span>
+    
+    <span class="comment">// Availability-focused</span>
+    available:   { W: <span class="string">1</span>, R: <span class="string">1</span> },  <span class="comment">// Any one node (eventual consistency)</span>
+    
+    <span class="comment">// Balanced</span>
+    balanced:    { W: <span class="string">2</span>, R: <span class="string">1</span> },  <span class="comment">// Write majority, read any</span>
+};
+
+<span class="comment">// Write Path</span>
+<span class="keyword">async function</span> <span class="function">write</span>(key, value, W) {
+    <span class="comment">// Send to all N replicas</span>
+    <span class="keyword">const</span> responses = <span class="keyword">await</span> Promise.<span class="function">allSettled</span>(
+        replicas.<span class="function">map</span>(node => node.<span class="function">write</span>(key, value))
+    );
+    
+    <span class="keyword">const</span> acks = responses.<span class="function">filter</span>(r => r.status === <span class="string">'fulfilled'</span>).length;
+    
+    <span class="keyword">if</span> (acks >= W) {
+        <span class="keyword">return</span> { success: <span class="keyword">true</span>, acks };
+    }
+    <span class="keyword">throw new</span> <span class="type">Error</span>(<span class="string">`Write quorum not reached: ${acks}/${W}`</span>);
+}
+
+<span class="comment">// Read Path with Read Repair</span>
+<span class="keyword">async function</span> <span class="function">read</span>(key, R) {
+    <span class="keyword">const</span> responses = <span class="keyword">await</span> Promise.<span class="function">allSettled</span>(
+        replicas.<span class="function">map</span>(node => node.<span class="function">read</span>(key))
+    );
+    
+    <span class="keyword">const</span> values = responses
+        .<span class="function">filter</span>(r => r.status === <span class="string">'fulfilled'</span>)
+        .<span class="function">map</span>(r => r.value);
+    
+    <span class="keyword">if</span> (values.length < R) {
+        <span class="keyword">throw new</span> <span class="type">Error</span>(<span class="string">`Read quorum not reached`</span>);
+    }
+    
+    <span class="comment">// Find most recent version</span>
+    <span class="keyword">const</span> latest = values.<span class="function">reduce</span>((a, b) => 
+        a.timestamp > b.timestamp ? a : b
+    );
+    
+    <span class="comment">// Read repair: update stale replicas</span>
+    values.<span class="function">filter</span>(v => v.timestamp < latest.timestamp)
+        .<span class="function">forEach</span>(v => v.node.<span class="function">repair</span>(key, latest));
+    
+    <span class="keyword">return</span> latest.value;
+}</div>
+        </section>
+
+        <!-- Distributed Transactions -->
+        <section class="section">
+            <h2>💼 Distributed Transactions</h2>
+            
+            <h3>Two-Phase Commit (2PC)</h3>
+            <div class="ascii-diagram">┌─────────────────────────────────────────────────────────────────────────┐
+│                    TWO-PHASE COMMIT (2PC)                               │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                         │
+│    Coordinator                    Participants                          │
+│         │                             │                                 │
+│         │         PHASE 1: PREPARE    │                                 │
+│         │                             │                                 │
+│         │─────── Prepare ────────────▶│ P1                              │
+│         │─────── Prepare ────────────▶│ P2                              │
+│         │─────── Prepare ────────────▶│ P3                              │
+│         │                             │                                 │
+│         │◀──── Ready/Abort ──────────│ (Lock resources, log intention) │
+│         │◀──── Ready/Abort ──────────│                                 │
+│         │◀──── Ready/Abort ──────────│                                 │
+│         │                             │                                 │
+│         │    [If all Ready, commit]   │                                 │
+│         │    [If any Abort, abort]    │                                 │
+│         │                             │                                 │
+│         │         PHASE 2: COMMIT/ABORT                                  │
+│         │                             │                                 │
+│         │─────── Commit ─────────────▶│ P1                              │
+│         │─────── Commit ─────────────▶│ P2                              │
+│         │─────── Commit ─────────────▶│ P3                              │
+│         │                             │                                 │
+│         │◀──── Acknowledged ─────────│                                 │
+│         │◀──── Acknowledged ─────────│                                 │
+│         │◀──── Acknowledged ─────────│                                 │
+│         │                             │                                 │
+│         ▼                             ▼                                 │
+│    Transaction Complete                                                 │
+│                                                                         │
+│    PROBLEMS:                                                            │
+│    - Blocking: If coordinator fails, participants blocked              │
+│    - Single point of failure: Coordinator crash                        │
+│    - Slow: Two round trips + fsync latency                             │
+└─────────────────────────────────────────────────────────────────────────┘</div>
+
+            <div class="code-block">
+<span class="comment">// Two-Phase Commit Implementation</span>
+
+<span class="keyword">class</span> <span class="type">Coordinator</span> {
+    <span class="keyword">async</span> <span class="function">executeTransaction</span>(participants, transaction) {
+        <span class="keyword">const</span> transactionId = <span class="function">generateId</span>();
+        
+        <span class="comment">// PHASE 1: PREPARE</span>
+        <span class="keyword">const</span> prepareResults = <span class="keyword">await</span> Promise.<span class="function">all</span>(
+            participants.<span class="function">map</span>(p => p.<span class="function">prepare</span>(transactionId, transaction))
+        );
+        
+        <span class="keyword">const</span> allReady = prepareResults.<span class="function">every</span>(r => r.status === <span class="string">'ready'</span>);
+        
+        <span class="comment">// PHASE 2: COMMIT or ABORT</span>
+        <span class="keyword">const</span> decision = allReady ? <span class="string">'commit'</span> : <span class="string">'abort'</span>;
+        
+        <span class="keyword">await</span> Promise.<span class="function">all</span>(
+            participants.<span class="function">map</span>(p => p[decision](transactionId))
+        );
+        
+        <span class="keyword">return</span> { success: allReady, transactionId };
+    }
+}
+
+<span class="keyword">class</span> <span class="type">Participant</span> {
+    <span class="keyword">async</span> <span class="function">prepare</span>(transactionId, transaction) {
+        <span class="comment">// 1. Acquire locks on resources</span>
+        <span class="comment">// 2. Write transaction log (undo/redo)</span>
+        <span class="comment">// 3. Return ready (but don't commit yet)</span>
+        
+        <span class="keyword">try</span> {
+            <span class="keyword">await this</span>.<span class="function">acquireLocks</span>(transaction);
+            <span class="keyword">await this</span>.<span class="function">writeLog</span>({ transactionId, transaction, state: <span class="string">'prepared'</span> });
+            <span class="keyword">return</span> { status: <span class="string">'ready'</span> };
+        } <span class="keyword">catch</span> (error) {
+            <span class="keyword">await this</span>.<span class="function">releaseLocks</span>(transaction);
+            <span class="keyword">return</span> { status: <span class="string">'abort'</span>, reason: error.message };
+        }
+    }
+    
+    <span class="keyword">async</span> <span class="function">commit</span>(transactionId) {
+        <span class="comment">// Apply changes permanently, release locks</span>
+        <span class="keyword">await this</span>.<span class="function">applyTransaction</span>(transactionId);
+        <span class="keyword">await this</span>.<span class="function">releaseLocks</span>(transactionId);
+        <span class="keyword">await this</span>.<span class="function">writeLog</span>({ transactionId, state: <span class="string">'committed'</span> });
+    }
+    
+    <span class="keyword">async</span> <span class="function">abort</span>(transactionId) {
+        <span class="comment">// Undo any changes, release locks</span>
+        <span class="keyword">await this</span>.<span class="function">rollback</span>(transactionId);
+        <span class="keyword">await this</span>.<span class="function">releaseLocks</span>(transactionId);
+        <span class="keyword">await this</span>.<span class="function">writeLog</span>({ transactionId, state: <span class="string">'aborted'</span> });
+    }
+}</div>
+
+            <h3>Three-Phase Commit (3PC)</h3>
+            <div class="highlight-box">
+                <strong>💡 3PC Improvements over 2PC:</strong>
+                <ul>
+                    <li>Adds "CanCommit?" phase before Prepare</li>
+                    <li>Non-blocking if coordinator fails (with timeout)</li>
+                    <li>Pre-committed state allows safe abort or commit</li>
+                    <li>Still vulnerable to network partitions</li>
+                </ul>
+                <p><strong>States:</strong> Idle → CanCommit → PreCommit → Commit</p>
+            </div>
+
+            <h3>Saga Pattern (Alternative to 2PC)</h3>
+            <div class="ascii-diagram">┌─────────────────────────────────────────────────────────────────────────┐
+│                    SAGA PATTERN                                         │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                         │
+│    Instead of atomic transaction across services, use compensating      │
+│    transactions to undo each step if later step fails.                 │
+│                                                                         │
+│    Example: Book Travel (Flight + Hotel + Car)                         │
+│                                                                         │
+│    ┌─────────────────────────────────────────────────────────────────┐ │
+│    │  SUCCESS PATH                                                   │ │
+│    │                                                                 │ │
+│    │  Book Flight ──▶ Book Hotel ──▶ Book Car ──▶ Confirm           │ │
+│    │       │              │             │           │                │ │
+│    │       T1             T2            T3          Done             │ │
+│    └─────────────────────────────────────────────────────────────────┘ │
+│                                                                         │
+│    ┌─────────────────────────────────────────────────────────────────┐ │
+│    │  FAILURE PATH (Car booking fails)                               │ │
+│    │                                                                 │ │
+│    │  Book Flight ──▶ Book Hotel ──▶ Book Car ──▶ FAIL              │ │
+│    │       │              │             X           │                │ │
+│    │       │              │                         │                │ │
+│    │       │         Cancel Hotel ◀─────────────────┘                │ │
+│    │       │              C2                                       │ │
+│    │       │                                                        │ │
+│    │  Cancel Flight ◀────────────────────────────────────            │ │
+│    │       C1                                                        │ │
+│    │                                                                 │ │
+│    │  Compensating transactions: C1 (undo T1), C2 (undo T2)         │ │
+│    └─────────────────────────────────────────────────────────────────┘ │
+│                                                                         │
+│    Properties:                                                          │
+│    - Each step has a compensating action                               │
+│    - Compensations are applied in reverse order                        │
+│    - Eventually consistent (not atomic)                                │
+│    - No distributed locks required                                     │
+│    - Works across heterogeneous systems                                │
+└─────────────────────────────────────────────────────────────────────────┘</div>
+        </section>
+
+        <!-- Distributed Algorithms -->
+        <section class="section">
+            <h2>⚙️ Essential Distributed Algorithms</h2>
+            
+            <h3>Leader Election</h3>
+            <div class="pattern-grid">
+                <div class="pattern-card coordination">
+                    <h4>Bully Algorithm</h4>
+                    <p>Highest ID node becomes leader. Node sends election message to higher-ID nodes. If no response, declares self leader.</p>
+                    <span class="tag blue">O(n²) messages</span>
+                </div>
+                <div class="pattern-card coordination">
+                    <h4>Ring Algorithm</h4>
+                    <p>Nodes arranged in logical ring. Election message circulates with node IDs. Highest ID becomes leader.</p>
+                    <span class="tag blue">O(n) messages</span>
+                </div>
+                <div class="pattern-card coordination">
+                    <h4>Raft Election</h4>
+                    <p>Randomized timeout triggers election. Candidate requests votes, majority wins. Used in etcd, Consul.</p>
+                    <span class="tag green">Production Ready</span>
+                </div>
+                <div class="pattern-card coordination">
+                    <h4>Zab Election</h4>
+                    <p>Fast leader election with epoch numbers. Highest zxid (transaction ID) wins. Used in ZooKeeper.</p>
+                    <span class="tag green">Production Ready</span>
+                </div>
+            </div>
+
+            <h3>Gossip Protocol</h3>
+            <div class="ascii-diagram">┌─────────────────────────────────────────────────────────────────────────┐
+│                    GOSSIP PROTOCOL                                      │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                         │
+│    Epidemic-style information dissemination                             │
+│                                                                         │
+│    Round 1: Node A knows {A}                                           │
+│    ┌─────────┐                                                         │
+│    │    A    │──────▶ randomly select peer, share state                │
+│    └─────────┘                                                         │
+│                                                                         │
+│    Round 2: A knows {A,B}, B knows {A,B}                               │
+│    ┌─────────┐     ┌─────────┐                                         │
+│    │  A{AB}  │◀───▶│  B{AB}  │                                         │
+│    └─────────┘     └─────────┘                                         │
+│         │               │                                              │
+│         ▼               ▼                                              │
+│    ┌─────────┐     ┌─────────┐                                         │
+│    │  C{C}   │     │  D{D}   │                                         │
+│    └─────────┘     └─────────┘                                         │
+│                                                                         │
+│    Round 3: All nodes know {A,B,C,D}                                   │
+│                                                                         │
+│    Properties:                                                          │
+│    - O(log N) rounds to reach all nodes                                │
+│    - Probabilistic eventual consistency                                │
+│    - Robust to node failures                                          │
+│    - Scalable (each node contacts O(1) peers per round)               │
+│                                                                         │
+│    Used in: Cassandra, DynamoDB, Consul, Kubernetes                    │
+└─────────────────────────────────────────────────────────────────────────┘</div>
+
+            <div class="code-block">
+<span class="comment">// Gossip Protocol Implementation</span>
+
+<span class="keyword">class</span> <span class="type">GossipNode</span> {
+    <span class="keyword">constructor</span>(id, peers) {
+        <span class="keyword">this</span>.id = id;
+        <span class="keyword">this</span>.peers = peers;
+        <span class="keyword">this</span>.state = <span class="keyword">new</span> <span class="type">Map</span>();      <span class="comment">// Local state</span>
+        <span class="keyword">this</span>.versions = <span class="keyword">new</span> <span class="type">Map</span>(); <span class="comment">// Version vector</span>
+        <span class="keyword">this</span>.fanout = <span class="string">3</span>;         <span class="comment">// Peers to contact per round</span>
+    }
+
+    <span class="comment">// Periodic gossip (every 1 second)</span>
+    <span class="keyword">async</span> <span class="function">gossipRound</span>() {
+        <span class="comment">// Select random peers (fanout)</span>
+        <span class="keyword">const</span> targets = <span class="keyword">this</span>.<span class="function">selectRandomPeers</span>(<span class="keyword">this</span>.fanout);
+        
+        <span class="comment">// Send digest (what versions we have)</span>
+        <span class="keyword">const</span> digest = Array.<span class="function">from</span>(<span class="keyword">this</span>.versions.<span class="function">entries</span>());
+        
+        <span class="keyword">for</span> (<span class="keyword">const</span> peer <span class="keyword">of</span> targets) {
+            <span class="keyword">const</span> response = <span class="keyword">await</span> peer.<span class="function">sync</span>(digest);
+            <span class="keyword">this</span>.<span class="function">mergeState</span>(response.updates);
+        }
+    }
+
+    <span class="comment">// Handle incoming gossip</span>
+    <span class="function">sync</span>(theirDigest) {
+        <span class="keyword">const</span> updates = [];
+        
+        <span class="comment">// Find what they're missing</span>
+        <span class="keyword">for</span> (<span class="keyword">const</span> [key, version] <span class="keyword">of</span> <span class="keyword">this</span>.versions) {
+            <span class="keyword">const</span> theirVersion = theirDigest.<span class="function">find</span>(d => d[<span class="string">0</span>] === key)?.[<span class="string">1</span>] || <span class="string">0</span>;
+            <span class="keyword">if</span> (version > theirVersion) {
+                updates.<span class="function">push</span>({ key, value: <span class="keyword">this</span>.state.<span class="function">get</span>(key), version });
+            }
+        }
+        
+        <span class="keyword">return</span> { updates };
+    }
+
+    <span class="function">mergeState</span>(updates) {
+        <span class="keyword">for</span> (<span class="keyword">const</span> { key, value, version } <span class="keyword">of</span> updates) {
+            <span class="keyword">if</span> (!<span class="keyword">this</span>.versions.<span class="function">has</span>(key) || <span class="keyword">this</span>.versions.<span class="function">get</span>(key) < version) {
+                <span class="keyword">this</span>.state.<span class="function">set</span>(key, value);
+                <span class="keyword">this</span>.versions.<span class="function">set</span>(key, version);
+            }
+        }
+    }
+}</div>
+
+            <h3>Consistent Hashing</h3>
+            <div class="ascii-diagram">┌─────────────────────────────────────────────────────────────────────────┐
+│                    CONSISTENT HASHING                                   │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                         │
+│    Hash Ring (0 to 2^32-1)                                             │
+│                                                                         │
+│                    0                                                   │
+│                    │                                                   │
+│         Node A ────┼──── Node B                                        │
+│            │       │        │                                          │
+│            │       │        │                                          │
+│    Key1 ───┤       │        ├── Key2                                   │
+│            │       │        │                                          │
+│                    │                                                   │
+│         Node D ────┼──── Node C                                        │
+│                    │                                                   │
+│                   2^32-1                                               │
+│                                                                         │
+│    Rules:                                                               │
+│    1. Hash(node_id) → position on ring                                 │
+│    2. Hash(key) → position on ring                                     │
+│    3. Key belongs to first node clockwise from its position            │
+│                                                                         │
+│    With Virtual Nodes (VNodes):                                        │
+│    - Each physical node maps to multiple positions                     │
+│    - Better load distribution                                          │
+│    - Smoother rebalancing when nodes join/leave                        │
+│                                                                         │
+│    Node A (150 vnodes) ──▶ 150 positions on ring                       │
+│    Node B (150 vnodes) ──▶ 150 positions on ring                       │
+│                                                                         │
+│    When Node A fails: Only ~50% of A's keys move (not all from A)      │
+│    Without vnodes: All of A's keys would go to single node             │
+│                                                                         │
+│    Used in: DynamoDB, Cassandra, Riak, Memcached                       │
+└─────────────────────────────────────────────────────────────────────────┘</div>
+
+            <div class="code-block">
+<span class="comment">// Consistent Hashing Implementation</span>
+
+<span class="keyword">class</span> <span class="type">ConsistentHash</span> {
+    <span class="keyword">constructor</span>(virtualNodes = <span class="string">150</span>) {
+        <span class="keyword">this</span>.virtualNodes = virtualNodes;
+        <span class="keyword">this</span>.ring = <span class="keyword">new</span> <span class="type">Map</span>();  <span class="comment">// position → node</span>
+        <span class="keyword">this</span>.sortedPositions = [];
+    }
+
+    <span class="function">hash</span>(key) {
+        <span class="comment">// Use MurmurHash3 or similar</span>
+        <span class="keyword">return</span> murmurhash3(key) % (<span class="string">2</span> ** <span class="string">32</span>);
+    }
+
+    <span class="function">addNode</span>(node) {
+        <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="string">0</span>; i < <span class="keyword">this</span>.virtualNodes; i++) {
+            <span class="keyword">const</span> position = <span class="keyword">this</span>.<span class="function">hash</span>(<span class="string">`${node}-${i}`</span>);
+            <span class="keyword">this</span>.ring.<span class="function">set</span>(position, node);
+        }
+        <span class="keyword">this</span>.sortedPositions = Array.<span class="function">from</span>(<span class="keyword">this</span>.ring.<span class="function">keys</span>()).<span class="function">sort</span>((a, b) => a - b);
+    }
+
+    <span class="function">removeNode</span>(node) {
+        <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="string">0</span>; i < <span class="keyword">this</span>.virtualNodes; i++) {
+            <span class="keyword">const</span> position = <span class="keyword">this</span>.<span class="function">hash</span>(<span class="string">`${node}-${i}`</span>);
+            <span class="keyword">this</span>.ring.<span class="function">delete</span>(position);
+        }
+        <span class="keyword">this</span>.sortedPositions = Array.<span class="function">from</span>(<span class="keyword">this</span>.ring.<span class="function">keys</span>()).<span class="function">sort</span>((a, b) => a - b);
+    }
+
+    <span class="function">getNode</span>(key) {
+        <span class="keyword">if</span> (<span class="keyword">this</span>.sortedPositions.length === <span class="string">0</span>) <span class="keyword">return null</span>;
+        
+        <span class="keyword">const</span> position = <span class="keyword">this</span>.<span class="function">hash</span>(key);
+        
+        <span class="comment">// Find first node clockwise from position</span>
+        <span class="keyword">let</span> idx = <span class="keyword">this</span>.sortedPositions.<span class="function">findIndex</span>(p => p >= position);
+        
+        <span class="keyword">if</span> (idx === -<span class="string">1</span>) {
+            idx = <span class="string">0</span>;  <span class="comment">// Wrap around to start</span>
+        }
+        
+        <span class="keyword">return this</span>.ring.<span class="function">get</span>(<span class="keyword">this</span>.sortedPositions[idx]);
+    }
+
+    <span class="comment">// Get N nodes for replication</span>
+    <span class="function">getNodes</span>(key, n) {
+        <span class="keyword">const</span> nodes = [];
+        <span class="keyword">const</span> position = <span class="keyword">this</span>.<span class="function">hash</span>(key);
+        <span class="keyword">let</span> idx = <span class="keyword">this</span>.sortedPositions.<span class="function">findIndex</span>(p => p >= position);
+        <span class="keyword">if</span> (idx === -<span class="string">1</span>) idx = <span class="string">0</span>;
+        
+        <span class="keyword">while</span> (nodes.length < n && nodes.length < <span class="keyword">this</span>.sortedPositions.length) {
+            <span class="keyword">const</span> node = <span class="keyword">this</span>.ring.<span class="function">get</span>(<span class="keyword">this</span>.sortedPositions[idx]);
+            <span class="keyword">if</span> (!nodes.<span class="function">includes</span>(node)) {
+                nodes.<span class="function">push</span>(node);
+            }
+            idx = (idx + <span class="string">1</span>) % <span class="keyword">this</span>.sortedPositions.length;
+        }
+        
+        <span class="keyword">return</span> nodes;
+    }
+}</div>
+        </section>
+
+        <!-- CRDTs -->
+        <section class="section">
+            <h2>🧮 Conflict-Free Replicated Data Types (CRDTs)</h2>
+            
+            <h3>What are CRDTs?</h3>
+            <div class="highlight-box">
+                <strong>💡 CRDT Definition:</strong>
+                <p>Data structures that can be replicated across multiple nodes, where replicas can be updated independently and concurrently, and it's always possible to merge (resolve) any two replicas in a mathematically correct way.</p>
+                <p><strong>Key Property:</strong> Merge operation is commutative, associative, and idempotent.</p>
+            </div>
+
+            <h3>CRDT Types</h3>
+            <div class="pattern-grid">
+                <div class="pattern-card consistency">
+                    <h4>Counter (G-Counter)</h4>
+                    <p>Grow-only counter. Each node has its own counter. Merge takes max per node.</p>
+                    <div class="code-block">
+<span class="comment">// G-Counter: Grow-only Counter</span>
+Node A: [A:5, B:0, C:2]
+Node B: [A:3, B:4, C:2]
+Merge:  [A:5, B:4, C:2] = 11</div>
+                </div>
+                <div class="pattern-card consistency">
+                    <h4>PN-Counter</h4>
+                    <p>Supports increment and decrement. Two G-Counters: one for increments, one for decrements.</p>
+                    <div class="code-block">
+<span class="comment">// PN-Counter</span>
+P (increments): [A:5, B:2] = 7
+N (decrements): [A:1, B:0] = 1
+Value: P - N = 6</div>
+                </div>
+                <div class="pattern-card consistency">
+                    <h4>G-Set (Grow-only Set)</h4>
+                    <p>Set that only supports add. Merge is union.</p>
+                    <div class="code-block">
+<span class="comment">// G-Set</span>
+Node A: {1, 2, 3}
+Node B: {2, 3, 4}
+Merge: {1, 2, 3, 4}</div>
+                </div>
+                <div class="pattern-card consistency">
+                    <h4>OR-Set (Observed-Remove Set)</h4>
+                    <p>Supports add and remove. Each element has unique tag. Remove only removes observed tags.</p>
+                    <div class="code-block">
+<span class="comment">// OR-Set with unique tags</span>
+Add "x": {x#A1}
+Add "x": {x#A1, x#B1}  <span class="comment">// two adds</span>
+Remove "x" at A: {x#B1} <span class="comment">// B's x remains</span></div>
+                </div>
+                <div class="pattern-card consistency">
+                    <h4>LWW-Register</h4>
+                    <p>Last-Writer-Wins register. Value with timestamp. Merge keeps highest timestamp.</p>
+                    <div class="code-block">
+<span class="comment">// LWW-Register</span>
+Node A: {value: "foo", ts: 100}
+Node B: {value: "bar", ts: 150}
+Merge: {value: "bar", ts: 150}</div>
+                </div>
+                <div class="pattern-card consistency">
+                    <h4>LWW-Element-Set</h4>
+                    <p>Set with add-set and remove-set. Element is in set if in add-set and not in remove-set (by timestamp).</p>
+                    <div class="code-block">
+<span class="comment">// LWW-Element-Set</span>
+Add-set:    {x: ts=100, y: ts=150}
+Remove-set: {x: ts=200}
+Result: {y}  <span class="comment">// x removed (200>100)</span></div>
+                </div>
+            </div>
+
+            <div class="code-block">
+<span class="comment">// CRDT Implementation: G-Counter</span>
+
+<span class="keyword">class</span> <span class="type">GCounter</span> {
+    <span class="keyword">constructor</span>(nodeId) {
+        <span class="keyword">this</span>.nodeId = nodeId;
+        <span class="keyword">this</span>.counts = {};  <span class="comment">// nodeId → count</span>
+    }
+
+    <span class="function">increment</span>(amount = <span class="string">1</span>) {
+        <span class="keyword">this</span>.counts[<span class="keyword">this</span>.nodeId] = (<span class="keyword">this</span>.counts[<span class="keyword">this</span>.nodeId] || <span class="string">0</span>) + amount;
+        <span class="keyword">return this</span>;
+    }
+
+    <span class="function">value</span>() {
+        <span class="keyword">return</span> Object.<span class="function">values</span>(<span class="keyword">this</span>.counts).<span class="function">reduce</span>((a, b) => a + b, <span class="string">0</span>);
+    }
+
+    <span class="comment">// Merge: take max of each node's count</span>
+    <span class="function">merge</span>(other) {
+        <span class="keyword">for</span> (<span class="keyword">const</span> [node, count] <span class="keyword">of</span> Object.<span class="function">entries</span>(other.counts)) {
+            <span class="keyword">this</span>.counts[node] = Math.<span class="function">max</span>(
+                <span class="keyword">this</span>.counts[node] || <span class="string">0</span>,
+                count
+            );
+        }
+        <span class="keyword">return this</span>;
+    }
+
+    <span class="comment">// Serialize for transmission</span>
+    <span class="function">toJSON</span>() {
+        <span class="keyword">return</span> { counts: <span class="keyword">this</span>.counts };
+    }
+}
+
+<span class="comment">// Usage</span>
+<span class="keyword">const</span> <span class="variable">counterA</span> = <span class="keyword">new</span> <span class="type">GCounter</span>(<span class="string">'A'</span>);
+<span class="keyword">const</span> <span class="variable">counterB</span> = <span class="keyword">new</span> <span class="type">GCounter</span>(<span class="string">'B'</span>);
+
+counterA.<span class="function">increment</span>(<span class="string">5</span>);  <span class="comment">// A: [A:5], value=5</span>
+counterB.<span class="function">increment</span>(<span class="string">3</span>);  <span class="comment">// B: [B:3], value=3</span>
+
+counterA.<span class="function">merge</span>(counterB);  <span class="comment">// A: [A:5, B:3], value=8</span>
+counterB.<span class="function">merge</span>(counterA);  <span class="comment">// B: [A:5, B:3], value=8</span>
+
+<span class="comment">// Both counters now agree on value 8</span></div>
+        </section>
+
+        <!-- Real-World Systems -->
+        <section class="section">
+            <h2>🏭 Real-World Distributed Systems</h2>
+            
+            <h3>System Architectures</h3>
+            <table>
+                <tr>
+                    <th>System</th>
+                    <th>Consistency Model</th>
+                    <th>Consensus</th>
+                    <th>Replication</th>
+                    <th>Use Case</th>
+                </tr>
+                <tr>
+                    <td><strong>Google Spanner</strong></td>
+                    <td>External Consistency (Linearizable)</td>
+                    <td>Paxos</td>
+                    <td>Synchronous, Multi-region</td>
+                    <td>Global database</td>
+                </tr>
+                <tr>
+                    <td><strong>Amazon DynamoDB</strong></td>
+                    <td>Eventual / Strong (configurable)</td>
+                    <td>Leaderless</td>
+                    <td>Multi-AZ, Global Tables</td>
+                    <td>Key-value, high availability</td>
+                </tr>
+                <tr>
+                    <td><strong>Apache Cassandra</strong></td>
+                    <td>Eventual / Tunable</td>
+                    <td>Leaderless (Gossip)</td>
+                    <td>Leaderless quorum</td>
+                    <td>Wide-column, write-heavy</td>
+                </tr>
+                <tr>
+                    <td><strong>etcd</strong></td>
+                    <td>Linearizable</td>
+                    <td>Raft</td>
+                    <td>Leader-based</td>
+                    <td>Configuration, coordination</td>
+                </tr>
+                <tr>
+                    <td><strong>Apache Kafka</strong></td>
+                    <td>Per-partition linearizable</td>
+                    <td>KRaft (was ZooKeeper)</td>
+                    <td>ISR (In-Sync Replicas)</td>
+                    <td>Event streaming</td>
+                </tr>
+                <tr>
+                    <td><strong>CockroachDB</strong></td>
+                    <td>Serializable + Linearizable</td>
+                    <td>Raft</td>
+                    <td>Synchronous, geo-partitioned</td>
+                    <td>SQL database</td>
+                </tr>
+                <tr>
+                    <td><strong>TiDB</strong></td>
+                    <td>Linearizable</td>
+                    <td>Raft (TiKV)</td>
+                    <td>Multi-Raft groups</td>
+                    <td>HTAP database</td>
+                </tr>
+            </table>
+
+            <h3>Google Spanner: TrueTime</h3>
+            <div class="card">
+                <h4>🌍 How Spanner Achieves External Consistency</h4>
+                <div class="ascii-diagram">┌─────────────────────────────────────────────────────────────────────────┐
+│                    SPANNER ARCHITECTURE                                 │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                         │
+│    ┌───────────────────────────────────────────────────────────────┐   │
+│    │                     Universe                                   │   │
+│    │  ┌─────────────────────┐  ┌─────────────────────┐             │   │
+│    │  │    Region US-East   │  │   Region EU-West    │             │   │
+│    │  │                     │  │                     │             │   │
+│    │  │  ┌─────┐ ┌─────┐   │  │  ┌─────┐ ┌─────┐   │             │   │
+│    │  │  │Replica│ │Replica│   │  │  │Replica│ │Replica│   │             │   │
+│    │  │  │Set 1 │ │Set 2 │   │  │  │Set 1 │ │Set 2 │   │             │   │
+│    │  │  └──┬──┘ └──┬──┘   │  │  └──┬──┘ └──┬──┘   │             │   │
+│    │  │     │ Paxos  │     │  │     │ Paxos  │     │             │   │
+│    │  │     └───┬────┘     │  │     └───┬────┘     │             │   │
+│    │  │         │          │  │         │          │             │   │
+│    │  │    ┌────▼────┐     │  │    ┌────▼────┐     │             │   │
+│    │  │    │  Leader │     │  │    │  Leader │     │             │   │
+│    │  │    └─────────┘     │  │    └─────────┘     │             │   │
+│    │  └─────────────────────┘  └─────────────────────┘             │   │
+│    │                                                               │   │
+│    │  TrueTime: GPS + Atomic Clocks                                │   │
+│    │  Clock uncertainty: ~2-10ms                                   │   │
+│    └───────────────────────────────────────────────────────────────┘   │
+│                                                                         │
+│    External Consistency:                                                │
+│    If T1 commits before T2 starts, then T1's timestamp < T2's         │
+│                                                                         │
+│    Commit Wait:                                                         │
+│    T1 commits at timestamp ts = TT.now().latest                         │
+│    Wait until TT.now().earliest > ts before returning success          │
+│                                                                         │
+│    This ensures any later transaction sees T1's writes                 │
+└─────────────────────────────────────────────────────────────────────────┘</div>
+            </div>
+
+            <h3>Amazon DynamoDB: Tunable Consistency</h3>
+            <div class="card">
+                <h4>📊 DynamoDB Design</h4>
+                <ul>
+                    <li><strong>Consistent Hashing:</strong> Partitions distributed across nodes</li>
+                    <li><strong>Replication Factor:</strong> 3 copies across AZs</li>
+                    <li><strong>Consistency:</strong> Eventually consistent reads (default) or strongly consistent reads</li>
+                    <li><strong>Leaderless:</strong> Any replica can serve reads/writes</li>
+                    <li><strong>Conflict Resolution:</strong> Last-Writer-Wins with vector clocks</li>
+                    <li><strong>Global Tables:</strong> Multi-region with async replication (eventual consistency)</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Design Patterns -->
+        <section class="section">
+            <h2>📐 Distributed System Design Patterns</h2>
+            
+            <h3>Essential Patterns</h3>
+            <div class="grid">
+                <div class="card">
+                    <h4>🔄 Request-Reply</h4>
+                    <p>Simple synchronous communication. Client sends request, waits for reply.</p>
+                    <span class="tag blue">Synchronous</span>
+                </div>
+                <div class="card">
+                    <h4>📨 Message Queue</h4>
+                    <p>Async decoupling. Producer sends to queue, consumer processes later.</p>
+                    <span class="tag green">Asynchronous</span>
+                </div>
+                <div class="card">
+                    <h4>📢 Publish-Subscribe</h4>
+                    <p>One-to-many broadcast. Publisher sends to topic, all subscribers receive.</p>
+                    <span class="tag green">Event-Driven</span>
+                </div>
+                <div class="card">
+                    <h4>🔀 Scatter-Gather</h4>
+                    <p>Fan-out to multiple services, aggregate results. Parallel processing.</p>
+                    <span class="tag purple">Parallel</span>
+                </div>
+                <div class="card">
+                    <h4>🌉 Ambassador</h4>
+                    <p>Sidecar proxy handles cross-cutting concerns (retry, circuit breaker, logging).</p>
+                    <span class="tag yellow">Proxy</span>
+                </div>
+                <div class="card">
+                    <h4>🎯 Sharding</h4>
+                    <p>Horizontal partitioning by shard key. Each shard on different node.</p>
+                    <span class="tag red">Scaling</span>
+                </div>
+                <div class="card">
+                    <h4>📦 Bulkhead</h4>
+                    <p>Isolate failures. Separate thread pools/resources per dependency.</p>
+                    <span class="tag red">Resilience</span>
+                </div>
+                <div class="card">
+                    <h4>⏰ Timeout + Retry</h4>
+                    <p>Fail fast, retry with backoff. Essential for distributed calls.</p>
+                    <span class="tag red">Resilience</span>
+                </div>
+            </div>
+
+            <h3>Scatter-Gather Pattern Example</h3>
+            <div class="ascii-diagram">┌─────────────────────────────────────────────────────────────────────────┐
+│                    SCATTER-GATHER PATTERN                               │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                         │
+│                     ┌─────────────┐                                    │
+│                     │   Client    │                                    │
+│                     └──────┬──────┘                                    │
+│                            │ Request                                   │
+│                            ▼                                           │
+│                     ┌─────────────┐                                    │
+│                     │ Aggregator  │                                    │
+│                     │  (Scatter)  │                                    │
+│                     └──────┬──────┘                                    │
+│                            │                                           │
+│         ┌──────────────────┼──────────────────┐                        │
+│         │                  │                  │                        │
+│         ▼                  ▼                  ▼                        │
+│    ┌─────────┐        ┌─────────┐        ┌─────────┐                  │
+│    │ Service │        │ Service │        │ Service │                  │
+│    │    A    │        │    B    │        │    C    │                  │
+│    │ Search  │        │  Ads    │        │ Recs    │                  │
+│    └────┬────┘        └────┬────┘        └────┬────┘                  │
+│         │                  │                  │                        │
+│         │                  │                  │                        │
+│         └──────────────────┼──────────────────┘                        │
+│                            │ Results                                   │
+│                            ▼                                           │
+│                     ┌─────────────┐                                    │
+│                     │ Aggregator  │                                    │
+│                     │  (Gather)   │                                    │
+│                     └──────┬──────┘                                    │
+│                            │ Combined Response                          │
+│                            ▼                                           │
+│                     ┌─────────────┐                                    │
+│                     │   Client    │                                    │
+│                     └─────────────┘                                    │
+│                                                                         │
+│    Example: Search engine aggregates results from multiple sources     │
+│    Latency = max(all services) + aggregation overhead                  │
+└─────────────────────────────────────────────────────────────────────────┘</div>
+        </section>
+
+        <!-- Anti-Patterns -->
+        <section class="section">
+            <h2>⚠️ Anti-Patterns & Common Mistakes</h2>
+            
+            <div class="grid">
+                <div class="card" style="border-left: 4px solid #ef4444;">
+                    <h4>❌ Two-Phase Blocking</h4>
+                    <p>Holding locks across service calls while waiting for 2PC. Causes cascading failures.</p>
+                    <p><strong>Fix:</strong> Use sagas or eventual consistency.</p>
+                </div>
+                <div class="card" style="border-left: 4px solid #ef4444;">
+                    <h4>❌ Distributed Single Thread</h4>
+                    <p>Processing requests sequentially across distributed system. Negates scaling benefits.</p>
+                    <p><strong>Fix:</strong> Parallelize independent operations.</p>
+                </div>
+                <div class="card" style="border-left: 4px solid #ef4444;">
+                    <h4>❌ Ignoring Network Partitions</h4>
+                    <p>Assuming network is reliable. No handling for split-brain scenarios.</p>
+                    <p><strong>Fix:</strong> Design for partition tolerance, use quorums.</p>
+                </div>
+                <div class="card" style="border-left: 4px solid #ef4444;">
+                    <h4>❌ Clock Synchronization Dependency</h4>
+                    <p>Relying on synchronized clocks for correctness. NTP can't guarantee sync.</p>
+                    <p><strong>Fix:</strong> Use logical clocks or TrueTime-like bounded uncertainty.</p>
+                </div>
+                <div class="card" style="border-left: 4px solid #ef4444;">
+                    <h4>❌ Synchronous Everything</h4>
+                    <p>All inter-service calls are synchronous. Creates tight coupling, cascade failures.</p>
+                    <p><strong>Fix:</strong> Use async messaging where possible.</p>
+                </div>
+                <div class="card" style="border-left: 4px solid #ef4444;">
+                    <h4>❌ Over-Engineering Consistency</h4>
+                    <p>Strong consistency everywhere when eventual is acceptable.</p>
+                    <p><strong>Fix:</strong> Choose consistency level per use case.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Quick Reference -->
+        <section class="section">
+            <h2>📋 Quick Reference Card</h2>
+            
+            <div class="formula-box">
+<strong>KEY FORMULAS</strong>
+
+<strong>Quorum for Consistency:</strong> R + W > N
+
+<strong>Crash Fault Tolerance:</strong> n ≥ 2f + 1 nodes for f failures
+
+<strong>Byzantine Fault Tolerance:</strong> n ≥ 3f + 1 nodes for f Byzantine failures
+
+<strong>Consistent Hashing:</strong> keys = O(keys/nodes) per node (with vnodes)
+
+<strong>Gossip Convergence:</strong> O(log N) rounds to propagate
+
+<strong>Lamport Clock:</strong> L = max(local, received) + 1
+
+<strong>Vector Clock Compare:</strong>
+- A → B: all entries in A ≤ B, at least one <
+- A || B: some entries A > B, some A < B
+
+<strong>2PC Latency:</strong> 2 × RTT + 2 × fsync
+
+<strong>Raft Election Timeout:</strong> 150-300ms random
+
+<strong>Paxos Rounds:</strong> Prepare + Accept = 2 round trips
+            </div>
+
+            <h3>When to Use What</h3>
+            <table>
+                <tr>
+                    <th>Requirement</th>
+                    <th>Choose</th>
+                </tr>
+                <tr>
+                    <td>Strong consistency, coordination</td>
+                    <td>Paxos, Raft, etcd, ZooKeeper</td>
+                </tr>
+                <tr>
+                    <td>High availability, partition tolerance</td>
+                    <td>Cassandra, DynamoDB, Riak</td>
+                </tr>
+                <tr>
+                    <td>Global database, external consistency</td>
+                    <td>Spanner, CockroachDB, TiDB</td>
+                </tr>
+                <tr>
+                    <td>Event streaming, log aggregation</td>
+                    <td>Kafka, Pulsar, Kinesis</td>
+                </tr>
+                <tr>
+                    <td>Configuration, service discovery</td>
+                    <td>etcd, Consul, ZooKeeper</td>
+                </tr>
+                <tr>
+                    <td>Conflict-free collaboration</td>
+                    <td>CRDTs (Yjs, Automerge)</td>
+                </tr>
+                <tr>
+                    <td>Distributed caching</td>
+                    <td>Redis Cluster, Memcached with consistent hashing</td>
+                </tr>
+            </table>
+        </section>
+
+        <footer>
+            <p>Distributed Systems Reference Guide | Built for Understanding Complex Distributed Architectures</p>
+            <p>"A distributed system is one in which the failure of a computer you didn't even know existed can render your own computer unusable." - Leslie Lamport</p>
+        </footer>
+    </div>
+</body>
+</html>

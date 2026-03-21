@@ -1,0 +1,2245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NeoVim/Vim Mastery Guide</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            color: #e8e8e8;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        header {
+            text-align: center;
+            padding: 40px 20px;
+            background: linear-gradient(90deg, #019f61 0%, #57b85c 100%);
+            border-radius: 15px;
+            margin-bottom: 30px;
+        }
+        header h1 {
+            font-size: 2.8em;
+            color: #fff;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            margin-bottom: 10px;
+        }
+        header p {
+            font-size: 1.2em;
+            color: rgba(255,255,255,0.9);
+        }
+        .logo {
+            font-size: 4em;
+            margin-bottom: 15px;
+        }
+        .section {
+            background: rgba(255,255,255,0.05);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .section h2 {
+            color: #57b85c;
+            font-size: 1.6em;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #019f61;
+        }
+        .section h3 {
+            color: #4ecdc4;
+            margin: 15px 0 10px 0;
+            font-size: 1.2em;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+        }
+        .card {
+            background: rgba(0,0,0,0.3);
+            border-radius: 10px;
+            padding: 20px;
+            border: 1px solid rgba(87, 184, 92, 0.3);
+        }
+        .card h4 {
+            color: #57b85c;
+            margin-bottom: 12px;
+            font-size: 1.1em;
+        }
+        .formula-box {
+            background: rgba(1, 159, 97, 0.1);
+            border-left: 4px solid #019f61;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 0 8px 8px 0;
+            font-family: 'Consolas', 'Monaco', monospace;
+        }
+        .key {
+            display: inline-block;
+            background: linear-gradient(180deg, #3a3a3a 0%, #2a2a2a 100%);
+            border: 1px solid #555;
+            border-radius: 5px;
+            padding: 3px 8px;
+            margin: 2px;
+            font-family: 'Consolas', monospace;
+            font-size: 0.9em;
+            color: #fff;
+            box-shadow: 0 2px 0 #222;
+        }
+        .key-combo {
+            color: #ffd93d;
+        }
+        code {
+            background: rgba(0,0,0,0.4);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            color: #4ecdc4;
+        }
+        pre {
+            background: rgba(0,0,0,0.4);
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 10px 0;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.9em;
+            line-height: 1.5;
+        }
+        .command {
+            color: #57b85c;
+        }
+        .comment {
+            color: #888;
+        }
+        .string {
+            color: #ffd93d;
+        }
+        .number {
+            color: #ff6b6b;
+        }
+        .mode-indicator {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 15px;
+            font-size: 0.8em;
+            font-weight: bold;
+            margin: 2px;
+        }
+        .mode-normal { background: #019f61; color: white; }
+        .mode-insert { background: #4ecdc4; color: #1a1a2e; }
+        .mode-visual { background: #ff6b6b; color: white; }
+        .mode-command { background: #ffd93d; color: #1a1a2e; }
+        .mode-replace { background: #e056fd; color: white; }
+        .tip-box {
+            background: linear-gradient(135deg, rgba(255, 217, 61, 0.1) 0%, rgba(255, 217, 61, 0.05) 100%);
+            border-left: 4px solid #ffd93d;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        .tip-box::before {
+            content: "💡 TIP: ";
+            color: #ffd93d;
+            font-weight: bold;
+        }
+        .warning-box {
+            background: linear-gradient(135deg, rgba(255, 107, 107, 0.1) 0%, rgba(255, 107, 107, 0.05) 100%);
+            border-left: 4px solid #ff6b6b;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        .warning-box::before {
+            content: "⚠️ WARNING: ";
+            color: #ff6b6b;
+            font-weight: bold;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        th {
+            background: rgba(1, 159, 97, 0.2);
+            color: #57b85c;
+        }
+        td {
+            background: rgba(0,0,0,0.2);
+        }
+        td:first-child {
+            font-family: 'Consolas', monospace;
+            color: #4ecdc4;
+        }
+        .ascii-art {
+            background: rgba(0,0,0,0.3);
+            padding: 20px;
+            border-radius: 10px;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85em;
+            line-height: 1.3;
+            color: #57b85c;
+        }
+        .quick-ref {
+            background: linear-gradient(135deg, rgba(78, 205, 196, 0.1) 0%, rgba(78, 205, 196, 0.05) 100%);
+            border: 1px solid #4ecdc4;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .quick-ref h4 {
+            color: #4ecdc4;
+            margin-bottom: 15px;
+        }
+        .tag {
+            display: inline-block;
+            background: #019f61;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 3px;
+            font-size: 0.75em;
+            margin-left: 10px;
+        }
+        .neovim-tag {
+            background: #4ecdc4;
+            color: #1a1a2e;
+        }
+        ul {
+            margin-left: 20px;
+        }
+        li {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">🚀</div>
+            <h1>NeoVim/Vim Mastery Guide</h1>
+            <p>From Fundamentals to Advanced Productivity - The Complete Reference</p>
+        </header>
+
+        <!-- Vim Modes -->
+        <section class="section">
+            <h2>📌 Vim Modes - The Foundation</h2>
+            <div class="ascii-art">
+┌─────────────────────────────────────────────────────────────────────────┐
+│                        VIM MODE TRANSITIONS                              │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│     ┌──────────┐   i,I,a,A,o,O   ┌──────────┐                           │
+│     │  NORMAL  │ ───────────────▶│  INSERT  │                           │
+│     │  (ESC)   │◀─────────────── │          │                           │
+│     └────┬─────┘      Esc        └──────────┘                           │
+│          │                                                              │
+│          │ v,V,Ctrl-v                  : / ?                            │
+│          ▼                             ▼                                │
+│     ┌──────────┐                 ┌──────────┐                           │
+│     │  VISUAL  │                 │ COMMAND  │                           │
+│     │          │                 │   LINE   │                           │
+│     └──────────┘                 └──────────┘                           │
+│          │                             │                                │
+│          │ Esc                         │ Esc                            │
+│          └──────────────┬──────────────┘                               │
+│                         ▼                                               │
+│     ┌──────────┐   R   ┌──────────┐                                     │
+│     │  NORMAL  │◀──────│ REPLACE  │                                     │
+│     └──────────┘       └──────────┘                                     │
+│                                                                          │
+└─────────────────────────────────────────────────────────────────────────┘
+            </div>
+            
+            <div class="grid">
+                <div class="card">
+                    <h4><span class="mode-indicator mode-normal">NORMAL</span> Default Mode</h4>
+                    <table>
+                        <tr><th>Key</th><th>Action</th></tr>
+                        <tr><td>Esc</td><td>Return to Normal mode</td></tr>
+                        <tr><td>Ctrl-[</td><td>Same as Esc (easier reach)</td></tr>
+                        <tr><td>Ctrl-c</td><td>Interrupt, return to Normal</td></tr>
+                    </table>
+                    <p><strong>Purpose:</strong> Navigation, manipulation, commands</p>
+                </div>
+                
+                <div class="card">
+                    <h4><span class="mode-indicator mode-insert">INSERT</span> Text Entry</h4>
+                    <table>
+                        <tr><th>Key</th><th>Action</th></tr>
+                        <tr><td>i</td><td>Insert before cursor</td></tr>
+                        <tr><td>I</td><td>Insert at line start</td></tr>
+                        <tr><td>a</td><td>Append after cursor</td></tr>
+                        <tr><td>A</td><td>Append at line end</td></tr>
+                        <tr><td>o</td><td>Open line below</td></tr>
+                        <tr><td>O</td><td>Open line above</td></tr>
+                        <tr><td>gi</td><td>Insert at last insert position</td></tr>
+                        <tr><td>gI</td><td>Insert at column 1</td></tr>
+                    </table>
+                </div>
+                
+                <div class="card">
+                    <h4><span class="mode-indicator mode-visual">VISUAL</span> Selection</h4>
+                    <table>
+                        <tr><th>Key</th><th>Action</th></tr>
+                        <tr><td>v</td><td>Character-wise selection</td></tr>
+                        <tr><td>V</td><td>Line-wise selection</td></tr>
+                        <tr><td>Ctrl-v</td><td>Block-wise selection</td></tr>
+                        <tr><td>gv</td><td>Reselect last selection</td></tr>
+                        <tr><td>o</td><td>Move to other end of selection</td></tr>
+                    </table>
+                    <div class="tip-box">Block mode (Ctrl-v) is powerful for column editing!</div>
+                </div>
+                
+                <div class="card">
+                    <h4><span class="mode-indicator mode-command">COMMAND</span> Ex Mode</h4>
+                    <table>
+                        <tr><th>Key</th><th>Action</th></tr>
+                        <tr><td>:</td><td>Command-line mode</td></tr>
+                        <tr><td>/</td><td>Search forward</td></tr>
+                        <tr><td>?</td><td>Search backward</td></tr>
+                        <tr><td>:</td><td>Execute Ex command</td></tr>
+                    </table>
+                </div>
+                
+                <div class="card">
+                    <h4><span class="mode-indicator mode-replace">REPLACE</span> Mode</h4>
+                    <table>
+                        <tr><th>Key</th><th>Action</th></tr>
+                        <tr><td>R</td><td>Replace mode (overwrite)</td></tr>
+                        <tr><td>r</td><td>Replace single character</td></tr>
+                        <tr><td>gr</td><td>Virtual replace (handle tabs)</td></tr>
+                        <tr><td>gR</td><td>Virtual replace mode</td></tr>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Navigation -->
+        <section class="section">
+            <h2>🧭 Navigation & Movement</h2>
+            
+            <div class="grid">
+                <div class="card">
+                    <h4>Basic Movement (hjkl)</h4>
+                    <div class="ascii-art" style="font-size:0.75em;">
+        ┌─────────────────────────────────────┐
+        │         hjkl Movement Keys          │
+        ├─────────────────────────────────────┤
+        │                                     │
+        │              k                      │
+        │              ↑                      │
+        │              │                      │
+        │         h ←──●──→ l                 │
+        │              │                      │
+        │              ↓                      │
+        │              j                      │
+        │                                     │
+        │   h = left    l = right             │
+        │   j = down    k = up                │
+        │                                     │
+        │   Memory aid:                       │
+        │   j = jumps down                    │
+        │   k = kicks up                      │
+        └─────────────────────────────────────┘
+                    </div>
+                    <table>
+                        <tr><th>Key</th><th>Action</th></tr>
+                        <tr><td>h / l</td><td>Left / Right one character</td></tr>
+                        <tr><td>j / k</td><td>Down / Up one line</td></tr>
+                        <tr><td>gj / gk</td><td>Down / Up (display line)</td></tr>
+                    </table>
+                </div>
+                
+                <div class="card">
+                    <h4>Word Movement</h4>
+                    <table>
+                        <tr><th>Key</th><th>Action</th></tr>
+                        <tr><td>w</td><td>Next word start</td></tr>
+                        <tr><td>W</td><td>Next WORD start (space-delimited)</td></tr>
+                        <tr><td>e</td><td>Next word end</td></tr>
+                        <tr><td>E</td><td>Next WORD end</td></tr>
+                        <tr><td>b</td><td>Previous word start</td></tr>
+                        <tr><td>B</td><td>Previous WORD start</td></tr>
+                        <tr><td>ge</td><td>Previous word end</td></tr>
+                    </table>
+                    <div class="formula-box">
+word = letters, digits, underscores<br>
+WORD = non-blank characters (space-delimited)
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <h4>Line Navigation</h4>
+                    <table>
+                        <tr><th>Key</th><th>Action</th></tr>
+                        <tr><td>0</td><td>Start of line</td></tr>
+                        <tr><td>^</td><td>First non-blank character</td></tr>
+                        <tr><td>$</td><td>End of line</td></tr>
+                        <tr><td>g_</td><td>Last non-blank character</td></tr>
+                        <tr><td>|</td><td>Go to column n (n|)</td></tr>
+                        <tr><td>+</td><td>First char of next line</td></tr>
+                        <tr><td>-</td><td>First char of previous line</td></tr>
+                    </table>
+                </div>
+                
+                <div class="card">
+                    <h4>File Navigation</h4>
+                    <table>
+                        <tr><th>Key</th><th>Action</th></tr>
+                        <tr><td>gg</td><td>First line of file</td></tr>
+                        <tr><td>G</td><td>Last line of file</td></tr>
+                        <tr><td>nG</td><td>Go to line n</td></tr>
+                        <tr><td>:n</td><td>Go to line n</td></tr>
+                        <tr><td>%</td><td>Jump to matching bracket</td></tr>
+                        <tr><td>Ctrl-g</td><td>Show file info and position</td></tr>
+                        <tr><td>g Ctrl-g</td><td>Detailed cursor position info</td></tr>
+                    </table>
+                </div>
+                
+                <div class="card">
+                    <h4>Screen Navigation</h4>
+                    <table>
+                        <tr><th>Key</th><th>Action</th></tr>
+                        <tr><td>H</td><td>Top of screen (High)</td></tr>
+                        <tr><td>M</td><td>Middle of screen</td></tr>
+                        <tr><td>L</td><td>Bottom of screen (Low)</td></tr>
+                        <tr><td>nH</td><td>n lines from top</td></tr>
+                        <tr><td>nL</td><td>n lines from bottom</td></tr>
+                        <tr><td>zt</td><td>Scroll line to top</td></tr>
+                        <tr><td>zz</td><td>Scroll line to center</td></tr>
+                        <tr><td>zb</td><td>Scroll line to bottom</td></tr>
+                    </table>
+                </div>
+                
+                <div class="card">
+                    <h4>Scrolling</h4>
+                    <table>
+                        <tr><th>Key</th><th>Action</th></tr>
+                        <tr><td>Ctrl-f</td><td>Scroll forward one page</td></tr>
+                        <tr><td>Ctrl-b</td><td>Scroll backward one page</td></tr>
+                        <tr><td>Ctrl-d</td><td>Scroll down half page</td></tr>
+                        <tr><td>Ctrl-u</td><td>Scroll up half page</td></tr>
+                        <tr><td>Ctrl-e</td><td>Scroll down one line</td></tr>
+                        <tr><td>Ctrl-y</td><td>Scroll up one line</td></tr>
+                    </table>
+                </div>
+                
+                <div class="card">
+                    <h4>Paragraph & Section</h4>
+                    <table>
+                        <tr><th>Key</th><th>Action</th></tr>
+                        <tr><td>{</td><td>Previous paragraph</td></tr>
+                        <tr><td>}</td><td>Next paragraph</td></tr>
+                        <tr><td>(</td><td>Previous sentence</td></tr>
+                        <tr><td>)</td><td>Next sentence</td></tr>
+                        <tr><td>[[</td><td>Previous section</td></tr>
+                        <tr><td>]]</td><td>Next section</td></tr>
+                        <tr><td>[]</td><td>Previous section end</td></tr>
+                        <tr><td>][</td><td>Next section end</td></tr>
+                    </table>
+                </div>
+                
+                <div class="card">
+                    <h4>Jump Commands</h4>
+                    <table>
+                        <tr><th>Key</th><th>Action</th></tr>
+                        <tr><td>Ctrl-o</td><td>Jump to older position</td></tr>
+                        <tr><td>Ctrl-i</td><td>Jump to newer position</td></tr>
+                        <tr><td>``</td><td>Jump to last position</td></tr>
+                        <tr><td>''</td><td>Jump to last line position</td></tr>
+                        <tr><td>:jumps</td><td>List jump history</td></tr>
+                    </table>
+                    <div class="tip-box">Jump list is maintained across sessions with viminfo!</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Editing -->
+        <section class="section">
+            <h2>✏️ Editing Commands</h2>
+            
+            <div class="grid">
+                <div class="card">
+                    <h4>Delete Operations</h4>
+                    <table>
+                        <tr><th>Key</th><th>Action</th></tr>
+                        <tr><td>x</td><td>Delete character under cursor</td></tr>
+                        <tr><td>X</td><td>Delete character before cursor</td></tr>
+                        <tr><td>dw</td><td>Delete word</td></tr>
+                        <tr><td>dd</td><td>Delete line</td></tr>
+                        <tr><td>D / d$</td><td>Delete to end of line</td></tr>
+                        <tr><td>d0</td><td>Delete to start of line</td></tr>
+                        <tr><td>d^</td><td>Delete to first non-blank</td></tr>
+                        <tr><td>dG</td><td>Delete to end of file</td></tr>
+                        <tr><td>dgg</td><td>Delete to start of file</td></tr>
+                        <tr><td>d%</td><td>Delete to matching bracket</td></tr>
+                        <tr><td>di"</td><td>Delete inside quotes</td></tr>
+                        <tr><td>da"</td><td>Delete around quotes</td></tr>
+                    </table>
+                </div>
+                
+                <div class="card">
+                    <h4>Change Operations</h4>
+                    <table>
+                        <tr><th>Key</th><th>Action</th></tr>
+                        <tr><td>c{motion}</td><td>Change text (delete & insert)</td></tr>
+                        <tr><td>cc / S</td><td>Change entire line</td></tr>
+                        <tr><td>C / c$</td><td>Change to end of line</td></tr>
+                        <tr><td>cw</td><td>Change word</td></tr>
+                        <tr><td>ciw</td><td>Change inner word</td></tr>
+                        <tr><td>ci"</td><td>Change inside quotes</td></tr>
+                        <tr><td>ca"</td><td>Change around quotes</td></tr>
+                        <tr><td>ci(</td><td>Change inside parentheses</td></tr>
+                        <tr><td>ci{</td><td>Change inside braces</td></tr>
+                        <tr><td>cit</td><td>Change inside tag (HTML/XML)</td></tr>
+                    </table>
+                </div>
+                
+                <div class="card">
+                    <h4>Yank & Put (Copy/Paste)</h4>
+                    <table>
+                        <tr><th>Key</th><th>Action</th></tr>
+                        <tr><td>y{motion}</td><td>Yank (copy) text</td></tr>
+                        <tr><td>yy / Y</td><td>Yank current line</td></tr>
+                        <tr><td>yw</td><td>Yank word</td></tr>
+                        <tr><td>p</td><td>Put after cursor</td></tr>
+                        <tr><td>P</td><td>Put before cursor</td></tr>
+                        <tr><td>]p</td><td>Put with auto-indent</td></tr>
+                        <tr><td>[p</td><td>Put before with auto-indent</td></tr>
+                        <tr><td>gp</td><td>Put and move cursor after</td></tr>
+                        <tr><td>gP</td><td>Put before and move cursor</td></tr>
+                    </table>
+                </div>
+                
+                <div class="card">
+                    <h4>Other Edit Operations</h4>
+                    <table>
+                        <tr><th>Key</th><th>Action</th></tr>
+                        <tr><td>J</td><td>Join current line with next</td></tr>
+                        <tr><td>gJ</td><td>Join without space</td></tr>
+                        <tr><td>~</td><td>Toggle case of character</td></tr>
+                        <tr><td>g~{motion}</td><td>Toggle case</td></tr>
+                        <tr><td>gu{motion}</td><td>Make lowercase</td></tr>
+                        <tr><td>gU{motion}</td><td>Make uppercase</td></tr>
+                        <tr><td>>></td><td>Indent line</td></tr>
+                        <tr><td><<</td><td>Unindent line</td></tr>
+                        <tr><td>==</td><td>Auto-indent line</td></tr>
+                        <tr><td>=</td><td>Auto-indent selection (visual)</td></tr>
+                    </table>
+                </div>
+                
+                <div class="card">
+                    <h4>Repeat & Undo</h4>
+                    <table>
+                        <tr><th>Key</th><th>Action</th></tr>
+                        <tr><td>.</td><td>Repeat last change</td></tr>
+                        <tr><td>u</td><td>Undo last change</td></tr>
+                        <tr><td>Ctrl-r</td><td>Redo</td></tr>
+                        <tr><td>U</td><td>Undo all changes on line</td></tr>
+                        <tr><td>g+</td><td>Newer text state</td></tr>
+                        <tr><td>g-</td><td>Older text state</td></tr>
+                    </table>
+                    <div class="tip-box">The dot (.) command is your best friend for repetitive edits!</div>
+                </div>
+                
+                <div class="card">
+                    <h4>Insert Mode Shortcuts</h4>
+                    <table>
+                        <tr><th>Key</th><th>Action</th></tr>
+                        <tr><td>Ctrl-w</td><td>Delete previous word</td></tr>
+                        <tr><td>Ctrl-u</td><td>Delete to start of line</td></tr>
+                        <tr><td>Ctrl-t</td><td>Indent current line</td></tr>
+                        <tr><td>Ctrl-d</td><td>Unindent current line</td></tr>
+                        <tr><td>Ctrl-n</td><td>Autocomplete next</td></tr>
+                        <tr><td>Ctrl-p</td><td>Autocomplete previous</td></tr>
+                        <tr><td>Ctrl-a</td><td>Insert last inserted text</td></tr>
+                        <tr><td>Ctrl-y</td><td>Insert char above cursor</td></tr>
+                        <tr><td>Ctrl-e</td><td>Insert char below cursor</td></tr>
+                        <tr><td>Ctrl-o</td><td>Execute normal cmd (temp)</td></tr>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Text Objects -->
+        <section class="section">
+            <h2>🎯 Text Objects - The Power Feature</h2>
+            <div class="ascii-art">
+┌─────────────────────────────────────────────────────────────────────────┐
+│                    TEXT OBJECTS ANATOMY                                  │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│   [count] [operator] [a/i] [object]                                     │
+│      │         │         │       │                                       │
+│      │         │         │       └── What to target                     │
+│      │         │         └── a=around, i=inner                          │
+│      │         └── d=delete, c=change, y=yank, v=select                 │
+│      └── How many times                                                  │
+│                                                                          │
+│   Examples:                                                              │
+│   ─────────                                                              │
+│   diw  → delete inner word           ci"  → change inside quotes        │
+│   daw  → delete a word (with space)  ca"  → change around quotes        │
+│   yi(  → yank inside parentheses     vip  → select inner paragraph      │
+│   ci{  → change inside braces        vap  → select around paragraph     │
+│                                                                          │
+└─────────────────────────────────────────────────────────────────────────┘
+            </div>
+            
+            <div class="grid">
+                <div class="card">
+                    <h4>Word Objects</h4>
+                    <table>
+                        <tr><th>Object</th><th>Description</th></tr>
+                        <tr><td>iw</td><td>Inner word (no surrounding space)</td></tr>
+                        <tr><td>aw</td><td>A word (includes trailing space)</td></tr>
+                        <tr><td>iW</td><td>Inner WORD (space-delimited)</td></tr>
+                        <tr><td>aW</td><td>A WORD (includes trailing space)</td></tr>
+                    </table>
+                </div>
+                
+                <div class="card">
+                    <h4>Bracket Objects</h4>
+                    <table>
+                        <tr><th>Object</th><th>Description</th></tr>
+                        <tr><td>i( / ib</td><td>Inside parentheses</td></tr>
+                        <tr><td>a( / ab</td><td>Around parentheses</td></tr>
+                        <tr><td>i[</td><td>Inside square brackets</td></tr>
+                        <tr><td>a[</td><td>Around square brackets</td></tr>
+                        <tr><td>i{ / iB</td><td>Inside curly braces</td></tr>
+                        <tr><td>a{ / aB</td><td>Around curly braces</td></tr>
+                        <tr><td>i&lt;</td><td>Inside angle brackets</td></tr>
+                        <tr><td>a&lt;</td><td>Around angle brackets</td></tr>
+                    </table>
+                </div>
+                
+                <div class="card">
+                    <h4>Quote Objects</h4>
+                    <table>
+                        <tr><th>Object</th><th>Description</th></tr>
+                        <tr><td>i"</td><td>Inside double quotes</td></tr>
+                        <tr><td>a"</td><td>Around double quotes</td></tr>
+                        <tr><td>i'</td><td>Inside single quotes</td></tr>
+                        <tr><td>a'</td><td>Around single quotes</td></tr>
+                        <tr><td>i`</td><td>Inside backticks</td></tr>
+                        <tr><td>a`</td><td>Around backticks</td></tr>
+                    </table>
+                </div>
+                
+                <div class="card">
+                    <h4>Block Objects</h4>
+                    <table>
+                        <tr><th>Object</th><th>Description</th></tr>
+                        <tr><td>ip</td><td>Inner paragraph</td></tr>
+                        <tr><td>ap</td><td>Around paragraph</td></tr>
+                        <tr><td>is</td><td>Inner sentence</td></tr>
+                        <tr><td>as</td><td>Around sentence</td></tr>
+                        <tr><td>it</td><td>Inside tag (HTML/XML)</td></tr>
+                        <tr><td>at</td><td>Around tag (HTML/XML)</td></tr>
+                    </table>
+                </div>
+                
+                <div class="card">
+                    <h4>Line/Indent Objects <span class="tag neovim-tag">NeoVim</span></h4>
+                    <table>
+                        <tr><th>Object</th><th>Description</th></tr>
+                        <tr><td>ii</td><td>Same indentation level</td></tr>
+                        <tr><td>ai</td><td>Same indentation + above</td></tr>
+                        <tr><td>aI</td><td>Same indentation + above/below</td></tr>
+                    </table>
+                    <p class="comment">Requires textobj-indent plugin or treesitter</p>
+                </div>
+                
+                <div class="card">
+                    <h4>Function/Class Objects <span class="tag neovim-tag">NeoVim</span></h4>
+                    <table>
+                        <tr><th>Object</th><th>Description</th></tr>
+                        <tr><td>if</td><td>Inside function</td></tr>
+                        <tr><td>af</td><td>Around function</td></tr>
+                        <tr><td>ic</td><td>Inside class</td></tr>
+                        <tr><td>ac</td><td>Around class</td></tr>
+                    </table>
+                    <p class="comment">Requires treesitter-textobjects plugin</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Search and Replace -->
+        <section class="section">
+            <h2>🔍 Search & Replace</h2>
+            
+            <div class="grid">
+                <div class="card">
+                    <h4>Basic Search</h4>
+                    <table>
+                        <tr><th>Key</th><th>Action</th></tr>
+                        <tr><td>/pattern</td><td>Search forward</td></tr>
+                        <tr><td>?pattern</td><td>Search backward</td></tr>
+                        <tr><td>n</td><td>Next match</td></tr>
+                        <tr><td>N</td><td>Previous match</td></tr>
+                        <tr><td>*</td><td>Search word under cursor (forward)</td></tr>
+                        <tr><td>#</td><td>Search word under cursor (backward)</td></tr>
+                        <tr><td>g*</td><td>Search partial word (forward)</td></tr>
+                        <tr><td>g#</td><td>Search partial word (backward)</td></tr>
+                    </table>
+                </div>
+                
+                <div class="card">
+                    <h4>Search Navigation</h4>
+                    <table>
+                        <tr><th>Key</th><th>Action</th></tr>
+                        <tr><td>gn</td><td>Select next match (visual)</td></tr>
+                        <tr><td>gN</td><td>Select previous match</td></tr>
+                        <tr><td>:noh</td><td>Clear search highlighting</td></tr>
+                        <tr><td>:nohlsearch</td><td>Same as :noh</td></tr>
+                        <tr><td>Ctrl-o</td><td>Jump back from search</td></tr>
+                        <tr><td>Ctrl-i</td><td>Jump forward in jumplist</td></tr>
+                    </table>
+                </div>
+                
+                <div class="card">
+                    <h4>Substitute Command</h4>
+                    <div class="formula-box">
+:[range]s/{pattern}/{replacement}/[flags]
+                    </div>
+                    <table>
+                        <tr><th>Command</th><th>Action</th></tr>
+                        <tr><td>:s/old/new/</td><td>Replace first occurrence in line</td></tr>
+                        <tr><td>:s/old/new/g</td><td>Replace all in line</td></tr>
+                        <tr><td>:%s/old/new/g</td><td>Replace all in file</td></tr>
+                        <tr><td>:%s/old/new/gc</td><td>Replace with confirmation</td></tr>
+                        <tr><td>:.,+2s/old/new/g</td><td>Current line + 2 more</td></tr>
+                        <tr><td>:g/pattern/s/old/new/g</td><td>Replace in matching lines</td></tr>
+                    </table>
+                </div>
+                
+                <div class="card">
+                    <h4>Substitute Flags</h4>
+                    <table>
+                        <tr><th>Flag</th><th>Meaning</th></tr>
+                        <tr><td>g</td><td>Global (all occurrences on line)</td></tr>
+                        <tr><td>c</td><td>Confirm each substitution</td></tr>
+                        <tr><td>i</td><td>Case insensitive</td></tr>
+                        <tr><td>I</td><td>Case sensitive</td></tr>
+                        <tr><td>n</td><td>Report count, don't substitute</td></tr>
+                        <tr><td>p</td><td>Print last modified line</td></tr>
+                        <tr><td>e</td><td>No error if pattern not found</td></tr>
+                    </table>
+                </div>
+                
+                <div class="card">
+                    <h4>Search Patterns (Regex)</h4>
+                    <table>
+                        <tr><th>Pattern</th><th>Matches</th></tr>
+                        <tr><td>.</td><td>Any single character</td></tr>
+                        <tr><td>.*</td><td>Any characters (greedy)</td></tr>
+                        <tr><td>.\\{-}</td><td>Any characters (non-greedy)</td></tr>
+                        <tr><td>^ / $</td><td>Line start / end</td></tr>
+                        <tr><td>\\&lt; / \\&gt;</td><td>Word boundary</td></tr>
+                        <tr><td>\\( \\)</td><td>Group (capture)</td></tr>
+                        <tr><td>\\1, \\2</td><td>Backreference</td></tr>
+                        <tr><td>\\v</td><td>Very magic (less escaping)</td></tr>
+                        <tr><td>\\V</td><td>Very nomagic (literal)</td></tr>
+                    </table>
+                </div>
+                
+                <div class="card">
+                    <h4>Global Command (:g)</h4>
+                    <div class="formula-box">
+:[range]g/{pattern}/[cmd]    Execute cmd on matching lines
+:[range]g!/{pattern}/[cmd]   Execute on non-matching
+                    </div>
+                    <table>
+                        <tr><th>Command</th><th>Action</th></tr>
+                        <tr><td>:g/pattern/d</td><td>Delete all matching lines</td></tr>
+                        <tr><td>:g!/pattern/d</td><td>Delete non-matching lines</td></tr>
+                        <tr><td>:g/pattern/t$</td><td>Copy matching to end</td></tr>
+                        <tr><td>:g/pattern/m$</td><td>Move matching to end</td></tr>
+                        <tr><td>:g/^$/d</td><td>Delete all blank lines</td></tr>
+                        <tr><td>:g/DEBUG/d</td><td>Delete all lines with DEBUG</td></tr>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Registers -->
+        <section class="section">
+            <h2>📋 Registers - Advanced Clipboard</h2>
+            <div class="ascii-art">
+┌─────────────────────────────────────────────────────────────────────────┐
+│                      VIM REGISTER TYPES                                  │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│   ""    Unnamed register (default, always used)                         │
+│   "0    Yank register (last yanked text)                                │
+│   "1-9  Delete registers (1=most recent, 9=oldest)                      │
+│   "a-z  Named registers (user-defined, persistent)                      │
+│   "A-Z  Append to named register (a-z)                                  │
+│   "-    Small delete register (less than one line)                      │
+│   "+    System clipboard                                                │
+│   "*    Primary selection (X11)                                         │
+│   "/    Search register (last search pattern)                           │
+│   ":    Command register (last command)                                 │
+│   ".    Insert register (last inserted text)                            │
+│   "%    Current file name                                               │
+│   "#    Alternate file name                                             │
+│   "_    Black hole register (discard)                                   │
+│   "=    Expression register (evaluate)                                  │
+│                                                                          │
+└─────────────────────────────────────────────────────────────────────────┘
+            </div>
+            
+            <div class="grid">
+                <div class="card">
+                    <h4>Using Registers</h4>
+                    <table>
+                        <tr><th>Command</th><th>Action</th></tr>
+                        <tr><td>"ay</td><td>Yank to register a</td></tr>
+                        <tr><td>"ap</td><td>Paste from register a</td></tr>
+                        <tr><td>"Ay</td><td>Append to register a</td></tr>
+                        <tr><td>"+y</td><td>Yank to system clipboard</td></tr>
+                        <tr><td>"+p</td><td>Paste from system clipboard</td></tr>
+                        <tr><td>"_d</td><td>Delete to black hole (no register)</td></tr>
+                        <tr><td>:reg</td><td>Show all registers</td></tr>
+                        <tr><td>:reg a b c</td><td>Show specific registers</td></tr>
+                    </table>
+                </div>
+                
+                <div class="card">
+                    <h4>Expression Register</h4>
+                    <table>
+                        <tr><th>Command</th><th>Result</th></tr>
+                        <tr><td>"=2+2</td><td>Insert 4</td></tr>
+                        <tr><td>"=system('date')</td><td>Insert date output</td></tr>
+                        <tr><td>"=@a</td><td>Insert contents of register a</td></tr>
+                        <tr><td>"=getline(5)</td><td>Insert line 5</td></tr>
+                        <tr><td>"=expand('%:p')</td><td>Insert full file path</td></tr>
+                    </table>
+                    <div class="tip-box">Use Ctrl-r = in insert mode for quick calculations!</div>
+                </div>
+                
+                <div class="card">
+                    <h4>Macro Registers</h4>
+                    <table>
+                        <tr><th>Command</th><th>Action</th></tr>
+                        <tr><td>qa</td><td>Start recording macro to register a</td></tr>
+                        <tr><td>q</td><td>Stop recording</td></tr>
+                        <tr><td>@a</td><td>Execute macro a</td></tr>
+                        <tr><td>@@</td><td>Repeat last macro</td></tr>
+                        <tr><td>100@a</td><td>Execute macro a 100 times</td></tr>
+                        <tr><td>:reg a</td><td>View macro contents</td></tr>
+                    </table>
+                </div>
+                
+                <div class="card">
+                    <h4>Insert Mode Register Access</h4>
+                    <table>
+                        <tr><th>Key</th><th>Action</th></tr>
+                        <tr><td>Ctrl-r "</td><td>Paste unnamed register</td></tr>
+                        <tr><td>Ctrl-r 0</td><td>Paste yank register</td></tr>
+                        <tr><td>Ctrl-r +</td><td>Paste system clipboard</td></tr>
+                        <tr><td>Ctrl-r a</td><td>Paste register a</td></tr>
+                        <tr><td>Ctrl-r =</td><td>Expression register</td></tr>
+                        <tr><td>Ctrl-r Ctrl-o r</td><td>Paste literally (no auto-indent)</td></tr>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Macros -->
+        <section class="section">
+            <h2>🎬 Macros - Automate Repetition</h2>
+            
+            <div class="ascii-art">
+┌─────────────────────────────────────────────────────────────────────────┐
+│                     MACRO WORKFLOW                                       │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│   1. PLAN: Think through the actions needed                             │
+│                                                                          │
+│   2. RECORD: qa ... q     (record to register a)                        │
+│            │    └── Stop recording                                      │
+│            └── Start recording                                          │
+│                                                                          │
+│   3. TEST: @a             (execute once to test)                        │
+│                                                                          │
+│   4. ITERATE: 100@a       (execute 100 times)                           │
+│               or                                                         │
+│               @@          (repeat last macro)                           │
+│                                                                          │
+│   └─────────────────────────────────────────────────────────────────────┘
+            </div>
+            
+            <div class="grid">
+                <div class="card">
+                    <h4>Recording Macros</h4>
+                    <table>
+                        <tr><th>Command</th><th>Action</th></tr>
+                        <tr><td>q{a-z}</td><td>Start recording to named register</td></tr>
+                        <tr><td>q{A-Z}</td><td>Append to existing macro</td></tr>
+                        <tr><td>q</td><td>Stop recording</td></tr>
+                    </table>
+                    <div class="tip-box">Plan your macro before recording - errors are recorded too!</div>
+                </div>
+                
+                <div class="card">
+                    <h4>Executing Macros</h4>
+                    <table>
+                        <tr><th>Command</th><th>Action</th></tr>
+                        <tr><td>@{a-z}</td><td>Execute macro once</td></tr>
+                        <tr><td>@@</td><td>Repeat last executed macro</td></tr>
+                        <tr><td>n@{a-z}</td><td>Execute macro n times</td></tr>
+                        <tr><td>@:</td><td>Repeat last command-line</td></tr>
+                    </table>
+                </div>
+                
+                <div class="card">
+                    <h4>Macro Examples</h4>
+                    <pre>
+<span class="comment">;; Convert CSV to formatted output</span>
+<span class="command">qa</span>      <span class="comment">" Start recording to a</span>
+0f,lct,<span class="string">: </span><span class="command">" Find first comma, change</span>
+f,lct,<span class="string">, Score: </span>
+<span class="command">j0q</span>     <span class="comment">" Move to next line, stop</span>
+<span class="command">100@a</span>   <span class="comment">" Execute 100 times</span>
+                    </pre>
+                </div>
+                
+                <div class="card">
+                    <h4>Editing Macros</h4>
+                    <table>
+                        <tr><th>Command</th><th>Action</th></tr>
+                        <tr><td>:put a</td><td>Paste macro a to buffer</td></tr>
+                        <tr><td>Edit the text</td><td>Modify as needed</td></tr>
+                        <tr><td>"ayy</td><td>Yank line back to register a</td></tr>
+                        <tr><td>"add</td><td>Delete line to register a</td></tr>
+                    </table>
+                    <div class="tip-box">Macros are just text in registers - edit them like any text!</div>
+                </div>
+                
+                <div class="card">
+                    <h4>Recursive Macros</h4>
+                    <pre>
+<span class="comment">;; Macro that runs until failure</span>
+<span class="command">qa</span>              <span class="comment">" Start recording</span>
+<span class="command">0dw</span>             <span class="comment">" Delete first word</span>
+<span class="command">j</span>               <span class="comment">" Move to next line</span>
+<span class="command">@a</span>              <span class="comment">" Recursive call</span>
+<span class="command">q</span>               <span class="comment">" Stop</span>
+<span class="command">@a</span>              <span class="comment">" Start execution</span>
+
+<span class="comment">;; Runs until @a fails (no more lines)</span>
+                    </pre>
+                </div>
+                
+                <div class="card">
+                    <h4>Macro Best Practices</h4>
+                    <ul>
+                        <li>Use <code>0</code> to normalize position (start of line)</li>
+                        <li>Use <code>^</code> for first non-blank</li>
+                        <li>Use search <code>/pattern</code> instead of counts</li>
+                        <li>Test with single execution first</li>
+                        <li>Use <code>n@:</code> for command repetition</li>
+                        <li>Save useful macros in vimrc</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Buffers, Windows, Tabs -->
+        <section class="section">
+            <h2>🪟 Buffers, Windows & Tabs</h2>
+            <div class="ascii-art">
+┌─────────────────────────────────────────────────────────────────────────┐
+│              BUFFER vs WINDOW vs TAB                                     │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│   BUFFER                          TAB                                    │
+│   ┌──────────────────────┐        ┌─────────────────────────────────┐   │
+│   │ File in memory       │        │  Collection of windows          │   │
+│   │ Can be hidden        │        │                                 │   │
+│   │ Multiple per file    │        │  ┌─────────┬─────────┐         │   │
+│   └──────────────────────┘        │  │ Window  │ Window  │         │   │
+│                                   │  │ (buf 1) │ (buf 2) │         │   │
+│   WINDOW                          │  ├─────────┴─────────┤         │   │
+│   ┌──────────────────────┐        │  │ Window (buf 3)   │         │   │
+│   │ Viewport into buffer │        │  └──────────────────┘         │   │
+│   │ Can split/resize     │        │                               │   │
+│   │ Multiple per buffer  │        └───────────────────────────────┘   │
+│   └──────────────────────┘                                              │
+│                                                                          │
+└─────────────────────────────────────────────────────────────────────────┘
+            </div>
+            
+            <div class="grid">
+                <div class="card">
+                    <h4>Buffer Commands</h4>
+                    <table>
+                        <tr><th>Command</th><th>Action</th></tr>
+                        <tr><td>:e file</td><td>Edit file (new buffer)</td></tr>
+                        <tr><td>:bn / :bnext</td><td>Next buffer</td></tr>
+                        <tr><td>:bp / :bprev</td><td>Previous buffer</td></tr>
+                        <tr><td>:bl / :blast</td><td>Last buffer</td></tr>
+                        <tr><td>:bf / :bfirst</td><td>First buffer</td></tr>
+                        <tr><td>:bd / :bdelete</td><td>Delete buffer</td></tr>
+                        <tr><td>:bw / :bwipeout</td><td>Wipe buffer completely</td></tr>
+                        <tr><td>:ls / :buffers</td><td>List all buffers</td></tr>
+                        <tr><td>:b{n}</td><td>Go to buffer n</td></tr>
+                        <tr><td>:b name</td><td>Go to buffer by name (tab-complete)</td></tr>
+                        <tr><td>Ctrl-^</td><td>Alternate buffer (previous)</td></tr>
+                    </table>
+                </div>
+                
+                <div class="card">
+                    <h4>Window Commands</h4>
+                    <table>
+                        <tr><th>Command</th><th>Action</th></tr>
+                        <tr><td>:sp / Ctrl-w s</td><td>Horizontal split</td></tr>
+                        <tr><td>:vsp / Ctrl-w v</td><td>Vertical split</td></tr>
+                        <tr><td>Ctrl-w h/j/k/l</td><td>Move to window left/down/up/right</td></tr>
+                        <tr><td>Ctrl-w w</td><td>Cycle through windows</td></tr>
+                        <tr><td>Ctrl-w W</td><td>Cycle backwards</td></tr>
+                        <tr><td>Ctrl-w c</td><td>Close current window</td></tr>
+                        <tr><td>Ctrl-w o</td><td>Close other windows</td></tr>
+                        <tr><td>Ctrl-w q</td><td>Quit window (or buffer if last)</td></tr>
+                        <tr><td>Ctrl-w n</td><td>New window (empty buffer)</td></tr>
+                    </table>
+                </div>
+                
+                <div class="card">
+                    <h4>Window Resize</h4>
+                    <table>
+                        <tr><th>Command</th><th>Action</th></tr>
+                        <tr><td>Ctrl-w +</td><td>Increase height</td></tr>
+                        <tr><td>Ctrl-w -</td><td>Decrease height</td></tr>
+                        <tr><td>Ctrl-w &gt;</td><td>Increase width</td></tr>
+                        <tr><td>Ctrl-w &lt;</td><td>Decrease width</td></tr>
+                        <tr><td>Ctrl-w =</td><td>Make all windows equal</td></tr>
+                        <tr><td>Ctrl-w _</td><td>Maximize height</td></tr>
+                        <tr><td>Ctrl-w |</td><td>Maximize width</td></tr>
+                        <tr><td>:res n</td><td>Set height to n lines</td></tr>
+                        <tr><td>:vert res n</td><td>Set width to n columns</td></tr>
+                    </table>
+                </div>
+                
+                <div class="card">
+                    <h4>Window Movement</h4>
+                    <table>
+                        <tr><th>Command</th><th>Action</th></tr>
+                        <tr><td>Ctrl-w H</td><td>Move window to far left</td></tr>
+                        <tr><td>Ctrl-w J</td><td>Move window to bottom</td></tr>
+                        <tr><td>Ctrl-w K</td><td>Move window to top</td></tr>
+                        <tr><td>Ctrl-w L</td><td>Move window to far right</td></tr>
+                        <tr><td>Ctrl-w r</td><td>Rotate windows right/down</td></tr>
+                        <tr><td>Ctrl-w R</td><td>Rotate windows left/up</td></tr>
+                        <tr><td>Ctrl-w x</td><td>Exchange with next</td></tr>
+                        <tr><td>Ctrl-w T</td><td>Move to new tab</td></tr>
+                    </table>
+                </div>
+                
+                <div class="card">
+                    <h4>Tab Commands</h4>
+                    <table>
+                        <tr><th>Command</th><th>Action</th></tr>
+                        <tr><td>:tabnew</td><td>New tab</td></tr>
+                        <tr><td>:tabc</td><td>Close current tab</td></tr>
+                        <tr><td>:tabo</td><td>Close all other tabs</td></tr>
+                        <tr><td>:tabn / gt</td><td>Next tab</td></tr>
+                        <tr><td>:tabp / gT</td><td>Previous tab</td></tr>
+                        <tr><td>:tabfirst</td><td>First tab</td></tr>
+                        <tr><td>:tablast</td><td>Last tab</td></tr>
+                        <tr><td>:tabs</td><td>List all tabs</td></tr>
+                        <tr><td>ngt</td><td>Go to tab n</td></tr>
+                        <tr><td>:tabm n</td><td>Move tab to position n</td></tr>
+                        <tr><td>:tabe file</td><td>Open file in new tab</td></tr>
+                    </table>
+                </div>
+                
+                <div class="card">
+                    <h4>Tab Mappings (Common)</h4>
+                    <table>
+                        <tr><th>Mapping</th><th>Purpose</th></tr>
+                        <tr><td>nnoremap tn :tabnew&lt;CR&gt;</td><td>New tab</td></tr>
+                        <tr><td>nnoremap tc :tabclose&lt;CR&gt;</td><td>Close tab</td></tr>
+                        <tr><td>nnoremap th :tabprev&lt;CR&gt;</td><td>Previous</td></tr>
+                        <tr><td>nnoremap tl :tabnext&lt;CR&gt;</td><td>Next</td></tr>
+                    </table>
+                    <div class="tip-box">Consider using buffers instead of tabs for most workflows!</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Marks -->
+        <section class="section">
+            <h2>📍 Marks & Jumplist</h2>
+            
+            <div class="grid">
+                <div class="card">
+                    <h4>Setting & Using Marks</h4>
+                    <table>
+                        <tr><th>Command</th><th>Action</th></tr>
+                        <tr><td>ma</td><td>Set mark a at current position</td></tr>
+                        <tr><td>'a</td><td>Jump to mark a (line)</td></tr>
+                        <tr><td>`a</td><td>Jump to mark a (exact position)</td></tr>
+                        <tr><td>:marks</td><td>List all marks</td></tr>
+                        <tr><td>:delmarks a</td><td>Delete mark a</td></tr>
+                        <tr><td>:delmarks!</td><td>Delete all marks (A-Z, 0-9 remain)</td></tr>
+                    </table>
+                </div>
+                
+                <div class="card">
+                    <h4>Special Marks</h4>
+                    <table>
+                        <tr><th>Mark</th><th>Meaning</th></tr>
+                        <tr><td>' / `</td><td>Previous position (before jump)</td></tr>
+                        <tr><td>".</td><td>Position of last change</td></tr>
+                        <tr><td>"^</td><td>Position of last insert</td></tr>
+                        <tr><td>'"</td><td>Position when leaving buffer</td></tr>
+                        <tr><td>"[ / "]</td><td>Start/end of last change/yank</td></tr>
+                        <tr><td>"&lt; / "&gt;</td><td>Start/end of last visual selection</td></tr>
+                    </table>
+                </div>
+                
+                <div class="card">
+                    <h4>File Marks (Persistent)</h4>
+                    <table>
+                        <tr><th>Mark</th><th>Meaning</th></tr>
+                        <tr><td>A-Z</td><td>File marks (stored in viminfo)</td></tr>
+                        <tr><td>0-9</td><td>Numbered marks (last 10 files)</td></tr>
+                    </table>
+                    <pre>
+<span class="comment">;; Jump to mark in different file</span>
+<span class="command">'A</span>  <span class="comment">" Open file with mark A, go to line</span>
+<span class="command">`A</span>  <span class="comment">" Same, but exact position</span>
+                    </pre>
+                    <div class="tip-box">Use uppercase marks for frequently accessed files!</div>
+                </div>
+                
+                <div class="card">
+                    <h4>Jumplist Navigation</h4>
+                    <table>
+                        <tr><th>Command</th><th>Action</th></tr>
+                        <tr><td>Ctrl-o</td><td>Jump to older position</td></tr>
+                        <tr><td>Ctrl-i</td><td>Jump to newer position</td></tr>
+                        <tr><td>:jumps</td><td>Show jump list</td></tr>
+                        <tr><td>:clearjumps</td><td>Clear jump list</td></tr>
+                    </table>
+                    <p><strong>Jump commands:</strong> G, gg, search (/, ?), marks, %, (, ), {, }, [[, ]], etc.</p>
+                </div>
+                
+                <div class="card">
+                    <h4>Changelist Navigation</h4>
+                    <table>
+                        <tr><th>Command</th><th>Action</th></tr>
+                        <tr><td>g;</td><td>Go to older change position</td></tr>
+                        <tr><td>g,</td><td>Go to newer change position</td></tr>
+                        <tr><td>:changes</td><td>Show change list</td></tr>
+                    </table>
+                    <p>Tracks positions of your last 100 changes.</p>
+                </div>
+                
+                <div class="card">
+                    <h4>Useful Mark Combos</h4>
+                    <pre>
+<span class="comment">;; Select last pasted text</span>
+<span class="command">`[v`]</span>
+
+<span class="comment">;; Delete last changed text</span>
+<span class="command">`[d`]</span>
+
+<span class="comment">;; Yank last visually selected</span>
+<span class="command">`&lt;v`&gt;y</span>
+
+<span class="comment">;; Resume editing where left off</span>
+<span class="command">gi</span>  <span class="comment">" Go to last insert and enter insert</span>
+
+<span class="comment">;; Quick file switching</span>
+<span class="command">mA</span>  <span class="comment">" Set mark A in current file</span>
+<span class="command">mB</span>  <span class="comment">" Set mark B in another file</span>
+<span class="command">'A</span>  <span class="comment">" Jump between files</span>
+                    </pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- Folding -->
+        <section class="section">
+            <h2>📁 Code Folding</h2>
+            
+            <div class="grid">
+                <div class="card">
+                    <h4>Fold Commands</h4>
+                    <table>
+                        <tr><th>Command</th><th>Action</th></tr>
+                        <tr><td>zf</td><td>Create fold (visual or motion)</td></tr>
+                        <tr><td>zo</td><td>Open fold</td></tr>
+                        <tr><td>zc</td><td>Close fold</td></tr>
+                        <tr><td>za</td><td>Toggle fold</td></tr>
+                        <tr><td>zR</td><td>Open all folds</td></tr>
+                        <tr><td>zM</td><td>Close all folds</td></tr>
+                        <tr><td>zd</td><td>Delete fold</td></tr>
+                        <tr><td>zE</td><td>Eliminate all folds</td></tr>
+                    </table>
+                </div>
+                
+                <div class="card">
+                    <h4>Fold Navigation</h4>
+                    <table>
+                        <tr><th>Command</th><th>Action</th></tr>
+                        <tr><td>zj</td><td>Jump to next fold</td></tr>
+                        <tr><td>zk</td><td>Jump to previous fold</td></tr>
+                        <tr><td>[z</td><td>Start of current fold</td></tr>
+                        <tr><td>]z</td><td>End of current fold</td></tr>
+                    </table>
+                </div>
+                
+                <div class="card">
+                    <h4>Fold Methods</h4>
+                    <table>
+                        <tr><th>Method</th><th>Description</th></tr>
+                        <tr><td>manual</td><td>Folds created by zf command</td></tr>
+                        <tr><td>indent</td><td>Fold based on indentation</td></tr>
+                        <tr><td>expr</td><td>Fold based on expression</td></tr>
+                        <tr><td>syntax</td><td>Fold based on syntax highlighting</td></tr>
+                        <tr><td>diff</td><td>Fold unchanged text in diff</td></tr>
+                        <tr><td>marker</td><td>Fold based on markers ({{{, }}})</td></tr>
+                    </table>
+                    <pre>
+<span class="command">set foldmethod=indent</span>
+<span class="command">set foldmethod=syntax</span>
+                    </pre>
+                </div>
+                
+                <div class="card">
+                    <h4>Fold Settings</h4>
+                    <pre>
+<span class="command">set foldenable</span>        <span class="comment">" Enable folding</span>
+<span class="command">set foldlevelstart=99</span> <span class="comment">" Start with open folds</span>
+<span class="command">set foldnestmax=10</span>    <span class="comment">" Max nesting level</span>
+<span class="command">set foldminlines=3</span>    <span class="comment">" Min lines to fold</span>
+
+<span class="comment">;; NeoVim Treesitter folding</span>
+<span class="command">set foldmethod=expr</span>
+<span class="command">set foldexpr=nvim_treesitter#foldexpr()</span>
+                    </pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- Command Line -->
+        <section class="section">
+            <h2>⌨️ Command-Line Mode</h2>
+            
+            <div class="grid">
+                <div class="card">
+                    <h4>Command-Line Navigation</h4>
+                    <table>
+                        <tr><th>Key</th><th>Action</th></tr>
+                        <tr><td>Ctrl-b</td><td>Beginning of line</td></tr>
+                        <tr><td>Ctrl-e</td><td>End of line</td></tr>
+                        <tr><td>Ctrl-a</td><td>Beginning of line</td></tr>
+                        <tr><td>Ctrl-h</td><td>Delete previous char</td></tr>
+                        <tr><td>Ctrl-w</td><td>Delete previous word</td></tr>
+                        <tr><td>Ctrl-u</td><td>Delete to beginning</td></tr>
+                        <tr><td>Ctrl-k</td><td>Delete to end</td></tr>
+                        <tr><td>Ctrl-f</td><td>Open command-line window</td></tr>
+                    </table>
+                </div>
+                
+                <div class="card">
+                    <h4>Command History</h4>
+                    <table>
+                        <tr><th>Key</th><th>Action</th></tr>
+                        <tr><td>↑ / ↓</td><td>Previous/next command</td></tr>
+                        <tr><td>Ctrl-p / Ctrl-n</td><td>Previous/next command</td></tr>
+                        <tr><td>Ctrl-↑ / Ctrl-↓</td><td>History matching current prefix</td></tr>
+                        <tr><td>q:</td><td>Open command history window</td></tr>
+                        <tr><td>q/</td><td>Open search history (forward)</td></tr>
+                        <tr><td>q?</td><td>Open search history (backward)</td></tr>
+                    </table>
+                </div>
+                
+                <div class="card">
+                    <h4>Ranges</h4>
+                    <table>
+                        <tr><th>Range</th><th>Description</th></tr>
+                        <tr><td>%</td><td>Entire file (1,$)</td></tr>
+                        <tr><td>n</td><td>Line n</td></tr>
+                        <tr><td>n,m</td><td>Lines n through m</td></tr>
+                        <tr><td>.</td><td>Current line</td></tr>
+                        <tr><td>$</td><td>Last line</td></tr>
+                        <tr><td>.,+5</td><td>Current line through +5</td></tr>
+                        <tr><td>.,$-1</td><td>Current through second-to-last</td></tr>
+                        <tr><td>'&lt;,'&gt;</td><td>Visual selection</td></tr>
+                    </table>
+                </div>
+                
+                <div class="card">
+                    <h4>Useful Commands</h4>
+                    <table>
+                        <tr><th>Command</th><th>Action</th></tr>
+                        <tr><td>:!</td><td>Execute external command</td></tr>
+                        <tr><td>:r !cmd</td><td>Insert command output</td></tr>
+                        <tr><td>:r file</td><td>Insert file contents</td></tr>
+                        <tr><td>:w !cmd</td><td>Send buffer to command</td></tr>
+                        <tr><td>:%!cmd</td><td>Filter buffer through command</td></tr>
+                        <tr><td>:so %</td><td>Source current file</td></tr>
+                        <tr><td>:silent !cmd</td><td>Run without output</td></tr>
+                    </table>
+                </div>
+                
+                <div class="card">
+                    <h4>Text Processing</h4>
+                    <table>
+                        <tr><th>Command</th><th>Action</th></tr>
+                        <tr><td>:.!</td><td>Filter current line</td></tr>
+                        <tr><td>:n,m!</td><td>Filter range</td></tr>
+                        <tr><td>:%!sort</td><td>Sort entire file</td></tr>
+                        <tr><td>:%!jq .</td><td>Format JSON</td></tr>
+                        <tr><td>:%!xmllint --format -</td><td>Format XML</td></tr>
+                        <tr><td>:'&lt;,'&gt;!jq .</td><td>Format JSON selection</td></tr>
+                    </table>
+                </div>
+                
+                <div class="card">
+                    <h4>Quick Tips</h4>
+                    <pre>
+<span class="comment">;; Insert date</span>
+<span class="command">:r !date</span>
+
+<span class="comment">;; Number lines</span>
+<span class="command">:%!cat -n</span>
+
+<span class="comment">;; Remove duplicate lines</span>
+<span class="command">:sort u</span>
+
+<span class="comment">;; Reverse lines</span>
+<span class="command">:g/^/m0</span>
+
+<span class="comment">;; Execute macro on lines</span>
+<span class="command">:g/pattern/normal @a</span>
+                    </pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- File Management -->
+        <section class="section">
+            <h2>📂 File Management</h2>
+            
+            <div class="grid">
+                <div class="card">
+                    <h4>File Operations</h4>
+                    <table>
+                        <tr><th>Command</th><th>Action</th></tr>
+                        <tr><td>:e file</td><td>Edit file</td></tr>
+                        <tr><td>:e!</td><td>Reload file (discard changes)</td></tr>
+                        <tr><td>:e #</td><td>Edit alternate file</td></tr>
+                        <tr><td>:w</td><td>Write file</td></tr>
+                        <tr><td>:w file</td><td>Write to file</td></tr>
+                        <tr><td>:w!</td><td>Write (override read-only)</td></tr>
+                        <tr><td>:wa</td><td>Write all buffers</td></tr>
+                        <tr><td>:sav file</td><td>Save as new file</td></tr>
+                        <tr><td>:rename file</td><td>Rename current file</td></tr>
+                    </table>
+                </div>
+                
+                <div class="card">
+                    <h4>Netrw (Built-in File Explorer)</h4>
+                    <table>
+                        <tr><th>Command</th><th>Action</th></tr>
+                        <tr><td>:e .</td><td>Open file explorer</td></tr>
+                        <tr><td>:Ex</td><td>Explore current directory</td></tr>
+                        <tr><td>:Sex</td><td>Explore in horizontal split</td></tr>
+                        <tr><td>:Vex</td><td>Explore in vertical split</td></tr>
+                        <tr><td>:Lex</td><td>Explore in left sidebar</td></tr>
+                    </table>
+                    <p><strong>Inside netrw:</strong></p>
+                    <table>
+                        <tr><td>&lt;Enter&gt;</td><td>Open file/directory</td></tr>
+                        <tr><td>-</td><td>Go up directory</td></tr>
+                        <tr><td>D</td><td>Delete file</td></tr>
+                        <tr><td>R</td><td>Rename file</td></tr>
+                        <tr><td>%</td><td>Create new file</td></tr>
+                        <tr><td>d</td><td>Create new directory</td></tr>
+                    </table>
+                </div>
+                
+                <div class="card">
+                    <h4>Reading & Writing</h4>
+                    <table>
+                        <tr><th>Command</th><th>Action</th></tr>
+                        <tr><td>:r file</td><td>Read file into buffer</td></tr>
+                        <tr><td>:r !cmd</td><td>Read command output</td></tr>
+                        <tr><td>:0r file</td><td>Read at beginning</td></tr>
+                        <tr><td>:$r file</td><td>Read at end</td></tr>
+                        <tr><td>:w &gt;&gt; file</td><td>Append to file</td></tr>
+                        <tr><td>:w !tee file</td><td>Write with sudo</td></tr>
+                    </table>
+                </div>
+                
+                <div class="card">
+                    <h4>Session Management</h4>
+                    <table>
+                        <tr><th>Command</th><th>Action</th></tr>
+                        <tr><td>:mksession file.vim</td><td>Save session</td></tr>
+                        <tr><td>:source file.vim</td><td>Load session</td></tr>
+                        <tr><td>vim -S file.vim</td><td>Start with session</td></tr>
+                    </table>
+                    <pre>
+<span class="comment">;; Save all on exit</span>
+<span class="command">set sessionoptions+=buffers,tabpages</span>
+                    </pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- Diff Mode -->
+        <section class="section">
+            <h2>⚔️ Diff Mode</h2>
+            
+            <div class="grid">
+                <div class="card">
+                    <h4>Starting Diff</h4>
+                    <table>
+                        <tr><th>Command</th><th>Action</th></tr>
+                        <tr><td>vimdiff file1 file2</td><td>Start vim in diff mode</td></tr>
+                        <tr><td>:diffsplit file</td><td>Diff with file in split</td></tr>
+                        <tr><td>:vert diffsplit file</td><td>Vertical diff split</td></tr>
+                        <tr><td>:diffthis</td><td>Make current window part of diff</td></tr>
+                        <tr><td>:diffoff</td><td>Exit diff mode</td></tr>
+                        <tr><td>:diffoff!</td><td>Exit diff mode for all windows</td></tr>
+                    </table>
+                </div>
+                
+                <div class="card">
+                    <h4>Diff Navigation</h4>
+                    <table>
+                        <tr><th>Key</th><th>Action</th></tr>
+                        <tr><td>]c</td><td>Next change</td></tr>
+                        <tr><td>[c</td><td>Previous change</td></tr>
+                    </table>
+                </div>
+                
+                <div class="card">
+                    <h4>Diff Editing</h4>
+                    <table>
+                        <tr><th>Key</th><th>Action</th></tr>
+                        <tr><td>dp</td><td>Diff put (copy to other)</td></tr>
+                        <tr><td>do</td><td>Diff obtain (copy from other)</td></tr>
+                        <tr><td>:diffu</td><td>Update diff highlights</td></tr>
+                    </table>
+                </div>
+                
+                <div class="card">
+                    <h4>Diff Settings</h4>
+                    <pre>
+<span class="command">set diffexpr=</span>         <span class="comment">" Use internal diff</span>
+<span class="command">set diffopt+=vertical</span>  <span class="comment">" Vertical split by default</span>
+<span class="command">set diffopt+=context:3</span> <span class="comment">" Context lines</span>
+<span class="command">set diffopt+=algorithm:patience</span> <span class="comment">" Better algorithm</span>
+                    </pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- Quickfix & Location Lists -->
+        <section class="section">
+            <h2>🔧 Quickfix & Location Lists</h2>
+            
+            <div class="grid">
+                <div class="card">
+                    <h4>Quickfix List</h4>
+                    <table>
+                        <tr><th>Command</th><th>Action</th></tr>
+                        <tr><td>:copen</td><td>Open quickfix window</td></tr>
+                        <tr><td>:cclose</td><td>Close quickfix window</td></tr>
+                        <tr><td>:cn</td><td>Next quickfix item</td></tr>
+                        <tr><td>:cp</td><td>Previous quickfix item</td></tr>
+                        <tr><td>:cfirst</td><td>First item</td></tr>
+                        <tr><td>:clast</td><td>Last item</td></tr>
+                        <tr><td>:cnfile</td><td>First item in next file</td></tr>
+                        <tr><td>:cpfile</td><td>Last item in prev file</td></tr>
+                        <tr><td>:colder</td><td>Older quickfix list</td></tr>
+                        <tr><td>:cnewer</td><td>Newer quickfix list</td></tr>
+                    </table>
+                </div>
+                
+                <div class="card">
+                    <h4>Location List</h4>
+                    <table>
+                        <tr><th>Command</th><th>Action</th></tr>
+                        <tr><td>:lopen</td><td>Open location list</td></tr>
+                        <tr><td>:lclose</td><td>Close location list</td></tr>
+                        <tr><td>:ln</td><td>Next item</td></tr>
+                        <tr><td>:lp</td><td>Previous item</td></tr>
+                        <tr><td>:lfirst</td><td>First item</td></tr>
+                        <tr><td>:llast</td><td>Last item</td></tr>
+                    </table>
+                    <div class="tip-box">Location lists are window-local, quickfix is global!</div>
+                </div>
+                
+                <div class="card">
+                    <h4>Populating Lists</h4>
+                    <table>
+                        <tr><th>Command</th><th>Action</th></tr>
+                        <tr><td>:grep pattern *.py</td><td>Grep to quickfix</td></tr>
+                        <tr><td>:lgrep pattern *.py</td><td>Grep to location list</td></tr>
+                        <tr><td>:vimgrep pat *.py</td><td>Vim internal grep</td></tr>
+                        <tr><td>:cfile err.txt</td><td>Read errors from file</td></tr>
+                        <tr><td>:cexpr errors</td><td>Read from expression</td></tr>
+                        <tr><td>:caddbuffer</td><td>Add current buffer errors</td></tr>
+                    </table>
+                </div>
+                
+                <div class="card">
+                    <h4>Grep Configuration</h4>
+                    <pre>
+<span class="comment">;; Use ripgrep for grep</span>
+<span class="command">set grepprg=rg\ --vimgrep\ --smart-case</span>
+<span class="command">set grepformat=%f:%l:%c:%m</span>
+
+<span class="comment">;; Use ag (the silver searcher)</span>
+<span class="command">set grepprg=ag\ --vimgrep</span>
+                    </pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- Configuration -->
+        <section class="section">
+            <h2>⚙️ Configuration</h2>
+            
+            <div class="grid">
+                <div class="card">
+                    <h4>Essential Settings</h4>
+                    <pre>
+<span class="comment">;; Basic Settings</span>
+<span class="command">set nocompatible</span>        <span class="comment">" Vim not Vi mode</span>
+<span class="command">set number</span>              <span class="comment">" Show line numbers</span>
+<span class="command">set relativenumber</span>      <span class="comment">" Relative line numbers</span>
+<span class="command">set cursorline</span>          <span class="comment">" Highlight current line</span>
+<span class="command">set wrap</span>                <span class="comment">" Wrap long lines</span>
+<span class="command">set showcmd</span>             <span class="comment">" Show command in bottom bar</span>
+<span class="command">set wildmenu</span>            <span class="comment">" Visual autocomplete for command menu</span>
+<span class="command">set showmatch</span>           <span class="comment">" Highlight matching [{()}]</span>
+
+<span class="comment">;; Search Settings</span>
+<span class="command">set incsearch</span>           <span class="comment">" Search as you type</span>
+<span class="command">set hlsearch</span>            <span class="comment">" Highlight matches</span>
+<span class="command">set ignorecase</span>          <span class="comment">" Ignore case when searching</span>
+<span class="command">set smartcase</span>           <span class="comment">" Unless uppercase is used</span>
+
+<span class="comment">;; Indentation</span>
+<span class="command">set tabstop=4</span>           <span class="comment">" Number of visual spaces per TAB</span>
+<span class="command">set softtabstop=4</span>       <span class="comment">" Number of spaces in tab when editing</span>
+<span class="command">set shiftwidth=4</span>        <span class="comment">" Number of spaces for autoindent</span>
+<span class="command">set expandtab</span>           <span class="comment">" Tabs are spaces</span>
+<span class="command">set autoindent</span>          <span class="comment">" Copy indent from current line</span>
+<span class="command">set smartindent</span>         <span class="comment">" Smart autoindenting</span>
+                    </pre>
+                </div>
+                
+                <div class="card">
+                    <h4>More Essential Settings</h4>
+                    <pre>
+<span class="comment">;; Performance</span>
+<span class="command">set lazyredraw</span>          <span class="comment">" Redraw only when needed</span>
+<span class="command">set updatetime=300</span>      <span class="comment">" Faster completion</span>
+<span class="command">set timeoutlen=500</span>      <span class="comment">" Faster key sequence</span>
+<span class="command">set ttimeoutlen=10</span>      <span class="comment">" Very fast key codes</span>
+
+<span class="comment">;; Backup/Swap/Undo</span>
+<span class="command">set backup</span>
+<span class="command">set backupdir=~/.vim/backup//</span>
+<span class="command">set directory=~/.vim/swap//</span>
+<span class="command">set undofile</span>            <span class="comment">" Persistent undo</span>
+<span class="command">set undodir=~/.vim/undo//</span>
+
+<span class="comment">;; Split Behavior</span>
+<span class="command">set splitbelow</span>          <span class="comment">" Horizontal split below</span>
+<span class="command">set splitright</span>          <span class="comment">" Vertical split right</span>
+
+<span class="comment">;; Clipboard</span>
+<span class="command">set clipboard=unnamedplus</span> <span class="comment">" System clipboard</span>
+
+<span class="comment">;; Encoding</span>
+<span class="command">set encoding=utf-8</span>
+<span class="command">set fileencoding=utf-8</span>
+
+<span class="comment">;; Visual</span>
+<span class="command">set termguicolors</span>       <span class="comment">" True color support</span>
+<span class="command">set signcolumn=yes</span>      <span class="comment">" Always show sign column</span>
+<span class="command">set scrolloff=8</span>         <span class="comment">" Lines of context</span>
+<span class="command">set sidescrolloff=8</span>
+                    </pre>
+                </div>
+                
+                <div class="card">
+                    <h4>Essential Mappings</h4>
+                    <pre>
+<span class="comment">;; Leader Key</span>
+<span class="command">let mapleader = " "</span>     <span class="comment">" Space as leader</span>
+
+<span class="comment">;; Quick Save</span>
+<span class="command">nnoremap &lt;leader&gt;w :w&lt;CR&gt;</span>
+
+<span class="comment">;; Quick Quit</span>
+<span class="command">nnoremap &lt;leader&gt;q :q&lt;CR&gt;</span>
+
+<span class="comment">;; Clear Search Highlighting</span>
+<span class="command">nnoremap &lt;leader&gt;h :noh&lt;CR&gt;</span>
+
+<span class="comment">;; Window Navigation</span>
+<span class="command">nnoremap &lt;C-h&gt; &lt;C-w&gt;h</span>
+<span class="command">nnoremap &lt;C-j&gt; &lt;C-w&gt;j</span>
+<span class="command">nnoremap &lt;C-k&gt; &lt;C-w&gt;k</span>
+<span class="command">nnoremap &lt;C-l&gt; &lt;C-w&gt;l</span>
+
+<span class="comment">;; Resize Windows</span>
+<span class="command">nnoremap &lt;C-Up&gt; :resize -2&lt;CR&gt;</span>
+<span class="command">nnoremap &lt;C-Down&gt; :resize +2&lt;CR&gt;</span>
+<span class="command">nnoremap &lt;C-Left&gt; :vertical resize -2&lt;CR&gt;</span>
+<span class="command">nnoremap &lt;C-Right&gt; :vertical resize +2&lt;CR&gt;</span>
+
+<span class="comment">;; Buffer Navigation</span>
+<span class="command">nnoremap &lt;Tab&gt; :bnext&lt;CR&gt;</span>
+<span class="command">nnoremap &lt;S-Tab&gt; :bprevious&lt;CR&gt;</span>
+
+<span class="comment">;; Move Lines</span>
+<span class="command">nnoremap &lt;A-j&gt; :m .+1&lt;CR&gt;==</span>
+<span class="command">nnoremap &lt;A-k&gt; :m .-2&lt;CR&gt;==</span>
+<span class="command">vnoremap &lt;A-j&gt; :m '&gt;+1&lt;CR&gt;gv=gv</span>
+<span class="command">vnoremap &lt;A-k&gt; :m '&lt;-2&lt;CR&gt;gv=gv</span>
+                    </pre>
+                </div>
+                
+                <div class="card">
+                    <h4>Useful Autocommands</h4>
+                    <pre>
+<span class="comment">;; Highlight on yank</span>
+<span class="command">augroup highlight_yank</span>
+    <span class="command">autocmd!</span>
+    <span class="command">autocmd TextYankPost * silent! lua</span>
+        <span class="string">vim.highlight.on_yank()</span>
+<span class="command">augroup END</span>
+
+<span class="comment">;; Return to last edit position</span>
+<span class="command">augroup resume_position</span>
+    <span class="command">autocmd!</span>
+    <span class="command">autocmd BufReadPost *</span>
+        <span class="string">\ if line("'\"") > 1 && line("'\"") <= line("$")</span>
+        <span class="string">\ | exe "normal! g`\""</span>
+        <span class="string">\ | endif</span>
+<span class="command">augroup END</span>
+
+<span class="comment">;; Auto-remove trailing whitespace</span>
+<span class="command">augroup trim_whitespace</span>
+    <span class="command">autocmd!</span>
+    <span class="command">autocmd BufWritePre * %s/\s\+$//e</span>
+<span class="command">augroup END</span>
+
+<span class="comment">;; Filetype-specific settings</span>
+<span class="command">augroup file_types</span>
+    <span class="command">autocmd!</span>
+    <span class="command">autocmd FileType python setlocal ts=4 sw=4</span>
+    <span class="command">autocmd FileType javascript setlocal ts=2 sw=2</span>
+    <span class="command">autocmd FileType go setlocal ts=4 sw=4 noexpandtab</span>
+<span class="command">augroup END</span>
+                    </pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- NeoVim Specific -->
+        <section class="section">
+            <h2>🚀 NeoVim Specific Features <span class="tag neovim-tag">NeoVim</span></h2>
+            
+            <div class="grid">
+                <div class="card">
+                    <h4>NeoVim Config Location</h4>
+                    <pre>
+<span class="comment">;; Vim: ~/.vimrc</span>
+<span class="comment">;; NeoVim: ~/.config/nvim/init.vim (Vimscript)</span>
+<span class="comment">;; NeoVim: ~/.config/nvim/init.lua (Lua) ✓</span>
+
+<span class="comment">;; Directory structure</span>
+~/.config/nvim/
+├── init.lua          <span class="comment">" Main config</span>
+├── lua/
+│   ├── config/       <span class="comment">" Config modules</span>
+│   │   ├── options.lua
+│   │   ├── keymaps.lua
+│   │   └── autocmds.lua
+│   └── plugins/      <span class="comment">" Plugin specs</span>
+│       ├── lsp.lua
+│       ├── cmp.lua
+│       └── telescope.lua
+└── plugin/           <span class="comment">" Auto-loaded scripts</span>
+                    </pre>
+                </div>
+                
+                <div class="card">
+                    <h4>init.lua Basics</h4>
+                    <pre>
+<span class="comment">-- Basic options</span>
+<span class="command">vim.opt.number = true</span>
+<span class="command">vim.opt.relativenumber = true</span>
+<span class="command">vim.opt.tabstop = 4</span>
+<span class="command">vim.opt.shiftwidth = 4</span>
+<span class="command">vim.opt.expandtab = true</span>
+<span class="command">vim.opt.smartindent = true</span>
+<span class="command">vim.opt.termguicolors = true</span>
+<span class="command">vim.opt.signcolumn = "yes"</span>
+<span class="command">vim.opt.updatetime = 250</span>
+<span class="command">vim.opt.timeoutlen = 300</span>
+<span class="command">vim.opt.splitright = true</span>
+<span class="command">vim.opt.splitbelow = true</span>
+
+<span class="comment">-- Leader key</span>
+<span class="command">vim.g.mapleader = " "</span>
+<span class="command">vim.g.maplocalleader = "\\"</span>
+
+<span class="comment">-- Keymaps</span>
+<span class="command">vim.keymap.set('n', '&lt;leader&gt;w', ':w&lt;CR&gt;')</span>
+<span class="command">vim.keymap.set('n', '&lt;leader&gt;q', ':q&lt;CR&gt;')</span>
+<span class="command">vim.keymap.set('n', '&lt;Esc&gt;', ':noh&lt;CR&gt;')</span>
+                    </pre>
+                </div>
+                
+                <div class="card">
+                    <h4>Lazy.nvim Plugin Manager</h4>
+                    <pre>
+<span class="comment">-- bootstrap lazy.nvim</span>
+<span class="command">local lazypath = vim.fn.stdpath("data")</span>
+    <span class="string">.. "/lazy/lazy.nvim"</span>
+<span class="command">if not vim.loop.fs_stat(lazypath) then</span>
+    <span class="command">vim.fn.system({</span>
+        <span class="string">"git", "clone", "--filter=blob:none",</span>
+        <span class="string">"https://github.com/folke/lazy.nvim.git"</span>
+    <span class="command">})</span>
+<span class="command">end</span>
+<span class="command">vim.opt.rtp:prepend(lazypath)</span>
+
+<span class="comment">-- Plugin spec</span>
+<span class="command">require("lazy").setup({</span>
+    <span class="string">-- Colorscheme</span>
+    <span class="command">{"folke/tokyonight.nvim"},</span>
+    
+    <span class="string">-- LSP</span>
+    <span class="command">{"neovim/nvim-lspconfig"},</span>
+    
+    <span class="string">-- Autocomplete</span>
+    <span class="command">{"hrsh7th/nvim-cmp"},</span>
+    <span class="command">{"hrsh7th/cmp-nvim-lsp"},</span>
+    
+    <span class="string">-- Syntax</span>
+    <span class="command">{"nvim-treesitter/nvim-treesitter"},</span>
+<span class="command">})</span>
+                    </pre>
+                </div>
+                
+                <div class="card">
+                    <h4>LSP Configuration</h4>
+                    <pre>
+<span class="comment">-- Setup LSP</span>
+<span class="command">local lspconfig = require('lspconfig')</span>
+
+<span class="comment">-- Setup completion</span>
+<span class="command">local capabilities = require('cmp_nvim_lsp')</span>
+    <span class="string">.default_capabilities()</span>
+
+<span class="comment">-- Python LSP</span>
+<span class="command">lspconfig.pyright.setup({</span>
+    <span class="command">capabilities = capabilities</span>
+<span class="command">})</span>
+
+<span class="comment">-- TypeScript LSP</span>
+<span class="command">lspconfig.tsserver.setup({</span>
+    <span class="command">capabilities = capabilities</span>
+<span class="command">})</span>
+
+<span class="comment">-- Go LSP</span>
+<span class="command">lspconfig.gopls.setup({</span>
+    <span class="command">capabilities = capabilities</span>
+<span class="command">})</span>
+
+<span class="comment">-- LSP Keymaps</span>
+<span class="command">vim.keymap.set('n', 'gd', vim.lsp.buf.definition)</span>
+<span class="command">vim.keymap.set('n', 'gr', vim.lsp.buf.references)</span>
+<span class="command">vim.keymap.set('n', 'K', vim.lsp.buf.hover)</span>
+<span class="command">vim.keymap.set('n', '&lt;leader&gt;rn', vim.lsp.buf.rename)</span>
+<span class="command">vim.keymap.set('n', '&lt;leader&gt;ca', vim.lsp.buf.code_action)</span>
+                    </pre>
+                </div>
+                
+                <div class="card">
+                    <h4>Treesitter Configuration</h4>
+                    <pre>
+<span class="command">require'nvim-treesitter.configs'.setup({</span>
+    <span class="command">ensure_installed = {</span>
+        <span class="string">"python", "javascript", "typescript",</span>
+        <span class="string">"go", "rust", "lua", "vim", "json"</span>
+    <span class="command">},</span>
+    <span class="command">sync_install = false,</span>
+    <span class="command">auto_install = true,</span>
+    <span class="command">highlight = {</span>
+        <span class="command">enable = true,</span>
+    <span class="command">},</span>
+    <span class="command">indent = {</span>
+        <span class="command">enable = true,</span>
+    <span class="command">},</span>
+    <span class="command">incremental_selection = {</span>
+        <span class="command">enable = true,</span>
+        <span class="command">keymaps = {</span>
+            <span class="command">init_selection = '&lt;CR&gt;',</span>
+            <span class="command">node_incremental = '&lt;CR&gt;',</span>
+            <span class="command">node_decremental = '&lt;BS&gt;',</span>
+        <span class="command">},</span>
+    <span class="command">},</span>
+<span class="command">})</span>
+                    </pre>
+                </div>
+                
+                <div class="card">
+                    <h4>Telescope (Fuzzy Finder)</h4>
+                    <pre>
+<span class="command">require('telescope').setup({</span>
+    <span class="command">defaults = {</span>
+        <span class="command">mappings = {</span>
+            <span class="command">i = {</span>
+                <span class="command">['&lt;C-u&gt;'] = false,</span>
+                <span class="command">['&lt;C-d&gt;'] = false,</span>
+            <span class="command">},</span>
+        <span class="command">},</span>
+    <span class="command">},</span>
+<span class="command">})</span>
+
+<span class="comment">-- Keymaps</span>
+<span class="command">local builtin = require('telescope.builtin')</span>
+<span class="command">vim.keymap.set('n', '&lt;leader&gt;ff', builtin.find_files)</span>
+<span class="command">vim.keymap.set('n', '&lt;leader&gt;fg', builtin.live_grep)</span>
+<span class="command">vim.keymap.set('n', '&lt;leader&gt;fb', builtin.buffers)</span>
+<span class="command">vim.keymap.set('n', '&lt;leader&gt;fh', builtin.help_tags)</span>
+<span class="command">vim.keymap.set('n', '&lt;leader&gt;fo', builtin.oldfiles)</span>
+<span class="command">vim.keymap.set('n', '&lt;leader&gt;fw', builtin.grep_string)</span>
+                    </pre>
+                </div>
+                
+                <div class="card">
+                    <h4>Nvim-cmp (Autocomplete)</h4>
+                    <pre>
+<span class="command">local cmp = require('cmp')</span>
+
+<span class="command">cmp.setup({</span>
+    <span class="command">mapping = cmp.mapping.preset.insert({</span>
+        <span class="command">['&lt;C-b&gt;'] = cmp.mapping.scroll_docs(-4),</span>
+        <span class="command">['&lt;C-f&gt;'] = cmp.mapping.scroll_docs(4),</span>
+        <span class="command">['&lt;C-Space&gt;'] = cmp.mapping.complete(),</span>
+        <span class="command">['&lt;CR&gt;'] = cmp.mapping.confirm({</span>
+            <span class="command">behavior = cmp.ConfirmBehavior.Replace,</span>
+            <span class="command">select = true</span>
+        <span class="command">}),</span>
+        <span class="command">['&lt;Tab&gt;'] = cmp.mapping(function(fallback)</span>
+            <span class="command">if cmp.visible() then</span>
+                <span class="command">cmp.select_next_item()</span>
+            <span class="command">else</span>
+                <span class="command">fallback()</span>
+            <span class="command">end</span>
+        <span class="command">end, { 'i', 's' }),</span>
+    <span class="command">}),</span>
+    <span class="command">sources = cmp.config.sources({</span>
+        <span class="command">{ name = 'nvim_lsp' },</span>
+        <span class="command">{ name = 'buffer' },</span>
+        <span class="command">{ name = 'path' },</span>
+    <span class="command">})</span>
+<span class="command">})</span>
+                    </pre>
+                </div>
+                
+                <div class="card">
+                    <h4>Essential NeoVim Plugins</h4>
+                    <table>
+                        <tr><th>Plugin</th><th>Purpose</th></tr>
+                        <tr><td>folke/lazy.nvim</td><td>Plugin manager</td></tr>
+                        <tr><td>nvim-treesitter/nvim-treesitter</td><td>Syntax highlighting</td></tr>
+                        <tr><td>neovim/nvim-lspconfig</td><td>LSP configuration</td></tr>
+                        <tr><td>hrsh7th/nvim-cmp</td><td>Autocompletion</td></tr>
+                        <tr><td>nvim-telescope/telescope.nvim</td><td>Fuzzy finder</td></tr>
+                        <tr><td>nvim-tree/nvim-tree.lua</td><td>File explorer</td></tr>
+                        <tr><td>lewis6991/gitsigns.nvim</td><td>Git signs</td></tr>
+                        <tr><td>folke/which-key.nvim</td><td>Keybinding helper</td></tr>
+                        <tr><td>numToStr/Comment.nvim</td><td>Commenting</td></tr>
+                        <tr><td>windwp/nvim-autopairs</td><td>Auto brackets</td></tr>
+                        <tr><td>akinsho/toggleterm.nvim</td><td>Terminal</td></tr>
+                        <tr><td>folke/trouble.nvim</td><td>Diagnostics list</td></tr>
+                        <tr><td>nvim-lualine/lualine.nvim</td><td>Statusline</td></tr>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Vim Scripting -->
+        <section class="section">
+            <h2>📜 Vim Scripting Basics</h2>
+            
+            <div class="grid">
+                <div class="card">
+                    <h4>Variables</h4>
+                    <pre>
+<span class="comment">;; Variable Types</span>
+<span class="command">let g:global_var = 1</span>     <span class="comment">" Global</span>
+<span class="command">let l:local_var = 2</span>      <span class="comment">" Local to function</span>
+<span class="command">let s:script_var = 3</span>     <span class="comment">" Local to script</span>
+<span class="command">let v:vim_var = 4</span>        <span class="comment">" Vim predefined</span>
+<span class="command">let w:window_var = 5</span>     <span class="comment">" Window local</span>
+<span class="command">let t:tab_var = 6</span>        <span class="comment">" Tab local</span>
+<span class="command">let b:buffer_var = 7</span>     <span class="comment">" Buffer local</span>
+
+<span class="comment">;; Environment</span>
+<span class="command">let $MYVAR = 'value'</span>
+<span class="command">echo $HOME</span>
+
+<span class="comment">;; Register</span>
+<span class="command">let @a = 'text'</span>         <span class="comment">" Set register a</span>
+<span class="command">echo @a</span>                 <span class="comment">" Get register a</span>
+                    </pre>
+                </div>
+                
+                <div class="card">
+                    <h4>Functions</h4>
+                    <pre>
+<span class="comment">;; Define function</span>
+<span class="command">function! MyFunction(arg1, arg2)</span>
+    <span class="command">echo a:arg1 . ' ' . a:arg2</span>
+    <span class="command">return a:arg1 + a:arg2</span>
+<span class="command">endfunction</span>
+
+<span class="comment">;; Call function</span>
+<span class="command">call MyFunction(1, 2)</span>
+
+<span class="comment">;; With range</span>
+<span class="command">function! MyRange() range</span>
+    <span class="command">echo a:firstline . '-' . a:lastline</span>
+<span class="command">endfunction</span>
+
+<span class="comment">;; Lambda (Vim 8+)</span>
+<span class="command">let Square = {x -> x * x}</span>
+<span class="command">echo Square(5)</span>
+
+<span class="comment">;; Autoload function</span>
+<span class="command">" In autoload/myplugin.vim:</span>
+<span class="command">function myplugin#Init()</span>
+    <span class="command">" ...</span>
+<span class="command">endfunction</span>
+                    </pre>
+                </div>
+                
+                <div class="card">
+                    <h4>Conditionals & Loops</h4>
+                    <pre>
+<span class="comment">;; If-else</span>
+<span class="command">if condition</span>
+    <span class="command">" ...</span>
+<span class="command">elseif other</span>
+    <span class="command">" ...</span>
+<span class="command">else</span>
+    <span class="command">" ...</span>
+<span class="command">endif</span>
+
+<span class="comment">;; For loop</span>
+<span class="command">for i in range(10)</span>
+    <span class="command">echo i</span>
+<span class="command">endfor</span>
+
+<span class="command">for item in items</span>
+    <span class="command">echo item</span>
+<span class="command">endfor</span>
+
+<span class="comment">;; While loop</span>
+<span class="command">while i &lt; 10</span>
+    <span class="command">let i += 1</span>
+<span class="command">endwhile</span>
+
+<span class="comment">;; Try-catch</span>
+<span class="command">try</span>
+    <span class="command">" risky code</span>
+<span class="command">catch /Pattern/</span>
+    <span class="command">" handle error</span>
+<span class="command">finally</span>
+    <span class="command">" cleanup</span>
+<span class="command">endtry</span>
+                    </pre>
+                </div>
+                
+                <div class="card">
+                    <h4>Useful Functions</h4>
+                    <table>
+                        <tr><th>Function</th><th>Description</th></tr>
+                        <tr><td>getline(n)</td><td>Get line n</td></tr>
+                        <tr><td>setline(n, text)</td><td>Set line n</td></tr>
+                        <tr><td>append(n, text)</td><td>Insert after line n</td></tr>
+                        <tr><td>line('.')</td><td>Current line number</td></tr>
+                        <tr><td>col('.')</td><td>Current column</td></tr>
+                        <tr><td>expand('%')</td><td>Current file name</td></tr>
+                        <tr><td>expand('%:p')</td><td>Full file path</td></tr>
+                        <tr><td>fnamemodify(fname, mod)</td><td>Modify filename</td></tr>
+                        <tr><td>search(pattern)</td><td>Search for pattern</td></tr>
+                        <tr><td>execute(cmd)</td><td>Execute Ex command</td></tr>
+                        <tr><td>system(cmd)</td><td>Run shell command</td></tr>
+                        <tr><td>input(prompt)</td><td>Get user input</td></tr>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Visual Mode Operations -->
+        <section class="section">
+            <h2>👁️ Visual Mode Operations</h2>
+            
+            <div class="grid">
+                <div class="card">
+                    <h4>Visual Mode Commands</h4>
+                    <table>
+                        <tr><th>Key</th><th>Action</th></tr>
+                        <tr><td>o</td><td>Move to other end of selection</td></tr>
+                        <tr><td>O</td><td>Move to other corner (block mode)</td></tr>
+                        <tr><td>gv</td><td>Reselect last visual selection</td></tr>
+                        <tr><td>&lt;</td><td>Shift left</td></tr>
+                        <tr><td>&gt;</td><td>Shift right</td></tr>
+                        <tr><td>y</td><td>Yank selection</td></tr>
+                        <tr><td>d</td><td>Delete selection</td></tr>
+                        <tr><td>c</td><td>Change selection</td></tr>
+                        <tr><td>J</td><td>Join lines</td></tr>
+                        <tr><td>u</td><td>Make lowercase</td></tr>
+                        <tr><td>U</td><td>Make uppercase</td></tr>
+                    </table>
+                </div>
+                
+                <div class="card">
+                    <h4>Block Mode Magic</h4>
+                    <table>
+                        <tr><th>Key</th><th>Action</th></tr>
+                        <tr><td>Ctrl-v</td><td>Enter block mode</td></tr>
+                        <tr><td>I</td><td>Insert at block start</td></tr>
+                        <tr><td>A</td><td>Append at block end</td></tr>
+                        <tr><td>c</td><td>Change block</td></tr>
+                        <tr><td>r</td><td>Replace with char</td></tr>
+                        <tr><td>x</td><td>Delete block</td></tr>
+                        <tr><td>$</td><td>Extend to line end</td></tr>
+                    </table>
+                    <pre>
+<span class="comment">;; Add text to multiple lines:</span>
+<span class="command">Ctrl-v</span>  <span class="comment">" Start block</span>
+<span class="command">jjj</span>     <span class="comment">" Select 3 lines</span>
+<span class="command">I</span>       <span class="comment">" Insert mode</span>
+<span class="command">// </span>     <span class="comment">" Type text</span>
+<span class="command">Esc</span>     <span class="comment">" Apply to all</span>
+                    </pre>
+                </div>
+                
+                <div class="card">
+                    <h4>Visual Selection Tricks</h4>
+                    <pre>
+<span class="comment">;; Sort selected lines</span>
+<span class="command">:'&lt;,'&gt;sort</span>
+
+<span class="comment">;; Search in selection</span>
+<span class="command">:'&lt;,'&gt;s/old/new/g</span>
+
+<span class="comment">;; Execute macro on selection</span>
+<span class="command">:'&lt;,'&gt;normal @a</span>
+
+<span class="comment">;; Duplicate line</span>
+<span class="command">VyP</span> or <span class="command">yyp</span>
+
+<span class="comment">;; Move selection up/down</span>
+<span class="command">:&lt;move -2</span>
+<span class="command">:&lt;move +1</span>
+
+<span class="comment">;; Filter through external command</span>
+<span class="command">:'&lt;,'&gt;!sort</span>
+<span class="command">:'&lt;,'&gt;!jq .</span>
+                    </pre>
+                </div>
+                
+                <div class="card">
+                    <h4>Increment/Decrement</h4>
+                    <table>
+                        <tr><th>Key</th><th>Action</th></tr>
+                        <tr><td>Ctrl-a</td><td>Increment number under cursor</td></tr>
+                        <tr><td>Ctrl-x</td><td>Decrement number</td></tr>
+                        <tr><td>5Ctrl-a</td><td>Add 5 to number</td></tr>
+                        <tr><td>5Ctrl-x</td><td>Subtract 5</td></tr>
+                    </table>
+                    <div class="tip-box">Works on visual selection too - increment all numbers!</div>
+                    <pre>
+<span class="comment">;; Create numbered list</span>
+<span class="command">1. item</span>
+<span class="command">1. item</span>  <span class="comment">" Select and gCtrl-a</span>
+<span class="command">1. item</span>
+<span class="comment">;; Result:</span>
+<span class="command">1. item</span>
+<span class="command">2. item</span>
+<span class="command">3. item</span>
+                    </pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- Performance & Troubleshooting -->
+        <section class="section">
+            <h2>🔧 Performance & Troubleshooting</h2>
+            
+            <div class="grid">
+                <div class="card">
+                    <h4>Performance Debugging</h4>
+                    <table>
+                        <tr><th>Command</th><th>Action</th></tr>
+                        <tr><td>:scriptnames</td><td>List all loaded scripts</td></tr>
+                        <tr><td>:verbose set option?</td><td>Show where option was set</td></tr>
+                        <tr><td>:verbose map key</td><td>Show where mapping was defined</td></tr>
+                        <tr><td>:profile start file</td><td>Start profiling</td></tr>
+                        <tr><td>:profile file *</td><td>Profile all files</td></tr>
+                        <tr><td>:profile pause</td><td>Pause profiling</td></tr>
+                    </table>
+                </div>
+                
+                <div class="card">
+                    <h4>NeoVim Profiling <span class="tag neovim-tag">NeoVim</span></h4>
+                    <pre>
+<span class="comment">;; Start with profiling</span>
+<span class="command">nvim --startuptime /tmp/startup.log</span>
+
+<span class="comment">;; Profile Lua code</span>
+<span class="command">local start = vim.loop.hrtime()</span>
+<span class="command">-- code to profile</span>
+<span class="command">print(vim.loop.hrtime() - start)</span>
+
+<span class="comment">;; Check startup time</span>
+<span class="command">vim.log.levels.INFO</span>
+                    </pre>
+                </div>
+                
+                <div class="card">
+                    <h4>Common Issues</h4>
+                    <table>
+                        <tr><th>Problem</th><th>Solution</th></tr>
+                        <tr><td>Slow startup</td><td>Use lazy loading for plugins</td></tr>
+                        <tr><td>Slow typing</td><td>Check for heavy InsertLeave autocmds</td></tr>
+                        <tr><td>High CPU</td><td>Disable syntax highlighting for huge files</td></tr>
+                        <tr><td>Colors wrong</td><td>set termguicolors, check $TERM</td></tr>
+                        <tr><td>Plugins not loading</td><td>Run :checkhealth (NeoVim)</td></tr>
+                    </table>
+                </div>
+                
+                <div class="card">
+                    <h4>Debug Commands</h4>
+                    <table>
+                        <tr><th>Command</th><th>Action</th></tr>
+                        <tr><td>:messages</td><td>View all messages</td></tr>
+                        <tr><td>:redir! &gt; file</td><td>Redirect output to file</td></tr>
+                        <tr><td>:debug cmd</td><td>Step through command</td></tr>
+                        <tr><td>:echo var</td><td>Print variable</td></tr>
+                        <tr><td>:echohl Error</td><td>Change echo color</td></tr>
+                        <tr><td>:syntax list</td><td>Show syntax items</td></tr>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Quick Reference -->
+        <section class="section">
+            <h2>⚡ Quick Reference Card</h2>
+            
+            <div class="quick-ref">
+                <h4>Most Essential Commands</h4>
+                <div class="grid">
+                    <div>
+                        <strong>Save & Exit:</strong><br>
+                        <code>:w</code> Save | <code>:q</code> Quit | <code>:wq</code> Save & Quit | <code>:q!</code> Force Quit
+                    </div>
+                    <div>
+                        <strong>Movement:</strong><br>
+                        <code>hjkl</code> Move | <code>w/W</code> Word | <code>0/$</code> Line start/end | <code>gg/G</code> File start/end
+                    </div>
+                    <div>
+                        <strong>Editing:</strong><br>
+                        <code>d</code> Delete | <code>c</code> Change | <code>y</code> Yank | <code>p</code> Put | <code>u</code> Undo
+                    </div>
+                    <div>
+                        <strong>Search:</strong><br>
+                        <code>/pattern</code> Search | <code>n/N</code> Next/Prev | <code>*</code> Word under cursor
+                    </div>
+                    <div>
+                        <strong>Windows:</strong><br>
+                        <code>Ctrl-w s/v</code> Split | <code>Ctrl-w h/j/k/l</code> Navigate | <code>Ctrl-w c</code> Close
+                    </div>
+                    <div>
+                        <strong>Modes:</strong><br>
+                        <code>i/a</code> Insert | <code>v/V/Ctrl-v</code> Visual | <code>R</code> Replace | <code>Esc</code> Normal
+                    </div>
+                </div>
+            </div>
+            
+            <div class="ascii-art">
+┌─────────────────────────────────────────────────────────────────────────┐
+│                    VIM LEARNING PROGRESSION                              │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                          │
+│   Level 1: SURVIVAL                                                     │
+│   ───────────────────                                                   │
+│   i = insert    Esc = normal mode    :wq = save and quit               │
+│   hjkl = move   x = delete char      u = undo                          │
+│                                                                          │
+│   Level 2: BASIC EDITING                                                │
+│   ───────────────────                                                   │
+│   dw = delete word    yy = yank line    p = paste                      │
+│   dd = delete line    cc = change line  . = repeat                     │
+│   /pattern = search   n = next match    :s/old/new/g = replace         │
+│                                                                          │
+│   Level 3: EFFICIENCY                                                   │
+│   ───────────────────                                                   │
+│   Text objects: ci", da(, yiw, vip                                      │
+│   Macros: qa...q @a                                                     │
+│   Visual mode: v, V, Ctrl-v                                             │
+│   Marks: ma 'a                                                          │
+│                                                                          │
+│   Level 4: MASTERY                                                      │
+│   ───────────────────                                                   │
+│   Registers, Jumplist, Quickfix                                         │
+│   Custom mappings, Plugins                                              │
+│   LSP integration (NeoVim)                                              │
+│   Lua configuration (NeoVim)                                            │
+│                                                                          │
+│   Level 5: ENLIGHTENMENT                                                │
+│   ───────────────────                                                   │
+│   "Vim is not an editor, it's a language"                              │
+│   Operate at the speed of thought                                       │
+│   Create your own editing language                                      │
+│                                                                          │
+└─────────────────────────────────────────────────────────────────────────┘
+            </div>
+        </section>
+
+    </div>
+</body>
+</html>
