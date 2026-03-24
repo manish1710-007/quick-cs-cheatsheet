@@ -1,0 +1,2681 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unity 2D/3D Mastery Guide - Game Development</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            color: #e8e8e8;
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            padding: 40px 20px;
+            background: linear-gradient(180deg, rgba(255,140,0,0.15) 0%, transparent 100%);
+            border-bottom: 2px solid #ff8c00;
+            margin-bottom: 30px;
+        }
+        
+        h1 {
+            font-size: 2.8em;
+            background: linear-gradient(90deg, #ff8c00, #ffa500, #ff6600);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+            text-shadow: 0 0 30px rgba(255,140,0,0.3);
+        }
+        
+        .subtitle {
+            font-size: 1.2em;
+            color: #888;
+            font-style: italic;
+        }
+        
+        .unity-logo {
+            font-size: 4em;
+            margin-bottom: 15px;
+        }
+        
+        h2 {
+            font-size: 1.8em;
+            color: #ff8c00;
+            margin: 30px 0 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #ff8c00;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        h3 {
+            font-size: 1.3em;
+            color: #ffa500;
+            margin: 20px 0 15px;
+            padding-left: 15px;
+            border-left: 3px solid #ff8c00;
+        }
+        
+        h4 {
+            font-size: 1.1em;
+            color: #4ecdc4;
+            margin: 15px 0 10px;
+        }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .card {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,140,0,0.2);
+            border-radius: 12px;
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+        
+        .card:hover {
+            border-color: rgba(255,140,0,0.5);
+            box-shadow: 0 10px 30px rgba(255,140,0,0.1);
+            transform: translateY(-2px);
+        }
+        
+        .shortcut-box {
+            background: rgba(0,0,0,0.3);
+            border-radius: 8px;
+            padding: 15px;
+            margin: 10px 0;
+        }
+        
+        .shortcut {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 12px;
+            margin: 5px 0;
+            background: rgba(255,140,0,0.05);
+            border-radius: 6px;
+            border-left: 3px solid #ff8c00;
+        }
+        
+        .key {
+            background: linear-gradient(180deg, #3a3a3a, #2a2a2a);
+            color: #fff;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-family: 'Consolas', monospace;
+            font-size: 0.9em;
+            border: 1px solid #555;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .formula-box {
+            background: rgba(78,205,196,0.1);
+            border: 1px solid rgba(78,205,196,0.3);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 15px 0;
+        }
+        
+        .formula-title {
+            color: #4ecdc4;
+            font-weight: bold;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+        
+        pre {
+            background: rgba(0,0,0,0.4);
+            border-radius: 8px;
+            padding: 15px;
+            overflow-x: auto;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.85em;
+            line-height: 1.5;
+            border: 1px solid rgba(255,140,0,0.2);
+        }
+        
+        code {
+            background: rgba(255,140,0,0.1);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Consolas', monospace;
+            color: #ffa500;
+        }
+        
+        .csharp-code {
+            color: #90EE90;
+        }
+        
+        .tip-box {
+            background: linear-gradient(135deg, rgba(255,140,0,0.1), rgba(255,165,0,0.05));
+            border-left: 4px solid #ff8c00;
+            padding: 15px 20px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .warning-box {
+            background: linear-gradient(135deg, rgba(255,99,71,0.1), rgba(255,99,71,0.05));
+            border-left: 4px solid #ff6347;
+            padding: 15px 20px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .pro-tip {
+            background: linear-gradient(135deg, rgba(78,205,196,0.1), rgba(78,205,196,0.05));
+            border-left: 4px solid #4ecdc4;
+            padding: 15px 20px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .workflow {
+            background: rgba(0,0,0,0.2);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 15px 0;
+        }
+        
+        .workflow-step {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            margin: 15px 0;
+            padding: 15px;
+            background: rgba(255,140,0,0.03);
+            border-radius: 8px;
+        }
+        
+        .step-number {
+            background: linear-gradient(135deg, #ff8c00, #ffa500);
+            color: #1a1a2e;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+        
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid rgba(255,140,0,0.2);
+        }
+        
+        th {
+            background: rgba(255,140,0,0.1);
+            color: #ff8c00;
+            font-weight: 600;
+        }
+        
+        tr:hover {
+            background: rgba(255,140,0,0.05);
+        }
+        
+        .ascii-diagram {
+            background: rgba(0,0,0,0.3);
+            padding: 20px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.8em;
+            white-space: pre;
+            overflow-x: auto;
+            color: #4ecdc4;
+            line-height: 1.3;
+        }
+        
+        .mode-badge {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 15px;
+            font-size: 0.8em;
+            font-weight: bold;
+            margin-right: 5px;
+        }
+        
+        .mode-2d { background: #22c55e; color: #fff; }
+        .mode-3d { background: #3b82f6; color: #fff; }
+        .mode-both { background: #a855f7; color: #fff; }
+        .mode-editor { background: #f59e0b; color: #1a1a2e; }
+        
+        .quick-ref {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+            margin: 15px 0;
+        }
+        
+        .quick-item {
+            background: rgba(255,140,0,0.05);
+            padding: 10px;
+            border-radius: 6px;
+            text-align: center;
+        }
+        
+        .section-divider {
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #ff8c00, transparent);
+            margin: 40px 0;
+        }
+        
+        .emoji-icon {
+            font-size: 1.2em;
+            margin-right: 8px;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .stat-card {
+            background: rgba(255,140,0,0.05);
+            border: 1px solid rgba(255,140,0,0.2);
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 2em;
+            color: #ff8c00;
+            font-weight: bold;
+        }
+        
+        .stat-label {
+            font-size: 0.9em;
+            color: #888;
+        }
+        
+        .keyword { color: #569cd6; }
+        .type { color: #4ec9b0; }
+        .string { color: #ce9178; }
+        .comment { color: #6a9955; }
+        .number { color: #b5cea8; }
+        .method { color: #dcdcaa; }
+        
+        @media (max-width: 768px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            h1 {
+                font-size: 2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="unity-logo">🎮🕹️</div>
+            <h1>Unity 2D/3D Mastery Guide</h1>
+            <p class="subtitle">The Complete Game Development Reference for Unity Engine</p>
+            <p style="margin-top: 15px; color: #ff8c00;">Unity 2022 LTS+ | C# Scripting | Physics | Animation | UI | Rendering</p>
+        </header>
+
+        <!-- Quick Stats -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-value">200+</div>
+                <div class="stat-label">Shortcuts</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">150+</div>
+                <div class="stat-label">Code Snippets</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">2D & 3D</div>
+                <div class="stat-label">Coverage</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">∞</div>
+                <div class="stat-label">Possibilities</div>
+            </div>
+        </div>
+
+        <!-- Section 1: Interface & Navigation -->
+        <h2>🖥️ Unity Editor Interface</h2>
+        
+        <div class="grid">
+            <div class="card">
+                <h3>Editor Windows</h3>
+                <div class="shortcut-box">
+                    <div class="shortcut"><span>Scene View</span><span class="key">Ctrl + 1</span></div>
+                    <div class="shortcut"><span>Game View</span><span class="key">Ctrl + 2</span></div>
+                    <div class="shortcut"><span>Inspector</span><span class="key">Ctrl + 3</span></div>
+                    <div class="shortcut"><span>Hierarchy</span><span class="key">Ctrl + 4</span></div>
+                    <div class="shortcut"><span>Project</span><span class="key">Ctrl + 5</span></div>
+                    <div class="shortcut"><span>Animation</span><span class="key">Ctrl + 6</span></div>
+                    <div class="shortcut"><span>Profiler</span><span class="key">Ctrl + 7</span></div>
+                    <div class="shortcut"><span>Console</span><span class="key">Ctrl + Shift + C</span></div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h3>Scene Navigation (3D)</h3>
+                <div class="shortcut-box">
+                    <div class="shortcut"><span>Orbit View</span><span class="key">Alt + LMB Drag</span></div>
+                    <div class="shortcut"><span>Pan View</span><span class="key">MMB Drag</span></div>
+                    <div class="shortcut"><span>Zoom</span><span class="key">Scroll / Alt + RMB</span></div>
+                    <div class="shortcut"><span>Fly Mode</span><span class="key">RMB + WASD</span></div>
+                    <div class="shortcut"><span>Focus Object</span><span class="key">F</span></div>
+                    <div class="shortcut"><span>Frame Selection</span><span class="key">Shift + F</span></div>
+                    <div class="shortcut"><span>Top View</span><span class="key">Scene Gizmo → Y</span></div>
+                    <div class="shortcut"><span>Front View</span><span class="key">Scene Gizmo → Z</span></div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h3>Scene View Tools</h3>
+                <div class="shortcut-box">
+                    <div class="shortcut"><span>Move Tool</span><span class="key">W</span></div>
+                    <div class="shortcut"><span>Rotate Tool</span><span class="key">E</span></div>
+                    <div class="shortcut"><span>Scale Tool</span><span class="key">R</span></div>
+                    <div class="shortcut"><span>Rect Tool (2D)</span><span class="key">T</span></div>
+                    <div class="shortcut"><span>Transform</span><span class="key">Y</span></div>
+                    <div class="shortcut"><span>Toggle Pivot/Center</span><span class="key">Z</span></div>
+                    <div class="shortcut"><span>Toggle Local/Global</span><span class="key">X</span></div>
+                    <div class="shortcut"><span>Snapping</span><span class="key">Ctrl (hold)</span></div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h3>Play Mode & Debugging</h3>
+                <div class="shortcut-box">
+                    <div class="shortcut"><span>Play/Pause</span><span class="key">Ctrl + P</span></div>
+                    <div class="shortcut"><span>Pause</span><span class="key">Ctrl + Shift + P</span></div>
+                    <div class="shortcut"><span>Step Frame</span><span class="key">Ctrl + Alt + P</span></div>
+                    <div class="shortcut"><span>Step Into</span><span class="key">F11</span></div>
+                    <div class="shortcut"><span>Step Over</span><span class="key">F10</span></div>
+                    <div class="shortcut"><span>Continue</span><span class="key">F5</span></div>
+                    <div class="shortcut"><span>Toggle Breakpoint</span><span class="key">F9</span></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="ascii-diagram">
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                        UNITY EDITOR LAYOUT                                   │
+├─────────────────────────────────────────────────────────────────────────────┤
+│  ┌─────────────────────────────────────────────────────────────────────┐    │
+│  │                         MENU BAR                                     │    │
+│  │  File | Edit | Assets | GameObject | Component | Window | Layout    │    │
+│  └─────────────────────────────────────────────────────────────────────┘    │
+│                                                                             │
+│  ┌──────────────┐  ┌─────────────────────────────┐  ┌──────────────────┐   │
+│  │  HIERARCHY   │  │                             │  │   INSPECTOR      │   │
+│  │              │  │       SCENE / GAME          │  │                  │   │
+│  │  ▼ Main Camera│  │                             │  │  Transform       │   │
+│  │  ▼ Directional│  │     ┌───────────┐          │  │  ▼ Mesh Renderer │   │
+│  │  ▼ Player     │  │     │  Cube     │          │  │  ▼ Collider      │   │
+│  │  ▼ Enemies    │  │     │  Sphere   │          │  │  ▼ Script(s)     │   │
+│  │  ▼ UI         │  │     │  Ground   │          │  │  Add Component   │   │
+│  └──────────────┘  │     └───────────┘          │  └──────────────────┘   │
+│                    │                             │                          │
+│  ┌──────────────┐  └─────────────────────────────┘  ┌──────────────────┐   │
+│  │   PROJECT    │                                  │   SERVICES/      │   │
+│  │              │  ┌─────────────────────────────┐ │   CONSOLE        │   │
+│  │  Assets/     │  │        ANIMATION           │ │                  │   │
+│  │   ▼ Scripts  │  │   Timeline | Curves        │ │  Log ▼           │   │
+│  │   ▼ Prefabs  │  └─────────────────────────────┘ │  ────────────    │   │
+│  │   ▼ Scenes   │                                  │  Debug.Log(...)   │   │
+│  │   ▼ Sprites  │  ┌─────────────────────────────┐ │  Ready.          │   │
+│  └──────────────┘  │         GAME VIEW           │ └──────────────────┘   │
+│                    │   [Play] [Pause] [Step]     │                         │
+│                    │   Free Aspect ▼ | Stats ▼   │                         │
+│                    └─────────────────────────────┘                         │
+└─────────────────────────────────────────────────────────────────────────────┘
+        </div>
+
+        <div class="section-divider"></div>
+
+        <!-- Section 2: GameObjects & Components -->
+        <h2>🎮 GameObjects & Components</h2>
+        
+        <div class="grid">
+            <div class="card">
+                <h3>Creating GameObjects</h3>
+                <div class="shortcut-box">
+                    <div class="shortcut"><span>Create Empty</span><span class="key">Ctrl + Shift + N</span></div>
+                    <div class="shortcut"><span>Create Menu</span><span class="key">GameObject Menu</span></div>
+                    <div class="shortcut"><span>Duplicate</span><span class="key">Ctrl + D</span></div>
+                    <div class="shortcut"><span>Delete</span><span class="key">Delete / Ctrl + Back</span></div>
+                    <div class="shortcut"><span>Rename</span><span class="key">F2</span></div>
+                    <div class="shortcut"><span>Copy Component</span><span class="key">Ctrl + C</span></div>
+                    <div class="shortcut"><span>Paste Component</span><span class="key">Ctrl + V</span></div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h3>Essential 3D Components</h3>
+                <table>
+                    <tr>
+                        <th>Component</th>
+                        <th>Purpose</th>
+                    </tr>
+                    <tr>
+                        <td>Transform</td>
+                        <td>Position, rotation, scale</td>
+                    </tr>
+                    <tr>
+                        <td>Mesh Filter</td>
+                        <td>Reference to mesh asset</td>
+                    </tr>
+                    <tr>
+                        <td>Mesh Renderer</td>
+                        <td>Render mesh with materials</td>
+                    </tr>
+                    <tr>
+                        <td>Rigidbody</td>
+                        <td>Physics simulation</td>
+                    </tr>
+                    <tr>
+                        <td>Collider</td>
+                        <td>Collision detection</td>
+                    </tr>
+                    <tr>
+                        <td>Audio Source</td>
+                        <td>Play audio clips</td>
+                    </tr>
+                </table>
+            </div>
+            
+            <div class="card">
+                <h3>Essential 2D Components</h3>
+                <table>
+                    <tr>
+                        <th>Component</th>
+                        <th>Purpose</th>
+                    </tr>
+                    <tr>
+                        <td>Sprite Renderer</td>
+                        <td>Render 2D sprites</td>
+                    </tr>
+                    <tr>
+                        <td>Rigidbody 2D</td>
+                        <td>2D physics simulation</td>
+                    </tr>
+                    <tr>
+                        <td>Collider 2D</td>
+                        <td>2D collision detection</td>
+                    </tr>
+                    <tr>
+                        <td>Canvas</td>
+                        <td>UI rendering container</td>
+                    </tr>
+                    <tr>
+                        <td>Animator</td>
+                        <td>Animation state machine</td>
+                    </tr>
+                    <tr>
+                        <td>Tilemap</td>
+                        <td>Grid-based 2D levels</td>
+                    </tr>
+                </table>
+            </div>
+            
+            <div class="card">
+                <h3>Component Architecture</h3>
+                <div class="formula-box">
+                    <div class="formula-title">Composition Over Inheritance</div>
+                    <pre>
+GameObject = Container
+    └── Transform (always present)
+    └── Mesh Renderer (visual)
+    └── Collider (physics)
+    └── Rigidbody (physics body)
+    └── Custom Scripts (behavior)
+    └── Audio Source (sound)
+
+Component Pattern:
+- Each component = single responsibility
+- Communicate via GetComponent&lt;T&gt;()
+- Use events/delegates for decoupling
+- Avoid deep inheritance hierarchies
+                    </pre>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-divider"></div>
+
+        <!-- Section 3: C# Scripting Fundamentals -->
+        <h2>📜 C# Scripting Fundamentals</h2>
+        
+        <div class="grid">
+            <div class="card">
+                <h3>MonoBehaviour Lifecycle</h3>
+                <pre class="csharp-code"><span class="keyword">void</span> <span class="method">Awake</span>() {
+    <span class="comment">// Called when script instance is loaded</span>
+    <span class="comment">// Use for: Initialize references, setup</span>
+}
+
+<span class="keyword">void</span> <span class="method">Start</span>() {
+    <span class="comment">// Called before first Update</span>
+    <span class="comment">// Use for: Init that depends on others</span>
+}
+
+<span class="keyword">void</span> <span class="method">FixedUpdate</span>() {
+    <span class="comment">// Called at fixed intervals (physics)</span>
+    <span class="comment">// Use for: Physics, Rigidbody operations</span>
+}
+
+<span class="keyword">void</span> <span class="method">Update</span>() {
+    <span class="comment">// Called once per frame</span>
+    <span class="comment">// Use for: Input, non-physics movement</span>
+}
+
+<span class="keyword">void</span> <span class="method">LateUpdate</span>() {
+    <span class="comment">// Called after all Updates</span>
+    <span class="comment">// Use for: Camera follow, trailing</span>
+}</pre>
+            </div>
+            
+            <div class="card">
+                <h3>Common MonoBehaviour Methods</h3>
+                <pre class="csharp-code"><span class="keyword">void</span> <span class="method">OnEnable</span>()   { <span class="comment">// Object activated</span> }
+<span class="keyword">void</span> <span class="method">OnDisable</span>()  { <span class="comment">// Object deactivated</span> }
+<span class="keyword">void</span> <span class="method">OnDestroy</span>()  { <span class="comment">// Object destroyed</span> }
+
+<span class="comment">// Collision events</span>
+<span class="keyword">void</span> <span class="method">OnCollisionEnter</span>(Collision c)
+<span class="keyword">void</span> <span class="method">OnCollisionStay</span>(Collision c)
+<span class="keyword">void</span> <span class="method">OnCollisionExit</span>(Collision c)
+
+<span class="comment">// Trigger events</span>
+<span class="keyword">void</span> <span class="method">OnTriggerEnter</span>(Collider c)
+<span class="keyword">void</span> <span class="method">OnTriggerStay</span>(Collider c)
+<span class="keyword">void</span> <span class="method">OnTriggerExit</span>(Collider c)
+
+<span class="comment">// 2D versions</span>
+<span class="keyword">void</span> <span class="method">OnCollisionEnter2D</span>(Collision2D c)
+<span class="keyword">void</span> <span class="method">OnTriggerEnter2D</span>(Collider2D c)</pre>
+            </div>
+            
+            <div class="card">
+                <h3>GetComponent & References</h3>
+                <pre class="csharp-code"><span class="comment">// Get component on same GameObject</span>
+Rigidbody rb = <span class="method">GetComponent</span>&lt;Rigidbody&gt;();
+
+<span class="comment">// Get component on child</span>
+Rigidbody rb = <span class="method">GetComponentInChildren</span>&lt;Rigidbody&gt;();
+
+<span class="comment">// Get component on parent</span>
+Rigidbody rb = <span class="method">GetComponentInParent</span>&lt;Rigidbody&gt;();
+
+<span class="comment">// Get all components of type</span>
+Rigidbody[] rbs = <span class="method">GetComponents</span>&lt;Rigidbody&gt;();
+
+<span class="comment">// Find object by name (slow)</span>
+GameObject player = GameObject.<span class="method">Find</span>(<span class="string">"Player"</span>);
+
+<span class="comment">// Find by type</span>
+PlayerController player = 
+    FindObjectOfType&lt;PlayerController&gt;();
+
+<span class="comment">// Find by tag (faster)</span>
+GameObject player = GameObject.<span class="method">FindWithTag</span>(<span class="string">"Player"</span>);
+GameObject[] enemies = GameObject.<span class="method">FindGameObjectsWithTag</span>(<span class="string">"Enemy"</span>);</pre>
+            </div>
+            
+            <div class="card">
+                <h3>SerializeField & Attributes</h3>
+                <pre class="csharp-code"><span class="comment">// Show private field in Inspector</span>
+[<span class="type">SerializeField</span>] <span class="keyword">private</span> <span class="keyword">float</span> speed = <span class="number">5f</span>;
+
+<span class="comment">// Header for organization</span>
+[<span class="type">Header</span>(<span class="string">"Movement Settings"</span>)]
+[<span class="keyword">public</span> <span class="keyword">float</span> moveSpeed = <span class="number">5f</span>;
+
+<span class="comment">// Range slider</span>
+[<span class="type">Range</span>(<span class="number">0</span>, <span class="number">100</span>)] <span class="keyword">public</span> <span class="keyword">int</span> health = <span class="number">100</span>;
+
+<span class="comment">// Tooltip</span>
+[<span class="type">Tooltip</span>(<span class="string">"Jump force in units"</span>)]
+<span class="keyword">public</span> <span class="keyword">float</span> jumpForce = <span class="number">10f</span>;
+
+<span class="comment">// Require component</span>
+[<span class="type">RequireComponent</span>(<span class="keyword">typeof</span>(Rigidbody))]
+<span class="keyword">public class</span> <span class="type">PlayerMovement</span> : MonoBehaviour { }
+
+<span class="comment">// Hide in Inspector</span>
+[<span class="type">HideInInspector</span>] <span class="keyword">public</span> <span class="keyword">bool</span> isGrounded;
+
+<span class="comment">// Space between fields</span>
+[<span class="type">Space</span>(<span class="number">10</span>)]
+<span class="keyword">public</span> <span class="keyword">float</span> gravity = <span class="number">9.81f</span>;</pre>
+            </div>
+        </div>
+
+        <h3>Unity Execution Order</h3>
+        <div class="ascii-diagram">
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                    UNITY MONOBEHAVIOUR LIFECYCLE                             │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│  INITIALIZATION                                                             │
+│  ──────────────────                                                         │
+│  Awake() → OnEnable() → Start()                                             │
+│     │          │           │                                                │
+│     │          │           └── After all Awake() calls                      │
+│     │          └── When object becomes active                               │
+│     └── First call, before Start                                            │
+│                                                                             │
+│  PHYSICS FRAME (Fixed Timestep)                                             │
+│  ───────────────────────────────                                            │
+│  WaitForFixedUpdate → FixedUpdate() → OnTrigger/Collision X                 │
+│                           │                                                 │
+│                           └── Physics calculations here                     │
+│                                                                             │
+│  GAME FRAME                                                                 │
+│  ──────────                                                                 │
+│  Update() → WaitForSeconds → LateUpdate()                                   │
+│     │                                  │                                    │
+│     └── Input, non-physics movement    └── Camera follow, post-processing  │
+│                                                                             │
+│  RENDERING                                                                  │
+│  ─────────                                                                  │
+│  OnPreCull → OnWillRenderObject → OnRenderObject → OnPostRender             │
+│                                                                             │
+│  CLEANUP                                                                    │
+│  ───────                                                                    │
+│  OnDisable() → OnDestroy()                                                  │
+│       │            │                                                        │
+│       │            └── Object is destroyed                                  │
+│       └── Object disabled or destroyed                                      │
+│                                                                             │
+│  TIMING FORMULA:                                                            │
+│  FixedUpdate: Called every 0.02s (default, configurable)                    │
+│  Update: Called every frame (variable, depends on FPS)                      │
+│  LateUpdate: Called after all Update() complete                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+        </div>
+
+        <div class="section-divider"></div>
+
+        <!-- Section 4: Transform & Movement -->
+        <h2>🚀 Transform & Movement</h2>
+        
+        <div class="grid">
+            <div class="card">
+                <h3>Transform Properties</h3>
+                <pre class="csharp-code"><span class="comment">// Position (world space)</span>
+<span class="keyword">Vector3</span> pos = transform.position;
+transform.position = <span class="keyword">new</span> <span class="type">Vector3</span>(<span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>);
+
+<span class="comment">// Position (local to parent)</span>
+<span class="keyword">Vector3</span> localPos = transform.localPosition;
+
+<span class="comment">// Rotation (Quaternion)</span>
+<span class="type">Quaternion</span> rot = transform.rotation;
+
+<span class="comment">// Rotation (Euler angles)</span>
+<span class="keyword">Vector3</span> euler = transform.eulerAngles;
+transform.eulerAngles = <span class="keyword">new</span> <span class="type">Vector3</span>(<span class="number">0</span>, <span class="number">90</span>, <span class="number">0</span>);
+
+<span class="comment">// Scale</span>
+<span class="keyword">Vector3</span> scale = transform.localScale;
+
+<span class="comment">// Direction vectors</span>
+<span class="keyword">Vector3</span> forward = transform.forward;  <span class="comment">// Z axis</span>
+<span class="keyword">Vector3</span> right = transform.right;      <span class="comment">// X axis</span>
+<span class="keyword">Vector3</span> up = transform.up;            <span class="comment">// Y axis</span></pre>
+            </div>
+            
+            <div class="card">
+                <h3>Basic Movement Patterns</h3>
+                <pre class="csharp-code"><span class="comment">// Simple movement</span>
+transform.position += direction * speed * Time.deltaTime;
+
+<span class="comment">// Translate (relative space)</span>
+transform.<span class="method">Translate</span>(direction * speed * Time.deltaTime);
+transform.<span class="method">Translate</span>(Vector3.forward * speed, Space.World);
+
+<span class="comment">// Move towards target</span>
+transform.position = <span class="type">Vector3</span>.<span class="method">MoveTowards</span>(
+    transform.position,
+    target.position,
+    speed * Time.deltaTime
+);
+
+<span class="comment">// Smooth damp (like smooth follow)</span>
+<span class="keyword">private</span> <span class="keyword">Vector3</span> velocity;
+transform.position = <span class="type">Vector3</span>.<span class="method">SmoothDamp</span>(
+    transform.position,
+    target.position,
+    <span class="keyword">ref</span> velocity,
+    smoothTime
+);
+
+<span class="comment">// Lerp (linear interpolation)</span>
+transform.position = <span class="type">Vector3</span>.<span class="method">Lerp</span>(
+    startPos,
+    endPos,
+    t  <span class="comment">// 0-1 progress</span>
+);</pre>
+            </div>
+            
+            <div class="card">
+                <h3>Rotation Patterns</h3>
+                <pre class="csharp-code"><span class="comment">// Rotate around axis</span>
+transform.<span class="method">Rotate</span>(<span class="number">0</span>, rotationSpeed * Time.deltaTime, <span class="number">0</span>);
+
+<span class="comment">// Rotate around point</span>
+transform.<span class="method">RotateAround</span>(
+    centerPoint,
+    Vector3.up,
+    angle * Time.deltaTime
+);
+
+<span class="comment">// Look at target</span>
+transform.<span class="method">LookAt</span>(target);
+
+<span class="comment">// Smooth look at</span>
+<span class="type">Quaternion</span> targetRotation = 
+    <span class="type">Quaternion</span>.<span class="method">LookRotation</span>(target.position - transform.position);
+transform.rotation = <span class="type">Quaternion</span>.<span class="method">Slerp</span>(
+    transform.rotation,
+    targetRotation,
+    rotationSpeed * Time.deltaTime
+);
+
+<span class="comment">// Rotate to face movement direction</span>
+<span class="keyword">if</span> (movement != Vector3.zero) {
+    transform.forward = movement;
+}</pre>
+            </div>
+            
+            <div class="card">
+                <h3>DeltaTime Explained</h3>
+                <div class="formula-box">
+                    <div class="formula-title">Frame-Independent Movement</div>
+                    <pre>
+Frame Rate Independence Formula:
+┌─────────────────────────────────────────────┐
+│  movement = speed × Time.deltaTime          │
+│                                             │
+│  Why:                                       │
+│  - Time.deltaTime = time since last frame   │
+│  - Makes movement consistent across FPS     │
+│                                             │
+│  Example:                                   │
+│  60 FPS: deltaTime = 0.0167s               │
+│  30 FPS: deltaTime = 0.0333s               │
+│                                             │
+│  Both result in same units/second!          │
+└─────────────────────────────────────────────┘
+
+Time class properties:
+  Time.deltaTime    - Frame time
+  Time.fixedDeltaTime - Fixed physics step
+  Time.time         - Time since game start
+  Time.timeScale    - Scale time (pause/slow-mo)
+                    </pre>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-divider"></div>
+
+        <!-- Section 5: Physics System -->
+        <h2>⚙️ Physics System</h2>
+        
+        <div class="grid">
+            <div class="card">
+                <h3><span class="mode-badge mode-3d">3D</span> Rigidbody Settings</h3>
+                <table>
+                    <tr>
+                        <th>Property</th>
+                        <th>Description</th>
+                    </tr>
+                    <tr>
+                        <td>Mass</td>
+                        <td>Object weight (affects collisions)</td>
+                    </tr>
+                    <tr>
+                        <td>Drag</td>
+                        <td>Air resistance (0 = none)</td>
+                    </tr>
+                    <tr>
+                        <td>Angular Drag</td>
+                        <td>Rotational resistance</td>
+                    </tr>
+                    <tr>
+                        <td>Use Gravity</td>
+                        <td>Apply gravity force</td>
+                    </tr>
+                    <tr>
+                        <td>Is Kinematic</td>
+                        <td>Not affected by physics forces</td>
+                    </tr>
+                    <tr>
+                        <td>Interpolate</td>
+                        <td>Smooth visual movement</td>
+                    </tr>
+                </table>
+            </div>
+            
+            <div class="card">
+                <h3><span class="mode-badge mode-2d">2D</span> Rigidbody2D Settings</h3>
+                <table>
+                    <tr>
+                        <th>Property</th>
+                        <th>Description</th>
+                    </tr>
+                    <tr>
+                        <td>Body Type</td>
+                        <td>Dynamic, Kinematic, Static</td>
+                    </tr>
+                    <tr>
+                        <td>Mass</td>
+                        <td>Object mass</td>
+                    </tr>
+                    <tr>
+                        <td>Linear Drag</td>
+                        <td>Movement resistance</td>
+                    </tr>
+                    <tr>
+                        <td>Angular Drag</td>
+                        <td>Rotation resistance</td>
+                    </tr>
+                    <tr>
+                        <td>Gravity Scale</td>
+                        <td>Gravity multiplier</td>
+                    </tr>
+                    <tr>
+                        <td>Constraints</td>
+                        <td>Freeze position/rotation</td>
+                    </tr>
+                </table>
+            </div>
+            
+            <div class="card">
+                <h3>Physics Movement (3D)</h3>
+                <pre class="csharp-code"><span class="keyword">public class</span> <span class="type">PlayerMovement</span> : MonoBehaviour {
+    [<span class="type">SerializeField</span>] <span class="keyword">private</span> <span class="keyword">float</span> moveSpeed = <span class="number">5f</span>;
+    <span class="keyword">private</span> <span class="type">Rigidbody</span> rb;
+    
+    <span class="keyword">void</span> <span class="method">Awake</span>() {
+        rb = <span class="method">GetComponent</span>&lt;Rigidbody&gt;();
+    }
+    
+    <span class="keyword">void</span> <span class="method">FixedUpdate</span>() {
+        <span class="keyword">float</span> h = Input.<span class="method">GetAxis</span>(<span class="string">"Horizontal"</span>);
+        <span class="keyword">float</span> v = Input.<span class="method">GetAxis</span>(<span class="string">"Vertical"</span>);
+        
+        <span class="keyword">Vector3</span> movement = <span class="keyword">new</span> <span class="type">Vector3</span>(h, <span class="number">0</span>, v);
+        
+        <span class="comment">// Velocity-based movement</span>
+        rb.linearVelocity = movement * moveSpeed;
+        
+        <span class="comment">// Or add force</span>
+        rb.<span class="method">AddForce</span>(movement * moveSpeed, ForceMode.VelocityChange);
+    }
+}</pre>
+            </div>
+            
+            <div class="card">
+                <h3>Physics Movement (2D)</h3>
+                <pre class="csharp-code"><span class="keyword">public class</span> <span class="type">PlayerMovement2D</span> : MonoBehaviour {
+    [<span class="type">SerializeField</span>] <span class="keyword">private</span> <span class="keyword">float</span> moveSpeed = <span class="number">5f</span>;
+    [<span class="type">SerializeField</span>] <span class="keyword">private</span> <span class="keyword">float</span> jumpForce = <span class="number">10f</span>;
+    <span class="keyword">private</span> <span class="type">Rigidbody2D</span> rb;
+    
+    <span class="keyword">void</span> <span class="method">Awake</span>() {
+        rb = <span class="method">GetComponent</span>&lt;Rigidbody2D&gt;();
+    }
+    
+    <span class="keyword">void</span> <span class="method">FixedUpdate</span>() {
+        <span class="keyword">float</span> h = Input.<span class="method">GetAxis</span>(<span class="string">"Horizontal"</span>);
+        
+        <span class="comment">// Preserve Y velocity for gravity</span>
+        rb.linearVelocity = <span class="keyword">new</span> <span class="type">Vector2</span>(
+            h * moveSpeed, 
+            rb.linearVelocity.y
+        );
+    }
+    
+    <span class="keyword">public void</span> <span class="method">Jump</span>() {
+        rb.linearVelocity = <span class="keyword">new</span> <span class="type">Vector2</span>(rb.linearVelocity.x, <span class="number">0</span>);
+        rb.<span class="method">AddForce</span>(Vector2.up * jumpForce, ForceMode2D.Impulse);
+    }
+}</pre>
+            </div>
+        </div>
+
+        <h3>Collider Types</h3>
+        <div class="grid">
+            <div class="card">
+                <h4>3D Colliders</h4>
+                <table>
+                    <tr>
+                        <th>Collider</th>
+                        <th>Use Case</th>
+                    </tr>
+                    <tr>
+                        <td>Box Collider</td>
+                        <td>Boxes, crates, walls</td>
+                    </tr>
+                    <tr>
+                        <td>Sphere Collider</td>
+                        <td>Balls, round objects</td>
+                    </tr>
+                    <tr>
+                        <td>Capsule Collider</td>
+                        <td>Characters, pillars</td>
+                    </tr>
+                    <tr>
+                        <td>Mesh Collider</td>
+                        <td>Complex shapes (convex/concave)</td>
+                    </tr>
+                    <tr>
+                        <td>Terrain Collider</td>
+                        <td>Large landscapes</td>
+                    </tr>
+                    <tr>
+                        <td>Wheel Collider</td>
+                        <td>Vehicles</td>
+                    </tr>
+                </table>
+            </div>
+            
+            <div class="card">
+                <h4>2D Colliders</h4>
+                <table>
+                    <tr>
+                        <th>Collider</th>
+                        <th>Use Case</th>
+                    </tr>
+                    <tr>
+                        <td>Box Collider 2D</td>
+                        <td>Rectangles, platforms</td>
+                    </tr>
+                    <tr>
+                        <td>Circle Collider 2D</td>
+                        <td>Round objects, wheels</td>
+                    </tr>
+                    <tr>
+                        <td>Capsule Collider 2D</td>
+                        <td>Characters</td>
+                    </tr>
+                    <tr>
+                        <td>Polygon Collider 2D</td>
+                        <td>Custom shapes</td>
+                    </tr>
+                    <tr>
+                        <td>Edge Collider 2D</td>
+                        <td>Ground, boundaries</td>
+                    </tr>
+                    <tr>
+                        <td>Tilemap Collider 2D</td>
+                        <td>Tile-based levels</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <div class="formula-box">
+            <div class="formula-title">Collision vs Trigger</div>
+            <pre>
+┌─────────────────────────────────────────────────────────────────┐
+│                    COLLIDER MODES                                │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                 │
+│  COLLISION (Collider)          TRIGGER (Is Trigger = true)     │
+│  ─────────────────             ───────────────────────────     │
+│  • Physical collision          • No physical interaction       │
+│  • Objects block each other    • Objects pass through          │
+│  • Uses OnCollision methods    • Uses OnTrigger methods        │
+│                                                                 │
+│  OnCollisionEnter()            OnTriggerEnter()                 │
+│  OnCollisionStay()             OnTriggerStay()                  │
+│  OnCollisionExit()             OnTriggerExit()                  │
+│                                                                 │
+│  USE CASES:                                                     │
+│  Collision: Walls, floors, obstacles, pushable objects         │
+│  Trigger: Pickups, checkpoints, area detection, cutscenes      │
+│                                                                 │
+│  REQUIREMENTS FOR COLLISION:                                    │
+│  1. Both objects have colliders                                 │
+│  2. At least one has Rigidbody                                  │
+│  3. Neither is a trigger                                        │
+│                                                                 │
+│  REQUIREMENTS FOR TRIGGER:                                      │
+│  1. At least one collider has "Is Trigger" = true              │
+│  2. At least one has Rigidbody                                  │
+└─────────────────────────────────────────────────────────────────┘
+            </pre>
+        </div>
+
+        <div class="section-divider"></div>
+
+        <!-- Section 6: Input System -->
+        <h2>🎮 Input System</h2>
+        
+        <div class="grid">
+            <div class="card">
+                <h3>Legacy Input Manager</h3>
+                <pre class="csharp-code"><span class="comment">// Axis input (-1 to 1)</span>
+<span class="keyword">float</span> horizontal = Input.<span class="method">GetAxis</span>(<span class="string">"Horizontal"</span>);  <span class="comment">// Smooth</span>
+<span class="keyword">float</span> vertical = Input.<span class="method">GetAxisRaw</span>(<span class="string">"Vertical"</span>);   <span class="comment">// Instant</span>
+
+<span class="comment">// Button input</span>
+<span class="keyword">bool</span> isJumping = Input.<span class="method">GetButtonDown</span>(<span class="string">"Jump"</span>);     <span class="comment">// This frame</span>
+<span class="keyword">bool</span> isHolding = Input.<span class="method">GetButton</span>(<span class="string">"Jump"</span>);        <span class="comment">// Held down</span>
+<span class="keyword">bool</span> released = Input.<span class="method">GetButtonUp</span>(<span class="string">"Jump"</span>);       <span class="comment">// Released</span>
+
+<span class="comment">// Mouse input</span>
+<span class="keyword">bool</span> leftClick = Input.<span class="method">GetMouseButtonDown</span>(<span class="number">0</span>);
+<span class="keyword">bool</span> rightClick = Input.<span class="method">GetMouseButtonDown</span>(<span class="number">1</span>);
+<span class="type">Vector3</span> mousePos = Input.mousePosition;
+
+<span class="comment">// Keyboard keys</span>
+<span class="keyword">bool</span> spacePressed = Input.<span class="method">GetKeyDown</span>(KeyCode.Space);
+<span class="keyword">bool</span> wHeld = Input.<span class="method">GetKey</span>(KeyCode.W);
+<span class="keyword">bool</span> wReleased = Input.<span class="method">GetKeyUp</span>(KeyCode.W);
+
+<span class="comment">// Touch input (mobile)</span>
+<span class="keyword">if</span> (Input.touchCount > <span class="number">0</span>) {
+    Touch touch = Input.<span class="method">GetTouch</span>(<span class="number">0</span>);
+    <span class="keyword">if</span> (touch.phase == TouchPhase.Began) { }
+}</pre>
+            </div>
+            
+            <div class="card">
+                <h3>New Input System</h3>
+                <pre class="csharp-code"><span class="keyword">using</span> UnityEngine.InputSystem;
+
+<span class="keyword">public class</span> <span class="type">PlayerInput</span> : MonoBehaviour {
+    <span class="keyword">private</span> PlayerControls controls;
+    
+    <span class="keyword">void</span> <span class="method">Awake</span>() {
+        controls = <span class="keyword">new</span> <span class="type">PlayerControls</span>();
+    }
+    
+    <span class="keyword">void</span> <span class="method">OnEnable</span>() => controls.<span class="method">Enable</span>();
+    <span class="keyword">void</span> <span class="method">OnDisable</span>() => controls.<span class="method">Disable</span>();
+    
+    <span class="keyword">void</span> <span class="method">Update</span>() {
+        <span class="comment">// Read vector2 from input action</span>
+        <span class="type">Vector2</span> move = controls.Player.Move.<span class="method">ReadValue</span>&lt;Vector2&gt;();
+        
+        <span class="comment">// Button press</span>
+        <span class="keyword">if</span> (controls.Player.Jump.<span class="method">WasPressedThisFrame</span>()) {
+            <span class="method">Jump</span>();
+        }
+    }
+    
+    <span class="comment">// Or use callback pattern</span>
+    <span class="keyword">private void</span> <span class="method">OnMove</span>(InputValue value) {
+        <span class="type">Vector2</span> input = value.<span class="method">Get</span>&lt;Vector2&gt;();
+    }
+}</pre>
+            </div>
+            
+            <div class="card">
+                <h3>Mouse & Touch Utilities</h3>
+                <pre class="csharp-code"><span class="comment">// Get world position from screen point</span>
+<span class="type">Vector3</span> worldPos = Camera.main.<span class="method">ScreenToWorldPoint</span>(
+    <span class="keyword">new</span> <span class="type">Vector3</span>(mousePos.x, mousePos.y, cameraDistance)
+);
+
+<span class="comment">// Raycast from mouse position</span>
+<span class="type">Ray</span> ray = Camera.main.<span class="method">ScreenPointToRay</span>(Input.mousePosition);
+<span class="keyword">if</span> (Physics.<span class="method">Raycast</span>(ray, <span class="keyword">out</span> RaycastHit hit)) {
+    GameObject clickedObject = hit.collider.gameObject;
+    <span class="type">Vector3</span> hitPoint = hit.point;
+}
+
+<span class="comment">// 2D Raycast from mouse</span>
+<span class="type">Vector3</span> worldPos = Camera.main.<span class="method">ScreenToWorldPoint</span>(Input.mousePosition);
+<span class="type">RaycastHit2D</span> hit = Physics2D.<span class="method">Raycast</span>(
+    worldPos, 
+    Vector2.zero
+);
+<span class="keyword">if</span> (hit.collider != <span class="keyword">null</span>) {
+    <span class="comment">// Clicked on something</span>
+}</pre>
+            </div>
+            
+            <div class="card">
+                <h3>Input Buffer Pattern</h3>
+                <pre class="csharp-code"><span class="keyword">public class</span> <span class="type">InputBuffer</span> : MonoBehaviour {
+    <span class="keyword">private</span> <span class="keyword">float</span> bufferTime = <span class="number">0.2f</span>;
+    <span class="keyword">private</span> <span class="keyword">float</span> jumpBufferCounter;
+    
+    <span class="keyword">void</span> <span class="method">Update</span>() {
+        <span class="comment">// Buffer jump input</span>
+        <span class="keyword">if</span> (Input.<span class="method">GetButtonDown</span>(<span class="string">"Jump"</span>)) {
+            jumpBufferCounter = bufferTime;
+        } <span class="keyword">else</span> {
+            jumpBufferCounter -= Time.deltaTime;
+        }
+        
+        <span class="comment">// Execute if grounded and buffer active</span>
+        <span class="keyword">if</span> (isGrounded && jumpBufferCounter > <span class="number">0</span>) {
+            <span class="method">Jump</span>();
+            jumpBufferCounter = <span class="number">0</span>;
+        }
+    }
+}
+
+<span class="comment">// Coyote Time (grace period after leaving ground)</span>
+<span class="keyword">private</span> <span class="keyword">float</span> coyoteTime = <span class="number">0.1f</span>;
+<span class="keyword">private</span> <span class="keyword">float</span> coyoteCounter;
+
+<span class="keyword">void</span> <span class="method">Update</span>() {
+    <span class="keyword">if</span> (isGrounded) {
+        coyoteCounter = coyoteTime;
+    } <span class="keyword">else</span> {
+        coyoteCounter -= Time.deltaTime;
+    }
+    
+    <span class="keyword">if</span> (Input.<span class="method">GetButtonDown</span>(<span class="string">"Jump"</span>) && coyoteCounter > <span class="number">0</span>) {
+        <span class="method">Jump</span>();
+    }
+}</pre>
+            </div>
+        </div>
+
+        <div class="section-divider"></div>
+
+        <!-- Section 7: Animation System -->
+        <h2>🎬 Animation System</h2>
+        
+        <div class="grid">
+            <div class="card">
+                <h3>Animator Controller Basics</h3>
+                <div class="shortcut-box">
+                    <div class="shortcut"><span>Open Animator</span><span class="key">Ctrl + 6</span></div>
+                    <div class="shortcut"><span>Add Parameter</span><span class="key">+ in Parameters tab</span></div>
+                    <div class="shortcut"><span>Make Transition</span><span class="key">Right-click → Make Transition</span></div>
+                    <div class="shortcut"><span>Set as Default</span><span class="key">Right-click state</span></div>
+                </div>
+                <table>
+                    <tr>
+                        <th>Parameter Type</th>
+                        <th>Use Case</th>
+                    </tr>
+                    <tr>
+                        <td>Float</td>
+                        <td>Speed, direction values</td>
+                    </tr>
+                    <tr>
+                        <td>Int</td>
+                        <td>State numbers, combo count</td>
+                    </tr>
+                    <tr>
+                        <td>Bool</td>
+                        <td>IsGrounded, isAttacking</td>
+                    </tr>
+                    <tr>
+                        <td>Trigger</td>
+                        <td>One-time events (jump, attack)</td>
+                    </tr>
+                </table>
+            </div>
+            
+            <div class="card">
+                <h3>Scripting Animator</h3>
+                <pre class="csharp-code"><span class="keyword">public class</span> <span class="type">PlayerAnimation</span> : MonoBehaviour {
+    <span class="keyword">private</span> <span class="type">Animator</span> animator;
+    
+    <span class="keyword">void</span> <span class="method">Awake</span>() {
+        animator = <span class="method">GetComponent</span>&lt;Animator&gt;();
+    }
+    
+    <span class="keyword">void</span> <span class="method">Update</span>() {
+        <span class="comment">// Set parameters</span>
+        animator.<span class="method">SetFloat</span>(<span class="string">"Speed"</span>, moveSpeed);
+        animator.<span class="method">SetBool</span>(<span class="string">"IsGrounded"</span>, isGrounded);
+        animator.<span class="method">SetInteger</span>(<span class="string">"AttackType"</span>, attackType);
+        animator.<span class="method">SetTrigger</span>(<span class="string">"Jump"</span>);
+        
+        <span class="comment">// Get current state info</span>
+        <span class="type">AnimatorStateInfo</span> state = animator.GetCurrentAnimatorStateInfo(<span class="number">0</span>);
+        
+        <span class="keyword">if</span> (state.IsName(<span class="string">"Attack"</span>)) {
+            <span class="comment">// Currently in attack animation</span>
+        }
+        
+        <span class="comment">// Check if animation finished</span>
+        <span class="keyword">if</span> (state.normalizedTime >= <span class="number">1.0f</span>) {
+            <span class="comment">// Animation complete</span>
+        }
+    }
+}</pre>
+            </div>
+            
+            <div class="card">
+                <h3>Animation Events</h3>
+                <pre class="csharp-code"><span class="comment">// In Animation window:</span>
+<span class="comment">// 1. Select animation clip</span>
+<span class="comment">// 2. Add Event at specific frame</span>
+<span class="comment">// 3. Select function to call</span>
+
+<span class="comment">// Functions must be on a script on same GameObject</span>
+<span class="keyword">public void</span> <span class="method">OnAttackHit</span>() {
+    <span class="comment">// Called at specific animation frame</span>
+    <span class="comment">// Deal damage, play sound, spawn effect</span>
+}
+
+<span class="keyword">public void</span> <span class="method">OnFootstep</span>() {
+    <span class="comment">// Play footstep sound</span>
+}
+
+<span class="keyword">public void</span> <span class="method">OnAnimationEnd</span>() {
+    <span class="comment">// Animation completed callback</span>
+    animator.<span class="method">SetTrigger</span>(<span class="string">"NextAnimation"</span>);
+}</pre>
+            </div>
+            
+            <div class="card">
+                <h3>Animation Blending</h3>
+                <pre class="csharp-code"><span class="comment">// Blend Tree for movement directions</span>
+<span class="comment">// Create in Animator: Right-click → Create Blend Tree</span>
+
+<span class="comment">// Set blend parameter</span>
+animator.<span class="method">SetFloat</span>(<span class="string">"MoveX"</span>, Input.GetAxis(<span class="string">"Horizontal"</span>));
+animator.<span class="method">SetFloat</span>(<span class="string">"MoveY"</span>, Input.GetAxis(<span class="string">"Vertical"</span>));
+
+<span class="comment">// Blend tree setup:</span>
+<span class="comment">// - Idle (0, 0)</span>
+<span class="comment">// - Walk Forward (0, 0.5)</span>
+<span class="comment">// - Walk Back (0, -0.5)</span>
+<span class="comment">// - Walk Left (-0.5, 0)</span>
+<span class="comment">// - Walk Right (0.5, 0)</span>
+
+<span class="comment">// Crossfade to state</span>
+animator.<span class="method">CrossFade</span>(<span class="string">"Attack"</span>, <span class="number">0.1f</span>); <span class="comment">// 0.1s blend</span>
+
+<span class="comment">// Play animation directly (no controller)</span>
+animator.<span class="method">Play</span>(<span class="string">"AnimationName"</span>);</pre>
+            </div>
+        </div>
+
+        <div class="ascii-diagram">
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                    ANIMATOR STATE MACHINE                                    │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│     ┌─────────────┐                                                         │
+│     │    IDLE     │◄──────────────────────────────┐                         │
+│     │  (Default)  │                               │                         │
+│     └──────┬──────┘                               │                         │
+│            │                                      │                         │
+│     Speed > 0.1                                   │                         │
+│            │                                      │                         │
+│            ▼                                      │                         │
+│     ┌─────────────┐                               │                         │
+│     │    WALK     │                               │                         │
+│     │             │                               │                         │
+│     └──────┬──────┘                               │                         │
+│            │                                      │                         │
+│     Speed > 0.5 && Sprint                        │                         │
+│            │                                      │                         │
+│            ▼                                      │                         │
+│     ┌─────────────┐      Trigger: Jump           │                         │
+│     │    RUN      │──────────────────────────────┼──┐                      │
+│     │             │                              │  │                      │
+│     └─────────────┘                              │  │                      │
+│            │                                     │  │                      │
+│     Any State ───────────────────────────────────┘  │                      │
+│            │                                        ▼                      │
+│            │                                 ┌─────────────┐              │
+│            │                                 │    JUMP     │              │
+│            │                                 │  (One-shot) │              │
+│            │                                 └──────┬──────┘              │
+│            │                                        │                      │
+│            │                               OnJumpComplete                   │
+│            │                                        │                      │
+│            └────────────────────────────────────────┘                      │
+│                                                                             │
+│  TRANSITION CONDITIONS:                                                     │
+│  - Parameters: Speed (float), IsGrounded (bool), Jump (trigger)            │
+│  - Can have multiple conditions (AND logic)                                │
+│  - Can set duration, interruption source                                   │
+│  - Exit Time: Wait for animation to finish before transition               │
+└─────────────────────────────────────────────────────────────────────────────┘
+        </div>
+
+        <div class="section-divider"></div>
+
+        <!-- Section 8: Prefabs & Instantiation -->
+        <h2>📦 Prefabs & Instantiation</h2>
+        
+        <div class="grid">
+            <div class="card">
+                <h3>Prefab Operations</h3>
+                <div class="shortcut-box">
+                    <div class="shortcut"><span>Create Prefab</span><span class="key">Drag to Project</span></div>
+                    <div class="shortcut"><span>Unpack Prefab</span><span class="key">Right-click → Unpack</span></div>
+                    <div class="shortcut"><span>Apply Changes</span><span class="key">Overrides → Apply All</span></div>
+                    <div class="shortcut"><span>Revert Changes</span><span class="key">Overrides → Revert All</span></div>
+                    <div class="shortcut"><span>Edit Prefab</span><span class="key">Double-click prefab</span></div>
+                    <div class="shortcut"><span>Nest Prefab</span><span class="key">Drag prefab into another</span></div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h3>Instantiating Objects</h3>
+                <pre class="csharp-code"><span class="keyword">public class</span> <span class="type">Spawner</span> : MonoBehaviour {
+    [<span class="type">SerializeField</span>] <span class="keyword">private</span> GameObject prefab;
+    [<span class="type">SerializeField</span>] <span class="keyword">private</span> Transform spawnPoint;
+    
+    <span class="keyword">public void</span> <span class="method">Spawn</span>() {
+        <span class="comment">// Basic instantiation</span>
+        GameObject obj = <span class="method">Instantiate</span>(prefab);
+        
+        <span class="comment">// With position and rotation</span>
+        GameObject obj = <span class="method">Instantiate</span>(
+            prefab,
+            spawnPoint.position,
+            spawnPoint.rotation
+        );
+        
+        <span class="comment">// As child of transform</span>
+        GameObject obj = <span class="method">Instantiate</span>(
+            prefab,
+            spawnPoint.position,
+            Quaternion.identity,
+            parentTransform
+        );
+        
+        <span class="comment">// Get component from instantiated object</span>
+        Enemy enemy = <span class="method">Instantiate</span>(prefab).<span class="method">GetComponent</span>&lt;Enemy&gt;();
+    }
+}</pre>
+            </div>
+            
+            <div class="card">
+                <h3>Object Pooling</h3>
+                <pre class="csharp-code"><span class="keyword">public class</span> <span class="type">ObjectPool</span> : MonoBehaviour {
+    [<span class="type">SerializeField</span>] <span class="keyword">private</span> GameObject prefab;
+    [<span class="type">SerializeField</span>] <span class="keyword">private</span> <span class="keyword">int</span> poolSize = <span class="number">10</span>;
+    
+    <span class="keyword">private</span> Queue&lt;GameObject&gt; pool = <span class="keyword">new</span> Queue&lt;GameObject&gt;();
+    
+    <span class="keyword">void</span> <span class="method">Awake</span>() {
+        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i < poolSize; i++) {
+            GameObject obj = <span class="method">Instantiate</span>(prefab);
+            obj.<span class="method">SetActive</span>(<span class="keyword">false</span>);
+            pool.<span class="method">Enqueue</span>(obj);
+        }
+    }
+    
+    <span class="keyword">public</span> GameObject <span class="method">Get</span>() {
+        <span class="keyword">if</span> (pool.Count == <span class="number">0</span>) {
+            GameObject obj = <span class="method">Instantiate</span>(prefab);
+            pool.<span class="method">Enqueue</span>(obj);
+        }
+        
+        GameObject obj = pool.<span class="method">Dequeue</span>();
+        obj.<span class="method">SetActive</span>(<span class="keyword">true</span>);
+        <span class="keyword">return</span> obj;
+    }
+    
+    <span class="keyword">public void</span> <span class="method">Return</span>(GameObject obj) {
+        obj.<span class="method">SetActive</span>(<span class="keyword">false</span>);
+        pool.<span class="method">Enqueue</span>(obj);
+    }
+}</pre>
+            </div>
+            
+            <div class="card">
+                <h3>Prefab Variants</h3>
+                <div class="tip-box">
+                    <strong>Prefab Variants:</strong>
+                    <ul>
+                        <li>Right-click prefab → Create → Prefab Variant</li>
+                        <li>Inherits from base prefab</li>
+                        <li>Changes to base propagate to variants</li>
+                        <li>Use for: Enemy types, weapon variants, etc.</li>
+                    </ul>
+                </div>
+                <div class="formula-box">
+                    <div class="formula-title">Nested Prefab Structure</div>
+                    <pre>
+Base Enemy Prefab
+├── Model (shared mesh)
+├── Collider (shared physics)
+└── Scripts (shared logic)
+
+Enemy Variant A (inherits base)
+├── Different material
+└── Different stats in script
+
+Enemy Variant B (inherits base)
+├── Different weapon prefab
+└── Additional abilities
+                    </pre>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-divider"></div>
+
+        <!-- Section 9: UI System -->
+        <h2>🖼️ UI System (UGUI)</h2>
+        
+        <div class="grid">
+            <div class="card">
+                <h3>UI Components</h3>
+                <table>
+                    <tr>
+                        <th>Component</th>
+                        <th>Purpose</th>
+                    </tr>
+                    <tr>
+                        <td>Canvas</td>
+                        <td>Root container for UI</td>
+                    </tr>
+                    <tr>
+                        <td>Text (TextMeshPro)</td>
+                        <td>Display text</td>
+                    </tr>
+                    <tr>
+                        <td>Image</td>
+                        <td>Display sprites</td>
+                    </tr>
+                    <tr>
+                        <td>Button</td>
+                        <td>Clickable button</td>
+                    </tr>
+                    <tr>
+                        <td>Toggle</td>
+                        <td>Checkbox on/off</td>
+                    </tr>
+                    <tr>
+                        <td>Slider</td>
+                        <td>Adjustable value bar</td>
+                    </tr>
+                    <tr>
+                        <td>Scroll View</td>
+                        <td>Scrollable content</td>
+                    </tr>
+                    <tr>
+                        <td>Input Field</td>
+                        <td>Text input</td>
+                    </tr>
+                </table>
+            </div>
+            
+            <div class="card">
+                <h3>Canvas Settings</h3>
+                <div class="formula-box">
+                    <div class="formula-title">Render Modes</div>
+                    <pre>
+SCREEN SPACE - OVERLAY
+├── UI drawn on top of everything
+├── Scales with screen size
+└── Best for: HUD, menus
+
+SCREEN SPACE - CAMERA
+├── UI positioned relative to camera
+├── Affected by camera settings
+└── Best for: World-space effects
+
+WORLD SPACE
+├── UI exists in 3D world
+├── Can be occluded by objects
+└── Best for: In-game displays, signs
+
+CANVAS SCALER:
+- Constant Pixel Size: Fixed size
+- Scale With Screen Size: Responsive
+- Constant Physical Size: DPI-based
+                    </pre>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h3>UI Scripting</h3>
+                <pre class="csharp-code"><span class="keyword">using</span> UnityEngine.UI;
+<span class="keyword">using</span> TMPro;
+
+<span class="keyword">public class</span> <span class="type"> UIManager</span> : MonoBehaviour {
+    [<span class="type">SerializeField</span>] <span class="keyword">private</span> <span class="type">Button</span> startButton;
+    [<span class="type">SerializeField</span>] <span class="keyword">private</span> <span class="type">Slider</span> healthSlider;
+    [<span class="type">SerializeField</span>] <span class="keyword">private</span> <span class="type">TMP_Text</span> scoreText;
+    [<span class="type">SerializeField</span>] <span class="keyword">private</span> <span class="type">GameObject</span> pauseMenu;
+    
+    <span class="keyword">void</span> <span class="method">Start</span>() {
+        <span class="comment">// Button click event</span>
+        startButton.<span class="method">onClick</span>.<span class="method">AddListener</span>(OnStartClick);
+    }
+    
+    <span class="keyword">public void</span> <span class="method">UpdateHealth</span>(<span class="keyword">float</span> health) {
+        healthSlider.value = health;
+    }
+    
+    <span class="keyword">public void</span> <span class="method">UpdateScore</span>(<span class="keyword">int</span> score) {
+        scoreText.text = <span class="string">$"Score: {score}"</span>;
+    }
+    
+    <span class="keyword">public void</span> <span class="method">TogglePause</span>(<span class="keyword">bool</span> isPaused) {
+        pauseMenu.<span class="method">SetActive</span>(isPaused);
+        Time.timeScale = isPaused ? <span class="number">0</span> : <span class="number">1</span>;
+    }
+    
+    <span class="keyword">private void</span> <span class="method">OnStartClick</span>() {
+        <span class="comment">// Start game</span>
+    }
+}</pre>
+            </div>
+            
+            <div class="card">
+                <h3>Layout Groups</h3>
+                <pre class="csharp-code"><span class="comment">// Layout components for automatic positioning</span>
+
+<span class="comment">// Horizontal Layout Group</span>
+<span class="comment">// Arranges children in a row</span>
+
+<span class="comment">// Vertical Layout Group</span>
+<span class="comment">// Arranges children in a column</span>
+
+<span class="comment">// Grid Layout Group</span>
+<span class="comment">// Arranges children in a grid</span>
+
+<span class="comment">// Layout Element</span>
+<span class="comment">// Override minimum/preferred size</span>
+
+<span class="comment">// Content Size Fitter</span>
+<span class="comment">// Resize to fit content</span>
+
+<span class="comment">// Example: Dynamic inventory</span>
+<span class="keyword">public void</span> <span class="method">AddItem</span>(Sprite icon) {
+    GameObject item = <span class="method">Instantiate</span>(itemPrefab);
+    item.transform.<span class="method">SetParent</span>(gridContainer);
+    item.<span class="method">GetComponent</span>&lt;Image&gt;().sprite = icon;
+    <span class="comment">// Grid Layout Group handles positioning</span>
+}</pre>
+            </div>
+        </div>
+
+        <div class="ascii-diagram">
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                    UI HIERARCHY EXAMPLE                                      │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│  Canvas (Screen Space - Overlay)                                            │
+│  ├── EventSystem                                                            │
+│  │                                                                          │
+│  ├── ┌─────────────────────────────────────────────────────────────┐       │
+│  │   │ HUD (Panel)                                                 │       │
+│  │   ├── Health Bar (Slider)                                       │       │
+│  │   ├── Score Text (TMP)                                          │       │
+│  │   └── Ammo Counter (TMP)                                        │       │
+│  │   └─────────────────────────────────────────────────────────────┘       │
+│  │                                                                          │
+│  ├── ┌─────────────────────────────────────────────────────────────┐       │
+│  │   │ Pause Menu (Panel - initially inactive)                     │       │
+│  │   ├── Title Text                                                │       │
+│  │   ├── Vertical Layout Group                                     │       │
+│  │   │   ├── Resume Button                                         │       │
+│  │   │   ├── Settings Button                                       │       │
+│  │   │   └── Quit Button                                           │       │
+│  │   └─────────────────────────────────────────────────────────────┘       │
+│  │                                                                          │
+│  └── ┌─────────────────────────────────────────────────────────────┐       │
+│      │ Inventory (Panel)                                          │       │
+│      ├── Grid Layout Group (6x4 slots)                            │       │
+│      │   ├── Slot 1                                               │       │
+│      │   ├── Slot 2                                               │       │
+│      │   └── ...                                                   │       │
+│      └─────────────────────────────────────────────────────────────┘       │
+│                                                                             │
+│  RECT TRANSFORM ANCHORS:                                                    │
+│  ┌──────────────────┬──────────────────┬──────────────────┐                │
+│  │ Top-Left         │ Top-Stretch      │ Top-Right        │                │
+│  │ (0,1)            │ (0.5,1)          │ (1,1)            │                │
+│  ├──────────────────┼──────────────────┼──────────────────┤                │
+│  │ Left-Stretch     │ Center           │ Right-Stretch    │                │
+│  │ (0,0.5)          │ (0.5,0.5)        │ (1,0.5)          │                │
+│  ├──────────────────┼──────────────────┼──────────────────┤                │
+│  │ Bottom-Left      │ Bottom-Stretch   │ Bottom-Right     │                │
+│  │ (0,0)            │ (0.5,0)          │ (1,0)            │                │
+│  └──────────────────┴──────────────────┴──────────────────┘                │
+└─────────────────────────────────────────────────────────────────────────────┘
+        </div>
+
+        <div class="section-divider"></div>
+
+        <!-- Section 10: Coroutines & Async -->
+        <h2>⏱️ Coroutines & Async</h2>
+        
+        <div class="grid">
+            <div class="card">
+                <h3>Coroutine Basics</h3>
+                <pre class="csharp-code"><span class="keyword">using</span> System.Collections;
+
+<span class="keyword">public class</span> <span class="type">CoroutineExample</span> : MonoBehaviour {
+    <span class="keyword">void</span> <span class="method">Start</span>() {
+        <span class="method">StartCoroutine</span>(<span class="method">MyCoroutine</span>());
+    }
+    
+    <span class="type">IEnumerator</span> <span class="method">MyCoroutine</span>() {
+        Debug.Log(<span class="string">"Start"</span>);
+        <span class="keyword">yield return new</span> <span class="type">WaitForSeconds</span>(<span class="number">2f</span>);
+        Debug.Log(<span class="string">"After 2 seconds"</span>);
+        <span class="keyword">yield return null</span>; <span class="comment">// Wait one frame</span>
+        Debug.Log(<span class="string">"Next frame"</span>);
+    }
+    
+    <span class="comment">// Stop coroutine</span>
+    <span class="keyword">void</span> <span class="method">Stop</span>() {
+        <span class="method">StopAllCoroutines</span>();
+        <span class="comment">// Or stop specific</span>
+        <span class="method">StopCoroutine</span>(<span class="method">MyCoroutine</span>());
+    }
+}</pre>
+            </div>
+            
+            <div class="card">
+                <h3>Yield Instructions</h3>
+                <pre class="csharp-code"><span class="comment">// Wait one frame</span>
+<span class="keyword">yield return null</span>;
+
+<span class="comment">// Wait for seconds</span>
+<span class="keyword">yield return new</span> <span class="type">WaitForSeconds</span>(<span class="number">1.5f</span>);
+
+<span class="comment">// Wait for seconds (unscaled time)</span>
+<span class="keyword">yield return new</span> <span class="type">WaitForSecondsRealtime</span>(<span class="number">1f</span>);
+
+<span class="comment">// Wait until condition is true</span>
+<span class="keyword">yield return new</span> <span class="type">WaitUntil</span>(() => isReady);
+
+<span class="comment">// Wait while condition is true</span>
+<span class="keyword">yield return new</span> <span class="type">WaitWhile</span>(() => isPlaying);
+
+<span class="comment">// Wait for end of frame</span>
+<span class="keyword">yield return new</span> <span class="type">WaitForEndOfFrame</span>();
+
+<span class="comment">// Wait for fixed update</span>
+<span class="keyword">yield return new</span> <span class="type">WaitForFixedUpdate</span>();
+
+<span class="comment">// Start another coroutine</span>
+<span class="keyword">yield return</span> <span class="method">StartCoroutine</span>(OtherCoroutine());
+
+<span class="comment">// Async operation (scene loading)</span>
+<span class="keyword">yield return</span> SceneManager.<span class="method">LoadSceneAsync</span>(<span class="string">"Level2"</span>);</pre>
+            </div>
+            
+            <div class="card">
+                <h3>Common Coroutine Patterns</h3>
+                <pre class="csharp-code"><span class="comment">// Fade effect</span>
+<span class="type">IEnumerator</span> <span class="method">Fade</span>(Image image, <span class="keyword">float</span> duration) {
+    <span class="keyword">float</span> elapsed = <span class="number">0f</span>;
+    Color start = image.color;
+    Color end = <span class="keyword">new</span> Color(start.r, start.g, start.b, <span class="number">0f</span>);
+    
+    <span class="keyword">while</span> (elapsed < duration) {
+        elapsed += Time.deltaTime;
+        image.color = Color.<span class="method">Lerp</span>(start, end, elapsed / duration);
+        <span class="keyword">yield return null</span>;
+    }
+}
+
+<span class="comment">// Spawn waves</span>
+<span class="type">IEnumerator</span> <span class="method">SpawnWaves</span>() {
+    <span class="keyword">foreach</span> (Wave wave <span class="keyword">in</span> waves) {
+        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i < wave.count; i++) {
+            <span class="method">SpawnEnemy</span>(wave.enemyPrefab);
+            <span class="keyword">yield return new</span> <span class="type">WaitForSeconds</span>(wave.spawnDelay);
+        }
+        <span class="keyword">yield return new</span> <span class="type">WaitForSeconds</span>(wave.waitAfter);
+    }
+}
+
+<span class="comment">// Countdown timer</span>
+<span class="type">IEnumerator</span> <span class="method">Countdown</span>(<span class="keyword">int</span> seconds) {
+    <span class="keyword">while</span> (seconds > <span class="number">0</span>) {
+        Debug.Log(seconds);
+        <span class="keyword">yield return new</span> <span class="type">WaitForSeconds</span>(<span class="number">1f</span>);
+        seconds--;
+    }
+    Debug.Log(<span class="string">"Done!"</span>);
+}</pre>
+            </div>
+            
+            <div class="card">
+                <h3>Async/Await (Unity 2023+)</h3>
+                <pre class="csharp-code"><span class="keyword">using</span> System.Threading.Tasks;
+<span class="keyword">using</span> UnityEngine.AddressableAssets;
+
+<span class="keyword">public class</span> <span class="type">AsyncExample</span> : MonoBehaviour {
+    <span class="keyword">async</span> Task <span class="method">LoadSceneAsync</span>() {
+        <span class="keyword">var</span> handle = Addressables.<span class="method">LoadAssetAsync</span>&lt;GameObject&gt;(<span class="string">"Prefab"</span>);
+        <span class="keyword">await</span> handle.Task;
+        GameObject prefab = handle.Result;
+    }
+    
+    <span class="keyword">async void</span> <span class="method">Start</span>() {
+        <span class="keyword">await</span> <span class="method">LoadSceneAsync</span>();
+        Debug.Log(<span class="string">"Loaded!"</span>);
+    }
+}
+
+<span class="comment">// Extension method for coroutine to task</span>
+<span class="keyword">public static</span> Task <span class="method">AsTask</span>(<span class="keyword">this</span> IEnumerator coroutine) {
+    <span class="keyword">var</span> tcs = <span class="keyword">new</span> TaskCompletionSource&lt;bool&gt;();
+    <span class="keyword">var</span> runner = <span class="keyword">new</span> GameObject(<span class="string">"CoroutineRunner"</span>).<span class="method">AddComponent</span>&lt;CoroutineRunner&gt;();
+    runner.<span class="method">StartCoroutine</span>(<span class="method">WrapCoroutine</span>(coroutine, () => tcs.<span class="method">SetResult</span>(<span class="keyword">true</span>)));
+    <span class="keyword">return</span> tcs.Task;
+}</pre>
+            </div>
+        </div>
+
+        <div class="section-divider"></div>
+
+        <!-- Section 11: Audio System -->
+        <h2>🔊 Audio System</h2>
+        
+        <div class="grid">
+            <div class="card">
+                <h3>Audio Components</h3>
+                <table>
+                    <tr>
+                        <th>Component</th>
+                        <th>Purpose</th>
+                    </tr>
+                    <tr>
+                        <td>Audio Source</td>
+                        <td>Plays audio clips</td>
+                    </tr>
+                    <tr>
+                        <td>Audio Listener</td>
+                        <td>Receives audio (usually on camera)</td>
+                    </tr>
+                    <tr>
+                        <td>Audio Mixer</td>
+                        <td>Controls volume, effects, groups</td>
+                    </tr>
+                    <tr>
+                        <td>Audio Reverb Zone</td>
+                        <td>Add reverb effects</td>
+                    </tr>
+                </table>
+                <div class="tip-box">
+                    <strong>Tip:</strong> Only one Audio Listener per scene. Usually attached to Main Camera.
+                </div>
+            </div>
+            
+            <div class="card">
+                <h3>Audio Source Settings</h3>
+                <div class="formula-box">
+                    <div class="formula-title">Key Properties</div>
+                    <pre>
+AudioSource Properties:
+├── AudioClip: The sound file to play
+├── Output: AudioMixerGroup (optional)
+├── Volume: 0-1 (loudness)
+├── Pitch: 0-3 (speed/tone)
+├── Loop: Repeat when finished
+├── Play On Awake: Auto-play on start
+├── Spatial Blend:
+│   ├── 0 = 2D (same volume everywhere)
+│   └── 3 = 3D (volume based on distance)
+└── 3D Sound Settings:
+    ├── Min Distance: Full volume range
+    └── Max Distance: Max audible range
+                    </pre>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h3>Audio Scripting</h3>
+                <pre class="csharp-code"><span class="keyword">public class</span> <span class="type">AudioManager</span> : MonoBehaviour {
+    [<span class="type">SerializeField</span>] <span class="keyword">private</span> AudioSource musicSource;
+    [<span class="type">SerializeField</span>] <span class="keyword">private</span> AudioSource sfxSource;
+    
+    <span class="keyword">public void</span> <span class="method">PlaySFX</span>(AudioClip clip) {
+        sfxSource.<span class="method">PlayOneShot</span>(clip);
+    }
+    
+    <span class="keyword">public void</span> <span class="method">PlaySFX</span>(AudioClip clip, <span class="keyword">float</span> volume) {
+        sfxSource.<span class="method">PlayOneShot</span>(clip, volume);
+    }
+    
+    <span class="keyword">public void</span> <span class="method">PlayMusic</span>(AudioClip clip, <span class="keyword">bool</span> loop = <span class="keyword">true</span>) {
+        musicSource.clip = clip;
+        musicSource.loop = loop;
+        musicSource.<span class="method">Play</span>();
+    }
+    
+    <span class="keyword">public void</span> <span class="method">StopMusic</span>() {
+        musicSource.<span class="method">Stop</span>();
+    }
+    
+    <span class="keyword">public void</span> <span class="method">FadeMusic</span>(<span class="keyword">float</span> targetVolume, <span class="keyword">float</span> duration) {
+        <span class="method">StartCoroutine</span>(<span class="method">FadeRoutine</span>(targetVolume, duration));
+    }
+    
+    <span class="keyword">private</span> <span class="type">IEnumerator</span> <span class="method">FadeRoutine</span>(<span class="keyword">float</span> target, <span class="keyword">float</span> duration) {
+        <span class="keyword">float</span> start = musicSource.volume;
+        <span class="keyword">float</span> elapsed = <span class="number">0f</span>;
+        <span class="keyword">while</span> (elapsed < duration) {
+            elapsed += Time.deltaTime;
+            musicSource.volume = Mathf.<span class="method">Lerp</span>(start, target, elapsed / duration);
+            <span class="keyword">yield return null</span>;
+        }
+    }
+}</pre>
+            </div>
+            
+            <div class="card">
+                <h3>Sound Manager Pattern</h3>
+                <pre class="csharp-code"><span class="keyword">public class</span> <span class="type">SoundManager</span> : MonoBehaviour {
+    <span class="keyword">public static</span> SoundManager Instance;
+    
+    [<span class="type">System.Serializable</span>]
+    <span class="keyword">public class</span> <span class="type">Sound</span> {
+        <span class="keyword">public string</span> name;
+        <span class="keyword">public</span> AudioClip clip;
+        [<span class="type">Range</span>(<span class="number">0f</span>, <span class="number">1f</span>)] <span class="keyword">public</span> <span class="keyword">float</span> volume = <span class="number">1f</span>;
+        [<span class="type">Range</span>(<span class="number">0.1f</span>, <span class="number">3f</span>)] <span class="keyword">public</span> <span class="keyword">float</span> pitch = <span class="number">1f</span>;
+        <span class="keyword">public bool</span> loop;
+    }
+    
+    [<span class="type">SerializeField</span>] <span class="keyword">private</span> Sound[] sounds;
+    <span class="keyword">private</span> Dictionary&lt;string, AudioSource&gt; sources;
+    
+    <span class="keyword">void</span> <span class="method">Awake</span>() {
+        Instance = <span class="keyword">this</span>;
+        sources = <span class="keyword">new</span> Dictionary&lt;string, AudioSource&gt;();
+        
+        <span class="keyword">foreach</span> (Sound s <span class="keyword">in</span> sounds) {
+            AudioSource source = gameObject.<span class="method">AddComponent</span>&lt;AudioSource&gt;();
+            source.clip = s.clip;
+            source.volume = s.volume;
+            source.pitch = s.pitch;
+            source.loop = s.loop;
+            sources[s.name] = source;
+        }
+    }
+    
+    <span class="keyword">public void</span> <span class="method">Play</span>(<span class="keyword">string</span> name) {
+        <span class="keyword">if</span> (sources.<span class="method">ContainsKey</span>(name))
+            sources[name].<span class="method">Play</span>();
+    }
+}</pre>
+            </div>
+        </div>
+
+        <div class="section-divider"></div>
+
+        <!-- Section 12: 2D Specific -->
+        <h2>🕹️ 2D Game Development</h2>
+        
+        <div class="grid">
+            <div class="card">
+                <h3>Sprite Import Settings</h3>
+                <table>
+                    <tr>
+                        <th>Setting</th>
+                        <th>Recommendation</th>
+                    </tr>
+                    <tr>
+                        <td>Texture Type</td>
+                        <td>Sprite (2D and UI)</td>
+                    </tr>
+                    <tr>
+                        <td>Sprite Mode</td>
+                        <td>Single / Multiple (atlas)</td>
+                    </tr>
+                    <tr>
+                        <td>Pixels Per Unit</td>
+                        <td>Match art resolution</td>
+                    </tr>
+                    <tr>
+                        <td>Filter Mode</td>
+                        <td>Point (pixel art) / Bilinear</td>
+                    </tr>
+                    <tr>
+                        <td>Compression</td>
+                        <td>None for pixel art</td>
+                    </tr>
+                </table>
+            </div>
+            
+            <div class="card">
+                <h3>2D Physics Components</h3>
+                <pre class="csharp-code"><span class="comment">// Rigidbody2D types</span>
+<span class="keyword">public enum</span> <span class="type">RigidbodyType2D</span> {
+    Dynamic,     <span class="comment">// Affected by forces/gravity</span>
+    Kinematic,   <span class="comment">// Only moved by script</span>
+    Static       <span class="comment">// Never moves (optimized)</span>
+}
+
+<span class="comment">// Common 2D movement</span>
+<span class="keyword">void</span> <span class="method">Move</span>(<span class="keyword">float</span> direction) {
+    rb.linearVelocity = <span class="keyword">new</span> <span class="type">Vector2</span>(
+        direction * speed,
+        rb.linearVelocity.y  <span class="comment">// Keep gravity</span>
+    );
+    
+    <span class="comment">// Flip sprite</span>
+    <span class="keyword">if</span> (direction != <span class="number">0</span>) {
+        transform.localScale = <span class="keyword">new</span> <span class="type">Vector3</span>(
+            Mathf.<span class="method">Sign</span>(direction),
+            <span class="number">1</span>, <span class="number">1</span>
+        );
+    }
+}
+
+<span class="comment">// Ground check</span>
+<span class="keyword">bool</span> <span class="method">IsGrounded</span>() {
+    <span class="keyword">return</span> Physics2D.<span class="method">OverlapCircle</span>(
+        groundCheck.position,
+        checkRadius,
+        groundLayer
+    );
+}</pre>
+            </div>
+            
+            <div class="card">
+                <h3>Tilemap System</h3>
+                <pre class="csharp-code"><span class="keyword">using</span> UnityEngine.Tilemaps;
+
+<span class="keyword">public class</span> <span class="type">TilemapManager</span> : MonoBehaviour {
+    [<span class="type">SerializeField</span>] <span class="keyword">private</span> Tilemap tilemap;
+    [<span class="type">SerializeField</span>] <span class="keyword">private</span> TileBase groundTile;
+    
+    <span class="keyword">public void</span> <span class="method">SetTile</span>(<span class="keyword">int</span> x, <span class="keyword">int</span> y, TileBase tile) {
+        tilemap.<span class="method">SetTile</span>(<span class="keyword">new</span> <span class="type">Vector3Int</span>(x, y, <span class="number">0</span>), tile);
+    }
+    
+    <span class="keyword">public</span> TileBase <span class="method">GetTile</span>(<span class="keyword">int</span> x, <span class="keyword">int</span> y) {
+        <span class="keyword">return</span> tilemap.<span class="method">GetTile</span>(<span class="keyword">new</span> <span class="type">Vector3Int</span>(x, y, <span class="number">0</span>));
+    }
+    
+    <span class="keyword">public void</span> <span class="method">ClearTile</span>(<span class="keyword">int</span> x, <span class="keyword">int</span> y) {
+        tilemap.<span class="method">SetTile</span>(<span class="keyword">new</span> <span class="type">Vector3Int</span>(x, y, <span class="number">0</span>), <span class="keyword">null</span>);
+    }
+    
+    <span class="comment">// Procedural generation</span>
+    <span class="keyword">public void</span> <span class="method">GenerateLevel</span>(<span class="keyword">int</span> width, <span class="keyword">int</span> height) {
+        <span class="keyword">for</span> (<span class="keyword">int</span> x = <span class="number">0</span>; x < width; x++) {
+            <span class="keyword">for</span> (<span class="keyword">int</span> y = <span class="number">0</span>; y < height; y++) {
+                <span class="keyword">if</span> (ShouldPlaceTile(x, y))
+                    tilemap.<span class="method">SetTile</span>(<span class="keyword">new</span> <span class="type">Vector3Int</span>(x, y, <span class="number">0</span>), groundTile);
+            }
+        }
+    }
+}</pre>
+            </div>
+            
+            <div class="card">
+                <h3>2D Camera Follow</h3>
+                <pre class="csharp-code"><span class="keyword">public class</span> <span class="type">CameraFollow2D</span> : MonoBehaviour {
+    [<span class="type">SerializeField</span>] <span class="keyword">private</span> Transform target;
+    [<span class="type">SerializeField</span>] <span class="keyword">private</span> <span class="keyword">float</span> smoothSpeed = <span class="number">0.125f</span>;
+    [<span class="type">SerializeField</span>] <span class="keyword">private</span> <span class="type">Vector3</span> offset = <span class="keyword">new</span> <span class="type">Vector3</span>(<span class="number">0</span>, <span class="number">0</span>, -<span class="number">10</span>);
+    [<span class="type">SerializeField</span>] <span class="keyword">private</span> <span class="keyword">bool</span> useBounds;
+    [<span class="type">SerializeField</span>] <span class="keyword">private</span> <span class="type">Vector2</span> minBounds, maxBounds;
+    
+    <span class="keyword">void</span> <span class="method">LateUpdate</span>() {
+        <span class="keyword">if</span> (target == <span class="keyword">null</span>) <span class="keyword">return</span>;
+        
+        <span class="type">Vector3</span> desiredPos = target.position + offset;
+        <span class="type">Vector3</span> smoothedPos = <span class="type">Vector3</span>.<span class="method">Lerp</span>(
+            transform.position,
+            desiredPos,
+            smoothSpeed
+        );
+        
+        <span class="keyword">if</span> (useBounds) {
+            smoothedPos.x = Mathf.<span class="method">Clamp</span>(smoothedPos.x, minBounds.x, maxBounds.x);
+            smoothedPos.y = Mathf.<span class="method">Clamp</span>(smoothedPos.y, minBounds.y, maxBounds.y);
+        }
+        
+        transform.position = smoothedPos;
+    }
+}</pre>
+            </div>
+        </div>
+
+        <div class="section-divider"></div>
+
+        <!-- Section 13: 3D Specific -->
+        <h2>🌍 3D Game Development</h2>
+        
+        <div class="grid">
+            <div class="card">
+                <h3>Camera Controller</h3>
+                <pre class="csharp-code"><span class="keyword">public class</span> <span class="type">ThirdPersonCamera</span> : MonoBehaviour {
+    [<span class="type">SerializeField</span>] <span class="keyword">private</span> Transform target;
+    [<span class="type">SerializeField</span>] <span class="keyword">private</span> <span class="keyword">float</span> distance = <span class="number">5f</span>;
+    [<span class="type">SerializeField</span>] <span class="keyword">private</span> <span class="keyword">float</span> sensitivity = <span class="number">2f</span>;
+    [<span class="type">SerializeField</span>] <span class="keyword">private</span> <span class="keyword">float</span> smoothTime = <span class="number">0.1f</span>;
+    
+    <span class="keyword">private</span> <span class="keyword">float</span> yaw, pitch;
+    <span class="keyword">private</span> <span class="type">Vector3</span> currentVelocity;
+    
+    <span class="keyword">void</span> <span class="method">LateUpdate</span>() {
+        <span class="comment">// Get mouse input</span>
+        yaw += Input.GetAxis(<span class="string">"Mouse X"</span>) * sensitivity;
+        pitch -= Input.GetAxis(<span class="string">"Mouse Y"</span>) * sensitivity;
+        pitch = Mathf.<span class="method">Clamp</span>(pitch, -<span class="number">40f</span>, <span class="number">80f</span>);
+        
+        <span class="comment">// Calculate position</span>
+        <span class="type">Vector3</span> targetPos = target.position + <span class="type">Vector3</span>.up * <span class="number">2f</span>;
+        <span class="type">Vector3</span> offset = <span class="keyword">new</span> <span class="type">Vector3</span>(<span class="number">0</span>, <span class="number">0</span>, -distance);
+        <span class="type">Quaternion</span> rotation = <span class="type">Quaternion</span>.<span class="method">Euler</span>(pitch, yaw, <span class="number">0</span>);
+        
+        <span class="type">Vector3</span> desiredPos = targetPos + rotation * offset;
+        transform.position = <span class="type">Vector3</span>.<span class="method">SmoothDamp</span>(
+            transform.position, desiredPos, <span class="keyword">ref</span> currentVelocity, smoothTime
+        );
+        transform.<span class="method">LookAt</span>(targetPos);
+    }
+}</pre>
+            </div>
+            
+            <div class="card">
+                <h3>First Person Controller</h3>
+                <pre class="csharp-code"><span class="keyword">public class</span> <span class="type">FirstPersonController</span> : MonoBehaviour {
+    [<span class="type">SerializeField</span>] <span class="keyword">private</span> <span class="keyword">float</span> moveSpeed = <span class="number">5f</span>;
+    [<span class="type">SerializeField</span>] <span class="keyword">private</span> <span class="keyword">float</span> mouseSensitivity = <span class="number">2f</span>;
+    [<span class="type">SerializeField</span>] <span class="keyword">private</span> <span class="keyword">float</span> jumpForce = <span class="number">5f</span>;
+    [<span class="type">SerializeField</span>] <span class="keyword">private</span> Transform cameraTransform;
+    
+    <span class="keyword">private</span> <span class="keyword">float</span> xRotation;
+    <span class="keyword">private</span> <span class="type">Rigidbody</span> rb;
+    
+    <span class="keyword">void</span> <span class="method">Awake</span>() {
+        rb = <span class="method">GetComponent</span>&lt;Rigidbody&gt;();
+        Cursor.<span class="method">LockCursor</span>(CursorLockMode.Locked);
+    }
+    
+    <span class="keyword">void</span> <span class="method">Update</span>() {
+        <span class="comment">// Mouse look</span>
+        <span class="keyword">float</span> mouseX = Input.GetAxis(<span class="string">"Mouse X"</span>) * mouseSensitivity;
+        <span class="keyword">float</span> mouseY = Input.GetAxis(<span class="string">"Mouse Y"</span>) * mouseSensitivity;
+        
+        xRotation -= mouseY;
+        xRotation = Mathf.<span class="method">Clamp</span>(xRotation, -<span class="number">90f</span>, <span class="number">90f</span>);
+        
+        cameraTransform.localRotation = <span class="type">Quaternion</span>.<span class="method">Euler</span>(xRotation, <span class="number">0</span>, <span class="number">0</span>);
+        transform.<span class="method">Rotate</span>(Vector3.up * mouseX);
+    }
+    
+    <span class="keyword">void</span> <span class="method">FixedUpdate</span>() {
+        <span class="keyword">float</span> h = Input.GetAxis(<span class="string">"Horizontal"</span>);
+        <span class="keyword">float</span> v = Input.GetAxis(<span class="string">"Vertical"</span>);
+        
+        <span class="type">Vector3</span> move = transform.right * h + transform.forward * v;
+        rb.<span class="method">MovePosition</span>(rb.position + move * moveSpeed * Time.fixedDeltaTime);
+    }
+}</pre>
+            </div>
+            
+            <div class="card">
+                <h3>NavMesh AI</h3>
+                <pre class="csharp-code"><span class="keyword">using</span> UnityEngine.AI;
+
+<span class="keyword">public class</span> <span class="type">EnemyAI</span> : MonoBehaviour {
+    [<span class="type">SerializeField</span>] <span class="keyword">private</span> Transform target;
+    [<span class="type">SerializeField</span>] <span class="keyword">private</span> <span class="keyword">float</span> stoppingDistance = <span class="number">2f</span>;
+    
+    <span class="keyword">private</span> <span class="type">NavMeshAgent</span> agent;
+    
+    <span class="keyword">void</span> <span class="method">Awake</span>() {
+        agent = <span class="method">GetComponent</span>&lt;NavMeshAgent&gt;();
+    }
+    
+    <span class="keyword">void</span> <span class="method">Update</span>() {
+        <span class="keyword">if</span> (target == <span class="keyword">null</span>) <span class="keyword">return</span>;
+        
+        <span class="keyword">float</span> distance = <span class="type">Vector3</span>.<span class="method">Distance</span>(transform.position, target.position);
+        
+        <span class="keyword">if</span> (distance > stoppingDistance) {
+            agent.<span class="method">SetDestination</span>(target.position);
+            agent.isStopped = <span class="keyword">false</span>;
+        } <span class="keyword">else</span> {
+            agent.isStopped = <span class="keyword">true</span>;
+            <span class="comment">// Attack or interact</span>
+        }
+    }
+    
+    <span class="comment">// Patrol pattern</span>
+    <span class="keyword">public</span> Transform[] waypoints;
+    <span class="keyword">private</span> <span class="keyword">int</span> currentWaypoint;
+    
+    <span class="keyword">void</span> <span class="method">Patrol</span>() {
+        <span class="keyword">if</span> (waypoints.Length == <span class="number">0</span>) <span class="keyword">return</span>;
+        
+        agent.<span class="method">SetDestination</span>(waypoints[currentWaypoint].position);
+        
+        <span class="keyword">if</span> (!agent.pathPending && agent.remainingDistance < <span class="number">0.5f</span>) {
+            currentWaypoint = (currentWaypoint + <span class="number">1</span>) % waypoints.Length;
+        }
+    }
+}</pre>
+            </div>
+            
+            <div class="card">
+                <h3>3D Character Controller</h3>
+                <pre class="csharp-code"><span class="keyword">public class</span> <span class="type">CharacterMovement</span> : MonoBehaviour {
+    [<span class="type">SerializeField</span>] <span class="keyword">private</span> <span class="keyword">float</span> speed = <span class="number">6f</span>;
+    [<span class="type">SerializeField</span>] <span class="keyword">private</span> <span class="keyword">float</span> jumpHeight = <span class="number">2f</span>;
+    [<span class="type">SerializeField</span>] <span class="keyword">private</span> <span class="keyword">float</span> gravity = -<span class="number">20f</span>;
+    [<span class="type">SerializeField</span>] <span class="keyword">private</span> Transform groundCheck;
+    [<span class="type">SerializeField</span>] <span class="keyword">private</span> LayerMask groundMask;
+    
+    <span class="keyword">private</span> <span class="type">CharacterController</span> controller;
+    <span class="keyword">private</span> <span class="type">Vector3</span> velocity;
+    <span class="keyword">private</span> <span class="keyword">bool</span> isGrounded;
+    
+    <span class="keyword">void</span> <span class="method">Awake</span>() {
+        controller = <span class="method">GetComponent</span>&lt;CharacterController&gt;();
+    }
+    
+    <span class="keyword">void</span> <span class="method">Update</span>() {
+        <span class="comment">// Ground check</span>
+        isGrounded = Physics.<span class="method">CheckSphere</span>(
+            groundCheck.position, <span class="number">0.4f</span>, groundMask
+        );
+        
+        <span class="keyword">if</span> (isGrounded && velocity.y < <span class="number">0</span>)
+            velocity.y = -<span class="number">2f</span>; <span class="comment">// Stick to ground</span>
+        
+        <span class="comment">// Movement</span>
+        <span class="keyword">float</span> h = Input.<span class="method">GetAxis</span>(<span class="string">"Horizontal"</span>);
+        <span class="keyword">float</span> v = Input.<span class="method">GetAxis</span>(<span class="string">"Vertical"</span>);
+        <span class="type">Vector3</span> move = transform.right * h + transform.forward * v;
+        controller.<span class="method">Move</span>(move * speed * Time.deltaTime);
+        
+        <span class="comment">// Jump</span>
+        <span class="keyword">if</span> (Input.<span class="method">GetButtonDown</span>(<span class="string">"Jump"</span>) && isGrounded)
+            velocity.y = Mathf.<span class="method">Sqrt</span>(jumpHeight * -<span class="number">2f</span> * gravity);
+        
+        <span class="comment">// Gravity</span>
+        velocity.y += gravity * Time.deltaTime;
+        controller.<span class="method">Move</span>(velocity * Time.deltaTime);
+    }
+}</pre>
+            </div>
+        </div>
+
+        <div class="section-divider"></div>
+
+        <!-- Section 14: ScriptableObjects -->
+        <h2>📊 ScriptableObjects</h2>
+        
+        <div class="grid">
+            <div class="card">
+                <h3>What are ScriptableObjects?</h3>
+                <div class="formula-box">
+                    <div class="formula-title">Data Container Pattern</div>
+                    <pre>
+MonoBehaviour vs ScriptableObject:
+
+MonoBehaviour:
+├── Attached to GameObject
+├── Exists in scene
+├── Duplicated per instance
+└── Has transform, lifecycle
+
+ScriptableObject:
+├── Asset file in Project
+├── Exists independent of scene
+├── Shared by multiple objects
+└── Data-only, no transform
+
+Benefits:
+• Reduce memory usage
+• Centralize configuration
+• Easy to modify during play
+• Create multiple variations
+                    </pre>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h3>Creating ScriptableObjects</h3>
+                <pre class="csharp-code">[<span class="type">CreateAssetMenu</span>(
+    fileName = <span class="string">"NewWeapon"</span>,
+    menuName = <span class="string">"Game/Weapon"</span>
+)]
+<span class="keyword">public class</span> <span class="type">WeaponData</span> : ScriptableObject {
+    <span class="keyword">public string</span> weaponName;
+    <span class="keyword">public int</span> damage;
+    <span class="keyword">public float</span> attackSpeed;
+    <span class="keyword">public</span> AudioClip attackSound;
+    <span class="keyword">public</span> GameObject prefab;
+}
+
+<span class="comment">// Usage in MonoBehaviour</span>
+<span class="keyword">public class</span> <span class="type">Weapon</span> : MonoBehaviour {
+    [<span class="type">SerializeField</span>] <span class="keyword">private</span> WeaponData data;
+    
+    <span class="keyword">public void</span> <span class="method">Attack</span>() {
+        Debug.Log(<span class="string">$"Attacking with {data.weaponName}"</span>);
+        <span class="comment">// Use data.damage, data.attackSpeed, etc.</span>
+    }
+}</pre>
+            </div>
+            
+            <div class="card">
+                <h3>ScriptableObject Patterns</h3>
+                <pre class="csharp-code"><span class="comment">// Game Configuration</span>
+[<span class="type">CreateAssetMenu</span>(menuName = <span class="string">"Game/GameConfig"</span>)]
+<span class="keyword">public class</span> <span class="type">GameConfig</span> : ScriptableObject {
+    <span class="keyword">public float</span> gravity = <span class="number">9.81f</span>;
+    <span class="keyword">public int</span> maxEnemies = <span class="number">50</span>;
+    <span class="keyword">public float</span> difficultyMultiplier = <span class="number">1f</span>;
+}
+
+<span class="comment">// Runtime Sets (track active objects)</span>
+[<span class="type">CreateAssetMenu</span>(menuName = <span class="string">"Game/RuntimeSet"</span>)]
+<span class="keyword">public class</span> <span class="type">EnemyRuntimeSet</span> : ScriptableObject {
+    <span class="keyword">public</span> List&lt;Enemy&gt; Items = <span class="keyword">new</span> List&lt;Enemy&gt;();
+    
+    <span class="keyword">public void</span> <span class="method">Add</span>(Enemy enemy) => Items.Add(enemy);
+    <span class="keyword">public void</span> <span class="method">Remove</span>(Enemy enemy) => Items.Remove(enemy);
+}
+
+<span class="comment">// Event channels</span>
+[<span class="type">CreateAssetMenu</span>(menuName = <span class="string">"Events/IntEvent"</span>)]
+<span class="keyword">public class</span> <span class="type">IntEventChannel</span> : ScriptableObject {
+    <span class="keyword">public event</span> Action&lt;int&gt; OnEventRaised;
+    
+    <span class="keyword">public void</span> <span class="method">RaiseEvent</span>(<span class="keyword">int</span> value) {
+        OnEventRaised?.Invoke(value);
+    }
+}</pre>
+            </div>
+            
+            <div class="card">
+                <h3>Event System with SO</h3>
+                <pre class="csharp-code"><span class="comment">// Generic event channel</span>
+<span class="keyword">public class</span> <span class="type">GameEvent</span> : ScriptableObject {
+    <span class="keyword">private</span> List&lt;GameEventListener&gt; listeners = 
+        <span class="keyword">new</span> List&lt;GameEventListener&gt;();
+    
+    <span class="keyword">public void</span> <span class="method">Raise</span>() {
+        <span class="keyword">for</span> (<span class="keyword">int</span> i = listeners.Count - <span class="number">1</span>; i >= <span class="number">0</span>; i--)
+            listeners[i].<span class="method">OnEventRaised</span>();
+    }
+    
+    <span class="keyword">public void</span> <span class="method">RegisterListener</span>(GameEventListener listener) {
+        listeners.Add(listener);
+    }
+    
+    <span class="keyword">public void</span> <span class="method">UnregisterListener</span>(GameEventListener listener) {
+        listeners.Remove(listener);
+    }
+}
+
+<span class="comment">// Listener component</span>
+<span class="keyword">public class</span> <span class="type">GameEventListener</span> : MonoBehaviour {
+    <span class="keyword">public</span> GameEvent Event;
+    <span class="keyword">public</span> UnityEvent Response;
+    
+    <span class="keyword">void</span> <span class="method">OnEnable</span>() => Event.RegisterListener(<span class="keyword">this</span>);
+    <span class="keyword">void</span> <span class="method">OnDisable</span>() => Event.UnregisterListener(<span class="keyword">this</span>);
+    <span class="keyword">public void</span> <span class="method">OnEventRaised</span>() => Response.Invoke();
+}</pre>
+            </div>
+        </div>
+
+        <div class="section-divider"></div>
+
+        <!-- Section 15: Performance Optimization -->
+        <h2>⚡ Performance Optimization</h2>
+        
+        <div class="grid">
+            <div class="card">
+                <h3>Common Performance Issues</h3>
+                <div class="warning-box">
+                    <strong>Avoid in Update():</strong>
+                    <ul>
+                        <li>GetComponent&lt;T&gt;() calls - Cache in Awake</li>
+                        <li>GameObject.Find() - Use references/tags</li>
+                        <li>Instantiate/Destroy - Use object pooling</li>
+                        <li>String concatenation - Use StringBuilder</li>
+                        <li>LINQ in hot paths - Use for loops</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h3>Optimization Patterns</h3>
+                <pre class="csharp-code"><span class="comment">// BAD: GetComponent every frame</span>
+<span class="keyword">void</span> <span class="method">Update</span>() {
+    <span class="method">GetComponent</span>&lt;Rigidbody&gt;().AddForce(force);
+}
+
+<span class="comment">// GOOD: Cache reference</span>
+<span class="keyword">private</span> Rigidbody rb;
+<span class="keyword">void</span> <span class="method">Awake</span>() => rb = <span class="method">GetComponent</span>&lt;Rigidbody&gt;();
+<span class="keyword">void</span> <span class="method">FixedUpdate</span>() => rb.AddForce(force);
+
+<span class="comment">// BAD: Find every frame</span>
+<span class="keyword">void</span> <span class="method">Update</span>() {
+    Player p = GameObject.Find(<span class="string">"Player"</span>).GetComponent&lt;Player&gt;();
+}
+
+<span class="comment">// GOOD: Singleton or reference</span>
+<span class="keyword">public class</span> <span class="type">Player</span> : MonoBehaviour {
+    <span class="keyword">public static</span> Player Instance;
+    <span class="keyword">void</span> <span class="method">Awake</span>() => Instance = <span class="keyword">this</span>;
+}
+
+<span class="comment">// GOOD: Object Pooling</span>
+<span class="keyword">public class</span> <span class="type">BulletPool</span> : MonoBehaviour {
+    Queue&lt;GameObject&gt; pool = <span class="keyword">new</span> Queue&lt;GameObject&gt;();
+    <span class="keyword">public</span> GameObject <span class="method">Get</span>() => pool.Count > <span class="number">0</span> ? 
+        pool.Dequeue() : Instantiate(prefab);
+    <span class="keyword">public void</span> <span class="method">Return</span>(GameObject obj) => pool.Enqueue(obj);
+}</pre>
+            </div>
+            
+            <div class="card">
+                <h3>Profiling Tips</h3>
+                <div class="shortcut-box">
+                    <div class="shortcut"><span>Open Profiler</span><span class="key">Ctrl + 7</span></div>
+                    <div class="shortcut"><span>Deep Profile</span><span class="key">Profiler → Deep Profile</span></div>
+                    <div class="shortcut"><span>Memory Profiler</span><span class="key">Window → Analysis</span></div>
+                    <div class="shortcut"><span>Frame Debugger</span><span class="key">Window → Analysis</span></div>
+                </div>
+                <table>
+                    <tr>
+                        <th>Metric</th>
+                        <th>Target</th>
+                    </tr>
+                    <tr>
+                        <td>Frame Time</td>
+                        <td>&lt; 16.6ms (60 FPS)</td>
+                    </tr>
+                    <tr>
+                        <td>Draw Calls</td>
+                        <td>&lt; 100 (batch)</td>
+                    </tr>
+                    <tr>
+                        <td>Triangles</td>
+                        <td>&lt; 100K visible</td>
+                    </tr>
+                    <tr>
+                        <td>Memory</td>
+                        <td>Monitor for leaks</td>
+                    </tr>
+                </table>
+            </div>
+            
+            <div class="card">
+                <h3>Batching & Rendering</h3>
+                <div class="formula-box">
+                    <div class="formula-title">Rendering Optimization</div>
+                    <pre>
+BATCHING:
+┌─────────────────────────────────────────────┐
+│ Static Batching                             │
+│ ├── Mark objects as "Static"               │
+│ ├── Combines meshes at build time          │
+│ └── Best for: Never-moving objects         │
+│                                             │
+│ Dynamic Batching                           │
+│ ├── Automatic for small meshes (< 900 vtx) │
+│ ├── Must share material                    │
+│ └── Best for: Small, moving objects        │
+│                                             │
+│ GPU Instancing                             │
+│ ├── Same mesh, same material               │
+│ ├── Per-instance properties supported      │
+│ └── Best for: Many identical objects       │
+└─────────────────────────────────────────────┘
+
+TIPS:
+• Use Sprite Atlas for 2D
+• Combine textures into atlases
+• Reduce material count
+• Use LOD (Level of Detail) groups
+• Occlusion culling for complex scenes
+                    </pre>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-divider"></div>
+
+        <!-- Section 16: Design Patterns -->
+        <h2>📐 Game Design Patterns</h2>
+        
+        <div class="grid">
+            <div class="card">
+                <h3>Singleton Pattern</h3>
+                <pre class="csharp-code"><span class="keyword">public class</span> <span class="type">GameManager</span> : MonoBehaviour {
+    <span class="keyword">public static</span> GameManager Instance { <span class="keyword">get</span>; <span class="keyword">private set</span>; }
+    
+    <span class="keyword">void</span> <span class="method">Awake</span>() {
+        <span class="keyword">if</span> (Instance != <span class="keyword">null</span> && Instance != <span class="keyword">this</span>) {
+            <span class="method">Destroy</span>(gameObject);
+            <span class="keyword">return</span>;
+        }
+        Instance = <span class="keyword">this</span>;
+        <span class="method">DontDestroyOnLoad</span>(gameObject);
+    }
+}
+
+<span class="comment">// Usage</span>
+GameManager.Instance.<span class="method">StartGame</span>();</pre>
+            </div>
+            
+            <div class="card">
+                <h3>State Machine Pattern</h3>
+                <pre class="csharp-code"><span class="keyword">public interface</span> <span class="type">IState</span> {
+    <span class="keyword">void</span> <span class="method">Enter</span>();
+    <span class="keyword">void</span> <span class="method">Execute</span>();
+    <span class="keyword">void</span> <span class="method">Exit</span>();
+}
+
+<span class="keyword">public class</span> <span class="type">StateMachine</span> {
+    <span class="keyword">private</span> IState currentState;
+    
+    <span class="keyword">public void</span> <span class="method">ChangeState</span>(IState newState) {
+        currentState?.Exit();
+        currentState = newState;
+        currentState.Enter();
+    }
+    
+    <span class="keyword">public void</span> <span class="method">Update</span>() => currentState?.Execute();
+}
+
+<span class="comment">// Example states</span>
+<span class="keyword">public class</span> <span class="type">IdleState</span> : IState {
+    <span class="keyword">private</span> Enemy enemy;
+    <span class="keyword">public void</span> <span class="method">Enter</span>() => enemy.animator.SetBool(<span class="string">"Idle"</span>, <span class="keyword">true</span>);
+    <span class="keyword">public void</span> <span class="method">Execute</span>() { <span class="keyword">if</span> (enemy.CanSeePlayer) enemy.stateMachine.ChangeState(<span class="keyword">new</span> ChaseState()); }
+    <span class="keyword">public void</span> <span class="method">Exit</span>() => enemy.animator.SetBool(<span class="string">"Idle"</span>, <span class="keyword">false</span>);
+}</pre>
+            </div>
+            
+            <div class="card">
+                <h3>Observer Pattern (Events)</h3>
+                <pre class="csharp-code"><span class="keyword">public class</span> <span class="type">PlayerHealth</span> : MonoBehaviour {
+    <span class="keyword">public event</span> Action&lt;int&gt; OnHealthChanged;
+    <span class="keyword">public event</span> Action OnDeath;
+    
+    <span class="keyword">private int</span> health;
+    
+    <span class="keyword">public void</span> <span class="method">TakeDamage</span>(<span class="keyword">int</span> damage) {
+        health -= damage;
+        OnHealthChanged?.Invoke(health);
+        
+        <span class="keyword">if</span> (health <= <span class="number">0</span>) {
+            OnDeath?.Invoke();
+        }
+    }
+}
+
+<span class="comment">// Subscriber</span>
+<span class="keyword">public class</span> <span class="type">UIManager</span> : MonoBehaviour {
+    [<span class="type">SerializeField</span>] <span class="keyword">private</span> PlayerHealth player;
+    
+    <span class="keyword">void</span> <span class="method">OnEnable</span>() {
+        player.OnHealthChanged += UpdateHealthUI;
+        player.OnDeath += ShowGameOver;
+    }
+    
+    <span class="keyword">void</span> <span class="method">OnDisable</span>() {
+        player.OnHealthChanged -= UpdateHealthUI;
+        player.OnDeath -= ShowGameOver;
+    }
+    
+    <span class="keyword">void</span> <span class="method">UpdateHealthUI</span>(<span class="keyword">int</span> health) { <span class="comment">/* ... */</span> }
+    <span class="keyword">void</span> <span class="method">ShowGameOver</span>() { <span class="comment">/* ... */</span> }
+}</pre>
+            </div>
+            
+            <div class="card">
+                <h3>Command Pattern</h3>
+                <pre class="csharp-code"><span class="keyword">public interface</span> <span class="type">ICommand</span> {
+    <span class="keyword">void</span> <span class="method">Execute</span>();
+    <span class="keyword">void</span> <span class="method">Undo</span>();
+}
+
+<span class="keyword">public class</span> <span class="type">MoveCommand</span> : ICommand {
+    <span class="keyword">private</span> Transform transform;
+    <span class="keyword">private</span> Vector3 direction;
+    <span class="keyword">private</span> <span class="keyword">float</span> distance;
+    
+    <span class="keyword">public</span> <span class="method">MoveCommand</span>(Transform t, Vector3 dir, <span class="keyword">float</span> dist) {
+        transform = t;
+        direction = dir;
+        distance = dist;
+    }
+    
+    <span class="keyword">public void</span> <span class="method">Execute</span>() {
+        transform.position += direction * distance;
+    }
+    
+    <span class="keyword">public void</span> <span class="method">Undo</span>() {
+        transform.position -= direction * distance;
+    }
+}
+
+<span class="comment">// Input handler</span>
+<span class="keyword">public class</span> <span class="type">InputHandler</span> : MonoBehaviour {
+    <span class="keyword">private</span> Stack&lt;ICommand&gt; commandHistory = <span class="keyword">new</span> Stack&lt;ICommand&gt;();
+    
+    <span class="keyword">public void</span> <span class="method">ExecuteCommand</span>(ICommand command) {
+        command.Execute();
+        commandHistory.Push(command);
+    }
+    
+    <span class="keyword">public void</span> <span class="method">UndoLast</span>() {
+        <span class="keyword">if</span> (commandHistory.Count > <span class="number">0</span>)
+            commandHistory.Pop().Undo();
+    }
+}</pre>
+            </div>
+        </div>
+
+        <div class="section-divider"></div>
+
+        <!-- Quick Reference -->
+        <h2>📋 Quick Reference Cheat Sheet</h2>
+        
+        <div class="grid">
+            <div class="card">
+                <h3>Editor Shortcuts</h3>
+                <div class="quick-ref">
+                    <div class="quick-item"><strong>Ctrl+P</strong><br>Play</div>
+                    <div class="quick-item"><strong>Ctrl+D</strong><br>Duplicate</div>
+                    <div class="quick-item"><strong>Ctrl+S</strong><br>Save</div>
+                    <div class="quick-item"><strong>F</strong><br>Focus</div>
+                    <div class="quick-item"><strong>W/E/R</strong><br>Move/Rotate/Scale</div>
+                    <div class="quick-item"><strong>Ctrl+Shift+N</strong><br>New Empty</div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h3>Common Vector Math</h3>
+                <div class="quick-ref">
+                    <div class="quick-item"><strong>Vector3.zero</strong><br>(0,0,0)</div>
+                    <div class="quick-item"><strong>Vector3.up</strong><br>(0,1,0)</div>
+                    <div class="quick-item"><strong>Vector3.forward</strong><br>(0,0,1)</div>
+                    <div class="quick-item"><strong>Vector3.Distance</strong><br>Distance between</div>
+                    <div class="quick-item"><strong>Vector3.Lerp</strong><br>Linear interpolation</div>
+                    <div class="quick-item"><strong>Quaternion.identity</strong><br>No rotation</div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h3>Debug Utilities</h3>
+                <div class="quick-ref">
+                    <div class="quick-item"><strong>Debug.Log()</strong><br>Console output</div>
+                    <div class="quick-item"><strong>Debug.DrawRay()</strong><br>Draw ray</div>
+                    <div class="quick-item"><strong>Debug.DrawLine()</strong><br>Draw line</div>
+                    <div class="quick-item"><strong>OnDrawGizmos()</strong><br>Editor gizmos</div>
+                    <div class="quick-item"><strong>[ContextMenu]</strong><br>Right-click menu</div>
+                    <div class="quick-item"><strong>[ExecuteAlways]</strong><br>Run in editor</div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h3>Layer Masks</h3>
+                <pre class="csharp-code"><span class="comment">// Get layer mask from layer name</span>
+<span class="keyword">int</span> layerMask = LayerMask.<span class="method">GetMask</span>(<span class="string">"Enemy"</span>);
+
+<span class="comment">// Multiple layers</span>
+<span class="keyword">int</span> mask = LayerMask.<span class="method">GetMask</span>(<span class="string">"Enemy"</span>, <span class="string">"Obstacle"</span>);
+
+<span class="comment">// Raycast with layer mask</span>
+Physics.<span class="method">Raycast</span>(origin, direction, <span class="keyword">out</span> hit, distance, layerMask);
+
+<span class="comment">// Exclude layer (bitwise NOT)</span>
+<span class="keyword">int</span> excludePlayer = ~LayerMask.<span class="method">GetMask</span>(<span class="string">"Player"</span>);</pre>
+            </div>
+        </div>
+
+        <footer>
+            <p>Unity 2D/3D Mastery Guide | Game Development Reference</p>
+            <p style="color: #ff8c00; margin-top: 10px;">Made with ❤️ for Unity Developers</p>
+            <p style="margin-top: 15px; font-size: 0.9em;">
+                <strong>Resources:</strong> 
+                <a href="https://docs.unity3d.com" style="color: #4ecdc4;">docs.unity3d.com</a> | 
+                <a href="https://learn.unity.com" style="color: #4ecdc4;">learn.unity.com</a> |
+                <a href="https://forum.unity.com" style="color: #4ecdc4;">forum.unity.com</a>
+            </p>
+        </footer>
+    </div>
+</body>
+</html>
