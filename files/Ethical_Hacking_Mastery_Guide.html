@@ -1356,11 +1356,13 @@ GET /products?id=1'
 GET /products?id=1 OR 1=1
 GET /products?id=1 UNION SELECT NULL--
 
+<pre><code class="language-html">
 # Testing XSS
 GET /search?q=test
 GET /search?q=<script>alert(1)</script>
 GET /search?q="><script>alert(1)</script>
 GET /search?q=<img src=x onerror=alert(1)>
+</code></pre>
 
 # Testing IDOR
 GET /api/documents/1001
