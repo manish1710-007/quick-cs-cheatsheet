@@ -4,108 +4,501 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>★ CYBER FORMULA LIBRARY ★</title>
-    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Noto+Sans+JP:wght@300;500;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --neon-pink: #ff2a6d;
+            --neon-cyan: #05d9e8;
+            --neon-yellow: #f9f871;
+            --bg-dark: #0b0c10;
+            --bg-panel: #1f1f2e;
+            --text-main: #ffffff;
+            --scroll-bg: #2a2a3d;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Share Tech Mono', monospace;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+        }
+
+        /* --- SIDEBAR --- */
+        .sidebar {
+            width: 320px;
+            height: 100vh;
+            background: rgba(11, 12, 16, 0.95);
+            border-right: 2px solid var(--neon-cyan);
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 0 20px rgba(5, 217, 232, 0.2);
+            position: relative;
+            z-index: 10;
+        }
+
+        .sidebar-header {
+            padding: 20px;
+            border-bottom: 1px solid rgba(5, 217, 232, 0.3);
+            background: linear-gradient(180deg, rgba(255, 42, 109, 0.1), transparent);
+        }
+
+        h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.5rem;
+            color: var(--neon-pink);
+            text-shadow: 2px 2px 0px var(--neon-cyan);
+            letter-spacing: 2px;
+            margin-bottom: 5px;
+            animation: glitch 3s infinite;
+        }
+
+        @keyframes glitch {
+            0% { transform: translate(0); }
+            20% { transform: translate(-2px, 2px); }
+            40% { transform: translate(-2px, -2px); }
+            60% { transform: translate(2px, 2px); }
+            80% { transform: translate(2px, -2px); }
+            100% { transform: translate(0); }
+        }
+
+        .subtitle {
+            font-family: 'Noto Sans JP', sans-serif;
+            font-size: 0.8rem;
+            color: var(--neon-cyan);
+            opacity: 0.8;
+        }
+
+        .menu-container {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding: 10px 15px;
+            scrollbar-width: thin;
+            scrollbar-color: var(--neon-cyan) var(--scroll-bg);
+        }
+
+        .menu-container::-webkit-scrollbar { width: 6px; }
+        .menu-container::-webkit-scrollbar-track { background: var(--scroll-bg); }
+        .menu-container::-webkit-scrollbar-thumb { background-color: var(--neon-cyan); border-radius: 3px; }
+
+        ul { list-style: none; }
+        li { margin-bottom: 8px; }
+
+        button {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(5, 217, 232, 0.3);
+            color: #fff;
+            padding: 10px;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.9rem;
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            position: relative;
+            overflow: hidden;
+            border-radius: 4px;
+        }
+
+        button:hover {
+            background: rgba(5, 217, 232, 0.1);
+            border-color: var(--neon-pink);
+            color: var(--neon-pink);
+            transform: translateX(5px);
+            box-shadow: 0 0 10px rgba(255, 42, 109, 0.3);
+        }
+
+        button::after {
+            content: '>';
+            position: absolute;
+            right: 10px;
+            opacity: 0;
+            transition: all 0.2s;
+        }
+        button:hover::after { opacity: 1; right: 5px; }
+
+        .marquee-container {
+            padding: 5px 0;
+            background: var(--neon-pink);
+            color: #000;
+            font-weight: bold;
+            font-size: 0.7rem;
+            border-bottom: 1px solid rgba(255, 42, 109, 0.3);
+        }
+
+        /* --- MAIN CONTENT AREA --- */
+        .main-content {
+            flex-grow: 1;
+            height: 100vh;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .iframe-container {
+            flex-grow: 1;
+            position: relative;
+            background: #000;
+            overflow: hidden;
+        }
+
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            background: #fff;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* --- PLACEHOLDER / WALLPAPER AREA --- */
+        .placeholder {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1;
+            color: #fff;
+            font-size: 2rem;
+            text-align: center;
+            
+            /* Default background fallback */
+            background-color: var(--bg-dark);
+            background-size: cover;
+            background-position: center;
+            transition: background-image 0.5s ease-in-out;
+        }
+
+        /* Default Matrix Background */
+        .bg-matrix {
+            background-image: url('https://cdn.wallpapersafari.com/70/23/6fP5Kp.gif');
+            background-color: #000;
+        }
+
+        .placeholder-content {
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(8px);
+            padding: 40px;
+            border: 1px solid var(--neon-cyan);
+            border-radius: 10px;
+            box-shadow: 0 0 30px rgba(5, 217, 232, 0.2);
+            animation: float 4s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .loader {
+            display: none;
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(11, 12, 16, 0.98);
+            z-index: 5;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 3px solid rgba(255, 42, 109, 0.2);
+            border-top-color: var(--neon-pink);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* --- SETTINGS BUTTON & MODAL --- */
+        #settings-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(0,0,0,0.5);
+            border: 1px solid var(--neon-cyan);
+            color: var(--neon-cyan);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2rem;
+            z-index: 100;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #settings-btn:hover {
+            background: var(--neon-cyan);
+            color: #000;
+            box-shadow: 0 0 15px var(--neon-cyan);
+        }
+
+        .settings-panel {
+            position: absolute;
+            top: 70px;
+            right: 20px;
+            width: 300px;
+            background: rgba(11, 12, 16, 0.95);
+            border: 1px solid var(--neon-pink);
+            padding: 20px;
+            z-index: 99;
+            border-radius: 8px;
+            display: none;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .settings-panel h3 {
+            color: var(--neon-pink);
+            margin-bottom: 15px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.9rem;
+        }
+
+        .wallpaper-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .wp-option {
+            height: 80px;
+            border-radius: 4px;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: all 0.2s;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+
+        .wp-option:hover {
+            border-color: #fff;
+            transform: scale(1.02);
+        }
+
+        .wp-option.active {
+            border-color: var(--neon-pink);
+            box-shadow: 0 0 10px var(--neon-pink);
+        }
+
+        .wp-label {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            background: rgba(0,0,0,0.7);
+            font-size: 0.6rem;
+            padding: 3px;
+            text-align: center;
+            color: #fff;
+        }
+
+    </style>
 </head>
 <body>
 
-    <h1>FORMULA DATABASE</h1>
-    <div class="subtitle" id="typewriter-text">コンピューターサイエンス公式集 (CS Formula Collection)</div>
-
-    <div class="marquee-container">
-        <marquee scrollamount="10">
-            ★ WELCOME TO THE DATABASE ★ LOAD YOUR MODULES ★ SYSTEM READY ★ Gyaru Tech v1.0 ★
-        </marquee>
-    </div>
-
-    <div class="menu-container">
-        <ul>
-            <li><button onclick="loadPage('files/algorithms_formulas.html')">Algorithms</button></li>
-            <li><button onclick="loadPage('files/compiler_design_formulas.html')">Compiler</button></li>
-            <li><button onclick="loadPage('files/computer_networks_formulas.html')">Networks</button></li>
-            <li><button onclick="loadPage('files/computer_organization_formulas.html')">Org & Arch</button></li>
-            <li><button onclick="loadPage('files/database_formulas.html')">Database</button></li>
-            <li><button onclick="loadPage('files/digital_logic_formulas.html')">Digital Logic</button></li>
-            <li><button onclick="loadPage('files/discrete_mathematics_formulas.html')">Discrete Math</button></li>
-            <li><button onclick="loadPage('files/disk_scheduling_paging_formulas.html')">Disk Paging</button></li>
-            <li><button onclick="loadPage('files/operating_systems_formulas.html')">OS</button></li>
-            <li><button onclick="loadPage('files/theory_of_computation_formulas.html')">Theory of Comp</button></li>
-            <li><button onclick="loadPage('files/programming_ds_algo_formulas.html')">Prog & DS</button></li>
-            <li><button onclick="loadPage('files/system_design_formulas.html')">System Design</button></li>
-            <li><button onclick="loadPage('files/algorithm_patterns_guide.html')">Algo Patterns</button></li>
-            <li><button onclick="loadPage('files/apis_formulas.html')">APIs</button></li>
-            <li><button onclick="loadPage('files/cloud_containers_formulas.html')">Cloud & Containers</button></li>
-            <li><button onclick="loadPage('files/springboot_formulas.html')">SpringBoot</button></li>
-            <li><button onclick="loadPage('files/mern_formulas.html')">MERN</button></li>
-            <li><button onclick="loadPage('files/10x_developer_guide.html')">10x_developer</button></li>
-            <li><button onclick="loadPage('files/backend_saas_production_guide.html')">Backend_SaaS</button></li>
-            <li><button onclick="loadPage('files/postgresql_cassandra_guide.html')">postgreVscass</button></li>
-            <li><button onclick="loadPage('files/git_mastery_guide.html')">GIT</button></li>
-            <li><button onclick="loadPage('files/linux_mastery_guide.html')">Linux</button></li>
-            <li><button onclick="loadPage('files/neovim_vim_mastery_guide.html')">NeoVim/Vim</button></li>
-            <li><button onclick="loadPage('files/distributed_systems_guide.html')">Distributed Systems</button></li>
-            <li><button onclick="loadPage('files/micoservices_guide.html')">MicroServices</button></li>
-            <li><button onclick="loadPage('files/blender_mastery_guide.html')">Blender</button></li>
-            <li><button onclick="loadPage('files/unity_mastery_guide.html')">Unity</button></li>
-            <li><button onclick="loadPage('files/unreal_mastery_guide.html')">Unreal</button></li>
-            <li><button onclick="loadPage('files/AI_mastery_guide.html')">AI</button></li>
-            <li><button onclick="loadPage('files/cybersecurity_mastery_guide.html')">CyberSecurity</button></li>
-            <li><button onclick="loadPage('files/ethical_hacking_mastery_guide.html')">Hacking</button></li>
-            
-        </ul>
-    </div>
-
-    <div class="iframe-container">
-        <div id="placeholderText" class="placeholder">
-            ✦ SELECT A MODULE TO LOAD ✦<br>
-            <span style="font-size:0.5em; font-family:'Kosugi Maru'">モジュールを選択してください</span>
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <h1>CYBER LIBRARY</h1>
+            <div class="subtitle" id="typewriter-text"></div>
         </div>
-        <iframe id="contentFrame" src="about:blank"></iframe>
+
+        <div class="marquee-container">
+            <marquee scrollamount="8">★ SYSTEM ONLINE ★ WALLPAPER MODE ENABLED ★ READY TO LOAD ★ </marquee>
+        </div>
+
+        <div class="menu-container">
+            <ul>
+                <li><button onclick="loadPage('files/algorithms_formulas.html')">Algorithms</button></li>
+                <li><button onclick="loadPage('files/compiler_design_formulas.html')">Compiler Design</button></li>
+                <li><button onclick="loadPage('files/computer_networks_formulas.html')">Networks</button></li>
+                <li><button onclick="loadPage('files/computer_organization_formulas.html')">Org & Arch</button></li>
+                <li><button onclick="loadPage('files/database_formulas.html')">Database</button></li>
+                <li><button onclick="loadPage('files/digital_logic_formulas.html')">Digital Logic</button></li>
+                <li><button onclick="loadPage('files/discrete_mathematics_formulas.html')">Discrete Math</button></li>
+                <li><button onclick="loadPage('files/disk_scheduling_paging_formulas.html')">Disk Paging</button></li>
+                <li><button onclick="loadPage('files/operating_systems_formulas.html')">Operating Systems</button></li>
+                <li><button onclick="loadPage('files/theory_of_computation_formulas.html')">Theory of Comp</button></li>
+                <li><button onclick="loadPage('files/programming_ds_algo_formulas.html')">Prog & DS</button></li>
+                <li><button onclick="loadPage('files/system_design_formulas.html')">System Design</button></li>
+                <li><button onclick="loadPage('files/algorithm_patterns_guide.html')">Algo Patterns</button></li>
+                <li><button onclick="loadPage('files/apis_formulas.html')">APIs</button></li>
+                <li><button onclick="loadPage('files/cloud_containers_formulas.html')">Cloud & Containers</button></li>
+                <li><button onclick="loadPage('files/springboot_formulas.html')">SpringBoot</button></li>
+                <li><button onclick="loadPage('files/mern_formulas.html')">MERN Stack</button></li>
+                <li><button onclick="loadPage('files/10x_developer_guide.html')">10x Developer</button></li>
+                <li><button onclick="loadPage('files/backend_saas_production_guide.html')">Backend SaaS</button></li>
+                <li><button onclick="loadPage('files/postgresql_cassandra_guide.html')">Postgre vs Cass</button></li>
+                <li><button onclick="loadPage('files/git_mastery_guide.html')">Git Mastery</button></li>
+                <li><button onclick="loadPage('files/linux_mastery_guide.html')">Linux Mastery</button></li>
+                <li><button onclick="loadPage('files/neovim_vim_mastery_guide.html')">NeoVim/Vim</button></li>
+                <li><button onclick="loadPage('files/distributed_systems_guide.html')">Distributed Sys</button></li>
+                <li><button onclick="loadPage('files/micoservices_guide.html')">MicroServices</button></li>
+                <li><button onclick="loadPage('files/blender_mastery_guide.html')">Blender</button></li>
+                <li><button onclick="loadPage('files/unity_mastery_guide.html')">Unity</button></li>
+                <li><button onclick="loadPage('files/unreal_mastery_guide.html')">Unreal Engine</button></li>
+                <li><button onclick="loadPage('files/AI_mastery_guide.html')">AI Mastery</button></li>
+                <li><button onclick="loadPage('files/cybersecurity_mastery_guide.html')">CyberSecurity</button></li>
+                <li><button onclick="loadPage('files/ethical_hacking_mastery_guide.html')">Ethical Hacking</button></li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- MAIN CONTENT AREA -->
+    <div class="main-content">
+        
+        <!-- Settings Button -->
+        <button id="settings-btn" onclick="toggleSettings()">⚙️</button>
+
+        <!-- Settings Panel -->
+        <div id="settings-panel" class="settings-panel">
+            <h3>WALLPAPER SELECTOR</h3>
+            <div class="wallpaper-grid">
+                <!-- Option 1: Matrix -->
+                <div class="wp-option active" style="background-image: url('https://cdn.wallpapersafari.com/70/23/6fP5Kp.gif');" onclick="setWallpaper('matrix', 'https://cdn.wallpapersafari.com/70/23/6fP5Kp.gif')">
+                    <div class="wp-label">Matrix Code</div>
+                </div>
+
+                <!-- Option 2: Cyberpunk City -->
+                <div class="wp-option" style="background-image: url('https://wallpapers.com/images/hd/cyberpunk-city-view-0dl309e9pgv3cvk7.jpg');" onclick="setWallpaper('cybercity', 'https://wallpapers.com/images/hd/cyberpunk-city-view-0dl309e9pgv3cvk7.jpg')">
+                    <div class="wp-label">Cyber City</div>
+                </div>
+
+                <!-- Option 3: Neon Abstract -->
+                <div class="wp-option" style="background-image: url('https://i.pinimg.com/originals/5d/1d/a7/5d1da7f59d02c4d15c5f2e7fbbec3624.gif');" onclick="setWallpaper('neon', 'https://i.pinimg.com/originals/5d/1d/a7/5d1da7f59d02c4d15c5f2e7fbbec3624.gif')">
+                    <div class="wp-label">Neon Grid</div>
+                </div>
+
+                <!-- Option 4: Anime Scenery -->
+                <div class="wp-option" style="background-image: url('https://wallpaper.dog/large/20493443.jpg');" onclick="setWallpaper('anime', 'https://wallpaper.dog/large/20493443.jpg')">
+                    <div class="wp-label">Anime Night</div>
+                </div>
+            </div>
+            <p style="font-size: 0.7rem; margin-top: 15px; opacity: 0.7; text-align: center;">
+                Selection saved automatically.
+            </p>
+        </div>
+
+        <div class="iframe-container">
+            <!-- Placeholder / Home Screen -->
+            <div id="placeholderText" class="placeholder bg-matrix">
+                <div class="placeholder-content">
+                    <div>✦ SELECT A MODULE ✦</div>
+                    <div style="font-size: 0.6rem; margin-top: 10px; font-family: 'Noto Sans JP', sans-serif; color: #ccc;">
+                        モジュールを選択してください
+                    </div>
+                </div>
+            </div>
+
+            <!-- Loading Spinner Overlay -->
+            <div id="loader" class="loader">
+                <div class="spinner"></div>
+                <div class="loader-text">LOADING MODULE...</div>
+            </div>
+
+            <!-- Content Frame -->
+            <iframe id="contentFrame" src="about:blank"></iframe>
+        </div>
     </div>
 
     <script>
-        // TYPEWRITER EFFECT FOR SUBTITLE 
+        // --- 1. TYPEWRITER EFFECT ---
         document.addEventListener("DOMContentLoaded", () => {
             const subtitleEl = document.getElementById('typewriter-text');
-            const text = subtitleEl.innerText;
-            subtitleEl.innerText = ''; // Clear text on load
+            const text = "FORMULA DATABASE v2.1";
+            subtitleEl.innerText = ''; 
             
             let i = 0;
             function typeWriter() {
                 if (i < text.length) {
                     subtitleEl.innerHTML += text.charAt(i);
                     i++;
-                    setTimeout(typeWriter, 50); 
+                    setTimeout(typeWriter, 80); 
                 }
             }
             
-            
-            setTimeout(typeWriter, 500); 
+            setTimeout(typeWriter, 500);
+            loadSavedWallpaper();
         });
 
-        // ENHANCED LOAD FUNCTION 
+        // --- 2. PAGE LOADER ---
         function loadPage(url) {
             const placeholder = document.getElementById('placeholderText');
+            const loader = document.getElementById('loader');
             const iframe = document.getElementById('contentFrame');
             
-            
-            iframe.style.opacity = '0'; 
-            placeholder.style.display = 'block';
-            placeholder.innerHTML = 'DOWNLOADING MODULE... <br><span style="font-size:0.5em;">お待ちください (Please wait)</span>';
-            placeholder.style.color = "var(--term-green)";
-
+            placeholder.style.display = 'none';
+            loader.style.display = 'flex';
+            iframe.style.opacity = '0';
             
             setTimeout(() => {
                 iframe.src = url;
-                
-                
                 iframe.onload = () => {
-                    placeholder.style.display = 'none';
+                    loader.style.display = 'none';
                     iframe.style.transition = "opacity 0.5s ease";
                     iframe.style.opacity = '1';
                 };
-            }, 400);
+            }, 300);
+        }
+
+        // --- 3. WALLPAPER SETTINGS ---
+        function toggleSettings() {
+            const panel = document.getElementById('settings-panel');
+            panel.style.display = panel.style.display === 'block' ? 'none' : 'block';
+        }
+
+        function setWallpaper(type, url) {
+            const placeholder = document.getElementById('placeholderText');
+            
+            // Apply background
+            if(type === 'default') {
+                placeholder.style.backgroundColor = 'var(--bg-dark)';
+                placeholder.style.backgroundImage = 'none';
+            } else {
+                placeholder.style.backgroundImage = `url('${url}')`;
+            }
+
+            // Update active state in UI
+            document.querySelectorAll('.wp-option').forEach(el => el.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+
+            // Save to localStorage
+            localStorage.setItem('selected_wallpaper', url);
+        }
+
+        function loadSavedWallpaper() {
+            const savedUrl = localStorage.getItem('selected_wallpaper');
+            if(savedUrl) {
+                const placeholder = document.getElementById('placeholderText');
+                placeholder.style.backgroundImage = `url('${savedUrl}')`;
+                
+                // Update UI active state based on URL
+                document.querySelectorAll('.wp-option').forEach(el => {
+                    if(el.style.backgroundImage.includes(savedUrl.substring(0, 20))) { // Partial match for safety
+                        el.classList.add('active');
+                    } else {
+                        el.classList.remove('active');
+                    }
+                });
+            }
         }
     </script>
-
 </body>
 </html>
