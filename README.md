@@ -30,4 +30,4 @@ The following memory modules are currently available in the database:
 
 **Option 2: Run Local Emulation** 1. Clone this repository to your local machine:
    ```bash
-   git clone [https://github.com/manish1710-007/quick-cs-cheatsheet.git](https://github.com/manish1710-007/quick-cs-cheatsheet.git)
+   git clone https://github.com/manish1710-007/quick-cs-cheatsheet.git
