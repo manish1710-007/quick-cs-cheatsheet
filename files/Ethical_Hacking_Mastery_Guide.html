@@ -1359,9 +1359,9 @@ GET /products?id=1 UNION SELECT NULL--
 <pre><code class="language-html">
 # Testing XSS
 GET /search?q=test
-GET /search?q=<script>alert(1)</script>
-GET /search?q="><script>alert(1)</script>
-GET /search?q=<img src=x onerror=alert(1)>
+GET /search?q=&lt;script&gt;alert(1)&lt;/script&gt;
+GET /search?q=&quot;&gt;&lt;script&gt;alert(1)&lt;/script&gt;
+GET /search?q=&lt;img src=x onerror=alert(1)&gt;
 </code></pre>
 
 # Testing IDOR
