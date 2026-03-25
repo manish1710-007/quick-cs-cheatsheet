@@ -1,0 +1,2563 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Artificial Intelligence Mastery Guide</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-python.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-bash.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-javascript.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0a0a1a 0%, #1a0a2e 50%, #0a1a2a 100%);
+            min-height: 100vh;
+            color: #e0e0e0;
+            line-height: 1.7;
+        }
+        
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            padding: 60px 20px;
+            background: linear-gradient(180deg, rgba(100, 0, 255, 0.2) 0%, transparent 100%);
+            border-bottom: 3px solid #6400ff;
+            margin-bottom: 40px;
+            position: relative;
+        }
+        
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #6400ff, #00d4ff, #6400ff);
+            animation: gradient-shift 3s ease infinite;
+        }
+        
+        @keyframes gradient-shift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        
+        h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #6400ff, #00d4ff, #ff00aa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 15px;
+            letter-spacing: 2px;
+        }
+        
+        .subtitle {
+            font-size: 1.4rem;
+            color: #888;
+            font-weight: 300;
+            margin-bottom: 10px;
+        }
+        
+        .badge-container {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 25px;
+            flex-wrap: wrap;
+        }
+        
+        .badge {
+            background: linear-gradient(135deg, #1a1a2e, #2a1a3e);
+            border: 1px solid #6400ff;
+            padding: 8px 18px;
+            border-radius: 25px;
+            font-size: 0.85rem;
+            color: #a088ff;
+            font-family: 'JetBrains Mono', monospace;
+        }
+        
+        .section {
+            background: linear-gradient(135deg, rgba(20, 20, 40, 0.95), rgba(15, 15, 30, 0.98));
+            border: 1px solid #2a2a4a;
+            border-radius: 16px;
+            padding: 35px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+        }
+        
+        .section:hover {
+            border-color: #6400ff;
+            box-shadow: 0 10px 50px rgba(100, 0, 255, 0.15);
+        }
+        
+        h2 {
+            font-size: 2rem;
+            color: #a088ff;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #2a2a4a;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        h2 .icon {
+            font-size: 1.8rem;
+        }
+        
+        h3 {
+            font-size: 1.4rem;
+            color: #00d4ff;
+            margin: 30px 0 15px 0;
+            padding-left: 15px;
+            border-left: 4px solid #6400ff;
+        }
+        
+        h4 {
+            font-size: 1.15rem;
+            color: #ff00aa;
+            margin: 25px 0 12px 0;
+        }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+            gap: 25px;
+            margin-top: 25px;
+        }
+        
+        .card {
+            background: rgba(10, 10, 25, 0.8);
+            border: 1px solid #1a1a3a;
+            border-radius: 12px;
+            padding: 22px;
+            transition: all 0.3s ease;
+        }
+        
+        .card:hover {
+            border-color: #6400ff;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(100, 0, 255, 0.15);
+        }
+        
+        .card-title {
+            font-size: 1.15rem;
+            color: #00d4ff;
+            font-weight: 600;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .card-title::before {
+            content: '◆';
+            color: #ff00aa;
+        }
+        
+        pre {
+            background: #0a0a15 !important;
+            border: 1px solid #1a1a3a;
+            border-radius: 10px;
+            padding: 18px !important;
+            overflow-x: auto;
+            font-family: 'JetBrains Mono', monospace !important;
+            font-size: 0.85rem !important;
+            margin: 18px 0;
+            line-height: 1.6 !important;
+        }
+        
+        code {
+            font-family: 'JetBrains Mono', monospace !important;
+            background: rgba(100, 0, 255, 0.15);
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            color: #a088ff;
+        }
+        
+        pre code {
+            background: transparent !important;
+            padding: 0 !important;
+            color: inherit !important;
+        }
+        
+        .command-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 12px;
+            margin: 18px 0;
+        }
+        
+        .cmd-item {
+            background: rgba(100, 0, 255, 0.1);
+            border: 1px solid #2a1a4a;
+            border-radius: 8px;
+            padding: 14px 16px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+        }
+        
+        .cmd-item strong {
+            color: #00d4ff;
+            display: block;
+        }
+        
+        .cmd-item span {
+            color: #666;
+            display: block;
+            font-size: 0.78rem;
+            margin-top: 6px;
+        }
+        
+        .ascii-box {
+            background: #0a0a15;
+            border: 1px solid #1a1a3a;
+            border-radius: 10px;
+            padding: 22px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.72rem;
+            line-height: 1.35;
+            overflow-x: auto;
+            color: #00d4ff;
+            white-space: pre;
+            margin: 22px 0;
+        }
+        
+        .tip-box {
+            background: linear-gradient(135deg, rgba(0, 100, 255, 0.15), rgba(0, 50, 150, 0.1));
+            border: 1px solid #0088ff;
+            border-radius: 10px;
+            padding: 18px 22px;
+            margin: 22px 0;
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+        }
+        
+        .tip-box::before {
+            content: '💡';
+            font-size: 1.5rem;
+        }
+        
+        .warning-box {
+            background: linear-gradient(135deg, rgba(255, 100, 0, 0.15), rgba(200, 50, 0, 0.1));
+            border: 1px solid #ff6600;
+            border-radius: 10px;
+            padding: 18px 22px;
+            margin: 22px 0;
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+        }
+        
+        .warning-box::before {
+            content: '⚠️';
+            font-size: 1.5rem;
+        }
+        
+        .flow-diagram {
+            background: linear-gradient(90deg, #0a0a15, #101025, #0a0a15);
+            border: 1px solid #1a1a3a;
+            border-radius: 12px;
+            padding: 25px;
+            margin: 25px 0;
+            text-align: center;
+        }
+        
+        .flow-diagram .step {
+            display: inline-block;
+            background: linear-gradient(135deg, #1a0a3a, #2a1a4a);
+            padding: 12px 22px;
+            border-radius: 8px;
+            margin: 8px;
+            font-weight: 600;
+            color: #a088ff;
+            border: 1px solid #6400ff;
+        }
+        
+        .flow-diagram .arrow {
+            color: #6400ff;
+            font-size: 1.6rem;
+            margin: 0 8px;
+        }
+        
+        ul, ol {
+            margin: 18px 0;
+            padding-left: 28px;
+        }
+        
+        li {
+            margin: 10px 0;
+            color: #c0c0c0;
+        }
+        
+        li::marker {
+            color: #6400ff;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 22px 0;
+        }
+        
+        th, td {
+            padding: 14px 18px;
+            text-align: left;
+            border: 1px solid #1a1a3a;
+        }
+        
+        th {
+            background: rgba(100, 0, 255, 0.2);
+            color: #a088ff;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+        }
+        
+        td {
+            background: rgba(10, 10, 25, 0.6);
+        }
+        
+        tr:hover td {
+            background: rgba(100, 0, 255, 0.1);
+        }
+        
+        .quick-ref {
+            background: linear-gradient(135deg, #0a0a2a, #1a0a3a);
+            border: 2px solid #6400ff;
+            border-radius: 12px;
+            padding: 28px;
+            margin: 28px 0;
+        }
+        
+        .quick-ref h4 {
+            color: #a088ff;
+            margin-bottom: 18px;
+            font-size: 1.3rem;
+            border-bottom: 1px solid #2a2a4a;
+            padding-bottom: 10px;
+        }
+        
+        .tool-header {
+            background: linear-gradient(135deg, #0a0a2a, #1a1a3a);
+            border: 1px solid #6400ff;
+            border-radius: 12px;
+            padding: 20px 25px;
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .tool-name {
+            font-size: 1.5rem;
+            color: #a088ff;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .tool-meta {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .tool-meta span {
+            background: rgba(100, 0, 255, 0.2);
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            color: #a088ff;
+        }
+        
+        .resources-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 18px;
+            margin: 22px 0;
+        }
+        
+        .resource-card {
+            background: rgba(100, 0, 255, 0.1);
+            border: 1px solid #2a1a4a;
+            border-radius: 10px;
+            padding: 18px;
+            transition: all 0.3s ease;
+        }
+        
+        .resource-card:hover {
+            border-color: #6400ff;
+            background: rgba(100, 0, 255, 0.15);
+        }
+        
+        .resource-card .name {
+            color: #00d4ff;
+            font-weight: 600;
+            font-size: 1.05rem;
+            margin-bottom: 8px;
+        }
+        
+        .resource-card .url {
+            color: #a088ff;
+            font-size: 0.85rem;
+            font-family: 'JetBrains Mono', monospace;
+        }
+        
+        .resource-card .desc {
+            color: #888;
+            font-size: 0.85rem;
+            margin-top: 10px;
+        }
+        
+        .formula-box {
+            background: linear-gradient(135deg, #0a0a20, #101030);
+            border: 1px solid #2a2a4a;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.1rem;
+            color: #00d4ff;
+        }
+        
+        .comparison-table {
+            margin: 25px 0;
+        }
+        
+        .level-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-left: 8px;
+        }
+        
+        .level-beginner { background: #00aa00; color: #000; }
+        .level-intermediate { background: #ffaa00; color: #000; }
+        .level-advanced { background: #ff4444; color: #fff; }
+        .level-expert { background: #aa00aa; color: #fff; }
+        
+        footer {
+            text-align: center;
+            padding: 50px 20px;
+            border-top: 2px solid #1a1a3a;
+            margin-top: 60px;
+            color: #555;
+        }
+        
+        @media (max-width: 768px) {
+            h1 { font-size: 2.2rem; }
+            .grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🤖 ARTIFICIAL INTELLIGENCE MASTERY GUIDE</h1>
+            <p class="subtitle">From Machine Learning Fundamentals to Advanced AI Systems</p>
+            <div class="badge-container">
+                <span class="badge">Machine Learning</span>
+                <span class="badge">Deep Learning</span>
+                <span class="badge">Neural Networks</span>
+                <span class="badge">LLMs</span>
+                <span class="badge">Computer Vision</span>
+                <span class="badge">NLP</span>
+                <span class="badge">TensorFlow</span>
+                <span class="badge">PyTorch</span>
+            </div>
+        </header>
+
+        <!-- Section 1: AI Fundamentals -->
+        <section class="section">
+            <h2><span class="icon">🧠</span> AI Fundamentals & Landscape</h2>
+            
+            <div class="ascii-box">
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                    ARTIFICIAL INTELLIGENCE HIERARCHY                         │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│   ┌─────────────────────────────────────────────────────────────────────┐   │
+│   │                      ARTIFICIAL INTELLIGENCE                        │   │
+│   │   The broad field of creating intelligent machines                  │   │
+│   └─────────────────────────────────────────────────────────────────────┘   │
+│                                   │                                          │
+│                                   ▼                                          │
+│   ┌─────────────────────────────────────────────────────────────────────┐   │
+│   │                     MACHINE LEARNING                                │   │
+│   │   Systems that learn from data without explicit programming         │   │
+│   └─────────────────────────────────────────────────────────────────────┘   │
+│                                   │                                          │
+│                                   ▼                                          │
+│   ┌─────────────────────────────────────────────────────────────────────┐   │
+│   │                      DEEP LEARNING                                  │   │
+│   │   Neural networks with multiple layers (deep architectures)         │   │
+│   └─────────────────────────────────────────────────────────────────────┘   │
+│                                   │                                          │
+│                    ┌──────────────┴──────────────┐                          │
+│                    ▼                              ▼                          │
+│   ┌────────────────────────┐      ┌────────────────────────┐               │
+│   │   COMPUTER VISION      │      │   NATURAL LANGUAGE     │               │
+│   │   Image recognition,   │      │   PROCESSING (NLP)     │               │
+│   │   Object detection     │      │   Text understanding,  │               │
+│   │   Video analysis       │      │   Generation, Translation              │
+│   └────────────────────────┘      └────────────────────────┘               │
+│                                                                              │
+│   EMERGING: Generative AI, Reinforcement Learning, Multimodal AI           │
+│                                                                              │
+└─────────────────────────────────────────────────────────────────────────────┘</div>
+
+            <h3>Types of Machine Learning</h3>
+            <div class="grid">
+                <div class="card">
+                    <div class="card-title">Supervised Learning</div>
+                    <p>Learning from labeled data with known outputs.</p>
+                    <ul>
+                        <li><strong>Classification:</strong> Spam detection, Image recognition</li>
+                        <li><strong>Regression:</strong> Price prediction, Weather forecasting</li>
+                        <li><strong>Algorithms:</strong> Linear Regression, Decision Trees, SVM, Random Forest</li>
+                    </ul>
+                    <div class="formula-box">
+                        Input (X) → Model → Output (ŷ) | Compare with y → Adjust
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-title">Unsupervised Learning</div>
+                    <p>Discovering patterns in unlabeled data.</p>
+                    <ul>
+                        <li><strong>Clustering:</strong> Customer segmentation, Anomaly detection</li>
+                        <li><strong>Dimensionality Reduction:</strong> PCA, t-SNE</li>
+                        <li><strong>Algorithms:</strong> K-Means, DBSCAN, Hierarchical Clustering</li>
+                    </ul>
+                    <div class="formula-box">
+                        Input (X) → Model → Discover Patterns/Structure
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-title">Reinforcement Learning</div>
+                    <p>Learning through trial and error with rewards.</p>
+                    <ul>
+                        <li><strong>Applications:</strong> Game AI, Robotics, Autonomous vehicles</li>
+                        <li><strong>Concepts:</strong> Agent, Environment, Action, Reward, State</li>
+                        <li><strong>Algorithms:</strong> Q-Learning, DQN, PPO, A3C</li>
+                    </ul>
+                    <div class="formula-box">
+                        State → Action → Reward → Update Policy → Repeat
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-title">Self-Supervised Learning</div>
+                    <p>Learning representations from unlabeled data by creating surrogate tasks.</p>
+                    <ul>
+                        <li><strong>Used in:</strong> LLMs (GPT, BERT), Vision models</li>
+                        <li><strong>Methods:</strong> Masked language modeling, Contrastive learning</li>
+                        <li><strong>Advantage:</strong> Leverages massive unlabeled datasets</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h3>AI Development Environment Setup</h3>
+            <pre><code class="language-bash"># Create virtual environment
+python -m venv ai_env
+source ai_env/bin/activate  # Linux/Mac
+# ai_env\Scripts\activate   # Windows
+
+# Core ML packages
+pip install numpy pandas matplotlib seaborn scipy
+pip install scikit-learn
+
+# Deep Learning (choose one or both)
+pip install tensorflow      # TensorFlow
+pip install torch torchvision torchaudio  # PyTorch
+
+# NLP
+pip install transformers datasets tokenizers
+pip install spacy nltk textblob
+
+# Computer Vision
+pip install opencv-python pillow
+pip install albumentations
+
+# Utilities
+pip install jupyter jupyterlab
+pip install tqdm wandb tensorboard
+
+# Data handling
+pip install h5py pyarrow fastparquet</code></pre>
+        </section>
+
+        <!-- Section 2: Python for AI -->
+        <section class="section">
+            <h2><span class="icon">🐍</span> Python for AI - Essential Foundations</h2>
+            
+            <h3>NumPy - Numerical Computing</h3>
+            <div class="card">
+                <div class="card-title">NumPy Essentials</div>
+                <pre><code class="language-python">import numpy as np
+
+# Array creation
+arr = np.array([1, 2, 3, 4, 5])
+matrix = np.array([[1, 2, 3], [4, 5, 6]])
+zeros = np.zeros((3, 4))
+ones = np.ones((2, 3))
+random = np.random.randn(3, 3)  # Normal distribution
+
+# Array properties
+print(arr.shape)      # (5,)
+print(matrix.ndim)    # 2
+print(matrix.dtype)   # int64
+
+# Reshaping
+arr.reshape(5, 1)
+matrix.flatten()
+
+# Mathematical operations
+arr = np.array([1, 2, 3, 4])
+arr * 2              # [2, 4, 6, 8]
+arr ** 2             # [1, 4, 9, 16]
+np.sqrt(arr)         # Square root
+np.exp(arr)          # Exponential
+np.log(arr)          # Natural log
+
+# Statistical operations
+np.mean(arr)
+np.std(arr)
+np.sum(arr)
+np.max(arr)
+np.argmax(arr)       # Index of max value
+
+# Matrix operations
+A = np.array([[1, 2], [3, 4]])
+B = np.array([[5, 6], [7, 8]])
+np.dot(A, B)         # Matrix multiplication
+A @ B                # Alternative syntax
+A.T                  # Transpose
+np.linalg.inv(A)     # Inverse
+np.linalg.det(A)     # Determinant
+
+# Broadcasting
+arr = np.array([[1, 2, 3], [4, 5, 6]])
+arr + np.array([1, 0, 1])  # Adds row-wise
+
+# Indexing and slicing
+arr = np.arange(20).reshape(4, 5)
+arr[0, :]            # First row
+arr[:, 0]            # First column
+arr[1:3, 2:4]        # Subarray
+arr[arr > 10]        # Boolean indexing</code></pre>
+            </div>
+            
+            <h3>Pandas - Data Manipulation</h3>
+            <div class="card">
+                <div class="card-title">Pandas Essentials</div>
+                <pre><code class="language-python">import pandas as pd
+
+# Creating DataFrames
+df = pd.DataFrame({
+    'name': ['Alice', 'Bob', 'Charlie'],
+    'age': [25, 30, 35],
+    'city': ['NYC', 'LA', 'Chicago']
+})
+
+# Reading data
+df = pd.read_csv('data.csv')
+df = pd.read_excel('data.xlsx')
+df = pd.read_json('data.json')
+
+# Basic exploration
+df.head()            # First 5 rows
+df.tail()            # Last 5 rows
+df.info()            # Data types and non-null counts
+df.describe()        # Statistical summary
+df.shape             # (rows, columns)
+df.columns           # Column names
+
+# Selection
+df['name']           # Single column
+df[['name', 'age']]  # Multiple columns
+df.iloc[0]           # Row by index
+df.loc[0, 'name']    # By label
+df[df['age'] > 25]   # Filter rows
+
+# Data cleaning
+df.dropna()                    # Drop rows with NaN
+df.fillna(0)                   # Fill NaN with 0
+df.drop_duplicates()           # Remove duplicates
+df.rename(columns={'old': 'new'})  # Rename columns
+
+# Data transformation
+df['age_squared'] = df['age'] ** 2
+df['category'] = df['age'].apply(lambda x: 'young' if x < 30 else 'old')
+
+# Aggregation
+df.groupby('city')['age'].mean()
+df.groupby('city').agg({'age': ['mean', 'std'], 'name': 'count'})
+
+# Merging
+pd.merge(df1, df2, on='key')
+pd.concat([df1, df2])
+
+# Time series
+df['date'] = pd.to_datetime(df['date'])
+df.set_index('date', inplace=True)
+df.resample('M').mean()  # Monthly average</code></pre>
+            </div>
+            
+            <h3>Matplotlib & Seaborn - Visualization</h3>
+            <div class="card">
+                <div class="card-title">Data Visualization</div>
+                <pre><code class="language-python">import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Basic matplotlib
+plt.figure(figsize=(10, 6))
+plt.plot([1, 2, 3, 4], [1, 4, 2, 3])
+plt.xlabel('X axis')
+plt.ylabel('Y axis')
+plt.title('Line Plot')
+plt.savefig('plot.png')
+plt.show()
+
+# Subplots
+fig, axes = plt.subplots(2, 2, figsize=(12, 8))
+axes[0, 0].plot(x, y)
+axes[0, 1].scatter(x, y)
+axes[1, 0].bar(x, y)
+axes[1, 1].hist(data, bins=20)
+
+# Seaborn
+sns.set_style('whitegrid')
+
+# Distribution plots
+sns.histplot(data=df, x='age', bins=20)
+sns.kdeplot(data=df, x='age', fill=True)
+sns.boxplot(data=df, x='category', y='age')
+
+# Relationship plots
+sns.scatterplot(data=df, x='age', y='salary', hue='category')
+sns.lineplot(data=df, x='year', y='sales')
+sns.heatmap(df.corr(), annot=True, cmap='coolwarm')
+
+# Categorical plots
+sns.barplot(data=df, x='city', y='salary')
+sns.countplot(data=df, x='category')
+sns.violinplot(data=df, x='category', y='age')
+
+# Pair plots
+sns.pairplot(df, hue='category')</code></pre>
+            </div>
+        </section>
+
+        <!-- Section 3: Machine Learning -->
+        <section class="section">
+            <h2><span class="icon">📊</span> Machine Learning with Scikit-learn</h2>
+            
+            <h3>ML Workflow Overview</h3>
+            <div class="flow-diagram">
+                <span class="step">Data Collection</span>
+                <span class="arrow">→</span>
+                <span class="step">Preprocessing</span>
+                <span class="arrow">→</span>
+                <span class="step">Feature Engineering</span>
+                <span class="arrow">→</span>
+                <span class="step">Model Training</span>
+                <span class="arrow">→</span>
+                <span class="step">Evaluation</span>
+            </div>
+            
+            <h3>Data Preprocessing</h3>
+            <pre><code class="language-python">from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler, MinMaxScaler, LabelEncoder
+from sklearn.impute import SimpleImputer
+from sklearn.feature_selection import SelectKBest, f_classif
+
+# Train-test split
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42, stratify=y
+)
+
+# Handling missing values
+imputer = SimpleImputer(strategy='mean')
+X_train = imputer.fit_transform(X_train)
+X_test = imputer.transform(X_test)
+
+# Feature scaling
+scaler = StandardScaler()
+X_train_scaled = scaler.fit_transform(X_train)
+X_test_scaled = scaler.transform(X_test)
+
+# Min-Max scaling (0-1 range)
+minmax = MinMaxScaler()
+X_normalized = minmax.fit_transform(X)
+
+# Label encoding
+le = LabelEncoder()
+y_encoded = le.fit_transform(y)
+
+# One-hot encoding
+from sklearn.preprocessing import OneHotEncoder
+encoder = OneHotEncoder(sparse_output=False)
+X_encoded = encoder.fit_transform(X_categorical)
+
+# Feature selection
+selector = SelectKBest(score_func=f_classif, k=10)
+X_selected = selector.fit_transform(X_train, y_train)</code></pre>
+            
+            <h3>Classification Algorithms</h3>
+            <div class="grid">
+                <div class="card">
+                    <div class="card-title">Logistic Regression</div>
+                    <pre><code class="language-python">from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score, classification_report
+
+model = LogisticRegression(max_iter=1000)
+model.fit(X_train_scaled, y_train)
+
+y_pred = model.predict(X_test_scaled)
+print(f"Accuracy: {accuracy_score(y_test, y_pred)}")
+print(classification_report(y_test, y_pred))
+
+# Predictions and probabilities
+y_prob = model.predict_proba(X_test_scaled)</code></pre>
+                </div>
+                
+                <div class="card">
+                    <div class="card-title">Random Forest</div>
+                    <pre><code class="language-python">from sklearn.ensemble import RandomForestClassifier
+
+model = RandomForestClassifier(
+    n_estimators=100,
+    max_depth=10,
+    random_state=42,
+    n_jobs=-1
+)
+model.fit(X_train, y_train)
+
+y_pred = model.predict(X_test)
+
+# Feature importance
+importances = model.feature_importances_
+for feat, imp in zip(feature_names, importances):
+    print(f"{feat}: {imp:.4f}")</code></pre>
+                </div>
+                
+                <div class="card">
+                    <div class="card-title">Support Vector Machine</div>
+                    <pre><code class="language-python">from sklearn.svm import SVC
+
+model = SVC(kernel='rbf', C=1.0, gamma='scale')
+model.fit(X_train_scaled, y_train)
+
+y_pred = model.predict(X_test_scaled)
+
+# Different kernels
+linear_svc = SVC(kernel='linear')
+poly_svc = SVC(kernel='poly', degree=3)
+rbf_svc = SVC(kernel='rbf')</code></pre>
+                </div>
+                
+                <div class="card">
+                    <div class="card-title">XGBoost / LightGBM</div>
+                    <pre><code class="language-python">import xgboost as xgb
+# or: import lightgbm as lgb
+
+model = xgb.XGBClassifier(
+    n_estimators=100,
+    max_depth=6,
+    learning_rate=0.1,
+    objective='binary:logistic',
+    n_jobs=-1
+)
+model.fit(X_train, y_train,
+          eval_set=[(X_test, y_test)],
+          early_stopping_rounds=10,
+          verbose=False
+)</code></pre>
+                </div>
+            </div>
+            
+            <h3>Regression Algorithms</h3>
+            <pre><code class="language-python">from sklearn.linear_model import LinearRegression, Ridge, Lasso
+from sklearn.ensemble import GradientBoostingRegressor
+from sklearn.metrics import mean_squared_error, r2_score, mean_absolute_error
+
+# Linear Regression
+lr = LinearRegression()
+lr.fit(X_train, y_train)
+y_pred = lr.predict(X_test)
+
+print(f"MSE: {mean_squared_error(y_test, y_pred)}")
+print(f"MAE: {mean_absolute_error(y_test, y_pred)}")
+print(f"R²: {r2_score(y_test, y_pred)}")
+
+# Ridge Regression (L2 regularization)
+ridge = Ridge(alpha=1.0)
+ridge.fit(X_train, y_train)
+
+# Lasso Regression (L1 regularization, feature selection)
+lasso = Lasso(alpha=0.1)
+lasso.fit(X_train, y_train)
+
+# Gradient Boosting Regressor
+gbr = GradientBoostingRegressor(
+    n_estimators=100,
+    learning_rate=0.1,
+    max_depth=5
+)
+gbr.fit(X_train, y_train)</code></pre>
+            
+            <h3>Model Evaluation & Tuning</h3>
+            <div class="card">
+                <div class="card-title">Cross-Validation & Hyperparameter Tuning</div>
+                <pre><code class="language-python">from sklearn.model_selection import cross_val_score, GridSearchCV, RandomizedSearchCV
+
+# Cross-validation
+scores = cross_val_score(model, X, y, cv=5, scoring='accuracy')
+print(f"CV Scores: {scores}")
+print(f"Mean: {scores.mean():.4f} (+/- {scores.std():.4f})")
+
+# Grid Search
+param_grid = {
+    'n_estimators': [50, 100, 200],
+    'max_depth': [5, 10, 15],
+    'min_samples_split': [2, 5, 10]
+}
+grid_search = GridSearchCV(
+    RandomForestClassifier(),
+    param_grid,
+    cv=5,
+    scoring='accuracy',
+    n_jobs=-1
+)
+grid_search.fit(X_train, y_train)
+print(f"Best params: {grid_search.best_params_}")
+print(f"Best score: {grid_search.best_score_:.4f}")
+
+# Random Search (more efficient for large parameter spaces)
+from scipy.stats import randint
+param_dist = {
+    'n_estimators': randint(50, 300),
+    'max_depth': randint(5, 20),
+    'min_samples_split': randint(2, 15)
+}
+random_search = RandomizedSearchCV(
+    RandomForestClassifier(),
+    param_dist,
+    n_iter=50,
+    cv=5,
+    random_state=42,
+    n_jobs=-1
+)
+random_search.fit(X_train, y_train)</code></pre>
+            </div>
+            
+            <h3>Clustering</h3>
+            <div class="grid">
+                <div class="card">
+                    <div class="card-title">K-Means Clustering</div>
+                    <pre><code class="language-python">from sklearn.cluster import KMeans
+from sklearn.metrics import silhouette_score
+
+# Find optimal k using elbow method
+inertias = []
+for k in range(1, 11):
+    kmeans = KMeans(n_clusters=k, random_state=42)
+    kmeans.fit(X)
+    inertias.append(kmeans.inertia_)
+
+# Plot elbow curve
+plt.plot(range(1, 11), inertias, 'bo-')
+
+# Fit with optimal k
+kmeans = KMeans(n_clusters=3, random_state=42)
+labels = kmeans.fit_predict(X)
+
+# Evaluate
+silhouette_avg = silhouette_score(X, labels)
+print(f"Silhouette Score: {silhouette_avg:.4f}")</code></pre>
+                </div>
+                
+                <div class="card">
+                    <div class="card-title">DBSCAN</div>
+                    <pre><code class="language-python">from sklearn.cluster import DBSCAN
+from sklearn.preprocessing import StandardScaler
+
+# Scale data
+X_scaled = StandardScaler().fit_transform(X)
+
+# DBSCAN clustering
+dbscan = DBSCAN(eps=0.5, min_samples=5)
+labels = dbscan.fit_predict(X_scaled)
+
+# Number of clusters (excluding noise)
+n_clusters = len(set(labels)) - (1 if -1 in labels else 0)
+print(f"Clusters found: {n_clusters}")
+
+# Points classified as noise
+n_noise = list(labels).count(-1)
+print(f"Noise points: {n_noise}")</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 4: Deep Learning -->
+        <section class="section">
+            <h2><span class="icon">🔮</span> Deep Learning Fundamentals</h2>
+            
+            <h3>Neural Network Architecture</h3>
+            <div class="ascii-box">
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                    NEURAL NETWORK ARCHITECTURE                               │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│   INPUT LAYER          HIDDEN LAYER(S)           OUTPUT LAYER               │
+│   ┌─────────┐         ┌─────────────────┐        ┌─────────┐                │
+│   │  x₁     │────────▶│  ○   ○   ○   ○ │───────▶│  y₁     │                │
+│   │  x₂     │────────▶│  ○   ○   ○   ○ │───────▶│  y₂     │                │
+│   │  x₃     │────────▶│  ○   ○   ○   ○ │───────▶│  ...    │                │
+│   │  ...    │────────▶│  ○   ○   ○   ○ │───────▶│  yₙ     │                │
+│   │  xₙ     │────────▶│                 │───────▶│         │                │
+│   └─────────┘         └─────────────────┘        └─────────┘                │
+│                                                                              │
+│   Each connection has a weight (w) and bias (b)                             │
+│   Output = activation(Σ(w × x) + b)                                         │
+│                                                                              │
+│   COMMON ACTIVATION FUNCTIONS:                                               │
+│   ┌─────────────────────────────────────────────────────────────────────┐   │
+│   │ ReLU:     f(x) = max(0, x)                  # Most common          │   │
+│   │ Sigmoid:  f(x) = 1 / (1 + e^(-x))          # Binary classification│   │
+│   │ Tanh:     f(x) = (e^x - e^(-x)) / (e^x + e^(-x))  # -1 to 1       │   │
+│   │ Softmax:  f(x) = e^x / Σ(e^x)               # Multi-class         │   │
+│   │ GELU:     Gaussian Error Linear Unit        # Transformers        │   │
+│   └─────────────────────────────────────────────────────────────────────┘   │
+│                                                                              │
+│   FORWARD PROPAGATION: Input → Hidden → Output → Loss                       │
+│   BACKPROPAGATION:    Loss → Gradients → Update Weights                     │
+│                                                                              │
+└─────────────────────────────────────────────────────────────────────────────┘</div>
+            
+            <h3>PyTorch Fundamentals</h3>
+            <div class="card">
+                <div class="card-title">PyTorch Basics</div>
+                <pre><code class="language-python">import torch
+import torch.nn as nn
+import torch.optim as optim
+from torch.utils.data import DataLoader, TensorDataset
+
+# Tensor operations
+x = torch.tensor([1, 2, 3, 4], dtype=torch.float32)
+y = torch.randn(3, 4)  # Random 3x4 tensor
+
+# GPU acceleration
+device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+x = x.to(device)
+
+# Define neural network
+class NeuralNetwork(nn.Module):
+    def __init__(self, input_size, hidden_size, num_classes):
+        super(NeuralNetwork, self).__init__()
+        self.layer1 = nn.Linear(input_size, hidden_size)
+        self.relu = nn.ReLU()
+        self.dropout = nn.Dropout(0.2)
+        self.layer2 = nn.Linear(hidden_size, hidden_size)
+        self.layer3 = nn.Linear(hidden_size, num_classes)
+        
+    def forward(self, x):
+        x = self.relu(self.layer1(x))
+        x = self.dropout(x)
+        x = self.relu(self.layer2(x))
+        x = self.layer3(x)
+        return x
+
+# Initialize model
+model = NeuralNetwork(input_size=784, hidden_size=128, num_classes=10).to(device)
+
+# Loss and optimizer
+criterion = nn.CrossEntropyLoss()
+optimizer = optim.Adam(model.parameters(), lr=0.001)
+
+# Training loop
+num_epochs = 10
+for epoch in range(num_epochs):
+    for batch_idx, (data, targets) in enumerate(train_loader):
+        data = data.to(device)
+        targets = targets.to(device)
+        
+        # Forward pass
+        outputs = model(data)
+        loss = criterion(outputs, targets)
+        
+        # Backward pass
+        optimizer.zero_grad()
+        loss.backward()
+        optimizer.step()
+        
+    print(f'Epoch {epoch+1}/{num_epochs}, Loss: {loss.item():.4f}')</code></pre>
+            </div>
+            
+            <h3>TensorFlow / Keras</h3>
+            <div class="card">
+                <div class="card-title">TensorFlow/Keras Basics</div>
+                <pre><code class="language-python">import tensorflow as tf
+from tensorflow import keras
+from tensorflow.keras import layers, models
+
+# Check GPU
+print("GPU Available:", tf.config.list_physical_devices('GPU'))
+
+# Sequential model
+model = models.Sequential([
+    layers.Dense(128, activation='relu', input_shape=(784,)),
+    layers.Dropout(0.2),
+    layers.Dense(64, activation='relu'),
+    layers.Dropout(0.2),
+    layers.Dense(10, activation='softmax')
+])
+
+# Compile model
+model.compile(
+    optimizer='adam',
+    loss='sparse_categorical_crossentropy',
+    metrics=['accuracy']
+)
+
+# Model summary
+model.summary()
+
+# Train model
+history = model.fit(
+    X_train, y_train,
+    epochs=10,
+    batch_size=32,
+    validation_split=0.2,
+    callbacks=[
+        keras.callbacks.EarlyStopping(patience=3, restore_best_weights=True),
+        keras.callbacks.ModelCheckpoint('best_model.keras', save_best_only=True)
+    ]
+)
+
+# Evaluate
+test_loss, test_acc = model.evaluate(X_test, y_test)
+print(f'Test accuracy: {test_acc:.4f}')
+
+# Predictions
+predictions = model.predict(X_test)
+predicted_classes = np.argmax(predictions, axis=1)
+
+# Save and load
+model.save('my_model.keras')
+loaded_model = tf.keras.models.load_model('my_model.keras')
+
+# Functional API (more flexible)
+inputs = keras.Input(shape=(784,))
+x = layers.Dense(128, activation='relu')(inputs)
+x = layers.Dropout(0.2)(x)
+x = layers.Dense(64, activation='relu')(x)
+outputs = layers.Dense(10, activation='softmax')(x)
+
+model = keras.Model(inputs=inputs, outputs=outputs)</code></pre>
+            </div>
+            
+            <h3>Convolutional Neural Networks (CNN)</h3>
+            <div class="card">
+                <div class="card-title">CNN for Image Classification</div>
+                <pre><code class="language-python"># PyTorch CNN
+class CNN(nn.Module):
+    def __init__(self, num_classes=10):
+        super(CNN, self).__init__()
+        self.conv1 = nn.Conv2d(1, 32, kernel_size=3, padding=1)
+        self.conv2 = nn.Conv2d(32, 64, kernel_size=3, padding=1)
+        self.pool = nn.MaxPool2d(2, 2)
+        self.dropout = nn.Dropout(0.25)
+        self.fc1 = nn.Linear(64 * 7 * 7, 128)
+        self.fc2 = nn.Linear(128, num_classes)
+        
+    def forward(self, x):
+        x = self.pool(nn.functional.relu(self.conv1(x)))
+        x = self.pool(nn.functional.relu(self.conv2(x)))
+        x = x.view(-1, 64 * 7 * 7)
+        x = self.dropout(nn.functional.relu(self.fc1(x)))
+        x = self.fc2(x)
+        return x
+
+# TensorFlow/Keras CNN
+model = models.Sequential([
+    layers.Conv2D(32, (3, 3), activation='relu', input_shape=(28, 28, 1)),
+    layers.MaxPooling2D((2, 2)),
+    layers.Conv2D(64, (3, 3), activation='relu'),
+    layers.MaxPooling2D((2, 2)),
+    layers.Conv2D(64, (3, 3), activation='relu'),
+    layers.Flatten(),
+    layers.Dense(64, activation='relu'),
+    layers.Dropout(0.5),
+    layers.Dense(10, activation='softmax')
+])
+
+# Image augmentation
+datagen = keras.preprocessing.image.ImageDataGenerator(
+    rotation_range=20,
+    width_shift_range=0.2,
+    height_shift_range=0.2,
+    horizontal_flip=True,
+    zoom_range=0.2
+)
+datagen.fit(X_train)</code></pre>
+            </div>
+            
+            <h3>Recurrent Neural Networks (RNN/LSTM)</h3>
+            <div class="card">
+                <div class="card-title">LSTM for Sequence Data</div>
+                <pre><code class="language-python"># PyTorch LSTM
+class LSTMModel(nn.Module):
+    def __init__(self, input_size, hidden_size, num_layers, num_classes):
+        super(LSTMModel, self).__init__()
+        self.hidden_size = hidden_size
+        self.num_layers = num_layers
+        self.lstm = nn.LSTM(input_size, hidden_size, num_layers, 
+                           batch_first=True, dropout=0.2)
+        self.fc = nn.Linear(hidden_size, num_classes)
+        
+    def forward(self, x):
+        h0 = torch.zeros(self.num_layers, x.size(0), self.hidden_size).to(device)
+        c0 = torch.zeros(self.num_layers, x.size(0), self.hidden_size).to(device)
+        out, _ = self.lstm(x, (h0, c0))
+        out = self.fc(out[:, -1, :])  # Last time step
+        return out
+
+# TensorFlow/Keras LSTM
+model = models.Sequential([
+    layers.Embedding(vocab_size, embedding_dim, input_length=max_length),
+    layers.LSTM(128, return_sequences=True),
+    layers.Dropout(0.2),
+    layers.LSTM(64),
+    layers.Dense(32, activation='relu'),
+    layers.Dense(1, activation='sigmoid')
+])
+
+# Bidirectional LSTM
+model = models.Sequential([
+    layers.Embedding(vocab_size, embedding_dim),
+    layers.Bidirectional(layers.LSTM(64, return_sequences=True)),
+    layers.Bidirectional(layers.LSTM(32)),
+    layers.Dense(64, activation='relu'),
+    layers.Dense(1, activation='sigmoid')
+])</code></pre>
+            </div>
+        </section>
+
+        <!-- Section 5: Large Language Models -->
+        <section class="section">
+            <h2><span class="icon">💬</span> Large Language Models (LLMs)</h2>
+            
+            <div class="tool-header">
+                <div class="tool-name">🤗 Hugging Face Transformers</div>
+                <div class="tool-meta">
+                    <span>NLP</span>
+                    <span>LLMs</span>
+                    <span>Pre-trained Models</span>
+                </div>
+            </div>
+            
+            <h3>Transformer Architecture</h3>
+            <div class="ascii-box">
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                    TRANSFORMER ARCHITECTURE                                  │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│                    ENCODER                    DECODER                        │
+│   ┌─────────────────────────┐    ┌─────────────────────────┐               │
+│   │  Input Embedding        │    │  Output Embedding       │               │
+│   │         ↓               │    │         ↓               │               │
+│   │  Positional Encoding    │    │  Positional Encoding    │               │
+│   │         ↓               │    │         ↓               │               │
+│   │  ┌─────────────────┐    │    │  ┌─────────────────┐    │               │
+│   │  │ Multi-Head      │    │    │  │ Masked Multi-   │    │               │
+│   │  │ Self-Attention  │    │    │  │ Head Attention  │    │               │
+│   │  └─────────────────┘    │    │  └─────────────────┘    │               │
+│   │         ↓               │    │         ↓               │               │
+│   │  Add & Normalize        │    │  Add & Normalize        │               │
+│   │         ↓               │    │         ↓               │               │
+│   │  ┌─────────────────┐    │────▶│  ┌─────────────────┐    │               │
+│   │  │ Feed Forward    │    │    │  │ Cross-Attention │    │               │
+│   │  └─────────────────┘    │    │  └─────────────────┘    │               │
+│   │         ↓               │    │         ↓               │               │
+│   │  Add & Normalize        │    │  Add & Normalize        │               │
+│   └─────────────────────────┘    │         ↓               │               │
+│                                   │  Feed Forward          │               │
+│                                   │         ↓               │               │
+│                                   │  Linear + Softmax      │               │
+│                                   └─────────────────────────┘               │
+│                                                                              │
+│   GPT: Decoder-only (generative)                                            │
+│   BERT: Encoder-only (understanding)                                        │
+│   T5/BART: Encoder-Decoder (seq2seq)                                        │
+│                                                                              │
+└─────────────────────────────────────────────────────────────────────────────┘</div>
+            
+            <h3>Getting Started with Transformers</h3>
+            <pre><code class="language-python">from transformers import (
+    AutoTokenizer, 
+    AutoModel, 
+    AutoModelForCausalLM,
+    AutoModelForSequenceClassification,
+    pipeline
+)
+
+# Using pipelines (easiest way)
+classifier = pipeline("sentiment-analysis")
+result = classifier("I love AI!")
+# [{'label': 'POSITIVE', 'score': 0.9998}]
+
+# Different pipelines
+qa_pipeline = pipeline("question-answering")
+result = qa_pipeline(
+    question="What is AI?",
+    context="Artificial intelligence is the simulation of human intelligence..."
+)
+
+summarizer = pipeline("summarization")
+summary = summarizer(long_text, max_length=130, min_length=30)
+
+translator = pipeline("translation_en_to_fr")
+translation = translator("Hello, how are you?")
+
+generator = pipeline("text-generation", model="gpt2")
+generated = generator("Once upon a time", max_length=50)
+
+# Named Entity Recognition
+ner = pipeline("ner", aggregation_strategy="simple")
+entities = ner("Apple was founded by Steve Jobs in California.")</code></pre>
+            
+            <h3>Loading and Using Models</h3>
+            <div class="grid">
+                <div class="card">
+                    <div class="card-title">Text Classification (BERT)</div>
+                    <pre><code class="language-python">from transformers import BertTokenizer, BertForSequenceClassification
+
+model_name = "bert-base-uncased"
+tokenizer = BertTokenizer.from_pretrained(model_name)
+model = BertForSequenceClassification.from_pretrained(model_name)
+
+# Tokenize
+texts = ["I love AI!", "This is terrible."]
+inputs = tokenizer(
+    texts, 
+    padding=True, 
+    truncation=True, 
+    return_tensors="pt"
+)
+
+# Get embeddings
+outputs = model(**inputs)
+predictions = outputs.logits.argmax(-1)</code></pre>
+                </div>
+                
+                <div class="card">
+                    <div class="card-title">Text Generation (GPT)</div>
+                    <pre><code class="language-python">from transformers import GPT2Tokenizer, GPT2LMHeadModel
+
+tokenizer = GPT2Tokenizer.from_pretrained("gpt2")
+model = GPT2LMHeadModel.from_pretrained("gpt2")
+
+prompt = "The future of AI is"
+inputs = tokenizer(prompt, return_tensors="pt")
+
+outputs = model.generate(
+    inputs["input_ids"],
+    max_length=100,
+    num_return_sequences=3,
+    temperature=0.7,
+    top_k=50,
+    top_p=0.95,
+    do_sample=True
+)
+
+for output in outputs:
+    print(tokenizer.decode(output, skip_special_tokens=True))</code></pre>
+                </div>
+                
+                <div class="card">
+                    <div class="card-title">Question Answering</div>
+                    <pre><code class="language-python">from transformers import pipeline
+
+qa = pipeline("question-answering", model="deepset/roberta-base-squad2")
+
+context = """
+AI is intelligence demonstrated by machines.
+The field was founded in 1956 at Dartmouth College.
+"""
+
+questions = [
+    "When was AI founded?",
+    "What is AI?"
+]
+
+for q in questions:
+    result = qa(question=q, context=context)
+    print(f"Q: {q}")
+    print(f"A: {result['answer']} (score: {result['score']:.4f})")</code></pre>
+                </div>
+                
+                <div class="card">
+                    <div class="card-title">Embeddings for Similarity</div>
+                    <pre><code class="language-python">from sentence_transformers import SentenceTransformer
+from sklearn.metrics.pairwise import cosine_similarity
+
+model = SentenceTransformer('all-MiniLM-L6-v2')
+
+sentences = [
+    "AI is transforming industries",
+    "Machine learning is revolutionary",
+    "I like pizza"
+]
+
+embeddings = model.encode(sentences)
+
+# Calculate similarities
+similarities = cosine_similarity(embeddings)
+print(f"Similarity between 0 and 1: {similarities[0][1]:.4f}")
+print(f"Similarity between 0 and 2: {similarities[0][2]:.4f}")</code></pre>
+                </div>
+            </div>
+            
+            <h3>Fine-tuning Models</h3>
+            <div class="card">
+                <div class="card-title">Fine-tuning with Trainer API</div>
+                <pre><code class="language-python">from transformers import (
+    AutoTokenizer, 
+    AutoModelForSequenceClassification,
+    TrainingArguments, 
+    Trainer,
+    DataCollatorWithPadding
+)
+from datasets import load_dataset
+
+# Load dataset
+dataset = load_dataset("imdb")
+
+# Tokenizer
+tokenizer = AutoTokenizer.from_pretrained("distilbert-base-uncased")
+
+def tokenize_function(examples):
+    return tokenizer(examples["text"], truncation=True)
+
+tokenized_datasets = dataset.map(tokenize_function, batched=True)
+
+# Model
+model = AutoModelForSequenceClassification.from_pretrained(
+    "distilbert-base-uncased", 
+    num_labels=2
+)
+
+# Training arguments
+training_args = TrainingArguments(
+    output_dir="./results",
+    evaluation_strategy="epoch",
+    learning_rate=2e-5,
+    per_device_train_batch_size=16,
+    per_device_eval_batch_size=16,
+    num_train_epochs=3,
+    weight_decay=0.01,
+)
+
+# Data collator
+data_collator = DataCollatorWithPadding(tokenizer=tokenizer)
+
+# Trainer
+trainer = Trainer(
+    model=model,
+    args=training_args,
+    train_dataset=tokenized_datasets["train"].select(range(1000)),  # Subset
+    eval_dataset=tokenized_datasets["test"].select(range(200)),
+    tokenizer=tokenizer,
+    data_collator=data_collator,
+)
+
+# Train
+trainer.train()
+
+# Save
+model.save_pretrained("./fine_tuned_model")
+tokenizer.save_pretrained("./fine_tuned_model")</code></pre>
+            </div>
+            
+            <h3>Popular LLM Models</h3>
+            <table>
+                <tr>
+                    <th>Model</th>
+                    <th>Type</th>
+                    <th>Parameters</th>
+                    <th>Best For</th>
+                </tr>
+                <tr>
+                    <td>GPT-4 / GPT-4o</td>
+                    <td>Decoder (Generative)</td>
+                    <td>~1.8T (estimated)</td>
+                    <td>General purpose, Reasoning, Coding</td>
+                </tr>
+                <tr>
+                    <td>Claude 3</td>
+                    <td>Decoder</td>
+                    <td>Unknown</td>
+                    <td>Long context, Analysis, Coding</td>
+                </tr>
+                <tr>
+                    <td>LLaMA 3</td>
+                    <td>Decoder</td>
+                    <td>8B - 405B</td>
+                    <td>Open source, Fine-tuning</td>
+                </tr>
+                <tr>
+                    <td>Mistral</td>
+                    <td>Decoder</td>
+                    <td>7B - 22B</td>
+                    <td>Efficient, Open source</td>
+                </tr>
+                <tr>
+                    <td>BERT</td>
+                    <td>Encoder</td>
+                    <td>110M - 340M</td>
+                    <td>Understanding, Classification</td>
+                </tr>
+                <tr>
+                    <td>T5</td>
+                    <td>Encoder-Decoder</td>
+                    <td>60M - 11B</td>
+                    <td>Seq2seq, Translation</td>
+                </tr>
+                <tr>
+                    <td>Whisper</td>
+                    <td>Encoder-Decoder</td>
+                    <td>39M - 1.5B</td>
+                    <td>Speech recognition</td>
+                </tr>
+                <tr>
+                    <td>DALL-E / Stable Diffusion</td>
+                    <td>Diffusion</td>
+                    <td>Varies</td>
+                    <td>Image generation</td>
+                </tr>
+            </table>
+        </section>
+
+        <!-- Section 6: Computer Vision -->
+        <section class="section">
+            <h2><span class="icon">👁️</span> Computer Vision</h2>
+            
+            <h3>Image Processing with OpenCV</h3>
+            <div class="card">
+                <div class="card-title">OpenCV Essentials</div>
+                <pre><code class="language-python">import cv2
+import numpy as np
+
+# Read image
+img = cv2.imread('image.jpg')
+img_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+
+# Basic operations
+resized = cv2.resize(img, (224, 224))
+cropped = img[100:300, 200:400]
+
+# Drawing
+cv2.rectangle(img, (10, 10), (100, 100), (0, 255, 0), 2)
+cv2.circle(img, (50, 50), 30, (255, 0, 0), -1)
+cv2.putText(img, 'AI', (10, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2)
+
+# Filtering
+gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+blur = cv2.GaussianBlur(img, (5, 5), 0)
+edges = cv2.Canny(img, 100, 200)
+
+# Thresholding
+_, thresh = cv2.threshold(gray, 127, 255, cv2.THRESH_BINARY)
+adaptive_thresh = cv2.adaptiveThreshold(gray, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C,
+                                         cv2.THRESH_BINARY, 11, 2)
+
+# Contours
+contours, _ = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+cv2.drawContours(img, contours, -1, (0, 255, 0), 2)
+
+# Feature detection
+sift = cv2.SIFT_create()
+keypoints, descriptors = sift.detectAndCompute(gray, None)
+
+# Object detection (Haar Cascade)
+face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
+faces = face_cascade.detectMultiScale(gray, 1.1, 4)</code></pre>
+            </div>
+            
+            <h3>Popular Vision Models</h3>
+            <div class="grid">
+                <div class="card">
+                    <div class="card-title">Image Classification</div>
+                    <pre><code class="language-python">import torch
+from torchvision import models, transforms
+from PIL import Image
+
+# Load pretrained model
+model = models.resnet50(pretrained=True)
+model.eval()
+
+# Preprocessing
+preprocess = transforms.Compose([
+    transforms.Resize(256),
+    transforms.CenterCrop(224),
+    transforms.ToTensor(),
+    transforms.Normalize(
+        mean=[0.485, 0.456, 0.406],
+        std=[0.229, 0.224, 0.225]
+    )
+])
+
+# Predict
+img = Image.open('image.jpg')
+img_tensor = preprocess(img).unsqueeze(0)
+
+with torch.no_grad():
+    outputs = model(img_tensor)
+    _, predicted = outputs.max(1)
+
+# Using Hugging Face
+from transformers import pipeline
+classifier = pipeline("image-classification")
+result = classifier("image.jpg")</code></pre>
+                </div>
+                
+                <div class="card">
+                    <div class="card-title">Object Detection</div>
+                    <pre><code class="language-python">from transformers import DetrImageProcessor, DetrForObjectDetection
+from PIL import Image
+import torch
+
+processor = DetrImageProcessor.from_pretrained("facebook/detr-resnet-50")
+model = DetrForObjectDetection.from_pretrained("facebook/detr-resnet-50")
+
+image = Image.open("image.jpg")
+inputs = processor(images=image, return_tensors="pt")
+
+outputs = model(**inputs)
+
+# Convert outputs
+target_sizes = torch.tensor([image.size[::-1]])
+results = processor.post_process_object_detection(
+    outputs, target_sizes=target_sizes, threshold=0.9
+)[0]
+
+for score, label, box in zip(results["scores"], results["labels"], results["boxes"]):
+    box = [round(i, 2) for i in box.tolist()]
+    print(f"Detected {model.config.id2label[label.item()]} with confidence {round(score.item(), 3)} at {box}")</code></pre>
+                </div>
+                
+                <div class="card">
+                    <div class="card-title">Image Segmentation</div>
+                    <pre><code class="language-python">from transformers import pipeline
+
+# Semantic segmentation
+segmenter = pipeline("image-segmentation", model="facebook/detr-resnet-50-panoptic")
+result = segmenter("image.jpg")
+
+# Instance segmentation
+from detectron2.config import get_cfg
+from detectron2.engine import DefaultPredictor
+
+cfg = get_cfg()
+cfg.merge_from_file("configs/COCO-InstanceSegmentation/mask_rcnn_R_50_FPN_3x.yaml")
+cfg.MODEL.WEIGHTS = "model_final.pth"
+predictor = DefaultPredictor(cfg)
+outputs = predictor(image)</code></pre>
+                </div>
+                
+                <div class="card">
+                    <div class="card-title">YOLO Object Detection</div>
+                    <pre><code class="language-python">from ultralytics import YOLO
+
+# Load model
+model = YOLO('yolov8n.pt')  # nano model
+
+# Predict
+results = model('image.jpg')
+
+# Process results
+for result in results:
+    boxes = result.boxes  # Bounding boxes
+    masks = result.masks  # Segmentation masks
+    probs = result.probs  # Classification probabilities
+    
+# Video
+results = model('video.mp4', stream=True)
+for result in results:
+    # Process each frame
+    
+# Train custom model
+model = YOLO('yolov8n.pt')
+model.train(data='dataset.yaml', epochs=50, imgsz=640)</code></pre>
+                </div>
+            </div>
+            
+            <h3>Transfer Learning for Vision</h3>
+            <div class="card">
+                <div class="card-title">Fine-tuning Vision Models</div>
+                <pre><code class="language-python">import torch
+import torch.nn as nn
+from torchvision import models, datasets, transforms
+from torch.utils.data import DataLoader
+
+# Load pretrained model
+model = models.resnet50(pretrained=True)
+
+# Freeze all layers
+for param in model.parameters():
+    param.requires_grad = False
+
+# Replace final layer for custom classification
+num_features = model.fc.in_features
+model.fc = nn.Linear(num_features, num_classes)
+
+# Data transforms
+train_transform = transforms.Compose([
+    transforms.RandomResizedCrop(224),
+    transforms.RandomHorizontalFlip(),
+    transforms.ToTensor(),
+    transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
+])
+
+# Dataset and dataloader
+train_dataset = datasets.ImageFolder('train/', transform=train_transform)
+train_loader = DataLoader(train_dataset, batch_size=32, shuffle=True)
+
+# Training
+criterion = nn.CrossEntropyLoss()
+optimizer = torch.optim.Adam(model.fc.parameters(), lr=0.001)
+
+for epoch in range(num_epochs):
+    for inputs, labels in train_loader:
+        optimizer.zero_grad()
+        outputs = model(inputs)
+        loss = criterion(outputs, labels)
+        loss.backward()
+        optimizer.step()</code></pre>
+            </div>
+        </section>
+
+        <!-- Section 7: Natural Language Processing -->
+        <section class="section">
+            <h2><span class="icon">📝</span> Natural Language Processing</h2>
+            
+            <h3>Text Preprocessing</h3>
+            <div class="card">
+                <div class="card-title">Text Processing Pipeline</div>
+                <pre><code class="language-python">import re
+import nltk
+from nltk.tokenize import word_tokenize, sent_tokenize
+from nltk.corpus import stopwords
+from nltk.stem import PorterStemmer, WordNetLemmatizer
+
+nltk.download('punkt')
+nltk.download('stopwords')
+nltk.download('wordnet')
+
+text = "AI is transforming the World! It's amazing."
+
+# Lowercase
+text = text.lower()
+
+# Remove punctuation
+text = re.sub(r'[^\w\s]', '', text)
+
+# Tokenization
+tokens = word_tokenize(text)
+sentences = sent_tokenize(text)
+
+# Remove stopwords
+stop_words = set(stopwords.words('english'))
+tokens = [t for t in tokens if t not in stop_words]
+
+# Stemming
+stemmer = PorterStemmer()
+stemmed = [stemmer.stem(t) for t in tokens]
+
+# Lemmatization
+lemmatizer = WordNetLemmatizer()
+lemmatized = [lemmatizer.lemmatize(t) for t in tokens]
+
+# Using spaCy
+import spacy
+nlp = spacy.load('en_core_web_sm')
+
+doc = nlp("Apple is looking at buying a startup for $1 billion.")
+
+# Named entities
+for ent in doc.ents:
+    print(f"{ent.text}: {ent.label_}")
+
+# Part-of-speech tagging
+for token in doc:
+    print(f"{token.text}: {token.pos_}")
+
+# Dependency parsing
+for token in doc:
+    print(f"{token.text}: {token.dep_} -> {token.head.text}")</code></pre>
+            </div>
+            
+            <h3>Text Vectorization</h3>
+            <div class="grid">
+                <div class="card">
+                    <div class="card-title">Bag of Words / TF-IDF</div>
+                    <pre><code class="language-python">from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
+
+corpus = [
+    "AI is the future",
+    "Machine learning is AI",
+    "Deep learning is powerful"
+]
+
+# Bag of Words
+bow = CountVectorizer()
+X_bow = bow.fit_transform(corpus)
+print(bow.get_feature_names_out())
+
+# TF-IDF
+tfidf = TfidfVectorizer()
+X_tfidf = tfidf.fit_transform(corpus)
+print(X_tfidf.toarray())
+
+# N-grams
+tfidf_ngram = TfidfVectorizer(ngram_range=(1, 2))
+X_ngram = tfidf_ngram.fit_transform(corpus)</code></pre>
+                </div>
+                
+                <div class="card">
+                    <div class="card-title">Word Embeddings</div>
+                    <pre><code class="language-python"># Word2Vec with Gensim
+from gensim.models import Word2Vec
+
+sentences = [['ai', 'is', 'the', 'future'],
+             ['machine', 'learning', 'is', 'ai']]
+
+model = Word2Vec(sentences, vector_size=100, window=5, min_count=1, workers=4)
+
+# Get embedding
+vector = model.wv['ai']
+
+# Similarity
+similar = model.wv.most_similar('ai', topn=5)
+
+# GloVe embeddings
+import gensim.downloader as api
+glove = api.load("glove-wiki-gigaword-100")
+similar = glove.most_similar('king', topn=5)
+
+# Word arithmetic
+result = glove.most_similar(positive=['king', 'woman'], 
+                            negative=['man'], topn=1)
+# Result: 'queen'</code></pre>
+                </div>
+            </div>
+            
+            <h3>NLP Tasks with Transformers</h3>
+            <div class="grid">
+                <div class="card">
+                    <div class="card-title">Named Entity Recognition</div>
+                    <pre><code class="language-python">from transformers import pipeline
+
+ner = pipeline("ner", model="dslim/bert-base-NER", aggregation_strategy="simple")
+
+text = "Apple CEO Tim Cook announced the new iPhone in California."
+entities = ner(text)
+
+for entity in entities:
+    print(f"{entity['word']}: {entity['entity_group']} ({entity['score']:.2f})")</code></pre>
+                </div>
+                
+                <div class="card">
+                    <div class="card-title">Text Summarization</div>
+                    <pre><code class="language-python">from transformers import pipeline
+
+summarizer = pipeline("summarization", model="facebook/bart-large-cnn")
+
+article = """Your long article text here..."""
+
+summary = summarizer(article, max_length=130, min_length=30, do_sample=False)
+print(summary[0]['summary_text'])</code></pre>
+                </div>
+                
+                <div class="card">
+                    <div class="card-title">Translation</div>
+                    <pre><code class="language-python">from transformers import pipeline
+
+# English to French
+translator = pipeline("translation_en_to_fr", model="t5-base")
+result = translator("Hello, how are you?")
+print(result[0]['translation_text'])
+
+# Multi-language
+from transformers import MBartForConditionalGeneration, MBart50TokenizerFast
+
+model = MBartForConditionalGeneration.from_pretrained("facebook/mbart-large-50-many-to-many-mmt")
+tokenizer = MBart50TokenizerFast.from_pretrained("facebook/mbart-large-50-many-to-many-mmt")
+
+tokenizer.src_lang = "en_XX"
+encoded = tokenizer("Hello world", return_tensors="pt")
+generated = model.generate(**encoded, forced_bos_token_id=tokenizer.lang_code_to_id["fr_XX"])</code></pre>
+                </div>
+                
+                <div class="card">
+                    <div class="card-title">Text Classification</div>
+                    <pre><code class="language-python">from transformers import pipeline
+
+# Sentiment analysis
+sentiment = pipeline("sentiment-analysis", model="cardiffnlp/twitter-roberta-base-sentiment")
+result = sentiment("I love artificial intelligence!")
+
+# Topic classification
+classifier = pipeline("zero-shot-classification", model="facebook/bart-large-mnli")
+result = classifier(
+    "AI is revolutionizing healthcare and finance",
+    candidate_labels=["technology", "health", "finance", "sports"]
+)
+print(result['labels'][0])  # Most likely topic</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 8: Generative AI -->
+        <section class="section">
+            <h2><span class="icon">🎨</span> Generative AI</h2>
+            
+            <h3>Text Generation</h3>
+            <div class="card">
+                <div class="card-title">Advanced Text Generation</div>
+                <pre><code class="language-python">from transformers import AutoModelForCausalLM, AutoTokenizer
+import torch
+
+model_name = "mistralai/Mistral-7B-v0.1"
+tokenizer = AutoTokenizer.from_pretrained(model_name)
+model = AutoModelForCausalLM.from_pretrained(
+    model_name,
+    torch_dtype=torch.float16,
+    device_map="auto"
+)
+
+prompt = "Write a short story about AI:"
+inputs = tokenizer(prompt, return_tensors="pt").to(model.device)
+
+# Generation with various parameters
+outputs = model.generate(
+    **inputs,
+    max_new_tokens=200,
+    temperature=0.7,        # Creativity (0.1-2.0)
+    top_p=0.9,             # Nucleus sampling
+    top_k=50,              # Top-k sampling
+    do_sample=True,
+    repetition_penalty=1.1,
+    no_repeat_ngram_size=3
+)
+
+generated_text = tokenizer.decode(outputs[0], skip_special_tokens=True)
+
+# Using system prompts (chat models)
+messages = [
+    {"role": "system", "content": "You are a helpful AI assistant."},
+    {"role": "user", "content": "Explain quantum computing simply."}
+]
+inputs = tokenizer.apply_chat_template(messages, return_tensors="pt")</code></pre>
+            </div>
+            
+            <h3>Image Generation</h3>
+            <div class="grid">
+                <div class="card">
+                    <div class="card-title">Stable Diffusion</div>
+                    <pre><code class="language-python">from diffusers import StableDiffusionPipeline
+import torch
+
+model_id = "runwayml/stable-diffusion-v1-5"
+pipe = StableDiffusionPipeline.from_pretrained(
+    model_id, 
+    torch_dtype=torch.float16
+).to("cuda")
+
+prompt = "A futuristic AI city at sunset, digital art"
+image = pipe(prompt, num_inference_steps=50).images[0]
+image.save("ai_city.png")
+
+# With negative prompt
+image = pipe(
+    prompt="A beautiful landscape",
+    negative_prompt="blurry, bad quality",
+    num_inference_steps=50,
+    guidance_scale=7.5
+).images[0]
+
+# Image-to-image
+from diffusers import StableDiffusionImg2ImgPipeline
+pipe = StableDiffusionImg2ImgPipeline.from_pretrained(model_id, torch_dtype=torch.float16).to("cuda")
+
+init_image = Image.open("input.png").convert("RGB")
+image = pipe(prompt="oil painting", image=init_image, strength=0.7).images[0]</code></pre>
+                </div>
+                
+                <div class="card">
+                    <div class="card-title">DALL-E API</div>
+                    <pre><code class="language-python">import openai
+
+openai.api_key = "your-api-key"
+
+response = openai.Image.create(
+    prompt="A futuristic AI robot teaching a class",
+    n=1,
+    size="1024x1024"
+)
+image_url = response['data'][0]['url']
+
+# DALL-E 3
+response = openai.Image.create(
+    model="dall-e-3",
+    prompt="Create a professional logo for an AI company",
+    size="1024x1024",
+    quality="hd",
+    n=1
+)</code></pre>
+                </div>
+            </div>
+            
+            <h3>Building AI Applications</h3>
+            <div class="card">
+                <div class="card-title">RAG (Retrieval Augmented Generation)</div>
+                <pre><code class="language-python">from langchain.embeddings import HuggingFaceEmbeddings
+from langchain.vectorstores import FAISS
+from langchain.text_splitter import RecursiveCharacterTextSplitter
+from langchain.llms import HuggingFacePipeline
+from langchain.chains import RetrievalQA
+
+# Load documents
+from langchain.document_loaders import TextLoader, PyPDFLoader
+loader = PyPDFLoader("document.pdf")
+documents = loader.load()
+
+# Split text
+text_splitter = RecursiveCharacterTextSplitter(
+    chunk_size=1000,
+    chunk_overlap=200
+)
+texts = text_splitter.split_documents(documents)
+
+# Create embeddings
+embeddings = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
+vectorstore = FAISS.from_documents(texts, embeddings)
+
+# Create retriever
+retriever = vectorstore.as_retriever(search_kwargs={"k": 3})
+
+# Create RAG chain
+from langchain.chat_models import ChatOpenAI
+llm = ChatOpenAI(model_name="gpt-4", temperature=0)
+qa_chain = RetrievalQA.from_chain_type(
+    llm=llm,
+    chain_type="stuff",
+    retriever=retriever
+)
+
+# Query
+response = qa_chain.run("What is the main topic of the document?")</code></pre>
+            </div>
+        </section>
+
+        <!-- Section 9: AI Tools & Platforms -->
+        <section class="section">
+            <h2><span class="icon">🛠️</span> AI Tools & Platforms</h2>
+            
+            <h3>Cloud AI Platforms</h3>
+            <div class="resources-grid">
+                <div class="resource-card">
+                    <div class="name">OpenAI API</div>
+                    <div class="url">platform.openai.com</div>
+                    <div class="desc">GPT-4, DALL-E, Whisper APIs</div>
+                </div>
+                <div class="resource-card">
+                    <div class="name">Google Cloud AI</div>
+                    <div class="url">cloud.google.com/ai</div>
+                    <div class="desc">Vertex AI, Gemini, AutoML</div>
+                </div>
+                <div class="resource-card">
+                    <div class="name">AWS AI Services</div>
+                    <div class="url">aws.amazon.com/ai</div>
+                    <div class="desc">SageMaker, Rekognition, Comprehend</div>
+                </div>
+                <div class="resource-card">
+                    <div class="name">Azure AI</div>
+                    <div class="url">azure.microsoft.com/ai</div>
+                    <div class="desc">Azure OpenAI, Cognitive Services</div>
+                </div>
+                <div class="resource-card">
+                    <div class="name">Hugging Face</div>
+                    <div class="url">huggingface.co</div>
+                    <div class="desc">Model Hub, Inference API, Spaces</div>
+                </div>
+                <div class="resource-card">
+                    <div class="name">Anthropic</div>
+                    <div class="url">anthropic.com</div>
+                    <div class="desc">Claude API</div>
+                </div>
+            </div>
+            
+            <h3>Development Tools</h3>
+            <table>
+                <tr>
+                    <th>Tool</th>
+                    <th>Purpose</th>
+                    <th>Key Features</th>
+                </tr>
+                <tr>
+                    <td>Jupyter Notebook</td>
+                    <td>Interactive Development</td>
+                    <td>Code cells, visualizations, markdown</td>
+                </tr>
+                <tr>
+                    <td>Google Colab</td>
+                    <td>Cloud Notebooks</td>
+                    <td>Free GPU/TPU, easy sharing</td>
+                </tr>
+                <tr>
+                    <td>Weights & Biases</td>
+                    <td>Experiment Tracking</td>
+                    <td>Logging, visualization, collaboration</td>
+                </tr>
+                <tr>
+                    <td>MLflow</td>
+                    <td>ML Lifecycle</td>
+                    <td>Tracking, packaging, deployment</td>
+                </tr>
+                <tr>
+                    <td>DVC</td>
+                    <td>Data Version Control</td>
+                    <td>Version datasets, pipelines</td>
+                </tr>
+                <tr>
+                    <td>Gradio</td>
+                    <td>ML Demos</td>
+                    <td>Quick UI for models</td>
+                </tr>
+                <tr>
+                    <td>Streamlit</td>
+                    <td>ML Apps</td>
+                    <td>Data apps, dashboards</td>
+                </tr>
+            </table>
+            
+            <h3>Building ML Apps</h3>
+            <div class="card">
+                <div class="card-title">Gradio Quick Start</div>
+                <pre><code class="language-python">import gradio as gr
+from transformers import pipeline
+
+# Load model
+classifier = pipeline("sentiment-analysis")
+
+def analyze_sentiment(text):
+    result = classifier(text)[0]
+    return f"{result['label']}: {result['score']:.4f}"
+
+# Create interface
+demo = gr.Interface(
+    fn=analyze_sentiment,
+    inputs=gr.Textbox(placeholder="Enter text here..."),
+    outputs="text",
+    title="Sentiment Analysis",
+    description="Analyze the sentiment of your text"
+)
+
+demo.launch()
+
+# Image classification demo
+def classify_image(image):
+    classifier = pipeline("image-classification")
+    results = classifier(image)
+    return {r['label']: r['score'] for r in results}
+
+img_demo = gr.Interface(
+    fn=classify_image,
+    inputs=gr.Image(type="pil"),
+    outputs=gr.Label(),
+    title="Image Classification"
+)</code></pre>
+            </div>
+        </section>
+
+        <!-- Section 10: AI Career Path -->
+        <section class="section">
+            <h2><span class="icon">🚀</span> AI Career Path</h2>
+            
+            <h3>Learning Roadmap</h3>
+            <div class="ascii-box">
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                    AI/ML LEARNING ROADMAP                                    │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│   PHASE 1: FOUNDATIONS (3-4 months)                                         │
+│   ├── Python Programming                                                    │
+│   ├── Mathematics (Linear Algebra, Calculus, Statistics)                   │
+│   ├── NumPy, Pandas, Matplotlib                                            │
+│   └── Basic ML concepts                                                     │
+│                                                                              │
+│   PHASE 2: MACHINE LEARNING (3-4 months)                                    │
+│   ├── Scikit-learn                                                          │
+│   ├── Supervised/Unsupervised Learning                                      │
+│   ├── Model Evaluation & Validation                                         │
+│   └── Feature Engineering                                                   │
+│                                                                              │
+│   PHASE 3: DEEP LEARNING (4-6 months)                                       │
+│   ├── Neural Network Fundamentals                                          │
+│   ├── TensorFlow or PyTorch                                                │
+│   ├── CNNs, RNNs, Transformers                                            │
+│   └── Computer Vision / NLP specialization                                 │
+│                                                                              │
+│   PHASE 4: ADVANCED TOPICS (Ongoing)                                        │
+│   ├── LLMs and Generative AI                                               │
+│   ├── MLOps and Deployment                                                 │
+│   ├── Research Papers                                                      │
+│   └── Domain Specialization                                                │
+│                                                                              │
+│   PROJECTS: Build portfolio with real-world projects                        │
+│   COMPETITIONS: Kaggle, hackathons                                          │
+│   CERTIFICATIONS: TensorFlow, AWS ML, Azure AI                             │
+│                                                                              │
+└─────────────────────────────────────────────────────────────────────────────┘</div>
+            
+            <h3>Career Roles & Salaries</h3>
+            <table>
+                <tr>
+                    <th>Role</th>
+                    <th>Experience</th>
+                    <th>Skills Required</th>
+                    <th>Salary Range (US)</th>
+                </tr>
+                <tr>
+                    <td>Data Analyst</td>
+                    <td>0-2 years</td>
+                    <td>Python, SQL, Visualization</td>
+                    <td>$60K - $90K</td>
+                </tr>
+                <tr>
+                    <td>ML Engineer</td>
+                    <td>2-5 years</td>
+                    <td>Python, TensorFlow/PyTorch, MLOps</td>
+                    <td>$110K - $170K</td>
+                </tr>
+                <tr>
+                    <td>Data Scientist</td>
+                    <td>2-5 years</td>
+                    <td>Statistics, ML, Python, SQL</td>
+                    <td>$100K - $160K</td>
+                </tr>
+                <tr>
+                    <td>AI Research Scientist</td>
+                    <td>PhD or 5+ years</td>
+                    <td>Deep Learning, Research, Papers</td>
+                    <td>$150K - $300K+</td>
+                </tr>
+                <tr>
+                    <td>NLP Engineer</td>
+                    <td>3+ years</td>
+                    <td>Transformers, LLMs, NLP</td>
+                    <td>$130K - $200K</td>
+                </tr>
+                <tr>
+                    <td>Computer Vision Engineer</td>
+                    <td>3+ years</td>
+                    <td>CNNs, OpenCV, PyTorch</td>
+                    <td>$130K - $200K</td>
+                </tr>
+                <tr>
+                    <td>ML Ops Engineer</td>
+                    <td>3+ years</td>
+                    <td>Docker, Kubernetes, ML Pipelines</td>
+                    <td>$130K - $190K</td>
+                </tr>
+            </table>
+            
+            <h3>Essential Certifications</h3>
+            <div class="resources-grid">
+                <div class="resource-card">
+                    <div class="name">TensorFlow Developer</div>
+                    <div class="desc">Google certification for deep learning</div>
+                </div>
+                <div class="resource-card">
+                    <div class="name">AWS ML Specialty</div>
+                    <div class="desc">Amazon's ML certification</div>
+                </div>
+                <div class="resource-card">
+                    <div class="name">Azure AI Engineer</div>
+                    <div class="desc">Microsoft's AI certification</div>
+                </div>
+                <div class="resource-card">
+                    <div class="name">Google Cloud ML</div>
+                    <div class="desc">GCP machine learning certification</div>
+                </div>
+            </div>
+            
+            <h3>Top Learning Resources</h3>
+            <div class="resources-grid">
+                <div class="resource-card">
+                    <div class="name">Coursera - Andrew Ng</div>
+                    <div class="url">coursera.org/learn/machine-learning</div>
+                    <div class="desc">Classic ML course, now with Python</div>
+                </div>
+                <div class="resource-card">
+                    <div class="name">Fast.ai</div>
+                    <div class="url">course.fast.ai</div>
+                    <div class="desc">Practical deep learning for coders</div>
+                </div>
+                <div class="resource-card">
+                    <div class="name">Deep Learning Specialization</div>
+                    <div class="url">coursera.org/specializations/deep-learning</div>
+                    <div class="desc">5-course deep learning series</div>
+                </div>
+                <div class="resource-card">
+                    <div class="name">Hugging Face Course</div>
+                    <div class="url">huggingface.co/course</div>
+                    <div class="desc">NLP with Transformers</div>
+                </div>
+                <div class="resource-card">
+                    <div class="name">Stanford CS229</div>
+                    <div class="url">cs229.stanford.edu</div>
+                    <div class="desc">Stanford's ML course materials</div>
+                </div>
+                <div class="resource-card">
+                    <div class="name">Kaggle Learn</div>
+                    <div class="url">kaggle.com/learn</div>
+                    <div class="desc">Free micro-courses on ML topics</div>
+                </div>
+            </div>
+            
+            <div class="tip-box">
+                <div>
+                    <strong>Career Advice:</strong> Build a strong portfolio with real projects. Contribute to open source, participate in Kaggle competitions, and stay current with research papers. The AI field moves fast - continuous learning is essential!
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 11: Quick Reference -->
+        <section class="section">
+            <h2><span class="icon">📖</span> Quick Reference Cheatsheet</h2>
+            
+            <h3>Common Loss Functions</h3>
+            <table>
+                <tr>
+                    <th>Loss Function</th>
+                    <th>Use Case</th>
+                    <th>Formula</th>
+                </tr>
+                <tr>
+                    <td>MSE (L2)</td>
+                    <td>Regression</td>
+                    <td>Σ(y - ŷ)² / n</td>
+                </tr>
+                <tr>
+                    <td>MAE (L1)</td>
+                    <td>Regression (robust)</td>
+                    <td>Σ|y - ŷ| / n</td>
+                </tr>
+                <tr>
+                    <td>Cross-Entropy</td>
+                    <td>Classification</td>
+                    <td>-Σ y·log(ŷ)</td>
+                </tr>
+                <tr>
+                    <td>Binary Cross-Entropy</td>
+                    <td>Binary Classification</td>
+                    <td>-[y·log(ŷ) + (1-y)·log(1-ŷ)]</td>
+                </tr>
+                <tr>
+                    <td>Focal Loss</td>
+                    <td>Imbalanced Classes</td>
+                    <td>-α(1-ŷ)^γ · y·log(ŷ)</td>
+                </tr>
+            </table>
+            
+            <h3>Optimization Algorithms</h3>
+            <div class="grid">
+                <div class="card">
+                    <div class="card-title">Optimizers</div>
+                    <pre><code class="language-python"># SGD
+optimizer = torch.optim.SGD(model.parameters(), lr=0.01)
+
+# SGD with Momentum
+optimizer = torch.optim.SGD(model.parameters(), lr=0.01, momentum=0.9)
+
+# Adam (most popular)
+optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
+
+# AdamW (with weight decay)
+optimizer = torch.optim.AdamW(model.parameters(), lr=0.001, weight_decay=0.01)
+
+# Learning rate scheduler
+scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=10, gamma=0.1)
+
+# In training loop
+for epoch in range(epochs):
+    # ... training code ...
+    scheduler.step()</code></pre>
+                </div>
+                
+                <div class="card">
+                    <div class="card-title">Regularization</div>
+                    <pre><code class="language-python"># Dropout
+dropout = nn.Dropout(0.5)
+
+# L2 Regularization (weight decay)
+optimizer = torch.optim.Adam(model.parameters(), lr=0.001, weight_decay=1e-4)
+
+# Batch Normalization
+batch_norm = nn.BatchNorm1d(num_features)
+
+# Layer Normalization
+layer_norm = nn.LayerNorm(normalized_shape)
+
+# Early stopping
+from pytorch_lightning.callbacks.early_stopping import EarlyStopping
+early_stop = EarlyStopping(monitor='val_loss', patience=3)</code></pre>
+                </div>
+            </div>
+            
+            <h3>Model Architecture Patterns</h3>
+            <div class="card">
+                <div class="card-title">Common Patterns</div>
+                <pre><code class="language-python"># Residual Connection (ResNet)
+class ResidualBlock(nn.Module):
+    def __init__(self, channels):
+        super().__init__()
+        self.conv1 = nn.Conv2d(channels, channels, 3, padding=1)
+        self.bn1 = nn.BatchNorm2d(channels)
+        self.conv2 = nn.Conv2d(channels, channels, 3, padding=1)
+        self.bn2 = nn.BatchNorm2d(channels)
+        
+    def forward(self, x):
+        residual = x
+        out = F.relu(self.bn1(self.conv1(x)))
+        out = self.bn2(self.conv2(out))
+        out += residual  # Skip connection
+        return F.relu(out)
+
+# Attention Mechanism
+class SelfAttention(nn.Module):
+    def __init__(self, embed_size, heads):
+        super().__init__()
+        self.embed_size = embed_size
+        self.heads = heads
+        self.head_dim = embed_size // heads
+        
+        self.queries = nn.Linear(embed_size, embed_size)
+        self.keys = nn.Linear(embed_size, embed_size)
+        self.values = nn.Linear(embed_size, embed_size)
+        self.fc_out = nn.Linear(embed_size, embed_size)
+        
+    def forward(self, query, key, value, mask=None):
+        N = query.shape[0]
+        q = self.queries(query).view(N, -1, self.heads, self.head_dim).transpose(1, 2)
+        k = self.keys(key).view(N, -1, self.heads, self.head_dim).transpose(1, 2)
+        v = self.values(value).view(N, -1, self.heads, self.head_dim).transpose(1, 2)
+        
+        attention = torch.matmul(q, k.transpose(-2, -1)) / (self.embed_size ** 0.5)
+        if mask is not None:
+            attention = attention.masked_fill(mask == 0, float("-1e20"))
+        attention = F.softmax(attention, dim=-1)
+        
+        out = torch.matmul(attention, v)
+        out = out.transpose(1, 2).contiguous().view(N, -1, self.embed_size)
+        return self.fc_out(out)</code></pre>
+            </div>
+        </section>
+
+        <footer>
+            <p>🤖 Artificial Intelligence Mastery Guide</p>
+            <p>Continue learning • Build projects • Stay curious</p>
+            <p>The future is intelligent</p>
+        </footer>
+    </div>
+    
+    <script>
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+        
+        // Animation on scroll
+        const sections = document.querySelectorAll('.section');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, { threshold: 0.1 });
+        
+        sections.forEach(section => {
+            section.style.opacity = '0';
+            section.style.transform = 'translateY(20px)';
+            section.style.transition = 'all 0.5s ease-out';
+            observer.observe(section);
+        });
+        
+        // Copy code on click
+        document.querySelectorAll('pre').forEach(block => {
+            block.addEventListener('click', () => {
+                const code = block.textContent;
+                navigator.clipboard.writeText(code).then(() => {
+                    const notification = document.createElement('div');
+                    notification.textContent = '✓ Copied!';
+                    notification.style.cssText = `
+                        position: fixed;
+                        bottom: 20px;
+                        right: 20px;
+                        background: linear-gradient(135deg, #6400ff, #00d4ff);
+                        color: #fff;
+                        padding: 12px 24px;
+                        border-radius: 8px;
+                        font-family: 'JetBrains Mono', monospace;
+                        font-weight: 600;
+                        z-index: 1000;
+                    `;
+                    document.body.appendChild(notification);
+                    setTimeout(() => notification.remove(), 2000);
+                });
+            });
+            block.style.cursor = 'pointer';
+            block.title = 'Click to copy';
+        });
+    </script>
+</body>
+</html>

