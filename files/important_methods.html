@@ -1,0 +1,1563 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Important Methods — Formula DB</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --bg:        #0a0c10;
+    --bg2:       #0f1117;
+    --bg3:       #141720;
+    --panel:     #161b24;
+    --border:    #1e2530;
+    --cyan:      #00e5ff;
+    --cyan-dim:  #00b8cc;
+    --cyan-glow: rgba(0,229,255,0.12);
+    --green:     #39ff14;
+    --amber:     #ffb300;
+    --red:       #ff3b5c;
+    --purple:    #b06aff;
+    --text:      #c8d6e5;
+    --text-dim:  #5a6a7a;
+    --mono:      'Share Tech Mono', monospace;
+    --display:   'Orbitron', monospace;
+    --body:      'Rajdhani', sans-serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--body);
+    font-size: 15px;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* ── SCANLINE OVERLAY ─────────────────────────────── */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background: repeating-linear-gradient(
+      to bottom,
+      transparent 0px,
+      transparent 3px,
+      rgba(0,0,0,0.08) 3px,
+      rgba(0,0,0,0.08) 4px
+    );
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+  /* ── HEADER ───────────────────────────────────────── */
+  header {
+    background: var(--bg2);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    height: 56px;
+    position: sticky; top: 0; z-index: 100;
+  }
+
+  .logo {
+    font-family: var(--display);
+    font-size: 1rem;
+    font-weight: 900;
+    color: var(--cyan);
+    letter-spacing: 0.08em;
+    text-shadow: 0 0 18px var(--cyan);
+    white-space: nowrap;
+  }
+  .logo span { color: var(--text-dim); font-weight: 400; font-size: 0.65rem; display: block; letter-spacing: 0.15em; }
+
+  .breadcrumb {
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    color: var(--text-dim);
+  }
+  .breadcrumb em { color: var(--cyan); font-style: normal; }
+
+  .status-dot {
+    margin-left: auto;
+    width: 8px; height: 8px;
+    background: var(--green);
+    border-radius: 50%;
+    box-shadow: 0 0 8px var(--green);
+    animation: blink 2s ease-in-out infinite;
+  }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+  /* ── HERO ─────────────────────────────────────────── */
+  .hero {
+    background: linear-gradient(135deg, #0d1520 0%, #0a1218 40%, #0f1a10 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 3rem 2rem 2.5rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: 'METHODS';
+    position: absolute;
+    font-family: var(--display);
+    font-size: 10rem;
+    font-weight: 900;
+    color: rgba(0,229,255,0.03);
+    top: 50%; left: 50%;
+    transform: translate(-50%,-50%);
+    white-space: nowrap;
+    pointer-events: none;
+    letter-spacing: 0.2em;
+  }
+
+  .hero-title {
+    font-family: var(--display);
+    font-size: clamp(1.4rem, 4vw, 2.4rem);
+    font-weight: 900;
+    color: #fff;
+    letter-spacing: 0.06em;
+    margin-bottom: 0.5rem;
+  }
+  .hero-title span { color: var(--cyan); text-shadow: 0 0 20px var(--cyan); }
+
+  .hero-sub {
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    color: var(--text-dim);
+    letter-spacing: 0.12em;
+    margin-bottom: 1.5rem;
+  }
+
+  .tag-row {
+    display: flex;
+    justify-content: center;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+  }
+  .tag {
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    padding: 0.25rem 0.7rem;
+    border-radius: 2px;
+    letter-spacing: 0.1em;
+    font-weight: 600;
+    text-transform: uppercase;
+    border: 1px solid;
+  }
+  .tag-java   { color: var(--amber); border-color: var(--amber); background: rgba(255,179,0,0.08); }
+  .tag-perf   { color: var(--green); border-color: var(--green); background: rgba(57,255,20,0.06); }
+  .tag-thread { color: var(--purple); border-color: var(--purple); background: rgba(176,106,255,0.08); }
+  .tag-bug    { color: var(--red); border-color: var(--red); background: rgba(255,59,92,0.08); }
+
+  /* ── QUICK REFERENCE BAR ──────────────────────────── */
+  .qref {
+    background: var(--panel);
+    border-bottom: 1px solid var(--border);
+    padding: 1rem 2rem;
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .qref-item {
+    text-align: center;
+    padding: 0.6rem 1.2rem;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    min-width: 120px;
+  }
+  .qref-item .label { font-family: var(--mono); font-size: 0.6rem; color: var(--text-dim); letter-spacing: 0.1em; display: block; }
+  .qref-item .value { font-family: var(--display); font-size: 0.8rem; color: var(--cyan); font-weight: 700; margin-top: 0.2rem; }
+
+  /* ── LAYOUT ───────────────────────────────────────── */
+  .page { max-width: 1200px; margin: 0 auto; padding: 2.5rem 1.5rem; }
+
+  /* ── SECTION HEADER ───────────────────────────────── */
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    margin-bottom: 1.5rem;
+    margin-top: 3rem;
+  }
+  .section-header:first-child { margin-top: 0; }
+  .section-icon { font-size: 1.3rem; }
+  .section-title {
+    font-family: var(--display);
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--cyan);
+    letter-spacing: 0.1em;
+    text-shadow: 0 0 12px rgba(0,229,255,0.4);
+  }
+  .section-line {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(to right, var(--border), transparent);
+  }
+
+  /* ── METHOD CARDS ─────────────────────────────────── */
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(520px, 1fr));
+    gap: 1.2rem;
+  }
+  @media (max-width: 600px) { .cards { grid-template-columns: 1fr; } }
+
+  .card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    overflow: hidden;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    animation: fadeUp 0.4s ease both;
+  }
+  .card:hover {
+    border-color: var(--cyan-dim);
+    box-shadow: 0 0 24px rgba(0,229,255,0.06), inset 0 0 0 1px rgba(0,229,255,0.04);
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(14px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .card-head {
+    background: var(--bg3);
+    border-bottom: 1px solid var(--border);
+    padding: 0.8rem 1.1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+  }
+  .card-num {
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    color: var(--cyan);
+    background: var(--cyan-glow);
+    border: 1px solid rgba(0,229,255,0.2);
+    border-radius: 2px;
+    padding: 0.15rem 0.45rem;
+    letter-spacing: 0.08em;
+    flex-shrink: 0;
+  }
+  .card-title {
+    font-family: var(--display);
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: 0.05em;
+    flex: 1;
+  }
+  .card-badge {
+    font-family: var(--mono);
+    font-size: 0.6rem;
+    padding: 0.15rem 0.5rem;
+    border-radius: 2px;
+    border: 1px solid;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    flex-shrink: 0;
+  }
+  .badge-warn  { color: var(--amber); border-color: rgba(255,179,0,0.3); background: rgba(255,179,0,0.06); }
+  .badge-perf  { color: var(--green); border-color: rgba(57,255,20,0.3); background: rgba(57,255,20,0.05); }
+  .badge-bug   { color: var(--red);   border-color: rgba(255,59,92,0.3); background: rgba(255,59,92,0.06); }
+  .badge-thread{ color: var(--purple);border-color: rgba(176,106,255,0.3);background: rgba(176,106,255,0.06);}
+  .badge-info  { color: var(--cyan);  border-color: rgba(0,229,255,0.3); background: rgba(0,229,255,0.05); }
+
+  .card-body { padding: 1rem 1.1rem; }
+
+  /* diff box */
+  .diff-box {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    padding: 0.75rem 1rem;
+    margin-bottom: 0.9rem;
+    display: flex;
+    gap: 1.2rem;
+    flex-wrap: wrap;
+  }
+  .diff-item { flex: 1; min-width: 160px; }
+  .diff-label {
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    color: var(--cyan);
+    letter-spacing: 0.08em;
+    margin-bottom: 0.25rem;
+  }
+  .diff-text {
+    font-family: var(--body);
+    font-size: 0.82rem;
+    color: var(--text);
+    font-weight: 500;
+  }
+
+  /* when-to-use */
+  .when-box {
+    background: rgba(0,229,255,0.04);
+    border-left: 2px solid var(--cyan-dim);
+    padding: 0.6rem 0.9rem;
+    margin-bottom: 0.9rem;
+    font-size: 0.82rem;
+    color: var(--text);
+    font-weight: 500;
+  }
+  .when-box strong { color: var(--cyan); font-family: var(--mono); font-size: 0.7rem; display: block; margin-bottom: 0.3rem; letter-spacing: 0.08em; }
+
+  /* trap box */
+  .trap-box {
+    background: rgba(255,59,92,0.06);
+    border-left: 2px solid var(--red);
+    padding: 0.6rem 0.9rem;
+    margin-bottom: 0.9rem;
+    font-size: 0.82rem;
+    color: #e8b0b8;
+    font-weight: 500;
+  }
+  .trap-box strong { color: var(--red); font-family: var(--mono); font-size: 0.7rem; display: block; margin-bottom: 0.3rem; letter-spacing: 0.08em; }
+
+  /* code block */
+  .code-block {
+    background: #07090d;
+    border: 1px solid #1a2030;
+    border-radius: 2px;
+    overflow-x: auto;
+  }
+  .code-header {
+    background: #0e1218;
+    border-bottom: 1px solid #1a2030;
+    padding: 0.35rem 0.8rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .code-dot { width: 7px; height: 7px; border-radius: 50%; }
+  .code-dot:nth-child(1) { background: #ff5f57; }
+  .code-dot:nth-child(2) { background: #febc2e; }
+  .code-dot:nth-child(3) { background: #28c840; }
+  .code-lang {
+    font-family: var(--mono);
+    font-size: 0.6rem;
+    color: var(--text-dim);
+    letter-spacing: 0.1em;
+    margin-left: auto;
+  }
+  .code-block pre {
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    line-height: 1.65;
+    padding: 0.9rem 1rem;
+    color: #a8c0d8;
+    white-space: pre;
+  }
+  .c-kw  { color: #c678dd; }   /* keyword */
+  .c-fn  { color: #61afef; }   /* function */
+  .c-str { color: #98c379; }   /* string */
+  .c-cmt { color: #4a5a6a; font-style: italic; } /* comment */
+  .c-ok  { color: #39ff14; }   /* good */
+  .c-bad { color: #ff3b5c; }   /* bad */
+  .c-num { color: #d19a66; }   /* number */
+  .c-cls { color: #e5c07b; }   /* class */
+
+  /* ── FOOTER ───────────────────────────────────────── */
+  footer {
+    margin-top: 4rem;
+    border-top: 1px solid var(--border);
+    background: var(--bg2);
+    padding: 1.5rem 2rem;
+    text-align: center;
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    color: var(--text-dim);
+    letter-spacing: 0.1em;
+  }
+  footer span { color: var(--cyan); }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="logo">FORMULA<br><span>DB // SYSTEM READY v2.0</span></div>
+  <div class="breadcrumb">ROOT / PROG &amp; DS / <em>IMP_METHODS</em></div>
+  <div class="status-dot"></div>
+</header>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-title">IMPORTANT <span>METHODS</span></div>
+  <div class="hero-sub">// JAVA • COMMON PITFALLS • MUST-KNOW API CONTRACTS</div>
+  <div class="tag-row">
+    <span class="tag tag-java">Java</span>
+    <span class="tag tag-perf">Performance</span>
+    <span class="tag tag-thread">Threading</span>
+    <span class="tag tag-bug">Bug Traps</span>
+  </div>
+</div>
+
+<!-- QUICK REFERENCE -->
+<div class="qref">
+  <div class="qref-item"><span class="label">TOTAL METHODS</span><div class="value">40</div></div>
+  <div class="qref-item"><span class="label">CATEGORY</span><div class="value">PROG &amp; DS</div></div>
+  <div class="qref-item"><span class="label">DIFFICULTY</span><div class="value">MED → ADV</div></div>
+  <div class="qref-item"><span class="label">LANGUAGE</span><div class="value">JAVA / OOP</div></div>
+  <div class="qref-item"><span class="label">BUG TRAPS</span><div class="value">14 CRITICAL</div></div>
+</div>
+
+<!-- MAIN CONTENT -->
+<div class="page">
+
+  <!-- ══ STRING METHODS ══════════════════════════════ -->
+  <div class="section-header">
+    <span class="section-icon">🔤</span>
+    <span class="section-title">STRING METHODS</span>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="cards">
+
+    <!-- 1. isEmpty vs isBlank -->
+    <div class="card">
+      <div class="card-head">
+        <span class="card-num">#01</span>
+        <span class="card-title">isEmpty() vs. isBlank()</span>
+        <span class="card-badge badge-bug">BUG TRAP</span>
+      </div>
+      <div class="card-body">
+        <div class="diff-box">
+          <div class="diff-item"><div class="diff-label">isEmpty()</div><div class="diff-text">True only if length == 0. Treats spaces as valid.</div></div>
+          <div class="diff-item"><div class="diff-label">isBlank()</div><div class="diff-text">True if empty OR whitespace-only (spaces, tabs, newlines).</div></div>
+        </div>
+        <div class="when-box">
+          <strong>// WHEN TO USE</strong>
+          Use <code>isEmpty()</code> when whitespace is meaningful (passwords, file formats). Use <code>isBlank()</code> for almost all user input validation — users accidentally press spacebar constantly.
+        </div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-dot"></span><span class="code-dot"></span><span class="code-dot"></span><span class="code-lang">JAVA</span></div>
+          <pre><span class="c-cls">String</span> input = <span class="c-str">" "</span>;
+input.<span class="c-fn">isEmpty</span>();   <span class="c-cmt">// false — has length</span>
+input.<span class="c-fn">isBlank</span>();   <span class="c-ok">// true  — safe to reject</span></pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. + vs StringBuilder -->
+    <div class="card">
+      <div class="card-head">
+        <span class="card-num">#02</span>
+        <span class="card-title">+ (Concat) vs. StringBuilder.append()</span>
+        <span class="card-badge badge-perf">PERFORMANCE</span>
+      </div>
+      <div class="card-body">
+        <div class="diff-box">
+          <div class="diff-item"><div class="diff-label">+ operator</div><div class="diff-text">Creates a NEW String object on every use. Massive GC pressure in loops.</div></div>
+          <div class="diff-item"><div class="diff-label">append()</div><div class="diff-text">Mutates an in-memory buffer. O(1) amortized. One object, always.</div></div>
+        </div>
+        <div class="when-box">
+          <strong>// WHEN TO USE</strong>
+          <code>+</code> for single-line log statements (compiler auto-optimizes). <code>StringBuilder</code> inside any loop or dynamic string construction.
+        </div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-dot"></span><span class="code-dot"></span><span class="code-dot"></span><span class="code-lang">JAVA</span></div>
+          <pre><span class="c-bad">// BAD: 1000 String objects</span>
+<span class="c-cls">String</span> s = <span class="c-str">""</span>;
+<span class="c-kw">for</span>(<span class="c-kw">int</span> i=<span class="c-num">0</span>; i&lt;<span class="c-num">1000</span>; i++) s += i;
+
+<span class="c-ok">// GOOD: 1 buffer</span>
+<span class="c-cls">StringBuilder</span> sb = <span class="c-kw">new</span> <span class="c-cls">StringBuilder</span>();
+<span class="c-kw">for</span>(<span class="c-kw">int</span> i=<span class="c-num">0</span>; i&lt;<span class="c-num">1000</span>; i++) sb.<span class="c-fn">append</span>(i);</pre>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /cards -->
+
+  <!-- ══ EQUALITY & IDENTITY ═════════════════════════ -->
+  <div class="section-header">
+    <span class="section-icon">⚖️</span>
+    <span class="section-title">EQUALITY &amp; IDENTITY</span>
+    <div class="section-line"></div>
+  </div>
+  <div class="cards">
+
+    <!-- 3. == vs equals -->
+    <div class="card">
+      <div class="card-head">
+        <span class="card-num">#03</span>
+        <span class="card-title">== vs. .equals()</span>
+        <span class="card-badge badge-bug">BUG TRAP</span>
+      </div>
+      <div class="card-body">
+        <div class="diff-box">
+          <div class="diff-item"><div class="diff-label">==</div><div class="diff-text">Compares <em>memory address</em>. Are these the same object?</div></div>
+          <div class="diff-item"><div class="diff-label">.equals()</div><div class="diff-text">Compares <em>value/content</em>. Do these hold the same data?</div></div>
+        </div>
+        <div class="when-box">
+          <strong>// WHEN TO USE</strong>
+          <code>==</code> for Enums and primitives (int, char, boolean). <code>.equals()</code> for all Objects — String, Integer, custom classes. Always.
+        </div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-dot"></span><span class="code-dot"></span><span class="code-dot"></span><span class="code-lang">JAVA</span></div>
+          <pre><span class="c-cls">String</span> a = <span class="c-kw">new</span> <span class="c-cls">String</span>(<span class="c-str">"text"</span>);
+<span class="c-cls">String</span> b = <span class="c-kw">new</span> <span class="c-cls">String</span>(<span class="c-str">"text"</span>);
+a == b          <span class="c-bad">// false — different heap addresses</span>
+a.<span class="c-fn">equals</span>(b)   <span class="c-ok">// true  — same content</span></pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. equals vs hashCode -->
+    <div class="card">
+      <div class="card-head">
+        <span class="card-num">#04</span>
+        <span class="card-title">equals() vs. hashCode() Contract</span>
+        <span class="card-badge badge-bug">BUG TRAP</span>
+      </div>
+      <div class="card-body">
+        <div class="diff-box">
+          <div class="diff-item"><div class="diff-label">equals()</div><div class="diff-text">Logical equality — same content?</div></div>
+          <div class="diff-item"><div class="diff-label">hashCode()</div><div class="diff-text">Integer digest for bucketing in HashMap/HashSet.</div></div>
+        </div>
+        <div class="trap-box">
+          <strong>// ⚠ GOLDEN RULE</strong>
+          If you override <code>equals()</code>, you MUST override <code>hashCode()</code>. Equal objects must share the same hash. Violating this causes HashSet to store duplicates and HashMap to lose keys silently.
+        </div>
+        <div class="when-box">
+          <strong>// WHEN TO USE</strong>
+          Always override both together via IDE or Lombok <code>@EqualsAndHashCode</code>. Never override just one.
+        </div>
+      </div>
+    </div>
+
+    <!-- 5. getClass vs .class -->
+    <div class="card">
+      <div class="card-head">
+        <span class="card-num">#05</span>
+        <span class="card-title">getClass() vs. .class</span>
+        <span class="card-badge badge-info">REFLECTION</span>
+      </div>
+      <div class="card-body">
+        <div class="diff-box">
+          <div class="diff-item"><div class="diff-label">.class</div><div class="diff-text">Compile-time. No object needed. Use when type is known statically.</div></div>
+          <div class="diff-item"><div class="diff-label">getClass()</div><div class="diff-text">Runtime. Reveals true dynamic type through polymorphism.</div></div>
+        </div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-dot"></span><span class="code-dot"></span><span class="code-dot"></span><span class="code-lang">JAVA</span></div>
+          <pre><span class="c-cls">Class</span>&lt;<span class="c-cls">String</span>&gt; c1 = <span class="c-cls">String</span>.class;  <span class="c-cmt">// compile time</span>
+<span class="c-cls">Object</span> obj = <span class="c-str">"Hello"</span>;
+<span class="c-cls">Class</span>&lt;?&gt; c2 = obj.<span class="c-fn">getClass</span>(); <span class="c-ok">// → String.class (runtime)</span></pre>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ══ THREADING ════════════════════════════════════ -->
+  <div class="section-header">
+    <span class="section-icon">🧵</span>
+    <span class="section-title">THREADING &amp; CONCURRENCY</span>
+    <div class="section-line"></div>
+  </div>
+  <div class="cards">
+
+    <!-- 6. sleep vs wait -->
+    <div class="card">
+      <div class="card-head">
+        <span class="card-num">#06</span>
+        <span class="card-title">sleep() vs. wait()</span>
+        <span class="card-badge badge-thread">CONCURRENCY</span>
+      </div>
+      <div class="card-body">
+        <div class="diff-box">
+          <div class="diff-item"><div class="diff-label">sleep()</div><div class="diff-text">Thread naps but KEEPS the lock. Does not release resources.</div></div>
+          <div class="diff-item"><div class="diff-label">wait()</div><div class="diff-text">Thread releases the lock and waits for notify()/notifyAll().</div></div>
+        </div>
+        <div class="trap-box">
+          <strong>// ⚠ DEADLOCK RISK</strong>
+          Using <code>sleep()</code> inside a <code>synchronized</code> block holds the lock — other threads can never enter. Classic deadlock.
+        </div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-dot"></span><span class="code-dot"></span><span class="code-dot"></span><span class="code-lang">JAVA</span></div>
+          <pre><span class="c-kw">synchronized</span>(queue) {
+  <span class="c-kw">while</span>(queue.<span class="c-fn">isEmpty</span>()) {
+    queue.<span class="c-fn">wait</span>();   <span class="c-ok">// releases lock — producer can add</span>
+    <span class="c-bad">// Thread.sleep(1000) — WRONG: holds lock → deadlock</span>
+  }
+}</pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- 7. start vs run -->
+    <div class="card">
+      <div class="card-head">
+        <span class="card-num">#07</span>
+        <span class="card-title">Thread.start() vs. Thread.run()</span>
+        <span class="card-badge badge-thread">CONCURRENCY</span>
+      </div>
+      <div class="card-body">
+        <div class="diff-box">
+          <div class="diff-item"><div class="diff-label">run()</div><div class="diff-text">Plain method call. Runs in the CURRENT thread. No parallelism.</div></div>
+          <div class="diff-item"><div class="diff-label">start()</div><div class="diff-text">Spawns a new OS thread, then calls run() inside it.</div></div>
+        </div>
+        <div class="trap-box">
+          <strong>// ⚠ COMMON MISTAKE</strong>
+          Calling <code>t.run()</code> makes "multithreaded" code run sequentially. UI freezes, tasks block. Always use <code>start()</code>.
+        </div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-dot"></span><span class="code-dot"></span><span class="code-dot"></span><span class="code-lang">JAVA</span></div>
+          <pre><span class="c-cls">Thread</span> t = <span class="c-kw">new</span> <span class="c-cls">Thread</span>(() -> <span class="c-fn">doWork</span>());
+t.<span class="c-fn">run</span>();    <span class="c-bad">// WRONG — runs in main thread</span>
+t.<span class="c-fn">start</span>(); <span class="c-ok">// CORRECT — new thread spawned</span></pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- 8. notify vs notifyAll -->
+    <div class="card">
+      <div class="card-head">
+        <span class="card-num">#08</span>
+        <span class="card-title">notify() vs. notifyAll()</span>
+        <span class="card-badge badge-thread">CONCURRENCY</span>
+      </div>
+      <div class="card-body">
+        <div class="diff-box">
+          <div class="diff-item"><div class="diff-label">notify()</div><div class="diff-text">Wakes ONE random waiting thread. May wake the wrong type.</div></div>
+          <div class="diff-item"><div class="diff-label">notifyAll()</div><div class="diff-text">Wakes ALL waiting threads. Let them compete for the lock safely.</div></div>
+        </div>
+        <div class="when-box">
+          <strong>// WHEN TO USE</strong>
+          Default to <code>notifyAll()</code> in 99% of cases. Use <code>notify()</code> only if you can guarantee exactly one thread is waiting and it can handle any notification.
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ══ COLLECTIONS & LISTS ═════════════════════════ -->
+  <div class="section-header">
+    <span class="section-icon">📦</span>
+    <span class="section-title">COLLECTIONS &amp; LISTS</span>
+    <div class="section-line"></div>
+  </div>
+  <div class="cards">
+
+    <!-- 9. remove(int) vs remove(Object) -->
+    <div class="card">
+      <div class="card-head">
+        <span class="card-num">#09</span>
+        <span class="card-title">List.remove(index) vs. remove(Object)</span>
+        <span class="card-badge badge-bug">BUG TRAP</span>
+      </div>
+      <div class="card-body">
+        <div class="trap-box">
+          <strong>// ⚠ DANGEROUS AMBIGUITY</strong>
+          On a <code>List&lt;Integer&gt;</code>, <code>remove(5)</code> removes the element at index 5 — NOT the value 5. If the list has &lt;6 elements, you get IndexOutOfBoundsException.
+        </div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-dot"></span><span class="code-dot"></span><span class="code-dot"></span><span class="code-lang">JAVA</span></div>
+          <pre><span class="c-cls">List</span>&lt;<span class="c-cls">Integer</span>&gt; nums = <span class="c-kw">new</span> <span class="c-cls">ArrayList</span>&lt;&gt;(<span class="c-cls">List</span>.<span class="c-fn">of</span>(<span class="c-num">5</span>, <span class="c-num">10</span>));
+nums.<span class="c-fn">remove</span>(<span class="c-num">5</span>);                      <span class="c-bad">// IndexOutOfBoundsException!</span>
+nums.<span class="c-fn">remove</span>(<span class="c-cls">Integer</span>.<span class="c-fn">valueOf</span>(<span class="c-num">5</span>));    <span class="c-ok">// removes the value 5</span></pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- 10. Comparable vs Comparator -->
+    <div class="card">
+      <div class="card-head">
+        <span class="card-num">#10</span>
+        <span class="card-title">Comparable vs. Comparator</span>
+        <span class="card-badge badge-info">SORTING</span>
+      </div>
+      <div class="card-body">
+        <div class="diff-box">
+          <div class="diff-item"><div class="diff-label">Comparable</div><div class="diff-text">Inside the class. One natural sort order. <code>compareTo()</code>.</div></div>
+          <div class="diff-item"><div class="diff-label">Comparator</div><div class="diff-text">Outside the class. Unlimited sort strategies. Passed at call site.</div></div>
+        </div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-dot"></span><span class="code-dot"></span><span class="code-dot"></span><span class="code-lang">JAVA</span></div>
+          <pre><span class="c-kw">class</span> <span class="c-cls">User</span> <span class="c-kw">implements</span> <span class="c-cls">Comparable</span>&lt;<span class="c-cls">User</span>&gt; {
+  <span class="c-kw">public int</span> <span class="c-fn">compareTo</span>(<span class="c-cls">User</span> u) { <span class="c-kw">return</span> <span class="c-kw">this</span>.id - u.id; }
+}
+<span class="c-cmt">// Custom — outside the class</span>
+users.<span class="c-fn">sort</span>(<span class="c-cls">Comparator</span>.<span class="c-fn">comparing</span>(<span class="c-cls">User</span>::getName));</pre>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ══ I/O & FILE SYSTEM ═══════════════════════════ -->
+  <div class="section-header">
+    <span class="section-icon">💾</span>
+    <span class="section-title">I/O &amp; FILE SYSTEM</span>
+    <div class="section-line"></div>
+  </div>
+  <div class="cards">
+
+    <!-- 11. flush vs close -->
+    <div class="card">
+      <div class="card-head">
+        <span class="card-num">#11</span>
+        <span class="card-title">flush() vs. close()</span>
+        <span class="card-badge badge-warn">DATA LOSS</span>
+      </div>
+      <div class="card-body">
+        <div class="diff-box">
+          <div class="diff-item"><div class="diff-label">flush()</div><div class="diff-text">Pushes buffer to disk/network. Stream stays OPEN for more writes.</div></div>
+          <div class="diff-item"><div class="diff-label">close()</div><div class="diff-text">Flushes + releases OS resources. Stream is DONE, cannot reuse.</div></div>
+        </div>
+        <div class="when-box">
+          <strong>// WHEN TO USE</strong>
+          <code>flush()</code> during long-running writes (logs, ZIPs) for periodic safety. <code>close()</code> when finished. Use try-with-resources — it auto-closes and prevents resource leaks.
+        </div>
+      </div>
+    </div>
+
+    <!-- 12. exists vs isFile -->
+    <div class="card">
+      <div class="card-head">
+        <span class="card-num">#12</span>
+        <span class="card-title">exists() vs. isFile()</span>
+        <span class="card-badge badge-bug">BUG TRAP</span>
+      </div>
+      <div class="card-body">
+        <div class="diff-box">
+          <div class="diff-item"><div class="diff-label">exists()</div><div class="diff-text">True if path exists — could be a file, directory, or symlink.</div></div>
+          <div class="diff-item"><div class="diff-label">isFile()</div><div class="diff-text">True only if it exists AND is a regular file (not a directory).</div></div>
+        </div>
+        <div class="trap-box">
+          <strong>// ⚠ THE TRAP</strong>
+          A directory named <code>data.txt</code> makes <code>exists()</code> return true. Attempting to read it as a file will crash. Always use <code>isRegularFile()</code> before reading.
+        </div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-dot"></span><span class="code-dot"></span><span class="code-dot"></span><span class="code-lang">JAVA</span></div>
+          <pre><span class="c-bad">// if(Files.exists(path)) Files.readAllLines(path); — DANGEROUS</span>
+<span class="c-kw">if</span>(<span class="c-cls">Files</span>.<span class="c-fn">isRegularFile</span>(path)) {
+  <span class="c-cls">Files</span>.<span class="c-fn">readAllLines</span>(path);   <span class="c-ok">// SAFE</span>
+}</pre>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ══ STREAMS & OPTIONAL ══════════════════════════ -->
+  <div class="section-header">
+    <span class="section-icon">🌊</span>
+    <span class="section-title">STREAMS &amp; OPTIONAL</span>
+    <div class="section-line"></div>
+  </div>
+  <div class="cards">
+
+    <!-- 13. peek vs forEach -->
+    <div class="card">
+      <div class="card-head">
+        <span class="card-num">#13</span>
+        <span class="card-title">Stream.peek() vs. forEach()</span>
+        <span class="card-badge badge-warn">STREAMS</span>
+      </div>
+      <div class="card-body">
+        <div class="diff-box">
+          <div class="diff-item"><div class="diff-label">peek()</div><div class="diff-text">Intermediate. Returns the stream — keep chaining. Debug only.</div></div>
+          <div class="diff-item"><div class="diff-label">forEach()</div><div class="diff-text">Terminal. Returns void. Ends the stream. For side effects.</div></div>
+        </div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-dot"></span><span class="code-dot"></span><span class="code-dot"></span><span class="code-lang">JAVA</span></div>
+          <pre>list.<span class="c-fn">stream</span>()
+  .<span class="c-fn">filter</span>(<span class="c-cls">User</span>::isActive)
+  .<span class="c-fn">peek</span>(u -> log.<span class="c-fn">debug</span>(u.<span class="c-fn">getName</span>()))  <span class="c-ok">// debug — keeps flowing</span>
+  .<span class="c-fn">map</span>(<span class="c-cls">User</span>::getEmail)
+  .<span class="c-fn">forEach</span>(emailService::sendEmail);  <span class="c-ok">// terminal — consumes</span></pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- 14. isPresent vs isEmpty (Optional) -->
+    <div class="card">
+      <div class="card-head">
+        <span class="card-num">#14</span>
+        <span class="card-title">Optional.isPresent() vs. isEmpty()</span>
+        <span class="card-badge badge-info">OPTIONAL</span>
+      </div>
+      <div class="card-body">
+        <div class="diff-box">
+          <div class="diff-item"><div class="diff-label">isPresent()</div><div class="diff-text">True if value exists. Use for positive checks.</div></div>
+          <div class="diff-item"><div class="diff-label">isEmpty()</div><div class="diff-text">True if value is absent. Cleaner than <code>!isPresent()</code>.</div></div>
+        </div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-dot"></span><span class="code-dot"></span><span class="code-dot"></span><span class="code-lang">JAVA</span></div>
+          <pre><span class="c-cls">Optional</span>&lt;<span class="c-cls">User</span>&gt; user = repo.<span class="c-fn">findById</span>(id);
+<span class="c-bad">if(!user.isPresent()) {...}    // hard to read (double negative)</span>
+<span class="c-kw">if</span>(user.<span class="c-fn">isEmpty</span>())             <span class="c-ok">// cleaner — throw or handle</span>
+  <span class="c-kw">throw new</span> <span class="c-cls">UserNotFoundException</span>();</pre>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ══ MATH & SYNTAX ════════════════════════════════ -->
+  <div class="section-header">
+    <span class="section-icon">🔢</span>
+    <span class="section-title">MATH &amp; SYNTAX TRAPS</span>
+    <div class="section-line"></div>
+  </div>
+  <div class="cards">
+
+    <!-- 15. floor vs ceil vs round -->
+    <div class="card">
+      <div class="card-head">
+        <span class="card-num">#15</span>
+        <span class="card-title">floor() vs. ceil() vs. round()</span>
+        <span class="card-badge badge-warn">MATH</span>
+      </div>
+      <div class="card-body">
+        <div class="diff-box">
+          <div class="diff-item"><div class="diff-label">floor(x)</div><div class="diff-text">Always rounds DOWN. 2.9 → 2, -2.1 → -3.</div></div>
+          <div class="diff-item"><div class="diff-label">ceil(x)</div><div class="diff-text">Always rounds UP. 2.1 → 3, -2.9 → -2.</div></div>
+        </div>
+        <div class="when-box">
+          <strong>// WHEN TO USE</strong>
+          <code>floor()</code> for grid/tile alignment. <code>ceil()</code> for pagination: 101 items ÷ 10 per page = ceil(10.1) = 11 pages. <code>round()</code> for display values.
+        </div>
+      </div>
+    </div>
+
+    <!-- 16. length vs length() vs size() -->
+    <div class="card">
+      <div class="card-head">
+        <span class="card-num">#16</span>
+        <span class="card-title">length vs. length() vs. size()</span>
+        <span class="card-badge badge-bug">SYNTAX TRAP</span>
+      </div>
+      <div class="card-body">
+        <div class="diff-box">
+          <div class="diff-item"><div class="diff-label">array.length</div><div class="diff-text">Property (field). No parentheses. Arrays only.</div></div>
+          <div class="diff-item"><div class="diff-label">str.length()</div><div class="diff-text">Method call. Strings only. Has parentheses.</div></div>
+        </div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-dot"></span><span class="code-dot"></span><span class="code-dot"></span><span class="code-lang">JAVA</span></div>
+          <pre><span class="c-kw">int</span>[] arr = {<span class="c-num">1</span>,<span class="c-num">2</span>,<span class="c-num">3</span>};     arr.length    <span class="c-ok">// array → field</span>
+<span class="c-cls">String</span> s = <span class="c-str">"hi"</span>;         s.<span class="c-fn">length</span>()   <span class="c-ok">// string → method</span>
+<span class="c-cls">List</span>&lt;<span class="c-cls">String</span>&gt; l = ...;   l.<span class="c-fn">size</span>()     <span class="c-ok">// collection → method</span></pre>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ══ BONUS: EXTRA METHODS ADDED ══════════════════ -->
+  <div class="section-header">
+    <span class="section-icon">⚡</span>
+    <span class="section-title">BONUS METHODS</span>
+    <div class="section-line"></div>
+  </div>
+  <div class="cards">
+
+    <!-- 17. orElse vs orElseGet -->
+    <div class="card">
+      <div class="card-head">
+        <span class="card-num">#17</span>
+        <span class="card-title">Optional.orElse() vs. orElseGet()</span>
+        <span class="card-badge badge-perf">PERFORMANCE</span>
+      </div>
+      <div class="card-body">
+        <div class="diff-box">
+          <div class="diff-item"><div class="diff-label">orElse(T)</div><div class="diff-text">The fallback expression is ALWAYS evaluated — even if value is present.</div></div>
+          <div class="diff-item"><div class="diff-label">orElseGet(Supplier)</div><div class="diff-text">Lazy — fallback only evaluated if value is absent.</div></div>
+        </div>
+        <div class="trap-box">
+          <strong>// ⚠ SILENT PERF KILLER</strong>
+          <code>orElse(expensiveCall())</code> always runs <code>expensiveCall()</code> — even when the Optional has a value. Use <code>orElseGet(this::expensiveCall)</code> to defer it.
+        </div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-dot"></span><span class="code-dot"></span><span class="code-dot"></span><span class="code-lang">JAVA</span></div>
+          <pre><span class="c-bad">// Always calls createDefault() — even if user exists!</span>
+user.<span class="c-fn">orElse</span>(<span class="c-fn">createDefault</span>());
+<span class="c-ok">// Lazy: only calls if user is absent</span>
+user.<span class="c-fn">orElseGet</span>(<span class="c-kw">this</span>::<span class="c-fn">createDefault</span>);</pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- 18. Iterator.remove vs List.remove in loop -->
+    <div class="card">
+      <div class="card-head">
+        <span class="card-num">#18</span>
+        <span class="card-title">Iterator.remove() vs. List.remove() in Loops</span>
+        <span class="card-badge badge-bug">BUG TRAP</span>
+      </div>
+      <div class="card-body">
+        <div class="trap-box">
+          <strong>// ⚠ ConcurrentModificationException</strong>
+          Calling <code>list.remove()</code> inside a <code>for-each</code> loop throws ConcurrentModificationException. The collection detects structural modification while iterating.
+        </div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-dot"></span><span class="code-dot"></span><span class="code-dot"></span><span class="code-lang">JAVA</span></div>
+          <pre><span class="c-bad">// for(String s : list) list.remove(s); — THROWS CME</span>
+
+<span class="c-ok">// Safe: use Iterator</span>
+<span class="c-cls">Iterator</span>&lt;<span class="c-cls">String</span>&gt; it = list.<span class="c-fn">iterator</span>();
+<span class="c-kw">while</span>(it.<span class="c-fn">hasNext</span>()) {
+  <span class="c-kw">if</span>(<span class="c-fn">condition</span>(it.<span class="c-fn">next</span>())) it.<span class="c-fn">remove</span>(); <span class="c-ok">// safe</span>
+}
+<span class="c-cmt">// Or Java 8+: list.removeIf(condition);</span></pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- 19. String.format vs. formatted() -->
+    <div class="card">
+      <div class="card-head">
+        <span class="card-num">#19</span>
+        <span class="card-title">String.format() vs. .formatted() (Java 15+)</span>
+        <span class="card-badge badge-info">MODERN JAVA</span>
+      </div>
+      <div class="card-body">
+        <div class="diff-box">
+          <div class="diff-item"><div class="diff-label">String.format()</div><div class="diff-text">Static method. Works everywhere (Java 5+). Verbose to call.</div></div>
+          <div class="diff-item"><div class="diff-label">.formatted()</div><div class="diff-text">Instance method on String literals. Cleaner syntax. Java 15+.</div></div>
+        </div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-dot"></span><span class="code-dot"></span><span class="code-dot"></span><span class="code-lang">JAVA</span></div>
+          <pre><span class="c-cmt">// Old style</span>
+<span class="c-cls">String</span> s1 = <span class="c-cls">String</span>.<span class="c-fn">format</span>(<span class="c-str">"Hello %s, you are %d"</span>, name, age);
+<span class="c-cmt">// Modern — inline on the template itself</span>
+<span class="c-cls">String</span> s2 = <span class="c-str">"Hello %s, you are %d"</span>.<span class="c-fn">formatted</span>(name, age);</pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- 20. Collections.unmodifiableList vs List.copyOf -->
+    <div class="card">
+      <div class="card-head">
+        <span class="card-num">#20</span>
+        <span class="card-title">unmodifiableList() vs. List.copyOf()</span>
+        <span class="card-badge badge-bug">DEFENSIVE COPY</span>
+      </div>
+      <div class="card-body">
+        <div class="diff-box">
+          <div class="diff-item"><div class="diff-label">unmodifiableList()</div><div class="diff-text">A READ-ONLY VIEW. Mutations to the original list are still reflected!</div></div>
+          <div class="diff-item"><div class="diff-label">List.copyOf()</div><div class="diff-text">A true immutable snapshot. Unaffected by future changes to source.</div></div>
+        </div>
+        <div class="trap-box">
+          <strong>// ⚠ SNEAKY MUTATION BUG</strong>
+          If you return <code>Collections.unmodifiableList(internalList)</code>, callers can't modify it — but YOU can still mutate the internal list and they'll see the changes. Use <code>List.copyOf()</code> for a true defensive copy.
+        </div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-dot"></span><span class="code-dot"></span><span class="code-dot"></span><span class="code-lang">JAVA</span></div>
+          <pre><span class="c-cls">List</span>&lt;<span class="c-cls">String</span>&gt; src = <span class="c-kw">new</span> <span class="c-cls">ArrayList</span>&lt;&gt;(<span class="c-cls">List</span>.<span class="c-fn">of</span>(<span class="c-str">"a"</span>,<span class="c-str">"b"</span>));
+<span class="c-cls">List</span>&lt;<span class="c-cls">String</span>&gt; view = <span class="c-cls">Collections</span>.<span class="c-fn">unmodifiableList</span>(src);
+src.<span class="c-fn">add</span>(<span class="c-str">"c"</span>);
+view.<span class="c-fn">size</span>(); <span class="c-bad">// 3 — still sees the mutation!</span>
+
+<span class="c-cls">List</span>&lt;<span class="c-cls">String</span>&gt; safe = <span class="c-cls">List</span>.<span class="c-fn">copyOf</span>(src);  <span class="c-ok">// true snapshot</span></pre>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /bonus cards -->
+
+
+  <!-- ══ EXCEPTION HANDLING ══════════════════════════ -->
+  <div class="section-header">
+    <span class="section-icon">🚨</span>
+    <span class="section-title">EXCEPTION HANDLING</span>
+    <div class="section-line"></div>
+  </div>
+  <div class="cards">
+
+    <!-- 21. checked vs unchecked -->
+    <div class="card">
+      <div class="card-head">
+        <span class="card-num">#21</span>
+        <span class="card-title">Checked vs. Unchecked Exceptions</span>
+        <span class="card-badge badge-warn">EXCEPTIONS</span>
+      </div>
+      <div class="card-body">
+        <div class="diff-box">
+          <div class="diff-item"><div class="diff-label">Checked (Exception)</div><div class="diff-text">Compiler forces you to handle or declare. Recoverable scenarios (IO, DB).</div></div>
+          <div class="diff-item"><div class="diff-label">Unchecked (RuntimeException)</div><div class="diff-text">Not enforced by compiler. Programming errors (NPE, ArrayIndexOutOfBounds).</div></div>
+        </div>
+        <div class="when-box">
+          <strong>// WHEN TO USE</strong>
+          Throw checked exceptions when the caller can realistically recover (file not found → ask user to retry). Throw unchecked for bugs that should never happen in correct code (null where impossible).
+        </div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-dot"></span><span class="code-dot"></span><span class="code-dot"></span><span class="code-lang">JAVA</span></div>
+          <pre><span class="c-cmt">// Checked — caller MUST handle</span>
+<span class="c-kw">public void</span> <span class="c-fn">readFile</span>(<span class="c-cls">String</span> path) <span class="c-kw">throws</span> <span class="c-cls">IOException</span> { ... }
+
+<span class="c-cmt">// Unchecked — programming error</span>
+<span class="c-kw">if</span>(id &lt; <span class="c-num">0</span>) <span class="c-kw">throw new</span> <span class="c-cls">IllegalArgumentException</span>(<span class="c-str">"ID negative"</span>);</pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- 22. finally vs try-with-resources -->
+    <div class="card">
+      <div class="card-head">
+        <span class="card-num">#22</span>
+        <span class="card-title">finally vs. try-with-resources</span>
+        <span class="card-badge badge-bug">RESOURCE LEAK</span>
+      </div>
+      <div class="card-body">
+        <div class="diff-box">
+          <div class="diff-item"><div class="diff-label">finally</div><div class="diff-text">Always runs — but you must manually close resources. Easy to forget.</div></div>
+          <div class="diff-item"><div class="diff-label">try-with-resources</div><div class="diff-text">Auto-calls close() on any AutoCloseable. Cleaner, safer, preferred.</div></div>
+        </div>
+        <div class="trap-box">
+          <strong>// ⚠ EXCEPTION SUPPRESSION IN FINALLY</strong>
+          If both the try block AND the finally block throw, the finally exception silently swallows the original. try-with-resources handles this correctly via getSuppressed().
+        </div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-dot"></span><span class="code-dot"></span><span class="code-dot"></span><span class="code-lang">JAVA</span></div>
+          <pre><span class="c-bad">// Old — manual, risky</span>
+<span class="c-cls">Connection</span> c = <span class="c-fn">getConn</span>();
+<span class="c-kw">try</span> { ... } <span class="c-kw">finally</span> { c.<span class="c-fn">close</span>(); }
+
+<span class="c-ok">// Modern — auto-close, exception-safe</span>
+<span class="c-kw">try</span>(<span class="c-cls">Connection</span> c = <span class="c-fn">getConn</span>()) {
+  <span class="c-cmt">// c.close() called automatically</span>
+}</pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- 23. catch(Exception) vs catch(Throwable) -->
+    <div class="card">
+      <div class="card-head">
+        <span class="card-num">#23</span>
+        <span class="card-title">catch(Exception) vs. catch(Throwable)</span>
+        <span class="card-badge badge-bug">BUG TRAP</span>
+      </div>
+      <div class="card-body">
+        <div class="diff-box">
+          <div class="diff-item"><div class="diff-label">catch(Exception)</div><div class="diff-text">Catches all checked + unchecked exceptions. Misses Errors.</div></div>
+          <div class="diff-item"><div class="diff-label">catch(Throwable)</div><div class="diff-text">Catches everything — including OutOfMemoryError, StackOverflowError.</div></div>
+        </div>
+        <div class="trap-box">
+          <strong>// ⚠ NEVER CATCH ERRORS</strong>
+          <code>Error</code> subclasses (OOM, SOE) mean the JVM is in an unrecoverable state. Catching them and continuing leads to silent corruption. Let them propagate — or log and exit.
+        </div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-dot"></span><span class="code-dot"></span><span class="code-dot"></span><span class="code-lang">JAVA</span></div>
+          <pre><span class="c-bad">// DANGEROUS — hides OOM, SOE</span>
+<span class="c-kw">catch</span>(<span class="c-cls">Throwable</span> t) { log.<span class="c-fn">error</span>(<span class="c-str">"oops"</span>); }
+
+<span class="c-ok">// Correct — only catch what you can handle</span>
+<span class="c-kw">catch</span>(<span class="c-cls">IOException</span> e) { <span class="c-fn">retry</span>(); }
+<span class="c-kw">catch</span>(<span class="c-cls">SQLException</span> e) { <span class="c-fn">rollback</span>(); }</pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- 24. throw vs throws -->
+    <div class="card">
+      <div class="card-head">
+        <span class="card-num">#24</span>
+        <span class="card-title">throw vs. throws</span>
+        <span class="card-badge badge-info">SYNTAX</span>
+      </div>
+      <div class="card-body">
+        <div class="diff-box">
+          <div class="diff-item"><div class="diff-label">throw</div><div class="diff-text">Statement that actually <em>fires</em> an exception at runtime.</div></div>
+          <div class="diff-item"><div class="diff-label">throws</div><div class="diff-text">Declaration on a method signature — warns callers it might propagate.</div></div>
+        </div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-dot"></span><span class="code-dot"></span><span class="code-dot"></span><span class="code-lang">JAVA</span></div>
+          <pre><span class="c-cmt">// throws = declaration (callers beware)</span>
+<span class="c-kw">public void</span> <span class="c-fn">parse</span>(<span class="c-cls">String</span> s) <span class="c-kw">throws</span> <span class="c-cls">ParseException</span> {
+  <span class="c-kw">if</span>(s == <span class="c-kw">null</span>)
+    <span class="c-kw">throw new</span> <span class="c-cls">ParseException</span>(<span class="c-str">"null input"</span>, <span class="c-num">0</span>); <span class="c-cmt">// throw = fires it</span>
+}</pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- 25. multi-catch -->
+    <div class="card">
+      <div class="card-head">
+        <span class="card-num">#25</span>
+        <span class="card-title">Multi-catch vs. Stacked catch Blocks</span>
+        <span class="card-badge badge-perf">CLEAN CODE</span>
+      </div>
+      <div class="card-body">
+        <div class="diff-box">
+          <div class="diff-item"><div class="diff-label">Stacked catch</div><div class="diff-text">Separate block per exception. Verbose when logic is identical.</div></div>
+          <div class="diff-item"><div class="diff-label">Multi-catch (Java 7+)</div><div class="diff-text">Single block for multiple types via <code>|</code>. Concise, no duplication.</div></div>
+        </div>
+        <div class="trap-box">
+          <strong>// ⚠ MULTI-CATCH MAKES e EFFECTIVELY FINAL</strong>
+          Inside a multi-catch block you cannot reassign <code>e</code>. The compiler enforces this because the type is ambiguous.
+        </div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-dot"></span><span class="code-dot"></span><span class="code-dot"></span><span class="code-lang">JAVA</span></div>
+          <pre><span class="c-bad">// Verbose — same body duplicated</span>
+<span class="c-kw">catch</span>(<span class="c-cls">IOException</span> e)     { log(e); }
+<span class="c-kw">catch</span>(<span class="c-cls">SQLException</span> e)    { log(e); }
+
+<span class="c-ok">// Clean — Java 7+ multi-catch</span>
+<span class="c-kw">catch</span>(<span class="c-cls">IOException</span> | <span class="c-cls">SQLException</span> e) { <span class="c-fn">log</span>(e); }</pre>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ══ COLLECTIONS & MAPS ══════════════════════════ -->
+  <div class="section-header">
+    <span class="section-icon">🗺️</span>
+    <span class="section-title">COLLECTIONS &amp; MAPS</span>
+    <div class="section-line"></div>
+  </div>
+  <div class="cards">
+
+    <!-- 26. HashMap vs LinkedHashMap vs TreeMap -->
+    <div class="card">
+      <div class="card-head">
+        <span class="card-num">#26</span>
+        <span class="card-title">HashMap vs. LinkedHashMap vs. TreeMap</span>
+        <span class="card-badge badge-info">MAP CHOICE</span>
+      </div>
+      <div class="card-body">
+        <div class="diff-box">
+          <div class="diff-item"><div class="diff-label">HashMap</div><div class="diff-text">O(1) ops. No guaranteed order. Default choice.</div></div>
+          <div class="diff-item"><div class="diff-label">LinkedHashMap</div><div class="diff-text">O(1) ops. Insertion order preserved. Good for LRU caches.</div></div>
+        </div>
+        <div class="diff-box">
+          <div class="diff-item"><div class="diff-label">TreeMap</div><div class="diff-text">O(log n) ops. Sorted by key (natural or Comparator). Use for range queries.</div></div>
+        </div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-dot"></span><span class="code-dot"></span><span class="code-dot"></span><span class="code-lang">JAVA</span></div>
+          <pre><span class="c-cmt">// Need sorted keys? TreeMap</span>
+<span class="c-cls">TreeMap</span>&lt;<span class="c-cls">String</span>,<span class="c-cls">Integer</span>&gt; scores = <span class="c-kw">new</span> <span class="c-cls">TreeMap</span>&lt;&gt;();
+scores.<span class="c-fn">firstKey</span>();  scores.<span class="c-fn">subMap</span>(<span class="c-str">"A"</span>, <span class="c-str">"M"</span>);
+
+<span class="c-cmt">// Need insertion order? LinkedHashMap</span>
+<span class="c-cls">Map</span>&lt;<span class="c-cls">String</span>,<span class="c-cls">Integer</span>&gt; lru = <span class="c-kw">new</span> <span class="c-cls">LinkedHashMap</span>&lt;&gt;(<span class="c-num">16</span>,<span class="c-num">0.75f</span>,<span class="c-kw">true</span>);</pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- 27. getOrDefault vs computeIfAbsent -->
+    <div class="card">
+      <div class="card-head">
+        <span class="card-num">#27</span>
+        <span class="card-title">getOrDefault() vs. computeIfAbsent()</span>
+        <span class="card-badge badge-perf">MAP OPS</span>
+      </div>
+      <div class="card-body">
+        <div class="diff-box">
+          <div class="diff-item"><div class="diff-label">getOrDefault()</div><div class="diff-text">Returns a default if key absent. Does NOT store it in the map.</div></div>
+          <div class="diff-item"><div class="diff-label">computeIfAbsent()</div><div class="diff-text">Computes and STORES the value if key absent. Lazy init.</div></div>
+        </div>
+        <div class="trap-box">
+          <strong>// ⚠ COMMON GROUPING BUG</strong>
+          Using <code>getOrDefault(key, new ArrayList())</code> then modifying it does NOT update the map. You're modifying a detached list. Use <code>computeIfAbsent</code> instead.
+        </div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-dot"></span><span class="code-dot"></span><span class="code-dot"></span><span class="code-lang">JAVA</span></div>
+          <pre><span class="c-bad">// BUG — list not stored in map</span>
+map.<span class="c-fn">getOrDefault</span>(key, <span class="c-kw">new</span> <span class="c-cls">ArrayList</span>&lt;&gt;()).<span class="c-fn">add</span>(val);
+
+<span class="c-ok">// CORRECT — creates &amp; stores on first access</span>
+map.<span class="c-fn">computeIfAbsent</span>(key, k -> <span class="c-kw">new</span> <span class="c-cls">ArrayList</span>&lt;&gt;()).<span class="c-fn">add</span>(val);</pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- 28. putIfAbsent vs merge -->
+    <div class="card">
+      <div class="card-head">
+        <span class="card-num">#28</span>
+        <span class="card-title">putIfAbsent() vs. merge()</span>
+        <span class="card-badge badge-info">MAP OPS</span>
+      </div>
+      <div class="card-body">
+        <div class="diff-box">
+          <div class="diff-item"><div class="diff-label">putIfAbsent()</div><div class="diff-text">Inserts only if key not present. Returns old value (or null).</div></div>
+          <div class="diff-item"><div class="diff-label">merge()</div><div class="diff-text">Inserts if absent; applies a function to combine old + new value if present.</div></div>
+        </div>
+        <div class="when-box">
+          <strong>// WHEN TO USE</strong>
+          <code>merge()</code> is the go-to for frequency counters and aggregation. It eliminates the classic <code>if(map.containsKey(k))</code> boilerplate.
+        </div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-dot"></span><span class="code-dot"></span><span class="code-dot"></span><span class="code-lang">JAVA</span></div>
+          <pre><span class="c-cmt">// Word frequency counter — old way</span>
+map.<span class="c-fn">put</span>(word, map.<span class="c-fn">getOrDefault</span>(word,<span class="c-num">0</span>) + <span class="c-num">1</span>);
+
+<span class="c-ok">// Clean with merge</span>
+map.<span class="c-fn">merge</span>(word, <span class="c-num">1</span>, <span class="c-cls">Integer</span>::sum);</pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- 29. ArrayDeque vs LinkedList as Queue -->
+    <div class="card">
+      <div class="card-head">
+        <span class="card-num">#29</span>
+        <span class="card-title">ArrayDeque vs. LinkedList as Queue/Stack</span>
+        <span class="card-badge badge-perf">PERFORMANCE</span>
+      </div>
+      <div class="card-body">
+        <div class="diff-box">
+          <div class="diff-item"><div class="diff-label">LinkedList</div><div class="diff-text">Node-per-element. High GC overhead. Implements Queue + Deque.</div></div>
+          <div class="diff-item"><div class="diff-label">ArrayDeque</div><div class="diff-text">Array-backed ring buffer. Faster, less GC, no null support. Preferred.</div></div>
+        </div>
+        <div class="when-box">
+          <strong>// WHEN TO USE</strong>
+          Always prefer <code>ArrayDeque</code> when using a queue or stack. Java's own docs recommend it over <code>Stack</code> and over <code>LinkedList</code> for queue use. Only use <code>LinkedList</code> if you need null elements.
+        </div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-dot"></span><span class="code-dot"></span><span class="code-dot"></span><span class="code-lang">JAVA</span></div>
+          <pre><span class="c-bad">// Avoid for stack/queue use</span>
+<span class="c-cls">Stack</span>&lt;<span class="c-cls">Integer</span>&gt; s = <span class="c-kw">new</span> <span class="c-cls">Stack</span>&lt;&gt;();
+<span class="c-cls">Queue</span>&lt;<span class="c-cls">Integer</span>&gt; q = <span class="c-kw">new</span> <span class="c-cls">LinkedList</span>&lt;&gt;();
+
+<span class="c-ok">// Prefer — faster, less overhead</span>
+<span class="c-cls">Deque</span>&lt;<span class="c-cls">Integer</span>&gt; dq = <span class="c-kw">new</span> <span class="c-cls">ArrayDeque</span>&lt;&gt;();</pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- 30. EnumSet vs HashSet for enums -->
+    <div class="card">
+      <div class="card-head">
+        <span class="card-num">#30</span>
+        <span class="card-title">EnumSet vs. HashSet for Enum Values</span>
+        <span class="card-badge badge-perf">PERFORMANCE</span>
+      </div>
+      <div class="card-body">
+        <div class="diff-box">
+          <div class="diff-item"><div class="diff-label">HashSet&lt;MyEnum&gt;</div><div class="diff-text">General purpose. Works, but wasteful for enums. Uses hashing.</div></div>
+          <div class="diff-item"><div class="diff-label">EnumSet</div><div class="diff-text">Backed by a single long bitmask. Extremely fast. Zero GC overhead.</div></div>
+        </div>
+        <div class="when-box">
+          <strong>// WHEN TO USE</strong>
+          Any time you have a Set of enum values, use <code>EnumSet</code>. It's O(1) for all operations and uses a single primitive under the hood. No brainer.
+        </div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-dot"></span><span class="code-dot"></span><span class="code-dot"></span><span class="code-lang">JAVA</span></div>
+          <pre><span class="c-kw">enum</span> <span class="c-cls">Day</span> { MON, TUE, WED, THU, FRI, SAT, SUN }
+
+<span class="c-cls">EnumSet</span>&lt;<span class="c-cls">Day</span>&gt; weekend = <span class="c-cls">EnumSet</span>.<span class="c-fn">of</span>(<span class="c-cls">Day</span>.SAT, <span class="c-cls">Day</span>.SUN);
+<span class="c-cls">EnumSet</span>&lt;<span class="c-cls">Day</span>&gt; workdays = <span class="c-cls">EnumSet</span>.<span class="c-fn">complementOf</span>(weekend);</pre>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ══ DESIGN PATTERNS / OOP ════════════════════════ -->
+  <div class="section-header">
+    <span class="section-icon">🏗️</span>
+    <span class="section-title">DESIGN PATTERNS &amp; OOP</span>
+    <div class="section-line"></div>
+  </div>
+  <div class="cards">
+
+    <!-- 31. abstract class vs interface -->
+    <div class="card">
+      <div class="card-head">
+        <span class="card-num">#31</span>
+        <span class="card-title">Abstract Class vs. Interface</span>
+        <span class="card-badge badge-info">OOP</span>
+      </div>
+      <div class="card-body">
+        <div class="diff-box">
+          <div class="diff-item"><div class="diff-label">Abstract Class</div><div class="diff-text">Can have state, constructors, concrete methods. Single inheritance only.</div></div>
+          <div class="diff-item"><div class="diff-label">Interface</div><div class="diff-text">Contract-only (+ default methods). No state. A class can implement many.</div></div>
+        </div>
+        <div class="when-box">
+          <strong>// WHEN TO USE</strong>
+          Abstract class for a shared base with common state/behavior (e.g., <code>Animal</code> with a <code>name</code> field). Interface for a capability contract that unrelated classes can implement (e.g., <code>Serializable</code>, <code>Flyable</code>). Prefer interfaces — they allow multiple inheritance of type.
+        </div>
+      </div>
+    </div>
+
+    <!-- 32. composition vs inheritance -->
+    <div class="card">
+      <div class="card-head">
+        <span class="card-num">#32</span>
+        <span class="card-title">Composition vs. Inheritance</span>
+        <span class="card-badge badge-warn">DESIGN</span>
+      </div>
+      <div class="card-body">
+        <div class="diff-box">
+          <div class="diff-item"><div class="diff-label">Inheritance (is-a)</div><div class="diff-text">Tight coupling to parent. Fragile base class problem. Hard to change.</div></div>
+          <div class="diff-item"><div class="diff-label">Composition (has-a)</div><div class="diff-text">Delegates to an owned object. Loosely coupled. Easier to swap behavior.</div></div>
+        </div>
+        <div class="trap-box">
+          <strong>// ⚠ FRAGILE BASE CLASS</strong>
+          Overriding a parent method that calls other methods in the parent can break silently when the parent changes. Composition avoids this entirely.
+        </div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-dot"></span><span class="code-dot"></span><span class="code-dot"></span><span class="code-lang">JAVA</span></div>
+          <pre><span class="c-bad">// Inheritance — tight coupling</span>
+<span class="c-kw">class</span> <span class="c-cls">LoggingList</span> <span class="c-kw">extends</span> <span class="c-cls">ArrayList</span>&lt;<span class="c-cls">String</span>&gt; { ... }
+
+<span class="c-ok">// Composition — loosely coupled</span>
+<span class="c-kw">class</span> <span class="c-cls">LoggingList</span> {
+  <span class="c-kw">private final</span> <span class="c-cls">List</span>&lt;<span class="c-cls">String</span>&gt; inner = <span class="c-kw">new</span> <span class="c-cls">ArrayList</span>&lt;&gt;();
+  <span class="c-kw">public void</span> <span class="c-fn">add</span>(<span class="c-cls">String</span> s) { <span class="c-fn">log</span>(s); inner.<span class="c-fn">add</span>(s); }
+}</pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- 33. singleton — eager vs lazy -->
+    <div class="card">
+      <div class="card-head">
+        <span class="card-num">#33</span>
+        <span class="card-title">Singleton: Eager vs. Lazy Initialization</span>
+        <span class="card-badge badge-thread">CONCURRENCY</span>
+      </div>
+      <div class="card-body">
+        <div class="diff-box">
+          <div class="diff-item"><div class="diff-label">Eager</div><div class="diff-text">Instance created at class load. Thread-safe by JVM guarantee. Simple.</div></div>
+          <div class="diff-item"><div class="diff-label">Lazy (Double-Checked)</div><div class="diff-text">Created on first use. Saves memory if rarely needed. Needs <code>volatile</code>.</div></div>
+        </div>
+        <div class="trap-box">
+          <strong>// ⚠ MISSING volatile = BROKEN SINGLETON</strong>
+          Without <code>volatile</code>, the JVM can reorder instructions: another thread may see a partially constructed object and use it. Always pair double-checked locking with <code>volatile</code>.
+        </div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-dot"></span><span class="code-dot"></span><span class="code-dot"></span><span class="code-lang">JAVA</span></div>
+          <pre><span class="c-cmt">// Eager — simplest, almost always fine</span>
+<span class="c-kw">private static final</span> <span class="c-cls">Singleton</span> INSTANCE = <span class="c-kw">new</span> <span class="c-cls">Singleton</span>();
+
+<span class="c-cmt">// Lazy — must use volatile!</span>
+<span class="c-kw">private static volatile</span> <span class="c-cls">Singleton</span> instance;
+<span class="c-kw">if</span>(instance == <span class="c-kw">null</span>) {
+  <span class="c-kw">synchronized</span>(<span class="c-cls">Singleton</span>.<span class="c-kw">class</span>) {
+    <span class="c-kw">if</span>(instance == <span class="c-kw">null</span>) instance = <span class="c-kw">new</span> <span class="c-cls">Singleton</span>();
+  }
+}</pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- 34. Strategy vs Template Method -->
+    <div class="card">
+      <div class="card-head">
+        <span class="card-num">#34</span>
+        <span class="card-title">Strategy vs. Template Method Pattern</span>
+        <span class="card-badge badge-info">PATTERNS</span>
+      </div>
+      <div class="card-body">
+        <div class="diff-box">
+          <div class="diff-item"><div class="diff-label">Strategy</div><div class="diff-text">Inject an algorithm from outside at runtime. Composition-based.</div></div>
+          <div class="diff-item"><div class="diff-label">Template Method</div><div class="diff-text">Define algorithm skeleton in base class; subclasses fill in steps. Inheritance-based.</div></div>
+        </div>
+        <div class="when-box">
+          <strong>// WHEN TO USE</strong>
+          Strategy when you need to swap algorithms at runtime (sorting, payment methods). Template Method when the overall flow is fixed but a step varies (data parsers: open → parse → close, where parse differs).
+        </div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-dot"></span><span class="code-dot"></span><span class="code-dot"></span><span class="code-lang">JAVA</span></div>
+          <pre><span class="c-cmt">// Strategy — runtime swap</span>
+sorter.<span class="c-fn">setStrategy</span>(<span class="c-kw">new</span> <span class="c-cls">QuickSort</span>());
+sorter.<span class="c-fn">setStrategy</span>(<span class="c-kw">new</span> <span class="c-cls">MergeSort</span>()); <span class="c-ok">// swap anytime</span>
+
+<span class="c-cmt">// Template Method — skeleton fixed</span>
+<span class="c-kw">abstract class</span> <span class="c-cls">Parser</span> {
+  <span class="c-kw">final void</span> <span class="c-fn">run</span>() { <span class="c-fn">open</span>(); <span class="c-fn">parse</span>(); <span class="c-fn">close</span>(); } <span class="c-cmt">// fixed</span>
+  <span class="c-kw">abstract void</span> <span class="c-fn">parse</span>();                              <span class="c-cmt">// varies</span>
+}</pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- 35. Builder pattern -->
+    <div class="card">
+      <div class="card-head">
+        <span class="card-num">#35</span>
+        <span class="card-title">Builder Pattern vs. Telescoping Constructors</span>
+        <span class="card-badge badge-warn">DESIGN</span>
+      </div>
+      <div class="card-body">
+        <div class="diff-box">
+          <div class="diff-item"><div class="diff-label">Telescoping Constructor</div><div class="diff-text">Multiple overloaded constructors. Unreadable for 4+ params. Error-prone.</div></div>
+          <div class="diff-item"><div class="diff-label">Builder Pattern</div><div class="diff-text">Fluent API. Named setters. Optional fields clear. Immutable result.</div></div>
+        </div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-dot"></span><span class="code-dot"></span><span class="code-dot"></span><span class="code-lang">JAVA</span></div>
+          <pre><span class="c-bad">// Telescoping — what does 'true, false, 42' mean?</span>
+<span class="c-kw">new</span> <span class="c-cls">User</span>(<span class="c-str">"Alice"</span>, <span class="c-str">"alice@x.com"</span>, <span class="c-kw">true</span>, <span class="c-kw">false</span>, <span class="c-num">42</span>);
+
+<span class="c-ok">// Builder — self-documenting</span>
+<span class="c-kw">new</span> <span class="c-cls">User</span>.<span class="c-cls">Builder</span>(<span class="c-str">"Alice"</span>)
+  .<span class="c-fn">email</span>(<span class="c-str">"alice@x.com"</span>)
+  .<span class="c-fn">verified</span>(<span class="c-kw">true</span>)
+  .<span class="c-fn">age</span>(<span class="c-num">42</span>)
+  .<span class="c-fn">build</span>();</pre>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ══ GENERICS & TYPE SYSTEM ══════════════════════ -->
+  <div class="section-header">
+    <span class="section-icon">🧬</span>
+    <span class="section-title">GENERICS &amp; TYPE SYSTEM</span>
+    <div class="section-line"></div>
+  </div>
+  <div class="cards">
+
+    <!-- 36. extends vs super wildcards (PECS) -->
+    <div class="card">
+      <div class="card-head">
+        <span class="card-num">#36</span>
+        <span class="card-title">? extends T vs. ? super T (PECS Rule)</span>
+        <span class="card-badge badge-bug">GENERICS</span>
+      </div>
+      <div class="card-body">
+        <div class="diff-box">
+          <div class="diff-item"><div class="diff-label">? extends T (Producer)</div><div class="diff-text">Read from it. Upper bounded. You can GET items out.</div></div>
+          <div class="diff-item"><div class="diff-label">? super T (Consumer)</div><div class="diff-text">Write into it. Lower bounded. You can PUT items in.</div></div>
+        </div>
+        <div class="when-box">
+          <strong>// PECS MNEMONIC</strong>
+          <strong>P</strong>roducer <strong>E</strong>xtends, <strong>C</strong>onsumer <strong>S</strong>uper. If you only read from a collection → <code>extends</code>. If you only write into it → <code>super</code>. If both → no wildcard.
+        </div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-dot"></span><span class="code-dot"></span><span class="code-dot"></span><span class="code-lang">JAVA</span></div>
+          <pre><span class="c-cmt">// READ from source — extends</span>
+<span class="c-kw">void</span> <span class="c-fn">copy</span>(<span class="c-cls">List</span>&lt;? <span class="c-kw">extends</span> <span class="c-cls">Number</span>&gt; src,
+          <span class="c-cls">List</span>&lt;? <span class="c-kw">super</span> <span class="c-cls">Number</span>&gt; dst) {
+  <span class="c-kw">for</span>(<span class="c-cls">Number</span> n : src) dst.<span class="c-fn">add</span>(n); <span class="c-cmt">// WRITE into dst — super</span>
+}</pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- 37. type erasure -->
+    <div class="card">
+      <div class="card-head">
+        <span class="card-num">#37</span>
+        <span class="card-title">Type Erasure &amp; Why instanceof Fails</span>
+        <span class="card-badge badge-bug">GENERICS</span>
+      </div>
+      <div class="card-body">
+        <div class="diff-box">
+          <div class="diff-item"><div class="diff-label">Compile Time</div><div class="diff-text">Generic types fully visible. Type safety enforced.</div></div>
+          <div class="diff-item"><div class="diff-label">Runtime (Bytecode)</div><div class="diff-text">Type parameters erased to raw types. <code>List&lt;String&gt;</code> becomes <code>List</code>.</div></div>
+        </div>
+        <div class="trap-box">
+          <strong>// ⚠ CAN'T instanceof GENERIC TYPES</strong>
+          At runtime, <code>List&lt;String&gt;</code> and <code>List&lt;Integer&gt;</code> are indistinguishable. Attempting <code>obj instanceof List&lt;String&gt;</code> is a compile error. Use <code>instanceof List&lt;?&gt;</code> or a typed check via reflection.
+        </div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-dot"></span><span class="code-dot"></span><span class="code-dot"></span><span class="code-lang">JAVA</span></div>
+          <pre><span class="c-bad">// COMPILE ERROR — generic type erased at runtime</span>
+<span class="c-kw">if</span>(obj <span class="c-kw">instanceof</span> <span class="c-cls">List</span>&lt;<span class="c-cls">String</span>&gt;) { ... }
+
+<span class="c-ok">// Correct — wildcard works</span>
+<span class="c-kw">if</span>(obj <span class="c-kw">instanceof</span> <span class="c-cls">List</span>&lt;?&gt; list) {
+  list.<span class="c-fn">forEach</span>(System.out::println);
+}</pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- 38. raw types -->
+    <div class="card">
+      <div class="card-head">
+        <span class="card-num">#38</span>
+        <span class="card-title">Raw Types vs. Bounded Wildcards</span>
+        <span class="card-badge badge-bug">GENERICS</span>
+      </div>
+      <div class="card-body">
+        <div class="diff-box">
+          <div class="diff-item"><div class="diff-label">Raw Type (List)</div><div class="diff-text">Bypasses all type safety. Heap pollution risk. Legacy only.</div></div>
+          <div class="diff-item"><div class="diff-label">Wildcard (List&lt;?&gt;)</div><div class="diff-text">Unknown but safe. Compiler still enforces type constraints.</div></div>
+        </div>
+        <div class="trap-box">
+          <strong>// ⚠ RAW TYPE HEAP POLLUTION</strong>
+          Mixing raw types and generics can cause <code>ClassCastException</code> at runtime in completely unrelated code — far from the actual bug. Never use raw types in new code.
+        </div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-dot"></span><span class="code-dot"></span><span class="code-dot"></span><span class="code-lang">JAVA</span></div>
+          <pre><span class="c-cls">List</span> raw = <span class="c-kw">new</span> <span class="c-cls">ArrayList</span>();   <span class="c-bad">// raw — unsafe, avoid</span>
+<span class="c-cls">List</span>&lt;?&gt; wild = <span class="c-kw">new</span> <span class="c-cls">ArrayList</span>&lt;<span class="c-cls">String</span>&gt;(); <span class="c-ok">// wildcard — safe</span>
+<span class="c-cls">List</span>&lt;<span class="c-cls">String</span>&gt; typed = <span class="c-kw">new</span> <span class="c-cls">ArrayList</span>&lt;&gt;();  <span class="c-ok">// specific — best</span></pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- 39. covariance: arrays vs generics -->
+    <div class="card">
+      <div class="card-head">
+        <span class="card-num">#39</span>
+        <span class="card-title">Array Covariance vs. Generic Invariance</span>
+        <span class="card-badge badge-bug">TYPE SYSTEM</span>
+      </div>
+      <div class="card-body">
+        <div class="diff-box">
+          <div class="diff-item"><div class="diff-label">Arrays (Covariant)</div><div class="diff-text"><code>String[]</code> IS-A <code>Object[]</code>. Compiles fine. Can throw ArrayStoreException at runtime.</div></div>
+          <div class="diff-item"><div class="diff-label">Generics (Invariant)</div><div class="diff-text"><code>List&lt;String&gt;</code> is NOT a <code>List&lt;Object&gt;</code>. Fails at compile time — safer.</div></div>
+        </div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-dot"></span><span class="code-dot"></span><span class="code-dot"></span><span class="code-lang">JAVA</span></div>
+          <pre><span class="c-cls">Object</span>[] arr = <span class="c-kw">new</span> <span class="c-cls">String</span>[<span class="c-num">3</span>]; <span class="c-cmt">// compiles!</span>
+arr[<span class="c-num">0</span>] = <span class="c-num">42</span>;              <span class="c-bad">// ArrayStoreException at runtime</span>
+
+<span class="c-cls">List</span>&lt;<span class="c-cls">Object</span>&gt; list = <span class="c-kw">new</span> <span class="c-cls">ArrayList</span>&lt;<span class="c-cls">String</span>&gt;(); <span class="c-ok">// COMPILE ERROR — caught early</span></pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- 40. sealed classes vs open hierarchy -->
+    <div class="card">
+      <div class="card-head">
+        <span class="card-num">#40</span>
+        <span class="card-title">Sealed Classes vs. Open Inheritance (Java 17+)</span>
+        <span class="card-badge badge-info">MODERN JAVA</span>
+      </div>
+      <div class="card-body">
+        <div class="diff-box">
+          <div class="diff-item"><div class="diff-label">Open Class</div><div class="diff-text">Anyone can subclass. Flexible but uncontrolled hierarchies.</div></div>
+          <div class="diff-item"><div class="diff-label">Sealed Class</div><div class="diff-text">Only explicitly permitted classes can extend. Enables exhaustive pattern matching.</div></div>
+        </div>
+        <div class="when-box">
+          <strong>// WHEN TO USE</strong>
+          Sealed classes are perfect for modelling closed domain types — e.g., <code>Shape</code> that is either <code>Circle</code>, <code>Rect</code>, or <code>Triangle</code> and nothing else. The compiler then warns if a switch misses a case.
+        </div>
+        <div class="code-block">
+          <div class="code-header"><span class="code-dot"></span><span class="code-dot"></span><span class="code-dot"></span><span class="code-lang">JAVA</span></div>
+          <pre><span class="c-kw">sealed interface</span> <span class="c-cls">Shape</span>
+  <span class="c-kw">permits</span> <span class="c-cls">Circle</span>, <span class="c-cls">Rect</span>, <span class="c-cls">Triangle</span> {}
+
+<span class="c-cmt">// Compiler enforces exhaustiveness in switch</span>
+<span class="c-kw">double</span> area = <span class="c-kw">switch</span>(shape) {
+  <span class="c-kw">case</span> <span class="c-cls">Circle</span> c    -> Math.PI * c.r() * c.r();
+  <span class="c-kw">case</span> <span class="c-cls">Rect</span> r      -> r.w() * r.h();
+  <span class="c-kw">case</span> <span class="c-cls">Triangle</span> t  -> <span class="c-num">0.5</span> * t.b() * t.h();
+};</pre>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</div><!-- /page -->
+
+<footer>
+  FORMULA_DB // IMP_METHODS.EXE // <span>SYSTEM READY</span> // 40 METHODS LOADED // © 2025
+</footer>
+
+</body>
+</html>

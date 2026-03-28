@@ -4,19 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>★ CYBER FORMULA LIBRARY ★</title>
-    <!-- Link to your CSS file -->
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <!-- SIDEBAR SECTION -->
     <div class="sidebar">
         <div class="sidebar-header">
             <h1>FORMULA DB</h1>
             <div class="subtitle" id="typewriter-text">SYSTEM READY</div>
         </div>
 
-        <!-- Scrollable Menu Area -->
         <div class="menu-container">
             <ul>
                 <li><button onclick="loadPage('files/algorithms_formulas.html')">Algorithms</button></li>
@@ -50,33 +47,27 @@
                 <li><button onclick="loadPage('files/AI_mastery_guide.html')">AI</button></li>
                 <li><button onclick="loadPage('files/cybersecurity_mastery_guide.html')">CyberSecurity</button></li>
                 <li><button onclick="loadPage('files/ethical_hacking_mastery_guide.html')">Hacking</button></li>
+                <li><button onclick="loadPage('files/important_methods.html')">Imp Methods</button></li>
             </ul>
         </div>
     </div>
 
-    <!-- MAIN CONTENT SECTION -->
     <div class="main-content">
         
-        <!-- Settings Button -->
         <button id="settings-btn" onclick="toggleSettings()">⚙️</button>
 
-        <!-- Settings Panel -->
         <div id="settings-panel" class="settings-panel">
             <h3>WALLPAPER SELECT</h3>
             <div class="wallpaper-grid">
-                <!-- Default Matrix -->
                 <div class="wp-option active" style="background-image: url('Think\ K\ Pop\ GIF.gif');" onclick="setWallpaper('matrix', 'Think\ K\ Pop\ GIF.gif')">
                     <div class="wp-label">Saku Code</div>
                 </div>
-                <!-- Cyberpunk City -->
                 <div class="wp-option" style="background-image: url('https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExcjVuMHowMnM1YmE4OHlwbHNrbWU2aXRydGY2ODhtZThkYncyN20wcSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/gH1jGsCnQBiFHWMFzh/giphy.gif');" onclick="setWallpaper('city', 'https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExcjVuMHowMnM1YmE4OHlwbHNrbWU2aXRydGY2ODhtZThkYncyN20wcSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/gH1jGsCnQBiFHWMFzh/giphy.gif')">
                     <div class="wp-label">Cyber City</div>
                 </div>
-                <!-- Neon Abstract -->
                 <div class="wp-option" style="background-image: url('https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExdXc0eWV4NDcwOXg4b243MGViYXZqbGoxbGhueWllcDNiY3Y3cHg2ZyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/9dVc1FBxVhkqEG0SpW/giphy.gif');" onclick="setWallpaper('neon', 'https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExdXc0eWV4NDcwOXg4b243MGViYXZqbGoxbGhueWllcDNiY3Y3cHg2ZyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/9dVc1FBxVhkqEG0SpW/giphy.gif')">
                     <div class="wp-label">Neon Grid</div>
                 </div>
-                <!-- Anime -->
                 <div class="wp-option" style="background-image: url('https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExM2dhaW10bzF4NDdpdGt6aDdneHByanpzeTNwc3RlbGh2d3h3d3dlMCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/W6dHvprT7oks6BpX5R/giphy.gif');" onclick="setWallpaper('anime', 'https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExM2dhaW10bzF4NDdpdGt6aDdneHByanpzeTNwc3RlbGh2d3h3d3dlMCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/W6dHvprT7oks6BpX5R/giphy.gif')">
                     <div class="wp-label">Anime Night</div>
                 </div>
@@ -85,7 +76,6 @@
 
         <div class="iframe-container">
             
-            <!-- Placeholder / Wallpaper Display -->
             <div id="placeholderText" class="placeholder">
                 <div class="placeholder-content">
                     ✦ SELECT A MODULE ✦
@@ -93,7 +83,6 @@
                 </div>
             </div>
 
-            <!-- Loader -->
             <div id="loader" class="loader">
                 <div class="spinner"></div>
                 <div class="loader-text">LOADING...</div>
@@ -104,7 +93,6 @@
     </div>
 
     <script>
-        // 1. TYPEWRITER EFFECT
         document.addEventListener("DOMContentLoaded", () => {
             const subtitleEl = document.getElementById('typewriter-text');
             const text = "SYSTEM READY // v2.0";
@@ -122,7 +110,6 @@
             loadSavedWallpaper();
         });
 
-        // 2. PAGE LOADER
         function loadPage(url) {
             const placeholder = document.getElementById('placeholderText');
             const loader = document.getElementById('loader');
@@ -142,7 +129,6 @@
             }, 300);
         }
 
-        // 3. WALLPAPER SETTINGS
         function toggleSettings() {
             const panel = document.getElementById('settings-panel');
             panel.style.display = panel.style.display === 'block' ? 'none' : 'block';
