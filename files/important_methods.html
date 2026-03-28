@@ -34,12 +34,11 @@
     background: var(--bg);
     color: var(--text);
     font-family: var(--body);
-    font-size: 15px;
-    line-height: 1.6;
+    font-size: 18px;
+    line-height: 1.75;
     min-height: 100vh;
   }
 
-  /* ── SCANLINE OVERLAY ─────────────────────────────── */
   body::before {
     content: '';
     position: fixed; inset: 0;
@@ -54,32 +53,31 @@
     z-index: 9999;
   }
 
-  /* ── HEADER ───────────────────────────────────────── */
   header {
     background: var(--bg2);
     border-bottom: 1px solid var(--border);
-    padding: 0 2rem;
+    padding: 0 2.5rem;
     display: flex;
     align-items: center;
     gap: 1.5rem;
-    height: 56px;
+    height: 70px;
     position: sticky; top: 0; z-index: 100;
   }
 
   .logo {
     font-family: var(--display);
-    font-size: 1rem;
+    font-size: 1.2rem;
     font-weight: 900;
     color: var(--cyan);
     letter-spacing: 0.08em;
     text-shadow: 0 0 18px var(--cyan);
     white-space: nowrap;
   }
-  .logo span { color: var(--text-dim); font-weight: 400; font-size: 0.65rem; display: block; letter-spacing: 0.15em; }
+  .logo span { color: var(--text-dim); font-weight: 400; font-size: 0.75rem; display: block; letter-spacing: 0.15em; }
 
   .breadcrumb {
     font-family: var(--mono);
-    font-size: 0.7rem;
+    font-size: 0.85rem;
     color: var(--text-dim);
   }
   .breadcrumb em { color: var(--cyan); font-style: normal; }
@@ -94,11 +92,10 @@
   }
   @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
 
-  /* ── HERO ─────────────────────────────────────────── */
   .hero {
     background: linear-gradient(135deg, #0d1520 0%, #0a1218 40%, #0f1a10 100%);
     border-bottom: 1px solid var(--border);
-    padding: 3rem 2rem 2.5rem;
+    padding: 4rem 2rem 3rem;
     text-align: center;
     position: relative;
     overflow: hidden;
@@ -119,7 +116,7 @@
 
   .hero-title {
     font-family: var(--display);
-    font-size: clamp(1.4rem, 4vw, 2.4rem);
+    font-size: clamp(2rem, 5vw, 3.4rem);
     font-weight: 900;
     color: #fff;
     letter-spacing: 0.06em;
@@ -129,10 +126,10 @@
 
   .hero-sub {
     font-family: var(--mono);
-    font-size: 0.75rem;
+    font-size: 0.95rem;
     color: var(--text-dim);
     letter-spacing: 0.12em;
-    margin-bottom: 1.5rem;
+    margin-bottom: 2rem;
   }
 
   .tag-row {
@@ -143,8 +140,8 @@
   }
   .tag {
     font-family: var(--mono);
-    font-size: 0.65rem;
-    padding: 0.25rem 0.7rem;
+    font-size: 0.82rem;
+    padding: 0.35rem 1rem;
     border-radius: 2px;
     letter-spacing: 0.1em;
     font-weight: 600;
@@ -156,7 +153,6 @@
   .tag-thread { color: var(--purple); border-color: var(--purple); background: rgba(176,106,255,0.08); }
   .tag-bug    { color: var(--red); border-color: var(--red); background: rgba(255,59,92,0.08); }
 
-  /* ── QUICK REFERENCE BAR ──────────────────────────── */
   .qref {
     background: var(--panel);
     border-bottom: 1px solid var(--border);
@@ -172,15 +168,13 @@
     background: var(--bg3);
     border: 1px solid var(--border);
     border-radius: 2px;
-    min-width: 120px;
+    min-width: 150px;
   }
-  .qref-item .label { font-family: var(--mono); font-size: 0.6rem; color: var(--text-dim); letter-spacing: 0.1em; display: block; }
-  .qref-item .value { font-family: var(--display); font-size: 0.8rem; color: var(--cyan); font-weight: 700; margin-top: 0.2rem; }
+  .qref-item .label { font-family: var(--mono); font-size: 0.75rem; color: var(--text-dim); letter-spacing: 0.1em; display: block; }
+  .qref-item .value { font-family: var(--display); font-size: 1rem; color: var(--cyan); font-weight: 700; margin-top: 0.2rem; }
 
-  /* ── LAYOUT ───────────────────────────────────────── */
-  .page { max-width: 1200px; margin: 0 auto; padding: 2.5rem 1.5rem; }
+  .page { max-width: 1300px; margin: 0 auto; padding: 3rem 2rem; }
 
-  /* ── SECTION HEADER ───────────────────────────────── */
   .section-header {
     display: flex;
     align-items: center;
@@ -189,10 +183,10 @@
     margin-top: 3rem;
   }
   .section-header:first-child { margin-top: 0; }
-  .section-icon { font-size: 1.3rem; }
+  .section-icon { font-size: 1.6rem; }
   .section-title {
     font-family: var(--display);
-    font-size: 1rem;
+    font-size: 1.2rem;
     font-weight: 700;
     color: var(--cyan);
     letter-spacing: 0.1em;
@@ -204,10 +198,10 @@
     background: linear-gradient(to right, var(--border), transparent);
   }
 
-  /* ── METHOD CARDS ─────────────────────────────────── */
+  /* METHOD CARDS */
   .cards {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(520px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(580px, 1fr));
     gap: 1.2rem;
   }
   @media (max-width: 600px) { .cards { grid-template-columns: 1fr; } }
@@ -232,14 +226,14 @@
   .card-head {
     background: var(--bg3);
     border-bottom: 1px solid var(--border);
-    padding: 0.8rem 1.1rem;
+    padding: 1rem 1.3rem;
     display: flex;
     align-items: center;
-    gap: 0.8rem;
+    gap: 1rem;
   }
   .card-num {
     font-family: var(--mono);
-    font-size: 0.65rem;
+    font-size: 0.8rem;
     color: var(--cyan);
     background: var(--cyan-glow);
     border: 1px solid rgba(0,229,255,0.2);
@@ -250,7 +244,7 @@
   }
   .card-title {
     font-family: var(--display);
-    font-size: 0.78rem;
+    font-size: 0.95rem;
     font-weight: 700;
     color: #fff;
     letter-spacing: 0.05em;
@@ -258,8 +252,8 @@
   }
   .card-badge {
     font-family: var(--mono);
-    font-size: 0.6rem;
-    padding: 0.15rem 0.5rem;
+    font-size: 0.75rem;
+    padding: 0.2rem 0.65rem;
     border-radius: 2px;
     border: 1px solid;
     text-transform: uppercase;
@@ -272,15 +266,15 @@
   .badge-thread{ color: var(--purple);border-color: rgba(176,106,255,0.3);background: rgba(176,106,255,0.06);}
   .badge-info  { color: var(--cyan);  border-color: rgba(0,229,255,0.3); background: rgba(0,229,255,0.05); }
 
-  .card-body { padding: 1rem 1.1rem; }
+  .card-body { padding: 1.3rem 1.4rem; }
 
   /* diff box */
   .diff-box {
     background: var(--bg2);
     border: 1px solid var(--border);
     border-radius: 2px;
-    padding: 0.75rem 1rem;
-    margin-bottom: 0.9rem;
+    padding: 1rem 1.2rem;
+    margin-bottom: 1.1rem;
     display: flex;
     gap: 1.2rem;
     flex-wrap: wrap;
@@ -288,14 +282,14 @@
   .diff-item { flex: 1; min-width: 160px; }
   .diff-label {
     font-family: var(--mono);
-    font-size: 0.65rem;
+    font-size: 0.8rem;
     color: var(--cyan);
     letter-spacing: 0.08em;
-    margin-bottom: 0.25rem;
+    margin-bottom: 0.3rem;
   }
   .diff-text {
     font-family: var(--body);
-    font-size: 0.82rem;
+    font-size: 1rem;
     color: var(--text);
     font-weight: 500;
   }
@@ -306,23 +300,23 @@
     border-left: 2px solid var(--cyan-dim);
     padding: 0.6rem 0.9rem;
     margin-bottom: 0.9rem;
-    font-size: 0.82rem;
+    font-size: 1rem;
     color: var(--text);
     font-weight: 500;
   }
-  .when-box strong { color: var(--cyan); font-family: var(--mono); font-size: 0.7rem; display: block; margin-bottom: 0.3rem; letter-spacing: 0.08em; }
+  .when-box strong { color: var(--cyan); font-family: var(--mono); font-size: 0.85rem; display: block; margin-bottom: 0.3rem; letter-spacing: 0.08em; }
 
   /* trap box */
   .trap-box {
     background: rgba(255,59,92,0.06);
     border-left: 2px solid var(--red);
-    padding: 0.6rem 0.9rem;
-    margin-bottom: 0.9rem;
-    font-size: 0.82rem;
+    padding: 0.8rem 1.1rem;
+    margin-bottom: 1.1rem;
+    font-size: 1rem;
     color: #e8b0b8;
     font-weight: 500;
   }
-  .trap-box strong { color: var(--red); font-family: var(--mono); font-size: 0.7rem; display: block; margin-bottom: 0.3rem; letter-spacing: 0.08em; }
+  .trap-box strong { color: var(--red); font-family: var(--mono); font-size: 0.85rem; display: block; margin-bottom: 0.3rem; letter-spacing: 0.08em; }
 
   /* code block */
   .code-block {
@@ -334,27 +328,27 @@
   .code-header {
     background: #0e1218;
     border-bottom: 1px solid #1a2030;
-    padding: 0.35rem 0.8rem;
+    padding: 0.45rem 1rem;
     display: flex;
     align-items: center;
     gap: 0.5rem;
   }
-  .code-dot { width: 7px; height: 7px; border-radius: 50%; }
+  .code-dot { width: 9px; height: 9px; border-radius: 50%; }
   .code-dot:nth-child(1) { background: #ff5f57; }
   .code-dot:nth-child(2) { background: #febc2e; }
   .code-dot:nth-child(3) { background: #28c840; }
   .code-lang {
     font-family: var(--mono);
-    font-size: 0.6rem;
+    font-size: 0.75rem;
     color: var(--text-dim);
     letter-spacing: 0.1em;
     margin-left: auto;
   }
   .code-block pre {
     font-family: var(--mono);
-    font-size: 0.72rem;
-    line-height: 1.65;
-    padding: 0.9rem 1rem;
+    font-size: 0.9rem;
+    line-height: 1.7;
+    padding: 1.1rem 1.3rem;
     color: #a8c0d8;
     white-space: pre;
   }
@@ -367,7 +361,7 @@
   .c-num { color: #d19a66; }   /* number */
   .c-cls { color: #e5c07b; }   /* class */
 
-  /* ── FOOTER ───────────────────────────────────────── */
+  /* FOOTER */
   footer {
     margin-top: 4rem;
     border-top: 1px solid var(--border);
@@ -375,7 +369,7 @@
     padding: 1.5rem 2rem;
     text-align: center;
     font-family: var(--mono);
-    font-size: 0.65rem;
+    font-size: 0.8rem;
     color: var(--text-dim);
     letter-spacing: 0.1em;
   }
@@ -415,7 +409,7 @@
 <!-- MAIN CONTENT -->
 <div class="page">
 
-  <!-- ══ STRING METHODS ══════════════════════════════ -->
+  <!-- STRING METHODS -->
   <div class="section-header">
     <span class="section-icon">🔤</span>
     <span class="section-title">STRING METHODS</span>
@@ -480,7 +474,7 @@ input.<span class="c-fn">isBlank</span>();   <span class="c-ok">// true  — saf
 
   </div><!-- /cards -->
 
-  <!-- ══ EQUALITY & IDENTITY ═════════════════════════ -->
+  <!-- EQUALITY & IDENTITY -->
   <div class="section-header">
     <span class="section-icon">⚖️</span>
     <span class="section-title">EQUALITY &amp; IDENTITY</span>
@@ -560,7 +554,7 @@ a.<span class="c-fn">equals</span>(b)   <span class="c-ok">// true  — same con
 
   </div>
 
-  <!-- ══ THREADING ════════════════════════════════════ -->
+  <!-- THREADING -->
   <div class="section-header">
     <span class="section-icon">🧵</span>
     <span class="section-title">THREADING &amp; CONCURRENCY</span>
@@ -642,7 +636,7 @@ t.<span class="c-fn">start</span>(); <span class="c-ok">// CORRECT — new threa
 
   </div>
 
-  <!-- ══ COLLECTIONS & LISTS ═════════════════════════ -->
+  <!-- COLLECTIONS & LISTS -->
   <div class="section-header">
     <span class="section-icon">📦</span>
     <span class="section-title">COLLECTIONS &amp; LISTS</span>
@@ -696,7 +690,7 @@ users.<span class="c-fn">sort</span>(<span class="c-cls">Comparator</span>.<span
 
   </div>
 
-  <!-- ══ I/O & FILE SYSTEM ═══════════════════════════ -->
+  <!-- I/O & FILE SYSTEM -->
   <div class="section-header">
     <span class="section-icon">💾</span>
     <span class="section-title">I/O &amp; FILE SYSTEM</span>
@@ -751,7 +745,7 @@ users.<span class="c-fn">sort</span>(<span class="c-cls">Comparator</span>.<span
 
   </div>
 
-  <!-- ══ STREAMS & OPTIONAL ══════════════════════════ -->
+  <!-- STREAMS & OPTIONAL-->
   <div class="section-header">
     <span class="section-icon">🌊</span>
     <span class="section-title">STREAMS &amp; OPTIONAL</span>
@@ -806,7 +800,7 @@ users.<span class="c-fn">sort</span>(<span class="c-cls">Comparator</span>.<span
 
   </div>
 
-  <!-- ══ MATH & SYNTAX ════════════════════════════════ -->
+  <!--  MATH & SYNTAX -->
   <div class="section-header">
     <span class="section-icon">🔢</span>
     <span class="section-title">MATH &amp; SYNTAX TRAPS</span>
@@ -856,7 +850,7 @@ users.<span class="c-fn">sort</span>(<span class="c-cls">Comparator</span>.<span
 
   </div>
 
-  <!-- ══ BONUS: EXTRA METHODS ADDED ══════════════════ -->
+  <!-- BONUS: EXTRA METHODS ADDED -->
   <div class="section-header">
     <span class="section-icon">⚡</span>
     <span class="section-title">BONUS METHODS</span>
@@ -969,7 +963,7 @@ view.<span class="c-fn">size</span>(); <span class="c-bad">// 3 — still sees t
   </div><!-- /bonus cards -->
 
 
-  <!-- ══ EXCEPTION HANDLING ══════════════════════════ -->
+  <!-- EXCEPTION HANDLING -->
   <div class="section-header">
     <span class="section-icon">🚨</span>
     <span class="section-title">EXCEPTION HANDLING</span>
@@ -1115,7 +1109,7 @@ view.<span class="c-fn">size</span>(); <span class="c-bad">// 3 — still sees t
 
   </div>
 
-  <!-- ══ COLLECTIONS & MAPS ══════════════════════════ -->
+  <!-- COLLECTIONS & MAPS -->
   <div class="section-header">
     <span class="section-icon">🗺️</span>
     <span class="section-title">COLLECTIONS &amp; MAPS</span>
@@ -1395,11 +1389,11 @@ sorter.<span class="c-fn">setStrategy</span>(<span class="c-kw">new</span> <span
         <div class="code-block">
           <div class="code-header"><span class="code-dot"></span><span class="code-dot"></span><span class="code-dot"></span><span class="code-lang">JAVA</span></div>
           <pre><span class="c-bad">// Telescoping — what does 'true, false, 42' mean?</span>
-<span class="c-kw">new</span> <span class="c-cls">User</span>(<span class="c-str">"Alice"</span>, <span class="c-str">"alice@x.com"</span>, <span class="c-kw">true</span>, <span class="c-kw">false</span>, <span class="c-num">42</span>);
+<span class="c-kw">new</span> <span class="c-cls">User</span>(<span class="c-str">"Alice"</span>, <span class="c-str">"<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="4a2b2623292f0a3264292527">[email&#160;protected]</a>"</span>, <span class="c-kw">true</span>, <span class="c-kw">false</span>, <span class="c-num">42</span>);
 
 <span class="c-ok">// Builder — self-documenting</span>
 <span class="c-kw">new</span> <span class="c-cls">User</span>.<span class="c-cls">Builder</span>(<span class="c-str">"Alice"</span>)
-  .<span class="c-fn">email</span>(<span class="c-str">"alice@x.com"</span>)
+  .<span class="c-fn">email</span>(<span class="c-str">"<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="dabbb6b3b9bf9aa2f4b9b5b7">[email&#160;protected]</a>"</span>)
   .<span class="c-fn">verified</span>(<span class="c-kw">true</span>)
   .<span class="c-fn">age</span>(<span class="c-num">42</span>)
   .<span class="c-fn">build</span>();</pre>
@@ -1545,19 +1539,4 @@ arr[<span class="c-num">0</span>] = <span class="c-num">42</span>;              
 <span class="c-kw">double</span> area = <span class="c-kw">switch</span>(shape) {
   <span class="c-kw">case</span> <span class="c-cls">Circle</span> c    -> Math.PI * c.r() * c.r();
   <span class="c-kw">case</span> <span class="c-cls">Rect</span> r      -> r.w() * r.h();
-  <span class="c-kw">case</span> <span class="c-cls">Triangle</span> t  -> <span class="c-num">0.5</span> * t.b() * t.h();
-};</pre>
-        </div>
-      </div>
-    </div>
-
-  </div>
-
-</div><!-- /page -->
-
-<footer>
-  FORMULA_DB // IMP_METHODS.EXE // <span>SYSTEM READY</span> // 40 METHODS LOADED // © 2025
-</footer>
-
-</body>
-</html>
+  <span class="c-kw">case</span> <span class="c-cls">Triangle</span> t  -> <span class="c-num">0.5</span>
