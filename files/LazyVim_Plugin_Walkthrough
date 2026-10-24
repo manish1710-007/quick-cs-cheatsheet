@@ -1,0 +1,1460 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>LazyVim Plugin Walkthrough</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap">
+<style>
+/* Layout: a Neovim screen recording with a sticky chapter list, then install, cheat sheet, files and fixes below.
+   Palette follows LazyVim's own default colorscheme (night variant); committed to one dark look on purpose. */
+:root{
+  --bg:#13141c; --chrome:#16161e; --panel:#1a1b26; --float:#1f2335; --sel:#2f3552; --line:#2c3150; --line2:#44507a;
+  --fg:#c0caf5; --muted:#9aa3c7; --dim:#7580a8; --comment:#7882ad;
+  --blue:#7aa2f7; --green:#9ece6a; --yellow:#e0af68; --purple:#bb9af7; --red:#f7768e; --cyan:#7dcfff; --orange:#ff9e64;
+  --keycap:#c0caf5; --keycap-ink:#16161e; --keycap-edge:#565f89;
+  --ui:"Instrument Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{scroll-behavior:smooth}
+body{
+  margin:0; background:var(--bg); color:var(--fg);
+  font-family:var(--ui); font-size:15px; line-height:1.55;
+  padding-block:28px 72px;
+  padding-left:max(16px, env(safe-area-inset-left, 0px));
+  padding-right:max(16px, env(safe-area-inset-right, 0px));
+}
+button,input{font:inherit; color:inherit}
+:focus-visible{outline:2px solid var(--blue); outline-offset:2px}
+a{color:var(--blue)}
+code{font-family:var(--mono); font-size:.88em; background:var(--float); color:var(--cyan); padding:.1em .4em; border-radius:4px}
+section[id],main[id]{scroll-margin-top:16px}
+
+.wrap{max-width:1160px; margin:0 auto; display:grid; gap:56px}
+.top{display:grid; gap:12px; max-width:72ch}
+.kicker{margin:0; font-family:var(--mono); font-size:12px; letter-spacing:.14em; text-transform:uppercase; color:var(--blue)}
+h1{margin:0; font-size:clamp(28px,4.6vw,46px); line-height:1.08; font-weight:700; text-wrap:balance; letter-spacing:-.015em}
+h2{margin:0; font-size:clamp(22px,3vw,28px); line-height:1.2; text-wrap:balance; letter-spacing:-.01em}
+h3{margin:0; font-size:15px}
+.lede{margin:0; color:var(--muted); font-size:17px; max-width:62ch}
+.pills{display:flex; flex-wrap:wrap; gap:8px; margin-top:6px}
+.pills a{display:inline-flex; align-items:center; min-height:36px; padding:0 14px; border:1px solid var(--line); border-radius:999px; background:var(--panel); color:var(--fg); text-decoration:none; font-size:14px}
+.pills a:hover{border-color:var(--line2); background:var(--float)}
+
+.sec{display:grid; gap:22px}
+.sec-head{display:grid; gap:8px; max-width:68ch}
+.sec-head p{margin:0; color:var(--muted)}
+
+/* ---------- player ---------- */
+.stage{display:grid; grid-template-columns:minmax(0,1fr) 330px; gap:24px; align-items:start}
+.player{display:grid; gap:12px; min-width:0}
+
+.win{position:relative; background:var(--panel); border:1px solid var(--line); border-radius:12px; overflow:hidden; font-family:var(--mono); font-size:13px; box-shadow:0 18px 48px rgba(0,0,0,.35)}
+.titlebar{display:flex; align-items:center; gap:12px; padding:9px 14px; background:var(--chrome); border-bottom:1px solid var(--line); color:var(--muted); font-size:12px}
+.dots{display:flex; gap:6px; flex:0 0 auto}
+.dots i{width:10px; height:10px; border-radius:50%; background:var(--line2)}
+.titlebar .tt{flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; text-align:center}
+.titlebar .chip{flex:0 0 auto}
+.tabline{display:flex; background:var(--chrome); border-bottom:1px solid var(--line); padding-left:8px; min-height:34px; align-items:flex-end}
+.tab{display:flex; gap:8px; align-items:center; padding:6px 14px; background:var(--panel); border-radius:6px 6px 0 0; color:var(--fg); max-width:100%; border-top:2px solid var(--blue)}
+.tab .mod{color:var(--yellow)}
+.bufwrap{position:relative; height:390px}
+.buf{height:100%; overflow:auto; padding:8px 0; scrollbar-width:thin; scrollbar-color:var(--line) transparent}
+.ln{display:flex; min-height:21px; line-height:21px; white-space:pre}
+.no{flex:0 0 46px; text-align:right; padding-right:14px; color:var(--dim); user-select:none}
+.win[data-term] .no{flex-basis:14px}
+.tx{padding-right:16px}
+.tx.tilde{color:var(--dim)}
+.tx.out{color:var(--muted)}
+.tx.out.ok{color:var(--green)}
+.tx.out.warn{color:var(--yellow)}
+.ln.cl{background:var(--float)}
+.ln.cl .no{color:var(--yellow)}
+.ps{color:var(--green); font-weight:700; margin-right:6px}
+.c{color:var(--comment); font-style:italic}
+.s{color:var(--green)}
+.k{color:var(--purple)}
+.f{color:var(--blue)}
+.p{color:var(--cyan)}
+.cur{display:inline-block; width:.62em; height:1.15em; background:var(--fg); vertical-align:text-bottom; animation:blink 1.1s steps(1) infinite}
+.win[data-mode="INSERT"] .tx .cur{width:2px}
+@keyframes blink{50%{opacity:0}}
+
+.pop{position:absolute; left:14px; right:14px; margin:0 auto; max-width:580px; top:14px; max-height:calc(100% - 28px); overflow:hidden;
+  background:var(--float); border:1px solid #3b4261; border-radius:8px; box-shadow:0 14px 34px rgba(0,0,0,.5); animation:popin .16s ease-out}
+@keyframes popin{from{opacity:0; transform:translateY(6px)}to{opacity:1; transform:none}}
+.pt{display:flex; justify-content:space-between; gap:12px; padding:7px 12px; color:var(--blue); border-bottom:1px solid var(--line)}
+.pt .tg{color:var(--dim)}
+.pp{padding:5px 12px; border-bottom:1px solid var(--line); color:var(--fg)}
+.pp .pr{color:var(--orange)}
+.row{display:flex; gap:10px; padding:2px 12px; line-height:20px; white-space:pre}
+.row .mk{flex:0 0 1.2em; color:var(--green)}
+.row .nm{flex:1 1 auto; min-width:0; overflow:hidden; text-overflow:ellipsis}
+.row .nt{flex:0 1 auto; color:var(--dim); overflow:hidden; text-overflow:ellipsis; min-width:0}
+.row.sel{background:var(--sel)}
+.row.on .nm{color:var(--green)}
+
+.keys{position:absolute; left:14px; bottom:12px; display:flex; gap:6px; flex-wrap:wrap; max-width:60%}
+kbd{font-family:var(--mono); font-size:12.5px; font-weight:700; min-width:30px; text-align:center; padding:4px 9px; border-radius:5px;
+  background:var(--keycap); color:var(--keycap-ink); box-shadow:0 2px 0 var(--keycap-edge); animation:kin .14s ease-out}
+@keyframes kin{from{opacity:0; transform:translateY(6px) scale(.92)}to{opacity:1; transform:none}}
+.toast{position:absolute; right:14px; bottom:12px; padding:6px 12px; background:var(--float); border:1px solid #3b4261; border-radius:6px; color:var(--green); animation:popin .16s ease-out}
+
+.cmdline{min-height:26px; padding:3px 12px; background:var(--panel); border-top:1px solid var(--line); white-space:pre; overflow:hidden; display:flex; align-items:center}
+.cmdline .msg{color:var(--yellow)}
+.status{display:flex; align-items:stretch; gap:12px; background:var(--chrome); border-top:1px solid var(--line); font-size:12px; line-height:24px}
+.mode{padding:0 12px; font-weight:700; color:var(--keycap-ink); background:var(--blue); letter-spacing:.04em}
+.mode[data-mode="INSERT"]{background:var(--green)}
+.mode[data-mode="COMMAND"],.mode[data-mode="SEARCH"]{background:var(--yellow)}
+.mode[data-mode="SHELL"]{background:var(--purple)}
+.sf{min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+.sp{flex:1}
+.sft,.spos{color:var(--muted); white-space:nowrap}
+.spos{padding-right:12px}
+
+.poster{position:absolute; inset:0; display:flex; align-items:center; justify-content:center; padding:20px; background:rgba(19,20,28,.9); backdrop-filter:blur(3px); z-index:5}
+.poster-in{display:grid; gap:14px; justify-items:start; max-width:480px; font-family:var(--ui)}
+.poster-in .kicker{font-size:11.5px}
+.poster-in h2{font-size:clamp(22px,4vw,30px)}
+.poster-in p{margin:0; color:var(--muted); font-size:15px}
+.btn{display:inline-flex; align-items:center; justify-content:center; gap:8px; min-height:40px; min-width:40px; padding:0 14px; border-radius:8px;
+  border:1px solid var(--line); background:var(--panel); cursor:pointer}
+.btn:hover{border-color:var(--line2); background:var(--float)}
+.btn.primary{background:var(--blue); border-color:var(--blue); color:var(--keycap-ink); font-weight:600}
+.btn.primary:hover{background:#8fb1fa}
+.btn.small{min-height:32px; padding:0 12px; font-size:13px}
+
+.caption{display:grid; gap:8px; background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:14px 16px; min-height:128px; align-content:start}
+.cap-head{display:flex; flex-wrap:wrap; align-items:center; gap:8px; font-family:var(--mono); font-size:12px; color:var(--dim)}
+.chip{display:inline-flex; align-items:center; padding:1px 9px; border-radius:999px; border:1px solid var(--line2); color:var(--muted); font-family:var(--mono); font-size:11.5px; letter-spacing:.04em; white-space:nowrap}
+.cap-text{font-size:17px; line-height:1.5; animation:cap .25s ease-out; min-height:3em}
+@keyframes cap{from{opacity:.3}to{opacity:1}}
+.try{display:flex; gap:10px; align-items:baseline; padding:10px 14px; border-radius:8px; background:var(--float); color:var(--muted); font-size:14px}
+.try b{flex:0 0 auto; color:var(--yellow); font-family:var(--mono); font-size:11.5px; letter-spacing:.1em; text-transform:uppercase}
+.try span{min-width:0}
+
+.controls{display:flex; flex-wrap:wrap; gap:8px; align-items:center}
+.controls .grow{flex:1}
+.speed{display:inline-flex; border:1px solid var(--line); border-radius:8px; overflow:hidden}
+.speed button{min-height:38px; padding:0 12px; background:var(--panel); border:0; border-right:1px solid var(--line); cursor:pointer; font-family:var(--mono); font-size:13px; color:var(--muted)}
+.speed button:last-child{border-right:0}
+.speed button[aria-pressed="true"]{background:var(--sel); color:var(--fg)}
+.auto{display:inline-flex; align-items:center; gap:8px; min-height:38px; padding:0 4px; color:var(--muted); font-size:13.5px; cursor:pointer}
+.auto input{width:16px; height:16px; accent-color:var(--blue)}
+
+.seg{display:flex; gap:4px}
+.seg button{flex:1; padding:7px 0; background:none; border:0; cursor:pointer}
+.seg .bar{display:block; height:6px; border-radius:3px; background:var(--line); overflow:hidden}
+.seg .fill{display:block; height:100%; width:0; background:var(--blue); transition:width .3s}
+
+.side{position:sticky; top:16px; display:grid; gap:10px; max-height:calc(100vh - 32px); overflow:auto; padding-right:2px; scrollbar-width:thin; scrollbar-color:var(--line) transparent}
+.side-head{display:flex; justify-content:space-between; align-items:baseline; gap:8px; font-family:var(--mono); font-size:12px; letter-spacing:.1em; text-transform:uppercase; color:var(--dim)}
+.chapters{display:grid; gap:8px}
+.ch{display:grid; grid-template-columns:26px minmax(0,1fr) auto; column-gap:10px; row-gap:2px; width:100%; text-align:left; padding:11px 13px;
+  border:1px solid var(--line); background:var(--panel); border-radius:9px; cursor:pointer}
+.ch:hover{border-color:var(--line2)}
+.ch .n{grid-row:1 / 3; font-family:var(--mono); color:var(--dim); padding-top:1px}
+.ch .t{font-weight:600; font-size:14.5px; line-height:1.3}
+.ch .tag{align-self:start; font-family:var(--mono); font-size:10.5px; letter-spacing:.06em; text-transform:uppercase; color:var(--cyan); white-space:nowrap}
+.ch .sb{grid-column:2 / 4; color:var(--muted); font-size:13px; line-height:1.4}
+.ch.done .n{color:var(--green)}
+.ch[aria-current="true"]{background:var(--float); border-color:var(--blue)}
+.ch[aria-current="true"] .n{color:var(--blue)}
+
+/* ---------- install ---------- */
+.install{display:grid; grid-template-columns:minmax(0,1.55fr) minmax(0,1fr); gap:28px; align-items:start}
+.col{display:grid; gap:16px; min-width:0}
+.tabs{display:flex; flex-wrap:wrap; gap:6px}
+.tabs button{min-height:38px; padding:0 14px; border-radius:8px; border:1px solid var(--line); background:var(--panel); cursor:pointer; color:var(--muted)}
+.tabs button[aria-selected="true"]{background:var(--sel); border-color:var(--line2); color:var(--fg)}
+.blk{min-width:0; background:var(--panel); border:1px solid var(--line); border-radius:10px; overflow:hidden}
+.blk header{display:flex; justify-content:space-between; align-items:center; gap:10px; padding:8px 8px 8px 14px; background:var(--chrome); border-bottom:1px solid var(--line)}
+.blk header h3{font-family:var(--mono); font-weight:500; font-size:12.5px; color:var(--muted); min-width:0}
+pre{margin:0; padding:14px; overflow-x:auto; font-family:var(--mono); font-size:12.5px; line-height:1.65; tab-size:2}
+.note{margin:0; color:var(--muted); font-size:14px}
+.tools{width:100%; border-collapse:collapse; font-size:14px}
+.tools th,.tools td{text-align:left; padding:9px 10px; border-bottom:1px solid var(--line); vertical-align:top}
+.tools th{font-family:var(--mono); font-weight:500; font-size:12.5px; color:var(--cyan); white-space:nowrap}
+.tools td{color:var(--muted)}
+.tablewrap{overflow-x:auto; background:var(--panel); border:1px solid var(--line); border-radius:10px}
+.tablewrap .tools tr:last-child th,.tablewrap .tools tr:last-child td{border-bottom:0}
+.check{display:grid; gap:4px; background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:14px}
+.check-head{display:flex; justify-content:space-between; align-items:baseline; gap:8px; margin-bottom:6px}
+.check-head span{font-family:var(--mono); font-size:12.5px; color:var(--green)}
+.check label{display:flex; gap:10px; align-items:flex-start; min-height:34px; padding:5px 0; cursor:pointer; color:var(--fg); font-size:14.5px; line-height:1.4}
+.check input{flex:0 0 auto; width:17px; height:17px; margin-top:2px; accent-color:var(--green)}
+.check input:checked + span{color:var(--muted); text-decoration:line-through; text-decoration-color:var(--dim)}
+.meter{height:6px; border-radius:3px; background:var(--line); overflow:hidden; margin-bottom:6px}
+.meter i{display:block; height:100%; width:0; background:var(--green); transition:width .25s}
+
+/* ---------- cheat sheet ---------- */
+.search{display:flex; align-items:center; gap:10px; max-width:460px; min-height:44px; padding:0 14px; border:1px solid var(--line); border-radius:10px; background:var(--panel)}
+.search:focus-within{border-color:var(--blue)}
+.search input{flex:1; min-width:0; height:42px; background:none; border:0; outline:0; font-size:15px}
+.search svg{flex:0 0 auto; color:var(--dim)}
+.sheet{display:grid; grid-template-columns:repeat(auto-fill,minmax(310px,1fr)); gap:16px}
+.group{min-width:0; background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:14px 16px; display:grid; gap:6px; align-content:start}
+.group h3{font-family:var(--mono); font-weight:500; font-size:12px; letter-spacing:.12em; text-transform:uppercase; color:var(--blue); margin-bottom:4px}
+.group ul{list-style:none; margin:0; padding:0; display:grid}
+.group li{display:grid; grid-template-columns:minmax(96px,auto) minmax(0,1fr); gap:12px; align-items:baseline; padding:7px 0; border-top:1px solid var(--line); font-size:14px}
+.group li:first-child{border-top:0}
+.group .kk{display:flex; flex-wrap:wrap; gap:4px}
+.group kbd{animation:none; font-size:11.5px; padding:2px 7px; min-width:24px}
+.group .d{color:var(--muted)}
+.none{margin:0; color:var(--muted)}
+
+/* ---------- files ---------- */
+.cards{display:grid; grid-template-columns:repeat(auto-fit,minmax(310px,1fr)); gap:16px}
+.card{min-width:0; background:var(--panel); border:1px solid var(--line); border-radius:10px; overflow:hidden}
+.card header{display:flex; justify-content:space-between; align-items:center; gap:10px; padding:8px 8px 8px 14px; background:var(--chrome); border-bottom:1px solid var(--line)}
+.card header span{font-family:var(--mono); font-size:12px; color:var(--muted); min-width:0; overflow-wrap:anywhere}
+
+/* ---------- fixes ---------- */
+.fixes{display:grid; gap:8px; max-width:860px}
+details{background:var(--panel); border:1px solid var(--line); border-radius:10px}
+details[open]{border-color:var(--line2)}
+summary{display:flex; justify-content:space-between; align-items:center; gap:12px; min-height:48px; padding:10px 16px; cursor:pointer; font-weight:600; list-style:none}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+"; font-family:var(--mono); color:var(--dim); font-size:18px; flex:0 0 auto}
+details[open] summary::after{content:"−"}
+.ans{display:grid; gap:10px; padding:0 16px 16px; color:var(--muted)}
+.ans p{margin:0; max-width:68ch}
+.ans pre{border:1px solid var(--line); border-radius:8px; background:var(--chrome)}
+.warnbox{padding:10px 14px; border-radius:8px; background:var(--float); color:var(--yellow); font-size:14px}
+.next{display:flex; flex-wrap:wrap; gap:10px}
+.next a{display:grid; gap:2px; flex:1 1 220px; min-width:0; padding:14px 16px; border:1px solid var(--line); border-radius:10px; background:var(--panel); color:var(--fg); text-decoration:none}
+.next a:hover{border-color:var(--line2); background:var(--float)}
+.next a span{color:var(--muted); font-size:13.5px}
+.next a b{font-size:15px}
+
+@media (max-width:980px){
+  .stage{grid-template-columns:minmax(0,1fr)}
+  .side{position:static; max-height:none; overflow:visible}
+  .install{grid-template-columns:minmax(0,1fr)}
+}
+@media (max-width:520px){
+  body{padding-block:20px 48px}
+  .wrap{gap:44px}
+  .win{font-size:12px}
+  .bufwrap{height:340px}
+  .no{flex-basis:36px; padding-right:10px}
+  .cap-text{font-size:16px}
+  .caption{min-height:150px}
+  .hint{display:none}
+  .group li{grid-template-columns:minmax(0,1fr)}
+  .titlebar .chip{display:none}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .cur,.pop,kbd,.toast,.cap-text{animation:none}
+  .seg .fill,.meter i{transition:none}
+}
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <p class="kicker">nvim · LazyVim · beginner guide</p>
+    <h1>Learn LazyVim by watching it typed out</h1>
+    <p class="lede">Nine short chapters play like a screen recording: every command and file is typed live, from installing LazyVim to fixing a file with no suggestions. Below the player you get install commands for your system, a cheat sheet and the config files.</p>
+    <nav class="pills" aria-label="Sections">
+      <a href="#watch">Watch</a><a href="#install">Install first</a><a href="#cheatsheet">Cheat sheet</a><a href="#files">Config files</a><a href="#fixes">Fixes</a>
+    </nav>
+  </header>
+
+  <main id="watch" class="stage">
+    <section class="player" aria-label="Walkthrough player">
+      <div class="win" id="win" data-mode="NORMAL">
+        <div class="titlebar">
+          <span class="dots" aria-hidden="true"><i></i><i></i><i></i></span>
+          <span class="tt" id="winTitle">nvim</span>
+          <span class="chip" id="chapName">Chapter 1 of 9</span>
+        </div>
+        <div class="tabline"><span class="tab"><span id="tabName">[No Name]</span><span class="mod" id="modDot" hidden>●</span></span></div>
+        <div class="bufwrap">
+          <div class="buf" id="buf"></div>
+          <div id="popLayer"></div>
+          <div class="toast" id="toast" hidden></div>
+          <div class="keys" id="keys" aria-hidden="true"></div>
+          <div class="poster" id="poster">
+            <div class="poster-in">
+              <p class="kicker" id="posterKick">Typed live, no video file</p>
+              <h2 id="posterTitle">Set up LazyVim in nine short chapters</h2>
+              <p id="posterText">Install it, learn the Vim basics, add extras and plugins, turn off AI suggestions, and fix problems when they show up.</p>
+              <button class="btn primary" id="posterBtn" type="button">Play walkthrough</button>
+            </div>
+          </div>
+        </div>
+        <div class="cmdline" id="cmdline"></div>
+        <div class="status">
+          <span class="mode" id="mode" data-mode="NORMAL">NORMAL</span>
+          <span class="sf" id="sfile">[No Name]</span>
+          <span class="sp"></span>
+          <span class="sft" id="sft"></span>
+          <span class="spos" id="spos">1:1</span>
+        </div>
+      </div>
+
+      <div class="caption" aria-live="polite">
+        <div class="cap-head"><span class="chip" id="capChip">Chapter 1</span><span id="capStep">Press play to start</span></div>
+        <div class="cap-text" id="caption">Each chapter ends on something you can copy into your own setup.</div>
+      </div>
+      <div class="try" id="tryBox"><b>Your turn</b><span id="tryText">After each chapter, try it yourself in a real Neovim window.</span></div>
+
+      <div class="controls">
+        <button class="btn primary" id="playBtn" type="button" aria-label="Play">
+          <svg id="icPlay" viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
+          <svg id="icPause" viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true" hidden><path d="M7 5h4v14H7zM13 5h4v14h-4z"/></svg>
+          <span id="playLabel">Play</span>
+        </button>
+        <button class="btn" id="prevBtn" type="button" aria-label="Previous chapter"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M6 6h2v12H6zM9.5 12l8.5 6V6z"/></svg></button>
+        <button class="btn" id="restartBtn" type="button" aria-label="Restart this chapter"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M12 5V2L7 6.5 12 11V8a5 5 0 1 1-5 5H5a7 7 0 1 0 7-8z"/></svg></button>
+        <button class="btn" id="nextBtn" type="button" aria-label="Next chapter"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M16 6h2v12h-2zM6 18l8.5-6L6 6z"/></svg></button>
+        <span class="grow"></span>
+        <label class="auto" for="auto"><input type="checkbox" id="auto" checked><span>Play next chapter</span></label>
+        <div class="speed" role="group" aria-label="Playback speed">
+          <button type="button" data-speed="1" aria-pressed="true">1×</button>
+          <button type="button" data-speed="1.5" aria-pressed="false">1.5×</button>
+          <button type="button" data-speed="2" aria-pressed="false">2×</button>
+        </div>
+      </div>
+      <div class="seg" id="seg" aria-label="Chapter progress"></div>
+      <span class="hint">Space pauses · ← → change chapter</span>
+    </section>
+
+    <aside class="side" aria-label="Chapters">
+      <div class="side-head"><span>Chapters</span><span id="watched">0 of 9 watched</span></div>
+      <nav class="chapters" id="chapters"></nav>
+    </aside>
+  </main>
+
+  <section id="install" class="sec" aria-labelledby="installH">
+    <div class="sec-head">
+      <p class="kicker">Before chapter 1</p>
+      <h2 id="installH">Install first</h2>
+      <p>Pick your system and copy the commands. Run them in a terminal, one block at a time.</p>
+    </div>
+    <div class="install">
+      <div class="col">
+        <div class="tabs" id="osTabs" role="tablist" aria-label="Operating system"></div>
+        <div class="col" id="osBlocks"></div>
+      </div>
+      <div class="col">
+        <div class="tablewrap">
+          <table class="tools">
+            <tbody>
+              <tr><th>Neovim 0.11+</th><td>The editor. Older versions break LazyVim.</td></tr>
+              <tr><th>git</th><td>Downloads every plugin.</td></tr>
+              <tr><th>ripgrep</th><td>Searches text in files: <code>Space /</code>.</td></tr>
+              <tr><th>fd</th><td>Finds files by name: <code>Space f f</code>.</td></tr>
+              <tr><th>C compiler</th><td>Builds the syntax parsers that give you colors.</td></tr>
+              <tr><th>Node + npm</th><td>Many language servers install through it.</td></tr>
+              <tr><th>lazygit</th><td>Optional. Git screen on <code>Space g g</code>.</td></tr>
+              <tr><th>Nerd Font</th><td>Icons. Without it you see empty boxes.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="check">
+          <div class="check-head"><h3>Your setup checklist</h3><span id="checkCount">0 of 8</span></div>
+          <div class="meter" aria-hidden="true"><i id="meter"></i></div>
+          <div id="checkList"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="cheatsheet" class="sec" aria-labelledby="sheetH">
+    <div class="sec-head">
+      <p class="kicker">Keep this open</p>
+      <h2 id="sheetH">Cheat sheet</h2>
+      <p>Type a word to filter, like <code>save</code>, <code>delete</code> or <code>git</code>. <code>Space</code> is the leader key in LazyVim.</p>
+    </div>
+    <label class="search" for="q">
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>
+      <input id="q" type="search" placeholder="Filter shortcuts" autocomplete="off">
+    </label>
+    <div class="sheet" id="sheet"></div>
+    <p class="none" id="noMatch" hidden>No shortcut matches that. Try a shorter word.</p>
+  </section>
+
+  <section id="files" class="sec" aria-labelledby="filesH">
+    <div class="sec-head">
+      <p class="kicker">Copy and paste</p>
+      <h2 id="filesH">Config files</h2>
+      <p>The first two go in <code>~/.config/nvim/lua/plugins/</code>. The third goes in <code>~/.config/nvim/lua/config/options.lua</code>. Save, restart Neovim and run <code>:Lazy sync</code>.</p>
+    </div>
+    <div class="cards">
+      <div class="card">
+        <header><span>lua/plugins/extra.lua</span><button class="btn small" type="button" data-copy="code1">Copy</button></header>
+        <pre id="code1"></pre>
+      </div>
+      <div class="card">
+        <header><span>lua/plugins/completion.lua</span><button class="btn small" type="button" data-copy="code2">Copy</button></header>
+        <pre id="code2"></pre>
+      </div>
+      <div class="card">
+        <header><span>lua/config/options.lua</span><button class="btn small" type="button" data-copy="code3">Copy</button></header>
+        <pre id="code3"></pre>
+      </div>
+    </div>
+  </section>
+
+  <section id="fixes" class="sec" aria-labelledby="fixesH">
+    <div class="sec-head">
+      <p class="kicker">When something looks wrong</p>
+      <h2 id="fixesH">Common fixes</h2>
+    </div>
+    <div class="fixes" id="fixList"></div>
+    <div class="sec-head"><h2>Keep learning</h2></div>
+    <div class="next">
+      <a href="https://www.lazyvim.org" target="_blank" rel="noopener"><b>lazyvim.org</b><span>Official docs, keymaps and the full list of extras.</span></a>
+      <a href="https://neovim.io" target="_blank" rel="noopener"><b>neovim.io</b><span>Downloads and the Neovim manual.</span></a>
+      <a href="https://github.com/LazyVim/LazyVim" target="_blank" rel="noopener"><b>LazyVim on GitHub</b><span>Issues, releases and the change log.</span></a>
+    </div>
+  </section>
+</div>
+
+<script>
+(function () {
+  "use strict";
+  var $ = function (id) { return document.getElementById(id); };
+  function esc(s) { return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); }
+  function load(k, def) { try { var v = localStorage.getItem(k); return v ? JSON.parse(v) : def; } catch (e) { return def; } }
+  function store(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) { /* storage can be blocked */ } }
+  function copyText(text, node, btn) {
+    var label = btn.dataset.label || btn.textContent; btn.dataset.label = label;
+    function fallback() {
+      var r = document.createRange(); r.selectNodeContents(node);
+      var s = window.getSelection(); s.removeAllRanges(); s.addRange(r);
+      btn.textContent = "Selected";
+    }
+    try { navigator.clipboard.writeText(text).then(function () { btn.textContent = "Copied"; }, fallback); } catch (e) { fallback(); }
+    setTimeout(function () { btn.textContent = label; }, 1800);
+  }
+
+  /* ---------- file contents shown in the recording and in the copy cards ---------- */
+  var EXTRA_LUA = [
+    "-- Each { } block is one plugin. Lazy installs them on the next start.",
+    "return {",
+    "  -- Flutter and Dart: run, hot reload, pick devices",
+    "  {",
+    "    \"akinsho/flutter-tools.nvim\",",
+    "    dependencies = { \"nvim-lua/plenary.nvim\" },",
+    "    opts = {},",
+    "  },",
+    "  -- Optional: Space g g already opens Lazygit in LazyVim",
+    "  { \"kdheepak/lazygit.nvim\", cmd = \"LazyGit\" },",
+    "  -- Space u u shows your undo history as a tree",
+    "  {",
+    "    \"mbbill/undotree\",",
+    "    keys = { { \"<leader>uu\", \"<cmd>UndotreeToggle<cr>\", desc = \"Undotree\" } },",
+    "  },",
+    "  -- Press - to edit a folder like a text file",
+    "  {",
+    "    \"stevearc/oil.nvim\",",
+    "    opts = {},",
+    "    keys = { { \"-\", \"<cmd>Oil<cr>\", desc = \"Open parent folder\" } },",
+    "  },",
+    "}"
+  ];
+  var COMPLETION_LUA = [
+    "-- Hide the grey inline preview text. The normal menu stays.",
+    "return {",
+    "  {",
+    "    \"saghen/blink.cmp\",",
+    "    opts = {",
+    "      completion = {",
+    "        ghost_text = { enabled = false },",
+    "      },",
+    "    },",
+    "  },",
+    "}"
+  ];
+  var OPTIONS_LUA = [
+    "-- LazyVim has good defaults. Add only what you want to change.",
+    "vim.opt.relativenumber = false -- show normal line numbers",
+    "vim.opt.wrap = true            -- wrap long lines",
+    "vim.opt.scrolloff = 8          -- keep 8 lines visible around the cursor",
+    "vim.g.autoformat = false       -- no format on save, use Space c f"
+  ];
+  var JS_SAMPLE = [
+    "import { useEffect, useState } from \"react\";",
+    "import { fetchOrders } from \"../api/client\";",
+    "",
+    "export default function Orders() {",
+    "  const [rows, setRows] = useState([]);",
+    "",
+    "  useEffect(() => {",
+    "    fetchOrders().then(setRows);",
+    "  }, []);",
+    "",
+    "  return <OrderList rows={rows} />;",
+    "}"
+  ];
+
+  /* ---------- tiny syntax highlighter ---------- */
+  function hl(s, kind) {
+    if (!kind || kind === "text" || kind === "markdown") return esc(s);
+    var re = /(--.*$|\/\/.*$)|("(?:[^"\\]|\\.)*"?)|\b(return|local|function|end|true|false|nil|const|let|async|await|import|from|export|default)\b|\b([A-Za-z_]\w*)(?=\s*=(?!=))|([{}()\[\],=])/g;
+    var out = "", last = 0, m;
+    while ((m = re.exec(s))) {
+      out += esc(s.slice(last, m.index));
+      if (m[1]) out += '<span class="c">' + esc(m[1]) + "</span>";
+      else if (m[2]) out += '<span class="s">' + esc(m[2]) + "</span>";
+      else if (m[3]) out += '<span class="k">' + m[3] + "</span>";
+      else if (m[4]) out += '<span class="f">' + m[4] + "</span>";
+      else out += '<span class="p">' + esc(m[5]) + "</span>";
+      last = re.lastIndex;
+    }
+    return out + esc(s.slice(last));
+  }
+
+  /* ---------- the script: nine chapters ---------- */
+  var SCENES = [
+    {
+      title: "Install LazyVim", tag: "Start here", sub: "Check your tools, clone the starter, first launch.",
+      try: "Run these commands in your own terminal. The install section below has the exact commands for your system.",
+      init: { file: "bash", ft: "", lines: [], term: true },
+      steps: [
+        {
+          k: "sh", cmds: [
+            { t: "nvim --version | head -n 1", out: ["NVIM v0.11.4"], cap: "Check your Neovim version. LazyVim needs a recent one, 0.11 or newer." },
+            { t: "command -v git rg fd lazygit node", out: ["/usr/bin/git", "/usr/bin/rg", "/usr/bin/fd", "/usr/bin/lazygit", "/usr/bin/node"], cap: "Check the helper tools. A path means it is installed. A missing line means install that one first." },
+            { t: "mv ~/.config/nvim ~/.config/nvim.bak", cap: "Back up any old config. If you have none, skip this command." },
+            { t: "git clone https://github.com/LazyVim/starter ~/.config/nvim", out: ["Cloning into '/home/you/.config/nvim'...", "Resolving deltas: 100%, done."], cap: "Clone the LazyVim starter into Neovim's config folder." },
+            { t: "rm -rf ~/.config/nvim/.git", cap: "Remove the starter's git history. The config is yours now, and you can put it in your own repo.", hold: 500 },
+            { t: "nvim", cap: "Open Neovim. The first start installs every plugin by itself.", hold: 400 }
+          ]
+        },
+        {
+          k: "pop", title: "lazy.nvim", hold: 3200,
+          rows: ["Installing LazyVim and its plugins...", "Wait until it finishes, then press q", "Run :checkhealth if you see red errors"],
+          cap: "Wait for the install to finish. Do not close Neovim. This only happens once."
+        }
+      ]
+    },
+    {
+      title: "Vim basics in two minutes", tag: "Beginner", sub: "Modes, moving, deleting, saving and quitting.",
+      try: "Run :Tutor inside Neovim. It is a built-in hands-on lesson of about 20 minutes.",
+      init: { file: "orders.js", ft: "javascript", lines: JS_SAMPLE, crow: 0 },
+      steps: [
+        {
+          k: "pop", title: "Vim has modes", hold: 5200,
+          rows: ["NORMAL   move around and run commands. This is the default", "INSERT   type text. Press i to enter, Esc to leave", "COMMAND  press : and type a command like :w", "VISUAL   press v to select text"],
+          cap: "Vim has modes. Keys do different things in each one. If something strange happens, press `Esc` to get back to Normal."
+        },
+        { k: "edit", keys: ["j", "j", "j", "j"], each: true, cap: "In Normal mode, `j` moves down, `k` up, `h` left and `l` right. Arrow keys work too." },
+        { k: "edit", keys: ["8", "G"], to: 7, cap: "`8G` jumps to line 8. `gg` goes to the top and `G` to the bottom." },
+        { k: "edit", keys: ["d", "d"], op: "del", cap: "`dd` deletes the whole line." },
+        { k: "edit", keys: ["u"], op: "undo", cap: "Made a mistake? `u` undoes it. `Ctrl r` redoes." },
+        { k: "edit", keys: ["y", "y", "p"], op: "dup", cap: "`yy` copies the line and `p` pastes it below." },
+        { k: "edit", keys: ["o"], op: "open", text: "// refresh when the user changes", cap: "`o` opens a new line below and enters Insert mode. Type, then press `Esc`." },
+        { k: "cmd", t: ":w", written: true, cap: "Save with `:w`." },
+        { k: "cmd", t: "/fetch", goto: 1, cap: "`/` searches the file. Type a word and press Enter." },
+        { k: "edit", keys: ["n"], to: 7, cap: "`n` jumps to the next match and `N` to the previous one." },
+        {
+          k: "pop", title: "Stuck? Escape hatch", hold: 5200,
+          rows: ["Esc   go back to Normal mode first", ":w    save", ":q    quit", ":wq   save and quit", ":q!   quit and throw changes away", ":qa   quit every window"],
+          cap: "How to leave Vim. Press `Esc` first, then one of these."
+        }
+      ]
+    },
+    {
+      title: "Turn on extras", tag: "Core", sub: "One menu for languages, formatters and debugging.",
+      try: "Run :LazyExtras, move to lang.typescript and press x. Restart Neovim.",
+      init: { file: "[No Name]", ft: "", lines: [] },
+      steps: [
+        {
+          k: "extras",
+          cap: "Open the extras menu: type `:LazyExtras` and press Enter.",
+          capMid: "Move down with `j`. Press `x` on an extra to turn it on. A check mark means it is enabled.",
+          capEnd: "Keep every `ai.*` extra off. That is what keeps Copilot-style suggestions out.",
+          items: [
+            { id: "ai.copilot", note: "leave off" },
+            { id: "coding.yanky", pick: 1 },
+            { id: "dap.core", pick: 1 },
+            { id: "editor.harpoon2", pick: 1 },
+            { id: "formatting.prettier", pick: 1 },
+            { id: "lang.docker", pick: 1 },
+            { id: "lang.java", pick: 1 },
+            { id: "lang.json", pick: 1 },
+            { id: "lang.tailwind", pick: 1 },
+            { id: "lang.typescript", pick: 1 },
+            { id: "linting.eslint", pick: 1 }
+          ]
+        },
+        { k: "cmd", t: ":qa", cap: "Quit with `:qa` and open Neovim again." },
+        {
+          k: "pop", title: "lazy.nvim", hold: 2600,
+          rows: ["Installing plugins for the enabled extras...", "Mason fetches language servers in the background"],
+          cap: "On the next start, lazy.nvim installs what these extras need. Give it a minute the first time."
+        }
+      ]
+    },
+    {
+      title: "Add your own plugins", tag: "Core", sub: "Flutter, Oil and Undotree in one file.",
+      try: "Create lua/plugins/extra.lua with the file from the Config files section, then run :Lazy sync.",
+      init: { file: "[No Name]", ft: "", lines: [] },
+      steps: [
+        {
+          k: "cmd", t: ":e ~/.config/nvim/lua/plugins/extra.lua", file: "extra.lua", ft: "lua", msg: "\"extra.lua\" [New]",
+          cap: "Open a new file inside `lua/plugins`. LazyVim loads every file in that folder."
+        },
+        { k: "code", lines: EXTRA_LUA, cap: "Each block is one plugin. Lazy reads this list on startup." },
+        { k: "cmd", t: ":w", written: true, cap: "Save with `:w`." },
+        { k: "cmd", t: ":Lazy sync", cap: "Run `:Lazy sync` to install them right now." },
+        {
+          k: "pop", title: "lazy.nvim", hold: 2800,
+          rows: ["✔ flutter-tools.nvim  installed", "✔ lazygit.nvim  installed", "✔ undotree  installed", "✔ oil.nvim  installed"],
+          cap: "Done. Plugin repos are written as `user/name`, the same as on GitHub."
+        }
+      ]
+    },
+    {
+      title: "Switch off AI suggestions", tag: "Core", sub: "Keep the normal menu, drop the ghost text.",
+      try: "Open :LazyExtras and confirm no ai.* extra has a check mark.",
+      init: { file: "[No Name]", ft: "", lines: [] },
+      steps: [
+        {
+          k: "cmd", t: ":e ~/.config/nvim/lua/plugins/completion.lua", file: "completion.lua", ft: "lua", msg: "\"completion.lua\" [New]",
+          cap: "LazyVim ships with no AI completion. This file also hides the grey inline preview from the normal completion engine."
+        },
+        { k: "code", lines: COMPLETION_LUA, cap: "One setting: `ghost_text` is turned off for `blink.cmp`." },
+        { k: "cmd", t: ":w", written: true, cap: "Save it." },
+        {
+          k: "pop", title: "Completion", hold: 3000,
+          rows: ["ƒ fetchOrders        Function", "ƒ fetchOrderById     Function", "◇ Order               Interface"],
+          cap: "You still get the usual completion menu from the language server. Only the inline preview is gone."
+        }
+      ]
+    },
+    {
+      title: "Check language servers", tag: "Core", sub: "Mason installs servers. Dart comes with Flutter.",
+      try: "Run :Mason and look for a check mark next to your languages.",
+      init: { file: "[No Name]", ft: "", lines: [] },
+      steps: [
+        {
+          k: "mason",
+          cap: "Run `:Mason` to see the language servers and tools on this machine.",
+          capMid: "Press `i` on a server to install it. The language extras normally install these for you, so this is a check.",
+          capEnd: "Dart is different. Its server ships with the Flutter SDK, and `flutter-tools.nvim` starts it for you.",
+          items: [
+            { name: "vtsls", note: "TypeScript and JavaScript" },
+            { name: "tailwindcss-language-server", note: "Tailwind" },
+            { name: "jdtls", note: "Java" },
+            { name: "eslint-lsp", note: "ESLint" },
+            { name: "prettier", note: "formatter" },
+            { name: "dart", note: "comes with the Flutter SDK", info: 1 }
+          ]
+        }
+      ]
+    },
+    {
+      title: "Daily keys", tag: "Beginner", sub: "The shortcuts you will use all day.",
+      try: "Open a project with nvim . and try Space f f, then Space /.",
+      init: { file: "orders.js", ft: "javascript", lines: JS_SAMPLE },
+      steps: [
+        { k: "keys", keys: ["Space"], hold: 3600, cap: "Press `Space` and wait. A menu lists every shortcut that starts with it. You never have to memorize them.",
+          pop: { title: "which-key  Space", sel: -1, rows: ["f  +file / find", "s  +search", "c  +code", "g  +git", "b  +buffer", "u  +ui", "x  +diagnostics", "q  +quit"] } },
+        { k: "keys", keys: ["Space", "f", "f"], cap: "`Space f f` finds a file by name. Type a few letters.",
+          pop: { title: "Files", prompt: "order", sel: 0, rows: ["src/routes/orders.js", "src/pages/Orders.jsx", "src/components/OrderList.jsx", "server/models/Order.js"] } },
+        { k: "keys", keys: ["Space", "/"], cap: "`Space /` searches the text of every file in the project.",
+          pop: { title: "Grep", prompt: "useState", sel: 0, rows: ["src/App.jsx:4  const [user, setUser] = useState(null)", "src/pages/Orders.jsx:5  const [rows, setRows] = useState([])", "src/components/Cart.jsx:7  const [open, setOpen] = useState(false)"] } },
+        { k: "keys", keys: ["Space", "e"], cap: "`Space e` toggles the file explorer.",
+          pop: { title: "Explorer", sel: 3, rows: ["▾ src", "  ▸ components", "  ▾ routes", "      orders.js", "  App.jsx", "package.json"] } },
+        { k: "keys", keys: ["K"], cap: "`K` on a name shows its type and docs.",
+          pop: { title: "Hover", sel: -1, rows: ["(function) fetchOrders(): Promise<Order[]>", "Loads the orders for the signed-in user."] } },
+        { k: "keys", keys: ["Space", "c", "a"], cap: "`Space c a` lists the fixes the language server offers.",
+          pop: { title: "Code Actions", sel: 0, rows: ["Add import from \"react\"", "Organize imports", "Fix all auto-fixable problems"] } },
+        { k: "keys", keys: ["Space", "c", "f"], cap: "`Space c f` formats the file with the formatter you enabled.", toast: "Formatted with prettier" },
+        { k: "keys", keys: ["Space", "h"], cap: "`Space H` marks the current file. `Space h` shows your marked files. `Space 1` to `Space 5` jump straight to one.",
+          pop: { title: "Harpoon", sel: 0, rows: ["1  src/routes/orders.js", "2  src/pages/Orders.jsx", "3  src/App.jsx"] } },
+        { k: "keys", keys: ["Space", "g", "g"], cap: "`Space g g` opens Lazygit inside Neovim for staging and commits.",
+          pop: { title: "Lazygit", sel: 1, rows: ["Unstaged", "M  src/routes/orders.js", "?? src/pages/Orders.jsx", "Commits", "a3f9c21  Add orders route"] } },
+        { k: "keys", keys: ["Space", "u", "u"], cap: "`Space u u` is the key you set in `extra.lua`. It shows undo history as a tree.",
+          pop: { title: "Undotree", sel: 0, rows: ["● seq 5  now", "│ ○ seq 4  12:41", "│ ○ seq 3  12:38", "○ seq 2  12:30"] } },
+        { k: "keys", keys: ["-"], cap: "`-` opens Oil, also from `extra.lua`. Rename or delete files by editing the text, then `:w`.",
+          pop: { title: "Oil  src/routes", sel: 1, rows: ["../", "orders.js", "users.js", "auth.js"] } }
+      ]
+    },
+    {
+      title: "Fix a file with no suggestions", tag: "Fixes", sub: "Filetype, language server and project root.",
+      try: "Open a file that has no colors and run :set ft? to see what Neovim thinks it is.",
+      init: { file: "scratch", ft: "text", lines: JS_SAMPLE },
+      steps: [
+        { k: "cmd", t: ":set ft?", msg: "  filetype=text",
+          cap: "Plain text, no colors, no suggestions? Check the filetype. `text` means Neovim did not detect the language." },
+        { k: "cmd", t: ":set ft=javascript", setft: "javascript",
+          cap: "Set it by hand. Colors return and the language server can attach. Files with no extension often need this." },
+        {
+          k: "cmd", t: ":checkhealth vim.lsp", file: "health://", ft: "markdown", blank: false,
+          out: ["vim.lsp", "", "- LSP log level: WARN", "- Log path: ~/.local/state/nvim/lsp.log", "", "vim.lsp: Active Clients", "- ✓ vtsls (id: 1)", "  - Root directory: ~/projects/my-app", "  - Attached buffers: 1"],
+          cap: "Under Active Clients you should see a server. An empty list means none attached to this file."
+        },
+        {
+          k: "pop", title: "Terminal", hold: 3600, rows: ["~/projects/my-app $ nvim ."],
+          cap: "Servers need a project root: a folder with `package.json`, `pom.xml`, `pubspec.yaml` or `.git`. Open the project folder with `nvim .` instead of one loose file."
+        }
+      ]
+    },
+    {
+      title: "Update and recover", tag: "Keep healthy", sub: "Update plugins, check health, undo a bad update.",
+      try: "Run :checkhealth once after installing. Fix the lines marked in yellow.",
+      init: { file: "[No Name]", ft: "", lines: [] },
+      steps: [
+        { k: "cmd", t: ":Lazy", cap: "`:Lazy` opens the plugin manager. You can also press `Space l`." },
+        {
+          k: "pop", title: "lazy.nvim  keys", hold: 5600,
+          rows: ["U  update plugins", "S  sync: install, clean and update", "R  restore plugins to the lazy-lock.json versions", "L  log: what changed in the last update", "P  profile: what slows startup", "?  show all keys"],
+          cap: "Press `U` to update. If an update breaks something, press `R` to go back to the versions in `lazy-lock.json`."
+        },
+        {
+          k: "cmd", t: ":checkhealth lazyvim", file: "health://", ft: "markdown", blank: false,
+          out: ["lazyvim: require(\"lazyvim.health\").check()", "", "LazyVim ~", "- ✓ Neovim >= 0.11", "- ✓ git is installed", "- ✓ ripgrep is installed", "- ✓ fd is installed", "- ⚠ WARNING lazygit not installed. Space g g needs it."],
+          cap: "`:checkhealth` lists what is missing. Green lines are fine. Fix the yellow ones."
+        },
+        {
+          k: "pop", title: "Keep lazy-lock.json", hold: 4200,
+          rows: ["lazy-lock.json records the plugin versions that work", "Commit it to git next to your config", "On a new computer, :Lazy restore installs the same versions"],
+          cap: "Commit your config folder to git. Then a new computer gets the same setup in minutes."
+        }
+      ]
+    }
+  ];
+
+  /* ---------- editor state ---------- */
+  var lines = [], ft = "", mode = "NORMAL", crow = -1, reg = null, termMode = false;
+  var winEl = $("win"), bufEl = $("buf"), popLayer = $("popLayer"), toastEl = $("toast"), keysEl = $("keys"), cmdEl = $("cmdline");
+  var MINROWS = 17, keyTimer = null;
+
+  function curIndex() { return crow >= 0 ? Math.min(crow, lines.length - 1) : lines.length - 1; }
+
+  function redraw() {
+    var ci = curIndex(), codeN = 0, curLine = 0, html = "", i, l;
+    var showCur = mode !== "COMMAND" && mode !== "SEARCH";
+    var curSpan = '<span class="cur"></span>';
+    for (i = 0; i < lines.length; i++) {
+      l = lines[i];
+      if (l.kind === "code") {
+        codeN++;
+        var isC = i === ci;
+        if (isC) curLine = codeN;
+        html += '<div class="ln' + (isC && crow >= 0 ? " cl" : "") + '"><span class="no">' + codeN + '</span><span class="tx">' + hl(l.text, ft) + (isC && showCur ? curSpan : "") + "</span></div>";
+      } else if (l.kind === "sh") {
+        html += '<div class="ln"><span class="no"></span><span class="tx"><span class="ps">$</span>' + esc(l.text) + (i === lines.length - 1 && showCur ? curSpan : "") + "</span></div>";
+      } else {
+        var cls = l.text.indexOf("✓") > -1 ? " ok" : l.text.indexOf("⚠") > -1 ? " warn" : "";
+        html += '<div class="ln"><span class="no"></span><span class="tx out' + cls + '">' + esc(l.text) + "</span></div>";
+      }
+    }
+    if (!termMode) {
+      for (i = lines.length; i < MINROWS; i++) html += '<div class="ln"><span class="no"></span><span class="tx tilde">~</span></div>';
+    }
+    bufEl.innerHTML = html;
+    if (crow >= 0 && !termMode) {
+      var el = bufEl.children[ci];
+      if (el && (el.offsetTop < bufEl.scrollTop || el.offsetTop + 21 > bufEl.scrollTop + bufEl.clientHeight)) bufEl.scrollTop = Math.max(0, el.offsetTop - 60);
+    } else {
+      bufEl.scrollTop = bufEl.scrollHeight;
+    }
+    $("spos").textContent = termMode ? "" : (curLine || 1) + ":1";
+  }
+  function setMode(m) { mode = m; winEl.dataset.mode = m; var e = $("mode"); e.textContent = m; e.dataset.mode = m; }
+  function setFile(name, f) { ft = f || ""; $("tabName").textContent = name; $("sfile").textContent = name; $("sft").textContent = ft; $("winTitle").textContent = termMode ? "bash" : "nvim " + name; }
+  function setMod(b) { $("modDot").hidden = !b; }
+  function setCmd(text, kind) {
+    if (!text) { cmdEl.innerHTML = ""; return; }
+    cmdEl.innerHTML = kind === "msg" ? '<span class="msg">' + esc(text) + "</span>" : "<span>" + esc(text) + '</span><span class="cur"></span>';
+  }
+  function capHTML(t) { return esc(t).replace(/`([^`]+)`/g, "<code>$1</code>"); }
+  function setCaption(t) {
+    var c = $("caption");
+    c.innerHTML = capHTML(t);
+    c.style.animation = "none"; void c.offsetWidth; c.style.animation = "";
+  }
+  function keycap(label, replace) {
+    if (replace) keysEl.textContent = "";
+    var k = document.createElement("kbd");
+    k.textContent = label;
+    keysEl.appendChild(k);
+    clearTimeout(keyTimer);
+    keyTimer = setTimeout(function () { keysEl.textContent = ""; }, 1800);
+  }
+  function row(mark, name, note, cls) {
+    return '<div class="row ' + (cls || "") + '"><span class="mk">' + esc(mark || "") + '</span><span class="nm">' + esc(name) + "</span>" + (note ? '<span class="nt">' + esc(note) + "</span>" : "") + "</div>";
+  }
+  function showPop(title, rowsHTML, opts) {
+    opts = opts || {};
+    popLayer.innerHTML = '<div class="pop"><div class="pt"><span>' + esc(title) + "</span>" + (opts.tag ? '<span class="tg">' + esc(opts.tag) + "</span>" : "") + "</div>" +
+      (opts.prompt != null ? '<div class="pp"><span class="pr">&gt;</span> ' + esc(opts.prompt) + '<span class="cur"></span></div>' : "") + rowsHTML.join("") + "</div>";
+  }
+  function clearPop() { popLayer.innerHTML = ""; }
+  function showToast(t) { toastEl.textContent = t; toastEl.hidden = false; }
+  function clearToast() { toastEl.hidden = true; }
+
+  /* ---------- player engine ---------- */
+  var ABORT = { abort: true };
+  var run = 0, cur = -1, playing = false, speed = 1, stepProg = 0;
+  var doneSet = load("lv-done", {});
+
+  function sleep(ms, tk) {
+    return new Promise(function (res, rej) {
+      var left = ms, last = performance.now();
+      (function loop() {
+        if (tk !== run) { rej(ABORT); return; }
+        var now = performance.now();
+        if (playing) left -= (now - last) * speed;
+        last = now;
+        if (left <= 0) res(); else setTimeout(loop, 16);
+      })();
+    });
+  }
+  function chunk() { return Math.max(1, Math.ceil(speed)); }
+
+  async function typeInto(setter, text, tk, delay) {
+    var step = chunk();
+    for (var i = step; ; i += step) {
+      var n = Math.min(i, text.length);
+      setter(text.slice(0, n));
+      if (n >= text.length) break;
+      await sleep(delay + Math.random() * 24, tk);
+    }
+  }
+
+  async function doSh(st, tk) {
+    clearPop(); clearToast(); keysEl.textContent = "";
+    for (var c = 0; c < st.cmds.length; c++) {
+      var cmd = st.cmds[c];
+      if (cmd.cap) setCaption(cmd.cap);
+      await sleep(600, tk);
+      var tgt = lines[lines.length - 1];
+      await typeInto(function (t) { tgt.text = " " + t; redraw(); }, cmd.t, tk, 32);
+      await sleep(320, tk);
+      keycap("⏎", true);
+      var out = cmd.out || [];
+      for (var o = 0; o < out.length; o++) { lines.push({ kind: "out", text: out[o] }); redraw(); await sleep(120, tk); }
+      lines.push({ kind: "sh", text: "" }); redraw();
+      await sleep(cmd.hold || 900, tk);
+    }
+  }
+
+  async function doCmd(st, tk) {
+    clearPop(); clearToast();
+    var prefix = st.t.charAt(0);
+    setMode(prefix === ":" ? "COMMAND" : "SEARCH"); keycap(prefix, true); redraw();
+    await typeInto(function (t) { setCmd(t); }, st.t, tk, 38);
+    await sleep(280, tk);
+    keycap("⏎"); setCmd(""); setMode("NORMAL");
+    await sleep(140, tk);
+    if (st.file) {
+      setFile(st.file, st.ft); setMod(false);
+      lines = st.blank === false ? [] : [{ kind: "code", text: "" }];
+      crow = -1;
+    }
+    if (st.setft) { ft = st.setft; $("sft").textContent = ft; }
+    if (st.goto != null) crow = st.goto;
+    redraw();
+    if (st.out) {
+      for (var i = 0; i < st.out.length; i++) { lines.push({ kind: "out", text: st.out[i] }); redraw(); await sleep(110, tk); }
+    }
+    if (st.written) {
+      var body = lines.filter(function (l) { return l.kind === "code"; }).map(function (l) { return l.text; }).join("\n") + "\n";
+      var bytes = new TextEncoder().encode(body).length;
+      var count = lines.filter(function (l) { return l.kind === "code"; }).length;
+      setMod(false);
+      setCmd("\"" + $("tabName").textContent + "\" " + count + "L, " + bytes + "B written", "msg");
+    } else if (st.msg) {
+      setCmd(st.msg, "msg");
+    }
+    await sleep(700, tk);
+  }
+
+  async function doCode(st, tk) {
+    setMode("INSERT"); keycap("i", true); redraw();
+    await sleep(320, tk);
+    var first = true;
+    for (var li = 0; li < st.lines.length; li++) {
+      var text = st.lines[li];
+      var lastL = lines[lines.length - 1];
+      if (!(first && lastL && lastL.kind === "code" && lastL.text === "")) lines.push({ kind: "code", text: "" });
+      first = false;
+      var target = lines[lines.length - 1];
+      var ind = text.match(/^ */)[0];
+      var rest = text.slice(ind.length);
+      target.text = ind; redraw();
+      if (rest.length) await typeInto(function (t) { target.text = ind + t; redraw(); }, rest, tk, 10);
+      await sleep(70, tk);
+    }
+    setMod(true);
+    await sleep(320, tk);
+    setMode("NORMAL"); keycap("Esc", true); redraw();
+    await sleep(400, tk);
+  }
+
+  async function doEdit(st, tk) {
+    clearPop(); clearToast(); keysEl.textContent = "";
+    await sleep(300, tk);
+    for (var i = 0; i < st.keys.length; i++) {
+      keycap(st.keys[i]);
+      if (st.each) { crow = Math.min(crow + 1, lines.length - 1); redraw(); }
+      await sleep(st.each ? 340 : 220, tk);
+    }
+    if (st.to != null) { crow = st.to === "end" ? lines.length - 1 : st.to; redraw(); }
+    if (st.op === "del") {
+      reg = lines.splice(crow, 1)[0];
+      if (crow >= lines.length) crow = lines.length - 1;
+      setMod(true); redraw();
+    } else if (st.op === "undo") {
+      if (reg) { lines.splice(crow, 0, reg); reg = null; }
+      redraw();
+    } else if (st.op === "dup") {
+      lines.splice(crow + 1, 0, { kind: "code", text: lines[crow].text });
+      crow++; setMod(true); redraw();
+    } else if (st.op === "open") {
+      setMode("INSERT"); redraw();
+      await sleep(250, tk);
+      var ind = lines[crow].text.match(/^ */)[0];
+      lines.splice(crow + 1, 0, { kind: "code", text: ind });
+      crow++; redraw();
+      var tgt = lines[crow];
+      await typeInto(function (t) { tgt.text = ind + t; redraw(); }, st.text, tk, 14);
+      setMod(true);
+      await sleep(300, tk);
+      setMode("NORMAL"); keycap("Esc", true); redraw();
+    }
+    await sleep(st.hold || 1500, tk);
+  }
+
+  async function doExtras(st, tk) {
+    await doCmd({ t: ":LazyExtras" }, tk);
+    var items = st.items.map(function (x) { return { id: x.id, note: x.note, pick: x.pick, on: false }; });
+    function render(c) {
+      showPop("LazyVim Extras", items.map(function (it, i) {
+        return row(it.on ? "✔" : "", it.id, it.note || "", (i === c ? "sel " : "") + (it.on ? "on" : ""));
+      }), { tag: "q to close" });
+    }
+    render(0);
+    if (st.capMid) setCaption(st.capMid);
+    await sleep(1100, tk);
+    keycap("j", true);
+    for (var i = 0; i < items.length; i++) {
+      render(i);
+      await sleep(items[i].pick ? 240 : 420, tk);
+      if (items[i].pick) {
+        keycap("x", true); items[i].on = true; render(i);
+        await sleep(300, tk);
+      }
+    }
+    if (st.capEnd) setCaption(st.capEnd);
+    await sleep(2600, tk);
+    keycap("q", true); clearPop();
+    await sleep(300, tk);
+  }
+
+  async function doMason(st, tk) {
+    await doCmd({ t: ":Mason" }, tk);
+    var items = st.items.map(function (x) { return { name: x.name, note: x.note, info: x.info, state: "idle", sp: "" }; });
+    var frames = ["⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏"];
+    function render(c) {
+      showPop("Mason", items.map(function (it, i) {
+        var mk = it.state === "done" ? "✔" : it.state === "run" ? it.sp : it.info ? "·" : "";
+        return row(mk, it.name, it.note, (i === c ? "sel " : "") + (it.state === "done" ? "on" : ""));
+      }), { tag: "i install · q close" });
+    }
+    render(0);
+    if (st.capMid) setCaption(st.capMid);
+    await sleep(1100, tk);
+    for (var i = 0; i < items.length; i++) {
+      var it = items[i];
+      render(i);
+      if (it.info) { await sleep(700, tk); continue; }
+      await sleep(260, tk);
+      keycap("i", true);
+      it.state = "run";
+      for (var f = 0; f < 8; f++) { it.sp = frames[f % frames.length]; render(i); await sleep(70, tk); }
+      it.state = "done"; render(i);
+      await sleep(180, tk);
+    }
+    if (st.capEnd) setCaption(st.capEnd);
+    await sleep(3600, tk);
+    keycap("q", true); clearPop();
+    await sleep(300, tk);
+  }
+
+  async function doKeys(st, tk) {
+    clearPop(); clearToast(); keysEl.textContent = "";
+    await sleep(250, tk);
+    for (var i = 0; i < st.keys.length; i++) { keycap(st.keys[i]); await sleep(190, tk); }
+    await sleep(160, tk);
+    if (st.toast) showToast(st.toast);
+    if (st.pop) {
+      var p = st.pop;
+      showPop(p.title, p.rows.map(function (t, i) { return row("", t, "", i === p.sel ? "sel" : ""); }), { prompt: p.prompt });
+    }
+    await sleep(st.hold || 2400, tk);
+    clearPop(); clearToast();
+  }
+
+  async function doPop(st, tk) {
+    clearPop(); clearToast();
+    showPop(st.title, st.rows.map(function (t) { return row("", t, "", ""); }));
+    await sleep(st.hold || 2400, tk);
+    clearPop();
+  }
+
+  async function runStep(st, tk) {
+    if (st.cap) setCaption(st.cap);
+    if (st.k === "sh") await doSh(st, tk);
+    else if (st.k === "cmd") await doCmd(st, tk);
+    else if (st.k === "code") await doCode(st, tk);
+    else if (st.k === "edit") await doEdit(st, tk);
+    else if (st.k === "extras") await doExtras(st, tk);
+    else if (st.k === "mason") await doMason(st, tk);
+    else if (st.k === "keys") await doKeys(st, tk);
+    else if (st.k === "pop") await doPop(st, tk);
+  }
+
+  function resetScene(i) {
+    var sc = SCENES[i];
+    termMode = !!sc.init.term;
+    winEl.toggleAttribute("data-term", termMode);
+    reg = null; crow = sc.init.crow != null ? sc.init.crow : -1;
+    if (termMode) lines = [{ kind: "sh", text: "" }];
+    else lines = sc.init.lines.length ? sc.init.lines.map(function (t) { return { kind: "code", text: t }; }) : [{ kind: "code", text: "" }];
+    setMode(termMode ? "SHELL" : "NORMAL");
+    setFile(sc.init.file, sc.init.ft); setMod(false);
+    setCmd(""); clearPop(); clearToast(); keysEl.textContent = "";
+    redraw();
+  }
+
+  async function execScene(i, tk) {
+    var sc = SCENES[i];
+    try {
+      for (var s = 0; s < sc.steps.length; s++) {
+        $("capStep").textContent = "Step " + (s + 1) + " of " + sc.steps.length;
+        await runStep(sc.steps[s], tk);
+        stepProg = (s + 1) / sc.steps.length; updateSeg();
+        await sleep(450, tk);
+      }
+      chapterEnd(i);
+    } catch (e) { if (e !== ABORT) console.error(e); }
+  }
+
+  function playScene(i) {
+    run++;
+    cur = i; stepProg = 0; playing = true;
+    $("poster").hidden = true;
+    $("capChip").textContent = "Chapter " + (i + 1);
+    $("tryText").textContent = SCENES[i].try;
+    resetScene(i);
+    updateUI();
+    execScene(i, run);
+  }
+
+  var posterAction = function () { playScene(0); };
+  function showPoster(kind, idx) {
+    if (kind === "next") {
+      $("posterKick").textContent = "Chapter " + (idx) + " done";
+      $("posterTitle").textContent = "Up next: " + SCENES[idx].title;
+      $("posterText").textContent = SCENES[idx].sub;
+      $("posterBtn").textContent = "Play chapter " + (idx + 1);
+      posterAction = function () { playScene(idx); };
+    } else if (kind === "end") {
+      $("posterKick").textContent = "That is the whole setup";
+      $("posterTitle").textContent = "Restart Neovim and try it";
+      $("posterText").textContent = "Copy the config files below, run :Lazy sync, and open a project folder with nvim . to see everything working.";
+      $("posterBtn").textContent = "Watch again";
+      posterAction = function () { playScene(0); };
+    }
+    $("poster").hidden = false;
+  }
+
+  function chapterEnd(i) {
+    doneSet[i] = true; store("lv-done", doneSet);
+    if (i < SCENES.length - 1) {
+      if ($("auto").checked) { playScene(i + 1); return; }
+      playing = false; showPoster("next", i + 1);
+    } else {
+      playing = false; showPoster("end");
+    }
+    updateUI();
+  }
+
+  /* ---------- player UI ---------- */
+  var chaptersEl = $("chapters"), segEl = $("seg");
+  SCENES.forEach(function (sc, i) {
+    var b = document.createElement("button");
+    b.type = "button"; b.className = "ch";
+    b.innerHTML = '<span class="n">' + (i + 1) + '</span><span class="t">' + esc(sc.title) + '</span><span class="tag">' + esc(sc.tag) + '</span><span class="sb">' + esc(sc.sub) + "</span>";
+    b.addEventListener("click", function () { playScene(i); });
+    chaptersEl.appendChild(b);
+    var sg = document.createElement("button");
+    sg.type = "button"; sg.setAttribute("aria-label", "Chapter " + (i + 1) + ": " + sc.title);
+    sg.innerHTML = '<span class="bar"><span class="fill"></span></span>';
+    sg.addEventListener("click", function () { playScene(i); });
+    segEl.appendChild(sg);
+  });
+
+  function updateSeg() {
+    var fills = segEl.querySelectorAll(".fill");
+    for (var j = 0; j < fills.length; j++) {
+      fills[j].style.width = (j === cur ? stepProg * 100 : (doneSet[j] || j < cur) ? 100 : 0) + "%";
+    }
+  }
+  function updateUI() {
+    var chs = chaptersEl.querySelectorAll(".ch"), total = 0;
+    for (var j = 0; j < chs.length; j++) {
+      var d = !!doneSet[j]; if (d) total++;
+      chs[j].classList.toggle("done", d);
+      if (j === cur) chs[j].setAttribute("aria-current", "true"); else chs[j].removeAttribute("aria-current");
+      chs[j].querySelector(".n").textContent = d ? "✔" : String(j + 1);
+    }
+    $("watched").textContent = total + " of " + SCENES.length + " watched";
+    $("chapName").textContent = "Chapter " + (cur < 0 ? 1 : cur + 1) + " of " + SCENES.length;
+    $("icPlay").hidden = playing; $("icPause").hidden = !playing;
+    $("playLabel").textContent = playing ? "Pause" : "Play";
+    $("playBtn").setAttribute("aria-label", playing ? "Pause" : "Play");
+    updateSeg();
+  }
+  function togglePlay() {
+    if (!$("poster").hidden) { posterAction(); return; }
+    playing = !playing; updateUI();
+  }
+  $("playBtn").addEventListener("click", togglePlay);
+  $("posterBtn").addEventListener("click", function () { posterAction(); });
+  $("prevBtn").addEventListener("click", function () { playScene(Math.max(0, cur - 1)); });
+  $("nextBtn").addEventListener("click", function () { playScene(Math.min(SCENES.length - 1, cur + 1)); });
+  $("restartBtn").addEventListener("click", function () { playScene(Math.max(0, cur)); });
+  Array.prototype.forEach.call(document.querySelectorAll(".speed button"), function (b) {
+    b.addEventListener("click", function () {
+      speed = parseFloat(b.dataset.speed);
+      Array.prototype.forEach.call(document.querySelectorAll(".speed button"), function (o) { o.setAttribute("aria-pressed", o === b ? "true" : "false"); });
+    });
+  });
+  document.addEventListener("keydown", function (e) {
+    if (e.target !== document.body) return;
+    if (e.key === " ") { e.preventDefault(); togglePlay(); }
+    else if (e.key === "ArrowRight") { playScene(Math.min(SCENES.length - 1, cur + 1)); }
+    else if (e.key === "ArrowLeft") { playScene(Math.max(0, cur - 1)); }
+  });
+
+  /* ---------- install guide ---------- */
+  var INSTALL = {
+    ubuntu: {
+      label: "Ubuntu / Debian",
+      blocks: [
+        { h: "1. Neovim and helper tools", c: [
+          "# Neovim: use the official release. apt's version is usually too old.",
+          "curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim-linux-x86_64.tar.gz",
+          "sudo rm -rf /opt/nvim-linux-x86_64",
+          "sudo tar -C /opt -xzf nvim-linux-x86_64.tar.gz",
+          "echo 'export PATH=\"$PATH:/opt/nvim-linux-x86_64/bin\"' >> ~/.bashrc",
+          "source ~/.bashrc",
+          "",
+          "# Helpers. Ubuntu calls fd \"fdfind\"; LazyVim finds it.",
+          "sudo apt update",
+          "sudo apt install -y git curl unzip build-essential ripgrep fd-find nodejs npm",
+          "",
+          "# Lazygit (optional, for Space g g)",
+          "LAZYGIT_VERSION=$(curl -s \"https://api.github.com/repos/jesseduffield/lazygit/releases/latest\" | grep -Po '\"tag_name\": *\"v\\K[^\"]*')",
+          "curl -Lo lazygit.tar.gz \"https://github.com/jesseduffield/lazygit/releases/latest/download/lazygit_${LAZYGIT_VERSION}_Linux_x86_64.tar.gz\"",
+          "tar xf lazygit.tar.gz lazygit",
+          "sudo install lazygit -D -t /usr/local/bin/"
+        ] },
+        { h: "2. A Nerd Font (icons)", c: [
+          "mkdir -p ~/.local/share/fonts",
+          "curl -Lo JetBrainsMono.zip https://github.com/ryanoasis/nerd-fonts/releases/latest/download/JetBrainsMono.zip",
+          "unzip -o JetBrainsMono.zip -d ~/.local/share/fonts",
+          "fc-cache -fv",
+          "# Then choose \"JetBrainsMono Nerd Font\" in your terminal's settings."
+        ] },
+        { h: "3. Get LazyVim", c: [
+          "mv ~/.config/nvim{,.bak}   # back up an old config. Skip if you have none.",
+          "git clone https://github.com/LazyVim/starter ~/.config/nvim",
+          "rm -rf ~/.config/nvim/.git",
+          "nvim"
+        ] }
+      ]
+    },
+    arch: {
+      label: "Arch",
+      blocks: [
+        { h: "1. Neovim and helper tools", c: [
+          "sudo pacman -S --needed neovim git base-devel ripgrep fd lazygit nodejs npm unzip curl"
+        ] },
+        { h: "2. A Nerd Font (icons)", c: [
+          "sudo pacman -S --needed ttf-jetbrains-mono-nerd",
+          "# Then choose \"JetBrainsMono Nerd Font\" in your terminal's settings."
+        ] },
+        { h: "3. Get LazyVim", c: [
+          "mv ~/.config/nvim{,.bak}   # back up an old config. Skip if you have none.",
+          "git clone https://github.com/LazyVim/starter ~/.config/nvim",
+          "rm -rf ~/.config/nvim/.git",
+          "nvim"
+        ] }
+      ]
+    },
+    mac: {
+      label: "macOS",
+      blocks: [
+        { h: "1. Neovim and helper tools", c: [
+          "# Needs Homebrew (brew.sh)",
+          "brew install neovim git ripgrep fd lazygit node"
+        ] },
+        { h: "2. A Nerd Font (icons)", c: [
+          "brew install --cask font-jetbrains-mono-nerd-font",
+          "# Then choose \"JetBrainsMono Nerd Font\" in your terminal's settings."
+        ] },
+        { h: "3. Get LazyVim", c: [
+          "mv ~/.config/nvim{,.bak}   # back up an old config. Skip if you have none.",
+          "git clone https://github.com/LazyVim/starter ~/.config/nvim",
+          "rm -rf ~/.config/nvim/.git",
+          "nvim"
+        ] }
+      ]
+    },
+    win: {
+      label: "Windows",
+      blocks: [
+        { h: "1. Neovim and helper tools (PowerShell)", c: [
+          "winget install Neovim.Neovim",
+          "winget install Git.Git",
+          "winget install BurntSushi.ripgrep.MSVC",
+          "winget install sharkdp.fd",
+          "winget install JesseDuffield.lazygit",
+          "winget install OpenJS.NodeJS.LTS",
+          "# Also install a C compiler (for example MSYS2 gcc or zig), then reopen the terminal."
+        ] },
+        { h: "2. A Nerd Font (icons)", c: [
+          "winget install DEVCOM.JetBrainsMonoNerdFont",
+          "# Then choose \"JetBrainsMono Nerd Font\" in Windows Terminal's settings."
+        ] },
+        { h: "3. Get LazyVim", c: [
+          "Move-Item $env:LOCALAPPDATA\\nvim $env:LOCALAPPDATA\\nvim.bak   # back up an old config. Skip if none.",
+          "git clone https://github.com/LazyVim/starter $env:LOCALAPPDATA\\nvim",
+          "Remove-Item $env:LOCALAPPDATA\\nvim\\.git -Recurse -Force",
+          "nvim"
+        ] }
+      ]
+    }
+  };
+  var OS_ORDER = ["ubuntu", "arch", "mac", "win"];
+  var guess = /Mac/i.test(navigator.platform || "") ? "mac" : /Win/i.test(navigator.platform || "") ? "win" : "ubuntu";
+  var curOS = load("lv-os", guess);
+  if (!INSTALL[curOS]) curOS = guess;
+
+  function renderInstall() {
+    var tabs = $("osTabs"), blocks = $("osBlocks");
+    tabs.textContent = ""; blocks.textContent = "";
+    OS_ORDER.forEach(function (k) {
+      var b = document.createElement("button");
+      b.type = "button"; b.setAttribute("role", "tab"); b.id = "tab-" + k;
+      b.setAttribute("aria-selected", k === curOS ? "true" : "false");
+      b.textContent = INSTALL[k].label;
+      b.addEventListener("click", function () { curOS = k; store("lv-os", k); renderInstall(); });
+      tabs.appendChild(b);
+    });
+    INSTALL[curOS].blocks.forEach(function (bl, n) {
+      var wrap = document.createElement("div"); wrap.className = "blk";
+      var head = document.createElement("header");
+      var h = document.createElement("h3"); h.textContent = bl.h;
+      var btn = document.createElement("button"); btn.type = "button"; btn.className = "btn small"; btn.textContent = "Copy";
+      var pre = document.createElement("pre"); pre.textContent = bl.c.join("\n");
+      btn.addEventListener("click", function () { copyText(pre.textContent, pre, btn); });
+      head.appendChild(h); head.appendChild(btn); wrap.appendChild(head); wrap.appendChild(pre);
+      blocks.appendChild(wrap);
+    });
+  }
+  renderInstall();
+
+  /* ---------- checklist ---------- */
+  var CHECK = [
+    ["nvim", "Neovim 0.11 or newer is installed"],
+    ["font", "A Nerd Font is set in my terminal"],
+    ["tools", "git, ripgrep, fd and a C compiler are installed"],
+    ["starter", "The LazyVim starter is cloned into my nvim config folder"],
+    ["first", "First start finished with no red errors"],
+    ["extras", "I enabled extras with :LazyExtras"],
+    ["ai", "All ai.* extras are off"],
+    ["project", "I opened a project folder with nvim ."]
+  ];
+  var checks = load("lv-checks", {});
+  function renderChecks() {
+    var host = $("checkList"); host.textContent = "";
+    CHECK.forEach(function (c) {
+      var lab = document.createElement("label"); lab.setAttribute("for", "chk-" + c[0]);
+      var inp = document.createElement("input"); inp.type = "checkbox"; inp.id = "chk-" + c[0]; inp.checked = !!checks[c[0]];
+      var sp = document.createElement("span"); sp.textContent = c[1];
+      inp.addEventListener("change", function () { checks[c[0]] = inp.checked; store("lv-checks", checks); countChecks(); });
+      lab.appendChild(inp); lab.appendChild(sp); host.appendChild(lab);
+    });
+    countChecks();
+  }
+  function countChecks() {
+    var n = CHECK.filter(function (c) { return checks[c[0]]; }).length;
+    $("checkCount").textContent = n + " of " + CHECK.length;
+    $("meter").style.width = (n / CHECK.length * 100) + "%";
+  }
+  renderChecks();
+
+  /* ---------- cheat sheet ---------- */
+  var CHEAT = [
+    { t: "Modes", items: [
+      [["i"], "Insert text before the cursor"],
+      [["a"], "Insert text after the cursor"],
+      [["Esc"], "Back to Normal mode. Press it whenever you are lost"],
+      [["v"], "Select text, then move to grow the selection"],
+      [["V"], "Select whole lines"],
+      [[":"], "Type a command, like :w to save"]
+    ] },
+    { t: "Move", items: [
+      [["h", "j", "k", "l"], "Left, down, up, right"],
+      [["w"], "Next word. b goes back a word"],
+      [["0"], "Start of the line. $ goes to the end"],
+      [["gg"], "Top of the file. G goes to the bottom"],
+      [["12", "G"], "Jump to line 12"],
+      [["Ctrl-d"], "Half a page down. Ctrl-u goes up"],
+      [["%"], "Jump to the matching bracket"]
+    ] },
+    { t: "Edit", items: [
+      [["x"], "Delete the character under the cursor"],
+      [["dd"], "Delete the line"],
+      [["yy"], "Copy the line"],
+      [["p"], "Paste after the cursor"],
+      [["u"], "Undo"],
+      [["Ctrl-r"], "Redo"],
+      [["ciw"], "Change the word under the cursor"],
+      [["o"], "Open a new line below and start typing"],
+      [["."], "Repeat the last change"]
+    ] },
+    { t: "Search", items: [
+      [["/"], "Search the file. n finds the next, N the previous"],
+      [["*"], "Search for the word under the cursor"],
+      [["Space", "/"], "Search text in every file (grep)"],
+      [["Space", "s", "k"], "Search all keymaps by name"]
+    ] },
+    { t: "Files and windows", items: [
+      [["Space", "f", "f"], "Find a file by name"],
+      [["Space", "f", "r"], "Recent files"],
+      [["Space", "e"], "Toggle the file explorer"],
+      [["Space", ","], "Switch between open buffers"],
+      [["Shift-h"], "Previous buffer. Shift-l is the next"],
+      [["Space", "b", "d"], "Close the current buffer"],
+      [["Space", "-"], "Split the window below. Space | splits right"],
+      [["Ctrl-h"], "Move to the window on the left. j, k, l for the others"],
+      [["Space", "w", "d"], "Close the current window"]
+    ] },
+    { t: "Code", items: [
+      [["K"], "Show docs for the name under the cursor"],
+      [["g", "d"], "Go to definition"],
+      [["g", "r"], "Find references"],
+      [["Space", "c", "a"], "Code actions and quick fixes"],
+      [["Space", "c", "r"], "Rename a symbol everywhere"],
+      [["Space", "c", "f"], "Format the file"],
+      [["]", "d"], "Next diagnostic. [ d goes to the previous"],
+      [["Space", "x", "x"], "List all problems in the project"]
+    ] },
+    { t: "Save and quit", items: [
+      [[":w"], "Save"],
+      [[":q"], "Quit the window"],
+      [[":wq"], "Save and quit"],
+      [[":q!"], "Quit and throw changes away"],
+      [[":qa"], "Quit everything"],
+      [["Space", "q", "q"], "Quit everything from Normal mode"]
+    ] },
+    { t: "Tools and help", items: [
+      [["Space"], "Wait one second to see the shortcut menu"],
+      [["Space", "l"], "Open the plugin manager"],
+      [["Space", "c", "m"], "Open Mason, the language server installer"],
+      [["Space", "g", "g"], "Open Lazygit"],
+      [[":Tutor"], "Built-in hands-on lesson"],
+      [[":checkhealth"], "Find missing tools"]
+    ] }
+  ];
+  function renderCheat(filter) {
+    var host = $("sheet"), f = (filter || "").trim().toLowerCase(), shown = 0;
+    host.textContent = "";
+    CHEAT.forEach(function (g) {
+      var items = g.items.filter(function (it) { return !f || (it[0].join(" ") + " " + it[1] + " " + g.t).toLowerCase().indexOf(f) > -1; });
+      if (!items.length) return;
+      shown += items.length;
+      var box = document.createElement("div"); box.className = "group";
+      var h = document.createElement("h3"); h.textContent = g.t; box.appendChild(h);
+      var ul = document.createElement("ul");
+      items.forEach(function (it) {
+        var li = document.createElement("li");
+        var kk = document.createElement("span"); kk.className = "kk";
+        it[0].forEach(function (k) { var kb = document.createElement("kbd"); kb.textContent = k; kk.appendChild(kb); });
+        var d = document.createElement("span"); d.className = "d"; d.textContent = it[1];
+        li.appendChild(kk); li.appendChild(d); ul.appendChild(li);
+      });
+      box.appendChild(ul); host.appendChild(box);
+    });
+    $("noMatch").hidden = shown > 0;
+  }
+  renderCheat("");
+  $("q").addEventListener("input", function () { renderCheat($("q").value); });
+
+  /* ---------- config file cards ---------- */
+  $("code1").innerHTML = EXTRA_LUA.map(function (l) { return hl(l, "lua"); }).join("\n");
+  $("code2").innerHTML = COMPLETION_LUA.map(function (l) { return hl(l, "lua"); }).join("\n");
+  $("code3").innerHTML = OPTIONS_LUA.map(function (l) { return hl(l, "lua"); }).join("\n");
+  Array.prototype.forEach.call(document.querySelectorAll("[data-copy]"), function (btn) {
+    btn.addEventListener("click", function () { var pre = $(btn.dataset.copy); copyText(pre.textContent, pre, btn); });
+  });
+
+  /* ---------- common fixes ---------- */
+  var FIXES = [
+    { q: "Icons show as empty boxes or question marks", a: [
+      "p:Your terminal font has no icons. Install a Nerd Font (see Install first), then select it in your terminal's font settings. Restart the terminal."
+    ] },
+    { q: "Space does nothing, or letters appear instead of a menu", a: [
+      "p:You are in Insert mode. Press Esc once, then try again. The bottom bar shows the current mode."
+    ] },
+    { q: "I am stuck and cannot quit", a: [
+      "p:Press Esc, then type one of these and press Enter.",
+      "pre::q!    quit and discard changes\n:wq    save and quit\n:qa!   quit every window and discard changes"
+    ] },
+    { q: ":checkhealth shows warnings for ripgrep, fd or lazygit", a: [
+      "p:Those tools are not installed or not on your PATH. Install them with the commands in Install first, restart the terminal, then run :checkhealth again."
+    ] },
+    { q: "Treesitter says it cannot compile a parser", a: [
+      "p:You need a C compiler. On Ubuntu install build-essential, on Arch base-devel, on macOS run xcode-select --install. Then run :TSUpdate."
+    ] },
+    { q: "A language server will not install in Mason", a: [
+      "p:Many servers need node, npm, unzip and curl. Install them, then open :Mason, move to the server and press i. Run :MasonLog to read the error."
+    ] },
+    { q: "A plugin update broke my setup", a: [
+      "p:Open :Lazy and press R to restore the versions listed in lazy-lock.json. If that file is in git, you can also run git checkout lazy-lock.json first."
+    ] },
+    { q: "Start over from a clean LazyVim", a: [
+      "p:This deletes Neovim's plugins, state and cache. Back up your config folder first.",
+      "pre:rm -rf ~/.local/share/nvim ~/.local/state/nvim ~/.cache/nvim",
+      "p:Keep your config folder if you only want plugins reinstalled. To also reset the config, re-clone the starter as shown in Install first."
+    ] }
+  ];
+  (function () {
+    var host = $("fixList");
+    FIXES.forEach(function (f) {
+      var d = document.createElement("details");
+      var s = document.createElement("summary"); s.textContent = f.q;
+      var ans = document.createElement("div"); ans.className = "ans";
+      f.a.forEach(function (x) {
+        var kind = x.slice(0, x.indexOf(":")), body = x.slice(x.indexOf(":") + 1);
+        var el = document.createElement(kind === "pre" ? "pre" : "p");
+        el.textContent = body; ans.appendChild(el);
+      });
+      d.appendChild(s); d.appendChild(ans); host.appendChild(d);
+    });
+  })();
+
+  /* ---------- rest state ---------- */
+  resetScene(0);
+  showPoster("start");
+  $("posterKick").textContent = "Typed live, no video file";
+  $("posterBtn").textContent = "Play walkthrough";
+  posterAction = function () { playScene(0); };
+  updateUI();
+})();
+</script>
+
+</body></html>
