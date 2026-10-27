@@ -15,7 +15,22 @@
         </div>
 
         <div class="menu-container">
-            <ul>
+            <div class="menu-search">
+                <label class="menu-search-label" for="topic-search">SEARCH DATABASE</label>
+                <div class="menu-search-row">
+                    <input
+                        id="topic-search"
+                        type="search"
+                        placeholder="Find a topic..."
+                        autocomplete="off"
+                        spellcheck="false"
+                        aria-label="Search Formula DB topics"
+                    >
+                    <button type="button" id="clear-search" class="menu-search-clear" aria-label="Clear topic search" title="Clear search">×</button>
+                </div>
+                <div id="search-status" class="search-status" aria-live="polite">32 MODULES AVAILABLE</div>
+            </div>
+            <ul id="topic-list">
                 <li><button onclick="loadPage('files/algorithms_formulas.html')">Algorithms</button></li>
                 <li><button onclick="loadPage('files/compiler_design_formulas.html')">Compiler</button></li>
                 <li><button onclick="loadPage('files/computer_networks_formulas.html')">Networks</button></li>
@@ -48,8 +63,6 @@
                 <li><button onclick="loadPage('files/cybersecurity_mastery_guide.html')">CyberSecurity</button></li>
                 <li><button onclick="loadPage('files/ethical_hacking_mastery_guide.html')">Hacking</button></li>
                 <li><button onclick="loadPage('files/important_methods.html')">Imp Methods</button></li>
-                <li><button onclick="loadPage('files/sorting al.html')">Sorting Algorithms</button></li>
-                <li><button onclick="loadPage('files/LazyVim_Plugin_Walkthrough.html')">NeoVim Starting Tutorial</button></li>
             </ul>
         </div>
     </div>
@@ -61,16 +74,16 @@
         <div id="settings-panel" class="settings-panel">
             <h3>WALLPAPER SELECT</h3>
             <div class="wallpaper-grid">
-                <div class="wp-option active" style="background-image: url('Think\ K\ Pop\ GIF.gif');" onclick="setWallpaper('matrix', 'Think\ K\ Pop\ GIF.gif')">
+                <div class="wp-option active" style="background-image: url('Think\ K\ Pop\ GIF.gif');" onclick="setWallpaper('matrix', 'Think K Pop GIF.gif', this)">
                     <div class="wp-label">Saku Code</div>
                 </div>
-                <div class="wp-option" style="background-image: url('https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExcjVuMHowMnM1YmE4OHlwbHNrbWU2aXRydGY2ODhtZThkYncyN20wcSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/gH1jGsCnQBiFHWMFzh/giphy.gif');" onclick="setWallpaper('city', 'https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExcjVuMHowMnM1YmE4OHlwbHNrbWU2aXRydGY2ODhtZThkYncyN20wcSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/gH1jGsCnQBiFHWMFzh/giphy.gif')">
+                <div class="wp-option" style="background-image: url('https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExcjVuMHowMnM1YmE4OHlwbHNrbWU2aXRydGY2ODhtZThkYncyN20wcSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/gH1jGsCnQBiFHWMFzh/giphy.gif');" onclick="setWallpaper('city', 'https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExcjVuMHowMnM1YmE4OHlwbHNrbWU2aXRydGY2ODhtZThkYncyN20wcSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/gH1jGsCnQBiFHWMFzh/giphy.gif', this)">
                     <div class="wp-label">Cyber City</div>
                 </div>
-                <div class="wp-option" style="background-image: url('https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExdXc0eWV4NDcwOXg4b243MGViYXZqbGoxbGhueWllcDNiY3Y3cHg2ZyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/9dVc1FBxVhkqEG0SpW/giphy.gif');" onclick="setWallpaper('neon', 'https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExdXc0eWV4NDcwOXg4b243MGViYXZqbGoxbGhueWllcDNiY3Y3cHg2ZyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/9dVc1FBxVhkqEG0SpW/giphy.gif')">
+                <div class="wp-option" style="background-image: url('https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExdXc0eWV4NDcwOXg4b243MGViYXZqbGoxbGhueWllcDNiY3Y3cHg2ZyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/9dVc1FBxVhkqEG0SpW/giphy.gif');" onclick="setWallpaper('neon', 'https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExdXc0eWV4NDcwOXg4b243MGViYXZqbGoxbGhueWllcDNiY3Y3cHg2ZyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/9dVc1FBxVhkqEG0SpW/giphy.gif', this)">
                     <div class="wp-label">Neon Grid</div>
                 </div>
-                <div class="wp-option" style="background-image: url('https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExM2dhaW10bzF4NDdpdGt6aDdneHByanpzeTNwc3RlbGh2d3h3d3dlMCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/W6dHvprT7oks6BpX5R/giphy.gif');" onclick="setWallpaper('anime', 'https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExM2dhaW10bzF4NDdpdGt6aDdneHByanpzeTNwc3RlbGh2d3h3d3dlMCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/W6dHvprT7oks6BpX5R/giphy.gif')">
+                <div class="wp-option" style="background-image: url('https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExM2dhaW10bzF4NDdpdGt6aDdneHByanpzeTNwc3RlbGh2d3h3d3dlMCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/W6dHvprT7oks6BpX5R/giphy.gif');" onclick="setWallpaper('anime', 'https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExM2dhaW10bzF4NDdpdGt6aDdneHByanpzeTNwc3RlbGh2d3h3d3dlMCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/W6dHvprT7oks6BpX5R/giphy.gif', this)">
                     <div class="wp-label">Anime Night</div>
                 </div>
             </div>
@@ -98,37 +111,98 @@
         document.addEventListener("DOMContentLoaded", () => {
             const subtitleEl = document.getElementById('typewriter-text');
             const text = "SYSTEM READY // v2.0";
-            subtitleEl.innerText = ''; 
-            
+            subtitleEl.textContent = '';
+
             let i = 0;
             function typeWriter() {
                 if (i < text.length) {
-                    subtitleEl.innerHTML += text.charAt(i);
+                    subtitleEl.textContent += text.charAt(i);
                     i++;
-                    setTimeout(typeWriter, 80); 
+                    setTimeout(typeWriter, 80);
                 }
             }
-            setTimeout(typeWriter, 500); 
+            setTimeout(typeWriter, 500);
             loadSavedWallpaper();
+            initializeTopicSearch();
         });
 
         function loadPage(url) {
             const placeholder = document.getElementById('placeholderText');
             const loader = document.getElementById('loader');
             const iframe = document.getElementById('contentFrame');
-            
+
+            // Keep the current topic visibly selected in the sidebar.
+            document.querySelectorAll('#topic-list button').forEach(button => {
+                const isActive = button.getAttribute('onclick')?.includes(url) ?? false;
+                button.classList.toggle('active-topic', isActive);
+                if (isActive) {
+                    button.setAttribute('aria-current', 'page');
+                } else {
+                    button.removeAttribute('aria-current');
+                }
+            });
+
             placeholder.style.display = 'none';
             loader.style.display = 'flex';
             iframe.style.opacity = '0';
-            
+
             setTimeout(() => {
-                iframe.src = url;
                 iframe.onload = () => {
                     loader.style.display = 'none';
                     iframe.style.transition = "opacity 0.5s ease";
                     iframe.style.opacity = '1';
                 };
-            }, 300);
+                iframe.src = url;
+            }, 150);
+        }
+
+        function initializeTopicSearch() {
+            const searchInput = document.getElementById('topic-search');
+            const clearButton = document.getElementById('clear-search');
+            const searchStatus = document.getElementById('search-status');
+            const topicItems = Array.from(document.querySelectorAll('#topic-list li'));
+            const total = topicItems.length;
+
+            function filterTopics() {
+                const query = searchInput.value.trim().toLocaleLowerCase();
+                let visible = 0;
+
+                topicItems.forEach(item => {
+                    const matches = item.textContent.toLocaleLowerCase().includes(query);
+                    item.hidden = !matches;
+                    if (matches) visible++;
+                });
+
+                searchStatus.textContent = query
+                    ? `${visible} / ${total} MODULES FOUND`
+                    : `${total} MODULES AVAILABLE`;
+                clearButton.classList.toggle('visible', searchInput.value.length > 0);
+            }
+
+            searchInput.addEventListener('input', filterTopics);
+            clearButton.addEventListener('click', () => {
+                searchInput.value = '';
+                filterTopics();
+                searchInput.focus();
+            });
+
+            // Press / to search; Escape clears the query and returns focus to the menu.
+            document.addEventListener('keydown', event => {
+                const target = event.target;
+                const typingInField = target instanceof HTMLElement &&
+                    (target.isContentEditable || ['INPUT', 'TEXTAREA', 'SELECT'].includes(target.tagName));
+
+                if (event.key === '/' && !typingInField && !event.ctrlKey && !event.metaKey && !event.altKey) {
+                    event.preventDefault();
+                    searchInput.focus();
+                } else if (event.key === 'Escape' && document.activeElement === searchInput) {
+                    searchInput.value = '';
+                    filterTopics();
+                    searchInput.blur();
+                }
+            });
+
+            filterTopics();
         }
 
         function toggleSettings() {
@@ -136,28 +210,26 @@
             panel.style.display = panel.style.display === 'block' ? 'none' : 'block';
         }
 
-        function setWallpaper(type, url) {
+        function setWallpaper(type, url, clickedElement) {
             const placeholder = document.getElementById('placeholderText');
-            placeholder.style.backgroundImage = `url('${url}')`;
-            
+            placeholder.style.backgroundImage = `url("${url.replace(/"/g, '\\"')}")`;
+
             document.querySelectorAll('.wp-option').forEach(el => el.classList.remove('active'));
-            event.currentTarget.classList.add('active');
+            const selectedOption = clickedElement || document.querySelector(`.wp-option[onclick*="${type}"]`);
+            if (selectedOption) selectedOption.classList.add('active');
 
             localStorage.setItem('selected_wallpaper', url);
         }
 
         function loadSavedWallpaper() {
             const savedUrl = localStorage.getItem('selected_wallpaper');
-            if(savedUrl) {
+            if (savedUrl) {
                 const placeholder = document.getElementById('placeholderText');
-                placeholder.style.backgroundImage = `url('${savedUrl}')`;
-                
+                placeholder.style.backgroundImage = `url("${savedUrl.replace(/"/g, '\\"')}")`;
+
                 document.querySelectorAll('.wp-option').forEach(el => {
-                    if(el.style.backgroundImage.includes(savedUrl.substring(0, 20))) { 
-                        el.classList.add('active');
-                    } else {
-                        el.classList.remove('active');
-                    }
+                    const isSelected = el.style.backgroundImage.includes(savedUrl.substring(0, 20));
+                    el.classList.toggle('active', isSelected);
                 });
             }
         }
