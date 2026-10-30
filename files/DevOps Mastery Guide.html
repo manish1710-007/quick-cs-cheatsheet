@@ -1,0 +1,3021 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>DevOps Mastery Guide</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Sans+Condensed:wght@500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+/* Layout: sticky search bar, section rail on the left, masonry columns of reference cards per section.
+   Cool blueprint neutrals with a blue accent; orange is reserved for pitfalls. Code surfaces stay dark in both themes. */
+:root{
+  --bg:#f1f4f9; --panel:#ffffff; --ink:#111a2c; --muted:#56627a; --line:#d7deea; --line2:#bcc7da;
+  --accent:#1d5d98; --accent-soft:#e3edf9; --accent-ink:#ffffff;
+  --warn:#b3400b; --warn-soft:#fdeee2; --ok:#17703f; --ok-soft:#e1f3e8;
+  --code-bg:#0f1728; --code-fg:#d5ddf0; --code-line:#222d45;
+  --t-kw:#ff9a62; --t-type:#7fc6f7; --t-str:#9ad58c; --t-num:#f0c674; --t-cmt:#7080a0; --t-ann:#e0a4ff; --t-fn:#b4d2ff;
+  --sans:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --cond:"IBM Plex Sans Condensed","IBM Plex Sans",system-ui,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0b101b; --panel:#121929; --ink:#e3e8f4; --muted:#97a2bc; --line:#25304a; --line2:#37456a;
+    --accent:#72b3ee; --accent-soft:#15253b; --accent-ink:#0b101b;
+    --warn:#ff9d66; --warn-soft:#2a1a11; --ok:#70d69b; --ok-soft:#11281c;
+    --code-bg:#080c15; --code-fg:#d5ddf0; --code-line:#1c263d;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0b101b; --panel:#121929; --ink:#e3e8f4; --muted:#97a2bc; --line:#25304a; --line2:#37456a;
+  --accent:#72b3ee; --accent-soft:#15253b; --accent-ink:#0b101b;
+  --warn:#ff9d66; --warn-soft:#2a1a11; --ok:#70d69b; --ok-soft:#11281c;
+  --code-bg:#080c15; --code-fg:#d5ddf0; --code-line:#1c263d;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{scroll-behavior:smooth}
+body{
+  margin:0; background:var(--bg); color:var(--ink); font-family:var(--sans); font-size:15px; line-height:1.55;
+  padding-left:max(16px, env(safe-area-inset-left, 0px));
+  padding-right:max(16px, env(safe-area-inset-right, 0px));
+  padding-block:0 80px;
+}
+body::before{content:""; position:fixed; inset:0 0 auto; height:env(safe-area-inset-top, 0px); z-index:30; background:var(--panel)}
+button,input{font:inherit; color:inherit}
+:focus-visible{outline:2px solid var(--accent); outline-offset:2px}
+a{color:var(--accent)}
+code{font-family:var(--mono); font-size:.86em; background:var(--accent-soft); color:var(--accent); padding:.08em .38em; border-radius:4px; overflow-wrap:anywhere}
+h1,h2,h3{text-wrap:balance}
+
+/* ---------- top bar ---------- */
+.bar{position:sticky; top:env(safe-area-inset-top, 0px); z-index:20; margin-inline:calc(-1 * max(16px, env(safe-area-inset-left, 0px))) calc(-1 * max(16px, env(safe-area-inset-right, 0px)));
+  padding-left:max(16px, env(safe-area-inset-left, 0px)); padding-right:max(16px, env(safe-area-inset-right, 0px));
+  background:var(--panel); border-bottom:1px solid var(--line)}
+.bar-in{max-width:1240px; margin:0 auto; display:flex; align-items:center; gap:14px; padding-block:10px}
+.brand{display:flex; align-items:center; gap:10px; text-decoration:none; color:var(--ink); font-weight:700; letter-spacing:-.01em; white-space:nowrap}
+.mark{display:grid; place-items:center; width:30px; height:30px; border-radius:7px; background:var(--accent); color:var(--accent-ink); font-family:var(--mono); font-weight:600}
+.search{flex:1; min-width:0; max-width:560px; display:flex; align-items:center; gap:10px; min-height:40px; padding:0 12px; border:1px solid var(--line); border-radius:9px; background:var(--bg)}
+.search:focus-within{border-color:var(--accent)}
+.search svg{flex:0 0 auto; color:var(--muted)}
+.search input{flex:1; min-width:0; height:38px; border:0; outline:0; background:none}
+.search kbd{flex:0 0 auto; font-family:var(--mono); font-size:12px; color:var(--muted); border:1px solid var(--line2); border-radius:5px; padding:0 6px}
+.grow{flex:1}
+.seg2{display:inline-flex; border:1px solid var(--line); border-radius:9px; overflow:hidden; flex:0 0 auto}
+.seg2 button{min-height:38px; padding:0 12px; border:0; background:var(--panel); color:var(--muted); cursor:pointer; font-size:13.5px}
+.seg2 button+button{border-left:1px solid var(--line)}
+.seg2 button[aria-pressed="true"]{background:var(--accent-soft); color:var(--accent); font-weight:600}
+.icon{flex:0 0 auto; display:grid; place-items:center; width:40px; height:40px; border:1px solid var(--line); border-radius:9px; background:var(--panel); cursor:pointer; color:var(--muted)}
+.icon:hover,.seg2 button:hover{color:var(--ink)}
+.chips{display:none; overflow-x:auto; gap:6px; padding:0 0 10px; max-width:1240px; margin:0 auto; scrollbar-width:thin}
+.chips a{flex:0 0 auto; display:inline-flex; align-items:center; min-height:34px; padding:0 12px; border:1px solid var(--line); border-radius:999px; text-decoration:none; color:var(--ink); font-size:13.5px; background:var(--panel); white-space:nowrap}
+.chips a[aria-current="true"]{background:var(--accent); border-color:var(--accent); color:var(--accent-ink)}
+
+/* ---------- hero ---------- */
+.wrap{max-width:1240px; margin:0 auto}
+.hero{display:grid; gap:14px; padding-block:34px 22px; max-width:78ch}
+.kicker{margin:0; font-family:var(--cond); font-weight:600; font-size:13px; letter-spacing:.14em; text-transform:uppercase; color:var(--accent)}
+h1{margin:0; font-size:clamp(30px,4.6vw,48px); line-height:1.06; letter-spacing:-.02em; font-weight:700}
+.lede{margin:0; color:var(--muted); font-size:17px; max-width:64ch}
+.lts{display:flex; flex-wrap:wrap; gap:8px; align-items:center; font-family:var(--cond); font-size:14px; color:var(--muted)}
+.lts b{font-weight:600; letter-spacing:.06em; text-transform:uppercase; font-size:12.5px}
+.v{display:inline-flex; align-items:center; min-height:26px; padding:0 10px; border-radius:6px; border:1px solid var(--line2); font-family:var(--mono); font-size:12.5px; color:var(--ink); background:var(--panel)}
+.v.lts-v{background:var(--accent); border-color:var(--accent); color:var(--accent-ink); font-weight:600}
+
+/* ---------- shell ---------- */
+.shell{display:grid; grid-template-columns:190px minmax(0,1fr); gap:30px; align-items:start}
+.side{position:sticky; top:calc(env(safe-area-inset-top, 0px) + 74px); display:grid; gap:2px; max-height:calc(100vh - 96px); overflow:auto; scrollbar-width:thin; padding-bottom:20px}
+.side h2{margin:0 0 8px; font-family:var(--cond); font-weight:600; font-size:12.5px; letter-spacing:.14em; text-transform:uppercase; color:var(--muted)}
+.side a{display:flex; justify-content:space-between; gap:8px; align-items:baseline; padding:7px 10px; border-radius:8px; text-decoration:none; color:var(--ink); font-size:14.5px; border:1px solid transparent}
+.side a:hover{background:var(--panel); border-color:var(--line)}
+.side a span{font-family:var(--mono); font-size:11.5px; color:var(--muted)}
+.side a[aria-current="true"]{background:var(--accent-soft); color:var(--accent); font-weight:600}
+.main{min-width:0; display:grid; grid-template-columns:minmax(0,1fr); gap:46px}
+
+/* ---------- sections and cards ---------- */
+.sec{scroll-margin-top:calc(env(safe-area-inset-top, 0px) + 130px); display:grid; grid-template-columns:minmax(0,1fr); gap:16px; min-width:0}
+.cols{min-width:0}
+.sec-head{display:grid; gap:4px; padding-bottom:10px; border-bottom:2px solid var(--ink)}
+.sec-head h2{margin:0; font-size:clamp(22px,3vw,30px); letter-spacing:-.015em}
+.sec-head p{margin:0; color:var(--muted); max-width:70ch}
+.cols{columns:2 400px; column-gap:16px}
+.card{break-inside:avoid; display:block; margin:0 0 16px; background:var(--panel); border:1px solid var(--line); border-radius:10px; overflow:hidden}
+.card.wide{column-span:all}
+.ch{display:flex; align-items:flex-start; justify-content:space-between; gap:10px; padding:12px 14px 0}
+.ch h3{margin:0; font-size:16.5px; line-height:1.3; letter-spacing:-.005em}
+.badges{display:flex; flex-wrap:wrap; gap:5px; justify-content:flex-end; flex:0 0 auto}
+.tag{font-family:var(--cond); font-weight:600; font-size:11.5px; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); border:1px solid var(--line2); border-radius:5px; padding:1px 7px; white-space:nowrap}
+.tag.ver{font-family:var(--mono); text-transform:none; letter-spacing:0; color:var(--accent); border-color:var(--accent)}
+.tag.prev{color:var(--warn); border-color:var(--warn)}
+.sum{margin:0; padding:6px 14px 12px; color:var(--muted)}
+.codewrap{position:relative; background:var(--code-bg); border-block:1px solid var(--code-line)}
+pre{margin:0; padding:13px 14px; overflow-x:auto; font-family:var(--mono); font-size:12.6px; line-height:1.62; tab-size:2; color:var(--code-fg)}
+.copy{position:absolute; top:6px; right:6px; min-height:28px; padding:0 9px; border-radius:6px; border:1px solid var(--code-line); background:var(--code-bg); color:#8f9bb8; font-family:var(--cond); font-size:12px; font-weight:600; letter-spacing:.06em; cursor:pointer; opacity:.0; transition:opacity .12s}
+.codewrap:hover .copy,.copy:focus-visible{opacity:1}
+@media (hover:none){.copy{opacity:1}}
+.k{color:var(--t-kw)} .ty{color:var(--t-type)} .s{color:var(--t-str)} .n{color:var(--t-num)} .c{color:var(--t-cmt); font-style:italic} .an{color:var(--t-ann)} .f{color:var(--t-fn)}
+.more{margin:0; padding:12px 14px 2px 32px; display:grid; gap:7px; font-size:14.5px}
+.more li::marker{color:var(--accent)}
+.watch{margin:12px 14px 14px; padding:10px 12px; background:var(--warn-soft); border-radius:8px; font-size:14px; display:grid; gap:6px}
+.watch b{font-family:var(--cond); font-weight:600; font-size:12px; letter-spacing:.12em; text-transform:uppercase; color:var(--warn)}
+.watch ul{margin:0; padding-left:18px; display:grid; gap:4px}
+.card>.more:last-child{padding-bottom:14px}
+.more+.watch{margin-top:10px}
+.sum:last-child{padding-bottom:14px}
+.tw{overflow-x:auto; border-top:1px solid var(--line)}
+table{border-collapse:collapse; width:100%; font-size:13.8px}
+th,td{text-align:left; vertical-align:top; padding:8px 12px; border-bottom:1px solid var(--line)}
+th{font-family:var(--cond); font-weight:600; font-size:12px; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); white-space:nowrap; background:var(--bg)}
+tr:last-child td{border-bottom:0}
+td:first-child{font-weight:600}
+td.mono{font-family:var(--mono); font-size:12.5px}
+.btn-d{margin:12px 14px; min-height:32px; padding:0 12px; border:1px solid var(--line2); border-radius:7px; background:var(--panel); color:var(--accent); cursor:pointer; font-size:13px; display:none}
+body.compact:not(.searching) .btn-d{display:inline-flex; align-items:center}
+body.compact:not(.searching) .card:not(.open) .more, body.compact:not(.searching) .card:not(.open) .watch{display:none}
+.search .cnt{flex:0 0 auto; font-family:var(--mono); font-size:12px; color:var(--muted); white-space:nowrap}
+.empty{padding:40px 0; color:var(--muted)}
+.foot{margin-top:50px; padding-top:18px; border-top:1px solid var(--line); color:var(--muted); font-size:14px; max-width:78ch}
+
+@media (max-width:900px){
+  .shell{grid-template-columns:minmax(0,1fr)}
+  .side{display:none}
+  .chips{display:flex}
+  .bar-in{flex-wrap:wrap; row-gap:8px}
+  .search{order:3; flex:1 1 100%; max-width:none}
+  .grow{display:none}
+  .brand{flex:1}
+  .sec{scroll-margin-top:calc(env(safe-area-inset-top, 0px) + 160px)}
+}
+@media (max-width:520px){
+  .brand span:last-child{display:none}
+  .cols{columns:1}
+  .seg2 button{padding:0 9px}
+  .hero{padding-block:24px 14px}
+}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.copy{transition:none}}
+</style>
+
+<div id="top"></div>
+<header class="bar">
+  <div class="bar-in">
+    <a class="brand" href="#top"><span class="mark" aria-hidden="true">D</span><span>DevOps Mastery Guide</span></a>
+    <label class="search" for="q">
+      <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>
+      <input id="q" type="search" placeholder="Search: kubectl, rebase, systemd, PromQL" autocomplete="off">
+      <kbd aria-hidden="true">/</kbd>
+    </label>
+    <span class="grow"></span>
+    <div class="seg2" role="group" aria-label="Detail level">
+      <button type="button" data-mode="detailed" aria-pressed="true">Detailed</button>
+      <button type="button" data-mode="compact" aria-pressed="false">Compact</button>
+    </div>
+    <button class="icon" id="theme" type="button" aria-label="Switch between light and dark theme">
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 13A9 9 0 1 1 11 3a7 7 0 0 0 10 10z"/></svg>
+    </button>
+  </div>
+  <nav class="chips" id="chips" aria-label="Sections"></nav>
+</header>
+
+<div class="wrap">
+  <section class="hero">
+    <p class="kicker">Reference · Linux to observability</p>
+    <h1>From the shell to the dashboard, one lookup</h1>
+    <p class="lede">Commands, config files and the reasoning behind them. Skim the summary and code on each card, open the details when something breaks, and press <code>/</code> to search. Compact shows only summaries and code.</p>
+    <div class="lts" aria-label="Topics and versions"><b>Covers</b><span class="v lts-v">Linux</span><span class="v lts-v">Git</span><span class="v lts-v">Docker</span><span class="v lts-v">Kubernetes</span><span class="v lts-v">CI/CD</span><span class="v lts-v">Cloud</span><span class="v lts-v">Observability</span><b>Current</b><span class="v">Kubernetes 1.37</span><span class="v">Docker Engine 29</span><span class="v">Grafana 13</span></div>
+  </section>
+
+  <div class="shell">
+    <aside class="side" aria-label="Sections"><h2>Sections</h2><div id="side" style="display:grid;gap:2px"></div></aside>
+    <main class="main" id="main"></main>
+  </div>
+  <p class="foot" id="foot">Version facts were checked in October 2026: Kubernetes 1.35 to 1.37 are the supported minors, and Ingress NGINX was retired in March 2026. Commands assume a recent Linux with bash, GNU tools and Docker or containerd. Test destructive commands on a throwaway system first.</p>
+</div>
+
+<script>
+(function () {
+  "use strict";
+  var CARDS = [];
+  /* card(section, title, kind, fields) */
+  function card(sec, t, kind, f) { f = f || {}; f.sec = sec; f.t = t; f.kind = kind; CARDS.push(f); }
+  var R = String.raw;
+
+  /* ================= LINUX ================= */
+  card("linux", "Filesystem layout", "Table", {
+    sum: "Where things live on a typical distribution. Knowing this tells you where to look first.",
+    head: ["Path", "Holds", "Look here when"],
+    rows: [
+      ["`/etc`", "System-wide configuration", "A service will not start or behaves oddly"],
+      ["`/var/log`", "Logs (`syslog`, `auth.log`, app logs). Most distros also use the journal", "Debugging after the fact"],
+      ["`/var/lib`", "Persistent service data (databases, Docker, kubelet)", "Disk is full and `du` points here"],
+      ["`/usr`, `/bin`, `/sbin`", "Installed programs and libraries (on modern distros `/bin` links to `/usr/bin`)", "Finding a binary"],
+      ["`/opt`", "Self-contained third-party software", "Vendor tarballs and installers"],
+      ["`/home`, `/root`", "User files and dotfiles", "Per-user config such as `~/.ssh`"],
+      ["`/tmp`, `/var/tmp`", "Temporary files. `/tmp` is often cleared on reboot", "Scratch space"],
+      ["`/proc`", "Live process and kernel info as files", "`cat /proc/meminfo`, `/proc/<pid>/status`"],
+      ["`/sys`", "Kernel devices and tunables", "Block devices, cgroups, network interfaces"],
+      ["`/dev`", "Device files (`/dev/null`, `/dev/sda`)", "Disks and terminals"],
+      ["`/run`", "Runtime state in memory (PID files, sockets)", "Where services keep sockets"],
+      ["`/boot`", "Kernel, initramfs and bootloader", "Kernel updates fail or disk is full"]
+    ]
+  });
+
+  card("linux", "Permissions and ownership", "Concept", {
+    sum: "Three classes (user, group, other), three bits each: read 4, write 2, execute 1.",
+    lang: "sh",
+    code: R`ls -l app.sh                  # -rwxr-x--- 1 deploy ops 220 Oct 30 app.sh
+chmod 750 app.sh              # rwx for owner, r-x for group, nothing for others
+chmod u+x,g-w,o= app.sh       # symbolic form
+chmod -R g+rX /srv/site       # capital X: execute only on directories and files already executable
+chown deploy:ops app.sh       # owner and group
+chown -R www-data: /var/www   # change recursively, group defaults to the user's group
+
+umask 022                     # new files 644, new directories 755
+chmod g+s /srv/shared         # setgid directory: new files inherit the directory's group
+chmod +t /srv/uploads         # sticky bit: only the owner can delete their files (like /tmp)
+getfacl /srv/shared           # ACLs for finer control
+setfacl -m u:alice:rw /srv/shared/report.txt`,
+    more: [
+      "For a directory, `r` lists names, `w` creates and deletes entries, and `x` lets you enter it or access files inside.",
+      "`setuid` (4xxx) runs a program as its owner. Audit with `find / -perm -4000 -type f 2>/dev/null`.",
+      "Services should run as their own unprivileged user. Do not fix a permission error with `chmod 777`."
+    ],
+    watch: ["`chmod -R 777` and `chown -R` on a wrong path (for example `/` or `/etc`) can break a machine. Run the command with `echo` first or use `find ... -print` to see what it touches."]
+  });
+
+  card("linux", "Find and process text", "Syntax", {
+    sum: "These five tools plus pipes handle most log and config work.",
+    lang: "sh",
+    code: R`find /var/log -name "*.log" -mtime -1 -size +10M       # modified in last day, over 10 MB
+find . -type f -name "*.tmp" -delete                     # delete matches (check without -delete first)
+find . -name "*.js" -print0 | xargs -0 grep -l "TODO"    # safe with spaces in names
+
+grep -rn "ERROR" /var/log/app/        # recursive, show line numbers
+grep -E "5[0-9]{2}" access.log        # extended regex
+rg "timeout" --glob '!node_modules'   # ripgrep: faster, respects .gitignore
+
+sed -i 's/old/new/g' file.txt         # in-place replace (use -i.bak to keep a backup)
+awk '{print $1, $9}' access.log       # print columns 1 and 9
+awk '$9 >= 500 {c[$1]++} END {for (ip in c) print c[ip], ip}' access.log | sort -rn | head
+
+cut -d: -f1,7 /etc/passwd             # fields 1 and 7, ':' delimiter
+sort data.txt | uniq -c | sort -rn    # count duplicates, most common first
+jq '.items[] | {name: .metadata.name}' pods.json   # JSON on the command line
+tail -f app.log | grep --line-buffered ERROR       # follow a log and filter`,
+    watch: ["`sort | uniq` needs sorted input. `sed -i` on macOS needs `-i ''`. `find -delete` removes immediately, so test with `-print` first."]
+  });
+
+  card("linux", "Processes and signals", "Concept", {
+    sum: "A signal is a message to a process. `kill` sends one, and the default is SIGTERM.",
+    head: ["Signal", "Number", "Meaning", "Notes"],
+    rows: [
+      ["`SIGHUP`", "1", "Hangup, or reload config", "Many daemons re-read config on HUP"],
+      ["`SIGINT`", "2", "Interrupt (Ctrl-C)", "Can be handled"],
+      ["`SIGQUIT`", "3", "Quit with core dump (Ctrl-\\)", "JVM prints a thread dump"],
+      ["`SIGKILL`", "9", "Kill immediately", "Cannot be caught or ignored. No cleanup runs"],
+      ["`SIGTERM`", "15", "Polite shutdown request", "Default for `kill`. What Docker and Kubernetes send first"],
+      ["`SIGUSR1`/`2`", "10/12", "User-defined", "App-specific, such as log rotation"],
+      ["`SIGSTOP`/`SIGCONT`", "19/18", "Pause and resume", "`SIGSTOP` cannot be caught"]
+    ],
+    lang: "sh",
+    code: R`ps aux --sort=-%mem | head          # biggest memory users
+ps -ef --forest                      # process tree
+pgrep -fa nginx                      # find by name with full command line
+kill -TERM 1234; sleep 5; kill -KILL 1234   # ask nicely, then force
+pkill -f "node server.js"
+nice -n 10 ./batch.sh                # lower priority
+nohup ./job.sh > job.log 2>&1 &      # survive logout
+jobs; fg %1; bg %1                   # job control`,
+    more: [
+      "Exit codes for killed processes are 128 plus the signal number: 137 means SIGKILL (often the OOM killer) and 143 means SIGTERM.",
+      "A process in state `D` (uninterruptible sleep) is waiting on I/O and cannot be killed. A `Z` zombie has exited, but its parent has not collected the exit status."
+    ]
+  });
+
+  card("linux", "systemd essentials", "Syntax", {
+    sum: "systemd starts services, handles dependencies, restarts them and collects their logs.",
+    lang: "sh",
+    code: R`systemctl status nginx              # state, recent logs, PID
+systemctl start|stop|restart|reload nginx
+systemctl enable --now nginx         # start now and at boot
+systemctl daemon-reload              # after editing a unit file
+systemctl list-units --failed
+systemctl list-timers
+
+journalctl -u nginx -f               # follow one service
+journalctl -u nginx --since "1 hour ago" -p err
+journalctl -b -1                     # previous boot
+journalctl --disk-usage; journalctl --vacuum-size=500M`,
+    more: ["Put your own units in `/etc/systemd/system/`. Use `systemctl edit nginx` for overrides, which write a drop-in and leave the packaged file alone."]
+  });
+
+  card("linux", "A service unit file", "Recipe", {
+    sum: "Run your own app as a managed, restarting, sandboxed service.",
+    lang: "ini",
+    code: R`# /etc/systemd/system/myapp.service
+[Unit]
+Description=My API
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+User=myapp
+Group=myapp
+WorkingDirectory=/opt/myapp
+EnvironmentFile=/etc/myapp/env
+ExecStart=/usr/bin/node server.js
+Restart=on-failure
+RestartSec=3
+# hardening
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+PrivateTmp=true
+ReadWritePaths=/var/lib/myapp
+
+[Install]
+WantedBy=multi-user.target`,
+    more: [
+      "`Restart=on-failure` restarts on non-zero exit or crash. Use `always` only if a clean exit should also restart.",
+      "`systemd-analyze security myapp` scores how locked down the unit is."
+    ]
+  });
+
+  card("linux", "Disk and storage", "Syntax", {
+    sum: "Free space can run out as bytes or as inodes. Check both.",
+    lang: "sh",
+    code: R`df -hT                          # usage per filesystem, with type
+df -i                            # inode usage (many tiny files can exhaust it)
+du -xh --max-depth=1 /var | sort -h | tail   # biggest directories, staying on one filesystem
+ncdu /var                        # interactive version
+lsblk -f                         # disks, partitions, filesystems, UUIDs
+lsof +L1                         # deleted files still held open by a process
+sudo mount /dev/sdb1 /mnt/data
+blkid                            # UUIDs for /etc/fstab
+
+# /etc/fstab line: use UUID, and nofail for non-critical disks
+# UUID=1234-ABCD  /data  ext4  defaults,nofail  0  2`,
+    watch: [
+      "Deleting a big log file that a process still has open frees no space. Restart the process or truncate with `: > file`. `lsof +L1` finds these.",
+      "A bad `/etc/fstab` line can stop boot. Test with `sudo mount -a` before rebooting."
+    ]
+  });
+
+  card("linux", "Networking commands", "Syntax", {
+    sum: "From link to DNS to TCP to HTTP. Work up the stack.",
+    lang: "sh",
+    code: R`ip -br a                         # interfaces and addresses
+ip r                             # routing table
+ss -tulpn                        # listening TCP/UDP sockets with processes
+ss -s                            # socket summary
+ping -c3 1.1.1.1                 # L3 reachability
+dig +short example.com           # DNS answer
+dig @8.8.8.8 example.com MX      # ask a specific resolver
+curl -v https://example.com      # TLS and HTTP details
+curl -o /dev/null -s -w "%{http_code} %{time_total}s\n" https://example.com
+nc -zv db.internal 5432          # is a TCP port open?
+mtr -rw example.com              # traceroute plus loss per hop
+sudo tcpdump -i any -nn port 53  # packets on DNS
+resolvectl status                # systemd-resolved settings`,
+    more: [
+      "`ifconfig`, `netstat` and `route` are older tools. `ip` and `ss` replace them.",
+      "Connection refused means nothing listens on that port. A timeout means a firewall, a wrong route or a dropped packet."
+    ]
+  });
+
+  card("linux", "Firewall quick reference", "Table", {
+    sum: "Three front ends over the same kernel packet filter.",
+    head: ["Tool", "Distro family", "Allow SSH and HTTPS"],
+    rows: [
+      ["`ufw`", "Ubuntu, Debian", "`ufw allow 22/tcp && ufw allow 443/tcp && ufw enable`"],
+      ["`firewalld`", "RHEL, Fedora, Rocky", "`firewall-cmd --permanent --add-service={ssh,https} && firewall-cmd --reload`"],
+      ["`nft` (nftables)", "Modern kernels, everywhere", "`nft add rule inet filter input tcp dport {22,443} accept`"],
+      ["`iptables`", "Legacy, still widespread", "`iptables -A INPUT -p tcp -m multiport --dports 22,443 -j ACCEPT`"]
+    ],
+    watch: ["Allow SSH before enabling a default-deny policy, or you lock yourself out. Cloud security groups sit in front of the host firewall, so check both."]
+  });
+
+  card("linux", "Performance triage in 60 seconds", "Recipe", {
+    sum: "Run these in order to see CPU, memory, disk and network pressure. Based on the USE method: utilisation, saturation, errors.",
+    lang: "sh",
+    code: R`uptime                       # load average: compare with CPU count (nproc)
+dmesg -T | tail              # kernel errors, OOM kills
+vmstat 1 5                   # r = runnable, si/so = swapping, wa = I/O wait
+mpstat -P ALL 1 3            # per-CPU usage, one hot core is a clue
+pidstat 1 3                  # per-process CPU
+iostat -xz 1 3               # disk: %util, await, queue size
+free -m                      # use the 'available' column, not 'free'
+sar -n DEV 1 3               # network throughput per interface
+top -o %MEM                  # who is using what`,
+    more: [
+      "Load average counts running and waiting threads (including I/O waits on Linux). A load of 8 on 8 cores is full, not broken.",
+      "Page cache makes `free` look low on a healthy box. `available` estimates what applications can still get.",
+      "High `wa` with high disk `await` points to storage. High `si`/`so` means swapping, which means too little memory."
+    ]
+  });
+
+  card("linux", "Deeper tools: strace, lsof, perf", "Syntax", {
+    sum: "When the metrics say where, these say why.",
+    lang: "sh",
+    code: R`strace -f -tt -e trace=network,file -p 1234   # system calls of a running process
+strace -c ./slow-cmd                            # summary of time per syscall
+lsof -p 1234                                    # open files and sockets of a process
+lsof -i :8080                                   # who has this port
+perf top                                        # live CPU hot spots
+perf record -g -p 1234 -- sleep 30 && perf report
+cat /proc/1234/status | grep -E 'VmRSS|Threads'
+cat /proc/pressure/memory                       # PSI: time stalled waiting for memory`,
+    watch: ["`strace` slows the target noticeably. Use it for diagnosis on a single process, not on a busy production service for long."]
+  });
+
+  card("linux", "SSH and keys", "Syntax", {
+    sum: "Use key pairs, a client config file and jump hosts. Disable password login on servers.",
+    lang: "sh",
+    code: R`ssh-keygen -t ed25519 -C "you@laptop"        # key pair in ~/.ssh
+ssh-copy-id deploy@server                      # install the public key
+ssh -L 5432:db.internal:5432 bastion           # local forward: localhost:5432 reaches the DB
+ssh -R 9000:localhost:3000 server              # remote forward
+ssh -J bastion app-server                      # jump host
+ssh -N -D 1080 server                          # SOCKS proxy
+
+# ~/.ssh/config
+# Host prod
+#   HostName 10.0.1.12
+#   User deploy
+#   ProxyJump bastion
+#   IdentityFile ~/.ssh/id_ed25519
+
+# /etc/ssh/sshd_config hardening
+# PasswordAuthentication no
+# PermitRootLogin no
+# AllowUsers deploy`,
+    more: ["After editing `sshd_config`, validate with `sshd -t` and keep a second session open while you restart `sshd`."],
+    watch: ["Agent forwarding (`ssh -A`) lets the remote host use your keys while you are connected. Prefer `ProxyJump`."]
+  });
+
+  card("linux", "Package managers", "Table", {
+    sum: "Same jobs, different names.",
+    head: ["Task", "Debian / Ubuntu", "RHEL / Fedora", "Alpine", "Arch"],
+    rows: [
+      ["Refresh index", "`apt update`", "`dnf makecache`", "`apk update`", "`pacman -Sy`"],
+      ["Install", "`apt install pkg`", "`dnf install pkg`", "`apk add pkg`", "`pacman -S pkg`"],
+      ["Upgrade all", "`apt upgrade`", "`dnf upgrade`", "`apk upgrade`", "`pacman -Syu`"],
+      ["Remove", "`apt remove pkg`", "`dnf remove pkg`", "`apk del pkg`", "`pacman -R pkg`"],
+      ["Search", "`apt search x`", "`dnf search x`", "`apk search x`", "`pacman -Ss x`"],
+      ["Who owns file", "`dpkg -S /path`", "`rpm -qf /path`", "`apk info -W /path`", "`pacman -Qo /path`"]
+    ]
+  });
+
+  card("linux", "Cron and systemd timers", "Syntax", {
+    sum: "Five time fields: minute, hour, day of month, month, day of week.",
+    lang: "sh",
+    code: R`# m   h   dom mon dow  command
+  0   2   *   *   *    /usr/local/bin/backup.sh          # 02:00 every day
+*/15  *   *   *   *    /usr/local/bin/poll.sh            # every 15 minutes
+  30  9   *   *   1-5  /usr/local/bin/report.sh          # 09:30 Monday to Friday
+  0   0   1   *   *    /usr/local/bin/monthly.sh         # first day of the month
+@reboot                /usr/local/bin/on-boot.sh
+
+crontab -e; crontab -l                                  # edit and list your jobs
+
+# Log output, avoid overlapping runs
+# 0 2 * * * flock -n /tmp/backup.lock /usr/local/bin/backup.sh >> /var/log/backup.log 2>&1`,
+    more: [
+      "Cron runs with a minimal environment. Use absolute paths and set `PATH` and `SHELL` at the top of the crontab.",
+      "systemd timers (`OnCalendar=*-*-* 02:00:00`, `Persistent=true`) catch up on missed runs and log to the journal. Prefer them for new work."
+    ]
+  });
+
+  card("linux", "How containers work: namespaces and cgroups", "Concept", {
+    sum: "A container is a normal process with isolated views (namespaces) and limited resources (cgroups).",
+    head: ["Namespace", "Isolates"],
+    rows: [
+      ["`pid`", "Process IDs. The first process inside is PID 1"],
+      ["`net`", "Network interfaces, routing tables, ports"],
+      ["`mnt`", "Mount points and the filesystem view"],
+      ["`uts`", "Hostname"],
+      ["`ipc`", "Shared memory and message queues"],
+      ["`user`", "User and group IDs. Root inside can map to an unprivileged user outside"],
+      ["`cgroup`, `time`", "The cgroup tree view, and clocks"]
+    ],
+    lang: "sh",
+    code: R`sudo unshare --pid --fork --mount-proc --uts bash   # new PID and hostname namespace
+lsns                                                  # list namespaces on the host
+cat /proc/self/cgroup
+cat /sys/fs/cgroup/memory.max                         # cgroup v2 memory limit
+systemd-cgtop                                         # resource use per cgroup`,
+    more: [
+      "cgroups v2 is the default on current distributions. It limits CPU, memory, I/O and process count, and it is how Docker and Kubernetes enforce limits.",
+      "Containers share the host kernel. That is why they start fast and why a kernel exploit can cross the boundary, unlike a VM."
+    ]
+  });
+
+  card("linux", "Bash scripting safety", "Recipe", {
+    sum: "Start every script with strict mode, quote variables, and clean up with a trap.",
+    lang: "sh",
+    code: R`#!/usr/bin/env bash
+set -Eeuo pipefail            # exit on error, unset variable, and pipe failure
+IFS=$'\n\t'
+
+tmp=$(mktemp -d)
+trap 'rm -rf "$tmp"' EXIT     # runs on exit, success or failure
+
+usage() { echo "usage: $0 <env> <version>" >&2; exit 64; }
+[[ $# -eq 2 ]] || usage
+env=$1 version=$2
+
+if [[ "$env" =~ ^(staging|prod)$ ]]; then
+  echo "deploying ~{version} to ~{env}"
+fi
+
+name=~{1:-default}            # default value
+file=~{path##*/}              # basename
+ext=~{file##*.}               # extension
+echo "~{files[@]}"            # expand an array safely
+for f in "$dir"/*.log; do [[ -e $f ]] || continue; gzip "$f"; done`,
+    more: [
+      "Run `shellcheck script.sh` in CI. It finds unquoted variables, bad tests and portability bugs.",
+      "Use `[[ ]]` in bash for tests and `$(...)` instead of backticks. Quote every expansion unless you want word splitting."
+    ],
+    watch: ["`set -e` does not trigger inside `if`, `&&` chains or pipelines without `pipefail`. It is a safety net, not full error handling."]
+  });
+
+  card("linux", "Users, groups and sudo", "Syntax", {
+    sum: "Grant the least access that works, and use drop-in sudoers files.",
+    lang: "sh",
+    code: R`sudo useradd -m -s /bin/bash -G docker deploy   # create with home directory and groups
+sudo usermod -aG sudo alice                      # ADD to a group (-a is essential)
+sudo passwd -l olduser                           # lock an account
+id alice; groups alice; getent passwd alice
+sudo visudo -f /etc/sudoers.d/deploy             # safe edit with syntax check
+# deploy ALL=(root) NOPASSWD: /bin/systemctl restart myapp
+last -a | head; lastb | head                     # login history, failed logins`,
+    watch: [
+      "`usermod -G` without `-a` replaces all supplementary groups.",
+      "Membership in the `docker` group is effectively root on the host. Treat it as such."
+    ]
+  });
+
+  /* ================= GIT ================= */
+  card("git", "Mental model", "Concept", {
+    sum: "A commit is a snapshot with a parent pointer. A branch is just a movable label on a commit.",
+    lang: "text",
+    code: R`working tree --git add--> index (staging) --git commit--> local repo --git push--> remote
+      ^                                                  |
+      +----------------- git restore / checkout ---------+
+
+A---B---C---D   main         HEAD -> main -> D
+         \
+          E---F feature      each letter is an immutable commit (a hash)`,
+    more: [
+      "Three areas: working tree (files on disk), index (what the next commit will contain), repository (commits).",
+      "`HEAD` points at the current branch, which points at a commit. A detached HEAD means HEAD points straight at a commit, so new commits belong to no branch.",
+      "Commits are never edited. Amend and rebase create new commits and move the label. The old ones stay reachable through `git reflog` for a while."
+    ]
+  });
+
+  card("git", "Everyday commands", "Table", {
+    sum: "The ones you type all day.",
+    head: ["Goal", "Command"],
+    rows: [
+      ["Start", "`git clone <url>` / `git init`"],
+      ["See state", "`git status -sb`"],
+      ["Stage", "`git add -p` (choose hunks) / `git add <file>`"],
+      ["Commit", "`git commit -m \"Fix login redirect\"`"],
+      ["Diff", "`git diff` (unstaged) / `git diff --staged` / `git diff main...HEAD`"],
+      ["New branch", "`git switch -c feature/x`"],
+      ["Change branch", "`git switch main`"],
+      ["Update", "`git fetch --prune` then `git merge` or `git rebase`"],
+      ["Publish", "`git push -u origin feature/x`"],
+      ["History", "`git log --oneline --graph --decorate -20`"],
+      ["Who changed this line", "`git blame -L 40,60 file`"]
+    ],
+    more: ["`git switch` and `git restore` (Git 2.23+) split the old overloaded `git checkout` into clearer commands."]
+  });
+
+  card("git", "Undo cheat sheet", "Table", {
+    wide: true,
+    sum: "Find what you want, then run the matching command. The right-hand column tells you whether it is safe on shared history.",
+    head: ["I want to", "Command", "Rewrites history?"],
+    rows: [
+      ["Unstage a file", "`git restore --staged file`", "No"],
+      ["Discard changes in a file", "`git restore file`", "No, but the changes are lost"],
+      ["Fix the last commit message or add a forgotten file", "`git add file && git commit --amend`", "Yes (last commit)"],
+      ["Undo the last commit, keep the changes staged", "`git reset --soft HEAD~1`", "Yes"],
+      ["Undo the last commit, keep the changes unstaged", "`git reset HEAD~1` (mixed, the default)", "Yes"],
+      ["Undo the last commit and throw the changes away", "`git reset --hard HEAD~1`", "Yes, and destroys work"],
+      ["Undo a commit that is already pushed", "`git revert <sha>` (adds a new commit)", "No. Use this on shared branches"],
+      ["Undo a merge commit", "`git revert -m 1 <merge-sha>`", "No"],
+      ["Get a file as it was in another commit", "`git restore --source <sha> file`", "No"],
+      ["Recover a lost commit or branch", "`git reflog` then `git switch -c rescue <sha>`", "No"],
+      ["Remove untracked files", "`git clean -fdn` (dry run) then `git clean -fd`", "n/a, deletes files"],
+      ["Abort a stuck merge or rebase", "`git merge --abort` / `git rebase --abort`", "No"]
+    ],
+    watch: ["`reset --hard`, `clean -fd` and `checkout .` delete uncommitted work with no undo. Committed work is almost always recoverable through the reflog."]
+  });
+
+  card("git", "Merge, rebase, squash", "Table", {
+    sum: "All three combine branches. They differ in what history looks like afterwards.",
+    head: ["Strategy", "Result", "Use when"],
+    rows: [
+      ["`merge` (no fast-forward)", "A merge commit with two parents. History keeps real branching", "Integrating long-lived branches, preserving context"],
+      ["`merge --ff-only`", "Moves the branch pointer. No new commit", "Updating main from origin"],
+      ["`rebase`", "Replays your commits on top of the target. Linear, new hashes", "Updating a private feature branch before review"],
+      ["`merge --squash` or squash-merge in the host", "One commit with the whole change", "Messy branch history, one logical change per PR"]
+    ],
+    lang: "sh",
+    code: R`git switch feature && git fetch origin
+git rebase origin/main               # replay my commits on top of the latest main
+# fix conflicts, then:
+git add . && git rebase --continue   # or: git rebase --abort
+git push --force-with-lease          # needed after a rebase, safer than --force`,
+    more: [
+      "Golden rule: do not rebase commits that other people have already based work on. Rebase your own branches, merge shared ones.",
+      "`--force-with-lease` refuses to overwrite remote commits you have not seen. Plain `--force` does not."
+    ]
+  });
+
+  card("git", "Resolving conflicts", "Recipe", {
+    sum: "A conflict means both sides changed the same lines. Git writes both versions into the file.",
+    lang: "text",
+    code: R`<<<<<<< HEAD (your side)
+timeout: 30
+||||||| merged common ancestors   (shown with merge.conflictStyle=zdiff3)
+timeout: 10
+=======
+timeout: 60
+>>>>>>> feature/retry (their side)`,
+    more: [
+      "Edit the file to the final content and remove the markers, then `git add file` and continue (`git commit`, `git rebase --continue`).",
+      "`git checkout --ours file` and `--theirs file` pick one whole side. In a rebase the meaning flips: `ours` is the branch you are rebasing onto.",
+      "`git mergetool` opens your configured tool. `git diff --name-only --diff-filter=U` lists files still unresolved.",
+      "Turn on `git config --global rerere.enabled true` so Git remembers resolutions and reuses them."
+    ]
+  });
+
+  card("git", "Interactive rebase", "Syntax", {
+    sum: "Rewrite your local commits before review: reorder, squash, reword, drop.",
+    lang: "sh",
+    code: R`git rebase -i HEAD~4            # edit the last 4 commits
+# pick   a1b2c3 Add endpoint
+# fixup  d4e5f6 typo
+# reword 7a8b9c Add tests
+# drop   0f1e2d debug logging
+#   pick = keep, reword = edit message, squash = merge and edit message,
+#   fixup = merge and discard message, edit = stop to amend, drop = remove
+
+git commit --fixup a1b2c3          # create a fixup commit aimed at a1b2c3
+git rebase -i --autosquash origin/main   # automatically order and squash the fixups`,
+    watch: ["Only rewrite commits that you have not shared, or that only you use. After a rewrite, push with `--force-with-lease`."]
+  });
+
+  card("git", "Stash and worktrees", "Syntax", {
+    sum: "Park work in progress, or check out a second branch in another folder without stashing.",
+    lang: "sh",
+    code: R`git stash push -u -m "wip login form"   # -u includes untracked files
+git stash list
+git stash show -p stash@{0}                # see what is inside
+git stash pop                              # apply and drop
+git stash apply stash@{1}                  # apply and keep
+git stash branch fix-login stash@{0}       # turn a stash into a branch
+
+git worktree add ../app-hotfix hotfix/1.2  # second working directory, shared repo
+git worktree list
+git worktree remove ../app-hotfix`,
+    more: ["Worktrees are useful for reviewing a PR or building a hotfix while a long job is running in your main checkout."]
+  });
+
+  card("git", "Investigate history", "Syntax", {
+    sum: "Find when and why something changed.",
+    lang: "sh",
+    code: R`git log --oneline --graph --decorate --all
+git log -p -- path/to/file             # patches for one file
+git log --follow -- path/to/file       # follow renames
+git log -S "retryCount" --oneline      # commits that added or removed this string
+git log -G "timeout\s*=\s*\d+"         # ... or lines matching a regex
+git log --author="alice" --since="2 weeks ago"
+git show a1b2c3 --stat
+git shortlog -sn --no-merges           # commits per author
+git blame -w -C file                   # ignore whitespace, follow moved code
+
+# Find the commit that broke something
+git bisect start
+git bisect bad                         # current commit is broken
+git bisect good v1.4.0                 # this one worked
+git bisect run ./test.sh               # binary search automatically
+git bisect reset`
+  });
+
+  card("git", "Remotes, fetch and tags", "Concept", {
+    sum: "`fetch` downloads. `pull` is fetch plus merge or rebase.",
+    lang: "sh",
+    code: R`git remote -v
+git remote add upstream https://github.com/org/repo.git
+git fetch --all --prune                 # update remote-tracking branches, drop deleted ones
+git branch -vv                          # local branches with upstream and ahead/behind
+git push -u origin feature              # set upstream on first push
+git push origin --delete old-branch
+git pull --rebase                       # replay local commits on top of the fetched ones
+
+git tag -a v1.4.0 -m "Release 1.4.0"    # annotated tag: author, date, message
+git push origin v1.4.0                  # tags are not pushed by default
+git tag -l "v1.*"; git describe --tags`,
+    more: ["Use annotated tags for releases. Lightweight tags (`git tag name`) are bare pointers and carry no metadata."]
+  });
+
+  card("git", "Branching strategies", "Table", {
+    sum: "Pick the simplest one your release process allows.",
+    head: ["Strategy", "How it works", "Good for", "Watch for"],
+    rows: [
+      ["Trunk-based", "Short-lived branches (hours to 2 days) merged to `main` daily, features behind flags", "Teams that deploy often, strong CI", "Needs fast tests and feature flags"],
+      ["GitHub flow", "Branch from `main`, open a PR, review, merge, deploy", "Web apps, continuous delivery", "Long-lived branches drift"],
+      ["GitFlow", "`main`, `develop`, feature, release and hotfix branches", "Versioned products with scheduled releases", "Heavy and slow. Merge overhead"],
+      ["Release branches", "Cut `release/1.x` from `main`, backport fixes", "Libraries and on-prem software with several supported versions", "Backport discipline"]
+    ]
+  });
+
+  card("git", "Config worth setting", "Syntax", {
+    sum: "A small global config removes daily friction.",
+    lang: "sh",
+    code: R`git config --global init.defaultBranch main
+git config --global pull.rebase true             # pull replays instead of creating merge commits
+git config --global fetch.prune true
+git config --global push.autoSetupRemote true    # first push sets upstream automatically
+git config --global rerere.enabled true
+git config --global merge.conflictStyle zdiff3
+git config --global rebase.autoSquash true
+git config --global diff.algorithm histogram
+git config --global alias.lg "log --oneline --graph --decorate --all"
+git config --global user.name "Ada Lovelace"
+git config --global user.email "ada@example.com"
+
+# Sign commits with an SSH key (Git 2.34+)
+git config --global gpg.format ssh
+git config --global user.signingkey ~/.ssh/id_ed25519.pub
+git config --global commit.gpgsign true`,
+    more: ["Use `includeIf` in `~/.gitconfig` to apply a different email for work and personal directories."]
+  });
+
+  card("git", "Ignore, attributes and conventions", "Concept", {
+    sum: "Keep junk and secrets out, normalise line endings, write readable commits.",
+    lang: "sh",
+    code: R`# .gitignore
+node_modules/
+dist/
+.env
+*.log
+.idea/
+!.env.example          # '!' re-includes a file
+
+# .gitattributes
+* text=auto eol=lf
+*.png binary
+
+# Conventional Commits: type(scope): summary
+# feat(auth): add refresh tokens
+# fix(api): handle empty cart
+# docs, refactor, test, chore, ci, perf, build, revert
+# BREAKING CHANGE: in the footer, or "!" after the type, marks a major bump`,
+    watch: ["Adding a file to `.gitignore` does not untrack a file that is already committed. Run `git rm --cached file` first."]
+  });
+
+  card("git", "Hooks and team workflow", "Concept", {
+    sum: "Run checks locally before commits and pushes, and again in CI where they cannot be skipped.",
+    more: [
+      "Hooks live in `.git/hooks`, which is not versioned. Share them with the `pre-commit` framework, Husky or `core.hooksPath`.",
+      "Typical hooks: `pre-commit` (lint, format, secret scan), `commit-msg` (enforce the message format), `pre-push` (fast tests).",
+      "Branch protection on the host: require PR review, require passing CI, block force pushes to `main`, require signed commits if you need them.",
+      "CODEOWNERS routes reviews to the right team. A PR template improves the description quality.",
+      "Large repos: `git clone --filter=blob:none` (partial clone), `git sparse-checkout`, and `git maintenance start` keep operations fast."
+    ],
+    lang: "sh",
+    code: R`pip install pre-commit && pre-commit install        # run hooks from .pre-commit-config.yaml
+git config core.hooksPath .githooks                    # versioned hooks folder
+git commit --no-verify                                  # skip local hooks (CI should still catch it)`
+  });
+
+  card("git", "I committed a secret", "Recipe", {
+    sum: "Assume the secret is already compromised. Rotate first, clean history second.",
+    lang: "sh",
+    code: R`# 1. Revoke and rotate the credential at the provider. Do this before anything else.
+# 2. Remove it from history (rewrites all commits, coordinate with the team)
+pip install git-filter-repo
+git filter-repo --path config/secrets.yml --invert-paths
+git push --force --all && git push --force --tags
+# 3. Ask collaborators to re-clone. Ask the host to purge cached views.
+# 4. Prevent a repeat
+gitleaks detect --source . --verbose                     # scan history
+# add gitleaks or trufflehog to pre-commit and CI`,
+    watch: ["Public forks, clones and CI caches may already hold the old history. Rotation is the only real fix. Cleaning the history is hygiene."]
+  });
+
+  /* ================= DOCKER ================= */
+  card("docker", "Images, containers, volumes", "Concept", {
+    sum: "An image is a read-only stack of layers. A container is a running process started from an image, with a thin writable layer on top.",
+    lang: "text",
+    code: R`Dockerfile --build--> Image (layers) --push--> Registry (Docker Hub, GHCR, ECR, ...)
+                          |
+                       docker run
+                          v
+          Container = image layers + writable layer + namespaces + cgroups
+                          |
+                  Volume or bind mount  (data that must outlive the container)`,
+    more: [
+      "Layers are content-addressed and shared. Two images based on the same base store it once.",
+      "The writable layer is thrown away with the container. Put data in volumes.",
+      "Docker Engine 29 uses the containerd image store by default for new installs (per its release coverage). Read the release notes before upgrading an existing host, since image storage and API behaviour changed."
+    ]
+  });
+
+  card("docker", "Core commands", "Table", {
+    sum: "What you run daily.",
+    head: ["Goal", "Command"],
+    rows: [
+      ["Run in background with a port", "`docker run -d --name web -p 8080:80 nginx`"],
+      ["Run once and remove", "`docker run --rm -it ubuntu bash`"],
+      ["Mount a folder, set env", "`docker run -v \"$PWD\":/app -e MODE=dev --env-file .env img`"],
+      ["Shell into a running container", "`docker exec -it web sh`"],
+      ["Logs", "`docker logs -f --tail 100 web`"],
+      ["List", "`docker ps` / `docker ps -a` / `docker images`"],
+      ["Stop, remove", "`docker stop web && docker rm web`"],
+      ["Build and tag", "`docker build -t myapp:1.4.0 .`"],
+      ["Push", "`docker tag myapp:1.4.0 ghcr.io/org/myapp:1.4.0 && docker push ghcr.io/org/myapp:1.4.0`"],
+      ["Inspect", "`docker inspect web` / `docker stats` / `docker top web`"],
+      ["Copy files", "`docker cp web:/etc/nginx/nginx.conf .`"],
+      ["Disk usage and cleanup", "`docker system df` / `docker system prune` (add `-a --volumes` with care)"]
+    ],
+    watch: ["`docker system prune -a --volumes` deletes unused images and volumes. Check what is unused first with `docker system df -v`."]
+  });
+
+  card("docker", "Dockerfile instruction reference", "Table", {
+    sum: "Each instruction creates a layer or metadata. Order them from least to most frequently changing.",
+    head: ["Instruction", "Purpose", "Notes"],
+    rows: [
+      ["`FROM image AS name`", "Base image and a stage name", "Pin a version or digest, avoid `latest`"],
+      ["`WORKDIR /app`", "Set the working directory", "Creates it if missing. Prefer it over `cd`"],
+      ["`COPY src dest`", "Copy files from the build context", "Use `--from=stage` for multi-stage, `--chown` for ownership"],
+      ["`ADD`", "Like `COPY`, plus URLs and tar extraction", "Use `COPY` unless you need those extras"],
+      ["`RUN cmd`", "Run a command at build time", "Chain with `&&` and clean caches in the same layer"],
+      ["`ENV KEY=value`", "Environment variable at build and run time", "Visible in `docker inspect`. Not for secrets"],
+      ["`ARG NAME`", "Build-time variable only", "Set with `--build-arg`. Not available at run time"],
+      ["`EXPOSE 8080`", "Documents the port", "Does not publish it. `-p` does"],
+      ["`USER app`", "Run as this user from here on", "Create the user first. Use a numeric UID in Kubernetes"],
+      ["`ENTRYPOINT` / `CMD`", "What starts when the container runs", "See the exec form card"],
+      ["`HEALTHCHECK`", "Command that reports healthy or not", "Used by Docker and Compose, ignored by Kubernetes"],
+      ["`VOLUME`, `LABEL`, `STOPSIGNAL`, `SHELL`", "Anonymous volume, metadata, stop signal, default shell", "`LABEL org.opencontainers.image.*` for provenance"]
+    ]
+  });
+
+  card("docker", "Multi-stage Dockerfile: Node", "Recipe", {
+    sum: "Build with dev tools in one stage, ship only what you need. Dependencies are cached until the lockfile changes.",
+    lang: "docker",
+    code: R`# syntax=docker/dockerfile:1
+FROM node:24-alpine AS deps
+WORKDIR /app
+COPY package.json package-lock.json ./
+RUN --mount=type=cache,target=/root/.npm npm ci
+
+FROM deps AS build
+COPY . .
+RUN npm run build
+
+FROM node:24-alpine AS runtime
+ENV NODE_ENV=production
+WORKDIR /app
+COPY package.json package-lock.json ./
+RUN --mount=type=cache,target=/root/.npm npm ci --omit=dev
+COPY --from=build /app/dist ./dist
+USER node
+EXPOSE 3000
+HEALTHCHECK --interval=30s --timeout=3s CMD wget -qO- http://localhost:3000/health || exit 1
+CMD ["node", "dist/server.js"]`,
+    more: [
+      "Add a `.dockerignore` with `node_modules`, `.git`, `dist`, `.env` and logs so the build context stays small and secrets stay out.",
+      "Alpine uses musl instead of glibc. Native modules and some DNS behaviour can differ. If you hit odd bugs, try the `-slim` Debian variant."
+    ]
+  });
+
+  card("docker", "Multi-stage Dockerfile: Spring Boot", "Recipe", {
+    sum: "Maven build in a JDK image, run in a JRE image as a non-root user, with heap sized from the container limit.",
+    lang: "docker",
+    code: R`# syntax=docker/dockerfile:1
+FROM eclipse-temurin:25-jdk AS build
+WORKDIR /src
+COPY mvnw pom.xml ./
+COPY .mvn .mvn
+RUN --mount=type=cache,target=/root/.m2 ./mvnw -q dependency:go-offline
+COPY src src
+RUN --mount=type=cache,target=/root/.m2 ./mvnw -q package -DskipTests
+
+FROM eclipse-temurin:25-jre
+RUN useradd --system --uid 10001 app
+WORKDIR /app
+COPY --from=build /src/target/*.jar app.jar
+USER 10001
+EXPOSE 8080
+ENTRYPOINT ["java", "-XX:MaxRAMPercentage=75", "-jar", "app.jar"]`,
+    more: [
+      "`MaxRAMPercentage` makes the JVM read the container memory limit. Leave room for metaspace, threads and direct buffers.",
+      "Spring Boot layered jars (`java -Djarmode=tools extract --layers`) or Buildpacks (`./mvnw spring-boot:build-image`) give better layer reuse than one fat jar layer."
+    ]
+  });
+
+  card("docker", "Build cache and BuildKit", "Concept", {
+    sum: "A layer is reused when its instruction and all inputs are unchanged. One changed layer invalidates every layer after it.",
+    lang: "sh",
+    code: R`docker build -t app .                                   # BuildKit is the default builder
+docker buildx build --platform linux/amd64,linux/arm64 -t org/app:1.0 --push .
+docker build --secret id=npmrc,src=$HOME/.npmrc .       # secret mounted only during one RUN
+docker build --target build -t app:build .              # stop at a stage
+docker buildx build --cache-to type=registry,ref=org/app:cache --cache-from type=registry,ref=org/app:cache .
+
+# In the Dockerfile
+# RUN --mount=type=secret,id=npmrc,target=/root/.npmrc npm ci
+# RUN --mount=type=cache,target=/var/cache/apt apt-get update && apt-get install -y curl`,
+    more: [
+      "Order matters: copy dependency manifests and install first, copy source later.",
+      "`ARG` values and `ENV` are stored in image metadata. Use secret mounts for tokens so they never reach a layer.",
+      "In CI, export and import the cache (registry or GitHub Actions cache) because runners start clean."
+    ]
+  });
+
+  card("docker", "CMD, ENTRYPOINT and PID 1", "Concept", {
+    sum: "Use the exec form (JSON array) so your process is PID 1 and receives signals.",
+    head: ["Form", "Example", "Effect"],
+    rows: [
+      ["Exec", "`CMD [\"node\", \"server.js\"]`", "Runs the program directly. Receives SIGTERM from `docker stop`"],
+      ["Shell", "`CMD node server.js`", "Runs `/bin/sh -c ...`. The shell is PID 1 and may not forward signals"],
+      ["`ENTRYPOINT` + `CMD`", "`ENTRYPOINT [\"java\", \"-jar\", \"app.jar\"]` plus `CMD [\"--spring.profiles.active=prod\"]`", "Entrypoint is fixed, `CMD` supplies default arguments that `docker run` can replace"]
+    ],
+    more: [
+      "`docker stop` sends SIGTERM, waits 10 seconds (default), then SIGKILL. Handle SIGTERM to finish requests and close connections.",
+      "PID 1 has special signal rules and must reap zombie children. Use `docker run --init` or add `tini` when your app spawns children."
+    ],
+    watch: ["A shell wrapper script as entrypoint should end with `exec \"$@\"` so the real app replaces the shell and gets the signals."]
+  });
+
+  card("docker", "Networking", "Concept", {
+    sum: "Containers on the same user-defined network find each other by name through built-in DNS.",
+    head: ["Mode", "Behaviour", "Use for"],
+    rows: [
+      ["`bridge` (default)", "Private network with NAT. Containers need `-p` to be reachable from outside. No name resolution on the default bridge", "Single containers"],
+      ["User-defined bridge", "Name-based DNS between containers, better isolation", "Multi-container apps (Compose creates one)"],
+      ["`host`", "Shares the host network stack. No port mapping", "Max network performance, special cases"],
+      ["`none`", "No network", "Isolated batch work"],
+      ["`overlay`", "Multi-host networks (Swarm)", "Rare today. Kubernetes handles this with CNI"]
+    ],
+    lang: "sh",
+    code: R`docker network create appnet
+docker run -d --name db --network appnet postgres:17
+docker run -d --name api --network appnet -p 127.0.0.1:3000:3000 myapp   # reaches db at hostname 'db'
+docker network inspect appnet`,
+    watch: [
+      "`-p 3000:3000` publishes on all interfaces, and Docker edits the firewall rules directly, so `ufw` rules may not block it. Bind to `127.0.0.1` when the port should stay local.",
+      "Inside a container, `localhost` is the container itself, not the host. Use the service name or `host.docker.internal`."
+    ]
+  });
+
+  card("docker", "Volumes and bind mounts", "Table", {
+    sum: "Data written inside a container disappears with it, unless it lives on a mount.",
+    head: ["Type", "Syntax", "Managed by", "Use for"],
+    rows: [
+      ["Named volume", "`-v pgdata:/var/lib/postgresql/data`", "Docker", "Databases, persistent app data"],
+      ["Bind mount", "`-v \"$PWD\":/app`", "You (host path)", "Source code in development, config files"],
+      ["tmpfs", "`--tmpfs /tmp`", "RAM", "Scratch data, secrets that must not touch disk"]
+    ],
+    lang: "sh",
+    code: R`docker volume create pgdata
+docker volume ls; docker volume inspect pgdata
+# back up a volume to a tarball
+docker run --rm -v pgdata:/data -v "$PWD":/backup alpine tar czf /backup/pgdata.tgz -C /data .
+# restore it
+docker run --rm -v pgdata:/data -v "$PWD":/backup alpine tar xzf /backup/pgdata.tgz -C /data`,
+    watch: ["File ownership on bind mounts follows host UIDs. If the container runs as UID 10001, the host folder must be writable by that UID. Prefer a named volume when you can."]
+  });
+
+  card("docker", "Docker Compose", "Recipe", {
+    sum: "Describe a multi-container app in one file. The old top-level `version:` key is no longer needed.",
+    lang: "yaml",
+    code: R`# compose.yaml
+services:
+  api:
+    build: .
+    ports: ["3000:3000"]
+    environment:
+      DATABASE_URL: postgres://app:secret@db:5432/app
+      REDIS_URL: redis://cache:6379
+    depends_on:
+      db:
+        condition: service_healthy     # wait until the health check passes
+    restart: unless-stopped
+  db:
+    image: postgres:17
+    environment:
+      POSTGRES_USER: app
+      POSTGRES_PASSWORD: secret
+      POSTGRES_DB: app
+    volumes: ["pgdata:/var/lib/postgresql/data"]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U app"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+  cache:
+    image: redis:7-alpine
+    profiles: ["full"]                 # started only with --profile full
+volumes:
+  pgdata:`,
+    more: [
+      "`docker compose up -d --build`, `docker compose logs -f api`, `docker compose exec api sh`, `docker compose down` (add `-v` to delete volumes).",
+      "`docker compose watch` syncs or rebuilds on file changes during development. Use `docker compose config` to see the final merged file."
+    ],
+    watch: ["Hard-coded passwords belong only in local examples. Use `env_file`, Compose secrets or your platform's secret store for anything real."]
+  });
+
+  card("docker", "Image security and size", "Table", {
+    sum: "Small images have fewer packages to patch. Unprivileged containers limit the damage of a break-in.",
+    head: ["Practice", "How"],
+    rows: [
+      ["Run as non-root", "`USER 10001`. In Kubernetes also set `runAsNonRoot: true`"],
+      ["Slim base images", "`-slim`, Alpine, or distroless (no shell or package manager). Add a debug image separately"],
+      ["Pin versions", "`FROM node:24.1-alpine@sha256:...` digest pins make builds reproducible"],
+      ["Scan images", "`trivy image app:1.0`, `docker scout cves app:1.0`, or `grype app:1.0`. Fail CI on high severity"],
+      ["No secrets in layers", "Never `COPY .env`. Use build secrets and runtime secret stores"],
+      ["Read-only root filesystem", "`docker run --read-only --tmpfs /tmp`"],
+      ["Drop privileges", "`--cap-drop ALL --security-opt no-new-privileges`, avoid `--privileged`"],
+      ["SBOM and provenance", "`docker buildx build --sbom=true --provenance=true`, then sign with cosign"],
+      ["Keep bases fresh", "Rebuild regularly. Use Renovate or Dependabot to bump base image tags"]
+    ],
+    watch: ["Mounting `/var/run/docker.sock` into a container gives it control of the host. Avoid it, or use a socket proxy with limited permissions."]
+  });
+
+  card("docker", "Debugging containers", "Syntax", {
+    sum: "Start with the exit code and the logs.",
+    lang: "sh",
+    code: R`docker ps -a --format 'table {{.Names}}\t{{.Status}}\t{{.Image}}'
+docker logs --tail 200 -f web
+docker inspect -f '{{.State.ExitCode}} {{.State.OOMKilled}} {{.State.Error}}' web
+docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' web
+docker events --since 10m
+docker stats --no-stream
+docker run --rm -it --network container:web nicolaka/netshoot    # network tools in web's namespace
+docker run --rm -it --entrypoint sh myapp:1.4.0                  # bypass a failing entrypoint`,
+    head: ["Exit code", "Meaning"],
+    rows: [
+      ["0", "Finished normally"],
+      ["1, 2", "Application error. Read the logs"],
+      ["125", "Docker daemon could not run the container (bad flag, name conflict)"],
+      ["126, 127", "Command found but not executable, or command not found. Check path and `ENTRYPOINT`"],
+      ["137", "SIGKILL. Often the OOM killer. Check `OOMKilled` and the memory limit"],
+      ["139", "Segmentation fault"],
+      ["143", "SIGTERM. A normal stop, if your app exits on it"]
+    ]
+  });
+
+  card("docker", "Beyond Docker: the container ecosystem", "Table", {
+    sum: "Docker is one implementation. The image format (OCI) is a standard, so images move between tools.",
+    head: ["Tool", "What it is", "Notes"],
+    rows: [
+      ["containerd", "High-level container runtime", "What Docker and Kubernetes call underneath"],
+      ["runc / crun", "Low-level runtime that creates the namespaces and cgroups", "OCI reference implementation and a faster C alternative"],
+      ["Podman", "Daemonless, rootless-first, Docker-compatible CLI", "`alias docker=podman` works for most commands. Has pods and systemd integration"],
+      ["nerdctl", "Docker-compatible CLI for containerd", "Used with Lima and Rancher Desktop"],
+      ["CRI-O", "Kubernetes-only container runtime", "Default on OpenShift"],
+      ["BuildKit, Buildah, Kaniko", "Image builders", "Buildah and Kaniko build without a Docker daemon, useful in CI"],
+      ["Docker Desktop, Colima, Rancher Desktop, OrbStack", "Local VM and tooling on macOS and Windows", "Licensing differs. Check Docker Desktop's terms for companies"]
+    ]
+  });
+
+  /* ================= KUBERNETES (part 1) ================= */
+  card("k8s", "Architecture", "Concept", {
+    sum: "You declare desired state. Controllers compare it with reality and keep fixing the difference.",
+    lang: "text",
+    code: R`Control plane                               Worker node
+  kube-apiserver  <-- kubectl, CI, kubelet     kubelet          starts and watches pods
+  etcd            (all cluster state)          container runtime (containerd / CRI-O)
+  scheduler       (picks a node per pod)       kube-proxy       service routing rules
+  controller-manager (deployments, nodes...)   CNI plugin       pod networking
+  cloud-controller-manager (LB, volumes)`,
+    more: [
+      "Everything goes through the API server. Only it talks to etcd. Controllers, the scheduler and kubelets watch the API and react.",
+      "Creating a Deployment: you apply YAML, the API server stores it, the Deployment controller creates a ReplicaSet, which creates Pods, the scheduler binds each Pod to a node, and the kubelet starts the containers.",
+      "Managed services (EKS, AKS, GKE) run and upgrade the control plane for you. You still manage nodes (or use autopilot-style modes), workloads and add-ons."
+    ]
+  });
+
+  card("k8s", "Objects you will use", "Table", {
+    wide: true,
+    sum: "Pick the workload type from how the app behaves.",
+    head: ["Kind", "What it does", "Use for"],
+    rows: [
+      ["`Pod`", "One or more containers sharing network and storage", "Rarely created directly"],
+      ["`Deployment`", "Manages stateless replicas with rolling updates and rollback", "Web apps and APIs"],
+      ["`StatefulSet`", "Stable names (`db-0`, `db-1`), ordered rollout, per-pod volumes", "Databases, Kafka, anything needing identity"],
+      ["`DaemonSet`", "One pod per node", "Log agents, node exporters, CNI"],
+      ["`Job` / `CronJob`", "Run to completion, once or on a schedule", "Migrations, batch, backups"],
+      ["`Service`", "Stable virtual IP and DNS name in front of pods", "Internal load balancing"],
+      ["`Ingress` / `Gateway` + `HTTPRoute`", "HTTP routing from outside the cluster", "Public endpoints"],
+      ["`ConfigMap` / `Secret`", "Configuration and sensitive values", "Env vars and mounted files"],
+      ["`PersistentVolumeClaim`", "A request for storage", "Anything that must keep data"],
+      ["`HorizontalPodAutoscaler`", "Scales replicas by metrics", "Variable load"],
+      ["`PodDisruptionBudget`", "Limits voluntary evictions", "Keeping minimum replicas during node drains"],
+      ["`NetworkPolicy`", "Allow-lists pod traffic", "Zero-trust inside the cluster"],
+      ["`ServiceAccount`, `Role`, `RoleBinding`", "Identity and permissions", "RBAC for pods and users"],
+      ["`Namespace`", "Scope for names, quotas and policies", "Teams, environments"]
+    ]
+  });
+
+  card("k8s", "kubectl essentials", "Syntax", {
+    sum: "Read before you change. `-n` picks a namespace and `-o` changes the output format.",
+    lang: "sh",
+    code: R`kubectl config get-contexts; kubectl config use-context prod
+kubectl get pods -n shop -o wide
+kubectl get pods -l app=api --watch
+kubectl describe pod api-7d9f8-abcde        # events at the bottom explain most failures
+kubectl logs api-7d9f8-abcde -c app --previous --tail=100    # previous container after a crash
+kubectl logs -l app=api --all-containers --prefix -f
+kubectl exec -it api-7d9f8-abcde -- sh
+kubectl port-forward svc/api 8080:80
+kubectl apply -f deploy.yaml; kubectl diff -f deploy.yaml    # preview first
+kubectl rollout status deploy/api; kubectl rollout undo deploy/api
+kubectl scale deploy/api --replicas=5
+kubectl top pods; kubectl top nodes          # needs metrics-server
+kubectl get events -A --sort-by=.lastTimestamp | tail
+kubectl explain deployment.spec.strategy     # built-in API docs
+kubectl auth can-i create deployments -n shop --as system:serviceaccount:shop:ci
+kubectl debug -it pod/api-7d9f8-abcde --image=busybox --target=app   # ephemeral debug container
+kubectl get pod api-1 -o jsonpath='{.status.podIP}'
+kubectl get deploy -o custom-columns=NAME:.metadata.name,IMG:.spec.template.spec.containers[0].image`,
+    more: ["Set up `alias k=kubectl` and shell completion. Tools such as `k9s`, `kubectx`/`kubens` and `stern` (multi-pod logs) save a lot of typing."],
+    watch: ["Always check the current context before `delete` or `apply`. Many incidents are a command run against the wrong cluster."]
+  });
+
+  card("k8s", "Production-ready Deployment", "Recipe", {
+    sum: "Requests and limits, probes, a non-root security context, a rolling update that never drops below capacity, and spreading across zones.",
+    lang: "yaml",
+    code: R`apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api
+  namespace: shop
+spec:
+  replicas: 3
+  selector:
+    matchLabels: {app: api}
+  strategy:
+    type: RollingUpdate
+    rollingUpdate: {maxSurge: 1, maxUnavailable: 0}
+  template:
+    metadata:
+      labels: {app: api}
+    spec:
+      terminationGracePeriodSeconds: 30
+      securityContext:
+        runAsNonRoot: true
+        seccompProfile: {type: RuntimeDefault}
+      topologySpreadConstraints:
+      - maxSkew: 1
+        topologyKey: topology.kubernetes.io/zone
+        whenUnsatisfiable: ScheduleAnyway
+        labelSelector: {matchLabels: {app: api}}
+      containers:
+      - name: app
+        image: ghcr.io/org/api:1.4.0          # pinned tag, never :latest
+        ports: [{containerPort: 3000}]
+        envFrom: [{configMapRef: {name: api-config}}]
+        resources:
+          requests: {cpu: 250m, memory: 256Mi}
+          limits: {memory: 512Mi}
+        readinessProbe:
+          httpGet: {path: /ready, port: 3000}
+          periodSeconds: 5
+        livenessProbe:
+          httpGet: {path: /health, port: 3000}
+          initialDelaySeconds: 15
+          periodSeconds: 10
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          capabilities: {drop: ["ALL"]}`,
+    more: [
+      "`maxUnavailable: 0` with `maxSurge: 1` adds a new pod before removing an old one. It needs spare capacity.",
+      "Selectors are immutable. Labels in `selector.matchLabels` must match the pod template labels."
+    ]
+  });
+
+  card("k8s", "Services and networking", "Table", {
+    sum: "A Service gives pods a stable address. Traffic goes to ready pods that match its selector.",
+    head: ["Type", "Reachable from", "Notes"],
+    rows: [
+      ["`ClusterIP` (default)", "Inside the cluster", "Virtual IP and DNS name `api.shop.svc.cluster.local`"],
+      ["`NodePort`", "Any node IP on ports 30000 to 32767", "Mostly for testing or as a base for load balancers"],
+      ["`LoadBalancer`", "Outside, through a cloud load balancer", "One cloud LB per Service, which can get expensive"],
+      ["`ExternalName`", "Inside the cluster", "DNS CNAME to an external hostname"],
+      ["Headless (`clusterIP: None`)", "Inside the cluster", "DNS returns pod IPs directly. Used with StatefulSets"]
+    ],
+    lang: "yaml",
+    code: R`apiVersion: v1
+kind: Service
+metadata: {name: api, namespace: shop}
+spec:
+  selector: {app: api}
+  ports:
+  - name: http
+    port: 80            # what clients call
+    targetPort: 3000    # the container port`,
+    more: [
+      "Pods find Services by DNS: same namespace `api`, other namespaces `api.shop`. Environment variables for Services are also injected, but DNS is the reliable path.",
+      "A pod is added to Service endpoints only when it is Ready. This is why a good readiness probe matters for zero-downtime deploys."
+    ]
+  });
+
+  card("k8s", "Ingress is retired: use Gateway API", "Concept", {
+    v: "2026",
+    sum: "The Ingress NGINX controller was retired in March 2026. It gets no more releases or security patches. The Ingress API itself still exists, but Gateway API is where new work goes.",
+    lang: "yaml",
+    code: R`apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata: {name: web, namespace: infra}
+spec:
+  gatewayClassName: envoy            # provided by your controller
+  listeners:
+  - name: https
+    protocol: HTTPS
+    port: 443
+    hostname: app.example.com
+    tls:
+      mode: Terminate
+      certificateRefs: [{name: app-cert}]
+    allowedRoutes: {namespaces: {from: All}}
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata: {name: api, namespace: shop}
+spec:
+  parentRefs: [{name: web, namespace: infra}]
+  hostnames: ["app.example.com"]
+  rules:
+  - matches: [{path: {type: PathPrefix, value: /api}}]
+    backendRefs: [{name: api, port: 80}]`,
+    more: [
+      "Roles are separated: platform teams own `GatewayClass` and `Gateway`, app teams own `HTTPRoute` in their own namespace.",
+      "Controllers that implement Gateway API include Envoy Gateway, Istio, Cilium, Traefik, NGINX Gateway Fabric, Contour, and the managed gateways of the major clouds. Pick one that your platform supports.",
+      "Migration: inventory Ingress objects and annotations, translate them with the `ingress2gateway` tool as a starting point, run both side by side, then switch DNS. Custom NGINX snippets have no direct equivalent and need rework.",
+      "Retirement means exposure: an unpatched ingress controller sits on your edge. Treat migration as a security task."
+    ],
+    watch: ["Check which Ingress controller you run: `kubectl get pods -A | grep -i ingress`. Managed add-ons from cloud vendors have their own support timelines. Read the vendor notice."]
+  });
+
+  card("k8s", "ConfigMaps and Secrets", "Concept", {
+    sum: "Keep configuration out of images. A Secret is not encrypted by default, only base64 encoded.",
+    lang: "yaml",
+    code: R`apiVersion: v1
+kind: ConfigMap
+metadata: {name: api-config}
+data:
+  LOG_LEVEL: info
+  app.yaml: |
+    cache:
+      ttl: 60s
+---
+# in the pod spec
+env:
+- name: DB_PASSWORD
+  valueFrom: {secretKeyRef: {name: db, key: password}}
+envFrom: [{configMapRef: {name: api-config}}]
+volumeMounts: [{name: cfg, mountPath: /etc/app}]
+volumes: [{name: cfg, configMap: {name: api-config}}]`,
+    more: [
+      "Env vars are read at container start. Mounted files from ConfigMaps and Secrets update eventually. Apps must reload them, or you restart pods (for example with a checksum annotation in Helm).",
+      "Enable encryption at rest for etcd. Restrict `get secrets` in RBAC. Prefer an external store: External Secrets Operator, the Secrets Store CSI driver, or Sealed Secrets for GitOps.",
+      "Mark ConfigMaps and Secrets `immutable: true` when they do not change. It reduces API server load and prevents accidental edits."
+    ],
+    watch: ["Do not commit Secret manifests with real values to Git. Base64 is not protection."]
+  });
+
+  card("k8s", "Probes and graceful shutdown", "Table", {
+    sum: "Three different questions. Mixing them up causes restart loops and dropped requests.",
+    head: ["Probe", "Question", "On failure", "Use for"],
+    rows: [
+      ["`startupProbe`", "Has the app finished starting?", "Restarts the container if it never succeeds", "Slow starters. Disables the other probes until it passes"],
+      ["`readinessProbe`", "Can it take traffic now?", "Removes the pod from Service endpoints. No restart", "Warm-up, dependency down, overload"],
+      ["`livenessProbe`", "Is it stuck beyond recovery?", "Restarts the container", "Deadlocks. Keep it cheap and independent of dependencies"]
+    ],
+    more: [
+      "Shutdown order: pod is marked Terminating and removed from endpoints, `preStop` runs, SIGTERM is sent, the app has `terminationGracePeriodSeconds` (30 by default) to exit, then SIGKILL.",
+      "Endpoint removal and SIGTERM race. Add a `preStop` sleep of a few seconds, or have the app keep serving briefly after SIGTERM, so in-flight traffic does not hit a closed port.",
+      "Sidecar containers (init containers with `restartPolicy: Always`, GA in 1.33) start before the main container and stop after it, which fixes ordering problems for log shippers and proxies."
+    ],
+    lang: "yaml",
+    code: R`lifecycle:
+  preStop:
+    exec: {command: ["sh", "-c", "sleep 5"]}
+startupProbe:
+  httpGet: {path: /health, port: 3000}
+  failureThreshold: 30
+  periodSeconds: 2             # up to 60 seconds to start`,
+    watch: ["A liveness probe that calls the database restarts every pod when the database is down, turning a partial outage into a full one."]
+  });
+
+  card("k8s", "Resources, QoS and scheduling", "Concept", {
+    sum: "Requests decide where a pod fits. Limits decide when it is throttled or killed.",
+    head: ["QoS class", "Condition", "Eviction order"],
+    rows: [
+      ["Guaranteed", "Every container has requests equal to limits for CPU and memory", "Last"],
+      ["Burstable", "At least one request or limit set, not all equal", "Middle"],
+      ["BestEffort", "No requests or limits", "First"]
+    ],
+    more: [
+      "CPU is compressible: exceeding the limit means throttling, which shows up as latency. Memory is not: exceeding the limit means an OOMKill (exit code 137).",
+      "Many teams set CPU requests but no CPU limits, and set memory limit equal to memory request. Measure before choosing.",
+      "Scheduling controls: `nodeSelector`, node and pod affinity or anti-affinity, `tolerations` for tainted nodes, `topologySpreadConstraints` for zones, `priorityClassName` for preemption.",
+      "`LimitRange` sets defaults per namespace, `ResourceQuota` caps the total. Use both on shared clusters."
+    ],
+    lang: "yaml",
+    code: R`tolerations:
+- key: workload
+  operator: Equal
+  value: gpu
+  effect: NoSchedule
+affinity:
+  podAntiAffinity:
+    preferredDuringSchedulingIgnoredDuringExecution:
+    - weight: 100
+      podAffinityTerm:
+        topologyKey: kubernetes.io/hostname
+        labelSelector: {matchLabels: {app: api}}`
+  });
+
+  /* ================= KUBERNETES (part 2) ================= */
+  card("k8s", "Autoscaling", "Table", {
+    sum: "Scale pods first, then nodes to fit the pods.",
+    head: ["Tool", "Scales", "Based on", "Notes"],
+    rows: [
+      ["HPA", "Pod replicas", "CPU, memory, custom or external metrics", "Needs metrics-server. Built in"],
+      ["VPA", "Pod requests and limits", "Observed usage", "Good for right-sizing. Updating usually restarts pods, so use recommendation mode first"],
+      ["KEDA", "Pod replicas, including to zero", "Queues, streams, cron, HTTP and 60+ scalers", "Drives an HPA under the hood"],
+      ["Cluster Autoscaler", "Nodes in a node group", "Pending pods that cannot be scheduled", "Works on the node groups you define"],
+      ["Karpenter", "Nodes, picks instance types", "Pending pods", "Faster and bin-packs better. Strong on AWS, available on other clouds"]
+    ],
+    lang: "yaml",
+    code: R`apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata: {name: api}
+spec:
+  scaleTargetRef: {apiVersion: apps/v1, kind: Deployment, name: api}
+  minReplicas: 3
+  maxReplicas: 20
+  metrics:
+  - type: Resource
+    resource: {name: cpu, target: {type: Utilization, averageUtilization: 65}}
+  behavior:
+    scaleDown: {stabilizationWindowSeconds: 300}`,
+    more: [
+      "HPA formula: desired replicas = ceil(current replicas × current metric ÷ target metric).",
+      "Utilisation is measured against requests, so requests must be realistic. No requests means CPU utilisation HPA cannot work.",
+      "Do not run HPA and VPA on the same resource metric."
+    ]
+  });
+
+  card("k8s", "Storage", "Concept", {
+    sum: "A pod claims storage with a PersistentVolumeClaim. A StorageClass provisions the volume on demand.",
+    head: ["Access mode", "Meaning"],
+    rows: [
+      ["`ReadWriteOnce` (RWO)", "Read and write from pods on one node. Typical for block disks"],
+      ["`ReadWriteOncePod` (RWOP)", "Read and write from exactly one pod"],
+      ["`ReadOnlyMany` (ROX)", "Read-only from many nodes"],
+      ["`ReadWriteMany` (RWX)", "Read and write from many nodes. Needs file storage such as NFS, EFS, CephFS"]
+    ],
+    lang: "yaml",
+    code: R`apiVersion: apps/v1
+kind: StatefulSet
+metadata: {name: db}
+spec:
+  serviceName: db
+  replicas: 3
+  selector: {matchLabels: {app: db}}
+  template:
+    metadata: {labels: {app: db}}
+    spec:
+      containers:
+      - name: pg
+        image: postgres:17
+        volumeMounts: [{name: data, mountPath: /var/lib/postgresql/data}]
+  volumeClaimTemplates:           # one PVC per replica: data-db-0, data-db-1, ...
+  - metadata: {name: data}
+    spec:
+      accessModes: [ReadWriteOnce]
+      storageClassName: fast-ssd
+      resources: {requests: {storage: 50Gi}}`,
+    more: [
+      "`reclaimPolicy: Delete` removes the cloud disk with the PVC. `Retain` keeps it. Choose deliberately for data you care about.",
+      "Deleting a StatefulSet does not delete its PVCs. Volume snapshots (`VolumeSnapshot`) give point-in-time copies if your CSI driver supports them.",
+      "Running databases on Kubernetes is possible with an operator (CloudNativePG, Percona, etc.), but a managed database is often simpler to operate."
+    ]
+  });
+
+  card("k8s", "RBAC and Pod security", "Concept", {
+    sum: "Grant roles to identities. Use the Pod Security Standards to restrict what pods may do.",
+    lang: "yaml",
+    code: R`apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata: {name: deployer, namespace: shop}
+rules:
+- apiGroups: ["apps"]
+  resources: ["deployments"]
+  verbs: ["get", "list", "patch", "update"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata: {name: ci-deployer, namespace: shop}
+subjects: [{kind: ServiceAccount, name: ci, namespace: shop}]
+roleRef: {kind: Role, name: deployer, apiGroup: rbac.authorization.k8s.io}
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: shop
+  labels:
+    pod-security.kubernetes.io/enforce: restricted      # also: baseline, privileged
+    pod-security.kubernetes.io/warn: restricted`,
+    more: [
+      "`Role` and `RoleBinding` are namespaced. `ClusterRole` and `ClusterRoleBinding` apply cluster-wide. Prefer namespaced roles.",
+      "Pod Security Standards levels: `privileged` (no limits), `baseline` (blocks known escalations), `restricted` (non-root, no privilege escalation, seccomp, dropped capabilities).",
+      "Each pod gets a ServiceAccount token. Set `automountServiceAccountToken: false` for pods that do not call the API.",
+      "For policy beyond PSS use Kyverno, Gatekeeper or the built-in ValidatingAdmissionPolicy (CEL based)."
+    ],
+    watch: ["`cluster-admin` for CI or for developers is the most common over-grant. Use `kubectl auth can-i --list` to review what an identity can do."]
+  });
+
+  card("k8s", "NetworkPolicy: default deny", "Recipe", {
+    sum: "By default every pod can talk to every pod. Start from deny-all, then allow what you need.",
+    lang: "yaml",
+    code: R`apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata: {name: default-deny, namespace: shop}
+spec:
+  podSelector: {}
+  policyTypes: [Ingress, Egress]
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata: {name: api-allow, namespace: shop}
+spec:
+  podSelector: {matchLabels: {app: api}}
+  policyTypes: [Ingress, Egress]
+  ingress:
+  - from: [{namespaceSelector: {matchLabels: {kubernetes.io/metadata.name: infra}}}]
+    ports: [{port: 3000}]
+  egress:
+  - to: [{podSelector: {matchLabels: {app: db}}}]
+    ports: [{port: 5432}]
+  - to: [{namespaceSelector: {}}]            # DNS
+    ports: [{port: 53, protocol: UDP}, {port: 53, protocol: TCP}]`,
+    watch: [
+      "NetworkPolicy is enforced by the CNI plugin (Calico, Cilium and others). A CNI without support silently ignores the objects.",
+      "Forgetting DNS egress after a default deny breaks name resolution for the pod."
+    ]
+  });
+
+  card("k8s", "Pod status decoder", "Table", {
+    wide: true,
+    sum: "Match the status to the likely cause, then run the first command.",
+    head: ["Status", "Usually means", "First command", "Typical fix"],
+    rows: [
+      ["`Pending`", "No node fits: not enough CPU or memory, taints, unbound PVC, affinity", "`kubectl describe pod` (look at Events)", "Add capacity, fix requests, tolerations or storage class"],
+      ["`ContainerCreating` (long)", "Image pull, volume attach or CNI problem", "`kubectl describe pod`", "Check the volume, the node and the CNI"],
+      ["`ImagePullBackOff` / `ErrImagePull`", "Wrong image name or tag, no registry credentials, rate limit", "`kubectl describe pod`", "Fix the tag, add `imagePullSecrets`, check registry access"],
+      ["`CrashLoopBackOff`", "Container starts and exits repeatedly", "`kubectl logs <pod> --previous`", "Fix the app error, config, missing env var, or failing liveness probe"],
+      ["`OOMKilled` (exit 137)", "Container exceeded its memory limit", "`kubectl describe pod` (Last State)", "Raise the limit or fix a memory leak. For JVMs set `MaxRAMPercentage`"],
+      ["`CreateContainerConfigError`", "Missing ConfigMap or Secret key", "`kubectl describe pod`", "Create the object or correct the reference"],
+      ["`Running` but not Ready", "Readiness probe failing", "`kubectl describe pod`, `kubectl get endpoints`", "Fix the probe path, port or dependency"],
+      ["`Evicted`", "Node under pressure (disk, memory)", "`kubectl describe node`", "Add capacity, set requests, clean disks"],
+      ["`Terminating` (stuck)", "Finalizer or app ignoring SIGTERM", "`kubectl get pod -o yaml` (finalizers)", "Handle SIGTERM, resolve the finalizer. Force delete only as a last resort"]
+    ],
+    lang: "sh",
+    code: R`kubectl get pod api-1 -o jsonpath='{.status.containerStatuses[0].lastState}'
+kubectl get endpoints api                       # empty list means no ready pods match the selector
+kubectl get events --field-selector involvedObject.name=api-1
+kubectl describe node worker-3 | sed -n '/Conditions/,/Addresses/p'`
+  });
+
+  card("k8s", "Service is not reachable: a checklist", "Recipe", {
+    sum: "Work from the pod outwards.",
+    lang: "sh",
+    code: R`# 1. Is the pod Ready? Do endpoints exist?
+kubectl get pods -l app=api; kubectl get endpoints api
+# 2. Does the selector match pod labels? (empty endpoints = no)
+kubectl get svc api -o jsonpath='{.spec.selector}'; kubectl get pods --show-labels
+# 3. Does the app answer inside its own pod?
+kubectl exec -it api-1 -- wget -qO- localhost:3000/health
+# 4. Does the Service answer from another pod?
+kubectl run tmp --rm -it --image=busybox --restart=Never -- wget -qO- http://api.shop/health
+# 5. DNS working?
+kubectl exec -it tmp -- nslookup api.shop
+# 6. NetworkPolicy blocking? Gateway route attached?
+kubectl get networkpolicy -A; kubectl get httproute -A; kubectl describe httproute api -n shop`,
+    more: ["`targetPort` not matching the container port, and an app listening on `127.0.0.1` instead of `0.0.0.0`, are the two most common causes."]
+  });
+
+  card("k8s", "Helm and Kustomize", "Table", {
+    sum: "Both generate manifests. Helm templates and packages. Kustomize patches plain YAML.",
+    head: ["", "Helm", "Kustomize"],
+    rows: [
+      ["Model", "Charts with Go templates and `values.yaml`", "Base manifests plus overlays with patches"],
+      ["Strengths", "Third-party software, packaging, versioned releases, rollback", "Per-environment differences without templating"],
+      ["Trade-offs", "Template logic can be hard to read and debug", "Complex changes become many patches"],
+      ["Built into kubectl", "No", "Yes: `kubectl apply -k`"]
+    ],
+    lang: "sh",
+    code: R`helm repo add bitnami https://charts.bitnami.com/bitnami && helm repo update
+helm install web bitnami/nginx -n web --create-namespace -f values.yaml
+helm upgrade --install web bitnami/nginx -n web -f values.yaml --atomic   # roll back on failure
+helm template web ./chart -f values.yaml | kubectl diff -f -               # render and compare
+helm list -A; helm history web -n web; helm rollback web 2 -n web
+helm lint ./chart
+
+# kustomize layout:  base/  overlays/prod/kustomization.yaml
+kubectl kustomize overlays/prod | less
+kubectl apply -k overlays/prod`,
+    more: ["A common pairing: Helm for installing other people's software, Kustomize (or Helm values per environment) for your own apps, reconciled by Argo CD or Flux."]
+  });
+
+  card("k8s", "Release strategies", "Table", {
+    sum: "Rolling updates are built in. Canary and blue-green need a router or a controller.",
+    head: ["Strategy", "How", "Rollback", "Tools"],
+    rows: [
+      ["Rolling", "Replace pods gradually (`maxSurge`, `maxUnavailable`)", "`kubectl rollout undo`", "Deployment"],
+      ["Recreate", "Stop all, then start new", "Redeploy old", "Deployment `strategy: Recreate`. Causes downtime"],
+      ["Blue-green", "Run the new version beside the old, switch the Service or route", "Switch back instantly", "Two Deployments, Argo Rollouts"],
+      ["Canary", "Send 5%, then 25%, then 100% of traffic. Check metrics at each step", "Shift traffic back", "Argo Rollouts, Flagger, Gateway API weights"]
+    ],
+    lang: "yaml",
+    code: R`# Gateway API traffic split: 90 / 10 canary
+rules:
+- backendRefs:
+  - {name: api-stable, port: 80, weight: 90}
+  - {name: api-canary, port: 80, weight: 10}`,
+    more: ["Database changes break rollback. Use expand and contract migrations: add the new column, deploy code that handles both, backfill, then remove the old column in a later release."]
+  });
+
+  card("k8s", "Versions and upgrades", "Table", {
+    v: "Oct 2026",
+    sum: "A new minor version ships about every four months, three per year. Each is supported for roughly 14 months.",
+    head: ["Version", "Released", "End of support", "Status"],
+    rows: [
+      ["1.37", "26 Aug 2026", "28 Aug 2027", "Supported (latest)"],
+      ["1.36", "22 Apr 2026", "28 Apr 2027", "Supported"],
+      ["1.35", "17 Dec 2025", "28 Dec 2026", "Supported, ending soon"],
+      ["1.34", "27 Aug 2025", "27 Aug 2026", "End of life"]
+    ],
+    more: [
+      "Upgrade one minor version at a time: control plane first, then nodes. A kubelet may be up to three minor versions older than the API server, and `kubectl` may differ by one in either direction.",
+      "Before each upgrade, read the release notes for removed APIs. Scan manifests and live objects with `pluto` or `kubent`, and watch `apiserver_requested_deprecated_apis` in metrics.",
+      "Managed clusters have their own version calendars and extended-support fees. Check your provider, because it may end support earlier or later than upstream.",
+      "Practice upgrades in a staging cluster built from the same code as production."
+    ],
+    watch: ["Dates come from public release trackers in October 2026. Confirm against kubernetes.io/releases before planning a change window."]
+  });
+
+  card("k8s", "Jobs and CronJobs", "Syntax", {
+    sum: "Run work to completion. Set limits so failures do not pile up.",
+    lang: "yaml",
+    code: R`apiVersion: batch/v1
+kind: CronJob
+metadata: {name: nightly-report}
+spec:
+  schedule: "0 2 * * *"            # cron syntax, in the controller's time zone unless timeZone is set
+  timeZone: "Asia/Kolkata"
+  concurrencyPolicy: Forbid        # skip a run if the previous one is still going
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      backoffLimit: 2
+      ttlSecondsAfterFinished: 86400   # clean up finished Jobs after a day
+      template:
+        spec:
+          restartPolicy: OnFailure
+          containers:
+          - name: report
+            image: ghcr.io/org/report:1.2.0
+            resources: {requests: {cpu: 100m, memory: 128Mi}}`,
+    more: ["Jobs must be idempotent: Kubernetes may run a task more than once. Use `Indexed` completion mode for parallel batch work."]
+  });
+
+  /* ================= CI/CD ================= */
+  /* In code samples, ~{ stands for ${ (the engine converts it) so template literals stay valid. */
+  card("cicd", "Pipeline stages", "Table", {
+    wide: true,
+    sum: "CI proves a change is safe to merge. CD ships what CI built. Put the fastest checks first so people get feedback early.",
+    head: ["Stage", "What runs", "Fails the build when", "Typical tools"],
+    rows: [
+      ["Checkout and restore cache", "Fetch source, restore dependency caches", "Never. A cache miss only slows it", "`actions/cache`, BuildKit cache"],
+      ["Lint and format", "Style, static analysis, type checks", "Any violation", "ESLint, Checkstyle, `ruff`, `tsc`, `shellcheck`"],
+      ["Unit tests", "Fast tests, no network", "Any failure or coverage below the gate", "JUnit, Jest, pytest"],
+      ["Build", "Compile, bundle, create the artifact or image once", "Build errors", "Maven, Gradle, npm, Docker buildx"],
+      ["Security scans", "Dependencies, secrets, image, IaC", "High severity findings", "Trivy, Grype, gitleaks, CodeQL, Checkov"],
+      ["Integration tests", "Service plus real dependencies", "Any failure", "Testcontainers, Compose"],
+      ["Publish", "Push the artifact with an immutable tag, sign it", "Push or signing fails", "GHCR, ECR, Artifactory, cosign"],
+      ["Deploy to staging", "Roll out the same artifact", "Rollout does not become healthy", "Argo CD, Helm, Terraform"],
+      ["Smoke and e2e tests", "A few critical user journeys", "A journey fails", "Playwright, k6, curl checks"],
+      ["Promote to production", "Same artifact, approval or automatic", "Health checks or SLO burn during rollout", "Argo Rollouts, Flagger, feature flags"]
+    ],
+    more: [
+      "Build once, deploy many: the artifact that passed tests is the one that runs in production. Do not rebuild per environment. Pass configuration at deploy time.",
+      "Aim for a pull request pipeline under about ten minutes. Slow pipelines get bypassed. Parallelise jobs, cache dependencies, and run slow suites after merge."
+    ]
+  });
+
+  card("cicd", "GitHub Actions anatomy", "Recipe", {
+    sum: "A workflow has triggers, jobs and steps. Jobs run on separate runners and in parallel unless you add `needs`.",
+    lang: "yaml",
+    code: R`# .github/workflows/ci.yml
+name: ci
+on:
+  push: {branches: [main]}
+  pull_request:
+permissions:
+  contents: read                    # least privilege for GITHUB_TOKEN
+concurrency:
+  group: ci-~{{ github.ref }}
+  cancel-in-progress: true          # cancel superseded runs
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        node: [22, 24]
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: ~{{ matrix.node }}
+          cache: npm
+      - run: npm ci
+      - run: npm test -- --ci
+  build:
+    needs: test                     # runs only if test passes
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - run: docker build -t app:~{{ github.sha }} .`,
+    more: [
+      "Useful contexts: `github.sha`, `github.ref_name`, `github.event_name`, `secrets.NAME`, `vars.NAME`, `matrix.x`, `needs.job.outputs.x`.",
+      "Share data between jobs with `outputs` (small values) or `actions/upload-artifact` and `download-artifact` (files). Reuse logic with reusable workflows (`workflow_call`) or composite actions.",
+      "Use `environment: production` to add required reviewers, wait timers and environment-scoped secrets."
+    ]
+  });
+
+  card("cicd", "Build and push an image with OIDC", "Recipe", {
+    sum: "OpenID Connect lets the job get short-lived cloud credentials. No long-lived access keys are stored in the repository.",
+    lang: "yaml",
+    code: R`jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write               # allows requesting an OIDC token
+      packages: write
+    steps:
+      - uses: actions/checkout@v5
+      - uses: docker/setup-buildx-action@v3
+      - uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ~{{ github.actor }}
+          password: ~{{ secrets.GITHUB_TOKEN }}
+      - uses: docker/build-push-action@v6
+        with:
+          push: true
+          tags: ghcr.io/~{{ github.repository }}:~{{ github.sha }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          provenance: true
+          sbom: true
+      # Cloud access without stored keys
+      - uses: aws-actions/configure-aws-credentials@v5
+        with:
+          role-to-assume: arn:aws:iam::123456789012:role/gha-deploy
+          aws-region: eu-west-1`,
+    more: [
+      "In the cloud, create a role whose trust policy accepts tokens from `token.actions.githubusercontent.com` and restricts the `sub` claim to your repository and branch or environment.",
+      "Tag images with the commit SHA or a version. A moving `latest` tag makes rollbacks and audits hard."
+    ]
+  });
+
+  card("cicd", "CI security checklist", "Pitfall", {
+    sum: "A pipeline can reach production, secrets and your artifact registry. Treat it as a high-value target.",
+    watch: [
+      "Pin third-party actions to a full commit SHA (`uses: owner/action@<40-char-sha>`), not a movable tag. Let Dependabot or Renovate update them.",
+      "Set `permissions:` at the top of each workflow. The default token can be broader than needed.",
+      "`pull_request_target` runs with secrets and write access in the context of the base repository. Never check out and run untrusted PR code there.",
+      "Never interpolate untrusted input (`github.event.pull_request.title`, branch names, issue bodies) directly into `run:` scripts. Pass it through `env:` and quote it to avoid script injection.",
+      "Secrets are masked in logs only when they match exactly. Avoid printing derived values, and never `echo` them to debug.",
+      "Self-hosted runners persist between jobs. Use ephemeral runners, keep them off public repositories, and isolate them from production networks.",
+      "Restrict who can approve deployments to protected environments, and require reviews on workflow file changes."
+    ],
+    lang: "yaml",
+    code: R`# unsafe: attacker controls the title
+# - run: echo "~{{ github.event.pull_request.title }}"
+
+# safer: pass through an environment variable
+- run: echo "$TITLE"
+  env:
+    TITLE: ~{{ github.event.pull_request.title }}`
+  });
+
+  card("cicd", "GitLab CI and Jenkins at a glance", "Syntax", {
+    sum: "Same ideas in different syntax: stages, jobs, scripts, artifacts, caches, rules.",
+    lang: "yaml",
+    code: R`# .gitlab-ci.yml
+stages: [test, build, deploy]
+default:
+  image: node:24
+  cache:
+    key: {files: [package-lock.json]}
+    paths: [.npm/]
+test:
+  stage: test
+  script: [npm ci --cache .npm, npm test]
+build:
+  stage: build
+  script: [npm run build]
+  artifacts: {paths: [dist/], expire_in: 1 week}
+deploy_prod:
+  stage: deploy
+  script: [./deploy.sh]
+  environment: production
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+      when: manual
+
+# Jenkinsfile (declarative)
+# pipeline {
+#   agent any
+#   stages {
+#     stage('Test')  { steps { sh 'npm ci && npm test' } }
+#     stage('Build') { steps { sh 'npm run build' } }
+#     stage('Deploy') { when { branch 'main' } steps { sh './deploy.sh' } }
+#   }
+# }`
+  });
+
+  card("cicd", "Choosing a CI/CD system", "Table", {
+    sum: "Use what sits next to your code unless you have a clear reason not to.",
+    head: ["System", "Config", "Runners", "Strengths", "Watch for"],
+    rows: [
+      ["GitHub Actions", "YAML in `.github/workflows`", "GitHub-hosted or self-hosted", "Huge marketplace, tight GitHub integration, OIDC", "Third-party action supply chain. Minutes cost on private repos"],
+      ["GitLab CI/CD", "`.gitlab-ci.yml`", "Shared or self-managed runners", "All-in-one platform, built-in registry and scanning, strong pipeline model", "Tied to GitLab"],
+      ["Jenkins", "`Jenkinsfile` (Groovy)", "Your own agents", "Extremely flexible, thousands of plugins, on-prem friendly", "You run and patch it. Plugin sprawl"],
+      ["CircleCI, Buildkite", "YAML", "Hosted or your own agents", "Fast pipelines, good parallelism and caching", "Another vendor to manage"],
+      ["Argo Workflows, Tekton", "Kubernetes CRDs", "Pods in your cluster", "Kubernetes-native pipelines", "More building blocks to assemble"]
+    ]
+  });
+
+  card("cicd", "Deployment strategies", "Table", {
+    wide: true,
+    sum: "How new code reaches users. The right choice depends on risk, cost and how quickly you can roll back.",
+    head: ["Strategy", "How", "Downtime", "Rollback", "Cost", "Best for"],
+    rows: [
+      ["Recreate", "Stop old, start new", "Yes", "Redeploy old", "Lowest", "Dev environments, batch systems"],
+      ["Rolling", "Replace instances gradually", "No (with readiness checks)", "Roll forward or redeploy, minutes", "Low", "Most stateless services"],
+      ["Blue-green", "Run two full environments, switch traffic", "No", "Switch back, seconds", "High (double capacity)", "Risky releases needing instant rollback"],
+      ["Canary", "Route a small share of traffic to the new version, watch metrics, increase", "No", "Move traffic back, seconds", "Medium", "High-traffic services with good metrics"],
+      ["Feature flags", "Deploy code dark, enable per user or percentage", "No", "Turn the flag off", "Low, plus flag hygiene", "Decoupling deploy from release, trunk-based development"],
+      ["Shadow / mirror", "Copy live traffic to the new version, discard responses", "No", "n/a (no users affected)", "Medium to high", "Testing a rewrite against real traffic"]
+    ],
+    more: ["Automate the decision: promote a canary only if error rate and latency stay within the SLO, and roll back automatically if they do not."]
+  });
+
+  card("cicd", "GitOps with Argo CD or Flux", "Concept", {
+    sum: "Git is the source of truth for what runs in the cluster. An agent in the cluster pulls and reconciles.",
+    lang: "yaml",
+    code: R`apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata: {name: shop-api, namespace: argocd}
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/org/deploy-config.git
+    targetRevision: main
+    path: apps/shop/api/overlays/prod
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: shop
+  syncPolicy:
+    automated: {prune: true, selfHeal: true}     # delete removed objects, undo manual changes
+    syncOptions: [CreateNamespace=true]`,
+    more: [
+      "Flow: CI builds and pushes an image, then opens a PR (or commits) that bumps the image tag in the config repo. Merge triggers the sync. Rollback is `git revert`.",
+      "Benefits: audit trail in Git, drift detection and self-healing, no cluster credentials stored in CI.",
+      "Keep application code and deployment config in separate repositories or folders so that config changes do not trigger a full build.",
+      "Argo CD offers a UI and `ApplicationSet` for many clusters. Flux is controller-only and composes with Helm and Kustomize controllers."
+    ],
+    watch: ["`prune: true` deletes anything not in Git. Test it first on a non-critical app. Keep Secrets out of the config repo, or encrypt them (Sealed Secrets, SOPS) or reference an external store."]
+  });
+
+  card("cicd", "Software supply chain security", "Table", {
+    sum: "Know what is in your artifact, prove who built it, and block what you cannot verify.",
+    head: ["Control", "What it does", "Tool examples"],
+    rows: [
+      ["Dependency updates", "Automatic PRs for new versions and fixes", "Dependabot, Renovate"],
+      ["Vulnerability scan", "Finds known CVEs in dependencies and images", "Trivy, Grype, Snyk, `npm audit`, OWASP Dependency-Check"],
+      ["Secret scan", "Detects committed credentials", "gitleaks, trufflehog, GitHub push protection"],
+      ["SBOM", "A bill of materials listing every component", "Syft, `docker buildx --sbom`, CycloneDX, SPDX"],
+      ["Signing", "Cryptographic proof of who built the image", "cosign (Sigstore, keyless with OIDC)"],
+      ["Provenance", "Signed record of how an artifact was built", "SLSA provenance, `--provenance=true`"],
+      ["Admission policy", "Cluster refuses unsigned or non-compliant images", "Kyverno, Gatekeeper, Sigstore policy-controller"],
+      ["Pinned inputs", "Lockfiles, image digests, action SHAs", "`package-lock.json`, `@sha256:`"]
+    ],
+    lang: "sh",
+    code: R`syft ghcr.io/org/app:1.4.0 -o spdx-json > sbom.json
+trivy image --severity HIGH,CRITICAL --exit-code 1 ghcr.io/org/app:1.4.0
+cosign sign ghcr.io/org/app@sha256:<digest>                 # keyless in CI with OIDC
+cosign verify ghcr.io/org/app@sha256:<digest> \
+  --certificate-identity-regexp 'https://github.com/org/.*' \
+  --certificate-oidc-issuer https://token.actions.githubusercontent.com`
+  });
+
+  card("cicd", "Versioning and releases", "Concept", {
+    sum: "Make versions predictable and let tools write the changelog.",
+    head: ["Change", "Semver bump", "Conventional commit"],
+    rows: [
+      ["Bug fix, no API change", "Patch: 1.4.0 to 1.4.1", "`fix:`"],
+      ["New backward-compatible feature", "Minor: 1.4.0 to 1.5.0", "`feat:`"],
+      ["Breaking change", "Major: 1.4.0 to 2.0.0", "`feat!:` or a `BREAKING CHANGE:` footer"]
+    ],
+    more: [
+      "Tools: `release-please`, `semantic-release` and `changesets` read commit messages, bump the version, update the changelog and create tags and releases.",
+      "Tag container images with the immutable version and the commit SHA. A moving tag such as `1.4` or `stable` is fine as an extra pointer, never the only one.",
+      "Pre-release identifiers: `2.0.0-rc.1`. Build metadata: `1.4.0+build.7`."
+    ]
+  });
+
+  card("cicd", "Testing in the pipeline", "Concept", {
+    sum: "Many fast tests at the bottom, few slow ones at the top.",
+    head: ["Level", "Speed", "Scope", "Run"],
+    rows: [
+      ["Unit", "Milliseconds", "One function or class", "Every commit"],
+      ["Integration", "Seconds", "A service with real dependencies (Testcontainers)", "Every PR"],
+      ["Contract", "Seconds", "API agreements between services (Pact)", "Every PR on both sides"],
+      ["End to end", "Minutes", "A few critical user journeys", "After merge and after each deploy"],
+      ["Load and performance", "Minutes to hours", "Throughput and latency against a budget", "Nightly or before big releases"]
+    ],
+    more: [
+      "Flaky tests destroy trust. Track them, quarantine fast, and fix the cause: shared state, time, ordering, network.",
+      "Shard slow suites across runners and use test impact analysis where available.",
+      "Database migrations should run in the pipeline against a real database engine, not an in-memory substitute."
+    ]
+  });
+
+  card("cicd", "Environments, secrets and promotion", "Concept", {
+    sum: "Keep environments alike, keep differences in configuration, and keep secrets out of the repository.",
+    more: [
+      "Typical chain: dev, staging, production. Staging should mirror production in shape (same IaC, same Kubernetes version) even if it is smaller.",
+      "Config per environment lives in values files or overlays. Secrets come from a secret manager (AWS Secrets Manager, Vault, Key Vault) at deploy or run time.",
+      "Use environment protection rules for approvals, and short-lived credentials (OIDC) for access.",
+      "Database changes: run migrations as a separate, reviewed step. Make them backward compatible so the previous app version still works during a rollback.",
+      "Ephemeral preview environments per pull request catch integration problems early. Tear them down when the PR closes."
+    ]
+  });
+
+  card("cicd", "Delivery metrics (DORA)", "Table", {
+    sum: "Four measures of software delivery performance. Two are about speed and two about stability.",
+    head: ["Metric", "Question", "How to measure"],
+    rows: [
+      ["Deployment frequency", "How often do we ship to production?", "Count successful production deploys per day or week"],
+      ["Lead time for changes", "How long from commit to production?", "Merge or commit time to deploy time"],
+      ["Change failure rate", "What share of deploys cause a failure needing a fix?", "Failed or rolled-back deploys divided by all deploys"],
+      ["Time to restore service", "How quickly do we recover from a failure?", "Incident start to resolution"]
+    ],
+    more: [
+      "Use them to find bottlenecks, not to rank teams. Gaming one metric (many tiny deploys) can hide the others.",
+      "Improvement levers: smaller batches, trunk-based development, fast reliable tests, automated rollbacks, good observability."
+    ]
+  });
+
+  /* ================= CLOUD AND IaC ================= */
+  card("cloud", "Service map: AWS, Azure, Google Cloud", "Table", {
+    wide: true,
+    sum: "The same building blocks under different names. Use it to translate between clouds.",
+    head: ["Need", "AWS", "Azure", "Google Cloud"],
+    rows: [
+      ["Virtual machines", "EC2", "Virtual Machines", "Compute Engine"],
+      ["Managed Kubernetes", "EKS", "AKS", "GKE"],
+      ["Run a container, no cluster", "ECS Fargate, App Runner", "Container Apps", "Cloud Run"],
+      ["Functions", "Lambda", "Functions", "Cloud Run functions"],
+      ["Object storage", "S3", "Blob Storage", "Cloud Storage"],
+      ["Block disk", "EBS", "Managed Disks", "Persistent Disk, Hyperdisk"],
+      ["Relational database", "RDS, Aurora", "Azure SQL, Database for PostgreSQL/MySQL", "Cloud SQL, AlloyDB, Spanner"],
+      ["NoSQL", "DynamoDB", "Cosmos DB", "Firestore, Bigtable"],
+      ["Queue and pub/sub", "SQS, SNS, EventBridge", "Service Bus, Event Grid", "Pub/Sub"],
+      ["Load balancer", "ALB, NLB", "Application Gateway, Load Balancer, Front Door", "Cloud Load Balancing"],
+      ["DNS", "Route 53", "Azure DNS", "Cloud DNS"],
+      ["Private network", "VPC", "Virtual Network (VNet)", "VPC"],
+      ["Identity and access", "IAM", "Microsoft Entra ID, Azure RBAC", "Cloud IAM"],
+      ["Secrets and keys", "Secrets Manager, KMS", "Key Vault", "Secret Manager, Cloud KMS"],
+      ["Monitoring and logs", "CloudWatch", "Azure Monitor", "Cloud Monitoring and Logging"],
+      ["Native IaC", "CloudFormation, CDK", "Bicep, ARM templates", "Infrastructure Manager (Terraform based)"]
+    ],
+    more: ["Names and product lines change often. Treat the table as a starting point and check each provider's current docs for limits, regions and pricing."]
+  });
+
+  card("cloud", "Core concepts", "Concept", {
+    sum: "These decisions shape cost, resilience and security more than any single service choice.",
+    head: ["Concept", "What it means", "Rule of thumb"],
+    rows: [
+      ["Region", "A geographic area with several data centres", "Pick near users and data-residency rules. Not every service exists in every region"],
+      ["Availability zone (AZ)", "An isolated data centre group inside a region", "Spread across at least two, ideally three"],
+      ["Shared responsibility", "Provider secures the cloud, you secure what you put in it", "Identity, data, config and patching of your VMs are yours"],
+      ["Least privilege", "Grant only the permissions needed", "Start with none, add what a task needs, review often"],
+      ["Elasticity", "Capacity follows demand", "Autoscale and delete idle resources"],
+      ["Managed vs self-run", "Provider operates the service", "Prefer managed for databases and queues unless you need control"],
+      ["Well-architected pillars", "Reliability, security, cost, performance, operational excellence, sustainability", "Use each provider's review checklist before launch"]
+    ]
+  });
+
+  card("cloud", "A typical network layout", "Concept", {
+    sum: "Public subnets hold load balancers. Private subnets hold apps and databases. Traffic leaves private subnets through a NAT gateway.",
+    lang: "text",
+    code: R`Internet
+   |
+[Internet gateway]
+   |
++---------------------- VPC 10.0.0.0/16 ----------------------+
+|  AZ-a                         AZ-b                          |
+|  public  10.0.0.0/24          public  10.0.1.0/24           |
+|    load balancer, NAT           load balancer, NAT          |
+|  private-app 10.0.10.0/24     private-app 10.0.11.0/24      |
+|    app servers / pods           app servers / pods          |
+|  private-data 10.0.20.0/24    private-data 10.0.21.0/24     |
+|    databases (no internet route)                            |
++-------------------------------------------------------------+`,
+    more: [
+      "Security groups are stateful allow-lists on instances or interfaces. Network ACLs are stateless and apply to subnets. Use security groups first and reference other groups instead of IP ranges.",
+      "Plan CIDR ranges before you peer networks or connect to on-premises. Overlapping ranges cannot be routed.",
+      "Use private endpoints (AWS PrivateLink and VPC endpoints, Azure Private Link, Private Service Connect) so traffic to managed services does not cross the internet.",
+      "NAT gateways bill per hour and per GB. Heavy egress from private subnets is a common surprise on the bill."
+    ]
+  });
+
+  card("cloud", "CIDR and subnet maths", "Table", {
+    sum: "A /N block has 2^(32-N) addresses. Clouds reserve a few per subnet (AWS reserves 5).",
+    head: ["Prefix", "Addresses", "Typical use"],
+    rows: [
+      ["`/16`", "65,536", "A whole VPC or VNet"],
+      ["`/20`", "4,096", "A large subnet, for example a Kubernetes node pool with pod IPs"],
+      ["`/24`", "256", "A standard subnet"],
+      ["`/26`", "64", "Small subnet"],
+      ["`/28`", "16", "Smallest AWS subnet. Endpoints and tiny tiers"],
+      ["`/32`", "1", "A single host"]
+    ],
+    more: [
+      "Private ranges (RFC 1918): `10.0.0.0/8`, `172.16.0.0/12`, `192.168.0.0/16`. Carrier-grade NAT uses `100.64.0.0/10`.",
+      "Kubernetes with a VPC-native CNI uses a VPC IP per pod. Size subnets for pods, not just nodes."
+    ]
+  });
+
+  card("cloud", "Identity and access (IAM)", "Concept", {
+    sum: "Give workloads roles, not keys. Give humans single sign-on, MFA and short sessions.",
+    lang: "json",
+    code: R`{
+  "Version": "2012-10-17",
+  "Statement": [{
+    "Effect": "Allow",
+    "Action": ["s3:GetObject", "s3:PutObject"],
+    "Resource": "arn:aws:s3:::my-app-uploads/*"
+  }]
+}`,
+    more: [
+      "Evaluation: explicit deny wins, otherwise access needs an allow. Organisation guardrails (AWS SCPs, Azure Policy, GCP organisation policies) cap what accounts can do, even for admins.",
+      "Workloads: AWS instance profiles, IRSA or EKS Pod Identity, Azure managed identities and workload identity, GCP service accounts with Workload Identity. CI systems use OIDC federation.",
+      "Separate accounts or subscriptions per environment and team. They are the strongest blast-radius boundary.",
+      "Never use the root account for daily work. Enable MFA, set up break-glass access, and send audit logs (CloudTrail, Activity Log, Cloud Audit Logs) to a protected store."
+    ],
+    watch: ["`Action: \"*\"` with `Resource: \"*\"` is administrator access. Search for wildcard policies during reviews and use access analyzers to find unused permissions."]
+  });
+
+  card("cloud", "Choosing compute", "Table", {
+    sum: "Move up the list for less operations work. Move down for more control.",
+    head: ["Model", "You manage", "Scaling", "Fits"],
+    rows: [
+      ["Functions (Lambda, Cloud Run functions)", "Code only", "Per request, to zero", "Event handlers, glue, spiky workloads. Mind cold starts, time limits (Lambda: 15 minutes) and concurrency limits"],
+      ["Serverless containers (Cloud Run, Fargate, Container Apps)", "Container image", "Automatic, can scale to zero", "HTTP APIs and workers with no cluster to run"],
+      ["Managed Kubernetes", "Workloads and add-ons", "Pods and nodes", "Many services, portability, a platform team"],
+      ["PaaS (App Service, Elastic Beanstalk, App Engine)", "App and config", "Platform settings", "Simple web apps"],
+      ["Virtual machines", "OS, patches, runtime, scaling", "Autoscaling groups", "Legacy apps, special software, full control"]
+    ],
+    more: [
+      "Spot or preemptible instances cost 60 to 90 percent less than on-demand but can be reclaimed on short notice. Use them for stateless, restartable work.",
+      "Choose ARM instances (Graviton, Ampere, Axion) when your software supports them. They often give better price per performance."
+    ]
+  });
+
+  card("cloud", "Storage and database choices", "Table", {
+    sum: "Match the data shape and access pattern.",
+    head: ["Need", "Pick", "Watch for"],
+    rows: [
+      ["Files, images, backups, data lake", "Object storage (S3, Blob, GCS)", "Eventual listing semantics vary, lifecycle rules, egress cost"],
+      ["Disk for one VM", "Block storage", "One attachment at a time, snapshots for backup"],
+      ["Shared files across servers", "NFS or SMB (EFS, Azure Files, Filestore)", "Latency and per-GB cost"],
+      ["Transactions, joins, constraints", "Relational (Postgres, MySQL, managed)", "Plan connection pooling and read replicas"],
+      ["Huge scale key lookups, flexible schema", "NoSQL (DynamoDB, Cosmos DB, Firestore)", "Design for access patterns up front"],
+      ["Caching, sessions, rate limits", "Redis or Valkey compatible service", "Treat as cache, not primary store"],
+      ["Analytics over large data", "Warehouse (BigQuery, Redshift, Synapse, Snowflake)", "Query cost control"],
+      ["Search", "OpenSearch, Elasticsearch", "A secondary index, not the source of truth"]
+    ],
+    more: [
+      "Multi-AZ gives high availability with automatic failover. Read replicas give read scale and are not a failover guarantee by themselves.",
+      "Decide RPO (how much data you can lose) and RTO (how long you can be down) before choosing backup and replication."
+    ]
+  });
+
+  card("cloud", "Disaster recovery strategies", "Table", {
+    sum: "More readiness means lower recovery time and higher cost.",
+    head: ["Strategy", "How it works", "RTO", "RPO", "Cost"],
+    rows: [
+      ["Backup and restore", "Restore from backups into a new region", "Hours", "Hours to a day", "Lowest"],
+      ["Pilot light", "Core data replicated. Compute is off until needed", "Tens of minutes to hours", "Minutes", "Low"],
+      ["Warm standby", "A scaled-down copy runs all the time", "Minutes", "Seconds to minutes", "Medium"],
+      ["Active-active", "Several regions serve traffic", "Near zero", "Near zero", "Highest, hardest to build"]
+    ],
+    more: [
+      "A backup you have not restored is a hope, not a backup. Schedule restore tests.",
+      "Keep backups in a separate account or region with delete protection (object lock) to survive ransomware and mistakes."
+    ]
+  });
+
+  card("cloud", "Cost control (FinOps)", "Table", {
+    sum: "Cloud bills grow quietly. Make cost visible per team and automate the easy savings.",
+    head: ["Lever", "Action"],
+    rows: [
+      ["Tag everything", "Enforce `team`, `env`, `service` tags in IaC and with policy. Allocate cost by tag"],
+      ["Right-size", "Use utilisation metrics. Many instances run below 20 percent CPU"],
+      ["Commitments", "Savings Plans, reserved instances, committed use discounts for the steady base load"],
+      ["Spot and preemptible", "For batch, CI runners and stateless workers"],
+      ["Storage lifecycle", "Move cold objects to cheaper tiers, expire old logs and snapshots"],
+      ["Data transfer", "Egress, cross-AZ and NAT traffic is billed. Keep chatty services in one zone where resilience allows"],
+      ["Delete idle", "Unattached disks, old snapshots, idle load balancers, forgotten dev environments"],
+      ["Budgets and alerts", "Set budgets with alerts per account and anomaly detection"],
+      ["Schedule non-prod", "Turn dev and test environments off at night"]
+    ]
+  });
+
+  card("cloud", "Terraform workflow and commands", "Syntax", {
+    sum: "Infrastructure as code: describe resources in files, review a plan, then apply it.",
+    lang: "sh",
+    code: R`terraform init                       # download providers and modules, configure the backend
+terraform fmt -recursive              # format
+terraform validate                    # syntax and internal consistency
+terraform plan -out=tfplan            # show what would change, save the plan
+terraform apply tfplan                # apply exactly the saved plan
+terraform destroy                     # remove everything (be careful)
+
+terraform state list
+terraform state show aws_s3_bucket.logs
+terraform state mv aws_instance.a aws_instance.web   # rename without recreating
+terraform import aws_s3_bucket.logs my-existing-bucket
+terraform apply -replace=aws_instance.web            # force recreation of one resource
+terraform output -json
+terraform providers lock -platform=linux_amd64 -platform=darwin_arm64`,
+    more: [
+      "Run `plan` in every pull request and post the result. Run `apply` only from the main branch through CI with approvals.",
+      "`terraform fmt`, `validate`, `tflint` and a policy or security scan (Checkov, Trivy, tfsec) belong in CI.",
+      "The `moved` block records renames and refactors in code, which is safer than `state mv` on a shared team."
+    ]
+  });
+
+  card("cloud", "Terraform example", "Recipe", {
+    sum: "Provider, variables, a resource, a module and outputs. Remote state with locking is the part you must not skip.",
+    lang: "hcl",
+    code: R`terraform {
+  required_version = ">= 1.9"
+  required_providers {
+    aws = { source = "hashicorp/aws", version = "~> 6.0" }
+  }
+  backend "s3" {
+    bucket       = "acme-tf-state"
+    key          = "prod/network/terraform.tfstate"
+    region       = "eu-west-1"
+    use_lockfile = true            # S3 native locking (Terraform 1.10+), no DynamoDB table needed
+    encrypt      = true
+  }
+}
+
+provider "aws" { region = var.region }
+
+variable "region" { type = string, default = "eu-west-1" }
+variable "env"    { type = string }
+
+locals {
+  tags = { env = var.env, managed_by = "terraform" }
+}
+
+resource "aws_s3_bucket" "logs" {
+  bucket = "acme-~{var.env}-logs"
+  tags   = local.tags
+  lifecycle { prevent_destroy = true }
+}
+
+module "vpc" {
+  source  = "terraform-aws-modules/vpc/aws"
+  version = "~> 6.0"
+  name    = "~{var.env}-vpc"
+  cidr    = "10.0.0.0/16"
+  azs     = ["eu-west-1a", "eu-west-1b"]
+}
+
+output "bucket_arn" { value = aws_s3_bucket.logs.arn }`,
+    more: [
+      "Use `for_each` over a map or set instead of `count` for collections. Removing an item from the middle of a `count` list shifts the indexes and recreates resources.",
+      "Pin provider and module versions and commit `.terraform.lock.hcl`.",
+      "State holds secrets in plain text unless you encrypt it. Restrict access to the state bucket."
+    ],
+    watch: ["Never edit state by hand and never run two applies at once. Locking exists to prevent corrupted state."]
+  });
+
+  card("cloud", "Terraform, OpenTofu, Pulumi and native tools", "Table", {
+    wide: true,
+    sum: "All of them describe infrastructure in code. They differ in language, licence and ecosystem.",
+    head: ["Tool", "Language", "Licence and governance", "Notes"],
+    rows: [
+      ["Terraform", "HCL", "Business Source License 1.1 since 1.6, owned by HashiCorp (IBM)", "Largest ecosystem. Latest line is 1.14.x as of mid 2026"],
+      ["OpenTofu", "HCL (compatible)", "MPL 2.0, Linux Foundation", "Fork of Terraform. Client-side state encryption and early variable evaluation. 1.12.x as of mid 2026"],
+      ["Pulumi", "TypeScript, Python, Go, C#, Java", "Apache 2.0 core, optional paid cloud", "Real programming languages, loops and tests"],
+      ["AWS CDK, CDKTF", "TypeScript, Python and others", "Open source", "Generates CloudFormation (CDK) or Terraform JSON (CDKTF)"],
+      ["CloudFormation, Bicep, Deployment Manager", "YAML or JSON, Bicep DSL", "Vendor tools", "Deep integration with one cloud. No cross-cloud use"],
+      ["Crossplane", "Kubernetes YAML (CRDs)", "CNCF", "Manage cloud resources through the Kubernetes API"],
+      ["Ansible", "YAML playbooks", "Open source", "Configuration management and orchestration. Agentless over SSH"]
+    ],
+    more: [
+      "Both Terraform and OpenTofu read the same HCL for most configurations, but they are diverging on newer features. Pick one per repository and pin its version.",
+      "Version numbers come from articles written in mid 2026. Check each project's releases page before pinning."
+    ]
+  });
+
+  card("cloud", "IaC project hygiene", "Pitfall", {
+    sum: "Habits that keep infrastructure code safe to change.",
+    watch: [
+      "One state file for everything makes each change slow and risky. Split by environment and by layer (network, data, apps).",
+      "Do not use workspaces to separate prod from dev for different accounts. Use separate states and credentials.",
+      "Drift happens when people change resources in the console. Run `plan` on a schedule and alert when it is not empty.",
+      "Avoid `terraform destroy` guards being removed. Use `prevent_destroy` and deletion protection on databases.",
+      "Passing secrets as variables stores them in state. Read them from a secret manager at runtime or use write-only attributes where supported.",
+      "Review the plan, not only the code. A rename can mean destroy and create."
+    ],
+    more: ["Keep modules small and versioned. A module that wraps one resource with no added logic is usually noise."]
+  });
+
+  /* ================= OBSERVABILITY ================= */
+  card("obs", "Three pillars and how they connect", "Concept", {
+    sum: "Metrics tell you something is wrong, traces show where, logs explain why. Shared labels and trace IDs link them.",
+    head: ["Signal", "What it is", "Best for", "Cost driver"],
+    rows: [
+      ["Metrics", "Numbers over time (counters, gauges, histograms)", "Dashboards, alerts, trends, SLOs", "Number of unique label combinations (cardinality)"],
+      ["Logs", "Timestamped events", "Root cause, audit, debugging one request", "Volume and retention"],
+      ["Traces", "A request path across services as spans", "Latency breakdown, dependency maps", "Sampling rate and span count"],
+      ["Profiles", "Where CPU and memory go in code", "Hot paths, leaks", "Continuous profiling overhead"],
+      ["Events and changes", "Deploys, config changes, flags", "Correlating incidents with changes", "Low"]
+    ],
+    more: [
+      "Monitoring checks known failure modes. Observability lets you ask new questions about a system from its outputs without shipping new code.",
+      "Put the trace ID in every log line. It is the cheapest way to jump from a slow trace to its logs."
+    ]
+  });
+
+  card("obs", "What to measure: golden signals, RED, USE", "Table", {
+    sum: "Three checklists. Pick RED for services and USE for resources.",
+    head: ["Method", "Signals", "Applies to"],
+    rows: [
+      ["Four golden signals (Google SRE)", "Latency, traffic, errors, saturation", "Any user-facing service"],
+      ["RED", "Rate, Errors, Duration", "Request-driven services and APIs"],
+      ["USE (Brendan Gregg)", "Utilisation, Saturation, Errors", "Resources: CPU, memory, disk, network, queues"]
+    ],
+    more: [
+      "Measure latency for successful and failed requests separately. Fast errors hide slow success.",
+      "Use percentiles (p50, p95, p99) from histograms. Averages hide the tail. Percentiles cannot be averaged across instances, so aggregate histogram buckets first."
+    ]
+  });
+
+  card("obs", "Prometheus: model and metric types", "Concept", {
+    sum: "Prometheus pulls (scrapes) text metrics over HTTP and stores them in a time-series database. Series = metric name + label set.",
+    lang: "text",
+    code: R`# HELP http_requests_total Total HTTP requests
+# TYPE http_requests_total counter
+http_requests_total{method="GET",route="/orders",status="200"} 10234
+http_requests_total{method="GET",route="/orders",status="500"} 7`,
+    head: ["Type", "Behaviour", "Use for"],
+    rows: [
+      ["Counter", "Only goes up, resets on restart", "Requests, errors, bytes. Always query with `rate()`"],
+      ["Gauge", "Goes up and down", "Memory, queue length, temperature"],
+      ["Histogram", "Counts observations in buckets (`_bucket`, `_sum`, `_count`)", "Latency, sizes. Supports `histogram_quantile`"],
+      ["Summary", "Client-side quantiles", "Rarely. Cannot be aggregated across instances"]
+    ],
+    more: [
+      "Prometheus 3.x also supports native histograms (higher resolution, cheaper) and OTLP ingestion. Check the release notes for the feature flags your version needs.",
+      "Never put unbounded values in labels (user ID, URL with IDs, request ID). Every distinct combination is a new series and cardinality is what breaks Prometheus."
+    ],
+    watch: ["Long-term storage and global views need Thanos, Mimir, Cortex or a hosted service. A single Prometheus keeps data locally, usually for days to weeks."]
+  });
+
+  card("obs", "Prometheus config and scraping", "Syntax", {
+    sum: "Static targets for simple setups, service discovery in Kubernetes, relabeling to shape labels.",
+    lang: "yaml",
+    code: R`global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+rule_files:
+  - /etc/prometheus/rules/*.yml
+
+alerting:
+  alertmanagers:
+    - static_configs: [{ targets: ["alertmanager:9093"] }]
+
+scrape_configs:
+  - job_name: node
+    static_configs:
+      - targets: ["node1:9100", "node2:9100"]
+
+  - job_name: k8s-pods
+    kubernetes_sd_configs: [{ role: pod }]
+    relabel_configs:
+      - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_scrape]
+        action: keep
+        regex: "true"
+      - source_labels: [__meta_kubernetes_namespace]
+        target_label: namespace`,
+    more: [
+      "With the Prometheus Operator or kube-prometheus-stack, you declare `ServiceMonitor` and `PodMonitor` objects instead of editing this file.",
+      "Exporters expose metrics for things you cannot instrument: `node_exporter` (hosts), `kube-state-metrics`, `cAdvisor`, `blackbox_exporter` (probes), database exporters."
+    ]
+  });
+
+  card("obs", "PromQL essentials", "Syntax", {
+    sum: "Instant vectors, range vectors and a few functions cover most dashboards and alerts.",
+    lang: "promql",
+    code: R`# Request rate per route over 5 minutes
+sum by (route) (rate(http_requests_total[5m]))
+
+# Error ratio (0 to 1)
+sum(rate(http_requests_total{status=~"5.."}[5m]))
+  / sum(rate(http_requests_total[5m]))
+
+# p95 latency from a histogram
+histogram_quantile(0.95,
+  sum by (le, route) (rate(http_request_duration_seconds_bucket[5m])))
+
+# CPU usage per pod, in cores
+sum by (pod) (rate(container_cpu_usage_seconds_total{container!=""}[5m]))
+
+# Memory working set vs limit
+container_memory_working_set_bytes{container!=""}
+  / on (pod, container) kube_pod_container_resource_limits{resource="memory"}
+
+# Disk will be full in 4 hours (linear prediction)
+predict_linear(node_filesystem_avail_bytes[1h], 4*3600) < 0
+
+# Instance is down
+up == 0
+
+# Compare with the same time last week
+sum(rate(http_requests_total[5m])) / sum(rate(http_requests_total[5m] offset 1w))`,
+    head: ["Function", "Use"],
+    rows: [
+      ["`rate(x[5m])`", "Per-second average increase of a counter. Handles resets"],
+      ["`increase(x[1h])`", "Total increase over the window"],
+      ["`irate(x[5m])`", "Instant rate from the last two samples. Spiky, for fast graphs only"],
+      ["`sum / avg / max by (label)`", "Aggregate and keep the listed labels"],
+      ["`histogram_quantile(q, ...)`", "Quantile from histogram buckets"],
+      ["`avg_over_time(x[1h])`", "Aggregate one series over time"],
+      ["`absent(x)`", "Fires when a series disappears"],
+      ["`topk(5, x)`", "Largest five series"]
+    ],
+    watch: ["Use a rate window of at least four times the scrape interval. `rate(x[30s])` with a 15 s scrape gives gaps and noise."]
+  });
+
+  card("obs", "Alert rules and Alertmanager", "Syntax", {
+    sum: "Prometheus evaluates rules and sends alerts. Alertmanager groups, silences, deduplicates and routes them.",
+    lang: "yaml",
+    code: R`# rules/app.yml
+groups:
+  - name: app
+    rules:
+      - alert: HighErrorRatio
+        expr: |
+          sum(rate(http_requests_total{status=~"5.."}[5m]))
+            / sum(rate(http_requests_total[5m])) > 0.05
+        for: 10m
+        labels: { severity: page }
+        annotations:
+          summary: "5xx ratio above 5 percent for 10 minutes"
+          runbook_url: https://wiki.example.com/runbooks/high-5xx
+
+# alertmanager.yml
+route:
+  receiver: team-chat
+  group_by: [alertname, service]
+  group_wait: 30s
+  group_interval: 5m
+  repeat_interval: 4h
+  routes:
+    - matchers: [severity="page"]
+      receiver: pagerduty
+receivers:
+  - name: team-chat
+    slack_configs: [{ channel: "#alerts", send_resolved: true }]
+  - name: pagerduty
+    pagerduty_configs: [{ routing_key: "<key>" }]
+inhibit_rules:
+  - source_matchers: [severity="page"]
+    target_matchers: [severity="warn"]
+    equal: [service]`,
+    more: [
+      "`for:` makes an alert wait before firing, which removes short blips.",
+      "Alert on symptoms users feel (errors, latency, saturation of a critical resource), not on every cause. Each page needs a clear action and a runbook link.",
+      "If an alert is ignored three times in a row, fix it or delete it. Alert fatigue hides real incidents."
+    ]
+  });
+
+  card("obs", "SLIs, SLOs and error budgets", "Table", {
+    sum: "An SLI is a measurement, an SLO is the target, the error budget is what is left to spend on failures and change.",
+    head: ["SLO (30 days)", "Allowed downtime", "Typical meaning"],
+    rows: [
+      ["99%", "7 h 12 min", "Internal tools"],
+      ["99.9%", "43 min 12 s", "Common for business apps"],
+      ["99.95%", "21 min 36 s", "Important customer features"],
+      ["99.99%", "4 min 19 s", "Needs multi-zone design and automation"],
+      ["99.999%", "about 26 s", "Rare, extremely costly"]
+    ],
+    lang: "yaml",
+    code: R`# Example SLO definition
+service: checkout-api
+sli:
+  good:  'http_requests_total{status!~"5.."}'
+  total: 'http_requests_total'
+slo: 99.9
+window: 30d
+# error budget = 100% - 99.9% = 0.1% of requests may fail`,
+    more: [
+      "Burn-rate alerting (Google SRE workbook): page when the budget burns at 14.4x over 1 hour (and a short window to confirm) or 6x over 6 hours. Open a ticket at 1x over 3 days.",
+      "When the budget is gone, slow feature releases and invest in reliability. When plenty is left, ship faster.",
+      "Define SLOs with product owners from user journeys such as login, checkout and search, not from server metrics.",
+      "Tools: Sloth, Pyrra and OpenSLO generate recording and alert rules from an SLO spec."
+    ]
+  });
+
+  card("obs", "Grafana dashboards", "Concept", {
+    sum: "Grafana queries many data sources (Prometheus, Loki, Tempo, cloud APIs). Make dashboards answer questions.",
+    head: ["Practice", "Detail"],
+    rows: [
+      ["Layout", "Top row: SLO and the golden signals. Below: per-component detail. Link to logs and traces"],
+      ["Variables", "Use template variables (namespace, service, instance) so one dashboard serves all"],
+      ["As code", "Store dashboards in Git (JSON, Jsonnet, Grafonnet, Terraform provider) and provision them"],
+      ["Units and thresholds", "Set units, axis limits and colour thresholds. A graph with no unit is a riddle"],
+      ["Annotations", "Show deploys and incidents as vertical lines"],
+      ["Ownership", "Every dashboard has an owner. Delete stale ones"]
+    ],
+    more: ["Grafana 13 (April 2026) is the current major line at the time of writing. Check the release notes before upgrading, since plugin and API changes are common between majors."]
+  });
+
+  card("obs", "OpenTelemetry basics", "Concept", {
+    sum: "A vendor-neutral standard for traces, metrics and logs: APIs, SDKs, a wire protocol (OTLP) and the Collector.",
+    head: ["Part", "Role"],
+    rows: [
+      ["API and SDK", "Instrument code. Auto-instrumentation exists for Java, Python, Node.js, .NET, Go (eBPF) and more"],
+      ["OTLP", "The protocol. gRPC on port `4317`, HTTP on port `4318`"],
+      ["Collector", "A pipeline of receivers, processors and exporters. Run as agent per node or as a gateway"],
+      ["Semantic conventions", "Standard attribute names such as `http.request.method`, `service.name`"],
+      ["Resource attributes", "Describe the source: `service.name`, `service.version`, `deployment.environment.name`, Kubernetes pod and namespace"]
+    ],
+    lang: "sh",
+    code: R`# Configure any OpenTelemetry SDK or agent with environment variables
+export OTEL_SERVICE_NAME=checkout-api
+export OTEL_RESOURCE_ATTRIBUTES=service.version=1.4.2,deployment.environment.name=prod
+export OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317
+export OTEL_EXPORTER_OTLP_PROTOCOL=grpc
+export OTEL_TRACES_SAMPLER=parentbased_traceidratio
+export OTEL_TRACES_SAMPLER_ARG=0.1
+
+# Java: attach the agent, no code changes
+java -javaagent:opentelemetry-javaagent.jar -jar app.jar`,
+    more: ["Semantic convention names have changed over time (for example HTTP attributes). Pin the SDK version and check the conventions it implements."]
+  });
+
+  card("obs", "OpenTelemetry Collector config", "Syntax", {
+    sum: "Receive OTLP, batch, drop noise, export to your backends.",
+    lang: "yaml",
+    code: R`receivers:
+  otlp:
+    protocols:
+      grpc: { endpoint: 0.0.0.0:4317 }
+      http: { endpoint: 0.0.0.0:4318 }
+
+processors:
+  memory_limiter: { check_interval: 1s, limit_percentage: 80, spike_limit_percentage: 25 }
+  batch: {}
+  attributes/drop:
+    actions:
+      - { key: http.request.header.authorization, action: delete }
+
+exporters:
+  otlphttp/tempo:   { endpoint: http://tempo:4318 }
+  prometheusremotewrite: { endpoint: http://mimir:9009/api/v1/push }
+  otlphttp/loki:    { endpoint: http://loki:3100/otlp }
+
+service:
+  pipelines:
+    traces:  { receivers: [otlp], processors: [memory_limiter, attributes/drop, batch], exporters: [otlphttp/tempo] }
+    metrics: { receivers: [otlp], processors: [memory_limiter, batch], exporters: [prometheusremotewrite] }
+    logs:    { receivers: [otlp], processors: [memory_limiter, batch], exporters: [otlphttp/loki] }`,
+    more: [
+      "Put `memory_limiter` first and `batch` last in each pipeline.",
+      "Tail sampling (keep slow and failed traces, sample the rest) needs a gateway tier that sees all spans of a trace, for example with the `tail_sampling` processor and trace-ID-aware load balancing."
+    ]
+  });
+
+  card("obs", "Logging practice", "Concept", {
+    sum: "Write structured logs to stdout and let the platform collect them.",
+    lang: "json",
+    code: R`{"ts":"2026-10-30T09:15:02.123Z","level":"error","service":"checkout-api",
+ "trace_id":"4bf92f3577b34da6a3ce929d0e0e4736","user_id_hash":"a1b2",
+ "msg":"payment provider timeout","duration_ms":3001,"provider":"acme-pay"}`,
+    more: [
+      "One JSON object per line. Use stable field names and consistent levels (debug, info, warn, error).",
+      "Never log secrets, tokens, full card numbers or personal data. Add redaction in the logging library or the collector.",
+      "Log once at the boundary where you handle an error. Logging and re-throwing at every layer duplicates the same failure.",
+      "Set retention by value: short for debug logs, long for audit logs. Sample or drop noisy health-check lines.",
+      "In Kubernetes, containers write to stdout and a node agent (Fluent Bit, Vector, OpenTelemetry Collector, Grafana Alloy) ships the files."
+    ]
+  });
+
+  card("obs", "Loki and LogQL", "Syntax", {
+    sum: "Loki indexes only labels, not log text, so it is cheap to run. Keep labels low-cardinality.",
+    lang: "promql",
+    code: R`# Select a stream by labels, then filter text
+{namespace="prod", app="checkout"} |= "timeout" != "healthcheck"
+
+# Parse JSON and filter on a field
+{app="checkout"} | json | level="error" | duration_ms > 1000
+
+# Count errors per minute
+sum by (app) (count_over_time({namespace="prod"} | json | level="error" [1m]))
+
+# Extract a number and compute p95
+quantile_over_time(0.95, {app="checkout"} | json | unwrap duration_ms [5m]) by (route)`,
+    more: [
+      "Good labels: cluster, namespace, app, environment. Bad labels: user ID, request ID, trace ID. Keep those in the log line and filter with `|=` or `| json`.",
+      "Alternatives: Elasticsearch or OpenSearch (full-text index, heavier), ClickHouse based stores, and managed services such as CloudWatch Logs, Azure Monitor and Cloud Logging."
+    ]
+  });
+
+  card("obs", "Distributed tracing", "Concept", {
+    sum: "A trace is a tree of spans. Context propagates between services in HTTP headers.",
+    lang: "text",
+    code: R`traceparent: 00-4bf92f3577b34da6a3ce929d0e0e4736-00f067aa0ba902b7-01
+             |  |                                |                |
+             |  trace id (16 bytes)              parent span id   flags (01 = sampled)
+             version
+
+GET /checkout                      [=========================== 480 ms ===]
+  ├─ auth-service  verify token      [== 20 ms ==]
+  ├─ cart-service  load cart            [==== 60 ms ====]
+  └─ payment-service charge                 [================== 380 ms ==]
+       └─ db INSERT payment                    [===== 90 ms =====]`,
+    more: [
+      "W3C Trace Context (`traceparent`, `tracestate`) is the standard header format. Make sure every service, proxy and message queue passes it on.",
+      "Sampling: head sampling decides at the start (cheap, random). Tail sampling decides after the trace completes (keeps errors and slow traces, needs more infrastructure).",
+      "Add useful span attributes (route, customer tier, cache hit) and record exceptions on the span. Avoid personal data."
+    ],
+    watch: ["Broken context propagation is the usual reason traces look cut in half. Check async hand-offs, thread pools and message headers."]
+  });
+
+  card("obs", "Tooling landscape", "Table", {
+    wide: true,
+    sum: "Open source stacks and managed platforms cover the same signals. Pick based on team size and operating cost.",
+    head: ["Area", "Open source", "Managed or commercial"],
+    rows: [
+      ["Metrics", "Prometheus, VictoriaMetrics, Mimir, Thanos", "Grafana Cloud, Datadog, New Relic, Amazon Managed Prometheus, Azure Monitor, Google Cloud Monitoring"],
+      ["Logs", "Loki, OpenSearch, ClickHouse, Vector, Fluent Bit", "Datadog, Splunk, CloudWatch Logs, Elastic Cloud, Cloud Logging"],
+      ["Traces", "Tempo, Jaeger, Zipkin, SigNoz", "Honeycomb, Datadog APM, Dynatrace, Lightstep, X-Ray"],
+      ["Dashboards", "Grafana, Perses", "Grafana Cloud, Datadog, Kibana (Elastic)"],
+      ["Alerts and on-call", "Alertmanager, Grafana OnCall (check status)", "PagerDuty, Opsgenie (check status), incident.io, Grafana Cloud IRM"],
+      ["Instrumentation", "OpenTelemetry, eBPF tools (Beyla, Pixie, Cilium Hubble)", "Vendor agents"],
+      ["Profiling", "Pyroscope, Parca", "Datadog, Grafana Cloud Profiles"]
+    ],
+    more: [
+      "Standardising on OpenTelemetry for instrumentation keeps you free to change backends.",
+      "Some products here were archived, sunset or merged in recent years. Verify the current status of any tool before adopting it."
+    ]
+  });
+
+  /* ================= RUNBOOKS AND QUICK LOOKUP ================= */
+  card("ops", "Site is down: triage order", "Recipe", {
+    sum: "Work from the user outward. Stop at the first broken layer.",
+    lang: "sh",
+    code: R`# 1. Is it really down, and for whom?
+curl -sS -o /dev/null -w "%{http_code} dns=%{time_namelookup}s connect=%{time_connect}s tls=%{time_appconnect}s ttfb=%{time_starttransfer}s\n" https://example.com/
+
+# 2. DNS
+dig +short example.com
+dig +trace example.com | tail -5
+
+# 3. TLS certificate
+echo | openssl s_client -connect example.com:443 -servername example.com 2>/dev/null | openssl x509 -noout -dates -subject
+
+# 4. Load balancer and backends (cloud console or CLI): healthy targets?
+
+# 5. The app host
+ssh app1 'systemctl status myapp --no-pager; journalctl -u myapp -n 50 --no-pager; df -h; free -m; uptime'
+
+# 6. Kubernetes
+kubectl get pods -n prod
+kubectl describe pod <pod> -n prod | tail -30
+kubectl logs deploy/myapp -n prod --tail=100
+kubectl rollout history deploy/myapp -n prod
+
+# 7. Dependencies: database, cache, third-party APIs`,
+    more: [
+      "Ask first: what changed? Deploys, config, certificates, quotas, DNS, a dependency. Most incidents follow a change.",
+      "If a recent deploy is the likely cause, roll back first and investigate afterwards."
+    ]
+  });
+
+  card("ops", "Disk full", "Recipe", {
+    sum: "Find what is large, check deleted-but-open files, check inodes.",
+    lang: "sh",
+    code: R`df -h                                     # which filesystem?
+df -i                                     # out of inodes?
+sudo du -xh --max-depth=1 / 2>/dev/null | sort -rh | head
+sudo du -xh --max-depth=1 /var | sort -rh | head
+sudo ncdu -x /                            # interactive, if installed
+sudo lsof +L1 | head                      # deleted files still held open by a process
+sudo journalctl --vacuum-size=500M        # shrink systemd journal
+docker system df && docker system prune   # container leftovers (read the prompt)
+sudo apt clean                            # package cache`,
+    watch: ["Deleting a log file that a process still has open does not free space. Truncate it (`: > file`) or restart the process."]
+  });
+
+  card("ops", "High load or CPU, memory pressure", "Recipe", {
+    sum: "Decide whether the cause is CPU, memory, disk or network, then find the process.",
+    lang: "sh",
+    code: R`uptime                       # load averages vs CPU count (nproc)
+top -o %CPU                  # or htop
+ps aux --sort=-%mem | head
+vmstat 1 5                   # r (run queue), si/so (swap), wa (IO wait)
+iostat -xz 1 3               # disk utilisation and await
+free -m
+dmesg -T | grep -i -E 'killed process|out of memory'
+journalctl -k | grep -i oom
+sudo ss -s                   # socket summary`,
+    more: ["A high load with low CPU use usually means processes are waiting on disk or locks. Check `wa` in vmstat and `iostat`."]
+  });
+
+  card("ops", "Incident response", "Concept", {
+    sum: "Roles, rhythm and communication matter as much as the technical fix.",
+    head: ["Step", "What to do"],
+    rows: [
+      ["Declare", "Open an incident channel, assign severity and an incident commander"],
+      ["Roles", "Commander (coordinates), ops lead (hands on keys), communications (updates), scribe (timeline)"],
+      ["Stabilise", "Mitigate before you root-cause: roll back, disable a flag, scale up, fail over, shed load"],
+      ["Communicate", "Post an update at a fixed interval (for example every 30 minutes), even if the update is no news"],
+      ["Resolve", "Confirm with metrics and user checks. Keep watching for recurrence"],
+      ["Learn", "Write a blameless postmortem within a few days"]
+    ],
+    more: ["Keep the timeline in one place with exact timestamps. Memory fades fast."]
+  });
+
+  card("ops", "Blameless postmortem template", "Recipe", {
+    sum: "Focus on systems and decisions, not on who made a mistake.",
+    lang: "text",
+    code: R`Title, date, severity, duration, authors
+Summary         2-3 sentences: what broke, who was affected, how long
+Impact          users, requests, revenue, SLO budget burned
+Timeline        UTC timestamps: detection, escalation, mitigation, resolution
+Root cause      the chain of conditions, not a single person
+Detection       how we found out, and how we should have found out
+What went well
+What went badly
+Where we got lucky
+Action items    owner, due date, ticket. Prevent / detect / mitigate`,
+    more: ["Track action items to completion. A postmortem with no follow-through repeats itself."]
+  });
+
+  card("ops", "HTTP status codes", "Table", {
+    sum: "The ones you meet in operations.",
+    head: ["Code", "Meaning", "Common cause"],
+    rows: [
+      ["`200` `201` `204`", "OK, Created, No Content", "Success"],
+      ["`301` `302` `308`", "Redirects", "Moved URL, HTTP to HTTPS. `308` keeps the method"],
+      ["`304`", "Not Modified", "Cache validation worked"],
+      ["`400`", "Bad Request", "Malformed request or body"],
+      ["`401`", "Unauthenticated", "Missing or invalid credentials"],
+      ["`403`", "Forbidden", "Authenticated but not allowed. WAF or IP rules"],
+      ["`404`", "Not Found", "Wrong path, missing route, wrong backend"],
+      ["`408` `499`", "Request timeout, client closed (nginx)", "Client gave up. Slow backend"],
+      ["`413`", "Payload Too Large", "Proxy body size limit"],
+      ["`429`", "Too Many Requests", "Rate limiting. Honour `Retry-After`"],
+      ["`500`", "Internal Server Error", "Unhandled exception. Read the app logs"],
+      ["`502`", "Bad Gateway", "Proxy got an invalid reply or the app crashed"],
+      ["`503`", "Service Unavailable", "No healthy backends, overload, deploying"],
+      ["`504`", "Gateway Timeout", "Backend too slow. Check proxy timeouts and the dependency"]
+    ]
+  });
+
+  card("ops", "Common ports", "Table", {
+    sum: "Handy when reading firewall rules and security groups.",
+    head: ["Port", "Service", "Port", "Service"],
+    rows: [
+      ["22", "SSH", "3306", "MySQL, MariaDB"],
+      ["25, 465, 587", "SMTP, SMTPS, submission", "5432", "PostgreSQL"],
+      ["53", "DNS (UDP and TCP)", "6379", "Redis, Valkey"],
+      ["80, 443", "HTTP, HTTPS", "9090", "Prometheus"],
+      ["123", "NTP (UDP)", "9093", "Alertmanager"],
+      ["389, 636", "LDAP, LDAPS", "9100", "node_exporter"],
+      ["2049", "NFS", "3000", "Grafana (default)"],
+      ["2375, 2376", "Docker API (plain, TLS)", "4317, 4318", "OTLP gRPC, HTTP"],
+      ["2379, 2380", "etcd client, peer", "6443", "Kubernetes API server"],
+      ["27017", "MongoDB", "10250", "kubelet API"],
+      ["3389", "RDP", "30000-32767", "Kubernetes NodePort range"]
+    ]
+  });
+
+  card("ops", "DNS records and dig", "Table", {
+    sum: "Records you set most often, and the commands to inspect them.",
+    head: ["Record", "Purpose", "Example"],
+    rows: [
+      ["`A` / `AAAA`", "Name to IPv4 / IPv6", "`app.example.com. A 203.0.113.10`"],
+      ["`CNAME`", "Alias to another name. Not allowed at the zone apex", "`www CNAME app.example.com.`"],
+      ["`ALIAS` / `ANAME`", "Apex alias (provider feature, for example Route 53 alias)", "Point the apex at a load balancer"],
+      ["`MX`", "Mail servers with priority", "`10 mail.example.com.`"],
+      ["`TXT`", "Free text: SPF, DKIM, domain verification", "`v=spf1 include:_spf.example.com -all`"],
+      ["`NS`", "Authoritative name servers", "Set at the registrar for delegation"],
+      ["`SRV`", "Host and port for a service", "`_sip._tcp`"],
+      ["`CAA`", "Which CAs may issue certificates", "`0 issue \"letsencrypt.org\"`"],
+      ["`PTR`", "Reverse lookup", "IP to name"]
+    ],
+    lang: "sh",
+    code: R`dig example.com A +short
+dig example.com MX
+dig @1.1.1.1 example.com            # ask a specific resolver
+dig +trace example.com              # walk from the root servers
+dig -x 203.0.113.10                 # reverse lookup
+dig example.com NS +short
+resolvectl query example.com        # systemd-resolved view
+getent hosts example.com            # what the system resolver (nsswitch) returns`,
+    more: [
+      "A TTL controls how long resolvers cache an answer. Lower it (for example to 60 s) a day before a planned migration.",
+      "Changes can look inconsistent while old answers expire. Query the authoritative servers to see the truth."
+    ]
+  });
+
+  card("ops", "TLS and certificates", "Recipe", {
+    sum: "Inspect, debug and automate certificates.",
+    lang: "sh",
+    code: R`# Inspect a live server
+echo | openssl s_client -connect example.com:443 -servername example.com 2>/dev/null \
+  | openssl x509 -noout -subject -issuer -dates -ext subjectAltName
+
+# Show the full chain and verify result
+openssl s_client -connect example.com:443 -servername example.com -showcerts </dev/null
+
+# Inspect a file
+openssl x509 -in cert.pem -noout -text
+openssl x509 -in cert.pem -noout -checkend 1209600     # exit 1 if it expires in 14 days
+
+# Key and certificate match? (hashes must be equal)
+openssl x509 -in cert.pem -noout -pubkey | sha256sum
+openssl pkey -in key.pem -pubout | sha256sum
+
+# Create a key and a CSR
+openssl req -new -newkey rsa:2048 -nodes -keyout key.pem -out req.csr -subj "/CN=app.example.com"
+
+# Let's Encrypt with certbot
+sudo certbot certonly --nginx -d app.example.com`,
+    more: [
+      "In Kubernetes, use cert-manager with a `ClusterIssuer` (ACME HTTP-01 or DNS-01) so certificates renew themselves. Alert when a certificate has less than 14 days left.",
+      "Public certificate lifetimes are being shortened by the CA/Browser Forum schedule. Automate renewal instead of tracking dates by hand.",
+      "A missing intermediate certificate works in browsers and fails in curl and in services. Serve the full chain."
+    ]
+  });
+
+  card("ops", "Exit codes and signals", "Table", {
+    sum: "A container or process exit code above 128 means it was killed by signal (code minus 128).",
+    head: ["Code", "Meaning"],
+    rows: [
+      ["`0`", "Success"],
+      ["`1`", "General error"],
+      ["`2`", "Misuse of shell command"],
+      ["`126`", "Command found but not executable"],
+      ["`127`", "Command not found"],
+      ["`130`", "Terminated by `SIGINT` (Ctrl+C)"],
+      ["`137`", "`SIGKILL` (128+9). OOM killer, `kill -9`, or the grace period ran out"],
+      ["`139`", "`SIGSEGV` (128+11). Segmentation fault"],
+      ["`143`", "`SIGTERM` (128+15). Normal stop request"],
+      ["`255`", "Exit status out of range, often an SSH failure"]
+    ],
+    more: ["In Kubernetes, `OOMKilled` with exit code 137 means the container hit its memory limit. Raise the limit or fix the leak."]
+  });
+
+  card("ops", "Handy one-liners", "Recipe", {
+    sum: "Small commands that save time during an incident.",
+    lang: "sh",
+    code: R`# Which process listens on a port?
+sudo ss -ltnp 'sport = :8080'
+
+# Top client IPs in an nginx access log
+awk '{print $1}' access.log | sort | uniq -c | sort -rn | head
+
+# Count status codes
+awk '{print $9}' access.log | sort | uniq -c | sort -rn
+
+# Watch a command every 2 seconds
+watch -n 2 'kubectl get pods -n prod'
+
+# Check many URLs quickly
+xargs -P 8 -I{} curl -s -o /dev/null -w "{} %{http_code}\n" {} < urls.txt
+
+# Time-box a command
+timeout 10s curl -sS https://example.com
+
+# Pretty-print JSON and pick fields
+curl -s https://api.example.com/items | jq '.items[] | {id, name}'
+
+# Test a TCP port without extra tools
+timeout 3 bash -c '</dev/tcp/10.0.1.5/5432' && echo open || echo closed
+
+# Quick HTTP load check (careful on production)
+hey -z 10s -c 20 https://staging.example.com/`
+  });
+
+  /* ================= ENGINE ================= */
+  var SECS = [
+    { id: "linux", t: "Linux", d: "Filesystem, permissions, processes, systemd, networking, performance triage, SSH and shell safety." },
+    { id: "git", t: "Git", d: "The mental model, everyday commands, undoing mistakes, rebasing, history search, hooks and branching strategies." },
+    { id: "docker", t: "Docker", d: "Images and containers, Dockerfile reference, multi-stage builds, networking, Compose, image security and debugging." },
+    { id: "k8s", t: "Kubernetes", d: "Objects, kubectl, a production Deployment, Services and Gateway API, probes, scaling, storage, RBAC and troubleshooting." },
+    { id: "cicd", t: "CI/CD", d: "Pipelines, GitHub Actions, GitLab and Jenkins, deployment strategies, GitOps, supply chain security and DORA." },
+    { id: "cloud", t: "Cloud and IaC", d: "AWS, Azure and Google Cloud service map, networking, IAM, cost, disaster recovery and Terraform." },
+    { id: "obs", t: "Observability", d: "Metrics, logs and traces, Prometheus and PromQL, alerting, SLOs, OpenTelemetry and tooling." },
+    { id: "ops", t: "Runbooks and lookup", d: "Triage recipes, incident response, HTTP codes, ports, DNS, TLS and exit codes." }
+  ];
+
+  var $ = function (id) { return document.getElementById(id); };
+  function esc(s) { return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); }
+  function fmt(s) { return esc(s).replace(/`([^`]+)`/g, "<code>$1</code>"); }
+  function load(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+  function save(k, v) { try { localStorage.setItem(k, v); } catch (e) { /* storage may be blocked */ } }
+
+  /* ---------- syntax highlighting ---------- */
+  // Generic tokenizer: re has capture groups, map[i] is the CSS class for group i+1.
+  function tok(src, re, map) {
+    var out = "", last = 0, m;
+    re.lastIndex = 0;
+    while ((m = re.exec(src))) {
+      if (m[0].length === 0) { re.lastIndex++; continue; }
+      out += esc(src.slice(last, m.index));
+      var cls = "";
+      for (var i = 1; i < m.length; i++) { if (m[i] !== undefined) { cls = map[i - 1]; break; } }
+      out += cls ? '<span class="' + cls + '">' + esc(m[0]) + "</span>" : esc(m[0]);
+      last = re.lastIndex;
+    }
+    return out + esc(src.slice(last));
+  }
+  function lines(src, fn) { return src.split("\n").map(fn).join("\n"); }
+  // Split a line into body and trailing "# comment" (the # must start the line or follow whitespace).
+  function cutHash(line) {
+    var i = line.search(/(^|\s)#/);
+    if (i < 0) return [line, ""];
+    var cut = line.charAt(i) === "#" ? i : i + 1;
+    return [line.slice(0, cut), line.slice(cut)];
+  }
+  function withComment(line, bodyFn) {
+    var p = cutHash(line);
+    return bodyFn(p[0]) + (p[1] ? '<span class="c">' + esc(p[1]) + "</span>" : "");
+  }
+
+  var STR = "\"(?:[^\"\\\\]|\\\\.)*\"|'[^']*'";
+  var SH_RE = new RegExp(
+    "(" + STR + ")" +
+    "|(\\$\\{\\{[^}]*\\}\\}|\\$\\{[^}]*\\}|\\$\\(|\\$[A-Za-z_]\\w*|\\$[0-9#?@*!$])" +
+    "|((?<=\\s)--?[A-Za-z][\\w:.+*=\\/\\-]*)" +
+    "|((?<=^\\s*|\\|\\s*|&&\\s*|;\\s*|sudo\\s+|\\$\\(\\s*|xargs\\s+(?:-\\S+\\s+)*)[a-z][\\w.\\-]*)", "g");
+  function hlShell(src) {
+    return lines(src, function (l) { return withComment(l, function (b) { return tok(b, SH_RE, ["s", "an", "ty", "f"]); }); });
+  }
+
+  var DOCKER_RE = new RegExp(
+    "(^\\s*(?:FROM|RUN|CMD|LABEL|EXPOSE|ENV|ADD|COPY|ENTRYPOINT|VOLUME|USER|WORKDIR|ARG|ONBUILD|STOPSIGNAL|HEALTHCHECK|SHELL|MAINTAINER)(?=\\s|$))" +
+    "|(" + STR + ")" +
+    "|(\\$\\{[^}]*\\}|\\$[A-Za-z_]\\w*)" +
+    "|((?<=\\s)--?[A-Za-z][\\w:.+*=\\/\\-]*)" +
+    "|(\\bAS\\b)", "g");
+  function hlDocker(src) {
+    return lines(src, function (l) { return withComment(l, function (b) { return tok(b, DOCKER_RE, ["k", "s", "an", "ty", "k"]); }); });
+  }
+
+  var YAML_VAL_RE = new RegExp(
+    "(" + STR + ")" +
+    "|(\\$\\{\\{[^}]*\\}\\}|\\$\\{[^}]*\\}|\\$[A-Za-z_]\\w*)" +
+    "|(\\b(?:true|false|null|yes|no)\\b)" +
+    "|((?<![\\w.\\/-])-?\\d+(?:\\.\\d+)?[a-zA-Z%]{0,3}(?![\\w.\\/-]))", "g");
+  function hlYaml(src) {
+    return lines(src, function (l) {
+      return withComment(l, function (b) {
+        var m = /^(\s*(?:-\s+)*)((?:"[^"]*"|'[^']*'|[^\s:#'"\[\]{},][^:#]*?))(:)(?=\s|$)(.*)$/.exec(b);
+        if (m) return esc(m[1]) + '<span class="f">' + esc(m[2]) + "</span>" + esc(m[3]) + tok(m[4], YAML_VAL_RE, ["s", "an", "k", "n"]);
+        return tok(b, YAML_VAL_RE, ["s", "an", "k", "n"]);
+      });
+    });
+  }
+
+  var HCL_RE = new RegExp(
+    "(\\/\\/[^\\n]*|#[^\\n]*|\\/\\*[\\s\\S]*?\\*\\/)" +
+    "|(\"(?:[^\"\\\\\\n]|\\\\.)*\")" +
+    "|(^\\s*(?:terraform|provider|resource|data|variable|output|module|locals|backend|required_providers|lifecycle|dynamic|moved|import|check|precondition|postcondition)(?=[\\s{]))" +
+    "|\\b(true|false|null|for|in|if|each|count|var|local|module|self)\\b" +
+    "|\\b(\\d+(?:\\.\\d+)?)\\b" +
+    "|(^\\s*[A-Za-z_][\\w\\-]*(?=\\s*=[^=]))" +
+    "|\\b([a-z_]+)(?=\\()", "gm");
+  function hlHcl(src) { return tok(src, HCL_RE, ["c", "s", "k", "k", "n", "f", "f"]); }
+
+  function hlIni(src) {
+    return lines(src, function (l) {
+      if (/^\s*[;#]/.test(l)) return '<span class="c">' + esc(l) + "</span>";
+      var s = /^(\s*\[[^\]]*\])(.*)$/.exec(l);
+      if (s) return '<span class="k">' + esc(s[1]) + "</span>" + esc(s[2]);
+      var kv = /^(\s*[A-Za-z][\w.\-]*)(\s*=\s*)(.*)$/.exec(l);
+      if (kv) return '<span class="f">' + esc(kv[1]) + "</span>" + esc(kv[2]) + esc(kv[3]);
+      return esc(l);
+    });
+  }
+
+  var JSON_RE = new RegExp(
+    "(\"(?:[^\"\\\\\\n]|\\\\.)*\"(?=\\s*:))" +
+    "|(\"(?:[^\"\\\\\\n]|\\\\.)*\")" +
+    "|\\b(true|false|null)\\b" +
+    "|(-?\\b\\d+(?:\\.\\d+)?(?:[eE][+-]?\\d+)?\\b)", "g");
+  function hlJson(src) { return tok(src, JSON_RE, ["f", "s", "k", "n"]); }
+
+  var PROMQL_RE = new RegExp(
+    "(#[^\\n]*)" +
+    "|(" + STR + "|`[^`]*`)" +
+    "|\\b(by|without|on|ignoring|group_left|group_right|offset|and|or|unless|bool|unwrap|json|logfmt|pattern|regexp|line_format|label_format)\\b" +
+    "|(\\b\\d+(?:\\.\\d+)?(?:ms|[smhdwy])?\\b)" +
+    "|(\\b[a-zA-Z_]\\w*(?=\\s*(?:=~|!=|!~|=(?!=))))" +
+    "|(\\b[a-z_]\\w*(?=\\())", "g");
+  function hlPromql(src) { return tok(src, PROMQL_RE, ["c", "s", "k", "n", "an", "f"]); }
+
+  function highlight(code, lang) {
+    switch (lang) {
+      case "sh": return hlShell(code);
+      case "docker": return hlDocker(code);
+      case "yaml": return hlYaml(code);
+      case "hcl": return hlHcl(code);
+      case "ini": return hlIni(code);
+      case "json": return hlJson(code);
+      case "promql": return hlPromql(code);
+      default: return esc(code);
+    }
+  }
+
+  /* ---------- render cards ---------- */
+  function tableHTML(c) {
+    var h = "<div class=\"tw\"><table><thead><tr>" + c.head.map(function (x) { return "<th>" + fmt(x) + "</th>"; }).join("") + "</tr></thead><tbody>";
+    c.rows.forEach(function (r) { h += "<tr>" + r.map(function (x) { return "<td>" + fmt(x) + "</td>"; }).join("") + "</tr>"; });
+    return h + "</tbody></table></div>";
+  }
+  function cardEl(c) {
+    var code = c.code ? c.code.replace(/~\{/g, "${") : "";
+    var el = document.createElement("article");
+    el.className = "card" + (c.wide ? " wide" : "");
+    var badges = (c.v ? '<span class="tag ver' + (c.prev ? " prev" : "") + '">' + esc(c.v) + "</span>" : "") + '<span class="tag">' + esc(c.kind) + "</span>";
+    var h = '<div class="ch"><h3>' + fmt(c.t) + '</h3><div class="badges">' + badges + "</div></div>";
+    if (c.sum) h += '<p class="sum">' + fmt(c.sum) + "</p>";
+    if (c.rows) h += tableHTML(c);
+    if (code) h += '<div class="codewrap"><button class="copy" type="button" aria-label="Copy code">Copy</button><pre>' + highlight(code, c.lang || "sh") + "</pre></div>";
+    var hasMore = (c.more && c.more.length) || (c.watch && c.watch.length);
+    if (hasMore) h += '<button class="btn-d" type="button" aria-expanded="false">Show details</button>';
+    if (c.more && c.more.length) h += '<ul class="more">' + c.more.map(function (x) { return "<li>" + fmt(x) + "</li>"; }).join("") + "</ul>";
+    if (c.watch && c.watch.length) h += '<div class="watch"><b>Watch out</b><ul>' + c.watch.map(function (x) { return "<li>" + fmt(x) + "</li>"; }).join("") + "</ul></div>";
+    el.innerHTML = h;
+    var parts = [c.t, c.kind, c.sum || "", code, (c.head || []).join(" "), (c.rows || []).map(function (r) { return r.join(" "); }).join(" "), (c.more || []).join(" "), (c.watch || []).join(" "), c.v || ""];
+    el._idx = parts.join(" ").toLowerCase();
+    return el;
+  }
+
+  var main = $("main"), side = $("side"), chips = $("chips");
+  var secEls = {}, cardEls = [], navLinks = [];
+  SECS.forEach(function (s) {
+    var sec = document.createElement("section");
+    sec.className = "sec"; sec.id = "sec-" + s.id; sec.setAttribute("aria-labelledby", "h-" + s.id);
+    sec.innerHTML = '<div class="sec-head"><h2 id="h-' + s.id + '">' + esc(s.t) + "</h2><p>" + esc(s.d) + '</p></div><div class="cols"></div>';
+    var cols = sec.querySelector(".cols"), n = 0;
+    CARDS.forEach(function (c) {
+      if (c.sec !== s.id) return;
+      var el = cardEl(c); cols.appendChild(el); cardEls.push({ el: el, sec: s.id }); n++;
+    });
+    s.count = n; s.shown = n;
+    main.appendChild(sec); secEls[s.id] = sec;
+
+    var a = document.createElement("a"); a.href = "#sec-" + s.id;
+    a.innerHTML = esc(s.t) + "<span>" + n + "</span>";
+    side.appendChild(a);
+    var ch = document.createElement("a"); ch.href = "#sec-" + s.id; ch.textContent = s.t;
+    chips.appendChild(ch);
+    navLinks.push({ id: s.id, side: a, chip: ch, count: a.querySelector("span") });
+  });
+  var emptyMsg = document.createElement("p");
+  emptyMsg.className = "empty"; emptyMsg.hidden = true;
+  emptyMsg.textContent = "No card matches that. Try a shorter word, such as probe, rebase or cidr.";
+  main.appendChild(emptyMsg);
+
+  /* ---------- search ---------- */
+  var q = $("q"), cnt = document.createElement("span");
+  cnt.className = "cnt"; cnt.id = "cnt"; cnt.setAttribute("aria-live", "polite");
+  q.parentNode.insertBefore(cnt, q.nextSibling);
+  function applyFilter() {
+    var terms = q.value.trim().toLowerCase().split(/\s+/).filter(Boolean), total = 0;
+    document.body.classList.toggle("searching", terms.length > 0);
+    SECS.forEach(function (s) { s.shown = 0; });
+    cardEls.forEach(function (o) {
+      var ok = terms.every(function (t) { return o.el._idx.indexOf(t) > -1; });
+      o.el.hidden = !ok;
+      if (ok) { total++; SECS.forEach(function (s) { if (s.id === o.sec) s.shown++; }); }
+    });
+    SECS.forEach(function (s, i) {
+      secEls[s.id].hidden = s.shown === 0;
+      navLinks[i].count.textContent = terms.length ? s.shown : s.count;
+      navLinks[i].side.hidden = navLinks[i].chip.hidden = s.shown === 0;
+    });
+    emptyMsg.hidden = total > 0;
+    cnt.textContent = terms.length ? total + (total === 1 ? " card" : " cards") : "";
+  }
+  q.addEventListener("input", applyFilter);
+  q.addEventListener("keydown", function (e) { if (e.key === "Escape") { q.value = ""; applyFilter(); q.blur(); } });
+  document.addEventListener("keydown", function (e) {
+    var tag = (e.target && e.target.tagName) || "";
+    if (e.key === "/" && tag !== "INPUT" && tag !== "TEXTAREA") { e.preventDefault(); q.focus(); q.select(); }
+  });
+
+  /* ---------- detail level, theme ---------- */
+  function setMode(m) {
+    document.body.classList.toggle("compact", m === "compact");
+    Array.prototype.forEach.call(document.querySelectorAll(".seg2 button"), function (b) { b.setAttribute("aria-pressed", b.dataset.mode === m ? "true" : "false"); });
+    save("dg-mode", m);
+  }
+  Array.prototype.forEach.call(document.querySelectorAll(".seg2 button"), function (b) { b.addEventListener("click", function () { setMode(b.dataset.mode); }); });
+  setMode(load("dg-mode") === "compact" ? "compact" : "detailed");
+
+  var root = document.documentElement;
+  var savedTheme = load("dg-theme");
+  if (savedTheme === "light" || savedTheme === "dark") root.setAttribute("data-theme", savedTheme);
+  $("theme").addEventListener("click", function () {
+    var cur = root.getAttribute("data-theme") || (window.matchMedia && matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+    var next = cur === "dark" ? "light" : "dark";
+    root.setAttribute("data-theme", next); save("dg-theme", next);
+  });
+
+  /* ---------- card actions: details, copy ---------- */
+  main.addEventListener("click", function (e) {
+    var d = e.target.closest(".btn-d");
+    if (d) {
+      var card = d.closest(".card"), open = card.classList.toggle("open");
+      d.textContent = open ? "Hide details" : "Show details"; d.setAttribute("aria-expanded", open ? "true" : "false");
+      return;
+    }
+    var c = e.target.closest(".copy");
+    if (c) {
+      var pre = c.parentNode.querySelector("pre"), label = "Copy";
+      function fallback() {
+        var r = document.createRange(); r.selectNodeContents(pre);
+        var s = window.getSelection(); s.removeAllRanges(); s.addRange(r); c.textContent = "Selected";
+      }
+      try { navigator.clipboard.writeText(pre.textContent).then(function () { c.textContent = "Copied"; }, fallback); } catch (err) { fallback(); }
+      setTimeout(function () { c.textContent = label; }, 1600);
+    }
+  });
+
+  /* ---------- scroll spy ---------- */
+  function setActive(id) {
+    navLinks.forEach(function (n) {
+      var on = n.id === id;
+      if (on) { n.side.setAttribute("aria-current", "true"); n.chip.setAttribute("aria-current", "true"); }
+      else { n.side.removeAttribute("aria-current"); n.chip.removeAttribute("aria-current"); }
+      if (on && chips.scrollWidth > chips.clientWidth) chips.scrollLeft = n.chip.offsetLeft - chips.clientWidth / 2 + n.chip.offsetWidth / 2;
+    });
+  }
+  if ("IntersectionObserver" in window) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) { if (en.isIntersecting) setActive(en.target.id.replace("sec-", "")); });
+    }, { rootMargin: "-140px 0px -65% 0px" });
+    SECS.forEach(function (s) { io.observe(secEls[s.id]); });
+  }
+  setActive(SECS[0].id);
+  applyFilter();
+})();
+</script>
+
+</body></html>

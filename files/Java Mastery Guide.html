@@ -1,0 +1,1969 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Java Mastery Guide</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Sans+Condensed:wght@500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+/* Layout: sticky search bar, section rail on the left, masonry columns of reference cards per section.
+   Cool blueprint neutrals with a Java-blue accent; orange is reserved for pitfalls. Code surfaces stay dark in both themes. */
+:root{
+  --bg:#f1f4f9; --panel:#ffffff; --ink:#111a2c; --muted:#56627a; --line:#d7deea; --line2:#bcc7da;
+  --accent:#1d5d98; --accent-soft:#e3edf9; --accent-ink:#ffffff;
+  --warn:#b3400b; --warn-soft:#fdeee2; --ok:#17703f; --ok-soft:#e1f3e8;
+  --code-bg:#0f1728; --code-fg:#d5ddf0; --code-line:#222d45;
+  --t-kw:#ff9a62; --t-type:#7fc6f7; --t-str:#9ad58c; --t-num:#f0c674; --t-cmt:#7080a0; --t-ann:#e0a4ff; --t-fn:#b4d2ff;
+  --sans:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --cond:"IBM Plex Sans Condensed","IBM Plex Sans",system-ui,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0b101b; --panel:#121929; --ink:#e3e8f4; --muted:#97a2bc; --line:#25304a; --line2:#37456a;
+    --accent:#72b3ee; --accent-soft:#15253b; --accent-ink:#0b101b;
+    --warn:#ff9d66; --warn-soft:#2a1a11; --ok:#70d69b; --ok-soft:#11281c;
+    --code-bg:#080c15; --code-fg:#d5ddf0; --code-line:#1c263d;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0b101b; --panel:#121929; --ink:#e3e8f4; --muted:#97a2bc; --line:#25304a; --line2:#37456a;
+  --accent:#72b3ee; --accent-soft:#15253b; --accent-ink:#0b101b;
+  --warn:#ff9d66; --warn-soft:#2a1a11; --ok:#70d69b; --ok-soft:#11281c;
+  --code-bg:#080c15; --code-fg:#d5ddf0; --code-line:#1c263d;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{scroll-behavior:smooth}
+body{
+  margin:0; background:var(--bg); color:var(--ink); font-family:var(--sans); font-size:15px; line-height:1.55;
+  padding-left:max(16px, env(safe-area-inset-left, 0px));
+  padding-right:max(16px, env(safe-area-inset-right, 0px));
+  padding-block:0 80px;
+}
+body::before{content:""; position:fixed; inset:0 0 auto; height:env(safe-area-inset-top, 0px); z-index:30; background:var(--panel)}
+button,input{font:inherit; color:inherit}
+:focus-visible{outline:2px solid var(--accent); outline-offset:2px}
+a{color:var(--accent)}
+code{font-family:var(--mono); font-size:.86em; background:var(--accent-soft); color:var(--accent); padding:.08em .38em; border-radius:4px; overflow-wrap:anywhere}
+h1,h2,h3{text-wrap:balance}
+
+/* ---------- top bar ---------- */
+.bar{position:sticky; top:env(safe-area-inset-top, 0px); z-index:20; margin-inline:calc(-1 * max(16px, env(safe-area-inset-left, 0px))) calc(-1 * max(16px, env(safe-area-inset-right, 0px)));
+  padding-left:max(16px, env(safe-area-inset-left, 0px)); padding-right:max(16px, env(safe-area-inset-right, 0px));
+  background:var(--panel); border-bottom:1px solid var(--line)}
+.bar-in{max-width:1240px; margin:0 auto; display:flex; align-items:center; gap:14px; padding-block:10px}
+.brand{display:flex; align-items:center; gap:10px; text-decoration:none; color:var(--ink); font-weight:700; letter-spacing:-.01em; white-space:nowrap}
+.mark{display:grid; place-items:center; width:30px; height:30px; border-radius:7px; background:var(--accent); color:var(--accent-ink); font-family:var(--mono); font-weight:600}
+.search{flex:1; min-width:0; max-width:560px; display:flex; align-items:center; gap:10px; min-height:40px; padding:0 12px; border:1px solid var(--line); border-radius:9px; background:var(--bg)}
+.search:focus-within{border-color:var(--accent)}
+.search svg{flex:0 0 auto; color:var(--muted)}
+.search input{flex:1; min-width:0; height:38px; border:0; outline:0; background:none}
+.search kbd{flex:0 0 auto; font-family:var(--mono); font-size:12px; color:var(--muted); border:1px solid var(--line2); border-radius:5px; padding:0 6px}
+.grow{flex:1}
+.seg2{display:inline-flex; border:1px solid var(--line); border-radius:9px; overflow:hidden; flex:0 0 auto}
+.seg2 button{min-height:38px; padding:0 12px; border:0; background:var(--panel); color:var(--muted); cursor:pointer; font-size:13.5px}
+.seg2 button+button{border-left:1px solid var(--line)}
+.seg2 button[aria-pressed="true"]{background:var(--accent-soft); color:var(--accent); font-weight:600}
+.icon{flex:0 0 auto; display:grid; place-items:center; width:40px; height:40px; border:1px solid var(--line); border-radius:9px; background:var(--panel); cursor:pointer; color:var(--muted)}
+.icon:hover,.seg2 button:hover{color:var(--ink)}
+.chips{display:none; overflow-x:auto; gap:6px; padding:0 0 10px; max-width:1240px; margin:0 auto; scrollbar-width:thin}
+.chips a{flex:0 0 auto; display:inline-flex; align-items:center; min-height:34px; padding:0 12px; border:1px solid var(--line); border-radius:999px; text-decoration:none; color:var(--ink); font-size:13.5px; background:var(--panel); white-space:nowrap}
+.chips a[aria-current="true"]{background:var(--accent); border-color:var(--accent); color:var(--accent-ink)}
+
+/* ---------- hero ---------- */
+.wrap{max-width:1240px; margin:0 auto}
+.hero{display:grid; gap:14px; padding-block:34px 22px; max-width:78ch}
+.kicker{margin:0; font-family:var(--cond); font-weight:600; font-size:13px; letter-spacing:.14em; text-transform:uppercase; color:var(--accent)}
+h1{margin:0; font-size:clamp(30px,4.6vw,48px); line-height:1.06; letter-spacing:-.02em; font-weight:700}
+.lede{margin:0; color:var(--muted); font-size:17px; max-width:64ch}
+.lts{display:flex; flex-wrap:wrap; gap:8px; align-items:center; font-family:var(--cond); font-size:14px; color:var(--muted)}
+.lts b{font-weight:600; letter-spacing:.06em; text-transform:uppercase; font-size:12.5px}
+.v{display:inline-flex; align-items:center; min-height:26px; padding:0 10px; border-radius:6px; border:1px solid var(--line2); font-family:var(--mono); font-size:12.5px; color:var(--ink); background:var(--panel)}
+.v.lts-v{background:var(--accent); border-color:var(--accent); color:var(--accent-ink); font-weight:600}
+
+/* ---------- shell ---------- */
+.shell{display:grid; grid-template-columns:190px minmax(0,1fr); gap:30px; align-items:start}
+.side{position:sticky; top:calc(env(safe-area-inset-top, 0px) + 74px); display:grid; gap:2px; max-height:calc(100vh - 96px); overflow:auto; scrollbar-width:thin; padding-bottom:20px}
+.side h2{margin:0 0 8px; font-family:var(--cond); font-weight:600; font-size:12.5px; letter-spacing:.14em; text-transform:uppercase; color:var(--muted)}
+.side a{display:flex; justify-content:space-between; gap:8px; align-items:baseline; padding:7px 10px; border-radius:8px; text-decoration:none; color:var(--ink); font-size:14.5px; border:1px solid transparent}
+.side a:hover{background:var(--panel); border-color:var(--line)}
+.side a span{font-family:var(--mono); font-size:11.5px; color:var(--muted)}
+.side a[aria-current="true"]{background:var(--accent-soft); color:var(--accent); font-weight:600}
+.main{min-width:0; display:grid; grid-template-columns:minmax(0,1fr); gap:46px}
+
+/* ---------- sections and cards ---------- */
+.sec{scroll-margin-top:calc(env(safe-area-inset-top, 0px) + 130px); display:grid; grid-template-columns:minmax(0,1fr); gap:16px; min-width:0}
+.cols{min-width:0}
+.sec-head{display:grid; gap:4px; padding-bottom:10px; border-bottom:2px solid var(--ink)}
+.sec-head h2{margin:0; font-size:clamp(22px,3vw,30px); letter-spacing:-.015em}
+.sec-head p{margin:0; color:var(--muted); max-width:70ch}
+.cols{columns:2 400px; column-gap:16px}
+.card{break-inside:avoid; display:block; margin:0 0 16px; background:var(--panel); border:1px solid var(--line); border-radius:10px; overflow:hidden}
+.card.wide{column-span:all}
+.ch{display:flex; align-items:flex-start; justify-content:space-between; gap:10px; padding:12px 14px 0}
+.ch h3{margin:0; font-size:16.5px; line-height:1.3; letter-spacing:-.005em}
+.badges{display:flex; flex-wrap:wrap; gap:5px; justify-content:flex-end; flex:0 0 auto}
+.tag{font-family:var(--cond); font-weight:600; font-size:11.5px; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); border:1px solid var(--line2); border-radius:5px; padding:1px 7px; white-space:nowrap}
+.tag.ver{font-family:var(--mono); text-transform:none; letter-spacing:0; color:var(--accent); border-color:var(--accent)}
+.tag.prev{color:var(--warn); border-color:var(--warn)}
+.sum{margin:0; padding:6px 14px 12px; color:var(--muted)}
+.codewrap{position:relative; background:var(--code-bg); border-block:1px solid var(--code-line)}
+pre{margin:0; padding:13px 14px; overflow-x:auto; font-family:var(--mono); font-size:12.6px; line-height:1.62; tab-size:2; color:var(--code-fg)}
+.copy{position:absolute; top:6px; right:6px; min-height:28px; padding:0 9px; border-radius:6px; border:1px solid var(--code-line); background:var(--code-bg); color:#8f9bb8; font-family:var(--cond); font-size:12px; font-weight:600; letter-spacing:.06em; cursor:pointer; opacity:.0; transition:opacity .12s}
+.codewrap:hover .copy,.copy:focus-visible{opacity:1}
+@media (hover:none){.copy{opacity:1}}
+.k{color:var(--t-kw)} .ty{color:var(--t-type)} .s{color:var(--t-str)} .n{color:var(--t-num)} .c{color:var(--t-cmt); font-style:italic} .an{color:var(--t-ann)} .f{color:var(--t-fn)}
+.more{margin:0; padding:12px 14px 2px 32px; display:grid; gap:7px; font-size:14.5px}
+.more li::marker{color:var(--accent)}
+.watch{margin:12px 14px 14px; padding:10px 12px; background:var(--warn-soft); border-radius:8px; font-size:14px; display:grid; gap:6px}
+.watch b{font-family:var(--cond); font-weight:600; font-size:12px; letter-spacing:.12em; text-transform:uppercase; color:var(--warn)}
+.watch ul{margin:0; padding-left:18px; display:grid; gap:4px}
+.card>.more:last-child{padding-bottom:14px}
+.more+.watch{margin-top:10px}
+.sum:last-child{padding-bottom:14px}
+.tw{overflow-x:auto; border-top:1px solid var(--line)}
+table{border-collapse:collapse; width:100%; font-size:13.8px}
+th,td{text-align:left; vertical-align:top; padding:8px 12px; border-bottom:1px solid var(--line)}
+th{font-family:var(--cond); font-weight:600; font-size:12px; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); white-space:nowrap; background:var(--bg)}
+tr:last-child td{border-bottom:0}
+td:first-child{font-weight:600}
+td.mono{font-family:var(--mono); font-size:12.5px}
+.btn-d{margin:12px 14px; min-height:32px; padding:0 12px; border:1px solid var(--line2); border-radius:7px; background:var(--panel); color:var(--accent); cursor:pointer; font-size:13px; display:none}
+body.compact:not(.searching) .btn-d{display:inline-flex; align-items:center}
+body.compact:not(.searching) .card:not(.open) .more, body.compact:not(.searching) .card:not(.open) .watch{display:none}
+.search .cnt{flex:0 0 auto; font-family:var(--mono); font-size:12px; color:var(--muted); white-space:nowrap}
+.empty{padding:40px 0; color:var(--muted)}
+.foot{margin-top:50px; padding-top:18px; border-top:1px solid var(--line); color:var(--muted); font-size:14px; max-width:78ch}
+
+@media (max-width:900px){
+  .shell{grid-template-columns:minmax(0,1fr)}
+  .side{display:none}
+  .chips{display:flex}
+  .bar-in{flex-wrap:wrap; row-gap:8px}
+  .search{order:3; flex:1 1 100%; max-width:none}
+  .grow{display:none}
+  .brand{flex:1}
+  .sec{scroll-margin-top:calc(env(safe-area-inset-top, 0px) + 160px)}
+}
+@media (max-width:520px){
+  .brand span:last-child{display:none}
+  .cols{columns:1}
+  .seg2 button{padding:0 9px}
+  .hero{padding-block:24px 14px}
+}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.copy{transition:none}}
+</style>
+
+<div id="top"></div>
+<header class="bar">
+  <div class="bar-in">
+    <a class="brand" href="#top"><span class="mark" aria-hidden="true">J</span><span>Java Mastery Guide</span></a>
+    <label class="search" for="q">
+      <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>
+      <input id="q" type="search" placeholder="Search: groupingBy, volatile, sealed, G1" autocomplete="off">
+      <kbd aria-hidden="true">/</kbd>
+    </label>
+    <span class="grow"></span>
+    <div class="seg2" role="group" aria-label="Detail level">
+      <button type="button" data-mode="detailed" aria-pressed="true">Detailed</button>
+      <button type="button" data-mode="compact" aria-pressed="false">Compact</button>
+    </div>
+    <button class="icon" id="theme" type="button" aria-label="Switch between light and dark theme">
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 13A9 9 0 1 1 11 3a7 7 0 0 0 10 10z"/></svg>
+    </button>
+  </div>
+  <nav class="chips" id="chips" aria-label="Sections"></nav>
+</header>
+
+<div class="wrap">
+  <section class="hero">
+    <p class="kicker">Reference · Java 8 to 27</p>
+    <h1>Everything you reach for, on one page</h1>
+    <p class="lede">Skim the summary and code on each card. Open the details when you need the reasoning. Press <code>/</code> to search, or switch to Compact to see only summaries and code.</p>
+    <div class="lts" aria-label="Release lines">
+      <b>LTS</b><span class="v lts-v">8</span><span class="v lts-v">11</span><span class="v lts-v">17</span><span class="v lts-v">21</span><span class="v lts-v">25</span>
+      <b>Latest</b><span class="v">27 (Sept 2026, not LTS)</span>
+    </div>
+  </section>
+
+  <div class="shell">
+    <aside class="side" aria-label="Sections"><h2>Sections</h2><div id="side" style="display:grid;gap:2px"></div></aside>
+    <main class="main" id="main"></main>
+  </div>
+  <p class="foot" id="foot">Checked against JDK 25 (LTS), JDK 26 and JDK 27 release notes. Preview features need <code>--enable-preview</code> and change between releases. Code is written for Java 21 or newer unless a card shows a version badge.</p>
+</div>
+
+<script>
+(function () {
+  "use strict";
+  var CARDS = [];
+  /* card(section, title, kind, fields) */
+  function card(sec, t, kind, f) { f = f || {}; f.sec = sec; f.t = t; f.kind = kind; CARDS.push(f); }
+  var R = String.raw;
+
+  /* ================= CORE JAVA ================= */
+  card("core", "Primitive types", "Table", {
+    sum: "Eight primitives. Fields default to 0, false or null. Locals have no default and must be assigned before use.",
+    head: ["Type", "Bits", "Range or note"],
+    rows: [
+      ["byte", "8", "-128 to 127"],
+      ["short", "16", "-32,768 to 32,767"],
+      ["char", "16", "Unsigned UTF-16 unit, 0 to 65,535"],
+      ["int", "32", "-2^31 to 2^31-1 (about ±2.1 billion)"],
+      ["long", "64", "-2^63 to 2^63-1. Literal needs L: `10_000_000_000L`"],
+      ["float", "32", "About 7 decimal digits. Literal needs f"],
+      ["double", "64", "About 15 to 16 digits. Default for `1.5`"],
+      ["boolean", "n/a", "true or false. Size is JVM-dependent"]
+    ],
+    more: [
+      "Underscores in literals are ignored: `1_000_000`, `0b1010`, `0xFF`, `017` (octal).",
+      "Arithmetic on `byte`, `short` and `char` promotes to `int`, so `byte c = a + b` does not compile without a cast."
+    ]
+  });
+
+  card("core", "Numeric traps", "Pitfall", {
+    sum: "Overflow is silent, integer division truncates, and floating point is binary.",
+    lang: "java",
+    code: R`int big = Integer.MAX_VALUE + 1;        // -2147483648, no exception
+int safe = Math.addExact(1, 2);          // throws ArithmeticException on overflow
+System.out.println(7 / 2);               // 3 (truncates toward zero)
+System.out.println(-7 / 2);              // -3
+System.out.println(-7 % 3);              // -1 (sign follows the dividend)
+System.out.println(Math.floorMod(-7, 3)); // 2
+System.out.println(0.1 + 0.2);           // 0.30000000000000004
+System.out.println(0.1 + 0.2 == 0.3);    // false
+
+byte b = 10;
+b += 5;                                  // fine: compound assignment casts back
+// b = b + 5;                            // compile error: int to byte
+
+var money = new BigDecimal("19.99");     // use the String constructor
+money = money.multiply(new BigDecimal("3"))
+             .setScale(2, RoundingMode.HALF_UP);`,
+    watch: [
+      "`new BigDecimal(0.1)` carries the binary error of the double. Use `BigDecimal.valueOf(0.1)` or a String.",
+      "Compare doubles with a tolerance, or use `Double.compare`. `NaN != NaN`, so use `Double.isNaN`."
+    ]
+  });
+
+  card("core", "Wrapper caching and boxing", "Pitfall", {
+    sum: "`Integer.valueOf` caches -128 to 127, so `==` works by accident for small values.",
+    lang: "java",
+    code: R`Integer a = 127, b = 127;
+System.out.println(a == b);        // true  (same cached object)
+Integer c = 1000, d = 1000;
+System.out.println(c == d);        // false (different objects)
+System.out.println(c.equals(d));   // true
+
+Integer maybe = null;
+// int x = maybe;                  // NullPointerException (auto-unboxing)
+
+List<Integer> list = new ArrayList<>(List.of(10, 20, 30));
+list.remove(1);                    // removes INDEX 1 -> [10, 30]
+list.remove(Integer.valueOf(10));  // removes VALUE 10 -> [30]`,
+    more: [
+      "Boxing in tight loops allocates objects. Prefer `IntStream`, `int[]` or specialised collections for hot paths.",
+      "A ternary like `cond ? 1 : null` unboxes when the other branch is a primitive and can throw NPE."
+    ]
+  });
+
+  card("core", "String essentials", "Concept", {
+    sum: "Strings are immutable. Literals live in the string pool, so compare content with `equals`.",
+    lang: "java",
+    code: R`String a = "java";
+String b = "java";
+String c = new String("java");
+System.out.println(a == b);            // true  (pooled literal)
+System.out.println(a == c);            // false (new object)
+System.out.println(a.equals(c));       // true
+System.out.println(a == c.intern());   // true
+
+"  hi ".strip();                       // "hi" (Unicode-aware, 11+)
+" ".isBlank();                         // true (11+)
+"ab".repeat(3);                        // "ababab" (11+)
+"a,b,,".split(",");                    // ["a", "b"]  trailing empties dropped
+"a,b,,".split(",", -1);                // ["a", "b", "", ""]
+String.join("-", "x", "y", "z");       // "x-y-z"
+"%s has %d items".formatted("cart", 3); // 15+`,
+    more: [
+      "Since Java 9, strings use compact storage: Latin-1 text takes one byte per char, otherwise UTF-16.",
+      "Concatenating in a loop builds a new String each pass. Use `StringBuilder` (not thread-safe) or `String.join` / `Collectors.joining`.",
+      "`switch` on strings uses `hashCode` then `equals`. A null string throws NPE."
+    ],
+    watch: ["`replace(a, b)` is literal text. `replaceAll(regex, repl)` is regex, so `.` matches any character."]
+  });
+
+  card("core", "Text blocks and switch expressions", "Syntax", {
+    v: "14, 15",
+    sum: "Multi-line strings and a switch that returns a value, with no fall-through.",
+    lang: "java",
+    code: R`String json = """
+    {
+      "name": "Ada",
+      "role": "engineer"
+    }
+    """;                         // closing delimiter sets the indentation
+
+int days = switch (month) {
+    case FEB -> 28;
+    case APR, JUN, SEP, NOV -> 30;
+    default -> {
+        if (month == null) throw new IllegalArgumentException();
+        yield 31;                // yield returns from a block
+    }
+};
+
+var label = switch (code) {
+    case 200 -> "OK";
+    case 404 -> "Not found";
+    default  -> "Other";
+};`,
+    more: [
+      "Switch expressions must be exhaustive. Enums and sealed types can omit `default` and the compiler checks coverage.",
+      "Arrow cases never fall through. The old colon form `case X:` still falls through unless you `break`.",
+      "In a text block `\\` at the end of a line joins lines, and `\\s` keeps a trailing space."
+    ]
+  });
+
+  card("core", "equals and hashCode contract", "Concept", {
+    sum: "Override both together, and base both on the same fields.",
+    lang: "java",
+    code: R`final class Point {
+    private final int x, y;
+    Point(int x, int y) { this.x = x; this.y = y; }
+
+    @Override public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Point p)) return false;   // pattern match (16+)
+        return x == p.x && y == p.y;
+    }
+    @Override public int hashCode() { return Objects.hash(x, y); }
+    @Override public String toString() { return "Point[" + x + "," + y + "]"; }
+}`,
+    more: [
+      "Equal objects must return equal hash codes. Unequal objects may collide, but fewer collisions mean faster maps.",
+      "`equals` must be reflexive, symmetric, transitive, consistent, and false for null.",
+      "Use records when the class is plain data. They generate all three methods."
+    ],
+    watch: ["Mutating a field used by `hashCode` after the object is a `HashMap` key or `HashSet` member makes it unfindable."]
+  });
+
+  card("core", "Access modifiers", "Table", {
+    sum: "Visibility from widest to narrowest.",
+    head: ["Modifier", "Same class", "Same package", "Subclass", "Everywhere"],
+    rows: [
+      ["public", "yes", "yes", "yes", "yes"],
+      ["protected", "yes", "yes", "yes", "no"],
+      ["(none)", "yes", "yes", "no", "no"],
+      ["private", "yes", "no", "no", "no"]
+    ],
+    more: [
+      "Modules (Java 9+) add another layer: a package is visible outside its module only if it is `exports`ed.",
+      "Top-level classes can only be `public` or package-private."
+    ]
+  });
+
+  card("core", "Initialization order", "Concept", {
+    sum: "Static first, once per class. Then for each `new`: superclass, field initializers and instance blocks, constructor body.",
+    lang: "java",
+    code: R`class Parent {
+    static { System.out.println("1 Parent static"); }
+    { System.out.println("3 Parent instance block"); }
+    Parent() { System.out.println("4 Parent constructor"); }
+}
+class Child extends Parent {
+    static { System.out.println("2 Child static"); }
+    { System.out.println("5 Child instance block"); }
+    Child() { System.out.println("6 Child constructor"); }
+}
+new Child();   // prints 1, 2, 3, 4, 5, 6`,
+    watch: [
+      "Calling an overridable method from a constructor runs the subclass version before the subclass fields are initialized.",
+      "Java 25 allows statements before `super(...)` as long as they do not touch `this` (flexible constructor bodies, final)."
+    ]
+  });
+
+  card("core", "Interface or abstract class", "Table", {
+    sum: "Prefer interfaces for contracts. Use an abstract class when you need state or a shared constructor.",
+    head: ["", "Interface", "Abstract class"],
+    rows: [
+      ["Instance fields", "No (constants only)", "Yes"],
+      ["Constructors", "No", "Yes"],
+      ["Inheritance", "A class implements many", "A class extends one"],
+      ["Methods", "abstract, `default`, `static`, `private`", "Any"],
+      ["Access modifiers", "Methods are public unless private", "Any"],
+      ["Functional use", "Single abstract method gives a lambda target", "Not a lambda target"]
+    ],
+    lang: "java",
+    code: R`interface Walker { default String move() { return "walk"; } }
+interface Swimmer { default String move() { return "swim"; } }
+
+class Duck implements Walker, Swimmer {
+    @Override public String move() {
+        return Walker.super.move() + " and " + Swimmer.super.move();  // resolve the clash
+    }
+}`,
+    more: ["Rule of thumb for default method conflicts: class wins, then the most specific interface, otherwise you must override."]
+  });
+
+  card("core", "Nested and inner classes", "Table", {
+    sum: "Four kinds. Only non-static inner and local/anonymous classes capture an enclosing instance or variables.",
+    head: ["Kind", "Declared", "Captures", "Use for"],
+    rows: [
+      ["Static nested", "`static class X` in a class", "Nothing", "Helpers, builders, `Map.Entry`"],
+      ["Inner", "`class X` in a class", "Outer `this`", "Iterators tied to an outer object"],
+      ["Local", "Inside a method", "Effectively final locals", "One-off helper type, local records and enums"],
+      ["Anonymous", "`new Type() { ... }`", "Effectively final locals", "Short one-off implementations. Prefer lambdas for one-method interfaces"]
+    ],
+    watch: ["An inner class keeps a hidden reference to its outer instance. That reference can keep a large object alive, for example when a listener is registered."]
+  });
+
+  card("core", "Exceptions", "Concept", {
+    sum: "Checked exceptions extend `Exception`. Unchecked ones extend `RuntimeException` or `Error`.",
+    lang: "java",
+    code: R`try (var in = Files.newBufferedReader(path);
+     var out = Files.newBufferedWriter(target)) {   // closed in reverse order
+    String line;
+    while ((line = in.readLine()) != null) out.write(line.strip() + "\n");
+} catch (NoSuchFileException | AccessDeniedException e) {   // multi-catch
+    throw new UncheckedIOException("cannot copy " + path, e);   // keep the cause
+} catch (IOException e) {
+    log.error("copy failed", e);
+}
+
+class OrderNotFound extends RuntimeException {
+    OrderNotFound(long id) { super("Order " + id + " not found"); }
+}`,
+    more: [
+      "If the try body and `close()` both throw, the body exception wins and the close exception is attached via `getSuppressed()`.",
+      "`finally` runs on return, break and exceptions. It does not run if the JVM exits or the thread dies first.",
+      "Catch the most specific type. Catch `Throwable` or `Error` only at a process boundary."
+    ],
+    watch: [
+      "A `return` inside `finally` swallows any exception from the try block.",
+      "Never write an empty catch. Log it or rethrow with the cause."
+    ]
+  });
+
+  card("core", "Enums", "Syntax", {
+    sum: "A fixed set of instances. They can hold fields and behaviour, implement interfaces, and work in `switch`.",
+    lang: "java",
+    code: R`enum Op implements IntBinaryOperator {
+    ADD("+") { public int applyAsInt(int a, int b) { return a + b; } },
+    MUL("*") { public int applyAsInt(int a, int b) { return a * b; } };
+
+    private final String symbol;
+    Op(String symbol) { this.symbol = symbol; }
+    String symbol() { return symbol; }
+}
+
+Op.valueOf("ADD");          // throws IllegalArgumentException if unknown
+Op.values();                // new array on every call
+var m = new EnumMap<Op, Integer>(Op.class);   // array-backed, ordered by ordinal`,
+    watch: ["Do not store `ordinal()` in a database. Reordering constants changes it. Store `name()` instead."]
+  });
+
+  card("core", "Immutable class recipe", "Recipe", {
+    sum: "Immutable objects are safe to share between threads and to use as map keys.",
+    lang: "java",
+    code: R`public final class Order {                      // 1. cannot be subclassed
+    private final long id;                       // 2. private final fields
+    private final List<String> items;
+
+    public Order(long id, List<String> items) {
+        this.id = id;
+        this.items = List.copyOf(items);         // 3. defensive copy, rejects nulls
+    }
+    public List<String> items() { return items; }   // 4. already unmodifiable
+}`,
+    more: ["Records give you steps 1 and 2 for free. You still add the defensive copy in a compact constructor."]
+  });
+
+  card("core", "Optional: do and don't", "Pitfall", {
+    sum: "Use it as a return type that says 'might be empty'. Not as a field or parameter.",
+    lang: "java",
+    code: R`Optional<User> user = repo.findById(id);
+
+String name = user.map(User::name).orElse("guest");
+String lazy = user.map(User::name).orElseGet(() -> loadDefault());   // computed only if empty
+User must   = user.orElseThrow(() -> new UserNotFound(id));          // 10+: no-arg orElseThrow() too
+
+user.ifPresentOrElse(u -> log(u), () -> log("none"));   // 9+
+Optional<User> either = user.or(() -> repo.findByEmail(mail));      // 9+`,
+    watch: [
+      "`orElse(expensiveCall())` always runs the call. Use `orElseGet`.",
+      "Do not call `get()` without a check. Do not return null from a method that returns Optional."
+    ]
+  });
+
+  card("core", "java.time quick lookup", "Table", {
+    sum: "Immutable and thread-safe. Prefer these over `Date` and `Calendar`.",
+    head: ["Type", "Holds", "Example"],
+    rows: [
+      ["`LocalDate`", "Date, no zone", "`LocalDate.of(2026, 10, 29)`"],
+      ["`LocalDateTime`", "Date and time, no zone", "`LocalDateTime.now()`"],
+      ["`ZonedDateTime`", "Date, time and zone", "`ZonedDateTime.now(ZoneId.of(\"Asia/Kolkata\"))`"],
+      ["`Instant`", "A point on the UTC timeline", "`Instant.now()`"],
+      ["`Duration`", "Time-based amount", "`Duration.ofMinutes(90)`"],
+      ["`Period`", "Date-based amount", "`Period.between(d1, d2)`"],
+      ["`DateTimeFormatter`", "Parse and format", "`DateTimeFormatter.ISO_LOCAL_DATE`"]
+    ],
+    more: [
+      "Store and transmit `Instant` (or UTC). Convert to a zone only for display.",
+      "`ChronoUnit.DAYS.between(a, b)` counts whole units. Adding a `Period` of one month to Jan 31 gives the last day of February."
+    ]
+  });
+
+  card("core", "Overloading and dispatch", "Concept", {
+    sum: "Overloads are chosen at compile time by the declared type. Overrides are chosen at run time by the actual type.",
+    lang: "java",
+    code: R`static void print(Object o) { System.out.println("Object"); }
+static void print(String s) { System.out.println("String"); }
+
+Object x = "hello";
+print(x);          // Object  (declared type decides the overload)
+print("hello");    // String
+
+void log(int... nums)    { }     // varargs is the last resort in overload resolution
+void log(int a, int b)   { }     // log(1, 2) picks this one`,
+    more: [
+      "Resolution order: exact match, widening primitive, boxing, then varargs.",
+      "Static and private methods and fields are hidden, not overridden, so they bind to the declared type."
+    ]
+  });
+
+  /* ================= COLLECTIONS ================= */
+  card("coll", "Which collection do I pick?", "Table", {
+    wide: true,
+    sum: "Start from the question, then pick the implementation. Big-O is for the typical case.",
+    head: ["I need", "Use", "get / contains", "add", "Order", "Nulls", "Notes"],
+    rows: [
+      ["Indexed list", "`ArrayList`", "O(1) by index, O(n) search", "O(1) amortised at end", "Insertion", "Yes", "Default choice for lists. Insert in the middle shifts elements"],
+      ["Queue or stack", "`ArrayDeque`", "O(n)", "O(1) both ends", "Insertion", "No", "Faster than `LinkedList` and `Stack`. Use `push`/`pop`/`offer`/`poll`"],
+      ["Linked list", "`LinkedList`", "O(n)", "O(1) at ends", "Insertion", "Yes", "Rarely the right answer. Worse cache behaviour"],
+      ["Key to value", "`HashMap`", "O(1)", "O(1)", "None", "1 null key", "Default map. Treeifies buckets at 8 entries"],
+      ["Key to value, keep insertion order", "`LinkedHashMap`", "O(1)", "O(1)", "Insertion or access", "Yes", "`accessOrder=true` plus `removeEldestEntry` gives an LRU cache"],
+      ["Sorted keys", "`TreeMap`", "O(log n)", "O(log n)", "Sorted", "No null key", "`floorKey`, `ceilingKey`, `subMap`, `headMap`"],
+      ["Unique items", "`HashSet`", "O(1)", "O(1)", "None", "Yes", "Backed by a `HashMap`"],
+      ["Unique, sorted", "`TreeSet`", "O(log n)", "O(log n)", "Sorted", "No", "`first`, `last`, `floor`, `higher`"],
+      ["Smallest or largest first", "`PriorityQueue`", "O(n)", "O(log n)", "Heap order", "No", "Iteration order is not sorted. `poll` is O(log n)"],
+      ["Enum keys", "`EnumMap` / `EnumSet`", "O(1)", "O(1)", "Ordinal", "No null key", "Array or bit-vector backed. Very fast"],
+      ["Concurrent map", "`ConcurrentHashMap`", "O(1)", "O(1)", "None", "No", "Atomic `compute`, `merge`. Not the same as `synchronizedMap`"],
+      ["Read-mostly shared list", "`CopyOnWriteArrayList`", "O(1)", "O(n) copy", "Insertion", "Yes", "Iterators see a snapshot and never throw `ConcurrentModificationException`"]
+    ]
+  });
+
+  card("coll", "Hierarchy at a glance", "Concept", {
+    sum: "`Map` is not a `Collection`. `Queue` and `Deque` extend `Collection`. Java 21 added the sequenced interfaces.",
+    lang: "text",
+    code: R`Iterable
+ └─ Collection
+     ├─ SequencedCollection (21)
+     │   ├─ List ........... ArrayList, LinkedList, CopyOnWriteArrayList
+     │   ├─ Deque .......... ArrayDeque, LinkedList
+     │   └─ SequencedSet ... LinkedHashSet, SortedSet -> TreeSet
+     ├─ Set ................ HashSet, EnumSet
+     └─ Queue .............. PriorityQueue, ArrayDeque
+
+Map ........................ HashMap, ConcurrentHashMap, EnumMap
+ └─ SequencedMap (21) ..... LinkedHashMap, SortedMap -> TreeMap`,
+    more: ["Program to the interface: `List<String> xs = new ArrayList<>();`. Return the narrowest type your callers need."]
+  });
+
+  card("coll", "HashMap internals", "Concept", {
+    sum: "An array of buckets. The key's `hashCode` picks the bucket and `equals` finds the entry.",
+    more: [
+      "Table size is always a power of two. Index is `(n - 1) & hash`, where `hash = h ^ (h >>> 16)` mixes high bits into low bits.",
+      "Default capacity 16 and load factor 0.75. When size exceeds capacity times load factor, the table doubles and entries are redistributed.",
+      "A bucket is a linked list. At 8 entries in one bucket (and a table of at least 64) it becomes a red-black tree, so worst-case lookup is O(log n). It reverts at 6.",
+      "Presize with `HashMap.newHashMap(expected)` (19+) to avoid resizes. `new HashMap<>(expected)` is too small by 25%.",
+      "Iteration cost is proportional to capacity plus size, so an oversized, mostly empty map iterates slowly."
+    ],
+    watch: [
+      "Mutable keys break lookups. Use immutable keys such as `String`, `Integer`, records and enums.",
+      "`HashMap` is not thread-safe. Concurrent writes can lose data or loop in older versions."
+    ]
+  });
+
+  card("coll", "Map methods you should use", "Syntax", {
+    sum: "These replace most get-check-put code.",
+    lang: "java",
+    code: R`Map<String, List<String>> byDept = new HashMap<>();
+byDept.computeIfAbsent("eng", k -> new ArrayList<>()).add("Ada");   // group in one line
+
+Map<String, Integer> counts = new HashMap<>();
+for (String w : words) counts.merge(w, 1, Integer::sum);            // count
+
+counts.getOrDefault("x", 0);
+counts.putIfAbsent("x", 1);
+counts.compute("x", (k, v) -> v == null ? 1 : v + 1);
+counts.computeIfPresent("x", (k, v) -> v > 5 ? null : v);           // returning null removes
+counts.replaceAll((k, v) -> v * 2);
+counts.entrySet().removeIf(e -> e.getValue() == 0);
+
+for (var e : counts.entrySet()) System.out.println(e.getKey() + "=" + e.getValue());
+Map.of("a", 1, "b", 2);                                             // immutable, no nulls
+Map.entry("k", "v");`,
+    watch: ["`Map.of` has no guaranteed iteration order and throws on duplicate keys."]
+  });
+
+  card("coll", "Immutable, unmodifiable, copy", "Pitfall", {
+    sum: "Three different things that look alike.",
+    head: ["Call", "Result", "Reflects later changes to the source?"],
+    rows: [
+      ["`List.of(a, b)`", "Truly immutable, no nulls", "n/a"],
+      ["`List.copyOf(src)`", "Immutable copy", "No"],
+      ["`Collections.unmodifiableList(src)`", "Read-only view", "Yes"],
+      ["`stream.toList()` (16+)", "Unmodifiable, nulls allowed", "No"],
+      ["`Collectors.toList()`", "Mutable `ArrayList` (not guaranteed)", "No"],
+      ["`Arrays.asList(arr)`", "Fixed-size list writing through to the array", "Yes"]
+    ],
+    lang: "java",
+    code: R`var src = new ArrayList<>(List.of(1, 2, 3));
+var view = Collections.unmodifiableList(src);
+src.add(4);
+System.out.println(view);        // [1, 2, 3, 4]  the view changed
+
+var fixed = Arrays.asList(1, 2, 3);
+fixed.set(0, 9);                 // fine
+// fixed.add(4);                 // UnsupportedOperationException`
+  });
+
+  card("coll", "Sequenced collections", "Syntax", {
+    v: "21",
+    sum: "One API for first, last and reversed on every ordered collection.",
+    lang: "java",
+    code: R`List<String> list = new ArrayList<>(List.of("a", "b", "c"));
+list.getFirst();        // "a"   (before 21 you wrote list.get(0))
+list.getLast();         // "c"   (before 21: list.get(list.size() - 1))
+list.addFirst("z");
+list.removeLast();
+var rev = list.reversed();            // a live reversed VIEW, not a copy
+
+var lhm = new LinkedHashMap<String, Integer>();
+lhm.put("x", 1); lhm.put("y", 2);
+lhm.firstEntry();                      // x=1
+lhm.pollLastEntry();                   // removes y=2
+lhm.putFirst("w", 0);
+
+new TreeSet<>(List.of(3, 1, 2)).reversed();   // [3, 2, 1]`,
+    watch: ["`getFirst()` on an empty list throws `NoSuchElementException`, while `List.get(0)` threw `IndexOutOfBoundsException`."]
+  });
+
+  card("coll", "Sorting and Comparator", "Syntax", {
+    sum: "Build comparators from key extractors and chain them.",
+    lang: "java",
+    code: R`record Person(String name, int age, String city) {}
+
+Comparator<Person> cmp = Comparator
+    .comparing(Person::city)
+    .thenComparing(Person::age, Comparator.reverseOrder())
+    .thenComparing(Person::name, String.CASE_INSENSITIVE_ORDER);
+
+people.sort(cmp);
+Collections.sort(people);                                // needs Comparable
+Comparator.nullsFirst(Comparator.<String>naturalOrder());
+people.stream().max(Comparator.comparingInt(Person::age));`,
+    watch: [
+      "Never subtract to compare (`a - b`). It overflows. Use `Integer.compare(a, b)`.",
+      "A comparator that is inconsistent with `equals` makes `TreeSet` and `TreeMap` drop elements that `equals` says are different."
+    ]
+  });
+
+  card("coll", "Iteration and ConcurrentModificationException", "Pitfall", {
+    sum: "Most collections have fail-fast iterators. They detect structural change during iteration on a best-effort basis.",
+    lang: "java",
+    code: R`List<Integer> nums = new ArrayList<>(List.of(1, 2, 3, 4));
+
+// for (Integer n : nums) if (n % 2 == 0) nums.remove(n);   // ConcurrentModificationException
+
+nums.removeIf(n -> n % 2 == 0);                  // best: one call
+
+var it = nums.iterator();                         // or remove through the iterator
+while (it.hasNext()) if (it.next() > 2) it.remove();`,
+    more: [
+      "`ConcurrentHashMap` and `CopyOnWriteArrayList` iterators are weakly consistent or snapshots and do not throw.",
+      "A `subList` is a view. Structural changes to the parent invalidate it."
+    ]
+  });
+
+  card("coll", "Queues, deques and PriorityQueue", "Syntax", {
+    sum: "Each operation comes in two flavours: one throws on failure, the other returns null or false.",
+    head: ["Operation", "Throws", "Returns special value"],
+    rows: [
+      ["Insert", "`add(e)`", "`offer(e)`"],
+      ["Remove head", "`remove()`", "`poll()`"],
+      ["Examine head", "`element()`", "`peek()`"],
+      ["Stack push / pop", "`push(e)` / `pop()`", "n/a"]
+    ],
+    lang: "java",
+    code: R`Deque<Integer> stack = new ArrayDeque<>();
+stack.push(1); stack.push(2);
+stack.pop();                                 // 2  (LIFO)
+
+PriorityQueue<int[]> pq = new PriorityQueue<>(Comparator.comparingInt(a -> a[0]));
+pq.offer(new int[]{5, 0});
+pq.offer(new int[]{1, 1});
+pq.poll();                                   // {1, 1}  smallest first
+var maxHeap = new PriorityQueue<Integer>(Comparator.reverseOrder());`,
+    watch: ["Printing a `PriorityQueue` shows heap order, not sorted order. Poll repeatedly to get sorted output."]
+  });
+
+  card("coll", "Concurrent collections", "Concept", {
+    sum: "Use these instead of wrapping a plain collection in `synchronized`.",
+    lang: "java",
+    code: R`var hits = new ConcurrentHashMap<String, LongAdder>();
+hits.computeIfAbsent(url, k -> new LongAdder()).increment();   // atomic and contention-friendly
+
+var total = new ConcurrentHashMap<String, Long>();
+total.merge("k", 1L, Long::sum);                              // atomic read-modify-write
+
+BlockingQueue<Job> q = new LinkedBlockingQueue<>(1000);        // bounded: put() blocks when full
+q.put(job);
+Job next = q.take();`,
+    more: [
+      "`ConcurrentHashMap` locks per bin and uses CAS for empty bins. Compound actions such as check-then-put must use `compute*` or `merge`.",
+      "`Collections.synchronizedList` makes single calls atomic, but iteration still needs a manual `synchronized (list)` block."
+    ]
+  });
+
+  card("coll", "Collection gotchas", "Pitfall", {
+    sum: "Short list of mistakes that show up in reviews.",
+    watch: [
+      "`list.remove(i)` with an `Integer` removes by value, with an `int` by index.",
+      "`Arrays.asList(int[])` gives a `List<int[]>` with one element. Use `Arrays.stream(arr).boxed().toList()`.",
+      "`new ArrayList<>(n)` sets capacity, not size. `list.get(0)` on it still throws.",
+      "`LinkedList` index access is O(n). Looping with `get(i)` is O(n^2).",
+      "`TreeMap` uses `compareTo`, not `equals`, to detect duplicate keys.",
+      "`HashSet.contains` on a mutated element returns false even though it is still stored."
+    ]
+  });
+
+  /* ================= STREAMS ================= */
+  card("str", "Pipeline anatomy", "Concept", {
+    sum: "Source, then lazy intermediate operations, then one terminal operation that pulls the data through.",
+    lang: "java",
+    code: R`List<String> top3 = orders.stream()              // source
+    .filter(o -> o.total() > 100)                // intermediate (lazy)
+    .sorted(Comparator.comparing(Order::total).reversed())
+    .map(Order::customer)                        // intermediate (lazy)
+    .distinct()
+    .limit(3)                                    // short-circuits
+    .toList();                                   // terminal: runs the pipeline`,
+    more: [
+      "Nothing runs until the terminal operation. Elements flow one at a time through the whole chain, except at stateful steps like `sorted` that need all input.",
+      "A stream can be consumed once. Reusing it throws `IllegalStateException`.",
+      "Streams do not modify their source. They are not data structures."
+    ]
+  });
+
+  card("str", "Creating streams", "Syntax", {
+    sum: "Collections, arrays, ranges, generators, files.",
+    lang: "java",
+    code: R`list.stream();                          Arrays.stream(arr);       Stream.of("a", "b");
+IntStream.range(0, 5);                  // 0..4
+IntStream.rangeClosed(1, 5);            // 1..5
+Stream.iterate(1, n -> n * 2).limit(8); // 1, 2, 4 ... 128
+Stream.iterate(1, n -> n < 100, n -> n * 3);   // with a stop predicate (9+)
+Stream.generate(UUID::randomUUID).limit(3);
+"hello".chars();                        // IntStream of UTF-16 units
+Files.lines(path);                      // lazy, close it: use try-with-resources
+Pattern.compile(",").splitAsStream(csv);`,
+    watch: ["`Files.lines` holds the file open. Wrap it in try-with-resources."]
+  });
+
+  card("str", "Intermediate operations", "Table", {
+    sum: "These return a new stream.",
+    head: ["Operation", "What it does", "Stateful?"],
+    rows: [
+      ["`filter(p)`", "Keep elements matching the predicate", "No"],
+      ["`map(f)` / `mapToInt` / `mapToObj`", "Transform each element", "No"],
+      ["`flatMap(f)`", "Map to a stream and flatten one level", "No"],
+      ["`mapMulti(f)` (16+)", "Emit zero or more elements through a consumer. Avoids creating small streams", "No"],
+      ["`distinct()`", "Remove duplicates using `equals`", "Yes"],
+      ["`sorted()` / `sorted(cmp)`", "Sort. Needs all elements first", "Yes"],
+      ["`limit(n)` / `skip(n)`", "Take or drop the first n", "Yes"],
+      ["`takeWhile(p)` / `dropWhile(p)` (9+)", "Take or drop while the predicate holds. Ordered streams only", "Yes"],
+      ["`peek(c)`", "Run a side effect. For debugging only", "No"],
+      ["`boxed()`", "`IntStream` to `Stream<Integer>`", "No"],
+      ["`gather(g)` (24+)", "Custom intermediate step, such as windows or scans", "Depends"]
+    ]
+  });
+
+  card("str", "Terminal operations", "Table", {
+    sum: "These produce a result or a side effect.",
+    head: ["Operation", "Returns", "Notes"],
+    rows: [
+      ["`toList()` (16+)", "Unmodifiable `List`", "Allows nulls"],
+      ["`collect(c)`", "Whatever the `Collector` builds", "Most flexible"],
+      ["`reduce(id, op)`", "`T`", "`op` must be associative"],
+      ["`count()`", "`long`", "May skip the pipeline when size is known"],
+      ["`min` / `max(cmp)`", "`Optional<T>`", ""],
+      ["`findFirst()` / `findAny()`", "`Optional<T>`", "Short-circuiting"],
+      ["`anyMatch` / `allMatch` / `noneMatch`", "`boolean`", "Short-circuiting"],
+      ["`forEach(c)`", "`void`", "`forEachOrdered` keeps encounter order in parallel"],
+      ["`toArray(String[]::new)`", "Array", "Pass a generator for the right array type"],
+      ["`sum()` / `average()` / `summaryStatistics()`", "Number, `OptionalDouble`, stats", "Primitive streams only"]
+    ]
+  });
+
+  card("str", "Collectors you will use weekly", "Syntax", {
+    sum: "`groupingBy` with a downstream collector covers most reporting code.",
+    lang: "java",
+    code: R`// group, then count
+Map<String, Long> perCity = people.stream()
+    .collect(Collectors.groupingBy(Person::city, Collectors.counting()));
+
+// group, then transform each group
+Map<String, List<String>> names = people.stream()
+    .collect(Collectors.groupingBy(Person::city,
+             Collectors.mapping(Person::name, Collectors.toList())));
+
+// sorted, deterministic result map
+Map<String, Double> avgAge = people.stream()
+    .collect(Collectors.groupingBy(Person::city, TreeMap::new,
+             Collectors.averagingInt(Person::age)));
+
+// split in two
+Map<Boolean, List<Person>> adults = people.stream()
+    .collect(Collectors.partitioningBy(p -> p.age() >= 18));
+
+// to map, with a merge function for duplicate keys
+Map<String, Integer> ageByName = people.stream()
+    .collect(Collectors.toMap(Person::name, Person::age, Integer::sum));
+
+String csv = people.stream().map(Person::name).collect(Collectors.joining(", ", "[", "]"));`,
+    watch: ["`toMap` without a merge function throws `IllegalStateException` on duplicate keys. It also throws NPE on null values."]
+  });
+
+  card("str", "More collectors", "Syntax", {
+    sum: "Combine results without a second pass.",
+    lang: "java",
+    code: R`// two results in one pass (12+)
+var stats = nums.stream().collect(Collectors.teeing(
+    Collectors.summingInt(x -> x),
+    Collectors.counting(),
+    (sum, n) -> n == 0 ? 0.0 : (double) sum / n));
+
+// post-process a collector
+List<String> frozen = names.stream()
+    .collect(Collectors.collectingAndThen(Collectors.toList(), List::copyOf));
+
+// filter and flatten inside groups (9+)
+Collectors.groupingBy(Dept::name,
+    Collectors.flatMapping(d -> d.staff().stream(), Collectors.toSet()));
+
+IntSummaryStatistics s = ages.stream().mapToInt(Integer::intValue).summaryStatistics();
+s.getMin(); s.getMax(); s.getAverage(); s.getSum(); s.getCount();`
+  });
+
+  card("str", "Primitive streams", "Concept", {
+    sum: "`IntStream`, `LongStream`, `DoubleStream` avoid boxing and add numeric terminals.",
+    lang: "java",
+    code: R`int sum = IntStream.rangeClosed(1, 100).sum();                 // 5050
+OptionalDouble avg = Arrays.stream(new int[]{3, 5, 8}).average();
+int[] squares = IntStream.range(0, 5).map(i -> i * i).toArray();
+List<Integer> boxed = IntStream.range(0, 3).boxed().toList();
+double[] prices = items.stream().mapToDouble(Item::price).toArray();
+String abc = IntStream.rangeClosed('a', 'c')
+    .mapToObj(c -> String.valueOf((char) c)).collect(Collectors.joining());`,
+    more: ["`IntStream.sum()` overflows silently. For large totals use `mapToLong`."]
+  });
+
+  card("str", "Gatherers", "Syntax", {
+    v: "24",
+    sum: "Custom intermediate operations. Built-ins cover windows, running folds and bounded concurrency.",
+    lang: "java",
+    code: R`import java.util.stream.Gatherers;
+
+Stream.of(1, 2, 3, 4, 5).gather(Gatherers.windowFixed(2)).toList();
+// [[1, 2], [3, 4], [5]]
+
+Stream.of(1, 2, 3, 4).gather(Gatherers.windowSliding(3)).toList();
+// [[1, 2, 3], [2, 3, 4]]
+
+Stream.of(1, 2, 3, 4).gather(Gatherers.scan(() -> 0, Integer::sum)).toList();
+// [1, 3, 6, 10]  running total
+
+urls.stream().gather(Gatherers.mapConcurrent(8, this::fetch)).toList();
+// up to 8 calls at once, results stay in order (runs on virtual threads)`,
+    more: [
+      "Use `fold` when you want one final result emitted at the end, and `scan` when you want every intermediate value.",
+      "Write your own with `Gatherer.ofSequential` or `Gatherer.of` when none of the built-ins fit."
+    ]
+  });
+
+  card("str", "Parallel streams", "Pitfall", {
+    sum: "`parallelStream()` splits work across the common ForkJoinPool. It helps only for CPU-bound work on large, cheaply splittable data.",
+    more: [
+      "Good fit: large `ArrayList`, arrays and ranges, with pure functions and an associative reduction.",
+      "Bad fit: blocking I/O, tiny inputs, `LinkedList`, `Stream.iterate`, or anything with shared mutable state.",
+      "All parallel streams share one pool. One slow task can starve unrelated work in the same JVM.",
+      "Measure first. Splitting and merging have a cost, and sequential code is often faster."
+    ],
+    watch: [
+      "Never mutate a shared collection from `forEach` in a parallel stream. Collect instead.",
+      "`reduce` with a non-associative operator or a wrong identity gives different answers per run."
+    ]
+  });
+
+  card("str", "Stream pitfalls", "Pitfall", {
+    sum: "Frequent causes of bugs and slow code.",
+    lang: "java",
+    code: R`// 1. Lazy: no terminal operation means nothing runs
+list.stream().map(x -> { System.out.println(x); return x; });   // prints nothing
+
+// 2. Side effects in map or filter
+List<Integer> out = new ArrayList<>();
+list.stream().forEach(out::add);          // works sequentially, breaks in parallel
+List<Integer> better = list.stream().toList();
+
+// 3. Infinite stream without a limit
+// Stream.iterate(1, n -> n + 1).toList();   // never ends, OutOfMemoryError
+
+// 4. Optional chain
+String city = Optional.ofNullable(user).map(User::address).map(Address::city).orElse("n/a");`,
+    watch: [
+      "Do not use `peek` for logic. It may not run when the terminal operation can skip elements, such as `count()` on a sized source.",
+      "Checked exceptions cannot be thrown from lambdas. Wrap them or write a small helper.",
+      "A `for` loop is clearer than a stream when you need index, early exit with state, or several mutable counters."
+    ]
+  });
+
+  /* ================= GENERICS ================= */
+  card("gen", "Generics syntax cheat sheet", "Syntax", {
+    sum: "Type parameters on classes, interfaces and methods. Bounds restrict what callers may pass.",
+    lang: "java",
+    code: R`class Box<T> { T value; }                         // generic class
+interface Repo<T, ID> { Optional<T> find(ID id); }
+
+static <T extends Comparable<T>> T max(List<T> xs) {   // generic method, bounded
+    T best = xs.get(0);
+    for (T x : xs) if (x.compareTo(best) > 0) best = x;
+    return best;
+}
+
+static <T extends Number & Comparable<T>> T clamp(T v, T lo, T hi) { ... }   // multiple bounds
+
+var box = new Box<String>();                       // explicit
+Box<String> b2 = new Box<>();                      // diamond inference
+List<String> none = Collections.<String>emptyList();   // explicit type witness (rare)`,
+    more: [
+      "Type parameters are single capital letters by convention: `T` type, `E` element, `K`/`V` key and value, `R` result.",
+      "Primitives cannot be type arguments. Use `List<Integer>`. Project Valhalla aims to lift this, but it is not in a released Java."
+    ]
+  });
+
+  card("gen", "Wildcards and PECS", "Concept", {
+    sum: "Producer Extends, Consumer Super. Use `? extends T` to read from a structure, `? super T` to write into it.",
+    head: ["Declaration", "Can read as", "Can add", "Typical use"],
+    rows: [
+      ["`List<? extends Number>`", "`Number`", "Only `null`", "Read from a list of any Number subtype"],
+      ["`List<? super Integer>`", "`Object`", "`Integer` and subtypes", "Write Integers into a list of Integer or supertypes"],
+      ["`List<?>`", "`Object`", "Only `null`", "Any list, when the element type does not matter"],
+      ["`List<T>`", "`T`", "`T`", "Read and write the same type"]
+    ],
+    lang: "java",
+    code: R`static double sum(Collection<? extends Number> src) {      // producer
+    double s = 0; for (Number n : src) s += n.doubleValue(); return s;
+}
+static void fill(List<? super Integer> dst) {                // consumer
+    for (int i = 0; i < 3; i++) dst.add(i);
+}
+// the JDK's own signature:
+static <T> void copy(List<? super T> dest, List<? extends T> src) { ... }`,
+    watch: ["`List<Integer>` is not a `List<Number>`. Generics are invariant. Arrays are covariant, which is why `Number[] n = new Integer[1]; n[0] = 1.5;` fails at run time with `ArrayStoreException`."]
+  });
+
+  card("gen", "Type erasure", "Concept", {
+    sum: "Generic type arguments exist only at compile time. The compiler checks types, inserts casts and erases the rest.",
+    lang: "java",
+    code: R`List<String> a = new ArrayList<>();
+List<Integer> b = new ArrayList<>();
+System.out.println(a.getClass() == b.getClass());   // true
+
+// What erasure forbids:
+// new T();                        // no instantiation
+// new T[10];                      // no generic arrays
+// if (o instanceof List<String>)  // not reifiable (List<?> is fine)
+// static T field;                 // static context has no T
+// catch (T e)                     // no generic exceptions
+// void m(List<String> x) {} void m(List<Integer> x) {}   // same erasure, will not compile
+
+// Workarounds
+static <T> T create(Supplier<T> factory) { return factory.get(); }
+static <T> T[] arr(IntFunction<T[]> gen, int n) { return gen.apply(n); }   // arr(String[]::new, 5)`,
+    more: [
+      "Bridge methods are synthetic methods the compiler adds so overriding still works after erasure.",
+      "`Class<T>` tokens carry a runtime type for checked casts: `type.cast(obj)`.",
+      "To read a generic type at run time from a field or superclass, use reflection: `getGenericSuperclass()` and `ParameterizedType`."
+    ],
+    watch: ["Raw types (`List` without arguments) turn off checking. A bad element can surface later as `ClassCastException` far from the cause, which is called heap pollution."]
+  });
+
+  card("gen", "Generic method patterns", "Recipe", {
+    sum: "Three shapes you will keep meeting.",
+    lang: "java",
+    code: R`// 1. Recursive bound: sorting anything comparable to itself or a supertype
+static <T extends Comparable<? super T>> void sort(List<T> list) { ... }
+
+// 2. Builder with a self type, so chained calls keep the subtype
+abstract class Builder<B extends Builder<B>> {
+    abstract B self();
+    B name(String n) { return self(); }
+}
+
+// 3. Type-safe heterogeneous container, keyed by Class
+class Registry {
+    private final Map<Class<?>, Object> map = new HashMap<>();
+    <T> void put(Class<T> k, T v) { map.put(k, v); }
+    <T> T get(Class<T> k) { return k.cast(map.get(k)); }
+}`,
+    more: ["`@SafeVarargs` on a final or static method declares that a generic varargs parameter is not misused. It silences the unchecked warning."]
+  });
+
+  /* ================= REFLECTION ================= */
+  card("refl", "Getting a Class and inspecting it", "Syntax", {
+    sum: "Three ways to get a `Class`, then read members and modifiers.",
+    lang: "java",
+    code: R`Class<?> c1 = String.class;                       // literal
+Class<?> c2 = "abc".getClass();                    // from an instance
+Class<?> c3 = Class.forName("java.util.ArrayList");   // by name, loads and initializes
+
+c3.getName();  c3.getSimpleName();  c3.getPackageName();
+c3.getSuperclass();  c3.getInterfaces();
+Modifier.isPublic(c3.getModifiers());
+c3.isInterface(); c3.isEnum(); c3.isRecord(); c3.isSealed(); c3.isArray();
+
+c3.getMethods();             // public methods, including inherited
+c3.getDeclaredMethods();     // all methods declared here, any visibility, not inherited
+c3.getDeclaredFields();
+c3.getDeclaredConstructors();`,
+    more: ["`getMethods` and `getFields` include inherited public members. The `getDeclared*` variants include private ones but only from this class."]
+  });
+
+  card("refl", "Invoke, construct, read and write", "Syntax", {
+    sum: "Call `setAccessible(true)` to reach non-public members, subject to module rules.",
+    lang: "java",
+    code: R`Class<?> cls = Class.forName("com.acme.Account");
+Object acct = cls.getDeclaredConstructor(String.class).newInstance("A-1");
+
+Method m = cls.getDeclaredMethod("deposit", long.class);
+m.setAccessible(true);
+Object result = m.invoke(acct, 100L);            // wrap: InvocationTargetException holds the cause
+
+Field f = cls.getDeclaredField("balance");
+f.setAccessible(true);
+long bal = f.getLong(acct);
+f.setLong(acct, 500L);
+
+try { m.invoke(acct, -1L); }
+catch (InvocationTargetException e) { throw e.getCause(); }   // the exception the method threw`,
+    watch: [
+      "Since Java 16 the JDK is strongly encapsulated. `setAccessible` on JDK internals throws `InaccessibleObjectException` unless you pass `--add-opens java.base/java.lang=ALL-UNNAMED`.",
+      "Java 26 starts warning when code mutates `final` fields through reflection. Treat that as a deprecation and stop doing it.",
+      "Reflection is slower than direct calls and invisible to the compiler and to tools such as native-image unless configured."
+    ]
+  });
+
+  card("refl", "Modern types and generics through reflection", "Syntax", {
+    sum: "Records, sealed types and generic signatures are all discoverable.",
+    lang: "java",
+    code: R`record Point(int x, int y) {}
+for (RecordComponent rc : Point.class.getRecordComponents()) {
+    System.out.println(rc.getName() + ": " + rc.getType());   // x: int, y: int
+}
+
+sealed interface Shape permits Circle, Square {}
+Shape.class.isSealed();                                   // true
+Shape.class.getPermittedSubclasses();                     // [Circle, Square]
+
+// Generic type argument of a field: List<String> names
+Field f = Person.class.getDeclaredField("names");
+var pt = (ParameterizedType) f.getGenericType();
+pt.getActualTypeArguments()[0];                           // class java.lang.String`
+  });
+
+  card("refl", "Dynamic proxies and method handles", "Concept", {
+    sum: "Proxies implement interfaces at run time. Method handles are faster, typed alternatives to reflection.",
+    lang: "java",
+    code: R`interface Greeter { String greet(String n); }
+
+Greeter logged = (Greeter) Proxy.newProxyInstance(
+    Greeter.class.getClassLoader(), new Class<?>[]{ Greeter.class },
+    (proxy, method, args) -> {
+        System.out.println("calling " + method.getName());
+        return "Hello, " + args[0];
+    });
+
+MethodHandle mh = MethodHandles.lookup()
+    .findVirtual(String.class, "length", MethodType.methodType(int.class));
+int n = (int) mh.invokeExact("hello");        // 5`,
+    more: [
+      "Frameworks such as Spring, Hibernate and Mockito build proxies for AOP, lazy loading and mocks. JDK proxies need an interface. Class-based proxies use bytecode generation.",
+      "`VarHandle` gives atomic and ordered access to fields and array elements. It replaces most uses of `Unsafe`."
+    ]
+  });
+
+  /* ================= ANNOTATIONS ================= */
+  card("ann", "Built-in annotations", "Table", {
+    sum: "Metadata the compiler, tools or run time can read.",
+    head: ["Annotation", "Effect"],
+    rows: [
+      ["`@Override`", "Compile error if the method does not override or implement anything"],
+      ["`@Deprecated(since=\"17\", forRemoval=true)`", "Warns on use. `forRemoval` produces a stronger warning"],
+      ["`@SuppressWarnings(\"unchecked\")`", "Silences named compiler warnings. Keep the scope small"],
+      ["`@FunctionalInterface`", "Compile error unless the type has exactly one abstract method"],
+      ["`@SafeVarargs`", "Asserts a generic varargs method is type-safe"]
+    ]
+  });
+
+  card("ann", "Define and read a custom annotation", "Recipe", {
+    sum: "Retention and target are meta-annotations. Only `RUNTIME` annotations can be read by reflection.",
+    lang: "java",
+    code: R`@Retention(RetentionPolicy.RUNTIME)        // SOURCE, CLASS (default), or RUNTIME
+@Target({ElementType.METHOD, ElementType.TYPE})
+@Documented
+public @interface Audit {
+    String action();
+    Level level() default Level.INFO;      // elements may have defaults
+    String[] tags() default {};
+}
+
+class OrderService {
+    @Audit(action = "cancel", tags = {"orders", "write"})
+    void cancel(long id) { ... }
+}
+
+for (Method m : OrderService.class.getDeclaredMethods()) {
+    Audit a = m.getAnnotation(Audit.class);
+    if (a != null) System.out.println(m.getName() + " -> " + a.action());
+}`,
+    more: [
+      "Element types are limited to primitives, `String`, `Class`, enums, annotations and arrays of those. No nulls.",
+      "`@Inherited` lets a class annotation be seen on subclasses. It does not apply to methods or interfaces.",
+      "`@Repeatable(Container.class)` allows the same annotation more than once on one element."
+    ]
+  });
+
+  card("ann", "Where annotations are processed", "Concept", {
+    sum: "Three moments, three tools.",
+    head: ["When", "Mechanism", "Examples"],
+    rows: [
+      ["Compile time", "Annotation processors (JSR 269, `javax.annotation.processing`)", "Lombok-style codegen, MapStruct, Dagger"],
+      ["Class load or startup", "Bytecode tools and classpath scanning", "Spring component scanning, Hibernate entity discovery"],
+      ["Run time", "Reflection on `RUNTIME` annotations", "JUnit `@Test`, Jakarta `@Inject`, Bean Validation `@NotNull`"]
+    ],
+    more: ["Type annotations (`@NonNull String`, `List<@Nullable T>`) let tools such as the Checker Framework attach rules to any use of a type."]
+  });
+
+  /* ================= RECORDS ================= */
+  card("rec", "Record anatomy", "Syntax", {
+    v: "16",
+    sum: "A transparent, shallowly immutable data carrier. The compiler writes the constructor, accessors, `equals`, `hashCode` and `toString`.",
+    lang: "java",
+    code: R`record Money(BigDecimal amount, String currency) {
+
+    Money {                                          // compact canonical constructor
+        Objects.requireNonNull(amount);
+        if (amount.signum() < 0) throw new IllegalArgumentException("negative");
+        currency = currency.toUpperCase();           // reassign parameters, no 'this.' needed
+    }
+
+    static Money usd(String s) { return new Money(new BigDecimal(s), "USD"); }   // factory
+    Money plus(Money o) { return new Money(amount.add(o.amount), currency); }    // behaviour
+    static final Money ZERO = new Money(BigDecimal.ZERO, "USD");                  // static state is fine
+}
+
+var m = Money.usd("9.99");
+m.amount();                // accessor is amount(), not getAmount()
+m.equals(Money.usd("9.99")); // true: component-wise`,
+    more: [
+      "Records are implicitly `final` and extend `java.lang.Record`. They can implement interfaces, be generic, nested and declared locally.",
+      "Components become `private final` fields. You cannot add other instance fields, only static ones.",
+      "Annotations on a component propagate to the field, accessor and constructor parameter, depending on the annotation's `@Target`."
+    ],
+    watch: [
+      "Immutability is shallow. A `List` component can still be mutated. Copy it in the compact constructor: `items = List.copyOf(items);`.",
+      "`BigDecimal` equality compares scale, so `new BigDecimal(\"1.0\")` does not equal `new BigDecimal(\"1.00\")`."
+    ]
+  });
+
+  card("rec", "Records or classes?", "Table", {
+    sum: "Records fit data whose identity is its values.",
+    head: ["Use a record for", "Use a class for"],
+    rows: [
+      ["DTOs, API responses, query results", "Entities with identity and lifecycle (JPA entities need mutability and a no-arg constructor)"],
+      ["Map keys, compound keys, tuples", "Objects with mutable state or hidden representation"],
+      ["Value objects: `Money`, `Point`, `Range`", "Types that need inheritance from a class"],
+      ["Variants of a sealed type", "Builders, services, anything with dependencies"]
+    ],
+    more: [
+      "Records work well with Jackson 2.12+, Jakarta Validation and Spring. Check the framework version before relying on them for persistence.",
+      "Serialization uses the canonical constructor, so validation in the constructor also protects deserialization."
+    ]
+  });
+
+  /* ================= SEALED AND PATTERNS ================= */
+  card("seal", "Sealed hierarchies", "Syntax", {
+    v: "17",
+    sum: "The author lists every allowed subtype. The compiler can then prove a `switch` covers all cases.",
+    lang: "java",
+    code: R`public sealed interface Shape permits Circle, Rectangle, Triangle {}
+
+public record Circle(double r) implements Shape {}
+public record Rectangle(double w, double h) implements Shape {}
+public final class Triangle implements Shape { ... }
+
+sealed abstract class Vehicle permits Car, Truck {}
+final class Car extends Vehicle {}
+non-sealed class Truck extends Vehicle {}      // opens the hierarchy again below Truck`,
+    more: [
+      "Each permitted subclass must be `final`, `sealed` or `non-sealed`. Records and enums are implicitly final.",
+      "Permitted subclasses must be in the same module, or the same package if you are on the classpath. If they are all in the same file you can omit `permits`.",
+      "Use it to model closed sets: results, events, AST nodes, commands."
+    ]
+  });
+
+  card("seal", "Pattern matching for switch", "Syntax", {
+    v: "21",
+    sum: "Switch on type, deconstruct records, add guards, and let the compiler check completeness.",
+    lang: "java",
+    code: R`static double area(Shape s) {
+    return switch (s) {                                   // no default: sealed + exhaustive
+        case Circle c                -> Math.PI * c.r() * c.r();
+        case Rectangle(double w, double h) -> w * h;      // record pattern
+        case Triangle t              -> t.base() * t.height() / 2;
+    };
+}
+
+static String describe(Object o) {
+    return switch (o) {
+        case null                          -> "null";
+        case Integer i when i > 100        -> "big int " + i;     // guard
+        case Integer i                     -> "int " + i;
+        case String s when s.isBlank()     -> "blank";
+        case String s                      -> "string " + s;
+        case int[] arr                     -> "ints:" + arr.length;
+        default                            -> "other";
+    };
+}`,
+    more: [
+      "Order matters. A more general pattern before a specific one is a compile error (dominance).",
+      "`case null` is allowed. Without it, a null selector throws `NullPointerException`. `case null, default ->` handles both.",
+      "Adding a new subtype to a sealed hierarchy makes every non-default switch fail to compile. That is the point: the compiler finds what to update."
+    ],
+    watch: ["A `default` branch on a sealed switch turns off the exhaustiveness check, so new subtypes slip through silently. Leave it out."]
+  });
+
+  card("seal", "Record patterns and instanceof", "Syntax", {
+    v: "16 / 21",
+    sum: "Test and destructure in one step. Nest patterns to dig into data.",
+    lang: "java",
+    code: R`if (obj instanceof String s && s.length() > 3) {      // s is in scope in the && part
+    System.out.println(s.toUpperCase());
+}
+if (!(obj instanceof Point p)) return;                  // p is in scope after the early return
+System.out.println(p.x());
+
+record Line(Point from, Point to) {}
+if (shape instanceof Line(Point(var x1, var y1), Point(var x2, var y2))) {
+    double len = Math.hypot(x2 - x1, y2 - y1);          // nested record pattern
+}
+
+// Unnamed variable and pattern, final in 22
+case Rectangle(double w, _) -> w;                       // ignore the second component
+try { parse(s); } catch (NumberFormatException _) { return 0; }
+list.forEach(_ -> count++);`
+  });
+
+  card("seal", "Result type with a sealed interface", "Recipe", {
+    sum: "A small algebraic data type replaces exceptions for expected failures.",
+    lang: "java",
+    code: R`sealed interface Result<T> {
+    record Ok<T>(T value) implements Result<T> {}
+    record Err<T>(String message, Throwable cause) implements Result<T> {}
+
+    default <U> Result<U> map(Function<T, U> f) {
+        return switch (this) {
+            case Ok<T>(var v)        -> new Ok<>(f.apply(v));
+            case Err<T>(var m, var c) -> new Err<>(m, c);
+        };
+    }
+}
+
+Result<Integer> r = parse("42");
+String text = switch (r) {
+    case Result.Ok<Integer>(var n)  -> "got " + n;
+    case Result.Err<Integer>(var m, var c) -> "failed: " + m;
+};`
+  });
+
+  card("seal", "Primitive patterns (preview)", "Syntax", {
+    v: "27",
+    prev: true,
+    sum: "Primitive types in `instanceof` and `switch` patterns. Fifth preview in JDK 27, so the syntax can still change.",
+    lang: "java",
+    code: R`// javac --enable-preview --release 27 Demo.java
+long big = 3_000_000_000L;
+if (big instanceof int i) {      // true only if the value fits in an int exactly
+    use(i);
+}
+switch (code) {
+    case 0 -> "zero";
+    case int n when n > 0 -> "positive " + n;
+    default -> "other";
+}`,
+    watch: ["Do not ship preview features in libraries. Class files compiled with preview enabled only run on the exact Java version that compiled them."]
+  });
+
+  /* ================= MODERN JAVA ================= */
+  card("mod", "Version timeline: Java 8 to 27", "Table", {
+    wide: true,
+    sum: "What arrived in each release. LTS versions are 8, 11, 17, 21 and 25.",
+    head: ["Version", "Released", "Language", "Library and runtime"],
+    rows: [
+      ["8 LTS", "Mar 2014", "Lambdas, method references, default methods", "Streams, `Optional`, `java.time`, `CompletableFuture`"],
+      ["9", "Sep 2017", "Private interface methods, try-with-resources on effectively final vars", "Modules, `List.of`/`Map.of`, `Stream.takeWhile`, `jshell`, G1 becomes default GC"],
+      ["10", "Mar 2018", "`var` for locals", "`List.copyOf`, `Collectors.toUnmodifiableList`"],
+      ["11 LTS", "Sep 2018", "`var` in lambda parameters", "`HttpClient`, `String.isBlank/strip/repeat/lines`, run a source file with `java X.java`"],
+      ["14", "Mar 2020", "Switch expressions (final)", "Helpful `NullPointerException` messages"],
+      ["15", "Sep 2020", "Text blocks (final)", "ZGC and Shenandoah production-ready"],
+      ["16", "Mar 2021", "Records, `instanceof` patterns (final)", "`Stream.toList()`, `mapMulti`, strong encapsulation begins"],
+      ["17 LTS", "Sep 2021", "Sealed classes (final)", "`RandomGenerator`, strongly encapsulated JDK internals by default"],
+      ["19", "Sep 2022", "Record patterns (preview)", "Virtual threads (preview)"],
+      ["21 LTS", "Sep 2023", "Pattern matching for switch, record patterns (final)", "Virtual threads, sequenced collections, generational ZGC"],
+      ["22", "Mar 2024", "Unnamed variables `_` (final)", "FFM API (final), launch multi-file source programs"],
+      ["23", "Sep 2024", "Markdown doc comments (`///`)", "Generational ZGC is the default mode of ZGC"],
+      ["24", "Mar 2025", "", "Stream Gatherers, Class-File API (final), virtual threads no longer pin on `synchronized`"],
+      ["25 LTS", "Sep 2025", "Flexible constructor bodies, compact source files with instance `main`, module import declarations (all final)", "Scoped values (final), compact object headers, generational Shenandoah, JFR CPU-time profiling"],
+      ["26", "Mar 2026", "", "HTTP/3 in `HttpClient`, G1 throughput work, warnings on reflective mutation of `final` fields, Applet API removed"],
+      ["27", "Sep 2026", "Primitive patterns (5th preview)", "G1 default in all environments, compact object headers on by default, post-quantum hybrid key exchange for TLS 1.3, structured concurrency (7th preview), lazy constants (3rd preview)"]
+    ]
+  });
+
+  card("mod", "Virtual threads and structured concurrency", "Syntax", {
+    v: "21",
+    sum: "Cheap threads for blocking code. Write simple sequential code and run one thread per task.",
+    lang: "java",
+    code: R`try (var executor = Executors.newVirtualThreadPerTaskExecutor()) {
+    List<Future<String>> results = urls.stream()
+        .map(u -> executor.submit(() -> fetch(u)))     // blocking I/O is fine here
+        .toList();
+    for (var f : results) System.out.println(f.get());
+}   // close() waits for all tasks
+
+Thread.startVirtualThread(() -> System.out.println("hi"));
+Thread vt = Thread.ofVirtual().name("worker-", 0).start(task);`,
+    more: [
+      "Do not pool virtual threads. Create one per task. Limit concurrency with a `Semaphore` when a downstream service needs protection.",
+      "Pinning: before Java 24 a virtual thread blocked inside `synchronized` held its carrier thread. Java 24 removed that for monitors. Native frames can still pin.",
+      "Structured concurrency (`StructuredTaskScope`) is still a preview feature, now in its seventh preview in JDK 27. It treats related tasks as one unit with shared cancellation and error handling.",
+      "Scoped values (final in 25) replace `ThreadLocal` for passing immutable context to child tasks."
+    ],
+    watch: ["Virtual threads help with waiting, not computing. CPU-bound work still needs about one platform thread per core."]
+  });
+
+  card("mod", "Compact source files and flexible constructors", "Syntax", {
+    v: "25",
+    sum: "Less ceremony for small programs, and validation before calling `super`.",
+    lang: "java",
+    code: R`// Hello.java : a whole program (Java 25). Run with: java Hello.java
+void main() {
+    IO.println("Hello");                    // java.lang.IO helper, no import needed
+}
+
+// Flexible constructor bodies: statements before super(...) that do not use 'this'
+class Positive extends Base {
+    Positive(int n) {
+        if (n <= 0) throw new IllegalArgumentException("n must be positive");
+        super(n);
+    }
+}
+
+import module java.base;                    // module import: all public packages of a module`
+  });
+
+  card("mod", "Preview and incubator status", "Table", {
+    sum: "As of JDK 27 (September 2026). Features change between previews, so read the release notes before using one.",
+    head: ["Feature", "Status in JDK 27", "Final in an LTS?"],
+    rows: [
+      ["Structured concurrency", "7th preview", "Not yet"],
+      ["Primitive types in patterns", "5th preview", "Not yet"],
+      ["Lazy constants (replaces stable values)", "3rd preview", "Not yet"],
+      ["PEM encodings of cryptographic objects", "Preview", "Not yet"],
+      ["Vector API", "12th incubator", "Waits on Valhalla value classes"],
+      ["Scoped values", "Final (since 25)", "Yes, 25"],
+      ["Gatherers", "Final (since 24)", "Yes, 25"],
+      ["Virtual threads", "Final (since 21)", "Yes, 21"]
+    ],
+    more: ["Production default today: stay on an LTS (21 or 25) and enable previews only in experiments."]
+  });
+
+  card("mod", "Which Java should I use?", "Concept", {
+    sum: "A practical rule.",
+    more: [
+      "New projects: Java 25 (LTS, September 2025). It carries everything from 21 plus scoped values, flexible constructors and compact object headers.",
+      "Existing Java 17 or 21 services: both are LTS releases with long support windows. Move to 25 when frameworks and your build plugins support it.",
+      "Java 8 and 11: upgrade to 17 first, mainly to deal with strong encapsulation of JDK internals (`--add-opens`), removed APIs and updated libraries.",
+      "Non-LTS releases (26, 27) get roughly six months of updates. Use them to try features, not for long-lived production."
+    ],
+    watch: ["Check the framework matrix before upgrading. Spring, Hibernate, Lombok, Mockito, ByteBuddy and ASM-based tools need versions that understand the new class file format."]
+  });
+
+  /* ================= JVM INTERNALS ================= */
+  card("jvm", "From source to running code", "Concept", {
+    sum: "`javac` produces bytecode. The JVM loads it, then interprets and JIT-compiles it while the garbage collector manages memory.",
+    lang: "text",
+    code: R`Hello.java --javac--> Hello.class (bytecode)
+                          |
+                   Class loaders   (bootstrap -> platform -> application)
+                          |
+   Runtime data areas:  Heap | Metaspace | Thread stacks | Code cache
+                          |
+   Execution engine:    Interpreter -> C1 -> C2 (JIT)   +   Garbage collector
+                          |
+                   Native code, OS, hardware`
+  });
+
+  card("jvm", "Memory areas", "Table", {
+    sum: "Know which area an `OutOfMemoryError` points at.",
+    head: ["Area", "Holds", "Size flag", "Per"],
+    rows: [
+      ["Heap", "Objects and arrays. Split into young (eden + survivor spaces) and old regions", "`-Xms` `-Xmx` `-XX:MaxRAMPercentage`", "JVM"],
+      ["Metaspace", "Class metadata. Lives in native memory, not the heap", "`-XX:MaxMetaspaceSize` (unbounded by default)", "JVM"],
+      ["Thread stack", "Frames with local variables and the operand stack", "`-Xss` (often 512 KB to 1 MB)", "Thread"],
+      ["Code cache", "Machine code produced by the JIT", "`-XX:ReservedCodeCacheSize`", "JVM"],
+      ["Direct memory", "Off-heap `ByteBuffer.allocateDirect`, used by NIO and Netty", "`-XX:MaxDirectMemorySize`", "JVM"],
+      ["Native memory", "JVM internals, GC structures, JNI, thread structures", "Tracked with `-XX:NativeMemoryTracking=summary`", "Process"]
+    ],
+    more: [
+      "Process memory is larger than `-Xmx`. Budget for metaspace, thread stacks, code cache, direct buffers and GC overhead.",
+      "In containers, set `-XX:MaxRAMPercentage=70` (the default is 25 percent of the container limit) rather than a fixed `-Xmx`."
+    ]
+  });
+
+  card("jvm", "Class loading", "Concept", {
+    sum: "Load, link (verify, prepare, resolve), then initialize. Loaders ask their parent first.",
+    head: ["Loader", "Loads", "Notes"],
+    rows: [
+      ["Bootstrap", "`java.base` and core modules", "Written in native code. `getClassLoader()` returns null"],
+      ["Platform", "Other JDK modules (`java.sql`, ...)", "Replaced the extension loader in Java 9"],
+      ["Application", "Your classpath and module path", "Default loader for your code"]
+    ],
+    lang: "java",
+    code: R`System.out.println(String.class.getClassLoader());       // null (bootstrap)
+System.out.println(Main.class.getClassLoader());         // jdk.internal.loader.ClassLoaders$AppClassLoader
+Class.forName("com.acme.Plugin");                        // loads and initializes
+Thread.currentThread().getContextClassLoader();          // used by frameworks and plugins`,
+    more: [
+      "Initialization runs static initializers once, on first `new`, static method call, or non-constant static field access.",
+      "Parent-first delegation stops you from replacing `java.lang.String`. Servlet containers and plugin systems reverse it so each app can ship its own libraries.",
+      "Two classes with the same name from different loaders are different types, which causes odd `ClassCastException` messages."
+    ],
+    watch: [
+      "`ClassNotFoundException` is checked and thrown by explicit loading. `NoClassDefFoundError` means the class was there at compile time but is missing or failed to initialize at run time.",
+      "A static initializer that throws makes the class unusable. Later uses throw `NoClassDefFoundError`."
+    ]
+  });
+
+  card("jvm", "Bytecode and javap", "Syntax", {
+    sum: "A stack machine. Read it with `javap -c -p MyClass`.",
+    lang: "sh",
+    code: R`javac Calc.java
+javap -c -p Calc        # -c disassemble, -p include private members
+
+# int add(int a, int b) { return a + b; }
+#   0: iload_1      push a
+#   1: iload_2      push b
+#   2: iadd         add the top two ints
+#   3: ireturn      return the result`,
+    head: ["Invoke instruction", "Used for"],
+    rows: [
+      ["`invokevirtual`", "Instance methods, resolved by actual class"],
+      ["`invokeinterface`", "Interface methods"],
+      ["`invokespecial`", "Constructors, `super.` calls, private methods"],
+      ["`invokestatic`", "Static methods"],
+      ["`invokedynamic`", "Lambdas, string concatenation, records' `equals`/`hashCode`, linked at first call"]
+    ]
+  });
+
+  card("jvm", "JIT compilation and warm-up", "Concept", {
+    sum: "HotSpot starts in the interpreter, profiles, then compiles hot methods in tiers.",
+    more: [
+      "Tiered compilation: level 0 interpreter, levels 1 to 3 C1 (quick, light optimisation), level 4 C2 (slow to compile, fastest code).",
+      "Key optimisations: inlining small and hot methods, escape analysis (an object that never leaves a method may live in registers, with no heap allocation), loop unrolling, dead-code removal and lock elision.",
+      "Deoptimisation: if an assumption breaks, such as a new class loaded that invalidates a devirtualised call, the JVM discards the compiled code and falls back.",
+      "Startup and warm-up: use class data sharing and the AOT cache to start faster. JDK 24 added AOT class loading and linking, 25 simplified the command line, 26 allows the object cache with any GC.",
+      "Benchmark with JMH. A naive `System.nanoTime()` loop measures the interpreter, dead-code elimination and noise."
+    ],
+    lang: "sh",
+    code: R`java -XX:+PrintCompilation App                          # see what gets compiled
+java -XX:AOTCacheOutput=app.aot -cp app.jar App           # create an AOT cache (JDK 25)
+java -XX:AOTCache=app.aot -cp app.jar App                 # start faster using it`
+  });
+
+  card("jvm", "Object layout", "Concept", {
+    sum: "Every object has a header, then fields, padded to 8 bytes.",
+    head: ["Part", "Size", "Note"],
+    rows: [
+      ["Mark word", "8 bytes", "Identity hash, lock state, GC age"],
+      ["Class pointer", "4 bytes", "Compressed. 8 bytes without compressed class pointers"],
+      ["Array length", "4 bytes", "Arrays only"],
+      ["Fields", "varies", "Reordered by the JVM to reduce padding"]
+    ],
+    more: [
+      "Compressed oops store references in 4 bytes when the heap is below about 32 GB. Going over 32 GB with `-Xmx` makes every reference 8 bytes, so a 33 GB heap can hold fewer objects than a 31 GB one.",
+      "Compact object headers (JEP 519, product feature in JDK 25, on by default in JDK 27 per JEP 534) shrink the header from 12 to 8 bytes and cut heap use for object-heavy programs.",
+      "Measure real sizes with the JOL library (`ClassLayout.parseClass(Foo.class).toPrintable()`)."
+    ]
+  });
+
+  card("jvm", "Java Memory Model", "Concept", {
+    sum: "Defines when one thread is guaranteed to see another thread's writes. Without a happens-before edge you get no guarantee.",
+    head: ["Tool", "Visibility", "Atomicity", "Ordering"],
+    rows: [
+      ["`volatile`", "Yes", "Single read or write only (`count++` is not atomic)", "Yes"],
+      ["`synchronized`", "Yes", "Whole block, with mutual exclusion", "Yes"],
+      ["`AtomicInteger`, `LongAdder`", "Yes", "Atomic read-modify-write (CAS)", "Yes"],
+      ["`final` fields", "Safe after the constructor ends, if `this` does not escape", "n/a", "Yes"],
+      ["`Lock` (`ReentrantLock`)", "Yes", "Block between `lock` and `unlock`", "Yes"]
+    ],
+    lang: "java",
+    code: R`class Config {
+    private static volatile Config instance;          // volatile is needed here
+    static Config get() {
+        Config c = instance;
+        if (c == null) {
+            synchronized (Config.class) {
+                if ((c = instance) == null) instance = c = new Config();
+            }
+        }
+        return c;                                      // double-checked locking
+    }
+}
+// Simpler and also safe: the holder idiom or an enum singleton.`,
+    watch: ["Without `volatile` a reader may see a half-constructed object or a stale flag, and a loop like `while (!done)` can spin forever after the JIT hoists the read."]
+  });
+
+  card("jvm", "JVM flags you will actually use", "Table", {
+    sum: "Start with few flags. Defaults are usually good.",
+    head: ["Flag", "Meaning"],
+    rows: [
+      ["`-Xms` / `-Xmx`", "Initial and maximum heap. Setting them equal avoids resize pauses"],
+      ["`-XX:MaxRAMPercentage=70`", "Heap as a share of container memory"],
+      ["`-Xss512k`", "Thread stack size"],
+      ["`-XX:+UseG1GC` / `UseZGC` / `UseShenandoahGC` / `UseParallelGC`", "Choose the collector"],
+      ["`-XX:MaxGCPauseMillis=200`", "G1 pause goal (a target, not a promise)"],
+      ["`-Xlog:gc*:file=gc.log`", "Unified GC logging"],
+      ["`-XX:+HeapDumpOnOutOfMemoryError`", "Write a heap dump when memory runs out"],
+      ["`-XX:HeapDumpPath=/var/dumps`", "Where to write it"],
+      ["`-XX:+ExitOnOutOfMemoryError`", "Exit so the orchestrator restarts the process"],
+      ["`-XX:NativeMemoryTracking=summary`", "Track native memory, query with `jcmd`"],
+      ["`--enable-preview`", "Allow preview features (compile and run)"],
+      ["`--add-opens java.base/java.lang=ALL-UNNAMED`", "Open a JDK package to reflection"],
+      ["`-XX:+PrintFlagsFinal`", "Print every flag and its value"]
+    ]
+  });
+
+  card("jvm", "Diagnostic tools", "Syntax", {
+    sum: "`jcmd` replaces most older tools. All are in the JDK `bin` folder.",
+    lang: "sh",
+    code: R`jcmd                                   # list running Java processes
+jcmd <pid> Thread.print                # thread dump (same as jstack)
+jcmd <pid> GC.heap_info                # heap summary
+jcmd <pid> GC.heap_dump /tmp/app.hprof # heap dump, open in Eclipse MAT or VisualVM
+jcmd <pid> VM.flags                    # effective JVM flags
+jcmd <pid> JFR.start duration=60s filename=rec.jfr   # Flight Recorder
+jstat -gcutil <pid> 1000               # GC utilisation every second
+jdeps --print-module-deps app.jar      # which modules the app needs
+jlink --add-modules java.base,java.sql --output slim-jre   # custom runtime image
+jshell                                 # REPL`,
+    more: [
+      "Read a thread dump for `BLOCKED` threads and repeated stack frames to find lock contention and deadlocks (the dump names the cycle).",
+      "Java Flight Recorder is built in, low overhead, and safe in production. Open the file in JDK Mission Control."
+    ]
+  });
+
+  /* ================= GARBAGE COLLECTION ================= */
+  card("gc", "How collection works", "Concept", {
+    sum: "An object is garbage when it cannot be reached from a GC root.",
+    more: [
+      "GC roots: local variables on thread stacks, static fields, JNI references, active threads and class loaders.",
+      "Generational hypothesis: most objects die young. Collect the young generation often and cheaply (copying survivors), and the old generation rarely.",
+      "Minor GC collects young only. Mixed collects young plus some old regions (G1). Full GC collects everything and is the one to avoid.",
+      "Stop-the-world (STW) pauses stop all application threads. Modern collectors do most work concurrently and keep STW to marking roots and small fix-ups.",
+      "Objects survive young collections, age up, and are promoted to old. Large objects may be allocated directly in old space (G1 calls them humongous)."
+    ],
+    watch: ["`System.gc()` is a hint that triggers a full collection on most collectors. Do not call it. `-XX:+DisableExplicitGC` ignores it."]
+  });
+
+  card("gc", "Choosing a collector", "Table", {
+    wide: true,
+    sum: "G1 is the default. Change it only when measurements show a pause or throughput problem.",
+    head: ["Collector", "Flag", "Optimises for", "Pauses", "Notes"],
+    rows: [
+      ["Serial", "`-XX:+UseSerialGC`", "Tiny heaps, single core, short-lived tools", "STW, proportional to live data", "Single-threaded. Lowest overhead and memory use"],
+      ["Parallel", "`-XX:+UseParallelGC`", "Throughput for batch jobs", "STW, can be long on big heaps", "Uses all cores for each pause. Was the default up to Java 8"],
+      ["G1", "`-XX:+UseG1GC`", "Balance of latency and throughput", "Short, target 200 ms", "Region-based, default since Java 9. JDK 27 makes it the default in every environment"],
+      ["ZGC", "`-XX:+UseZGC`", "Very low latency, large heaps (up to 16 TB)", "Sub-millisecond, independent of heap size", "Generational by default since 23. Needs spare headroom and a little more CPU"],
+      ["Shenandoah", "`-XX:+UseShenandoahGC`", "Low latency", "Low, mostly independent of heap size", "Generational mode is a product feature in JDK 25. Shipped in OpenJDK builds, not every vendor"],
+      ["Epsilon", "`-XX:+UseEpsilonGC`", "Benchmarks, short jobs", "None (never collects)", "Allocates until memory runs out, then the JVM exits"]
+    ],
+    more: [
+      "Before JDK 27 the JVM selected Serial on machines it judged not server-class (fewer than 2 CPUs or about 1.8 GB of memory), and G1 elsewhere. Containers with a small CPU limit hit this surprise often. Set the collector explicitly if it matters.",
+      "Pick ZGC when pauses over about 10 ms hurt (trading, interactive services, big caches). Pick Parallel when only total job time matters."
+    ]
+  });
+
+  card("gc", "G1 in practice", "Concept", {
+    sum: "The heap is split into equal regions of 1 to 32 MB. Each region acts as eden, survivor, old or humongous.",
+    more: [
+      "Young collections evacuate live objects from eden and survivor regions to new regions. They are STW but parallel.",
+      "When heap occupancy passes the initiating threshold (45 percent by default, adaptive), G1 starts concurrent marking, then runs mixed collections that also reclaim the old regions with the most garbage.",
+      "Humongous objects are at least half a region. They are allocated in contiguous regions and can fragment the heap. Increase `-XX:G1HeapRegionSize` if you allocate many large arrays.",
+      "Do not set `-Xmn` or `-XX:NewSize` for G1. It disables the pause-goal logic that sizes the young generation.",
+      "A Full GC in G1 means it could not keep up: evacuation failure, too little headroom, or a concurrent cycle that started too late."
+    ],
+    lang: "sh",
+    code: R`java -Xms4g -Xmx4g -XX:MaxGCPauseMillis=100 -Xlog:gc*:file=gc.log -jar app.jar`
+  });
+
+  card("gc", "ZGC and Shenandoah", "Concept", {
+    sum: "Concurrent compaction. Application threads keep running while objects move.",
+    more: [
+      "ZGC uses coloured pointers and load barriers to move objects concurrently. Pause time stays under a millisecond for heaps from megabytes to terabytes.",
+      "Generational ZGC (default in 23, the only mode from 24) collects young objects separately, so it handles high allocation rates with lower CPU than the single-generation version.",
+      "Shenandoah uses a Brooks-style forwarding and barriers. Its generational mode became a product feature in JDK 25.",
+      "Both give back throughput for latency. They need heap headroom: run them with a heap 20 to 30 percent larger than the live set."
+    ],
+    lang: "sh",
+    code: R`java -XX:+UseZGC -Xmx16g -jar app.jar
+java -XX:+UseShenandoahGC -XX:ShenandoahGCMode=generational -jar app.jar`
+  });
+
+  card("gc", "Reading a GC log", "Syntax", {
+    sum: "Enable with `-Xlog:gc*`. The key numbers are heap before, heap after, total and pause time.",
+    lang: "text",
+    code: R`[2.345s][info][gc] GC(12) Pause Young (Normal) (G1 Evacuation Pause) 512M->96M(1024M) 18.421ms
+[9.870s][info][gc] GC(31) Pause Young (Concurrent Start) (G1 Humongous Allocation) 700M->410M(1024M) 25.3ms
+[9.912s][info][gc] GC(32) Concurrent Mark Cycle
+[14.20s][info][gc] GC(40) Pause Full (G1 Compaction Pause) 1020M->880M(1024M) 1830.7ms`,
+    more: [
+      "Line 1: heap went from 512 MB to 96 MB out of 1 GB, and the pause lasted 18 ms. Healthy.",
+      "Line 4: a Full GC that frees little (1020M to 880M) and pauses for 1.8 s. The heap is too small or there is a leak.",
+      "Upload logs to a GC analyser such as GCeasy, or open JFR recordings in Mission Control."
+    ]
+  });
+
+  card("gc", "Tuning checklist", "Recipe", {
+    sum: "Measure, change one thing, measure again.",
+    head: ["Symptom", "Likely cause", "First thing to try"],
+    rows: [
+      ["Frequent young GCs", "High allocation rate or small young generation", "Reduce allocation (reuse buffers, avoid boxing), raise `-Xmx`"],
+      ["Long pauses on G1", "Too much live data in mixed collections, or humongous objects", "Raise heap, review large allocations, lower `MaxGCPauseMillis`, or try ZGC"],
+      ["Full GCs", "Heap too small, leak, or evacuation failure", "Heap dump, check retained size, raise headroom"],
+      ["Heap keeps growing", "Leak", "Compare two heap dumps, check static maps, caches, listeners, `ThreadLocal`"],
+      ["High CPU in GC threads", "Allocation churn", "Profile allocations with JFR or async-profiler"],
+      ["Container OOM-killed (exit 137)", "Total process memory above the limit", "Lower `MaxRAMPercentage`, check native memory, direct buffers and thread count"]
+    ]
+  });
+
+  card("gc", "Reference types", "Table", {
+    sum: "Control how strongly an object is held. All live in `java.lang.ref`.",
+    head: ["Type", "Collected when", "Use for"],
+    rows: [
+      ["Strong (normal reference)", "Never while reachable", "Everything by default"],
+      ["`SoftReference`", "Memory is low, before `OutOfMemoryError`", "Memory-sensitive caches (use with care)"],
+      ["`WeakReference`", "No strong references remain, at the next GC", "`WeakHashMap`, canonicalising maps"],
+      ["`PhantomReference`", "After finalisation, never readable via `get()`", "Cleanup actions, usually through `Cleaner`"]
+    ],
+    lang: "java",
+    code: R`var cleaner = Cleaner.create();
+class Res implements AutoCloseable {
+    private final Cleaner.Cleanable cleanable;
+    Res(NativeHandle h) { cleanable = cleaner.register(this, h::release); }
+    @Override public void close() { cleanable.clean(); }    // explicit and idempotent
+}`,
+    watch: ["`finalize()` has been deprecated for removal since Java 18. Use try-with-resources, and `Cleaner` as a safety net."]
+  });
+
+  card("gc", "OutOfMemoryError decoder", "Table", {
+    sum: "The message after the error name tells you which memory is exhausted.",
+    head: ["Message", "Meaning", "Look at"],
+    rows: [
+      ["`Java heap space`", "Heap is full of live objects", "Heap dump, retained size, `-Xmx`"],
+      ["`GC overhead limit exceeded`", "More than 98% of time in GC, under 2% recovered (Parallel and Serial)", "Same as heap space. Usually a leak"],
+      ["`Metaspace`", "Too many classes or a class loader leak", "Dynamic proxies, hot redeploys, `-XX:MaxMetaspaceSize`"],
+      ["`unable to create native thread`", "OS thread limit or native memory exhausted", "Thread count, `-Xss`, container limits. Consider virtual threads"],
+      ["`Direct buffer memory`", "Off-heap buffers exhausted", "Netty or NIO leaks, `-XX:MaxDirectMemorySize`"],
+      ["`Requested array size exceeds VM limit`", "Array length near `Integer.MAX_VALUE`", "Stream the data instead"]
+    ],
+    more: [
+      "Common leaks: static collections that only grow, unbounded caches, listeners never removed, `ThreadLocal` values on pooled threads, unclosed streams and connections, class loader references after redeploy.",
+      "Run with `-XX:+HeapDumpOnOutOfMemoryError`, then open the `.hprof` in Eclipse MAT and use the leak suspects report and the dominator tree."
+    ]
+  });
+
+  /* ================= QUICK LOOKUP ================= */
+  card("look", "Functional interfaces", "Table", {
+    sum: "From `java.util.function`. Primitive variants exist for `int`, `long` and `double` (for example `IntPredicate`, `ToIntFunction`).",
+    head: ["Interface", "Method", "Shape", "Example"],
+    rows: [
+      ["`Function<T,R>`", "`apply`", "T to R", "`String::length`"],
+      ["`BiFunction<T,U,R>`", "`apply`", "(T, U) to R", "`Math::max`"],
+      ["`UnaryOperator<T>`", "`apply`", "T to T", "`String::trim`"],
+      ["`BinaryOperator<T>`", "`apply`", "(T, T) to T", "`Integer::sum`"],
+      ["`Predicate<T>`", "`test`", "T to boolean", "`String::isEmpty`"],
+      ["`Supplier<T>`", "`get`", "() to T", "`ArrayList::new`"],
+      ["`Consumer<T>`", "`accept`", "T to void", "`System.out::println`"],
+      ["`Runnable`", "`run`", "() to void", "`() -> work()`"],
+      ["`Callable<V>`", "`call`", "() to V, may throw", "`() -> fetch()`"],
+      ["`Comparator<T>`", "`compare`", "(T, T) to int", "`String::compareTo`"]
+    ],
+    lang: "java",
+    code: R`Function<String, Integer> len = String::length;
+Function<String, String> up = String::toUpperCase;
+var pipeline = len.compose(up);            // len(up(x))
+var both = up.andThen(len);                // same order, read left to right
+Predicate<String> notBlank = Predicate.not(String::isBlank);
+Supplier<List<String>> factory = ArrayList::new;`
+  });
+
+  card("look", "Common exceptions", "Table", {
+    sum: "What they mean and the usual fix.",
+    head: ["Exception", "Typical cause", "Fix"],
+    rows: [
+      ["`NullPointerException`", "Calling a method or reading a field on null", "Check inputs, `Objects.requireNonNull`, return `Optional`. Helpful messages name the null variable"],
+      ["`ClassCastException`", "Bad cast, often from raw types", "Use generics and `instanceof` patterns"],
+      ["`IndexOutOfBoundsException`", "Index outside 0 to size-1", "Check bounds, iterate with for-each"],
+      ["`ConcurrentModificationException`", "Changing a collection while iterating it", "`removeIf`, iterator `remove`, or a concurrent collection"],
+      ["`IllegalArgumentException`", "Caller passed a bad value", "Validate early with a clear message"],
+      ["`IllegalStateException`", "Object is in the wrong state for the call", "Check lifecycle, for example a stream already consumed"],
+      ["`UnsupportedOperationException`", "Writing to an immutable or fixed-size collection", "Copy to a mutable collection first"],
+      ["`NumberFormatException`", "Parsing a bad number string", "Validate or catch and report"],
+      ["`StackOverflowError`", "Runaway recursion", "Add a base case, make it iterative, check `toString` cycles"],
+      ["`ArithmeticException`", "Integer divide by zero, `addExact` overflow", "Guard the divisor"]
+    ]
+  });
+
+  card("look", "Concurrency utilities", "Table", {
+    sum: "Pick the highest-level tool that works.",
+    head: ["Need", "Use"],
+    rows: [
+      ["Run tasks on a pool", "`Executors.newFixedThreadPool(n)`, or `newVirtualThreadPerTaskExecutor()` for blocking work"],
+      ["Chain async steps", "`CompletableFuture.supplyAsync(...).thenApply(...).thenCombine(...).exceptionally(...)`"],
+      ["Wait for N tasks", "`CountDownLatch` (one use), `CyclicBarrier` (reusable)"],
+      ["Limit concurrency", "`Semaphore`"],
+      ["Shared counter", "`AtomicLong`, or `LongAdder` under heavy contention"],
+      ["Mutual exclusion", "`synchronized`, or `ReentrantLock` for `tryLock` and timeouts"],
+      ["Read-heavy lock", "`StampedLock`, `ReentrantReadWriteLock`"],
+      ["Hand off work between threads", "`BlockingQueue`"],
+      ["Per-thread data", "`ThreadLocal` (avoid with virtual threads), `ScopedValue` (25+)"]
+    ],
+    lang: "java",
+    code: R`CompletableFuture<Order> order = CompletableFuture
+    .supplyAsync(() -> loadUser(id), pool)
+    .thenCompose(u -> CompletableFuture.supplyAsync(() -> loadOrder(u), pool))
+    .orTimeout(2, TimeUnit.SECONDS)
+    .exceptionally(ex -> Order.EMPTY);`,
+    watch: ["Always pass your own executor to `*Async` calls that block. The default is the common pool, which is shared with parallel streams."]
+  });
+
+  /* ================= ENGINE ================= */
+  var SECS = [
+    { id: "core", t: "Core Java", d: "Types, strings, equality, initialization order, exceptions, enums, Optional and java.time." },
+    { id: "coll", t: "Collections", d: "Picking an implementation, HashMap internals, map methods, sequenced collections, sorting and concurrency." },
+    { id: "str", t: "Streams API", d: "Pipelines, collectors, primitive streams, gatherers and the mistakes that cost the most time." },
+    { id: "gen", t: "Generics", d: "Bounds, wildcards, PECS, type erasure and common generic patterns." },
+    { id: "refl", t: "Reflection", d: "Inspect and call code at run time, plus proxies and method handles." },
+    { id: "ann", t: "Annotations", d: "Built-in, custom, and where they get processed." },
+    { id: "rec", t: "Records", d: "Compact data classes and when to choose them." },
+    { id: "seal", t: "Sealed classes and patterns", d: "Closed hierarchies, switch patterns, record patterns and result types." },
+    { id: "mod", t: "Modern Java", d: "What changed from Java 8 to 27, virtual threads, compact source files and which version to run." },
+    { id: "jvm", t: "JVM internals", d: "Memory areas, class loading, bytecode, JIT, object layout, the memory model, flags and tools." },
+    { id: "gc", t: "Garbage collection", d: "How collectors work, which to choose, reading logs, tuning and out-of-memory errors." },
+    { id: "look", t: "Quick lookup", d: "Functional interfaces, common exceptions and concurrency utilities." }
+  ];
+
+  var $ = function (id) { return document.getElementById(id); };
+  function esc(s) { return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); }
+  function fmt(s) { return esc(s).replace(/`([^`]+)`/g, "<code>$1</code>"); }
+  function load(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+  function save(k, v) { try { localStorage.setItem(k, v); } catch (e) { /* storage may be blocked */ } }
+
+  /* ---------- syntax highlighting (Java, shell) ---------- */
+  var KW = "abstract|assert|boolean|break|byte|case|catch|char|class|continue|default|do|double|else|enum|extends|final|finally|float|for|if|implements|import|instanceof|int|interface|long|native|new|non-sealed|package|permits|private|protected|public|record|return|sealed|short|static|super|switch|synchronized|this|throw|throws|transient|try|var|void|volatile|when|while|yield|module|true|false|null";
+  var JAVA_RE = new RegExp(
+    "(\\/\\/[^\\n]*|\\/\\*[\\s\\S]*?\\*\\/)" +
+    "|(\"\"\"[\\s\\S]*?\"\"\"|\"(?:[^\"\\\\\\n]|\\\\.)*\"|'(?:[^'\\\\\\n]|\\\\.)*')" +
+    "|(@[A-Za-z_]\\w*)" +
+    "|\\b(" + KW + ")\\b" +
+    "|\\b(0[xX][0-9a-fA-F_]+|0[bB][01_]+|\\d[\\d_]*(?:\\.\\d+)?(?:[eE][+-]?\\d+)?[LlFfDd]?)\\b" +
+    "|\\b([A-Z]\\w*)\\b" +
+    "|\\b([a-z_]\\w*)(?=\\()", "g");
+  function hlJava(src) {
+    var out = "", last = 0, m;
+    JAVA_RE.lastIndex = 0;
+    while ((m = JAVA_RE.exec(src))) {
+      out += esc(src.slice(last, m.index));
+      var cls = m[1] ? "c" : m[2] ? "s" : m[3] ? "an" : m[4] ? "k" : m[5] ? "n" : m[6] ? "ty" : "f";
+      out += '<span class="' + cls + '">' + esc(m[0]) + "</span>";
+      last = JAVA_RE.lastIndex;
+      if (m[0].length === 0) JAVA_RE.lastIndex++;
+    }
+    return out + esc(src.slice(last));
+  }
+  function hlShell(src) {
+    return src.split("\n").map(function (line) {
+      var i = line.search(/(^|\s)#/), body = line, cmt = "";
+      if (i >= 0) { var cut = line.charAt(i) === "#" ? i : i + 1; body = line.slice(0, cut); cmt = line.slice(cut); }
+      var h = esc(body)
+        .replace(/^([a-z][\w.\-]*)/, '<span class="f">$1</span>')
+        .replace(/(\s)(--?[A-Za-z][\w:.+*=\/\-]*)/g, '$1<span class="ty">$2</span>');
+      return h + (cmt ? '<span class="c">' + esc(cmt) + "</span>" : "");
+    }).join("\n");
+  }
+  function highlight(code, lang) {
+    if (lang === "java") return hlJava(code);
+    if (lang === "sh") return hlShell(code);
+    return esc(code);
+  }
+
+  /* ---------- render cards ---------- */
+  function tableHTML(c) {
+    var h = "<div class=\"tw\"><table><thead><tr>" + c.head.map(function (x) { return "<th>" + fmt(x) + "</th>"; }).join("") + "</tr></thead><tbody>";
+    c.rows.forEach(function (r) { h += "<tr>" + r.map(function (x) { return "<td>" + fmt(x) + "</td>"; }).join("") + "</tr>"; });
+    return h + "</tbody></table></div>";
+  }
+  function cardEl(c) {
+    var el = document.createElement("article");
+    el.className = "card" + (c.wide ? " wide" : "");
+    var badges = (c.v ? '<span class="tag ver' + (c.prev ? " prev" : "") + '">Java ' + esc(c.v) + (c.prev ? " · preview" : "") + "</span>" : "") + '<span class="tag">' + esc(c.kind) + "</span>";
+    var h = '<div class="ch"><h3>' + fmt(c.t) + '</h3><div class="badges">' + badges + "</div></div>";
+    if (c.sum) h += '<p class="sum">' + fmt(c.sum) + "</p>";
+    if (c.rows) h += tableHTML(c);
+    if (c.code) h += '<div class="codewrap"><button class="copy" type="button" aria-label="Copy code">Copy</button><pre>' + highlight(c.code, c.lang || "java") + "</pre></div>";
+    var hasMore = (c.more && c.more.length) || (c.watch && c.watch.length);
+    if (hasMore) h += '<button class="btn-d" type="button" aria-expanded="false">Show details</button>';
+    if (c.more && c.more.length) h += '<ul class="more">' + c.more.map(function (x) { return "<li>" + fmt(x) + "</li>"; }).join("") + "</ul>";
+    if (c.watch && c.watch.length) h += '<div class="watch"><b>Watch out</b><ul>' + c.watch.map(function (x) { return "<li>" + fmt(x) + "</li>"; }).join("") + "</ul></div>";
+    el.innerHTML = h;
+    var parts = [c.t, c.kind, c.sum || "", c.code || "", (c.head || []).join(" "), (c.rows || []).map(function (r) { return r.join(" "); }).join(" "), (c.more || []).join(" "), (c.watch || []).join(" "), c.v ? "java " + c.v : ""];
+    el._idx = parts.join(" ").toLowerCase();
+    return el;
+  }
+
+  var main = $("main"), side = $("side"), chips = $("chips");
+  var secEls = {}, cardEls = [], navLinks = [];
+  SECS.forEach(function (s) {
+    var sec = document.createElement("section");
+    sec.className = "sec"; sec.id = "sec-" + s.id; sec.setAttribute("aria-labelledby", "h-" + s.id);
+    sec.innerHTML = '<div class="sec-head"><h2 id="h-' + s.id + '">' + esc(s.t) + "</h2><p>" + esc(s.d) + '</p></div><div class="cols"></div>';
+    var cols = sec.querySelector(".cols"), n = 0;
+    CARDS.forEach(function (c) {
+      if (c.sec !== s.id) return;
+      var el = cardEl(c); cols.appendChild(el); cardEls.push({ el: el, sec: s.id }); n++;
+    });
+    s.count = n; s.shown = n;
+    main.appendChild(sec); secEls[s.id] = sec;
+
+    var a = document.createElement("a"); a.href = "#sec-" + s.id;
+    a.innerHTML = esc(s.t) + "<span>" + n + "</span>";
+    side.appendChild(a);
+    var ch = document.createElement("a"); ch.href = "#sec-" + s.id; ch.textContent = s.t;
+    chips.appendChild(ch);
+    navLinks.push({ id: s.id, side: a, chip: ch, count: a.querySelector("span") });
+  });
+  var emptyMsg = document.createElement("p");
+  emptyMsg.className = "empty"; emptyMsg.hidden = true;
+  emptyMsg.textContent = "No card matches that. Try a shorter word, or a class name such as HashMap.";
+  main.appendChild(emptyMsg);
+
+  /* ---------- search ---------- */
+  var q = $("q"), cnt = document.createElement("span");
+  cnt.className = "cnt"; cnt.id = "cnt"; cnt.setAttribute("aria-live", "polite");
+  q.parentNode.insertBefore(cnt, q.nextSibling);
+  function applyFilter() {
+    var terms = q.value.trim().toLowerCase().split(/\s+/).filter(Boolean), total = 0;
+    document.body.classList.toggle("searching", terms.length > 0);
+    SECS.forEach(function (s) { s.shown = 0; });
+    cardEls.forEach(function (o) {
+      var ok = terms.every(function (t) { return o.el._idx.indexOf(t) > -1; });
+      o.el.hidden = !ok;
+      if (ok) { total++; SECS.forEach(function (s) { if (s.id === o.sec) s.shown++; }); }
+    });
+    SECS.forEach(function (s, i) {
+      secEls[s.id].hidden = s.shown === 0;
+      navLinks[i].count.textContent = terms.length ? s.shown : s.count;
+      navLinks[i].side.hidden = navLinks[i].chip.hidden = s.shown === 0;
+    });
+    emptyMsg.hidden = total > 0;
+    cnt.textContent = terms.length ? total + (total === 1 ? " card" : " cards") : "";
+  }
+  q.addEventListener("input", applyFilter);
+  q.addEventListener("keydown", function (e) { if (e.key === "Escape") { q.value = ""; applyFilter(); q.blur(); } });
+  document.addEventListener("keydown", function (e) {
+    var tag = (e.target && e.target.tagName) || "";
+    if (e.key === "/" && tag !== "INPUT" && tag !== "TEXTAREA") { e.preventDefault(); q.focus(); q.select(); }
+  });
+
+  /* ---------- detail level, theme ---------- */
+  function setMode(m) {
+    document.body.classList.toggle("compact", m === "compact");
+    Array.prototype.forEach.call(document.querySelectorAll(".seg2 button"), function (b) { b.setAttribute("aria-pressed", b.dataset.mode === m ? "true" : "false"); });
+    save("jg-mode", m);
+  }
+  Array.prototype.forEach.call(document.querySelectorAll(".seg2 button"), function (b) { b.addEventListener("click", function () { setMode(b.dataset.mode); }); });
+  setMode(load("jg-mode") === "compact" ? "compact" : "detailed");
+
+  var root = document.documentElement;
+  var savedTheme = load("jg-theme");
+  if (savedTheme === "light" || savedTheme === "dark") root.setAttribute("data-theme", savedTheme);
+  $("theme").addEventListener("click", function () {
+    var cur = root.getAttribute("data-theme") || (window.matchMedia && matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+    var next = cur === "dark" ? "light" : "dark";
+    root.setAttribute("data-theme", next); save("jg-theme", next);
+  });
+
+  /* ---------- card actions: details, copy ---------- */
+  main.addEventListener("click", function (e) {
+    var d = e.target.closest(".btn-d");
+    if (d) {
+      var card = d.closest(".card"), open = card.classList.toggle("open");
+      d.textContent = open ? "Hide details" : "Show details"; d.setAttribute("aria-expanded", open ? "true" : "false");
+      return;
+    }
+    var c = e.target.closest(".copy");
+    if (c) {
+      var pre = c.parentNode.querySelector("pre"), label = "Copy";
+      function fallback() {
+        var r = document.createRange(); r.selectNodeContents(pre);
+        var s = window.getSelection(); s.removeAllRanges(); s.addRange(r); c.textContent = "Selected";
+      }
+      try { navigator.clipboard.writeText(pre.textContent).then(function () { c.textContent = "Copied"; }, fallback); } catch (err) { fallback(); }
+      setTimeout(function () { c.textContent = label; }, 1600);
+    }
+  });
+
+  /* ---------- scroll spy ---------- */
+  function setActive(id) {
+    navLinks.forEach(function (n) {
+      var on = n.id === id;
+      if (on) { n.side.setAttribute("aria-current", "true"); n.chip.setAttribute("aria-current", "true"); }
+      else { n.side.removeAttribute("aria-current"); n.chip.removeAttribute("aria-current"); }
+      if (on && chips.scrollWidth > chips.clientWidth) chips.scrollLeft = n.chip.offsetLeft - chips.clientWidth / 2 + n.chip.offsetWidth / 2;
+    });
+  }
+  if ("IntersectionObserver" in window) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) { if (en.isIntersecting) setActive(en.target.id.replace("sec-", "")); });
+    }, { rootMargin: "-140px 0px -65% 0px" });
+    SECS.forEach(function (s) { io.observe(secEls[s.id]); });
+  }
+  setActive(SECS[0].id);
+  applyFilter();
+})();
+</script>
+
+</body></html>
