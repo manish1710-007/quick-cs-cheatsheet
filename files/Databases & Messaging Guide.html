@@ -1,0 +1,2731 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Databases & Messaging Guide</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Sans+Condensed:wght@500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+/* Layout: sticky search bar, section rail on the left, masonry columns of reference cards per section.
+   Cool blueprint neutrals with a Java-blue accent; orange is reserved for pitfalls. Code surfaces stay dark in both themes. */
+:root{
+  --bg:#f1f4f9; --panel:#ffffff; --ink:#111a2c; --muted:#56627a; --line:#d7deea; --line2:#bcc7da;
+  --accent:#1d5d98; --accent-soft:#e3edf9; --accent-ink:#ffffff;
+  --warn:#b3400b; --warn-soft:#fdeee2; --ok:#17703f; --ok-soft:#e1f3e8;
+  --code-bg:#0f1728; --code-fg:#d5ddf0; --code-line:#222d45;
+  --t-kw:#ff9a62; --t-type:#7fc6f7; --t-str:#9ad58c; --t-num:#f0c674; --t-cmt:#7080a0; --t-ann:#e0a4ff; --t-fn:#b4d2ff;
+  --sans:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --cond:"IBM Plex Sans Condensed","IBM Plex Sans",system-ui,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0b101b; --panel:#121929; --ink:#e3e8f4; --muted:#97a2bc; --line:#25304a; --line2:#37456a;
+    --accent:#72b3ee; --accent-soft:#15253b; --accent-ink:#0b101b;
+    --warn:#ff9d66; --warn-soft:#2a1a11; --ok:#70d69b; --ok-soft:#11281c;
+    --code-bg:#080c15; --code-fg:#d5ddf0; --code-line:#1c263d;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0b101b; --panel:#121929; --ink:#e3e8f4; --muted:#97a2bc; --line:#25304a; --line2:#37456a;
+  --accent:#72b3ee; --accent-soft:#15253b; --accent-ink:#0b101b;
+  --warn:#ff9d66; --warn-soft:#2a1a11; --ok:#70d69b; --ok-soft:#11281c;
+  --code-bg:#080c15; --code-fg:#d5ddf0; --code-line:#1c263d;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{scroll-behavior:smooth}
+body{
+  margin:0; background:var(--bg); color:var(--ink); font-family:var(--sans); font-size:15px; line-height:1.55;
+  padding-left:max(16px, env(safe-area-inset-left, 0px));
+  padding-right:max(16px, env(safe-area-inset-right, 0px));
+  padding-block:0 80px;
+}
+body::before{content:""; position:fixed; inset:0 0 auto; height:env(safe-area-inset-top, 0px); z-index:30; background:var(--panel)}
+button,input{font:inherit; color:inherit}
+:focus-visible{outline:2px solid var(--accent); outline-offset:2px}
+a{color:var(--accent)}
+code{font-family:var(--mono); font-size:.86em; background:var(--accent-soft); color:var(--accent); padding:.08em .38em; border-radius:4px; overflow-wrap:anywhere}
+h1,h2,h3{text-wrap:balance}
+
+/* ---------- top bar ---------- */
+.bar{position:sticky; top:env(safe-area-inset-top, 0px); z-index:20; margin-inline:calc(-1 * max(16px, env(safe-area-inset-left, 0px))) calc(-1 * max(16px, env(safe-area-inset-right, 0px)));
+  padding-left:max(16px, env(safe-area-inset-left, 0px)); padding-right:max(16px, env(safe-area-inset-right, 0px));
+  background:var(--panel); border-bottom:1px solid var(--line)}
+.bar-in{max-width:1240px; margin:0 auto; display:flex; align-items:center; gap:14px; padding-block:10px}
+.brand{display:flex; align-items:center; gap:10px; text-decoration:none; color:var(--ink); font-weight:700; letter-spacing:-.01em; white-space:nowrap}
+.mark{display:grid; place-items:center; width:30px; height:30px; border-radius:7px; background:var(--accent); color:var(--accent-ink); font-family:var(--mono); font-weight:600}
+.search{flex:1; min-width:0; max-width:560px; display:flex; align-items:center; gap:10px; min-height:40px; padding:0 12px; border:1px solid var(--line); border-radius:9px; background:var(--bg)}
+.search:focus-within{border-color:var(--accent)}
+.search svg{flex:0 0 auto; color:var(--muted)}
+.search input{flex:1; min-width:0; height:38px; border:0; outline:0; background:none}
+.search kbd{flex:0 0 auto; font-family:var(--mono); font-size:12px; color:var(--muted); border:1px solid var(--line2); border-radius:5px; padding:0 6px}
+.grow{flex:1}
+.seg2{display:inline-flex; border:1px solid var(--line); border-radius:9px; overflow:hidden; flex:0 0 auto}
+.seg2 button{min-height:38px; padding:0 12px; border:0; background:var(--panel); color:var(--muted); cursor:pointer; font-size:13.5px}
+.seg2 button+button{border-left:1px solid var(--line)}
+.seg2 button[aria-pressed="true"]{background:var(--accent-soft); color:var(--accent); font-weight:600}
+.icon{flex:0 0 auto; display:grid; place-items:center; width:40px; height:40px; border:1px solid var(--line); border-radius:9px; background:var(--panel); cursor:pointer; color:var(--muted)}
+.icon:hover,.seg2 button:hover{color:var(--ink)}
+.chips{display:none; overflow-x:auto; gap:6px; padding:0 0 10px; max-width:1240px; margin:0 auto; scrollbar-width:thin}
+.chips a{flex:0 0 auto; display:inline-flex; align-items:center; min-height:34px; padding:0 12px; border:1px solid var(--line); border-radius:999px; text-decoration:none; color:var(--ink); font-size:13.5px; background:var(--panel); white-space:nowrap}
+.chips a[aria-current="true"]{background:var(--accent); border-color:var(--accent); color:var(--accent-ink)}
+
+/* ---------- hero ---------- */
+.wrap{max-width:1240px; margin:0 auto}
+.hero{display:grid; gap:14px; padding-block:34px 22px; max-width:78ch}
+.kicker{margin:0; font-family:var(--cond); font-weight:600; font-size:13px; letter-spacing:.14em; text-transform:uppercase; color:var(--accent)}
+h1{margin:0; font-size:clamp(30px,4.6vw,48px); line-height:1.06; letter-spacing:-.02em; font-weight:700}
+.lede{margin:0; color:var(--muted); font-size:17px; max-width:64ch}
+.lts{display:flex; flex-wrap:wrap; gap:8px; align-items:center; font-family:var(--cond); font-size:14px; color:var(--muted)}
+.lts b{font-weight:600; letter-spacing:.06em; text-transform:uppercase; font-size:12.5px}
+.v{display:inline-flex; align-items:center; min-height:26px; padding:0 10px; border-radius:6px; border:1px solid var(--line2); font-family:var(--mono); font-size:12.5px; color:var(--ink); background:var(--panel)}
+.v.lts-v{background:var(--accent); border-color:var(--accent); color:var(--accent-ink); font-weight:600}
+
+/* ---------- shell ---------- */
+.shell{display:grid; grid-template-columns:190px minmax(0,1fr); gap:30px; align-items:start}
+.side{position:sticky; top:calc(env(safe-area-inset-top, 0px) + 74px); display:grid; gap:2px; max-height:calc(100vh - 96px); overflow:auto; scrollbar-width:thin; padding-bottom:20px}
+.side h2{margin:0 0 8px; font-family:var(--cond); font-weight:600; font-size:12.5px; letter-spacing:.14em; text-transform:uppercase; color:var(--muted)}
+.side a{display:flex; justify-content:space-between; gap:8px; align-items:baseline; padding:7px 10px; border-radius:8px; text-decoration:none; color:var(--ink); font-size:14.5px; border:1px solid transparent}
+.side a:hover{background:var(--panel); border-color:var(--line)}
+.side a span{font-family:var(--mono); font-size:11.5px; color:var(--muted)}
+.side a[aria-current="true"]{background:var(--accent-soft); color:var(--accent); font-weight:600}
+.main{min-width:0; display:grid; grid-template-columns:minmax(0,1fr); gap:46px}
+
+/* ---------- sections and cards ---------- */
+.sec{scroll-margin-top:calc(env(safe-area-inset-top, 0px) + 130px); display:grid; grid-template-columns:minmax(0,1fr); gap:16px; min-width:0}
+.cols{min-width:0}
+.sec-head{display:grid; gap:4px; padding-bottom:10px; border-bottom:2px solid var(--ink)}
+.sec-head h2{margin:0; font-size:clamp(22px,3vw,30px); letter-spacing:-.015em}
+.sec-head p{margin:0; color:var(--muted); max-width:70ch}
+.cols{columns:2 400px; column-gap:16px}
+.card{break-inside:avoid; display:block; margin:0 0 16px; background:var(--panel); border:1px solid var(--line); border-radius:10px; overflow:hidden}
+.card.wide{column-span:all}
+.ch{display:flex; align-items:flex-start; justify-content:space-between; gap:10px; padding:12px 14px 0}
+.ch h3{margin:0; font-size:16.5px; line-height:1.3; letter-spacing:-.005em}
+.badges{display:flex; flex-wrap:wrap; gap:5px; justify-content:flex-end; flex:0 0 auto}
+.tag{font-family:var(--cond); font-weight:600; font-size:11.5px; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); border:1px solid var(--line2); border-radius:5px; padding:1px 7px; white-space:nowrap}
+.tag.ver{font-family:var(--mono); text-transform:none; letter-spacing:0; color:var(--accent); border-color:var(--accent)}
+.tag.prev{color:var(--warn); border-color:var(--warn)}
+.sum{margin:0; padding:6px 14px 12px; color:var(--muted)}
+.codewrap{position:relative; background:var(--code-bg); border-block:1px solid var(--code-line)}
+pre{margin:0; padding:13px 14px; overflow-x:auto; font-family:var(--mono); font-size:12.6px; line-height:1.62; tab-size:2; color:var(--code-fg)}
+.copy{position:absolute; top:6px; right:6px; min-height:28px; padding:0 9px; border-radius:6px; border:1px solid var(--code-line); background:var(--code-bg); color:#8f9bb8; font-family:var(--cond); font-size:12px; font-weight:600; letter-spacing:.06em; cursor:pointer; opacity:.0; transition:opacity .12s}
+.codewrap:hover .copy,.copy:focus-visible{opacity:1}
+@media (hover:none){.copy{opacity:1}}
+.k{color:var(--t-kw)} .ty{color:var(--t-type)} .s{color:var(--t-str)} .n{color:var(--t-num)} .c{color:var(--t-cmt); font-style:italic} .an{color:var(--t-ann)} .f{color:var(--t-fn)}
+.more{margin:0; padding:12px 14px 2px 32px; display:grid; gap:7px; font-size:14.5px}
+.more li::marker{color:var(--accent)}
+.watch{margin:12px 14px 14px; padding:10px 12px; background:var(--warn-soft); border-radius:8px; font-size:14px; display:grid; gap:6px}
+.watch b{font-family:var(--cond); font-weight:600; font-size:12px; letter-spacing:.12em; text-transform:uppercase; color:var(--warn)}
+.watch ul{margin:0; padding-left:18px; display:grid; gap:4px}
+.card>.more:last-child{padding-bottom:14px}
+.more+.watch{margin-top:10px}
+.sum:last-child{padding-bottom:14px}
+.tw{overflow-x:auto; border-top:1px solid var(--line)}
+table{border-collapse:collapse; width:100%; font-size:13.8px}
+th,td{text-align:left; vertical-align:top; padding:8px 12px; border-bottom:1px solid var(--line)}
+th{font-family:var(--cond); font-weight:600; font-size:12px; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); white-space:nowrap; background:var(--bg)}
+tr:last-child td{border-bottom:0}
+td:first-child{font-weight:600}
+td.mono{font-family:var(--mono); font-size:12.5px}
+.btn-d{margin:12px 14px; min-height:32px; padding:0 12px; border:1px solid var(--line2); border-radius:7px; background:var(--panel); color:var(--accent); cursor:pointer; font-size:13px; display:none}
+body.compact:not(.searching) .btn-d{display:inline-flex; align-items:center}
+body.compact:not(.searching) .card:not(.open) .more, body.compact:not(.searching) .card:not(.open) .watch{display:none}
+.search .cnt{flex:0 0 auto; font-family:var(--mono); font-size:12px; color:var(--muted); white-space:nowrap}
+.empty{padding:40px 0; color:var(--muted)}
+.foot{margin-top:50px; padding-top:18px; border-top:1px solid var(--line); color:var(--muted); font-size:14px; max-width:78ch}
+
+@media (max-width:900px){
+  .shell{grid-template-columns:minmax(0,1fr)}
+  .side{display:none}
+  .chips{display:flex}
+  .bar-in{flex-wrap:wrap; row-gap:8px}
+  .search{order:3; flex:1 1 100%; max-width:none}
+  .grow{display:none}
+  .brand{flex:1}
+  .sec{scroll-margin-top:calc(env(safe-area-inset-top, 0px) + 160px)}
+}
+@media (max-width:520px){
+  .brand span:last-child{display:none}
+  .cols{columns:1}
+  .seg2 button{padding:0 9px}
+  .hero{padding-block:24px 14px}
+}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.copy{transition:none}}
+</style>
+
+<div id="top"></div>
+<header class="bar">
+  <div class="bar-in">
+    <a class="brand" href="#top"><span class="mark" aria-hidden="true">DB</span><span>Databases &amp; Messaging Guide</span></a>
+    <label class="search" for="q">
+      <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>
+      <input id="q" type="search" placeholder="Search: vacuum, EXPLAIN, XADD, dead letter, ISR" autocomplete="off">
+      <kbd aria-hidden="true">/</kbd>
+    </label>
+    <span class="grow"></span>
+    <div class="seg2" role="group" aria-label="Detail level">
+      <button type="button" data-mode="detailed" aria-pressed="true">Detailed</button>
+      <button type="button" data-mode="compact" aria-pressed="false">Compact</button>
+    </div>
+    <button class="icon" id="theme" type="button" aria-label="Switch between light and dark theme">
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 13A9 9 0 1 1 11 3a7 7 0 0 0 10 10z"/></svg>
+    </button>
+  </div>
+  <nav class="chips" id="chips" aria-label="Sections"></nav>
+</header>
+
+<div class="wrap">
+  <section class="hero">
+    <p class="kicker">Reference · Storage to streaming</p>
+    <h1>From the query planner to the commit log</h1>
+    <p class="lede">Commands, internals and the trade-offs behind them, plus exercises with solutions. Skim the summary and code on each card, open the details when something breaks, and press <code>/</code> to search. Compact shows only summaries and code.</p>
+    <div class="lts" aria-label="Topics and versions"><b>Covers</b><span class="v lts-v">PostgreSQL 18</span><span class="v lts-v">Internals</span><span class="v lts-v">Redis 8 / Valkey</span><span class="v lts-v">RabbitMQ 4</span><span class="v lts-v">Kafka 4</span><span class="v lts-v">Patterns</span><span class="v lts-v">Practice</span></div>
+  </section>
+
+  <div class="shell">
+    <aside class="side" aria-label="Sections"><h2>Sections</h2><div id="side" style="display:grid;gap:2px"></div></aside>
+    <main class="main" id="main"></main>
+  </div>
+  <p class="foot" id="foot">Versions were checked in October 2026: PostgreSQL 18 features, Kafka 4.0 and 4.1 (KRaft only), RabbitMQ 4.x, and Redis 8 under AGPLv3. Newer releases may exist, so confirm in the official release notes before you upgrade. Try destructive commands only on a throwaway instance.</p>
+</div>
+
+<script>
+(function () {
+  "use strict";
+  var CARDS = [];
+  /* card(section, title, kind, fields) */
+  function card(sec, t, kind, f) { f = f || {}; f.sec = sec; f.t = t; f.kind = kind; CARDS.push(f); }
+  var R = String.raw;
+
+  /* ================= POSTGRESQL: SQL AND MODELLING ================= */
+  card("sql", "psql survival kit", "Syntax", {
+    sum: "The command-line client. Backslash commands are psql's own, not SQL.",
+    lang: "sh",
+    code: R`psql "postgresql://app:secret@db.example.com:5432/shop?sslmode=require"
+psql -h localhost -U app -d shop -c "SELECT now()"
+psql -d shop -f schema.sql -v ON_ERROR_STOP=1
+
+\l                 list databases          \c shop        connect to a database
+\dt                list tables             \dt *.*        include all schemas
+\d orders          columns, indexes, FKs   \d+ orders     plus size and storage
+\di+               indexes and sizes       \dv  \df  \dn  views, functions, schemas
+\du                roles                   \dp orders     privileges
+\x auto            expanded output when wide
+\timing on         show query time         \e             edit query in $EDITOR
+\copy orders TO 'orders.csv' CSV HEADER    client-side CSV export
+\watch 2           repeat the last query every 2 seconds
+\?   \h CREATE INDEX                       help for psql and for SQL`,
+    more: [
+      "Put connection defaults in `~/.pgpass` (password) and `~/.pg_service.conf` (named services) so scripts do not contain secrets.",
+      "`\\copy` runs on your machine. SQL `COPY` runs on the server and needs file access there."
+    ]
+  });
+
+  card("sql", "Choosing data types", "Table", {
+    sum: "A few good defaults prevent most schema regrets.",
+    head: ["Need", "Use", "Avoid"],
+    rows: [
+      ["Surrogate key", "`bigint GENERATED ALWAYS AS IDENTITY`, or `uuid` (time-ordered `uuidv7()` in PostgreSQL 18)", "`serial` in new code, random UUIDv4 as a hot clustered key on huge tables"],
+      ["Text", "`text`. Add a `CHECK` for length if needed", "`char(n)`, `varchar(n)` out of habit. There is no speed gain"],
+      ["Money and exact decimals", "`numeric(12,2)`, or integer cents", "`float`, `real`, `money`"],
+      ["Timestamps", "`timestamptz` (stored as UTC, shown in session zone)", "`timestamp` without zone for real events"],
+      ["Date only", "`date`", "Storing dates as text"],
+      ["Flags and enums", "`boolean`, `text` with `CHECK`, or `CREATE TYPE ... AS ENUM` for stable sets", "Magic integers"],
+      ["Semi-structured data", "`jsonb`", "`json` (stores text, no indexing)"],
+      ["Arrays and ranges", "`int[]`, `tstzrange`, with exclusion constraints", "Comma-separated strings"],
+      ["IP and network", "`inet`, `cidr`", "Text"],
+      ["Large files", "Object storage plus a URL column", "`bytea` for big blobs"]
+    ],
+    more: ["`timestamptz` does not store a zone. It converts to UTC on input and to the session `TimeZone` on output. Store the user's zone name separately if you need it."]
+  });
+
+  card("sql", "Schema example with constraints", "Recipe", {
+    sum: "Let the database enforce rules. Application checks race, constraints do not.",
+    lang: "sql",
+    code: R`CREATE TABLE customers (
+  id          bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  email       text NOT NULL UNIQUE CHECK (position('@' in email) > 1),
+  name        text NOT NULL,
+  created_at  timestamptz NOT NULL DEFAULT now()
+);
+
+CREATE TABLE orders (
+  id           bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  customer_id  bigint NOT NULL REFERENCES customers(id) ON DELETE RESTRICT,
+  status       text NOT NULL DEFAULT 'new'
+               CHECK (status IN ('new', 'paid', 'shipped', 'cancelled')),
+  total_cents  integer NOT NULL CHECK (total_cents >= 0),
+  placed_at    timestamptz NOT NULL DEFAULT now()
+);
+CREATE INDEX orders_customer_idx ON orders (customer_id);   -- FKs are NOT indexed automatically
+
+CREATE TABLE order_items (
+  order_id    bigint NOT NULL REFERENCES orders(id) ON DELETE CASCADE,
+  line_no     smallint NOT NULL,
+  product_id  bigint NOT NULL,
+  qty         integer NOT NULL CHECK (qty > 0),
+  price_cents integer NOT NULL,
+  PRIMARY KEY (order_id, line_no)
+);`,
+    more: [
+      "PostgreSQL indexes the referenced primary key but not the referencing foreign key column. Add the index yourself, or deletes and joins on the parent scan the child table.",
+      "`ON DELETE` choices: `RESTRICT` or `NO ACTION` (block), `CASCADE` (delete children), `SET NULL` (detach)."
+    ]
+  });
+
+  card("sql", "Querying essentials", "Syntax", {
+    sum: "Logical order of evaluation: FROM, WHERE, GROUP BY, HAVING, SELECT, DISTINCT, ORDER BY, LIMIT.",
+    lang: "sql",
+    code: R`SELECT c.name,
+       count(*)                      AS orders,
+       sum(o.total_cents) / 100.0    AS revenue
+FROM customers c
+JOIN orders o ON o.customer_id = c.id
+WHERE o.placed_at >= date_trunc('month', now())
+  AND o.status <> 'cancelled'
+GROUP BY c.id, c.name
+HAVING count(*) >= 3
+ORDER BY revenue DESC
+LIMIT 10;
+
+-- conditional aggregates
+SELECT count(*) FILTER (WHERE status = 'paid')      AS paid,
+       count(*) FILTER (WHERE status = 'cancelled') AS cancelled
+FROM orders;
+
+-- NULL-safe comparison and defaults
+SELECT coalesce(nickname, name), nullif(code, ''), a IS DISTINCT FROM b FROM people;`,
+    head: ["Join", "Returns"],
+    rows: [
+      ["`INNER JOIN`", "Only rows that match on both sides"],
+      ["`LEFT JOIN`", "All left rows, NULLs where no match"],
+      ["`FULL JOIN`", "All rows from both sides"],
+      ["`CROSS JOIN`", "Every combination (cartesian product)"],
+      ["`LATERAL`", "A subquery that can reference columns from earlier FROM items"],
+      ["`SEMI` (`EXISTS`)", "Left rows that have a match, without duplicating them"],
+      ["`ANTI` (`NOT EXISTS`)", "Left rows with no match"]
+    ],
+    watch: [
+      "`NULL = NULL` is not true. Use `IS NULL` and `IS DISTINCT FROM`.",
+      "`NOT IN (subquery)` returns nothing if the subquery yields a NULL. Prefer `NOT EXISTS`.",
+      "Filters on the right table of a `LEFT JOIN` belong in the `ON` clause, or the join becomes an inner join."
+    ]
+  });
+
+  card("sql", "CTEs, window functions and LATERAL", "Syntax", {
+    sum: "Window functions compute across related rows without collapsing them.",
+    lang: "sql",
+    code: R`-- Top 3 products by revenue in each category
+WITH ranked AS (
+  SELECT category_id, product_id, sum(price_cents * qty) AS revenue,
+         row_number() OVER (PARTITION BY category_id ORDER BY sum(price_cents * qty) DESC) AS rn
+  FROM sales
+  GROUP BY category_id, product_id
+)
+SELECT * FROM ranked WHERE rn <= 3;
+
+-- Running total and previous row
+SELECT day, amount,
+       sum(amount) OVER (ORDER BY day)                    AS running_total,
+       amount - lag(amount) OVER (ORDER BY day)           AS change,
+       avg(amount) OVER (ORDER BY day ROWS 6 PRECEDING)   AS avg_7d
+FROM daily_sales;
+
+-- Latest 3 orders per customer with LATERAL
+SELECT c.id, o.id, o.placed_at
+FROM customers c
+CROSS JOIN LATERAL (
+  SELECT id, placed_at FROM orders WHERE customer_id = c.id ORDER BY placed_at DESC LIMIT 3
+) o;`,
+    head: ["Function", "Meaning"],
+    rows: [
+      ["`row_number()`", "1, 2, 3 with no ties"],
+      ["`rank()` / `dense_rank()`", "Ties share a rank. `rank` leaves gaps, `dense_rank` does not"],
+      ["`lag(x, n)` / `lead(x, n)`", "Value n rows before or after"],
+      ["`first_value` / `last_value`", "First or last in the frame. Mind the default frame"],
+      ["`ntile(n)`", "Split into n buckets"],
+      ["`sum() OVER ()`", "Running or total aggregates"]
+    ],
+    more: ["Since PostgreSQL 12, a CTE is inlined when it is referenced once and has no side effects. Use `MATERIALIZED` or `NOT MATERIALIZED` to force a choice."]
+  });
+
+  card("sql", "Recursive queries", "Syntax", {
+    sum: "Walk trees and graphs: org charts, categories, bill of materials.",
+    lang: "sql",
+    code: R`WITH RECURSIVE chain AS (
+  SELECT id, name, manager_id, 1 AS depth, ARRAY[id] AS path
+  FROM employees WHERE manager_id IS NULL            -- anchor: the root
+  UNION ALL
+  SELECT e.id, e.name, e.manager_id, c.depth + 1, c.path || e.id
+  FROM employees e
+  JOIN chain c ON e.manager_id = c.id                -- step: children of the previous level
+  WHERE NOT e.id = ANY(c.path)                       -- cycle guard
+)
+SELECT * FROM chain ORDER BY path;`,
+    more: ["Without a stop condition or cycle guard on cyclic data, a recursive query runs until it fills the disk. Add a depth limit as a safety net."]
+  });
+
+  card("sql", "Upsert, RETURNING and MERGE", "Syntax", {
+    sum: "Write idempotent changes in one atomic statement.",
+    lang: "sql",
+    code: R`-- Insert or update on conflict (needs a unique index on the conflict target)
+INSERT INTO page_views (page, day, hits)
+VALUES ('/home', current_date, 1)
+ON CONFLICT (page, day) DO UPDATE SET hits = page_views.hits + 1
+RETURNING hits;
+
+-- Insert if missing, ignore otherwise
+INSERT INTO tags (name) VALUES ('sql') ON CONFLICT DO NOTHING;
+
+-- Update with a join, return changed rows
+UPDATE orders o SET status = 'cancelled'
+FROM customers c
+WHERE c.id = o.customer_id AND c.banned
+RETURNING o.id;
+
+-- MERGE (PostgreSQL 15+). PostgreSQL 17 added RETURNING for MERGE
+MERGE INTO stock s
+USING incoming i ON s.sku = i.sku
+WHEN MATCHED THEN UPDATE SET qty = s.qty + i.qty
+WHEN NOT MATCHED THEN INSERT (sku, qty) VALUES (i.sku, i.qty);`,
+    watch: ["`ON CONFLICT DO UPDATE` can still deadlock if two transactions upsert the same keys in different orders. Sort keys before batch upserts."]
+  });
+
+  card("sql", "JSONB", "Syntax", {
+    sum: "Document data inside a relational table. Index it with GIN.",
+    lang: "sql",
+    code: R`CREATE TABLE events (id bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY, payload jsonb NOT NULL);
+CREATE INDEX events_payload_gin ON events USING gin (payload jsonb_path_ops);
+CREATE INDEX events_user_idx ON events ((payload ->> 'user_id'));        -- expression index
+
+SELECT payload -> 'user' ->> 'name'            FROM events;              -- -> json, ->> text
+SELECT * FROM events WHERE payload @> '{"type": "login"}';               -- containment, uses GIN
+SELECT * FROM events WHERE payload ? 'error';                            -- key exists
+SELECT * FROM events WHERE payload @? '$.items[*] ? (@.qty > 5)';        -- jsonpath
+
+UPDATE events SET payload = jsonb_set(payload, '{status}', '"done"') WHERE id = 1;
+SELECT jsonb_agg(jsonb_build_object('id', id, 'type', payload ->> 'type')) FROM events;
+SELECT * FROM jsonb_to_recordset('[{"a":1},{"a":2}]') AS t(a int);`,
+    more: [
+      "Use real columns for data you filter, join or constrain often. Keep `jsonb` for flexible, sparse or third-party payloads.",
+      "Updating one key rewrites the whole `jsonb` value. Large documents that change often cause write amplification and bloat."
+    ]
+  });
+
+  card("sql", "Transactions and isolation levels", "Table", {
+    sum: "PostgreSQL uses MVCC: readers do not block writers. The default level is `READ COMMITTED`.",
+    head: ["Level", "Behaviour in PostgreSQL", "Retry needed?"],
+    rows: [
+      ["`READ COMMITTED` (default)", "Each statement sees data committed before it started. Non-repeatable reads and phantoms are possible", "Rarely"],
+      ["`REPEATABLE READ`", "One snapshot for the whole transaction (snapshot isolation). Phantoms do not occur, write skew can", "Yes: error `40001` on concurrent update of the same row"],
+      ["`SERIALIZABLE`", "Serializable snapshot isolation (SSI). Behaves as if transactions ran one at a time", "Yes: error `40001`, retry the whole transaction"],
+      ["`READ UNCOMMITTED`", "Treated as `READ COMMITTED`. There are no dirty reads", "-"]
+    ],
+    lang: "sql",
+    code: R`BEGIN ISOLATION LEVEL REPEATABLE READ;
+  SELECT balance FROM accounts WHERE id = 1;
+  UPDATE accounts SET balance = balance - 100 WHERE id = 1;
+  UPDATE accounts SET balance = balance + 100 WHERE id = 2;
+COMMIT;
+
+-- Pessimistic locking
+SELECT * FROM accounts WHERE id = 1 FOR UPDATE;                 -- block others writing this row
+SELECT * FROM jobs WHERE state = 'new' FOR UPDATE SKIP LOCKED LIMIT 1;   -- work queue
+SELECT * FROM accounts WHERE id = 1 FOR UPDATE NOWAIT;          -- fail instead of waiting`,
+    more: [
+      "Keep transactions short. A long transaction holds back vacuum and keeps locks. `idle in transaction` sessions are a classic production problem.",
+      "Set `idle_in_transaction_session_timeout` and `lock_timeout` so mistakes cannot block the system for long.",
+      "Failed statements abort the transaction. Use `SAVEPOINT` to recover part of the way."
+    ]
+  });
+
+  card("sql", "Table partitioning", "Syntax", {
+    sum: "Split a huge table by range, list or hash. Gains: dropping old data instantly, smaller indexes, partition pruning.",
+    lang: "sql",
+    code: R`CREATE TABLE measurements (
+  device_id  bigint      NOT NULL,
+  ts         timestamptz NOT NULL,
+  value      double precision,
+  PRIMARY KEY (device_id, ts)            -- the key must include the partition column
+) PARTITION BY RANGE (ts);
+
+CREATE TABLE measurements_2026_10 PARTITION OF measurements
+  FOR VALUES FROM ('2026-10-01') TO ('2026-11-01');
+CREATE TABLE measurements_2026_11 PARTITION OF measurements
+  FOR VALUES FROM ('2026-11-01') TO ('2026-12-01');
+
+-- Retention: detach and drop instead of a slow DELETE
+ALTER TABLE measurements DETACH PARTITION measurements_2026_10 CONCURRENTLY;
+DROP TABLE measurements_2026_10;`,
+    more: [
+      "Queries must filter on the partition key to benefit from pruning. Check with `EXPLAIN`.",
+      "Create partitions ahead of time (cron, `pg_partman`). A row with no matching partition raises an error unless a default partition exists.",
+      "Do not partition small tables. Thousands of partitions slow planning."
+    ]
+  });
+
+  card("sql", "Full-text search and useful extensions", "Table", {
+    sum: "PostgreSQL often replaces a separate search or cache service for moderate needs.",
+    head: ["Feature or extension", "Use"],
+    rows: [
+      ["`tsvector`, `tsquery`, GIN index", "Built-in full-text search with stemming and ranking (`ts_rank`)"],
+      ["`pg_trgm`", "Fuzzy and `LIKE '%text%'` search with trigram GIN or GiST indexes"],
+      ["`pg_stat_statements`", "Per-query statistics. The first extension to install"],
+      ["`pgcrypto`", "Hashing and encryption functions"],
+      ["`pgvector`", "Vector similarity search (see the AI guide)"],
+      ["`PostGIS`", "Geospatial types and indexes"],
+      ["`btree_gin`, `btree_gist`", "Mix scalar columns into GIN or GiST and exclusion constraints"],
+      ["`postgres_fdw`", "Query other PostgreSQL servers as tables"],
+      ["`pg_partman`", "Automatic partition management"],
+      ["`TimescaleDB`", "Time-series storage and compression"],
+      ["`pg_cron`", "Schedule SQL inside the database"]
+    ],
+    lang: "sql",
+    code: R`ALTER TABLE articles ADD COLUMN tsv tsvector
+  GENERATED ALWAYS AS (to_tsvector('english', title || ' ' || body)) STORED;
+CREATE INDEX articles_tsv_idx ON articles USING gin (tsv);
+
+SELECT title, ts_rank(tsv, q) AS rank
+FROM articles, websearch_to_tsquery('english', 'postgres "write ahead log" -mysql') q
+WHERE tsv @@ q ORDER BY rank DESC LIMIT 10;`
+  });
+
+  card("sql", "Security: roles, grants and RLS", "Syntax", {
+    sum: "Roles are users and groups. Grant the minimum and revoke the default public access.",
+    lang: "sql",
+    code: R`CREATE ROLE app_rw  NOLOGIN;                         -- group role holding privileges
+GRANT CONNECT ON DATABASE shop TO app_rw;
+GRANT USAGE ON SCHEMA public TO app_rw;
+GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA public TO app_rw;
+ALTER DEFAULT PRIVILEGES IN SCHEMA public
+  GRANT SELECT, INSERT, UPDATE, DELETE ON TABLES TO app_rw;
+
+CREATE ROLE app LOGIN PASSWORD 'change-me' IN ROLE app_rw;   -- the application's login
+REVOKE CREATE ON SCHEMA public FROM PUBLIC;                  -- default since PostgreSQL 15
+
+-- Row-level security: each tenant sees only its rows
+ALTER TABLE invoices ENABLE ROW LEVEL SECURITY;
+CREATE POLICY tenant_isolation ON invoices
+  USING (tenant_id = current_setting('app.tenant_id')::bigint);
+-- per request: SET LOCAL app.tenant_id = '42';`,
+    more: [
+      "Use SCRAM authentication (`scram-sha-256`) and TLS. Restrict who can connect in `pg_hba.conf`.",
+      "Table owners and superusers bypass RLS unless `FORCE ROW LEVEL SECURITY` is set. The application must not connect as the owner.",
+      "Prefer parameterised queries (`$1`) everywhere. Never build SQL by string concatenation."
+    ]
+  });
+
+  /* ================= POSTGRESQL: PERFORMANCE AND OPERATIONS ================= */
+  card("pgops", "Index types", "Table", {
+    sum: "B-tree covers most needs. Choose another type when the query shape is different.",
+    head: ["Type", "Good for", "Operators"],
+    rows: [
+      ["B-tree (default)", "Equality, ranges, sorting, `LIKE 'abc%'` (with the right collation or `text_pattern_ops`)", "`= < > <= >= BETWEEN IN`"],
+      ["Hash", "Equality only. Rarely better than B-tree", "`=`"],
+      ["GIN", "Many values per row: arrays, `jsonb`, full-text, trigrams", "`@> ? @@ &&`"],
+      ["GiST", "Geometry, ranges, nearest neighbour, exclusion constraints", "`&& <-> @>`"],
+      ["SP-GiST", "Partitioned search spaces: tries, quadtrees, IP ranges", "Varies"],
+      ["BRIN", "Huge append-only tables where values correlate with physical order (timestamps). Tiny index", "`= < >`"]
+    ],
+    lang: "sql",
+    code: R`CREATE INDEX CONCURRENTLY orders_placed_idx ON orders (placed_at DESC);   -- no write lock, can fail: check for INVALID
+CREATE INDEX orders_open_idx ON orders (customer_id) WHERE status = 'new';       -- partial: smaller, faster
+CREATE INDEX users_lower_email ON users (lower(email));                          -- expression index
+CREATE INDEX orders_cover_idx ON orders (customer_id, placed_at) INCLUDE (total_cents);  -- index-only scans
+CREATE UNIQUE INDEX one_active_sub ON subscriptions (user_id) WHERE active;      -- conditional uniqueness
+CREATE INDEX logs_ts_brin ON logs USING brin (ts);`,
+    more: [
+      "Multicolumn B-tree: the order matters. An index on `(a, b)` serves `WHERE a = ?` and `WHERE a = ? AND b = ?`. PostgreSQL 18 added skip scan, which lets some queries use it without an `a` condition, but do not rely on it for speed.",
+      "Put equality columns first, then the range or sort column. Put the more selective column first when both are equality filters.",
+      "Every index slows writes and takes space. Drop unused ones (`pg_stat_user_indexes.idx_scan = 0` over a long period)."
+    ]
+  });
+
+  card("pgops", "Reading EXPLAIN", "Recipe", {
+    sum: "`EXPLAIN` shows the plan. `EXPLAIN (ANALYZE, BUFFERS)` runs the query and shows real numbers.",
+    lang: "text",
+    code: R`EXPLAIN (ANALYZE, BUFFERS) SELECT * FROM orders WHERE customer_id = 42 ORDER BY placed_at DESC LIMIT 10;
+
+Limit  (cost=0.43..8.5 rows=10 width=64) (actual time=0.03..0.05 rows=10 loops=1)
+  Buffers: shared hit=5
+  ->  Index Scan Backward using orders_cust_placed_idx on orders
+        (cost=0.43..120.2 rows=150 width=64) (actual time=0.03..0.04 rows=10 loops=1)
+        Index Cond: (customer_id = 42)
+        Buffers: shared hit=5
+Planning Time: 0.15 ms
+Execution Time: 0.07 ms`,
+    head: ["Look at", "What it tells you"],
+    rows: [
+      ["`rows=` estimated vs actual", "A big gap (10x or more) means stale or missing statistics. Run `ANALYZE` or add extended statistics"],
+      ["`Seq Scan` on a big table with a selective filter", "A missing or unusable index"],
+      ["`Rows Removed by Filter`", "Many removed rows means the index does not cover the filter"],
+      ["`Buffers: shared hit / read`", "Memory hits versus disk reads"],
+      ["`loops=N`", "Node ran N times. Multiply actual time by loops"],
+      ["`Sort Method: external merge`", "Sort spilled to disk. Raise `work_mem` for that query"],
+      ["`Nested Loop` with a big outer side", "Possible bad estimate. Hash or merge join may be better"],
+      ["`Heap Fetches` on Index Only Scan", "Visibility map is stale. Vacuum more"]
+    ],
+    more: [
+      "`ANALYZE` executes the statement. Wrap `INSERT`, `UPDATE` or `DELETE` in `BEGIN; ... ROLLBACK;`.",
+      "Test with production-sized data. A plan on 1,000 rows says little about 100 million.",
+      "Visualisers: explain.dalibo.com and explain.depesz.com make long plans readable."
+    ]
+  });
+
+  card("pgops", "Scans and joins at a glance", "Table", {
+    sum: "The planner picks the cheapest plan from statistics. These are its building blocks.",
+    head: ["Node", "How it works", "Chosen when"],
+    rows: [
+      ["Seq Scan", "Read the whole table", "Small table or most rows match"],
+      ["Index Scan", "Walk the index, fetch each row from the heap", "Few rows match"],
+      ["Index Only Scan", "Answer from the index alone", "All needed columns are in the index and pages are all-visible"],
+      ["Bitmap Index and Heap Scan", "Build a bitmap of pages, then read them in order", "Medium selectivity, or combining several indexes"],
+      ["Nested Loop", "For each outer row, probe the inner side", "Small outer side with an indexed inner side"],
+      ["Hash Join", "Build a hash table of one side, probe with the other", "Large unsorted inputs, equality join"],
+      ["Merge Join", "Merge two sorted inputs", "Both sides sorted or indexed"]
+    ]
+  });
+
+  card("pgops", "Common slow-query causes and fixes", "Table", {
+    sum: "Check these before you tune configuration.",
+    head: ["Cause", "Fix"],
+    rows: [
+      ["Function on an indexed column (`WHERE lower(email) = ...`, `WHERE date(ts) = ...`)", "Expression index, or rewrite as a range (`ts >= ... AND ts < ...`)"],
+      ["Type mismatch (text column compared to a number)", "Match types so the index is usable"],
+      ["`OFFSET 100000` pagination", "Keyset pagination: `WHERE (placed_at, id) < ($1, $2) ORDER BY placed_at DESC, id DESC LIMIT 50`"],
+      ["`SELECT *` over wide rows", "Select needed columns. Enables index-only scans"],
+      ["N+1 queries from the application", "Join, batch with `= ANY($1)`, or `LATERAL`"],
+      ["Count on a big table (`count(*)`)", "Approximate from statistics, maintain a counter, or use an index-only scan with a recent vacuum"],
+      ["Missing foreign key index", "Add an index on the referencing column"],
+      ["Wrong estimates", "`ANALYZE`, raise `default_statistics_target`, `CREATE STATISTICS` for correlated columns"],
+      ["Lock waits", "Find blockers in `pg_locks` and `pg_stat_activity`. Shorten transactions"],
+      ["Too many connections", "Use PgBouncer. Do not raise `max_connections` blindly"]
+    ]
+  });
+
+  card("pgops", "Finding trouble with the stats views", "Recipe", {
+    sum: "Queries to keep in a runbook.",
+    lang: "sql",
+    code: R`-- Top queries by total time (needs pg_stat_statements in shared_preload_libraries)
+SELECT round(total_exec_time::numeric, 0) AS total_ms, calls,
+       round(mean_exec_time::numeric, 2) AS mean_ms, left(query, 80) AS query
+FROM pg_stat_statements ORDER BY total_exec_time DESC LIMIT 10;
+
+-- What is running now
+SELECT pid, state, wait_event_type, wait_event, now() - xact_start AS xact_age, left(query, 80)
+FROM pg_stat_activity WHERE state <> 'idle' ORDER BY xact_start;
+
+-- Who blocks whom
+SELECT pid, pg_blocking_pids(pid) AS blocked_by, left(query, 60) FROM pg_stat_activity
+WHERE cardinality(pg_blocking_pids(pid)) > 0;
+
+-- Cancel the query / terminate the session
+SELECT pg_cancel_backend(12345);
+SELECT pg_terminate_backend(12345);
+
+-- Table sizes and index usage
+SELECT relname, pg_size_pretty(pg_total_relation_size(relid)) AS total FROM pg_catalog.pg_statio_user_tables
+ORDER BY pg_total_relation_size(relid) DESC LIMIT 10;
+SELECT relname, indexrelname, idx_scan FROM pg_stat_user_indexes WHERE idx_scan = 0;
+
+-- Cache hit ratio (aim for above 99 percent on OLTP)
+SELECT sum(blks_hit) * 100.0 / nullif(sum(blks_hit + blks_read), 0) FROM pg_stat_database;`
+  });
+
+  card("pgops", "VACUUM, autovacuum and bloat", "Concept", {
+    sum: "MVCC keeps old row versions. Vacuum removes the dead ones and updates statistics and the visibility map.",
+    head: ["Term", "Meaning"],
+    rows: [
+      ["Dead tuple", "An old row version no transaction can see any more"],
+      ["Bloat", "Dead space in tables and indexes that was not reused. Wastes memory and I/O"],
+      ["Autovacuum", "Background workers that vacuum and analyze based on thresholds"],
+      ["`VACUUM`", "Marks space reusable and updates the visibility map. Does not shrink the file"],
+      ["`VACUUM FULL`", "Rewrites the table to shrink it. Takes an exclusive lock. Avoid on live tables (use `pg_repack`)"],
+      ["`ANALYZE`", "Refreshes planner statistics"],
+      ["Transaction ID wraparound", "32-bit XIDs must be frozen. Vacuum does it. Severe lag forces a shutdown to protect data"],
+      ["HOT update", "A row update that needs no index change. Leave free space with `fillfactor` for hot-updated tables"]
+    ],
+    lang: "sql",
+    code: R`-- Tune a busy table to vacuum earlier (default: 20 percent dead rows)
+ALTER TABLE orders SET (autovacuum_vacuum_scale_factor = 0.02, autovacuum_analyze_scale_factor = 0.02);
+
+-- Dead tuples and last vacuum
+SELECT relname, n_live_tup, n_dead_tup, last_autovacuum, last_autoanalyze
+FROM pg_stat_user_tables ORDER BY n_dead_tup DESC LIMIT 10;
+
+-- Oldest transactions preventing cleanup, and wraparound risk
+SELECT datname, age(datfrozenxid) FROM pg_database ORDER BY 2 DESC;
+SELECT pid, now() - xact_start AS age, state FROM pg_stat_activity
+WHERE xact_start IS NOT NULL ORDER BY xact_start LIMIT 5;`,
+    watch: ["Long transactions, abandoned replication slots and prepared transactions block vacuum from removing rows. Bloat that keeps growing usually has one of those as its cause."]
+  });
+
+  card("pgops", "Key configuration settings", "Table", {
+    sum: "Start from a tuner (PGTune, your cloud's defaults) and then measure. Values below are starting points for a dedicated server.",
+    head: ["Setting", "Starting point", "Notes"],
+    rows: [
+      ["`shared_buffers`", "25% of RAM", "PostgreSQL's own cache. The OS cache does the rest"],
+      ["`effective_cache_size`", "50 to 75% of RAM", "A planner hint, allocates nothing"],
+      ["`work_mem`", "16 to 64 MB", "Per sort or hash node per query. Many connections times several nodes can exhaust RAM"],
+      ["`maintenance_work_mem`", "512 MB to 2 GB", "Index builds and vacuum"],
+      ["`max_connections`", "100 to 200", "Use a pooler for more clients"],
+      ["`random_page_cost`", "1.1 on SSD", "Default 4.0 suits spinning disks"],
+      ["`wal_level`", "`replica` or `logical`", "`logical` for logical replication and CDC"],
+      ["`max_wal_size` and `checkpoint_timeout`", "4 to 16 GB, 15 min", "Fewer, smoother checkpoints"],
+      ["`synchronous_commit`", "`on`", "`off` trades a small window of lost commits for speed. Never corrupts data"],
+      ["`io_method` (PostgreSQL 18)", "`worker` (default), `io_uring` on Linux", "Asynchronous I/O. Check the docs before changing"],
+      ["`log_min_duration_statement`", "250 to 1000 ms", "Log slow queries"],
+      ["`idle_in_transaction_session_timeout`", "30 s to 5 min", "Kill forgotten transactions"]
+    ],
+    lang: "ini",
+    code: R`# postgresql.conf (example for a 32 GB, 8-core SSD server)
+shared_buffers = 8GB
+effective_cache_size = 24GB
+work_mem = 32MB
+maintenance_work_mem = 1GB
+random_page_cost = 1.1
+max_wal_size = 8GB
+checkpoint_timeout = 15min
+shared_preload_libraries = 'pg_stat_statements'
+log_min_duration_statement = 500ms
+idle_in_transaction_session_timeout = 60s`,
+    more: ["Most changes apply with `SELECT pg_reload_conf();`. `shared_buffers`, `max_connections` and `shared_preload_libraries` need a restart."]
+  });
+
+  card("pgops", "Connection pooling with PgBouncer", "Concept", {
+    sum: "Each PostgreSQL connection is a process using memory. Pool connections between many clients and few server sessions.",
+    head: ["Pool mode", "A server connection is held for", "Caveat"],
+    rows: [
+      ["Session", "The client's whole session", "Least saving. Everything works"],
+      ["Transaction", "One transaction", "Best saving. No session state across transactions: `SET`, advisory session locks, temp tables. Prepared statements need protocol-level support in recent PgBouncer"],
+      ["Statement", "One statement", "No multi-statement transactions"]
+    ],
+    lang: "ini",
+    code: R`; pgbouncer.ini
+[databases]
+shop = host=10.0.0.5 port=5432 dbname=shop
+
+[pgbouncer]
+listen_port = 6432
+auth_type = scram-sha-256
+auth_file = /etc/pgbouncer/userlist.txt
+pool_mode = transaction
+max_client_conn = 2000
+default_pool_size = 20`,
+    more: [
+      "Size the pool near `cores * 2 + spindles` for the busiest workloads. More server connections than the CPU can run mostly add contention.",
+      "Application pools (HikariCP and others) also need limits. Total across all app instances must stay below the server's capacity."
+    ]
+  });
+
+  card("pgops", "WAL, replication and high availability", "Table", {
+    sum: "Every change is written to the write-ahead log (WAL) first. Replicas replay it.",
+    head: ["Feature", "What it does", "Notes"],
+    rows: [
+      ["Streaming (physical) replication", "Replica applies WAL byte for byte, a full copy of the cluster", "Read replicas and failover. Same major version"],
+      ["Synchronous replication", "Commit waits for a standby to confirm", "No data loss on failover, higher commit latency. `synchronous_standby_names`"],
+      ["Logical replication", "Publish selected tables, subscribers apply row changes", "Cross-version upgrades, selective copies, CDC with Debezium"],
+      ["Replication slot", "Server remembers what a consumer still needs", "An inactive slot makes WAL pile up and can fill the disk. Monitor `pg_replication_slots`"],
+      ["Hot standby", "Read-only queries on a replica", "Long queries can conflict with replay. Replicas lag"],
+      ["Failover managers", "Patroni, repmgr, cloud managed HA", "Automatic leader election with a distributed store or the cloud control plane"]
+    ],
+    lang: "sql",
+    code: R`-- On the primary
+SELECT client_addr, state, sync_state, pg_wal_lsn_diff(sent_lsn, replay_lsn) AS lag_bytes
+FROM pg_stat_replication;
+SELECT slot_name, active, pg_size_pretty(pg_wal_lsn_diff(pg_current_wal_lsn(), restart_lsn)) AS retained
+FROM pg_replication_slots;
+
+-- On a replica
+SELECT pg_is_in_recovery(), now() - pg_last_xact_replay_timestamp() AS replay_delay;
+
+-- Logical replication
+CREATE PUBLICATION shop_pub FOR TABLE orders, customers;                          -- publisher
+CREATE SUBSCRIPTION shop_sub CONNECTION 'host=primary dbname=shop user=repl' PUBLICATION shop_pub;   -- subscriber`,
+    more: [
+      "Asynchronous replicas can lose the last transactions on failover. Decide your RPO, then choose sync or async.",
+      "Applications reading from replicas must tolerate lag (read-your-writes problems). Route such reads to the primary."
+    ]
+  });
+
+  card("pgops", "Backup and recovery", "Recipe", {
+    sum: "Two layers: logical dumps for portability, physical backups with WAL archiving for point-in-time recovery.",
+    lang: "sh",
+    code: R`# Logical backup (one database, custom format, parallel restore possible)
+pg_dump -Fc -d shop -f shop.dump
+pg_restore -d shop_new --jobs 4 --clean --if-exists shop.dump
+pg_dumpall --globals-only > globals.sql        # roles and tablespaces
+
+# Physical base backup
+pg_basebackup -h primary -U repl -D /backup/base -Ft -z -P
+
+# Point-in-time recovery: archive WAL continuously (postgresql.conf)
+#   archive_mode = on
+#   archive_command = 'pgbackrest --stanza=main archive-push %p'
+# Restore: restore base, then in postgresql.conf
+#   restore_command = 'pgbackrest --stanza=main archive-get %f "%p"'
+#   recovery_target_time = '2026-10-31 14:00:00+00'
+# and create an empty recovery.signal file before starting the server.
+
+# pgBackRest (recommended tool): full, differential and incremental backups
+pgbackrest --stanza=main --type=full backup
+pgbackrest --stanza=main info`,
+    more: [
+      "A backup counts only after a successful restore test. Automate restore drills and time them against your RTO.",
+      "Keep copies off the server and off the account, with retention and immutability for ransomware safety.",
+      "Major upgrades: `pg_upgrade` (use `--link` for speed, and `--jobs`) or logical replication for near-zero downtime. PostgreSQL 18 keeps planner statistics across the upgrade."
+    ]
+  });
+
+  card("pgops", "Schema migrations without downtime", "Table", {
+    sum: "Some DDL takes strong locks that queue behind long transactions and block every query after them.",
+    head: ["Change", "Safe approach"],
+    rows: [
+      ["Add a column", "`ADD COLUMN x type` with no default or with a constant default is fast on PostgreSQL 11+. Volatile defaults rewrite the table"],
+      ["Add `NOT NULL`", "Add a `CHECK (x IS NOT NULL) NOT VALID`, then `VALIDATE CONSTRAINT`, then set `NOT NULL`"],
+      ["Add an index", "`CREATE INDEX CONCURRENTLY`. Check for an `INVALID` index afterwards"],
+      ["Add a foreign key", "`ADD CONSTRAINT ... NOT VALID`, then `VALIDATE CONSTRAINT` (weaker lock)"],
+      ["Change a column type", "Add a new column, backfill in batches, dual-write, switch, drop the old one"],
+      ["Rename a column or table", "Expand and contract: add new, migrate readers and writers, remove old"],
+      ["Drop a column", "First deploy code that no longer uses it, then drop"]
+    ],
+    lang: "sql",
+    code: R`SET lock_timeout = '3s';          -- fail fast instead of queueing behind a long transaction
+ALTER TABLE orders ADD COLUMN note text;
+RESET lock_timeout;
+
+-- backfill in batches
+UPDATE orders SET note = '' WHERE id BETWEEN 1 AND 10000 AND note IS NULL;`,
+    watch: ["A harmless-looking `ALTER TABLE` waiting for a lock blocks all later queries on that table. Always set `lock_timeout` for DDL and retry."]
+  });
+
+  /* ================= DATABASE INTERNALS ================= */
+  card("internals", "ACID, precisely", "Table", {
+    sum: "The four guarantees of a transaction, and the mechanism behind each.",
+    head: ["Property", "Promise", "Mechanism"],
+    rows: [
+      ["Atomicity", "All of a transaction happens or none of it", "Write-ahead log, undo or MVCC visibility rules"],
+      ["Consistency", "Constraints hold before and after", "Constraints, triggers, application rules"],
+      ["Isolation", "Concurrent transactions do not see each other's partial work", "MVCC, locking, serializable validation"],
+      ["Durability", "Committed data survives a crash", "WAL flushed to disk (`fsync`) before commit returns"]
+    ],
+    more: [
+      "Consistency in ACID means invariants you declared. It is not the same as consistency in CAP.",
+      "Durability depends on the hardware honouring flushes. Disks and virtual machines that lie about `fsync` break it."
+    ]
+  });
+
+  card("internals", "How a database stores data", "Concept", {
+    sum: "Fixed-size pages are the unit of I/O. Everything above them is organisation.",
+    lang: "text",
+    code: R`file (relation)  =  sequence of 8 KB pages (PostgreSQL)   |   16 KB pages (InnoDB)
+
+page:  [header | item pointers ->  ...free space...  <- tuples (rows) ]
+                   |                                      ^
+                   +--- (page number, slot) = TID/ctid ---+
+
+heap table:  rows in no particular order, found through indexes
+index (B-tree): pages of sorted keys -> pointers (TIDs) to heap rows
+buffer pool:  RAM cache of pages. Reads go: buffer pool -> OS cache -> disk`,
+    head: ["Idea", "Detail"],
+    rows: [
+      ["Heap table (PostgreSQL)", "Rows are stored unordered. Updates create a new row version"],
+      ["Clustered index (InnoDB, SQL Server)", "Table rows live inside the primary key B-tree. Lookups by key are one step, secondary indexes store the key"],
+      ["TOAST", "PostgreSQL moves large values (above about 2 KB) out of line and compresses them"],
+      ["Row vs column store", "Row stores keep whole rows together (OLTP). Column stores keep each column together, compress well and scan fast (OLAP)"]
+    ]
+  });
+
+  card("internals", "B-tree indexes", "Concept", {
+    sum: "A balanced tree of sorted pages. A lookup reads one page per level, usually 3 to 4 levels even for billions of rows.",
+    lang: "text",
+    code: R`                [ 40 | 80 ]                      root (cached in RAM)
+              /      |      \
+      [10|25]    [50|65]    [90|99]               internal pages
+      /  |  \     ...         ...
+ [leaf pages: sorted keys + pointers, linked left to right]   -> range scans follow the links`,
+    head: ["Fact", "Consequence"],
+    rows: [
+      ["Fan-out of hundreds of keys per page", "Height stays tiny. 3 levels hold millions of keys, 4 levels billions"],
+      ["Leaf pages are linked", "Range scans and `ORDER BY` read sequentially"],
+      ["Inserts split full pages", "Random keys (UUIDv4) scatter inserts and cause splits and cache misses. Ordered keys append at the right edge"],
+      ["Leftmost prefix rule", "Composite `(a, b, c)` helps `a`, `a,b`, `a,b,c`. It does not help `b` alone"],
+      ["Selectivity", "An index is worth using when it narrows to a small fraction of rows"],
+      ["Write cost", "Each index is updated on every insert and often on update"]
+    ]
+  });
+
+  card("internals", "LSM trees versus B-trees", "Table", {
+    sum: "Two ways to organise write-heavy data. RocksDB, Cassandra, ScyllaDB and many time-series stores use LSM trees.",
+    head: ["", "B-tree (PostgreSQL, MySQL InnoDB)", "LSM tree (RocksDB, Cassandra)"],
+    rows: [
+      ["Write path", "Find the page, update in place (plus WAL)", "Append to a log and an in-memory table (memtable), flush to sorted immutable files (SSTables)"],
+      ["Read path", "One tree walk", "Check memtable and several SSTables, using Bloom filters to skip files"],
+      ["Strength", "Fast point reads and range scans, predictable reads", "Very high write throughput, good compression"],
+      ["Cost", "Random writes, page splits, write amplification from full-page writes", "Read amplification, background compaction I/O, space amplification"],
+      ["Deletes", "Dead tuples cleaned by vacuum", "Tombstones removed during compaction"]
+    ],
+    more: ["Bloom filter: a compact structure that says \"definitely not here\" or \"maybe here\". It saves disk reads for missing keys."]
+  });
+
+  card("internals", "Write-ahead logging and crash recovery", "Concept", {
+    sum: "Write the change to a sequential log first. Data pages can be written later, because the log can replay them.",
+    lang: "text",
+    code: R`1. Transaction changes a page in the buffer pool (page is now dirty, not yet on disk)
+2. The change is described in a WAL record and appended to the log
+3. COMMIT: flush the WAL up to this point to disk (fsync)  ->  now durable, return OK
+4. Later: checkpointer writes dirty data pages to their files
+5. Crash? On restart, replay WAL from the last checkpoint: committed changes are redone`,
+    head: ["Term", "Meaning"],
+    rows: [
+      ["LSN", "Log sequence number: a byte position in the WAL"],
+      ["Checkpoint", "A point where all earlier changes are on disk. Recovery starts here"],
+      ["Full-page writes", "After a checkpoint, the first change to a page logs the whole page, which protects against torn writes"],
+      ["Group commit", "Many transactions share one `fsync`"],
+      ["Sequential vs random I/O", "The WAL is appended sequentially, which is why commit is fast even when data files are scattered"]
+    ],
+    more: ["The same log powers replication, point-in-time recovery and change data capture. That is why one idea shows up in so many features."]
+  });
+
+  card("internals", "MVCC: multi-version concurrency control", "Concept", {
+    sum: "Writers create new row versions. Readers see the version that was current for their snapshot. No read locks needed.",
+    lang: "text",
+    code: R`row version:   xmin = creating txid   xmax = deleting/updating txid (0 if live)
+
+T100 INSERT  row v1                 v1(xmin=100, xmax=0)
+T105 UPDATE  same row               v1(xmin=100, xmax=105)   v2(xmin=105, xmax=0)
+Snapshot taken before T105 commits  -> sees v1
+Snapshot taken after                -> sees v2
+VACUUM removes v1 when no snapshot can see it any more`,
+    head: ["Aspect", "PostgreSQL", "MySQL InnoDB, Oracle"],
+    rows: [
+      ["Old versions live", "In the table itself (heap)", "In an undo log or rollback segment"],
+      ["Cleanup", "VACUUM", "Purge thread"],
+      ["Update cost", "New tuple plus index entries (HOT avoids some)", "In-place update plus an undo record"],
+      ["Risk", "Table bloat", "Long transactions grow the undo history"]
+    ]
+  });
+
+  card("internals", "Concurrency anomalies", "Table", {
+    wide: true,
+    sum: "What each isolation level allows according to the SQL standard, and what PostgreSQL actually does.",
+    head: ["Anomaly", "What goes wrong", "Read committed", "Repeatable read", "Serializable"],
+    rows: [
+      ["Dirty read", "Reading another transaction's uncommitted data", "No (PostgreSQL)", "No", "No"],
+      ["Non-repeatable read", "Same row read twice gives different values", "Possible", "No", "No"],
+      ["Phantom read", "Same query returns different rows", "Possible", "No (PostgreSQL)", "No"],
+      ["Lost update", "Two read-modify-write cycles overwrite each other", "Possible unless you lock or use atomic updates", "Error, retry", "Error, retry"],
+      ["Write skew", "Two transactions each check a rule, then write different rows, together breaking the rule", "Possible", "Possible", "Prevented, error and retry"]
+    ],
+    more: [
+      "Write skew example: two doctors on call each check that another doctor is on call, then both go off call. Fixes: serializable isolation, `SELECT ... FOR UPDATE` on a shared row, or a constraint.",
+      "Lost update fix without locks: `UPDATE accounts SET balance = balance - 100 WHERE id = 1`. The database does the read and write atomically."
+    ]
+  });
+
+  card("internals", "Locks and deadlocks", "Table", {
+    sum: "MVCC removes most read locking. Writers still lock rows and sometimes tables.",
+    head: ["Lock", "Taken by", "Blocks"],
+    rows: [
+      ["Row lock (exclusive)", "`UPDATE`, `DELETE`, `SELECT ... FOR UPDATE`", "Other writers on the same row"],
+      ["Row lock (shared)", "`SELECT ... FOR SHARE`, foreign key checks", "Writers on that row"],
+      ["Table lock `ACCESS SHARE`", "Plain `SELECT`", "Only `ACCESS EXCLUSIVE`"],
+      ["Table lock `ACCESS EXCLUSIVE`", "`DROP`, many `ALTER TABLE`, `VACUUM FULL`, `TRUNCATE`", "Everything, including reads"],
+      ["Advisory lock", "`pg_advisory_lock(key)`", "Other callers using the same key. For application-level mutual exclusion"],
+      ["Gap and next-key locks (InnoDB)", "Range queries under repeatable read", "Inserts into the range"]
+    ],
+    more: [
+      "Deadlock: T1 holds A and wants B, T2 holds B and wants A. The database detects it and aborts one transaction. Fix by always locking rows in a consistent order, and keep transactions short.",
+      "Handle `40P01` (deadlock) and `40001` (serialization failure) by retrying the whole transaction."
+    ]
+  });
+
+  card("internals", "Query execution pipeline", "Concept", {
+    sum: "From SQL text to rows.",
+    lang: "text",
+    code: R`SQL text
+  -> parser           syntax check, builds a parse tree
+  -> analyzer         resolves names and types, checks permissions
+  -> rewriter         expands views and rules
+  -> planner/optimizer  enumerates plans, estimates cost from statistics, picks the cheapest
+  -> executor         runs the plan tree; each node pulls rows from its children
+  -> result rows`,
+    head: ["Planner input", "Source"],
+    rows: [
+      ["Row counts and page counts", "`pg_class.reltuples`, `relpages`"],
+      ["Value distribution", "`pg_stats` (most common values, histogram, null fraction, correlation) from `ANALYZE`"],
+      ["Cost constants", "`seq_page_cost`, `random_page_cost`, `cpu_tuple_cost` and others"],
+      ["Join order and method", "Dynamic programming for small joins, genetic search (GEQO) for very large ones"]
+    ],
+    more: ["Prepared statements may reuse a generic plan. A plan good for a common value can be bad for a rare one. Check `plan_cache_mode` if parameter values vary a lot."]
+  });
+
+  card("internals", "Normalisation in short", "Table", {
+    sum: "Store each fact once. Denormalise on purpose, with measurements.",
+    head: ["Form", "Rule", "Violation example"],
+    rows: [
+      ["1NF", "Atomic values, no repeating groups", "`phones = '123, 456'`"],
+      ["2NF", "Every non-key column depends on the whole key", "`(order_id, product_id) -> product_name` depends on product only"],
+      ["3NF", "Non-key columns depend only on the key, not on each other", "`zip -> city` stored in the customer table"],
+      ["BCNF", "Every determinant is a candidate key", "Rare edge cases of overlapping keys"]
+    ],
+    more: [
+      "Denormalise when reads dominate and joins are the measured bottleneck: counters, summary tables, materialised views, copies of rarely changing names.",
+      "Every duplicated fact needs a plan to keep it consistent (trigger, job, application code, or accept eventual consistency)."
+    ]
+  });
+
+  card("internals", "Distributed data: CAP, PACELC and consistency", "Table", {
+    sum: "When a network partition splits a cluster, you choose between consistency and availability. Without a partition, you still trade latency for consistency.",
+    head: ["Idea", "Meaning"],
+    rows: [
+      ["CAP", "During a partition, a system can stay consistent (refuse some requests) or stay available (accept requests that may be stale). Partitions are not optional in real networks"],
+      ["PACELC", "If Partition: Availability or Consistency. Else: Latency or Consistency. Describes everyday trade-offs too"],
+      ["Linearizable", "Behaves like one copy with a single global order. Strongest, costs coordination"],
+      ["Sequential and causal", "Weaker orders that preserve causality (a reply is never seen before its question)"],
+      ["Eventual consistency", "Replicas converge if updates stop. Reads may be stale meanwhile"],
+      ["Read-your-writes", "A client sees its own writes. Often enforced by routing to the primary or using session tokens"],
+      ["Quorum", "R + W > N guarantees that a read overlaps the latest write in leaderless systems"]
+    ],
+    more: ["Single-node PostgreSQL is not partition-tolerant in the CAP sense. Replicated setups behave as CP or AP depending on synchronous replication and failover settings."]
+  });
+
+  card("internals", "Replication, consensus and sharding", "Table", {
+    sum: "How databases and brokers spread data over machines.",
+    head: ["Topic", "How it works", "Used by"],
+    rows: [
+      ["Leader and follower", "Writes go to the leader, followers copy the log", "PostgreSQL, MySQL, Redis, Kafka partitions"],
+      ["Multi-leader", "Several writable sites, conflicts resolved later", "Multi-region setups, CRDT based stores"],
+      ["Leaderless", "Any replica accepts writes, quorum reads and writes", "Cassandra, DynamoDB style systems"],
+      ["Raft and Paxos", "Replicas agree on a log by majority vote and elect a leader", "etcd, Kafka KRaft controllers, RabbitMQ quorum queues, CockroachDB"],
+      ["Sharding (partitioning)", "Split data across nodes by key", "Redis Cluster (hash slots), Kafka partitions, Citus, Vitess, MongoDB"],
+      ["Consistent hashing", "Keys and nodes on a ring, adding a node moves only a small share of keys", "Cassandra, DynamoDB, many caches"],
+      ["Two-phase commit (2PC)", "Coordinator asks all participants to prepare, then commit", "XA transactions, `PREPARE TRANSACTION`. Blocks if the coordinator dies"]
+    ],
+    more: [
+      "A Raft group of N nodes tolerates fewer than N/2 failures. 3 nodes survive 1 failure, 5 nodes survive 2. Use odd sizes.",
+      "Choose the shard key for even load and for queries that hit one shard. Cross-shard joins and transactions are expensive."
+    ]
+  });
+
+  card("internals", "Latency numbers worth knowing", "Table", {
+    sum: "Orders of magnitude for reasoning about design. Exact values vary by hardware.",
+    head: ["Operation", "Rough time"],
+    rows: [
+      ["CPU cache hit", "1 ns"],
+      ["Main memory read", "100 ns"],
+      ["Read 1 MB sequentially from memory", "about 50 microseconds"],
+      ["SSD random read", "50 to 150 microseconds"],
+      ["`fsync` on a good NVMe SSD", "0.1 to 1 ms (much more on network disks)"],
+      ["Round trip in the same data centre", "0.2 to 1 ms"],
+      ["Round trip across regions", "50 to 150 ms"],
+      ["Spinning disk seek", "5 to 10 ms"]
+    ],
+    more: ["A query doing 1,000 network round trips (the N+1 problem) at 0.5 ms each takes half a second before any work happens."]
+  });
+
+  /* ================= REDIS ================= */
+  card("redis", "What Redis is", "Concept", {
+    sum: "An in-memory data structure server. Single-threaded command execution, microsecond latency, optional persistence.",
+    head: ["Fact", "Detail"],
+    rows: [
+      ["Model", "Keys map to typed values: strings, hashes, lists, sets, sorted sets, streams, bitmaps, HyperLogLog, geo"],
+      ["Execution", "Commands run one at a time on a main thread, so each command is atomic. I/O threads can help with networking"],
+      ["Typical uses", "Cache, session store, rate limiting, leaderboards, queues and streams, pub/sub, locks, counters"],
+      ["Licensing (2026)", "Redis 8 is available under AGPLv3 (tri-licensed with RSALv2 and SSPLv1) and bundles the former modules: JSON, Search, Time Series and probabilistic structures"],
+      ["Alternatives", "Valkey (Linux Foundation fork of Redis 7.2, BSD licence, backed by AWS and Google), KeyDB, Dragonfly, and managed services such as ElastiCache, MemoryDB and Azure Cache"]
+    ],
+    more: [
+      "Valkey and Redis share the core protocol (RESP) and most commands, so client libraries work with both. Newer features have started to diverge, so check compatibility for modules and recent commands.",
+      "Redis is not a primary database by default. With persistence and replication it can be, but plan for memory cost and recovery time."
+    ]
+  });
+
+  card("redis", "Data types and when to use them", "Table", {
+    wide: true,
+    sum: "Choosing the right type is most of Redis design.",
+    head: ["Type", "Commands", "Use for"],
+    rows: [
+      ["String", "`SET GET INCR DECR MSET SETNX APPEND`", "Cache values, counters, flags, serialized objects"],
+      ["Hash", "`HSET HGET HGETALL HINCRBY HDEL`", "Objects with fields: user profile, shopping cart"],
+      ["List", "`LPUSH RPUSH LPOP BRPOP LRANGE LTRIM`", "Simple queues, recent items, activity feeds"],
+      ["Set", "`SADD SREM SISMEMBER SMEMBERS SINTER SUNION`", "Unique members, tags, who liked what, set maths"],
+      ["Sorted set", "`ZADD ZRANGE ZREVRANGE ZRANK ZRANGEBYSCORE ZINCRBY`", "Leaderboards, priority queues, time-ordered indexes, sliding windows"],
+      ["Stream", "`XADD XREAD XGROUP XREADGROUP XACK XAUTOCLAIM`", "Durable event log with consumer groups"],
+      ["Bitmap, bitfield", "`SETBIT GETBIT BITCOUNT BITOP`", "Daily active flags per user ID, compact booleans"],
+      ["HyperLogLog", "`PFADD PFCOUNT PFMERGE`", "Approximate distinct counts in 12 KB, error about 0.8 percent"],
+      ["Geo", "`GEOADD GEOSEARCH`", "Nearby search"],
+      ["JSON, Search, Time Series, Bloom (modules, built into Redis 8)", "`JSON.SET`, `FT.SEARCH`, `TS.ADD`, `BF.ADD`", "Documents, full-text and vector search, metrics, membership tests"]
+    ]
+  });
+
+  card("redis", "Core commands", "Syntax", {
+    sum: "Run these in `redis-cli`. Replies show on the right.",
+    lang: "redis",
+    code: R`SET user:42:name "Asha"
+GET user:42:name                       # "Asha"
+SET session:abc "data" EX 3600 NX      # only if absent, expire in 1 hour (set + ttl, atomic)
+INCR page:home:views                   # atomic counter
+EXPIRE user:42:name 60
+TTL user:42:name                       # seconds left, -1 no expiry, -2 key missing
+DEL user:42:name
+UNLINK big:key                         # delete in the background, safe for large values
+
+HSET user:42 name Asha plan pro logins 0
+HINCRBY user:42 logins 1
+HGETALL user:42
+
+LPUSH queue:emails job1                # push left
+BRPOP queue:emails 5                   # blocking pop right, wait up to 5 seconds
+SADD tags:post:7 redis cache db
+SISMEMBER tags:post:7 cache
+ZADD leaderboard 1500 asha 1720 ben
+ZREVRANGE leaderboard 0 2 WITHSCORES   # top 3
+ZRANK leaderboard asha
+
+SCAN 0 MATCH user:* COUNT 100          # iterate keys safely (never KEYS * in production)
+TYPE user:42
+OBJECT ENCODING user:42
+MEMORY USAGE user:42`,
+    more: [
+      "Key naming convention: `object:id:field`, with colons. Keep keys short and consistent, since keys use memory too.",
+      "Every key should have a TTL unless it is meant to live forever. Untracked keys without expiry are the usual cause of memory growth."
+    ]
+  });
+
+  card("redis", "Expiration and eviction", "Table", {
+    sum: "When memory is full, `maxmemory-policy` decides what happens.",
+    head: ["Policy", "Behaviour"],
+    rows: [
+      ["`noeviction` (default)", "Writes fail with an error when memory is full. Right for a database-like use"],
+      ["`allkeys-lru`", "Evict least recently used keys. A good default for caches"],
+      ["`allkeys-lfu`", "Evict least frequently used keys. Better for skewed access"],
+      ["`volatile-lru` / `volatile-lfu` / `volatile-ttl`", "Only keys with a TTL are candidates"],
+      ["`allkeys-random`, `volatile-random`", "Random choice"]
+    ],
+    lang: "ini",
+    code: R`# redis.conf
+maxmemory 4gb
+maxmemory-policy allkeys-lfu`,
+    more: [
+      "Expiry is lazy plus a periodic sampling of keys, so expired keys may use memory for a short time.",
+      "Set `maxmemory` below the machine's RAM, leaving room for fork copy-on-write during snapshots and for replica buffers."
+    ]
+  });
+
+  card("redis", "Persistence: RDB and AOF", "Table", {
+    sum: "Memory is fast and volatile. Persistence is optional and has a cost.",
+    head: ["", "RDB snapshots", "AOF (append-only file)"],
+    rows: [
+      ["What", "Point-in-time dump of the dataset", "Log of every write command"],
+      ["Data loss on crash", "Everything since the last snapshot (minutes)", "About 1 second with `everysec`, none with `always` (slow)"],
+      ["Restart speed", "Fast", "Slower, rewritten periodically to shrink"],
+      ["File size", "Compact", "Larger"],
+      ["Cost", "A `fork()` per snapshot. Memory use can spike with copy-on-write", "Disk writes, fsync policy"]
+    ],
+    lang: "ini",
+    code: R`save 900 1 300 100 60 10000      # RDB: snapshot if N changes in M seconds
+appendonly yes                     # AOF on
+appendfsync everysec               # always | everysec | no
+aof-use-rdb-preamble yes           # AOF rewrite starts with an RDB image (fast load)`,
+    more: [
+      "Pure cache: disable persistence for speed. Session store or primary data: use AOF `everysec` plus RDB, and replicas.",
+      "Test restores. A dump that nobody loaded is unverified."
+    ]
+  });
+
+  card("redis", "Replication, Sentinel and Cluster", "Table", {
+    sum: "Three levels of availability and scale.",
+    head: ["Mode", "What you get", "Notes"],
+    rows: [
+      ["Replication", "Asynchronous copies for reads and a standby", "A replica can miss the last writes on failover. `WAIT` can request acknowledgements"],
+      ["Sentinel", "Monitoring and automatic failover for one primary with replicas", "Run 3 or more Sentinels. Clients ask Sentinel for the current primary"],
+      ["Cluster", "Sharding over 16384 hash slots across primaries, each with replicas", "Needs cluster-aware clients"]
+    ],
+    lang: "sh",
+    code: R`redis-cli --cluster create 10.0.0.1:6379 10.0.0.2:6379 10.0.0.3:6379 \
+          10.0.0.4:6379 10.0.0.5:6379 10.0.0.6:6379 --cluster-replicas 1
+redis-cli -c -h 10.0.0.1 CLUSTER INFO         # -c follows MOVED redirects
+redis-cli CLUSTER KEYSLOT "user:42"           # slot = CRC16(key) mod 16384`,
+    more: [
+      "Multi-key commands and Lua scripts need all keys in one slot. Use hash tags: `{user:42}:cart` and `{user:42}:profile` hash on the text inside braces.",
+      "Cluster does not make a big key or a hot key faster. Both stay on one node."
+    ]
+  });
+
+  card("redis", "Transactions, scripts and pipelining", "Syntax", {
+    sum: "Group commands atomically, or cut network round trips.",
+    lang: "redis",
+    code: R`MULTI                          # queue commands, run together
+DECR stock:sku1
+LPUSH orders:pending 1001
+EXEC                           # no rollback: a failing command does not undo the others
+
+WATCH balance:42               # optimistic lock: EXEC fails if the key changed
+MULTI
+DECRBY balance:42 100
+EXEC
+
+# Lua script runs atomically on the server
+EVAL "local c = redis.call('INCR', KEYS[1]); if c == 1 then redis.call('EXPIRE', KEYS[1], ARGV[1]) end; return c" 1 rate:ip:1.2.3.4 60`,
+    more: [
+      "Redis Functions (`FUNCTION LOAD`) are the persistent, replicated alternative to ad-hoc `EVAL` scripts.",
+      "Pipelining sends many commands without waiting for each reply. It can improve throughput by 10x or more. In clients: `pipe = r.pipeline(); ...; pipe.execute()`.",
+      "Scripts block the server while they run. Keep them short."
+    ]
+  });
+
+  card("redis", "Pattern: cache-aside", "Recipe", {
+    sum: "The application checks the cache, falls back to the database and fills the cache.",
+    lang: "python",
+    code: R`import json, random, redis
+r = redis.Redis(host="localhost", port=6379, decode_responses=True)
+
+def get_user(user_id: int):
+    key = f"user:{user_id}"
+    cached = r.get(key)
+    if cached is not None:
+        return json.loads(cached)
+    row = db.fetch_user(user_id)                  # slow path
+    ttl = 3600 + random.randint(0, 300)           # jitter avoids many keys expiring together
+    r.set(key, json.dumps(row), ex=ttl)
+    return row
+
+def update_user(user_id: int, data):
+    db.save_user(user_id, data)
+    r.delete(f"user:{user_id}")                   # invalidate, do not update the cache`,
+    head: ["Problem", "Cause", "Fix"],
+    rows: [
+      ["Stampede (thundering herd)", "A hot key expires and many requests hit the database at once", "Lock per key while one caller rebuilds, serve stale while refreshing, TTL jitter"],
+      ["Penetration", "Requests for keys that do not exist skip the cache every time", "Cache a short-lived negative result, or use a Bloom filter"],
+      ["Avalanche", "Many keys expire together or the cache goes down", "Random TTLs, replicas, rate-limit the fallback"],
+      ["Stale data", "Update and invalidate race", "Short TTL, delete after commit, versioned keys"]
+    ]
+  });
+
+  card("redis", "Pattern: rate limiter", "Recipe", {
+    sum: "A fixed window is simplest. A sliding window with a sorted set is smoother.",
+    lang: "python",
+    code: R`import time, uuid
+
+def allow_fixed(r, user, limit=100, window=60):
+    key = f"rl:{user}:{int(time.time() // window)}"
+    n = r.incr(key)
+    if n == 1:
+        r.expire(key, window)
+    return n <= limit
+
+SLIDING = """
+local key, now, window, limit, member = KEYS[1], tonumber(ARGV[1]), tonumber(ARGV[2]), tonumber(ARGV[3]), ARGV[4]
+redis.call('ZREMRANGEBYSCORE', key, 0, now - window)
+if redis.call('ZCARD', key) < limit then
+  redis.call('ZADD', key, now, member)
+  redis.call('PEXPIRE', key, window)
+  return 1
+end
+return 0
+"""
+def allow_sliding(r, user, limit=100, window_ms=60_000):
+    now = int(time.time() * 1000)
+    return r.eval(SLIDING, 1, f"rl:{user}", now, window_ms, limit, f"{now}-{uuid.uuid4()}") == 1`,
+    more: ["The script makes the check and the insert atomic. Without it, two requests can both pass at the limit."]
+  });
+
+  card("redis", "Pattern: distributed lock", "Recipe", {
+    sum: "Good enough for efficiency (avoid duplicate work). Be careful when correctness depends on it.",
+    lang: "python",
+    code: R`import uuid
+
+RELEASE = """
+if redis.call('GET', KEYS[1]) == ARGV[1] then return redis.call('DEL', KEYS[1]) else return 0 end
+"""
+def acquire(r, name, ttl_ms=10_000):
+    token = str(uuid.uuid4())
+    ok = r.set(f"lock:{name}", token, nx=True, px=ttl_ms)     # atomic: only if absent, with expiry
+    return token if ok else None
+
+def release(r, name, token):
+    r.eval(RELEASE, 1, f"lock:{name}", token)                 # delete only if we still own it`,
+    watch: [
+      "If the holder pauses (GC, slow call) longer than the TTL, another client takes the lock and both run. For correctness, add a fencing token that the protected resource checks, or use a database lock or a consensus system (etcd, ZooKeeper).",
+      "A lock on a single Redis node is lost on failover if the write had not reached the replica. Redlock across several nodes is debated for safety-critical use."
+    ]
+  });
+
+  card("redis", "Pattern: leaderboard and counters", "Recipe", {
+    sum: "Sorted sets rank millions of members with O(log N) updates.",
+    lang: "redis",
+    code: R`ZADD scores 1500 asha 1720 ben 1310 chen
+ZINCRBY scores 50 asha                     # asha now 1550
+ZREVRANK scores asha                       # 0-based rank from the top
+ZREVRANGE scores 0 9 WITHSCORES            # top 10
+ZRANGEBYSCORE scores 1400 +inf LIMIT 0 20  # score range
+ZCOUNT scores 1000 2000
+
+PFADD uv:2026-10-31 user1 user2 user1      # approximate unique visitors
+PFCOUNT uv:2026-10-31                      # 2
+SETBIT active:2026-10-31 42 1              # user id 42 was active today
+BITCOUNT active:2026-10-31                 # number of active users`
+  });
+
+  card("redis", "Streams and consumer groups", "Syntax", {
+    sum: "An append-only log with durable consumer groups. Lighter than Kafka, heavier than lists.",
+    lang: "redis",
+    code: R`XADD orders MAXLEN ~ 100000 * order_id 1001 total 4999     # append, trim roughly to 100k entries
+XGROUP CREATE orders billing $ MKSTREAM                      # group starts at new entries
+XREADGROUP GROUP billing worker-1 COUNT 10 BLOCK 5000 STREAMS orders >   # > = never delivered
+XACK orders billing 1730380000000-0                          # mark processed
+XPENDING orders billing - + 10                               # delivered but not acknowledged
+XAUTOCLAIM orders billing worker-2 60000 0-0 COUNT 10        # take over entries idle over 60 s
+XLEN orders
+XINFO GROUPS orders`,
+    more: [
+      "At-least-once delivery: unacknowledged entries are redelivered after a claim. Make handlers idempotent.",
+      "Pub/Sub, by contrast, is fire and forget. Subscribers that are offline miss messages and nothing is stored."
+    ]
+  });
+
+  card("redis", "Redis client example", "Syntax", {
+    sum: "Connection pools, timeouts and pipelines.",
+    lang: "python",
+    code: R`import redis
+
+pool = redis.ConnectionPool(host="redis.internal", port=6379, max_connections=50,
+                            socket_timeout=1.0, socket_connect_timeout=1.0, decode_responses=True)
+r = redis.Redis(connection_pool=pool)
+
+pipe = r.pipeline(transaction=False)       # many commands, one round trip
+for i in range(1000):
+    pipe.hset(f"item:{i}", mapping={"name": f"n{i}", "qty": i})
+pipe.execute()
+
+with r.pubsub() as ps:
+    ps.subscribe("alerts")
+    for msg in ps.listen():
+        if msg["type"] == "message":
+            print(msg["data"])`,
+    more: ["Always set timeouts. A client without a timeout hangs forever when a node stalls, and threads pile up."]
+  });
+
+  card("redis", "Operating Redis: what to watch", "Recipe", {
+    sum: "Commands for health checks and incidents.",
+    lang: "redis",
+    code: R`INFO memory                    # used_memory, mem_fragmentation_ratio, evicted_keys
+INFO stats                     # keyspace_hits / keyspace_misses, instantaneous_ops_per_sec
+INFO replication               # role, connected_slaves, master_repl_offset, lag
+INFO persistence               # rdb_last_save_time, aof_last_write_status
+SLOWLOG GET 10                 # slowest commands (slowlog-log-slower-than in microseconds)
+LATENCY DOCTOR
+CLIENT LIST                    # who is connected, idle time, buffers
+MEMORY DOCTOR
+redis-cli --bigkeys            # sample the biggest keys (use on a replica)
+redis-cli --latency            # round-trip latency from the client`,
+    watch: [
+      "`KEYS *`, `SMEMBERS` on a huge set, `HGETALL` on a huge hash and `FLUSHALL` block the single thread. Use `SCAN`, `SSCAN`, `HSCAN` and `UNLINK`.",
+      "Big keys (tens of MB) and hot keys cause latency spikes and uneven cluster load. Split them (`user:42:cart:{shard}`).",
+      "Never expose Redis to the internet. Use `requirepass` or ACLs, bind to private interfaces, TLS where traffic crosses networks."
+    ],
+    more: ["Cache hit ratio = `keyspace_hits / (keyspace_hits + keyspace_misses)`. A falling ratio often means a change in key patterns or too small a memory limit."]
+  });
+
+  /* ================= RABBITMQ ================= */
+  card("rabbit", "The AMQP model", "Concept", {
+    sum: "Producers publish to an exchange, not to a queue. The exchange routes messages to queues by bindings. Consumers read from queues.",
+    lang: "text",
+    code: R`producer --publish(routing_key)--> [exchange] --binding rules--> [queue A] --> consumer 1
+                                                      \--> [queue B] --> consumer 2, 3 (compete)
+
+exchange types:  direct   exact routing key match
+                 fanout   copy to every bound queue
+                 topic    pattern match on dotted keys (orders.*.created, logs.#)
+                 headers  match on message headers
+default exchange: "" (direct). Routing key = queue name`,
+    head: ["Term", "Meaning"],
+    rows: [
+      ["Connection", "A long-lived TCP connection. Open few"],
+      ["Channel", "A lightweight virtual connection inside one TCP connection. Use one per thread"],
+      ["Virtual host (vhost)", "A namespace with its own exchanges, queues and permissions"],
+      ["Binding", "A rule linking an exchange to a queue, optionally with a key or pattern"],
+      ["Prefetch (QoS)", "How many unacknowledged messages a consumer may hold"],
+      ["Acknowledgement (ack)", "The consumer confirms it processed the message so the broker can delete it"]
+    ],
+    more: ["Topic pattern: `*` matches exactly one word, `#` matches zero or more words. `orders.*.created` matches `orders.eu.created`, not `orders.eu.paid.created`."]
+  });
+
+  card("rabbit", "Exchange types at a glance", "Table", {
+    sum: "Pick by how many consumers should see a message and how you select them.",
+    head: ["Type", "Routing", "Example"],
+    rows: [
+      ["Direct", "Exact key match", "`error` goes to the errors queue"],
+      ["Fanout", "All bound queues, key ignored", "Broadcast a cache invalidation to every service instance's queue"],
+      ["Topic", "Wildcards on dotted keys", "`eu.orders.#` to one region's order processors"],
+      ["Headers", "Match header values, `x-match: all/any`", "Rare. Use topic where possible"],
+      ["Consistent hash (plugin)", "Hash of key chooses a queue", "Shard work across queues keeping per-key order"]
+    ]
+  });
+
+  card("rabbit", "Queue types", "Table", {
+    sum: "In RabbitMQ 4.x, use quorum queues for data you care about and streams for logs.",
+    head: ["Type", "What it is", "Use for"],
+    rows: [
+      ["Quorum queue", "Replicated queue using Raft consensus. Data safety first", "The default choice for durable work queues"],
+      ["Stream", "Replicated append-only log. Messages are not deleted on read, consumers use offsets and can replay", "Fan-out to many readers, replay, very high throughput"],
+      ["Classic queue", "Single-node queue, no replication in 4.x (mirroring was removed in 4.0)", "Transient or low-value data, exclusive queues"]
+    ],
+    more: [
+      "Classic mirrored queues were deprecated for years and removed in RabbitMQ 4.0. Migrate to quorum queues.",
+      "Quorum queues need a majority of replicas to work. Use 3 or 5 nodes. They use more memory and disk than classic queues, and 4.x adds features such as delivery limits and, in 4.3, consumer timeouts that apply across protocols and strict message priorities.",
+      "Declare the type explicitly: `x-queue-type: quorum`. Queue arguments cannot be changed after creation."
+    ]
+  });
+
+  card("rabbit", "Publishing and consuming with pika", "Syntax", {
+    sum: "A durable work queue with confirms, manual acks and fair dispatch.",
+    lang: "python",
+    code: R`import json, pika
+
+params = pika.ConnectionParameters("rabbit.internal", credentials=pika.PlainCredentials("app", "secret"),
+                                   heartbeat=30, blocked_connection_timeout=60)
+
+# ---- producer ----
+conn = pika.BlockingConnection(params); ch = conn.channel()
+ch.queue_declare(queue="emails", durable=True, arguments={"x-queue-type": "quorum"})
+ch.confirm_delivery()                                   # publisher confirms: broker acknowledges receipt
+ch.basic_publish(
+    exchange="", routing_key="emails",
+    body=json.dumps({"to": "a@example.com", "template": "welcome"}),
+    properties=pika.BasicProperties(delivery_mode=2, content_type="application/json",
+                                    message_id="evt-1001"),
+    mandatory=True,                                     # error if it cannot be routed
+)
+conn.close()
+
+# ---- consumer ----
+conn = pika.BlockingConnection(params); ch = conn.channel()
+ch.queue_declare(queue="emails", durable=True, arguments={"x-queue-type": "quorum"})
+ch.basic_qos(prefetch_count=10)                         # at most 10 unacked per consumer
+
+def handle(ch, method, props, body):
+    try:
+        send_email(json.loads(body))
+        ch.basic_ack(method.delivery_tag)
+    except TransientError:
+        ch.basic_nack(method.delivery_tag, requeue=True)    # try again
+    except Exception:
+        ch.basic_nack(method.delivery_tag, requeue=False)   # to the dead-letter exchange
+
+ch.basic_consume(queue="emails", on_message_callback=handle, auto_ack=False)
+ch.start_consuming()`,
+    more: [
+      "`delivery_mode=2` (persistent) only helps with a durable queue. Durable queue plus persistent message plus publisher confirms is the safe publish path.",
+      "Never use `auto_ack=True` for important work. A crash after delivery loses the message.",
+      "A blocking connection is not thread-safe. Use one channel per thread, or an async client such as `aio-pika`."
+    ]
+  });
+
+  card("rabbit", "Reliability checklist: acks, confirms, durability", "Table", {
+    sum: "Message loss can happen at three places. Close each one.",
+    head: ["Risk", "Protection"],
+    rows: [
+      ["Producer to broker", "Publisher confirms, `mandatory` flag or alternate exchange for unroutable messages"],
+      ["Broker restart or node failure", "Durable queue, persistent messages, quorum queue with 3 replicas"],
+      ["Broker to consumer", "Manual acknowledgements, ack after the work is done"],
+      ["Poison messages", "Delivery limit and a dead-letter exchange so bad messages do not loop forever"],
+      ["Duplicates", "Redelivery after a crash is normal (at-least-once). Make consumers idempotent using a message ID"],
+      ["Slow consumers", "Set `prefetch`, scale consumers, set queue length limits and overflow behaviour"]
+    ],
+    more: ["Exactly-once delivery does not exist end to end. Combine at-least-once delivery with idempotent processing."]
+  });
+
+  card("rabbit", "Dead letters, TTL and retries", "Recipe", {
+    sum: "A retry topology with a delay queue. Failed messages wait, then return to the work queue.",
+    lang: "python",
+    code: R`# main work queue: rejected or expired messages go to the retry exchange
+ch.exchange_declare("work.dlx", "direct", durable=True)
+ch.queue_declare("work", durable=True, arguments={
+    "x-queue-type": "quorum",
+    "x-dead-letter-exchange": "work.dlx",
+    "x-dead-letter-routing-key": "retry",
+    "x-delivery-limit": 5,                      # quorum queues: drop or dead-letter after 5 redeliveries
+})
+
+# retry queue: messages sit for 30 s, then dead-letter back to the main exchange (default "")
+ch.queue_declare("work.retry", durable=True, arguments={
+    "x-message-ttl": 30_000,
+    "x-dead-letter-exchange": "",
+    "x-dead-letter-routing-key": "work",
+})
+ch.queue_bind("work.retry", "work.dlx", "retry")
+
+# parking lot for messages that failed too many times (inspect manually)
+ch.queue_declare("work.dead", durable=True)`,
+    head: ["Mechanism", "Detail"],
+    rows: [
+      ["Dead-lettering triggers", "Consumer `nack` or `reject` with `requeue=false`, message TTL expiry, queue length overflow, delivery limit reached"],
+      ["Per-message TTL", "Only the head of the queue expires first, so a long-lived message in front can hold back others. Prefer per-queue TTL"],
+      ["`x-death` header", "Records how often and why a message was dead-lettered. Use it to count retries"],
+      ["Delay", "The delayed-message plugin exists, but a TTL queue like the one above is simple and portable"]
+    ],
+    more: ["Use increasing delays (several retry queues, 10 s, 1 min, 10 min) for exponential backoff."]
+  });
+
+  card("rabbit", "Topic exchange example", "Syntax", {
+    sum: "Route by event name so each service gets only what it needs.",
+    lang: "python",
+    code: R`ch.exchange_declare("events", "topic", durable=True)
+
+# billing service: all payment events
+ch.queue_declare("billing", durable=True, arguments={"x-queue-type": "quorum"})
+ch.queue_bind("billing", "events", "payment.*")
+
+# audit service: everything
+ch.queue_declare("audit", durable=True, arguments={"x-queue-type": "quorum"})
+ch.queue_bind("audit", "events", "#")
+
+# publish: both queues get a copy of payment.failed, only audit gets user.created
+ch.basic_publish("events", "payment.failed", b'{"order": 7}')
+ch.basic_publish("events", "user.created", b'{"id": 42}')`,
+    more: ["Each consuming service gets its own queue, so one slow service never delays another. That is the main benefit over a shared queue."]
+  });
+
+  card("rabbit", "Streams", "Concept", {
+    sum: "An append-only log inside RabbitMQ. Consumers track their own offset and can read the same data again.",
+    lang: "python",
+    code: R`# Streams use the AMQP 0.9.1 client with a few rules, or the dedicated stream protocol (port 5552)
+ch.queue_declare("clicks", durable=True, arguments={
+    "x-queue-type": "stream",
+    "x-max-length-bytes": 20 * 1024**3,       # retention by size
+    "x-max-age": "7D",                         # and by age
+})
+ch.basic_qos(prefetch_count=100)               # required for stream consumers
+ch.basic_consume("clicks", on_message_callback=cb, auto_ack=False,
+                 arguments={"x-stream-offset": "first"})   # first | last | next | offset | timestamp`,
+    head: ["Compare", "Quorum queue", "Stream"],
+    rows: [
+      ["After a consumer reads", "Message is deleted", "Message stays until retention removes it"],
+      ["Multiple readers", "Compete for messages", "Each reader sees everything"],
+      ["Replay", "No", "Yes, by offset or time"],
+      ["Best for", "Task distribution", "Event feeds, audit, high fan-out"]
+    ],
+    more: ["Streams give Kafka-like semantics (log, offsets, replay) inside RabbitMQ. For a large event-streaming platform with many consumers and ecosystem tools, Kafka is usually the better fit."]
+  });
+
+  card("rabbit", "rabbitmqctl and diagnostics", "Syntax", {
+    sum: "Day-to-day commands for operators.",
+    lang: "sh",
+    code: R`rabbitmqctl status
+rabbitmq-diagnostics check_running && rabbitmq-diagnostics check_local_alarms
+rabbitmqctl cluster_status
+rabbitmqctl list_queues name type messages messages_ready messages_unacknowledged consumers
+rabbitmqctl list_connections name state channels
+rabbitmqctl list_consumers
+rabbitmqctl add_vhost shop
+rabbitmqctl add_user app 'S3cret!'
+rabbitmqctl set_permissions -p shop app ".*" ".*" ".*"      # configure, write, read (regex)
+rabbitmqctl set_policy -p shop ha-limit "^work" '{"max-length": 100000, "overflow": "reject-publish"}' --apply-to queues
+rabbitmqctl purge_queue work -p shop
+rabbitmq-plugins enable rabbitmq_management rabbitmq_prometheus
+rabbitmq-queues quorum_status work -p shop
+# Management UI: http://host:15672    Prometheus metrics: http://host:15692/metrics`,
+    more: [
+      "Prefer policies over per-queue arguments for limits and TTLs, since policies can change without redeclaring queues.",
+      "Create a separate user per application with the narrowest vhost permissions. Delete or lock down the default `guest` user for remote access."
+    ]
+  });
+
+  card("rabbit", "Clustering, flow control and alarms", "Table", {
+    sum: "A cluster shares users, vhosts, exchanges and metadata. Queue data lives on the nodes that host the queue's replicas.",
+    head: ["Topic", "Detail"],
+    rows: [
+      ["Cluster size", "Odd numbers (3 or 5) for Raft based features. Keep nodes in one low-latency network. Do not span regions"],
+      ["Partitions", "Network splits are handled by a partition handling strategy. Quorum queues stay safe with majority voting"],
+      ["Memory alarm", "At the high watermark (default 60% of RAM) publishers are blocked"],
+      ["Disk alarm", "When free disk drops below the limit, publishers are blocked"],
+      ["Credit-based flow", "A fast publisher is slowed so queues and consumers keep up"],
+      ["Federation and Shovel", "Move messages between brokers or regions asynchronously"],
+      ["Protocols", "AMQP 0.9.1, AMQP 1.0 (native in 4.x), MQTT, STOMP, streams. Different clients can share one broker"]
+    ],
+    watch: [
+      "Queues that only grow mean consumers are slower than producers. Alert on `messages_ready` growth and on consumer count dropping to zero.",
+      "A high count of `messages_unacknowledged` means consumers hold messages without acking. Check prefetch and slow handlers.",
+      "Opening a connection per message is very expensive. Reuse connections and channels."
+    ]
+  });
+
+  card("rabbit", "RabbitMQ versus Kafka versus a database queue", "Table", {
+    wide: true,
+    sum: "Different tools. Choose by the shape of the problem.",
+    head: ["", "RabbitMQ", "Kafka", "PostgreSQL as a queue"],
+    rows: [
+      ["Model", "Smart broker, routing and per-message acks", "Distributed log, consumers track offsets", "Rows with `FOR UPDATE SKIP LOCKED`"],
+      ["Replay old messages", "Streams only", "Yes, by retention", "Yes while rows exist"],
+      ["Ordering", "Per queue, weakened by multiple consumers and redelivery", "Per partition", "By your `ORDER BY`"],
+      ["Routing flexibility", "Excellent (exchanges)", "Topic and key only", "Anything SQL can express"],
+      ["Throughput", "Tens of thousands per second per queue", "Hundreds of thousands to millions per second", "Thousands per second"],
+      ["Per-message features", "TTL, priorities, dead letters, delays", "Few, built by you", "All of SQL"],
+      ["Operations", "Moderate", "Heavier (brokers, partitions, tooling)", "Nothing new if you run PostgreSQL"],
+      ["Best for", "Task queues, RPC, complex routing", "Event streaming, analytics pipelines, CDC, event sourcing", "Small to medium job queues with transactional enqueue"]
+    ]
+  });
+
+  /* ================= KAFKA ================= */
+  card("kafka", "Kafka in one picture", "Concept", {
+    sum: "A distributed, replicated, partitioned commit log. Producers append. Consumers read at their own pace and remember an offset.",
+    lang: "text",
+    code: R`topic "orders" (3 partitions, replication factor 3)
+
+ partition 0: [0][1][2][3][4][5] ...   leader on broker 1, followers on 2 and 3
+ partition 1: [0][1][2][3] ...         leader on broker 2
+ partition 2: [0][1][2][3][4] ...      leader on broker 3
+                             ^ offset: position inside ONE partition
+
+producer --key hash--> partition        consumer group "billing": each partition read by one member
+order is guaranteed only inside a partition`,
+    head: ["Term", "Meaning"],
+    rows: [
+      ["Broker", "A Kafka server. A cluster has several"],
+      ["Topic", "A named stream, split into partitions"],
+      ["Partition", "An ordered, append-only log. The unit of parallelism and ordering"],
+      ["Offset", "A record's position in its partition"],
+      ["Replica, leader, ISR", "Each partition has a leader and followers. ISR = in-sync replicas that are caught up"],
+      ["Consumer group", "Consumers sharing the work of a topic. Each partition goes to one member of the group"],
+      ["Controller (KRaft)", "Brokers or dedicated nodes running Raft to manage cluster metadata"],
+      ["Retention", "Records are kept by time or size, or compacted by key. Reading does not delete"]
+    ],
+    more: [
+      "Kafka 4.0 removed ZooKeeper entirely. Clusters run in KRaft mode only. ZooKeeper clusters must migrate on a 3.x release before moving to 4.0.",
+      "Kafka 4.0 requires Java 17 for brokers, Connect and tools, and Java 11 for clients and Kafka Streams."
+    ]
+  });
+
+  card("kafka", "Kafka 4.x highlights", "Table", {
+    sum: "What changed recently. Check the release notes for the exact version you run.",
+    v: "4.0 / 4.1",
+    head: ["Change", "Detail"],
+    rows: [
+      ["KRaft only", "ZooKeeper support is gone in 4.0"],
+      ["New consumer rebalance protocol (KIP-848)", "Generally available in 4.0. The broker coordinates assignments, which makes rebalances faster and less disruptive"],
+      ["Stronger transactions (KIP-890)", "Protects against hanging transactions"],
+      ["Share groups (KIP-932)", "Queue-like consumption: many consumers share a partition with per-record acknowledgement. Preview in 4.1, not for production yet"],
+      ["Eligible leader replicas", "Enabled on new clusters in 4.1. Improves safe leader election"],
+      ["Removed", "MirrorMaker 1, old partitioners, deprecated client APIs and `--zookeeper`-style tool options"],
+      ["Streams rebalance protocol (KIP-1071)", "Early access, not for production"]
+    ],
+    more: ["Later 4.x releases continue this work. Confirm current status in the official upgrade notes before you plan an upgrade."]
+  });
+
+  card("kafka", "Running a broker with KRaft", "Syntax", {
+    sum: "A single-node setup for learning. Production uses 3 or more nodes.",
+    lang: "sh",
+    code: R`# format storage once with a cluster id, then start
+KAFKA_CLUSTER_ID="$(bin/kafka-storage.sh random-uuid)"
+bin/kafka-storage.sh format --standalone -t $KAFKA_CLUSTER_ID -c config/server.properties
+bin/kafka-server-start.sh config/server.properties
+
+# docker one-liner (official image)
+docker run -d --name kafka -p 9092:9092 apache/kafka:latest`,
+    more: [
+      "Key `server.properties` settings: `process.roles=broker,controller`, `node.id`, `controller.quorum.voters` (or bootstrap controllers), `listeners`, `advertised.listeners`, `log.dirs`.",
+      "`advertised.listeners` is where most connection problems come from. Clients receive this address from the broker and connect to it, so it must be reachable from the client side."
+    ]
+  });
+
+  card("kafka", "Command-line tools", "Syntax", {
+    sum: "Kafka ships with scripts for topics, groups, configs and quick tests.",
+    lang: "sh",
+    code: R`B=localhost:9092
+bin/kafka-topics.sh --bootstrap-server $B --create --topic orders --partitions 6 --replication-factor 3 \
+  --config min.insync.replicas=2 --config retention.ms=604800000
+bin/kafka-topics.sh --bootstrap-server $B --list
+bin/kafka-topics.sh --bootstrap-server $B --describe --topic orders
+bin/kafka-topics.sh --bootstrap-server $B --alter --topic orders --partitions 12     # can only increase
+
+echo "k1:hello" | bin/kafka-console-producer.sh --bootstrap-server $B --topic orders \
+  --property parse.key=true --property key.separator=:
+bin/kafka-console-consumer.sh --bootstrap-server $B --topic orders --from-beginning \
+  --property print.key=true --property print.offset=true
+
+bin/kafka-consumer-groups.sh --bootstrap-server $B --list
+bin/kafka-consumer-groups.sh --bootstrap-server $B --describe --group billing         # lag per partition
+bin/kafka-consumer-groups.sh --bootstrap-server $B --group billing --topic orders \
+  --reset-offsets --to-earliest --dry-run                                             # replace --dry-run with --execute
+
+bin/kafka-configs.sh --bootstrap-server $B --entity-type topics --entity-name orders --alter \
+  --add-config retention.ms=86400000
+bin/kafka-log-dirs.sh --bootstrap-server $B --describe --topic-list orders
+bin/kafka-get-offsets.sh --bootstrap-server $B --topic orders`,
+    more: ["Stop the consumer group before resetting offsets. Reset with `--dry-run` first."]
+  });
+
+  card("kafka", "Producer settings that matter", "Table", {
+    sum: "Defaults in modern clients are safe, but know the dials.",
+    head: ["Setting", "Meaning", "Guidance"],
+    rows: [
+      ["`acks`", "How many replicas must confirm", "`all` for important data (default in recent clients). `1` leader only. `0` fire and forget"],
+      ["`enable.idempotence`", "Broker de-duplicates retries per producer session", "`true` (default in recent clients). Prevents duplicates and reordering from retries"],
+      ["`retries`, `delivery.timeout.ms`", "How long to keep trying", "Leave retries high and bound it with `delivery.timeout.ms` (default 2 min)"],
+      ["`linger.ms`", "Wait to fill a batch", "5 to 20 ms boosts throughput. 0 sends immediately"],
+      ["`batch.size`", "Max batch bytes per partition", "16 KB default. 64 to 256 KB for high throughput"],
+      ["`compression.type`", "Compress batches", "`lz4` or `zstd`. Saves network and disk"],
+      ["`max.in.flight.requests.per.connection`", "Concurrent unacked requests", "Up to 5 stays ordered with idempotence"],
+      ["`transactional.id`", "Enable transactions", "Needed for exactly-once across topics"]
+    ]
+  });
+
+  card("kafka", "Producer example", "Syntax", {
+    sum: "Python with `confluent-kafka`. Delivery is asynchronous, so check callbacks.",
+    lang: "python",
+    code: R`from confluent_kafka import Producer
+import json
+
+p = Producer({
+    "bootstrap.servers": "localhost:9092",
+    "acks": "all",
+    "enable.idempotence": True,
+    "linger.ms": 10,
+    "compression.type": "zstd",
+})
+
+def on_delivery(err, msg):
+    if err:
+        print("FAILED", err)                       # log, alert, or retry in your own way
+    else:
+        print(f"ok {msg.topic()}[{msg.partition()}]@{msg.offset()}")
+
+for order in orders:
+    p.produce("orders",
+              key=str(order["customer_id"]),        # same key -> same partition -> ordered per customer
+              value=json.dumps(order).encode(),
+              headers={"source": "checkout"},
+              on_delivery=on_delivery)
+    p.poll(0)                                       # serve callbacks
+
+p.flush(10)                                         # wait for outstanding messages before exit`,
+    more: [
+      "Without a key, records are spread across partitions (sticky batching), so there is no ordering guarantee.",
+      "The default partitioner hashes the key, so adding partitions later changes where keys land and breaks per-key ordering across the change."
+    ]
+  });
+
+  card("kafka", "Consumer settings that matter", "Table", {
+    sum: "Most consumer bugs come from offset commits and slow processing.",
+    head: ["Setting", "Meaning", "Guidance"],
+    rows: [
+      ["`group.id`", "Consumer group name", "One per logical application"],
+      ["`enable.auto.commit`", "Commit offsets in the background", "Set `false` and commit after processing for at-least-once"],
+      ["`auto.offset.reset`", "Where to start with no committed offset", "`earliest` to process history, `latest` for new data only"],
+      ["`max.poll.interval.ms`", "Max time between polls before the consumer is considered dead", "Raise it for slow processing. Or lower `max.poll.records`"],
+      ["`session.timeout.ms`, `heartbeat.interval.ms`", "Failure detection", "Defaults are fine. Heartbeats run in a background thread"],
+      ["`max.poll.records`, `fetch.min.bytes`, `fetch.max.wait.ms`", "Batch size and latency", "Trade throughput against latency"],
+      ["`isolation.level`", "`read_committed` hides aborted transactional writes", "Use with transactional producers"],
+      ["`partition.assignment.strategy` (classic) or `group.protocol=consumer`", "Assignment method", "The KIP-848 protocol is available in 4.x clients"]
+    ]
+  });
+
+  card("kafka", "Consumer example", "Syntax", {
+    sum: "At-least-once: process first, commit after.",
+    lang: "python",
+    code: R`from confluent_kafka import Consumer
+import json
+
+c = Consumer({
+    "bootstrap.servers": "localhost:9092",
+    "group.id": "billing",
+    "enable.auto.commit": False,
+    "auto.offset.reset": "earliest",
+})
+c.subscribe(["orders"])
+
+try:
+    while True:
+        msg = c.poll(1.0)
+        if msg is None:
+            continue
+        if msg.error():
+            print("error", msg.error()); continue
+        order = json.loads(msg.value())
+        process(order)                      # must be idempotent: a crash before the commit replays it
+        c.commit(message=msg, asynchronous=False)     # commit offset of the NEXT message automatically
+finally:
+    c.close()                               # leave the group cleanly so partitions move quickly`,
+    more: [
+      "Committing every message is slow. Commit every N messages or every few seconds, and accept replay of that window.",
+      "Never do long blocking work between polls. Exceeding `max.poll.interval.ms` triggers a rebalance and duplicates."
+    ]
+  });
+
+  card("kafka", "Delivery guarantees", "Table", {
+    sum: "What each mode means, and what it costs.",
+    head: ["Guarantee", "How", "Result on failure"],
+    rows: [
+      ["At most once", "Commit offset before processing, or `acks=0`", "Messages can be lost, never duplicated"],
+      ["At least once", "Process, then commit. Producer `acks=all` with retries", "No loss, duplicates possible. Make consumers idempotent"],
+      ["Exactly once (within Kafka)", "Idempotent producer plus transactions plus `read_committed`. Kafka Streams: `processing.guarantee=exactly_once_v2`", "Read, process and write to Kafka atomically"],
+      ["Exactly once to an external system", "Idempotent writes or write the result and the offset in one database transaction", "Kafka cannot enroll your database in its transaction"]
+    ],
+    lang: "python",
+    code: R`# transactional consume-transform-produce
+p = Producer({"bootstrap.servers": B, "transactional.id": "enricher-1", "enable.idempotence": True})
+p.init_transactions()
+p.begin_transaction()
+p.produce("orders-enriched", key=k, value=v2)
+p.send_offsets_to_transaction(c.position(c.assignment()), c.consumer_group_metadata())
+p.commit_transaction()`,
+    more: ["Pragmatic rule: design for at-least-once with idempotent handlers, such as an upsert keyed on the event ID. It is simpler and works with any sink."]
+  });
+
+  card("kafka", "Durability and replication settings", "Table", {
+    sum: "A safe baseline: replication factor 3, `min.insync.replicas=2`, producer `acks=all`.",
+    head: ["Setting", "Where", "Meaning"],
+    rows: [
+      ["`replication.factor`", "Topic", "Copies of each partition. 3 in production"],
+      ["`min.insync.replicas`", "Topic or broker", "Minimum ISR size for a write to succeed with `acks=all`. 2 with factor 3 tolerates 1 broker down"],
+      ["`unclean.leader.election.enable`", "Topic or broker", "`false`. Never promote an out-of-sync replica unless you accept data loss"],
+      ["`acks=all`", "Producer", "Wait for all in-sync replicas"],
+      ["`default.replication.factor`", "Broker", "Used when topics are auto-created. Prefer creating topics explicitly"],
+      ["`auto.create.topics.enable`", "Broker", "`false` in production to avoid typo topics"]
+    ],
+    more: [
+      "With `min.insync.replicas=2` and factor 3, losing 2 brokers makes writes fail (safe) instead of silently losing data.",
+      "Spread replicas over racks or zones (`broker.rack`) so a zone failure leaves a quorum."
+    ]
+  });
+
+  card("kafka", "Retention and log compaction", "Table", {
+    sum: "Kafka keeps data by policy, not by consumption.",
+    head: ["Policy", "Setting", "Behaviour"],
+    rows: [
+      ["Time retention", "`retention.ms` (default 7 days)", "Delete segments older than this"],
+      ["Size retention", "`retention.bytes`", "Delete oldest segments when a partition exceeds this size"],
+      ["Compaction", "`cleanup.policy=compact`", "Keep only the latest record per key. A `null` value (tombstone) deletes the key after a delay"],
+      ["Both", "`cleanup.policy=compact,delete`", "Compact and also expire by time"],
+      ["Segments", "`segment.ms`, `segment.bytes`", "Retention works per closed segment, so the active segment is never deleted"]
+    ],
+    more: [
+      "Compacted topics hold the current state per key: a table changelog, configuration, user profiles. New consumers can rebuild state by reading from the start.",
+      "Tiered storage (offload old segments to object storage) is available in recent releases for lower cost long retention. Check support for your version and vendor."
+    ]
+  });
+
+  card("kafka", "Partitions and keys: design choices", "Table", {
+    sum: "Partitions set parallelism and ordering. Choose them with care, since changing later is painful.",
+    head: ["Question", "Guidance"],
+    rows: [
+      ["How many partitions?", "At least the maximum number of parallel consumers you will need, with headroom. Estimate: target throughput / per-partition throughput (often 10 to 50 MB/s each). Typical topics use 6 to 48"],
+      ["What key?", "The entity that needs ordering: customer ID, order ID, device ID. All events for one key land in one partition"],
+      ["Hot keys", "One huge customer overloads one partition. Add a salt or sub-key if strict ordering is not needed across the whole customer"],
+      ["More partitions later?", "Allowed, but key to partition mapping changes. Plan capacity early, or create a new topic and migrate"],
+      ["Too many partitions", "More open files, longer failover and rebalance times, more memory. Avoid thousands per broker"],
+      ["Ordering across topics", "Not guaranteed. Put related events into one topic if their order matters"]
+    ]
+  });
+
+  card("kafka", "Consumer groups, rebalancing and lag", "Concept", {
+    sum: "A rebalance moves partitions between group members. Lag is how far a consumer is behind the end of the log.",
+    head: ["Topic", "Detail"],
+    rows: [
+      ["Parallelism limit", "A group has at most one active consumer per partition. Extra consumers sit idle"],
+      ["Rebalance triggers", "A member joins, leaves or stops polling, or partitions change"],
+      ["Old (eager) protocol", "All members stop and reassign. Stop-the-world pauses"],
+      ["Cooperative and KIP-848 protocol", "Only moved partitions pause. Much smoother"],
+      ["Static membership", "`group.instance.id` lets a restarting consumer keep its partitions without a rebalance"],
+      ["Lag", "`log end offset - committed offset` per partition. The key health metric for consumers"],
+      ["Several groups", "Each group has its own offsets, so many applications can read the same topic independently"]
+    ],
+    more: [
+      "Alert on growing lag, not on absolute size. Tools: Burrow, `kafka-consumer-groups.sh`, Prometheus exporters, Confluent Control Center, Redpanda Console, AKHQ, Kafka UI.",
+      "Frequent rebalances usually mean slow processing past `max.poll.interval.ms`, unstable networks, or pods restarting."
+    ]
+  });
+
+  card("kafka", "Schemas and serialisation", "Table", {
+    sum: "Messages are bytes. A shared schema keeps producers and consumers compatible.",
+    head: ["Format", "Notes"],
+    rows: [
+      ["JSON", "Easy to read and debug. Larger, no enforced schema without extra tooling"],
+      ["Avro", "Compact binary, schema evolution rules, popular with Schema Registry"],
+      ["Protobuf", "Compact binary, strong typing, good tooling across languages"],
+      ["JSON Schema", "Validate JSON with a registry"]
+    ],
+    more: [
+      "A schema registry stores versions and checks compatibility on publish. Modes: `BACKWARD` (new readers read old data, the default), `FORWARD`, `FULL`, and `NONE`.",
+      "Safe evolution: add optional fields with defaults. Do not rename or retype fields, and do not remove required ones. Put a version or event type in the envelope.",
+      "Registries: Confluent Schema Registry, Apicurio, Karapace, AWS Glue Schema Registry."
+    ]
+  });
+
+  card("kafka", "Kafka Connect, Streams and the ecosystem", "Table", {
+    wide: true,
+    sum: "Reuse these tools before writing your own pipelines.",
+    head: ["Tool", "What it does"],
+    rows: [
+      ["Kafka Connect", "Run source and sink connectors without code: databases, S3, Elasticsearch, Snowflake and more. Config is JSON over a REST API"],
+      ["Debezium", "Change data capture. Reads the PostgreSQL WAL, MySQL binlog and others, and publishes row changes to Kafka"],
+      ["Kafka Streams", "Java library for stateful stream processing inside your service: joins, windows, aggregations, local state stores, exactly-once"],
+      ["Apache Flink", "Distributed stream processing engine with SQL, strong event-time support, large state"],
+      ["ksqlDB", "SQL on streams. Check the current status of the project before choosing it for new work"],
+      ["MirrorMaker 2, Cluster Linking", "Replicate topics between clusters or regions"],
+      ["Managed Kafka", "Confluent Cloud, Amazon MSK, Azure Event Hubs (Kafka API), Aiven, Redpanda (Kafka API compatible)"]
+    ],
+    lang: "json",
+    code: R`{
+  "name": "pg-orders-cdc",
+  "config": {
+    "connector.class": "io.debezium.connector.postgresql.PostgresConnector",
+    "database.hostname": "db", "database.port": "5432",
+    "database.user": "debezium", "database.password": "secret", "database.dbname": "shop",
+    "topic.prefix": "shop",
+    "table.include.list": "public.orders",
+    "plugin.name": "pgoutput"
+  }
+}`
+  });
+
+  card("kafka", "Kafka operations and pitfalls", "Pitfall", {
+    sum: "What to monitor, and what tends to go wrong.",
+    watch: [
+      "Under-replicated partitions, offline partitions, ISR shrinks, controller changes and request latency are the broker alerts that matter most.",
+      "Disk fills quickly with a long retention and heavy throughput. Alert at 70 percent, and know your retention maths.",
+      "Poison messages: a record that always fails stops the partition. Send it to a dead-letter topic after N attempts and continue.",
+      "Large messages (over 1 MB default limit) strain brokers. Store the payload in object storage and send a reference.",
+      "Consumers that process in other threads while committing offsets can commit past unfinished work and lose it.",
+      "Topic auto-creation, ad-hoc partition counts and default replication of 1 are common causes of production incidents.",
+      "Timestamps: records carry a create time or log append time. Do not assume offsets across partitions are time ordered."
+    ],
+    more: ["Upgrade brokers before clients, one at a time, following the documented rolling procedure, and check the `inter.broker.protocol` and metadata version steps in the upgrade guide."]
+  });
+
+  /* ================= CHOOSING AND PATTERNS ================= */
+  card("patterns", "Which tool for which job", "Table", {
+    wide: true,
+    sum: "Start with PostgreSQL. Add a component when a measured need appears.",
+    head: ["Need", "Use", "Why"],
+    rows: [
+      ["System of record, transactions, relations", "PostgreSQL", "ACID, constraints, rich queries"],
+      ["Cache, sessions, counters, rate limits, leaderboards", "Redis or Valkey", "Microsecond latency, atomic data structures"],
+      ["Background jobs with retries, routing, priorities", "RabbitMQ (or a Postgres queue at small scale)", "Per-message acks, dead letters, flexible routing"],
+      ["Event log, many consumers, replay, analytics feeds, CDC", "Kafka", "Durable partitioned log with high throughput"],
+      ["Full-text and faceted search at scale", "OpenSearch or Elasticsearch (PostgreSQL FTS for modest needs)", "Dedicated ranking and scale"],
+      ["Analytics over big data", "A column store or warehouse (ClickHouse, BigQuery, Snowflake)", "Scan speed and compression"],
+      ["Flexible documents, huge key-value scale", "MongoDB, DynamoDB, Cassandra", "Horizontal scale, schema flexibility"],
+      ["Time series metrics", "TimescaleDB, Prometheus, InfluxDB, ClickHouse", "Compression and time functions"]
+    ],
+    more: [
+      "Every new component adds deployment, monitoring, backup, security and on-call work. A single PostgreSQL instance with `pg_trgm`, `jsonb`, FTS and a `SKIP LOCKED` queue carries many products to a meaningful scale.",
+      "The usual growth path: PostgreSQL, then Redis for caching, then a broker when asynchronous work or integration demands it."
+    ]
+  });
+
+  card("patterns", "Transactional outbox", "Recipe", {
+    sum: "How to update the database and publish an event without losing either. The classic dual-write problem.",
+    lang: "sql",
+    code: R`-- Problem: write DB, then publish to Kafka. A crash between the two loses the event (or publishes one with no data).
+-- Solution: write the event into an outbox table in the SAME transaction as the data change.
+
+BEGIN;
+  INSERT INTO orders (id, customer_id, total_cents) VALUES (1001, 42, 4999);
+  INSERT INTO outbox (id, aggregate, event_type, payload)
+  VALUES (gen_random_uuid(), 'order-1001', 'OrderPlaced',
+          '{"order_id": 1001, "customer_id": 42, "total_cents": 4999}');
+COMMIT;
+
+-- A relay reads the outbox and publishes. Two options:
+--  1) Debezium CDC streams the outbox table's WAL changes to Kafka (no polling, ordered).
+--  2) A poller:
+SELECT id, aggregate, event_type, payload FROM outbox
+WHERE published_at IS NULL ORDER BY created_at LIMIT 100 FOR UPDATE SKIP LOCKED;
+-- publish, then:  UPDATE outbox SET published_at = now() WHERE id = ANY($1);`,
+    more: [
+      "The relay may publish twice (crash after publish, before marking). Consumers must be idempotent, so include the event ID.",
+      "Clean up old rows, or partition the outbox by time."
+    ]
+  });
+
+  card("patterns", "Idempotent consumers", "Recipe", {
+    sum: "At-least-once delivery means duplicates. Make processing safe to repeat.",
+    lang: "sql",
+    code: R`-- Approach 1: remember processed message IDs in the same transaction as the effect
+BEGIN;
+  INSERT INTO processed_events (event_id) VALUES ($1) ON CONFLICT DO NOTHING;
+  -- if 0 rows inserted: duplicate, skip and COMMIT. Otherwise apply the change:
+  UPDATE accounts SET balance = balance + $2 WHERE id = $3;
+COMMIT;
+
+-- Approach 2: natural idempotence
+INSERT INTO orders_view (order_id, status) VALUES ($1, 'paid')
+ON CONFLICT (order_id) DO UPDATE SET status = EXCLUDED.status;      -- same result when repeated
+
+-- Approach 3: version check (reject stale or repeated updates)
+UPDATE items SET qty = $1, version = $2 WHERE id = $3 AND version < $2;`,
+    head: ["Delivery", "Consumer needs"],
+    rows: [
+      ["At-least-once (Kafka, RabbitMQ with acks)", "Idempotency key or natural idempotence"],
+      ["Retries from HTTP clients", "`Idempotency-Key` header stored with the response"],
+      ["Out-of-order events", "Version numbers or timestamps per entity"]
+    ]
+  });
+
+  card("patterns", "Sagas instead of distributed transactions", "Concept", {
+    sum: "A long business process made of local transactions, each with a compensating action if a later step fails.",
+    lang: "text",
+    code: R`Order saga (orchestrated):
+1. Order service:    create order (PENDING)            ── compensate: cancel order
+2. Payment service:  charge card                       ── compensate: refund
+3. Stock service:    reserve items                     ── compensate: release items
+4. Order service:    mark CONFIRMED
+If step 3 fails -> run compensations for 2 and 1 in reverse order.`,
+    head: ["Style", "How", "Trade-off"],
+    rows: [
+      ["Orchestration", "A coordinator tells each service what to do next", "Clear flow, one place to look. Coordinator is a dependency"],
+      ["Choreography", "Services react to each other's events", "Loose coupling. Flow is hard to see and test"]
+    ],
+    more: [
+      "Compensations must also be idempotent and retryable. Some actions cannot be undone (an email sent). Order steps so irreversible ones come last.",
+      "Workflow engines (Temporal, Camunda, AWS Step Functions) store saga state, retries and timers for you."
+    ]
+  });
+
+  card("patterns", "Change data capture (CDC)", "Concept", {
+    sum: "Stream database changes by reading the transaction log instead of polling tables.",
+    head: ["Aspect", "Detail"],
+    rows: [
+      ["How", "Debezium reads the PostgreSQL logical decoding stream (`pgoutput`) through a replication slot, and writes one event per row change"],
+      ["Setup", "`wal_level = logical`, a replication role, a publication, then a connector"],
+      ["Uses", "Cache invalidation, search index sync, data warehouse feeds, outbox relay, microservice data sharing"],
+      ["Event shape", "`before`, `after`, operation (`c`, `u`, `d`), source position (LSN), timestamp"],
+      ["Risks", "An inactive slot retains WAL and fills the disk. Schema changes need care. Initial snapshots can be heavy"]
+    ],
+    lang: "sql",
+    code: R`ALTER SYSTEM SET wal_level = 'logical';          -- restart required
+CREATE ROLE debezium WITH LOGIN REPLICATION PASSWORD 'secret';
+CREATE PUBLICATION dbz_pub FOR TABLE public.orders, public.outbox;
+-- monitor retained WAL
+SELECT slot_name, active, pg_size_pretty(pg_wal_lsn_diff(pg_current_wal_lsn(), confirmed_flush_lsn)) AS lag
+FROM pg_replication_slots;`
+  });
+
+  card("patterns", "Postgres as a job queue", "Recipe", {
+    sum: "A transactional queue with no extra infrastructure. Good up to thousands of jobs per second.",
+    lang: "sql",
+    code: R`CREATE TABLE jobs (
+  id         bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  queue      text NOT NULL DEFAULT 'default',
+  payload    jsonb NOT NULL,
+  state      text NOT NULL DEFAULT 'new' CHECK (state IN ('new', 'running', 'done', 'failed')),
+  attempts   int  NOT NULL DEFAULT 0,
+  run_at     timestamptz NOT NULL DEFAULT now(),
+  locked_at  timestamptz
+);
+CREATE INDEX jobs_pick_idx ON jobs (run_at) WHERE state = 'new';
+
+-- Worker: claim one job atomically. Other workers skip locked rows instead of waiting.
+WITH next AS (
+  SELECT id FROM jobs
+  WHERE state = 'new' AND run_at <= now()
+  ORDER BY run_at
+  FOR UPDATE SKIP LOCKED
+  LIMIT 1
+)
+UPDATE jobs j SET state = 'running', locked_at = now(), attempts = attempts + 1
+FROM next WHERE j.id = next.id
+RETURNING j.id, j.payload;
+
+-- Finish or retry with backoff
+UPDATE jobs SET state = 'done' WHERE id = $1;
+UPDATE jobs SET state = 'new', run_at = now() + interval '30 seconds' * attempts WHERE id = $1;`,
+    more: [
+      "Enqueue in the same transaction as your data change and the job exists if and only if the change committed. That is the big advantage over an external broker.",
+      "Rescue stuck jobs: a janitor resets `running` rows whose `locked_at` is older than a timeout.",
+      "Use `LISTEN` and `NOTIFY` to wake workers without polling. Libraries such as pgmq, Graphile Worker and River package this pattern."
+    ]
+  });
+
+  card("patterns", "Caching strategies", "Table", {
+    sum: "Where the cache sits and who updates it.",
+    head: ["Strategy", "Read", "Write", "Notes"],
+    rows: [
+      ["Cache-aside", "App checks cache, falls back to DB, fills cache", "App writes DB, deletes the cache key", "Most common and simple. Stale window is small"],
+      ["Read-through", "Cache layer loads from DB on a miss", "Writes go to the DB", "Less app code, needs a cache library or proxy"],
+      ["Write-through", "Cache is always warm", "Write to cache and DB together", "Consistent, slower writes"],
+      ["Write-behind", "Cache is source of truth for reads", "Write to cache, flush to DB later", "Fast writes, risk of loss. Use with care"],
+      ["Refresh-ahead", "Reload hot keys before they expire", "-", "Avoids stampedes on known hot data"]
+    ],
+    more: ["Cache invalidation is hard because there are two writes with no shared transaction. Short TTLs bound the damage when an invalidation is missed."]
+  });
+
+  card("patterns", "Ordering, backpressure and retries", "Table", {
+    sum: "Problems every messaging system shares.",
+    head: ["Problem", "Approach"],
+    rows: [
+      ["Per-entity ordering", "Kafka: key by entity. RabbitMQ: single consumer per queue, or consistent-hash sharding across queues"],
+      ["Producer faster than consumer", "Bound queues and apply backpressure (publisher blocking, reject-publish), scale consumers, add rate limits"],
+      ["Transient failure", "Retry with exponential backoff and jitter, with a cap on attempts"],
+      ["Permanent failure (poison message)", "Dead-letter queue or topic, alert, and a tool to replay after a fix"],
+      ["Duplicate delivery", "Idempotent handlers"],
+      ["Out-of-order arrival", "Version or sequence numbers, or event-time windows"],
+      ["Large payloads", "Claim check: store the blob elsewhere and pass a reference"],
+      ["Schema change", "Compatible evolution with a registry, versioned event types"]
+    ]
+  });
+
+  card("patterns", "Event sourcing and CQRS in brief", "Concept", {
+    sum: "Two related ideas. Use them only where their benefits are needed.",
+    head: ["Idea", "Meaning", "Cost"],
+    rows: [
+      ["Event sourcing", "Store the sequence of events as the source of truth and derive state by replaying them", "Event schema evolution, rebuild time (use snapshots), harder ad-hoc queries"],
+      ["CQRS", "Separate the write model from one or more read models built from events", "Eventual consistency between the models, more moving parts"]
+    ],
+    more: ["Many systems get 90 percent of the value from an audit table, an outbox and a few read-optimised views, without a full event-sourced design."]
+  });
+
+  /* ================= PRACTICE ================= */
+  card("practice", "Lab setup: all four systems locally", "Recipe", {
+    wide: true,
+    sum: "One Compose file gives you PostgreSQL, Redis, RabbitMQ and Kafka to practise on. Try each exercise first, then compare with the solution below it.",
+    lang: "yaml",
+    code: R`# docker-compose.yml   (docker compose up -d)
+services:
+  postgres:
+    image: postgres:18
+    environment: { POSTGRES_PASSWORD: dev, POSTGRES_DB: lab }
+    ports: ["5432:5432"]
+  redis:
+    image: redis:8
+    ports: ["6379:6379"]
+  rabbitmq:
+    image: rabbitmq:4-management
+    ports: ["5672:5672", "15672:15672"]      # UI: http://localhost:15672 (guest/guest)
+  kafka:
+    image: apache/kafka:latest
+    ports: ["9092:9092"]`,
+    more: [
+      "Connect with `psql postgresql://postgres:dev@localhost/lab`, `redis-cli`, and `docker exec -it <kafka container> /opt/kafka/bin/kafka-topics.sh --bootstrap-server localhost:9092 --list`.",
+      "Image tags move over time. Pin exact versions for anything beyond experiments."
+    ]
+  });
+
+  card("practice", "SQL 1: top two products per category", "Exercise", {
+    sum: "Task: from `products(id, category_id, name, price_cents)`, return the two most expensive products in each category. Break ties by lowest id.",
+    lang: "sql",
+    code: R`SELECT category_id, id, name, price_cents
+FROM (
+  SELECT p.*,
+         row_number() OVER (PARTITION BY category_id ORDER BY price_cents DESC, id) AS rn
+  FROM products p
+) t
+WHERE rn <= 2
+ORDER BY category_id, rn;`,
+    more: [
+      "Hint: a window function with `PARTITION BY`, then filter in an outer query, since window results cannot go in `WHERE` directly.",
+      "Variation: use `LATERAL` with `LIMIT 2` per category. With an index on `(category_id, price_cents DESC)` it can beat the window version on large tables."
+    ]
+  });
+
+  card("practice", "SQL 2: login streaks (gaps and islands)", "Exercise", {
+    sum: "Task: `logins(user_id, day date)` has one row per user per login day. Find each user's longest streak of consecutive days.",
+    lang: "sql",
+    code: R`WITH numbered AS (
+  SELECT user_id, day,
+         day - (row_number() OVER (PARTITION BY user_id ORDER BY day))::int AS grp   -- constant within a streak
+  FROM (SELECT DISTINCT user_id, day FROM logins) d
+),
+streaks AS (
+  SELECT user_id, grp, min(day) AS start_day, max(day) AS end_day, count(*) AS days
+  FROM numbered GROUP BY user_id, grp
+)
+SELECT DISTINCT ON (user_id) user_id, start_day, end_day, days
+FROM streaks
+ORDER BY user_id, days DESC;`,
+    more: [
+      "Why it works: in a run of consecutive dates, the date and the row number both rise by one, so their difference stays constant. A gap changes it.",
+      "`DISTINCT ON (user_id)` with `ORDER BY user_id, days DESC` keeps the longest streak per user."
+    ]
+  });
+
+  card("practice", "SQL 3: delete duplicates safely", "Exercise", {
+    sum: "Task: `users` has duplicate emails. Keep the row with the lowest id and delete the rest, then make sure it cannot happen again.",
+    lang: "sql",
+    code: R`BEGIN;
+DELETE FROM users u
+USING (
+  SELECT id, row_number() OVER (PARTITION BY lower(email) ORDER BY id) AS rn FROM users
+) d
+WHERE u.id = d.id AND d.rn > 1;
+
+CREATE UNIQUE INDEX users_email_unique ON users (lower(email));
+COMMIT;      -- check the DELETE count before this line in a real system`,
+    more: [
+      "Run the inner `SELECT` alone first to see what would be deleted. Take a backup or work in a transaction you can roll back.",
+      "On a big live table, create the unique index with `CONCURRENTLY` (outside a transaction) after cleaning in batches."
+    ]
+  });
+
+  card("practice", "SQL 4: prevent double booking", "Exercise", {
+    sum: "Task: a `bookings(room_id, period)` table must never allow two bookings for the same room that overlap in time. Enforce it in the database.",
+    lang: "sql",
+    code: R`CREATE EXTENSION IF NOT EXISTS btree_gist;
+
+CREATE TABLE bookings (
+  id       bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  room_id  int NOT NULL,
+  period   tstzrange NOT NULL,
+  EXCLUDE USING gist (room_id WITH =, period WITH &&)     -- same room AND overlapping period is rejected
+);
+
+INSERT INTO bookings (room_id, period) VALUES (1, '[2026-11-01 10:00, 2026-11-01 11:00)');
+INSERT INTO bookings (room_id, period) VALUES (1, '[2026-11-01 10:30, 2026-11-01 11:30)');
+-- ERROR: conflicting key value violates exclusion constraint`,
+    more: [
+      "An application-level check (`SELECT` then `INSERT`) has a race. Two requests can both pass the check. A constraint cannot.",
+      "The `[)` range notation means start inclusive, end exclusive, so back-to-back bookings are allowed."
+    ]
+  });
+
+  card("practice", "SQL 5: diagnose a slow query", "Exercise", {
+    sum: "Task: this query takes 4 s on 50 million orders. Explain why, and fix it.",
+    lang: "sql",
+    code: R`-- Slow
+SELECT * FROM orders
+WHERE date(placed_at) = '2026-10-30' AND status = 'paid'
+ORDER BY placed_at DESC
+LIMIT 50;
+-- EXPLAIN: Seq Scan on orders, Rows Removed by Filter: 49,900,000
+
+-- Why: date(placed_at) wraps the column in a function, so an index on placed_at cannot be used.
+
+-- Fix 1: sargable range
+SELECT id, customer_id, total_cents, placed_at FROM orders
+WHERE placed_at >= '2026-10-30' AND placed_at < '2026-10-31' AND status = 'paid'
+ORDER BY placed_at DESC
+LIMIT 50;
+
+-- Fix 2: an index that matches filter and order
+CREATE INDEX CONCURRENTLY orders_paid_placed_idx ON orders (placed_at DESC) WHERE status = 'paid';
+-- Now: Index Scan using orders_paid_placed_idx ... executes in about 1 ms`,
+    more: [
+      "Checklist: compare estimated and actual rows, look for `Seq Scan` and `Rows Removed by Filter`, check that the index matches the filter and sort, and avoid `SELECT *` when an index-only scan is possible.",
+      "Try it: generate data with `INSERT ... SELECT generate_series(...)`, run `EXPLAIN (ANALYZE, BUFFERS)` before and after."
+    ]
+  });
+
+  card("practice", "SQL 6: a transfer that cannot deadlock", "Exercise", {
+    sum: "Task: transfer money between two accounts. Two users sending in opposite directions at once keep deadlocking. Fix it.",
+    lang: "sql",
+    code: R`-- Deadlock-prone: T1 locks account 1 then 2, T2 locks account 2 then 1
+-- Fix: always lock in a consistent order (lowest id first), then update
+BEGIN;
+SELECT id FROM accounts WHERE id IN (1, 2) ORDER BY id FOR UPDATE;
+
+UPDATE accounts SET balance = balance - 100 WHERE id = 1 AND balance >= 100;
+-- check the affected row count: if 0, ROLLBACK (insufficient funds)
+UPDATE accounts SET balance = balance + 100 WHERE id = 2;
+INSERT INTO ledger (from_id, to_id, amount_cents) VALUES (1, 2, 10000);
+COMMIT;`,
+    more: [
+      "The balance check sits inside the `UPDATE`, so the read and the write are one atomic step.",
+      "Still handle `40P01` (deadlock detected) and `40001` (serialization failure) by retrying the whole transaction."
+    ]
+  });
+
+  card("practice", "Redis 1: daily active users with bitmaps", "Exercise", {
+    sum: "Task: track which of 10 million users were active each day, then count active users today, users active on all of the last 3 days, and on any of them.",
+    lang: "redis",
+    code: R`SETBIT active:2026-10-29 1001 1
+SETBIT active:2026-10-30 1001 1
+SETBIT active:2026-10-30 2002 1
+SETBIT active:2026-10-31 1001 1
+
+BITCOUNT active:2026-10-31                                   # active today
+BITOP AND all3 active:2026-10-29 active:2026-10-30 active:2026-10-31
+BITCOUNT all3                                                # active on every one of 3 days
+BITOP OR any3 active:2026-10-29 active:2026-10-30 active:2026-10-31
+BITCOUNT any3                                                # active on at least one day
+GETBIT active:2026-10-31 1001                                # was user 1001 active today?
+EXPIRE active:2026-10-29 2592000                             # keep a month`,
+    more: [
+      "10 million users need about 1.25 MB per day. Bit position equals user ID, so IDs should be dense integers.",
+      "For approximate unique counts of arbitrary strings, `PFADD` and `PFCOUNT` (HyperLogLog) use 12 KB per key."
+    ]
+  });
+
+  card("practice", "Redis 2: a queue that survives worker crashes", "Exercise", {
+    sum: "Task: with only lists, build a work queue where a job is not lost if the worker dies while processing it.",
+    lang: "python",
+    code: R`import redis
+r = redis.Redis(decode_responses=True)
+
+def enqueue(job: str):
+    r.lpush("jobs", job)
+
+def work_once():
+    # atomically move a job from "jobs" to "processing" (and wait up to 5 s)
+    job = r.blmove("jobs", "processing", timeout=5, src="RIGHT", dest="LEFT")
+    if job is None:
+        return
+    try:
+        handle(job)
+        r.lrem("processing", 1, job)             # done: remove from the processing list
+    except Exception:
+        pass                                      # leave it in "processing" for the janitor
+
+def janitor():
+    # separate process: re-queue jobs stuck in "processing" longer than a timeout.
+    # Record a start time per job (for example HSET started job_id <epoch>) when you claim it.
+    for job in r.lrange("processing", 0, -1):
+        if is_stale(job):
+            if r.lrem("processing", 1, job):
+                r.lpush("jobs", job)`,
+    more: [
+      "This is the reliable-queue pattern. It is basic. Redis Streams with a consumer group give acknowledgements, pending lists and `XAUTOCLAIM` built in, and are the better choice for new designs.",
+      "Jobs are strings here. For two identical jobs, `LREM` removes the first match, so include a unique ID in each job."
+    ]
+  });
+
+  card("practice", "Redis 3: size your cache", "Exercise", {
+    sum: "Task: 20 million user sessions, each about 600 bytes of JSON, TTL 24 hours, kept as strings. How much memory do you need and what settings protect you?",
+    lang: "text",
+    code: R`Payload:            20,000,000 x 600 B                 = 12 GB
+Per-key overhead:   key (~30 B) + dict entry + object + expiry bookkeeping  =~ 100 B
+                    20,000,000 x 100 B                  =  2 GB
+Estimated data:     about 14 GB
+Fragmentation:      x 1.1 to 1.3                        = 15.4 to 18.2 GB
+Replica:            a second node with the same memory
+Fork headroom:      RDB/AOF rewrite can use extra memory with copy-on-write (up to +20 percent when writes are heavy)
+=> plan 24 GB per node, set maxmemory ~ 18 GB, maxmemory-policy allkeys-lfu (or volatile-ttl),
+   alert at 80 percent, and measure real numbers with MEMORY USAGE on sample keys.
+
+Cheaper: store each session as a hash (small hashes use compact encodings), compress values,
+or shorten field names.`,
+    more: ["Rule: estimate, then measure with real data (`MEMORY USAGE`, `INFO memory`). Per-key overhead dominates when values are small."]
+  });
+
+  card("practice", "RabbitMQ 1: slow SMS must not delay email", "Exercise", {
+    sum: "Task: on every `order.paid` event, send an email and an SMS. The SMS provider is slow and often down. Email must never wait for SMS. Design the topology.",
+    lang: "python",
+    code: R`ch.exchange_declare("events", "topic", durable=True)
+
+for name, key in [("notify.email", "order.paid"), ("notify.sms", "order.paid")]:
+    ch.queue_declare(name, durable=True, arguments={
+        "x-queue-type": "quorum",
+        "x-dead-letter-exchange": "events.dlx",
+        "x-delivery-limit": 5,
+        "x-max-length": 100_000, "x-overflow": "reject-publish",
+    })
+    ch.queue_bind(name, "events", key)       # one event, two independent queues
+
+# publish once
+ch.basic_publish("events", "order.paid", body, properties=pika.BasicProperties(delivery_mode=2))
+
+# email consumers: prefetch 50, many workers
+# sms consumers:   prefetch 5, handler uses a timeout and circuit breaker; on failure nack(requeue=False)
+#                  so the message goes to the retry queue with a delay (see the retry card)`,
+    more: [
+      "Separate queues isolate slow consumers. A shared queue would let slow SMS jobs hog consumers and block email.",
+      "Add alerts on `messages_ready` for `notify.sms` and a dead-letter queue you can replay after the provider recovers."
+    ]
+  });
+
+  card("practice", "Kafka 1: design a topic for driver locations", "Exercise", {
+    sum: "Task: 20,000 location updates per second, about 1 KB each. Per-driver ordering matters. Consumers are 12 instances of a map service. Choose key, partitions, replication and retention.",
+    lang: "text",
+    code: R`Throughput:   20,000 msg/s x 1 KB = about 20 MB/s into the cluster
+              x 3 replicas = about 60 MB/s of disk writes cluster-wide
+Key:          driver_id  (all updates for one driver go to one partition, so order is kept)
+Partitions:   consumer parallelism sets the floor: at least 12 so every instance works. Choose 24 for growth.
+              Load is not the limit: 20 MB/s over 24 partitions is under 1 MB/s each
+Replication:  3, min.insync.replicas = 2, producer acks=all, unclean leader election off
+Retention:    locations are only useful briefly: retention.ms = 24h (cleanup.policy=delete)
+              if the map service only needs the LAST position, a second compacted topic keyed by driver_id works too
+Storage:      20 MB/s x 86,400 s x 3 replicas = about 5.2 TB/day cluster-wide -> size disks for it (or shorten retention)
+Compression:  zstd/lz4 on the producer, likely 3x to 5x smaller for JSON
+Producer:     linger.ms = 10, batch.size = 64 KB`,
+    more: [
+      "Check hot keys: a few drivers do not create a hot partition, but one huge tenant key would.",
+      "If consumers only need the latest position per driver, a compacted topic or Redis with a TTL may fit better than a long log."
+    ]
+  });
+
+  card("practice", "Kafka 2: consumer lag keeps growing", "Exercise", {
+    sum: "Task: lag on the `billing` group climbs for an hour. Walk through the diagnosis.",
+    lang: "sh",
+    code: R`# 1. Where is the lag? One partition or all?
+bin/kafka-consumer-groups.sh --bootstrap-server $B --describe --group billing
+#   one partition behind    -> hot key or one slow/stuck consumer
+#   all partitions behind   -> consumers too slow overall, or a recent traffic jump
+#   consumer-id empty       -> no active member for that partition (crashed or rebalancing)
+
+# 2. Is the group stable?  Frequent rebalances: check logs for "rebalance", "max.poll.interval.ms exceeded"
+# 3. Is processing slow?   Look at handler timing, downstream DB/API latency, GC pauses
+# 4. Are there more consumers than partitions?  Extra ones are idle. Scale only up to the partition count
+# 5. Is it a poison message?  The same offset retried forever -> dead-letter after N attempts
+
+# Fixes by cause
+#   slow handler        -> batch writes, parallelise within a partition keeping per-key order, fix the downstream
+#   too few consumers   -> add instances (up to #partitions), or add partitions for the future
+#   long processing     -> lower max.poll.records or raise max.poll.interval.ms
+#   poison message      -> DLQ topic and alert`,
+    more: ["Producer-side check: did the incoming rate rise? Compare `bytes-in` per topic with the consumer's processing rate."]
+  });
+
+  card("practice", "Integration 1: write an outbox relay", "Exercise", {
+    sum: "Task: implement the poller that moves rows from the `outbox` table to Kafka, safely with several relay instances.",
+    lang: "python",
+    code: R`import time, psycopg
+from confluent_kafka import Producer
+
+p = Producer({"bootstrap.servers": "localhost:9092", "acks": "all", "enable.idempotence": True})
+
+def relay_once(conn) -> int:
+    with conn.transaction():
+        rows = conn.execute("""
+            SELECT id, aggregate, event_type, payload::text
+            FROM outbox WHERE published_at IS NULL
+            ORDER BY created_at LIMIT 100
+            FOR UPDATE SKIP LOCKED
+        """).fetchall()
+        for id_, agg, typ, payload in rows:
+            p.produce("domain-events", key=agg, value=payload,
+                      headers={"event_id": str(id_), "type": typ})
+        p.flush(10)                                   # raises/returns >0 if not delivered: check it in real code
+        if rows:
+            conn.execute("UPDATE outbox SET published_at = now() WHERE id = ANY(%s)", ([r[0] for r in rows],))
+    return len(rows)
+
+with psycopg.connect("postgresql://postgres:dev@localhost/lab") as conn:
+    while True:
+        if relay_once(conn) == 0:
+            time.sleep(0.5)`,
+    more: [
+      "`SKIP LOCKED` lets several relays run side by side without picking the same rows.",
+      "A crash after `flush` but before the `UPDATE` republishes the batch. That is fine: consumers dedupe on `event_id`.",
+      "For high volume, Debezium reading the WAL is lighter than polling, and keeps the exact commit order."
+    ]
+  });
+
+  card("practice", "Self-check questions", "Table", {
+    wide: true,
+    sum: "Answer out loud, then check. If you hesitate, reread the matching card.",
+    head: ["Question", "Short answer"],
+    rows: [
+      ["Why does a long-running transaction hurt PostgreSQL even if it only reads?", "Its snapshot stops vacuum from removing dead rows, causing bloat"],
+      ["Composite index on `(a, b)`. Does `WHERE b = 1` use it well?", "Not efficiently, because of the leftmost prefix rule (PostgreSQL 18 skip scan can help in some cases)"],
+      ["What does `READ COMMITTED` allow that `REPEATABLE READ` does not?", "Non-repeatable reads, because each statement sees a new snapshot"],
+      ["How does PostgreSQL stay durable without writing data pages at commit?", "It flushes the WAL at commit and replays it after a crash"],
+      ["Why `SKIP LOCKED` for queues?", "Workers pick different rows without waiting for each other"],
+      ["Redis is single-threaded. Why is `KEYS *` dangerous?", "It blocks the only command thread while it scans every key"],
+      ["Cache-aside: update or delete the cached value on write?", "Delete, to avoid racing writers leaving stale data"],
+      ["Why is a Redis lock with a TTL not fully safe?", "A paused holder can outlive the TTL, so two clients hold it. Use fencing tokens"],
+      ["What guarantees does RabbitMQ give with durable queue, persistent message and confirms?", "The broker has stored the message. Delivery is at-least-once, so consumers must be idempotent"],
+      ["Quorum queue versus stream?", "Quorum: work queue where messages are deleted after ack. Stream: replayable log read by many consumers"],
+      ["Kafka ordering guarantee?", "Only within one partition. Use a key to send related events to the same partition"],
+      ["`acks=all` alone: enough for durability?", "No. Also need replication factor 3 and `min.insync.replicas=2`"],
+      ["How do you get exactly-once effects with Kafka and a database?", "At-least-once delivery plus idempotent writes, or store results and offsets in one DB transaction"],
+      ["What problem does the outbox pattern solve?", "Dual writes: updating a database and publishing an event without losing one"]
+    ]
+  });
+
+  /* ================= ENGINE ================= */
+  var SECS = [
+    { id: "sql", t: "PostgreSQL: SQL", d: "psql, data types, constraints, joins, windows, CTEs, upserts, JSONB, transactions, partitioning and security." },
+    { id: "pgops", t: "PostgreSQL: performance", d: "Indexes, EXPLAIN, vacuum, configuration, pooling, replication, backups and safe migrations." },
+    { id: "internals", t: "Database internals", d: "ACID, pages, B-trees, LSM trees, WAL, MVCC, anomalies, locks, the planner, CAP and consensus." },
+    { id: "redis", t: "Redis", d: "Data types, expiry and eviction, persistence, cluster, scripts, patterns and operations." },
+    { id: "rabbit", t: "RabbitMQ", d: "Exchanges, queue types, acks and confirms, dead letters and retries, streams, operations." },
+    { id: "kafka", t: "Kafka", d: "Partitions, producers, consumers, delivery guarantees, durability, retention, schemas and the ecosystem." },
+    { id: "patterns", t: "Patterns", d: "Choosing tools, outbox, idempotency, sagas, CDC, queues in Postgres, caching strategies." },
+    { id: "practice", t: "Practice", d: "A local lab, exercises with solutions across SQL, Redis, RabbitMQ and Kafka, and self-check questions." }
+  ];
+
+  var $ = function (id) { return document.getElementById(id); };
+  function esc(s) { return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); }
+  function fmt(s) { return esc(s).replace(/`([^`]+)`/g, "<code>$1</code>"); }
+  function load(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+  function save(k, v) { try { localStorage.setItem(k, v); } catch (e) { /* storage may be blocked */ } }
+
+  /* ---------- syntax highlighting ---------- */
+  // Generic tokenizer: re has capture groups, map[i] is the CSS class for group i+1.
+  function tok(src, re, map) {
+    var out = "", last = 0, m;
+    re.lastIndex = 0;
+    while ((m = re.exec(src))) {
+      if (m[0].length === 0) { re.lastIndex++; continue; }
+      out += esc(src.slice(last, m.index));
+      var cls = "";
+      for (var i = 1; i < m.length; i++) { if (m[i] !== undefined) { cls = map[i - 1]; break; } }
+      out += cls ? '<span class="' + cls + '">' + esc(m[0]) + "</span>" : esc(m[0]);
+      last = re.lastIndex;
+    }
+    return out + esc(src.slice(last));
+  }
+  function lines(src, fn) { return src.split("\n").map(fn).join("\n"); }
+  // Split a line into body and trailing "# comment" (the # must start the line or follow whitespace).
+  function cutHash(line) {
+    var i = line.search(/(^|\s)#/);
+    if (i < 0) return [line, ""];
+    var cut = line.charAt(i) === "#" ? i : i + 1;
+    return [line.slice(0, cut), line.slice(cut)];
+  }
+  function withComment(line, bodyFn) {
+    var p = cutHash(line);
+    return bodyFn(p[0]) + (p[1] ? '<span class="c">' + esc(p[1]) + "</span>" : "");
+  }
+
+  var STR = "\"(?:[^\"\\\\]|\\\\.)*\"|'[^']*'";
+  var SH_RE = new RegExp(
+    "(" + STR + ")" +
+    "|(\\$\\{\\{[^}]*\\}\\}|\\$\\{[^}]*\\}|\\$\\(|\\$[A-Za-z_]\\w*|\\$[0-9#?@*!$])" +
+    "|((?<=\\s)--?[A-Za-z][\\w:.+*=\\/\\-]*)" +
+    "|((?<=^\\s*|\\|\\s*|&&\\s*|;\\s*|sudo\\s+|\\$\\(\\s*|xargs\\s+(?:-\\S+\\s+)*)[a-z][\\w.\\-]*)", "g");
+  function hlShell(src) {
+    return lines(src, function (l) { return withComment(l, function (b) { return tok(b, SH_RE, ["s", "an", "ty", "f"]); }); });
+  }
+
+  var DOCKER_RE = new RegExp(
+    "(^\\s*(?:FROM|RUN|CMD|LABEL|EXPOSE|ENV|ADD|COPY|ENTRYPOINT|VOLUME|USER|WORKDIR|ARG|ONBUILD|STOPSIGNAL|HEALTHCHECK|SHELL|MAINTAINER)(?=\\s|$))" +
+    "|(" + STR + ")" +
+    "|(\\$\\{[^}]*\\}|\\$[A-Za-z_]\\w*)" +
+    "|((?<=\\s)--?[A-Za-z][\\w:.+*=\\/\\-]*)" +
+    "|(\\bAS\\b)", "g");
+  function hlDocker(src) {
+    return lines(src, function (l) { return withComment(l, function (b) { return tok(b, DOCKER_RE, ["k", "s", "an", "ty", "k"]); }); });
+  }
+
+  var YAML_VAL_RE = new RegExp(
+    "(" + STR + ")" +
+    "|(\\$\\{\\{[^}]*\\}\\}|\\$\\{[^}]*\\}|\\$[A-Za-z_]\\w*)" +
+    "|(\\b(?:true|false|null|yes|no)\\b)" +
+    "|((?<![\\w.\\/-])-?\\d+(?:\\.\\d+)?[a-zA-Z%]{0,3}(?![\\w.\\/-]))", "g");
+  function hlYaml(src) {
+    return lines(src, function (l) {
+      return withComment(l, function (b) {
+        var m = /^(\s*(?:-\s+)*)((?:"[^"]*"|'[^']*'|[^\s:#'"\[\]{},][^:#]*?))(:)(?=\s|$)(.*)$/.exec(b);
+        if (m) return esc(m[1]) + '<span class="f">' + esc(m[2]) + "</span>" + esc(m[3]) + tok(m[4], YAML_VAL_RE, ["s", "an", "k", "n"]);
+        return tok(b, YAML_VAL_RE, ["s", "an", "k", "n"]);
+      });
+    });
+  }
+
+  var HCL_RE = new RegExp(
+    "(\\/\\/[^\\n]*|#[^\\n]*|\\/\\*[\\s\\S]*?\\*\\/)" +
+    "|(\"(?:[^\"\\\\\\n]|\\\\.)*\")" +
+    "|(^\\s*(?:terraform|provider|resource|data|variable|output|module|locals|backend|required_providers|lifecycle|dynamic|moved|import|check|precondition|postcondition)(?=[\\s{]))" +
+    "|\\b(true|false|null|for|in|if|each|count|var|local|module|self)\\b" +
+    "|\\b(\\d+(?:\\.\\d+)?)\\b" +
+    "|(^\\s*[A-Za-z_][\\w\\-]*(?=\\s*=[^=]))" +
+    "|\\b([a-z_]+)(?=\\()", "gm");
+  function hlHcl(src) { return tok(src, HCL_RE, ["c", "s", "k", "k", "n", "f", "f"]); }
+
+  function hlIni(src) {
+    return lines(src, function (l) {
+      if (/^\s*[;#]/.test(l)) return '<span class="c">' + esc(l) + "</span>";
+      var s = /^(\s*\[[^\]]*\])(.*)$/.exec(l);
+      if (s) return '<span class="k">' + esc(s[1]) + "</span>" + esc(s[2]);
+      var kv = /^(\s*[A-Za-z][\w.\-]*)(\s*=\s*)(.*)$/.exec(l);
+      if (kv) return '<span class="f">' + esc(kv[1]) + "</span>" + esc(kv[2]) + esc(kv[3]);
+      return esc(l);
+    });
+  }
+
+  var JSON_RE = new RegExp(
+    "(\"(?:[^\"\\\\\\n]|\\\\.)*\"(?=\\s*:))" +
+    "|(\"(?:[^\"\\\\\\n]|\\\\.)*\")" +
+    "|\\b(true|false|null)\\b" +
+    "|(-?\\b\\d+(?:\\.\\d+)?(?:[eE][+-]?\\d+)?\\b)", "g");
+  function hlJson(src) { return tok(src, JSON_RE, ["f", "s", "k", "n"]); }
+
+  var PROMQL_RE = new RegExp(
+    "(#[^\\n]*)" +
+    "|(" + STR + "|`[^`]*`)" +
+    "|\\b(by|without|on|ignoring|group_left|group_right|offset|and|or|unless|bool|unwrap|json|logfmt|pattern|regexp|line_format|label_format)\\b" +
+    "|(\\b\\d+(?:\\.\\d+)?(?:ms|[smhdwy])?\\b)" +
+    "|(\\b[a-zA-Z_]\\w*(?=\\s*(?:=~|!=|!~|=(?!=))))" +
+    "|(\\b[a-z_]\\w*(?=\\())", "g");
+  function hlPromql(src) { return tok(src, PROMQL_RE, ["c", "s", "k", "n", "an", "f"]); }
+
+
+  var PY_KW = "and|as|assert|async|await|break|class|continue|def|del|elif|else|except|finally|for|from|global|if|import|in|is|lambda|nonlocal|not|or|pass|raise|return|try|while|with|yield|True|False|None|self";
+  var PY_RE = new RegExp(
+    "(#[^\\n]*)" +
+    "|(\"\"\"[\\s\\S]*?\"\"\"|[fFbBrR]?\"(?:[^\"\\\\\\n]|\\\\.)*\"|[fFbBrR]?'(?:[^'\\\\\\n]|\\\\.)*')" +
+    "|(@[A-Za-z_][\\w.]*)" +
+    "|\\b(" + PY_KW + ")\\b" +
+    "|\\b(\\d[\\d_]*(?:\\.\\d+)?(?:[eE][+-]?\\d+)?)\\b" +
+    "|\\b([A-Z]\\w*)\\b" +
+    "|\\b([a-z_]\\w*)(?=\\()", "g");
+  function hlPython(src) { return tok(src, PY_RE, ["c", "s", "an", "k", "n", "ty", "f"]); }
+
+  var SQL_KW = "SELECT|FROM|WHERE|GROUP BY|ORDER BY|HAVING|LIMIT|OFFSET|DISTINCT ON|DISTINCT|AS|AND|OR|NOT|IN|IS|NULL|LIKE|BETWEEN|EXISTS|ANY|ALL|CASE|WHEN|THEN|ELSE|END|JOIN|INNER|LEFT|RIGHT|FULL|CROSS|LATERAL|ON|USING|UNION|INTERSECT|EXCEPT|WITH|RECURSIVE|OVER|PARTITION BY|ROWS|PRECEDING|FOLLOWING|FILTER|INSERT INTO|INSERT|VALUES|UPDATE|SET|DELETE|RETURNING|CONFLICT|DO|NOTHING|MERGE|MATCHED|CREATE|ALTER|DROP|TABLE|INDEX|UNIQUE|CONCURRENTLY|EXTENSION|IF|PRIMARY KEY|REFERENCES|FOREIGN KEY|CHECK|DEFAULT|CONSTRAINT|EXCLUDE|ADD|COLUMN|ROLE|LOGIN|GRANT|REVOKE|PUBLICATION|SUBSCRIPTION|CONNECTION|POLICY|ENABLE|ROW LEVEL SECURITY|PARTITION|FOR|TO|OF|BEGIN|COMMIT|ROLLBACK|ISOLATION LEVEL|SKIP LOCKED|NOWAIT|UPDATE OF|TRUE|FALSE|GENERATED|ALWAYS|STORED|IDENTITY|VALID|NO|ASC|DESC|VACUUM|ANALYZE|EXPLAIN|MATERIALIZED|ATTACH|DETACH|REPLACE|FUNCTION|TRIGGER|WHERE|INCLUDE|RESET|SELECT|SAVEPOINT";
+  var SQL_RE = new RegExp(
+    "(--[^\\n]*|\\/\\*[\\s\\S]*?\\*\\/)" +
+    "|('(?:[^']|'')*')" +
+    "|(\\$\\d+|:{2}[a-z_]\\w*(?:\\[\\])?)" +
+    "|\\b(" + SQL_KW + ")\\b" +
+    "|\\b(\\d+(?:\\.\\d+)?)\\b" +
+    "|\\b(bigint|bigserial|boolean|bytea|date|double precision|inet|int|integer|interval|jsonb|json|numeric|real|serial|smallint|text|timestamptz|timestamp|tsvector|tsquery|tstzrange|uuid|varchar|vector)\\b" +
+    "|\\b([a-z_][a-z_0-9]*)(?=\\()", "gi");
+  function hlSql(src) { return tok(src, SQL_RE, ["c", "s", "an", "k", "n", "ty", "f"]); }
+
+
+  var REDIS_RE = new RegExp(
+    "(#[^\\n]*)" +
+    "|(\"(?:[^\"\\\\]|\\\\.)*\"|'[^']*')" +
+    "|(^\\s*[A-Z][A-Z.]+(?:\\s+[A-Z]+(?=\\s|$))?)" +
+    "|\\b(NX|XX|EX|PX|EXAT|PXAT|KEEPTTL|GET|MATCH|COUNT|LIMIT|WITHSCORES|BLOCK|STREAMS|GROUP|MAXLEN|MKSTREAM|REV|BYSCORE|BYLEX|LT|GT|CH|INCR|AND|OR|XOR|NOT)\\b" +
+    "|((?<![\\w:.-])-?\\d+(?:\\.\\d+)?(?![\\w:.-]))", "gm");
+  function hlRedis(src) { return tok(src, REDIS_RE, ["c", "s", "f", "k", "n"]); }
+
+  function highlight(code, lang) {
+    switch (lang) {
+      case "python": return hlPython(code);
+      case "sql": return hlSql(code);
+      case "redis": return hlRedis(code);
+      case "sh": return hlShell(code);
+      case "docker": return hlDocker(code);
+      case "yaml": return hlYaml(code);
+      case "hcl": return hlHcl(code);
+      case "ini": return hlIni(code);
+      case "json": return hlJson(code);
+      case "promql": return hlPromql(code);
+      default: return esc(code);
+    }
+  }
+
+  /* ---------- render cards ---------- */
+  function tableHTML(c) {
+    var h = "<div class=\"tw\"><table><thead><tr>" + c.head.map(function (x) { return "<th>" + fmt(x) + "</th>"; }).join("") + "</tr></thead><tbody>";
+    c.rows.forEach(function (r) { h += "<tr>" + r.map(function (x) { return "<td>" + fmt(x) + "</td>"; }).join("") + "</tr>"; });
+    return h + "</tbody></table></div>";
+  }
+  function cardEl(c) {
+    var code = c.code ? c.code.replace(/~\{/g, "${") : "";
+    var el = document.createElement("article");
+    el.className = "card" + (c.wide ? " wide" : "");
+    var badges = (c.v ? '<span class="tag ver' + (c.prev ? " prev" : "") + '">' + esc(c.v) + "</span>" : "") + '<span class="tag">' + esc(c.kind) + "</span>";
+    var h = '<div class="ch"><h3>' + fmt(c.t) + '</h3><div class="badges">' + badges + "</div></div>";
+    if (c.sum) h += '<p class="sum">' + fmt(c.sum) + "</p>";
+    if (c.rows) h += tableHTML(c);
+    if (code) h += '<div class="codewrap"><button class="copy" type="button" aria-label="Copy code">Copy</button><pre>' + highlight(code, c.lang || "sh") + "</pre></div>";
+    var hasMore = (c.more && c.more.length) || (c.watch && c.watch.length);
+    if (hasMore) h += '<button class="btn-d" type="button" aria-expanded="false">Show details</button>';
+    if (c.more && c.more.length) h += '<ul class="more">' + c.more.map(function (x) { return "<li>" + fmt(x) + "</li>"; }).join("") + "</ul>";
+    if (c.watch && c.watch.length) h += '<div class="watch"><b>Watch out</b><ul>' + c.watch.map(function (x) { return "<li>" + fmt(x) + "</li>"; }).join("") + "</ul></div>";
+    el.innerHTML = h;
+    var parts = [c.t, c.kind, c.sum || "", code, (c.head || []).join(" "), (c.rows || []).map(function (r) { return r.join(" "); }).join(" "), (c.more || []).join(" "), (c.watch || []).join(" "), c.v || ""];
+    el._idx = parts.join(" ").toLowerCase();
+    return el;
+  }
+
+  var main = $("main"), side = $("side"), chips = $("chips");
+  var secEls = {}, cardEls = [], navLinks = [];
+  SECS.forEach(function (s) {
+    var sec = document.createElement("section");
+    sec.className = "sec"; sec.id = "sec-" + s.id; sec.setAttribute("aria-labelledby", "h-" + s.id);
+    sec.innerHTML = '<div class="sec-head"><h2 id="h-' + s.id + '">' + esc(s.t) + "</h2><p>" + esc(s.d) + '</p></div><div class="cols"></div>';
+    var cols = sec.querySelector(".cols"), n = 0;
+    CARDS.forEach(function (c) {
+      if (c.sec !== s.id) return;
+      var el = cardEl(c); cols.appendChild(el); cardEls.push({ el: el, sec: s.id }); n++;
+    });
+    s.count = n; s.shown = n;
+    main.appendChild(sec); secEls[s.id] = sec;
+
+    var a = document.createElement("a"); a.href = "#sec-" + s.id;
+    a.innerHTML = esc(s.t) + "<span>" + n + "</span>";
+    side.appendChild(a);
+    var ch = document.createElement("a"); ch.href = "#sec-" + s.id; ch.textContent = s.t;
+    chips.appendChild(ch);
+    navLinks.push({ id: s.id, side: a, chip: ch, count: a.querySelector("span") });
+  });
+  var emptyMsg = document.createElement("p");
+  emptyMsg.className = "empty"; emptyMsg.hidden = true;
+  emptyMsg.textContent = "No card matches that. Try a shorter word, such as vacuum, xadd or outbox.";
+  main.appendChild(emptyMsg);
+
+  /* ---------- search ---------- */
+  var q = $("q"), cnt = document.createElement("span");
+  cnt.className = "cnt"; cnt.id = "cnt"; cnt.setAttribute("aria-live", "polite");
+  q.parentNode.insertBefore(cnt, q.nextSibling);
+  function applyFilter() {
+    var terms = q.value.trim().toLowerCase().split(/\s+/).filter(Boolean), total = 0;
+    document.body.classList.toggle("searching", terms.length > 0);
+    SECS.forEach(function (s) { s.shown = 0; });
+    cardEls.forEach(function (o) {
+      var ok = terms.every(function (t) { return o.el._idx.indexOf(t) > -1; });
+      o.el.hidden = !ok;
+      if (ok) { total++; SECS.forEach(function (s) { if (s.id === o.sec) s.shown++; }); }
+    });
+    SECS.forEach(function (s, i) {
+      secEls[s.id].hidden = s.shown === 0;
+      navLinks[i].count.textContent = terms.length ? s.shown : s.count;
+      navLinks[i].side.hidden = navLinks[i].chip.hidden = s.shown === 0;
+    });
+    emptyMsg.hidden = total > 0;
+    cnt.textContent = terms.length ? total + (total === 1 ? " card" : " cards") : "";
+  }
+  q.addEventListener("input", applyFilter);
+  q.addEventListener("keydown", function (e) { if (e.key === "Escape") { q.value = ""; applyFilter(); q.blur(); } });
+  document.addEventListener("keydown", function (e) {
+    var tag = (e.target && e.target.tagName) || "";
+    if (e.key === "/" && tag !== "INPUT" && tag !== "TEXTAREA") { e.preventDefault(); q.focus(); q.select(); }
+  });
+
+  /* ---------- detail level, theme ---------- */
+  function setMode(m) {
+    document.body.classList.toggle("compact", m === "compact");
+    Array.prototype.forEach.call(document.querySelectorAll(".seg2 button"), function (b) { b.setAttribute("aria-pressed", b.dataset.mode === m ? "true" : "false"); });
+    save("mg-mode", m);
+  }
+  Array.prototype.forEach.call(document.querySelectorAll(".seg2 button"), function (b) { b.addEventListener("click", function () { setMode(b.dataset.mode); }); });
+  setMode(load("mg-mode") === "compact" ? "compact" : "detailed");
+
+  var root = document.documentElement;
+  var savedTheme = load("mg-theme");
+  if (savedTheme === "light" || savedTheme === "dark") root.setAttribute("data-theme", savedTheme);
+  $("theme").addEventListener("click", function () {
+    var cur = root.getAttribute("data-theme") || (window.matchMedia && matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+    var next = cur === "dark" ? "light" : "dark";
+    root.setAttribute("data-theme", next); save("mg-theme", next);
+  });
+
+  /* ---------- card actions: details, copy ---------- */
+  main.addEventListener("click", function (e) {
+    var d = e.target.closest(".btn-d");
+    if (d) {
+      var card = d.closest(".card"), open = card.classList.toggle("open");
+      d.textContent = open ? "Hide details" : "Show details"; d.setAttribute("aria-expanded", open ? "true" : "false");
+      return;
+    }
+    var c = e.target.closest(".copy");
+    if (c) {
+      var pre = c.parentNode.querySelector("pre"), label = "Copy";
+      function fallback() {
+        var r = document.createRange(); r.selectNodeContents(pre);
+        var s = window.getSelection(); s.removeAllRanges(); s.addRange(r); c.textContent = "Selected";
+      }
+      try { navigator.clipboard.writeText(pre.textContent).then(function () { c.textContent = "Copied"; }, fallback); } catch (err) { fallback(); }
+      setTimeout(function () { c.textContent = label; }, 1600);
+    }
+  });
+
+  /* ---------- scroll spy ---------- */
+  function setActive(id) {
+    navLinks.forEach(function (n) {
+      var on = n.id === id;
+      if (on) { n.side.setAttribute("aria-current", "true"); n.chip.setAttribute("aria-current", "true"); }
+      else { n.side.removeAttribute("aria-current"); n.chip.removeAttribute("aria-current"); }
+      if (on && chips.scrollWidth > chips.clientWidth) chips.scrollLeft = n.chip.offsetLeft - chips.clientWidth / 2 + n.chip.offsetWidth / 2;
+    });
+  }
+  if ("IntersectionObserver" in window) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) { if (en.isIntersecting) setActive(en.target.id.replace("sec-", "")); });
+    }, { rootMargin: "-140px 0px -65% 0px" });
+    SECS.forEach(function (s) { io.observe(secEls[s.id]); });
+  }
+  setActive(SECS[0].id);
+  applyFilter();
+})();
+</script>
+
+</body></html>

@@ -1,0 +1,2414 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Architecture & Distributed Systems Guide</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Sans+Condensed:wght@500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+/* Layout: sticky search bar, section rail on the left, masonry columns of reference cards per section.
+   Cool blueprint neutrals with a Java-blue accent; orange is reserved for pitfalls. Code surfaces stay dark in both themes. */
+:root{
+  --bg:#f1f4f9; --panel:#ffffff; --ink:#111a2c; --muted:#56627a; --line:#d7deea; --line2:#bcc7da;
+  --accent:#1d5d98; --accent-soft:#e3edf9; --accent-ink:#ffffff;
+  --warn:#b3400b; --warn-soft:#fdeee2; --ok:#17703f; --ok-soft:#e1f3e8;
+  --code-bg:#0f1728; --code-fg:#d5ddf0; --code-line:#222d45;
+  --t-kw:#ff9a62; --t-type:#7fc6f7; --t-str:#9ad58c; --t-num:#f0c674; --t-cmt:#7080a0; --t-ann:#e0a4ff; --t-fn:#b4d2ff;
+  --sans:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --cond:"IBM Plex Sans Condensed","IBM Plex Sans",system-ui,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0b101b; --panel:#121929; --ink:#e3e8f4; --muted:#97a2bc; --line:#25304a; --line2:#37456a;
+    --accent:#72b3ee; --accent-soft:#15253b; --accent-ink:#0b101b;
+    --warn:#ff9d66; --warn-soft:#2a1a11; --ok:#70d69b; --ok-soft:#11281c;
+    --code-bg:#080c15; --code-fg:#d5ddf0; --code-line:#1c263d;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0b101b; --panel:#121929; --ink:#e3e8f4; --muted:#97a2bc; --line:#25304a; --line2:#37456a;
+  --accent:#72b3ee; --accent-soft:#15253b; --accent-ink:#0b101b;
+  --warn:#ff9d66; --warn-soft:#2a1a11; --ok:#70d69b; --ok-soft:#11281c;
+  --code-bg:#080c15; --code-fg:#d5ddf0; --code-line:#1c263d;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{scroll-behavior:smooth}
+body{
+  margin:0; background:var(--bg); color:var(--ink); font-family:var(--sans); font-size:15px; line-height:1.55;
+  padding-left:max(16px, env(safe-area-inset-left, 0px));
+  padding-right:max(16px, env(safe-area-inset-right, 0px));
+  padding-block:0 80px;
+}
+body::before{content:""; position:fixed; inset:0 0 auto; height:env(safe-area-inset-top, 0px); z-index:30; background:var(--panel)}
+button,input{font:inherit; color:inherit}
+:focus-visible{outline:2px solid var(--accent); outline-offset:2px}
+a{color:var(--accent)}
+code{font-family:var(--mono); font-size:.86em; background:var(--accent-soft); color:var(--accent); padding:.08em .38em; border-radius:4px; overflow-wrap:anywhere}
+h1,h2,h3{text-wrap:balance}
+
+/* ---------- top bar ---------- */
+.bar{position:sticky; top:env(safe-area-inset-top, 0px); z-index:20; margin-inline:calc(-1 * max(16px, env(safe-area-inset-left, 0px))) calc(-1 * max(16px, env(safe-area-inset-right, 0px)));
+  padding-left:max(16px, env(safe-area-inset-left, 0px)); padding-right:max(16px, env(safe-area-inset-right, 0px));
+  background:var(--panel); border-bottom:1px solid var(--line)}
+.bar-in{max-width:1240px; margin:0 auto; display:flex; align-items:center; gap:14px; padding-block:10px}
+.brand{display:flex; align-items:center; gap:10px; text-decoration:none; color:var(--ink); font-weight:700; letter-spacing:-.01em; white-space:nowrap}
+.mark{display:grid; place-items:center; width:30px; height:30px; border-radius:7px; background:var(--accent); color:var(--accent-ink); font-family:var(--mono); font-weight:600}
+.search{flex:1; min-width:0; max-width:560px; display:flex; align-items:center; gap:10px; min-height:40px; padding:0 12px; border:1px solid var(--line); border-radius:9px; background:var(--bg)}
+.search:focus-within{border-color:var(--accent)}
+.search svg{flex:0 0 auto; color:var(--muted)}
+.search input{flex:1; min-width:0; height:38px; border:0; outline:0; background:none}
+.search kbd{flex:0 0 auto; font-family:var(--mono); font-size:12px; color:var(--muted); border:1px solid var(--line2); border-radius:5px; padding:0 6px}
+.grow{flex:1}
+.seg2{display:inline-flex; border:1px solid var(--line); border-radius:9px; overflow:hidden; flex:0 0 auto}
+.seg2 button{min-height:38px; padding:0 12px; border:0; background:var(--panel); color:var(--muted); cursor:pointer; font-size:13.5px}
+.seg2 button+button{border-left:1px solid var(--line)}
+.seg2 button[aria-pressed="true"]{background:var(--accent-soft); color:var(--accent); font-weight:600}
+.icon{flex:0 0 auto; display:grid; place-items:center; width:40px; height:40px; border:1px solid var(--line); border-radius:9px; background:var(--panel); cursor:pointer; color:var(--muted)}
+.icon:hover,.seg2 button:hover{color:var(--ink)}
+.chips{display:none; overflow-x:auto; gap:6px; padding:0 0 10px; max-width:1240px; margin:0 auto; scrollbar-width:thin}
+.chips a{flex:0 0 auto; display:inline-flex; align-items:center; min-height:34px; padding:0 12px; border:1px solid var(--line); border-radius:999px; text-decoration:none; color:var(--ink); font-size:13.5px; background:var(--panel); white-space:nowrap}
+.chips a[aria-current="true"]{background:var(--accent); border-color:var(--accent); color:var(--accent-ink)}
+
+/* ---------- hero ---------- */
+.wrap{max-width:1240px; margin:0 auto}
+.hero{display:grid; gap:14px; padding-block:34px 22px; max-width:78ch}
+.kicker{margin:0; font-family:var(--cond); font-weight:600; font-size:13px; letter-spacing:.14em; text-transform:uppercase; color:var(--accent)}
+h1{margin:0; font-size:clamp(30px,4.6vw,48px); line-height:1.06; letter-spacing:-.02em; font-weight:700}
+.lede{margin:0; color:var(--muted); font-size:17px; max-width:64ch}
+.lts{display:flex; flex-wrap:wrap; gap:8px; align-items:center; font-family:var(--cond); font-size:14px; color:var(--muted)}
+.lts b{font-weight:600; letter-spacing:.06em; text-transform:uppercase; font-size:12.5px}
+.v{display:inline-flex; align-items:center; min-height:26px; padding:0 10px; border-radius:6px; border:1px solid var(--line2); font-family:var(--mono); font-size:12.5px; color:var(--ink); background:var(--panel)}
+.v.lts-v{background:var(--accent); border-color:var(--accent); color:var(--accent-ink); font-weight:600}
+
+/* ---------- shell ---------- */
+.shell{display:grid; grid-template-columns:190px minmax(0,1fr); gap:30px; align-items:start}
+.side{position:sticky; top:calc(env(safe-area-inset-top, 0px) + 74px); display:grid; gap:2px; max-height:calc(100vh - 96px); overflow:auto; scrollbar-width:thin; padding-bottom:20px}
+.side h2{margin:0 0 8px; font-family:var(--cond); font-weight:600; font-size:12.5px; letter-spacing:.14em; text-transform:uppercase; color:var(--muted)}
+.side a{display:flex; justify-content:space-between; gap:8px; align-items:baseline; padding:7px 10px; border-radius:8px; text-decoration:none; color:var(--ink); font-size:14.5px; border:1px solid transparent}
+.side a:hover{background:var(--panel); border-color:var(--line)}
+.side a span{font-family:var(--mono); font-size:11.5px; color:var(--muted)}
+.side a[aria-current="true"]{background:var(--accent-soft); color:var(--accent); font-weight:600}
+.main{min-width:0; display:grid; grid-template-columns:minmax(0,1fr); gap:46px}
+
+/* ---------- sections and cards ---------- */
+.sec{scroll-margin-top:calc(env(safe-area-inset-top, 0px) + 130px); display:grid; grid-template-columns:minmax(0,1fr); gap:16px; min-width:0}
+.cols{min-width:0}
+.sec-head{display:grid; gap:4px; padding-bottom:10px; border-bottom:2px solid var(--ink)}
+.sec-head h2{margin:0; font-size:clamp(22px,3vw,30px); letter-spacing:-.015em}
+.sec-head p{margin:0; color:var(--muted); max-width:70ch}
+.cols{columns:2 400px; column-gap:16px}
+.card{break-inside:avoid; display:block; margin:0 0 16px; background:var(--panel); border:1px solid var(--line); border-radius:10px; overflow:hidden}
+.card.wide{column-span:all}
+.ch{display:flex; align-items:flex-start; justify-content:space-between; gap:10px; padding:12px 14px 0}
+.ch h3{margin:0; font-size:16.5px; line-height:1.3; letter-spacing:-.005em}
+.badges{display:flex; flex-wrap:wrap; gap:5px; justify-content:flex-end; flex:0 0 auto}
+.tag{font-family:var(--cond); font-weight:600; font-size:11.5px; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); border:1px solid var(--line2); border-radius:5px; padding:1px 7px; white-space:nowrap}
+.tag.ver{font-family:var(--mono); text-transform:none; letter-spacing:0; color:var(--accent); border-color:var(--accent)}
+.tag.prev{color:var(--warn); border-color:var(--warn)}
+.sum{margin:0; padding:6px 14px 12px; color:var(--muted)}
+.codewrap{position:relative; background:var(--code-bg); border-block:1px solid var(--code-line)}
+pre{margin:0; padding:13px 14px; overflow-x:auto; font-family:var(--mono); font-size:12.6px; line-height:1.62; tab-size:2; color:var(--code-fg)}
+.copy{position:absolute; top:6px; right:6px; min-height:28px; padding:0 9px; border-radius:6px; border:1px solid var(--code-line); background:var(--code-bg); color:#8f9bb8; font-family:var(--cond); font-size:12px; font-weight:600; letter-spacing:.06em; cursor:pointer; opacity:.0; transition:opacity .12s}
+.codewrap:hover .copy,.copy:focus-visible{opacity:1}
+@media (hover:none){.copy{opacity:1}}
+.k{color:var(--t-kw)} .ty{color:var(--t-type)} .s{color:var(--t-str)} .n{color:var(--t-num)} .c{color:var(--t-cmt); font-style:italic} .an{color:var(--t-ann)} .f{color:var(--t-fn)}
+.more{margin:0; padding:12px 14px 2px 32px; display:grid; gap:7px; font-size:14.5px}
+.more li::marker{color:var(--accent)}
+.watch{margin:12px 14px 14px; padding:10px 12px; background:var(--warn-soft); border-radius:8px; font-size:14px; display:grid; gap:6px}
+.watch b{font-family:var(--cond); font-weight:600; font-size:12px; letter-spacing:.12em; text-transform:uppercase; color:var(--warn)}
+.watch ul{margin:0; padding-left:18px; display:grid; gap:4px}
+.card>.more:last-child{padding-bottom:14px}
+.more+.watch{margin-top:10px}
+.sum:last-child{padding-bottom:14px}
+.tw{overflow-x:auto; border-top:1px solid var(--line)}
+table{border-collapse:collapse; width:100%; font-size:13.8px}
+th,td{text-align:left; vertical-align:top; padding:8px 12px; border-bottom:1px solid var(--line)}
+th{font-family:var(--cond); font-weight:600; font-size:12px; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); white-space:nowrap; background:var(--bg)}
+tr:last-child td{border-bottom:0}
+td:first-child{font-weight:600}
+td.mono{font-family:var(--mono); font-size:12.5px}
+.btn-d{margin:12px 14px; min-height:32px; padding:0 12px; border:1px solid var(--line2); border-radius:7px; background:var(--panel); color:var(--accent); cursor:pointer; font-size:13px; display:none}
+body.compact:not(.searching) .btn-d{display:inline-flex; align-items:center}
+body.compact:not(.searching) .card:not(.open) .more, body.compact:not(.searching) .card:not(.open) .watch{display:none}
+.search .cnt{flex:0 0 auto; font-family:var(--mono); font-size:12px; color:var(--muted); white-space:nowrap}
+.empty{padding:40px 0; color:var(--muted)}
+.foot{margin-top:50px; padding-top:18px; border-top:1px solid var(--line); color:var(--muted); font-size:14px; max-width:78ch}
+
+@media (max-width:900px){
+  .shell{grid-template-columns:minmax(0,1fr)}
+  .side{display:none}
+  .chips{display:flex}
+  .bar-in{flex-wrap:wrap; row-gap:8px}
+  .search{order:3; flex:1 1 100%; max-width:none}
+  .grow{display:none}
+  .brand{flex:1}
+  .sec{scroll-margin-top:calc(env(safe-area-inset-top, 0px) + 160px)}
+}
+@media (max-width:520px){
+  .brand span:last-child{display:none}
+  .cols{columns:1}
+  .seg2 button{padding:0 9px}
+  .hero{padding-block:24px 14px}
+}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.copy{transition:none}}
+</style>
+
+<div id="top"></div>
+<header class="bar">
+  <div class="bar-in">
+    <a class="brand" href="#top"><span class="mark" aria-hidden="true">AS</span><span>Architecture &amp; Distributed Systems</span></a>
+    <label class="search" for="q">
+      <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>
+      <input id="q" type="search" placeholder="Search: saga, quorum, CAP, outbox, fan-out" autocomplete="off">
+      <kbd aria-hidden="true">/</kbd>
+    </label>
+    <span class="grow"></span>
+    <div class="seg2" role="group" aria-label="Detail level">
+      <button type="button" data-mode="detailed" aria-pressed="true">Detailed</button>
+      <button type="button" data-mode="compact" aria-pressed="false">Compact</button>
+    </div>
+    <button class="icon" id="theme" type="button" aria-label="Switch between light and dark theme">
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 13A9 9 0 1 1 11 3a7 7 0 0 0 10 10z"/></svg>
+    </button>
+  </div>
+  <nav class="chips" id="chips" aria-label="Sections"></nav>
+</header>
+
+<div class="wrap">
+  <section class="hero">
+    <p class="kicker">Reference · Boundaries to production</p>
+    <h1>Designing systems that survive failure</h1>
+    <p class="lede">Concepts, patterns and worked designs with the trade-offs, failure modes and pitfalls spelled out. Skim the summary and code on each card, open the details when something breaks, and press <code>/</code> to search. Compact shows only summaries and code.</p>
+    <div class="lts" aria-label="Topics and versions"><b>Covers</b><span class="v lts-v">CAP and consistency</span><span class="v lts-v">HLD</span><span class="v lts-v">Microservices</span><span class="v lts-v">DDD</span><span class="v lts-v">Consensus</span><span class="v lts-v">Patterns</span><span class="v lts-v">Worked designs</span></div>
+  </section>
+
+  <div class="shell">
+    <aside class="side" aria-label="Sections"><h2>Sections</h2><div id="side" style="display:grid;gap:2px"></div></aside>
+    <main class="main" id="main"></main>
+  </div>
+  <p class="foot" id="foot">Product names, vendor classifications and library status (for example Hystrix, Istio ambient mode) change over time. Treat them as examples and check current documentation. Numbers are orders of magnitude for reasoning, not benchmarks. Validate with your own load tests.</p>
+</div>
+
+<script>
+(function () {
+  "use strict";
+  var CARDS = [];
+  /* card(section, title, kind, fields) */
+  function card(sec, t, kind, f) { f = f || {}; f.sec = sec; f.t = t; f.kind = kind; CARDS.push(f); }
+  var R = String.raw;
+
+  /* ================= FOUNDATIONAL MENTAL MODELS ================= */
+  card("models", "CAP theorem, stated precisely", "Concept", {
+    sum: "When a network partition occurs, a replicated system must choose between linearizable consistency (C) and availability (A). Partitions are not optional, so the real choice is made only during one.",
+    lang: "text",
+    code: R`Partition splits replicas into {A1,A2} | {B1}
+client writes x=1 to A side, then another client reads x from B side
+
+  CP choice: B refuses the read (error/timeout)     -> consistent, not available
+  AP choice: B answers with old x                   -> available, not consistent (stale)`,
+    head: ["Term (Gilbert and Lynch)", "Precise meaning", "Common misreading"],
+    rows: [
+      ["Consistency", "Linearizability: every operation appears to take effect atomically at one point between its call and its return", "\"Same as ACID C\". It is not. It is also not just \"replicas agree eventually\""],
+      ["Availability", "Every request to a non-failing node gets a non-error response", "\"High uptime\". CAP availability has no latency bound, and means every live node responds"],
+      ["Partition tolerance", "The system keeps working when messages between nodes are lost or delayed", "\"A choice you can skip\". In any real network you cannot opt out"]
+    ],
+    more: [
+      "Use it when: choosing what a system does while replicas cannot talk. Payments ledger: refuse writes (CP). Shopping cart or product page: accept and reconcile later (AP).",
+      "Do not use it to: describe normal operation. Most of the time there is no partition, and then latency versus consistency is the real trade (see PACELC).",
+      "CAP is per operation, not per system. One product can serve a CP checkout and an AP browse path.",
+      "Example: Amazon's Dynamo shopping cart accepted writes on both sides of a partition and merged the carts later, so a deleted item could reappear. Amazon judged that cheaper than refusing to add to a cart."
+    ],
+    watch: [
+      "\"We are CA\" is not a valid claim for a distributed system. A single-node database is CA only because it has no partitions to tolerate.",
+      "A system labelled CP may still be unavailable for minutes during leader election. That unavailability is the price, and you must plan for it (client retries, queues)."
+    ]
+  });
+
+  card("models", "PACELC: the everyday trade-off", "Table", {
+    sum: "If Partitioned: choose Availability or Consistency. Else (normal operation): choose Latency or Consistency. Replication always costs either latency or freshness.",
+    head: ["System (commonly classified)", "On partition", "Else", "Why"],
+    rows: [
+      ["DynamoDB (default reads), Cassandra, Riak", "PA", "EL", "Replicas answer locally. Eventual consistency by default, tunable per request"],
+      ["Spanner, CockroachDB, FoundationDB", "PC", "EC", "Consensus on every write. You pay cross-replica round trips (tens of ms across regions) for strong consistency"],
+      ["MongoDB (majority concerns)", "PC", "EC", "Writes need majority acknowledgement, reads follow the chosen concern"],
+      ["PostgreSQL primary with async replicas", "PC for the primary", "EL for replica reads", "Replica reads are fast and may lag"],
+      ["PNUTS (Yahoo)", "PC", "EL", "Timeline consistency per record, fast local reads"]
+    ],
+    more: [
+      "Rule: the trade-off is a dial, not a switch. DynamoDB offers strongly consistent reads, Cassandra offers `QUORUM` and `LOCAL_QUORUM`, Spanner offers stale reads with bounded staleness. Pick per query.",
+      "Intermediate thinking: \"use a strongly consistent database\". Senior thinking: \"which three operations truly need linearizability, and can the rest use cheaper reads?\"",
+      "Classifications are approximate and depend on configuration. Check the vendor's current documentation before relying on a label."
+    ]
+  });
+
+  card("models", "Consistency models, strongest to weakest", "Table", {
+    wide: true,
+    sum: "A consistency model is a contract about which orders of operations clients may observe.",
+    head: ["Model", "Guarantee", "Cost", "Example behaviour and system"],
+    rows: [
+      ["Strict serializable (external consistency)", "Transactions behave as if run one at a time, in real-time order", "Highest. Consensus plus bounded clock uncertainty", "Spanner with TrueTime"],
+      ["Linearizability", "Single-object operations take effect atomically in real-time order. Reads see the latest completed write", "Quorum or leader round trip per operation", "etcd, ZooKeeper (writes), Spanner, DynamoDB strongly consistent read"],
+      ["Serializability", "Transactions equivalent to some serial order (not necessarily real-time)", "Locking or validation", "PostgreSQL SERIALIZABLE, most SQL engines at the top level"],
+      ["Snapshot isolation", "Transaction reads one consistent snapshot. Write skew possible", "Cheaper than serializable", "PostgreSQL REPEATABLE READ, Oracle, many MVCC engines"],
+      ["Sequential consistency", "All processes see the same order, which respects each process's program order. Not real-time", "Coordination for total order", "Some replicated logs, memory models"],
+      ["Causal consistency", "If A may have caused B, everyone sees A before B. Concurrent writes may be seen in different orders", "Track dependencies (vector clocks, HLC)", "MongoDB causal sessions, COPS, many collaborative apps"],
+      ["Session guarantees", "Read-your-writes, monotonic reads, monotonic writes, writes-follow-reads for one client", "Sticky sessions or version tokens", "Most social apps, Cosmos DB session level"],
+      ["Eventual consistency", "If writes stop, replicas converge. No promise about when or in between", "Lowest", "DNS, Cassandra at `ONE`, DynamoDB default reads"]
+    ],
+    more: [
+      "Real bug: a user posts a comment and refreshes, and the comment is missing because the read hit a lagging replica. Fix with read-your-writes: route that user to the primary for a few seconds after a write, or pass a version token.",
+      "Another real bug: monotonic reads violated. A user sees a new value, refreshes, and sees the old value from another replica. Fix with replica affinity per session.",
+      "Do not promise linearizability across services. Two microservices with separate databases give you at best eventual consistency between them."
+    ]
+  });
+
+  card("models", "Fallacies of distributed computing", "Table", {
+    sum: "The eight false assumptions (Deutsch and Gosling) that every distributed bug eventually violates.",
+    head: ["Fallacy", "What happens in production", "Design response"],
+    rows: [
+      ["The network is reliable", "Packets drop, connections reset, a call may have executed but the reply was lost", "Timeouts, retries with idempotency, acknowledgements"],
+      ["Latency is zero", "A 0.5 ms call in the same zone becomes 80 ms cross-region. N+1 calls become seconds", "Batch, cache, colocate, async"],
+      ["Bandwidth is infinite", "Chatty JSON, replication traffic and backups saturate links", "Compression, pagination, binary formats, data locality"],
+      ["The network is secure", "Lateral movement once one service is breached", "mTLS, zero trust, least privilege, network policies"],
+      ["Topology does not change", "Pods reschedule, IPs change, DNS caches go stale", "Service discovery, short TTLs, retries on new connections"],
+      ["There is one administrator", "Several teams, clouds and vendors change things independently", "Contracts, versioning, clear ownership, runbooks"],
+      ["Transport cost is zero", "Serialisation CPU, egress fees, cross-AZ charges", "Cost-aware design, keep chatty traffic within a zone"],
+      ["The network is homogeneous", "Different protocols, clocks, library versions, hardware", "Open standards, compatibility tests, tolerant readers"]
+    ]
+  });
+
+  card("models", "Failure modes", "Table", {
+    wide: true,
+    sum: "Know which failure model you design for. Most outages come from the nasty ones, not clean crashes.",
+    head: ["Failure", "Description", "Detected by", "Mitigation"],
+    rows: [
+      ["Crash-stop", "Process dies and stays dead", "Heartbeat timeout", "Replication, failover, restart"],
+      ["Crash-recovery", "Process restarts with durable state, loses memory", "Heartbeat, restart count", "Write-ahead log, idempotent recovery"],
+      ["Omission", "Messages lost in send or receive", "Missing acks", "Retries, deduplication"],
+      ["Timing (slow node)", "Responds, but too slowly to be useful", "Latency percentiles, timeouts", "Timeouts, hedged requests, load shedding, outlier ejection"],
+      ["Gray failure", "Node looks healthy to health checks but fails real requests", "End-to-end probes, client-observed errors", "Active probing from the client path, outlier detection"],
+      ["Network partition", "Subsets of nodes cannot communicate", "Quorum loss", "Quorums, fencing, partition-aware design"],
+      ["Split brain", "Two nodes both believe they are leader", "Conflicting writes, fencing token rejection", "Consensus-based election, fencing tokens, STONITH"],
+      ["Clock skew and jumps", "Clocks differ or go backwards (NTP step, VM pause)", "Monotonic clock checks", "Never order events by wall clock alone, use logical or hybrid clocks, leases with margin"],
+      ["Byzantine", "Node behaves arbitrarily or maliciously (or corrupted by a bug or bit flip)", "Checksums, cross-checks", "Rare inside one organisation. Use checksums and validation. BFT consensus only for adversarial settings"],
+      ["Metastable failure", "A trigger pushes the system into a state that persists after the trigger ends, for example retry storms with a full queue", "Goodput collapsing while load looks normal", "Load shedding, retry budgets, circuit breakers, capacity headroom"],
+      ["Correlated failure", "Same bug, same zone, same deploy, same certificate expiry", "Fleet-wide alarms", "Cells, staggered rollouts, diversity, blast-radius limits"]
+    ],
+    more: [
+      "Gray failures are the most common production surprise. A broken disk that still answers pings keeps getting traffic. Count real request errors per backend and eject outliers.",
+      "A paused JVM (GC, VM live migration) is indistinguishable from a dead node. When it wakes, it may still act as leader. That is why leaders use leases plus fencing tokens."
+    ]
+  });
+
+  card("models", "Why partial failure changes everything", "Concept", {
+    sum: "A local call either returns or throws. A remote call has a third outcome: you do not know what happened.",
+    lang: "text",
+    code: R`client --- charge($50) ---> payment service ---> bank
+client <-- (nothing, timeout) --
+
+Possibilities the client cannot tell apart:
+  1. request never arrived          -> retry is safe
+  2. request ran, response was lost -> retry double-charges
+  3. request still running          -> retry doubles load and may double-charge
+
+Answer: make operations idempotent (Idempotency-Key header), then retry freely.`,
+    more: [
+      "The consequence is design-wide: every state-changing call needs an idempotency story, every retry needs a budget, every timeout is a decision about which of the three cases to risk.",
+      "Intermediate thinking: handle exceptions. Senior thinking: define the contract for the ambiguous outcome (the \"unknown\" state) and how it is resolved (reconciliation, status query, idempotent retry)."
+    ]
+  });
+
+  card("models", "Tail latency and fan-out", "Concept", {
+    sum: "In a fan-out, the slowest call decides the response time. Rare slowness at each backend becomes common at the front.",
+    lang: "python",
+    code: R`# Probability that a request is slow when it must wait for n backends,
+# each of which is slow with probability p
+def p_slow(n, p):
+    return 1 - (1 - p) ** n
+
+print(p_slow(1, 0.01))      # 0.01   (1 percent of requests)
+print(p_slow(10, 0.01))     # 0.096
+print(p_slow(100, 0.01))    # 0.634  (63 percent of requests wait for at least one p99 call!)`,
+    head: ["Technique", "How it helps"],
+    rows: [
+      ["Hedged requests", "After the p95 time, send a second copy to another replica and take the first answer. Costs a few percent extra load, cuts the tail"],
+      ["Tied requests", "Send to two replicas and cancel the slower once one starts"],
+      ["Deadlines and budgets", "Propagate a remaining time budget so downstream calls do not work on already-expired requests"],
+      ["Partial results", "Return what arrived in time (search with a missing shard) when the product allows it"],
+      ["Reduce fan-out", "Pre-aggregate, cache, denormalise"]
+    ],
+    more: ["From Dean and Barroso, \"The Tail at Scale\". Measure p99 and p99.9, not averages. Averages hide the problem users feel."]
+  });
+
+  card("models", "Intermediate versus senior thinking: the same problem", "Table", {
+    sum: "How the questions change as experience grows. Use this as a self-check when reviewing a design.",
+    head: ["Problem", "Intermediate answer", "Senior answer"],
+    rows: [
+      ["Service A calls B and B is slow", "Add a retry and a timeout", "Set a deadline from the caller's budget, cap retries with a budget, add a circuit breaker and bulkhead, define the degraded behaviour, check whether B's capacity or the retry load is the real problem"],
+      ["Need consistency across two databases", "Use a distributed transaction", "Redraw the boundary so one aggregate lives in one store, otherwise use outbox plus saga with compensations and accept eventual consistency"],
+      ["Reads are slow", "Add a cache", "Quantify hit ratio and miss cost, choose invalidation, plan stampede protection and what happens when the cache is cold or down"],
+      ["Service is down", "Restart it", "Check blast radius, whether retries amplify the outage, whether a rollback is safer, and write down why the alert did not fire earlier"],
+      ["Want exactly-once", "Turn on the broker's exactly-once setting", "At-least-once delivery plus idempotent consumers, with end-to-end identifiers"],
+      ["Scale for 10x traffic", "Add more servers", "Find the first bottleneck (database connections, a hot partition, a lock), load test to it, and decide what to degrade first"]
+    ]
+  });
+
+  /* ================= SYSTEM DESIGN APPROACH (HLD) ================= */
+  card("hld", "A repeatable HLD framework", "Recipe", {
+    wide: true,
+    sum: "Seven steps in order. Spend time where the risk is, not evenly.",
+    head: ["Step", "Questions to answer", "Output"],
+    rows: [
+      ["1. Requirements", "Who are the users? Core use cases (3 to 5)? What is out of scope? Functional versus non-functional: latency, availability, consistency needs, durability, compliance, data residency", "A short list with numbers, for example \"p99 read under 200 ms, 99.95 percent availability, no lost orders\""],
+      ["2. Estimation", "Users, requests per second, read:write ratio, data size, growth, peak factor", "QPS, storage per year, bandwidth, which resource dominates"],
+      ["3. High-level architecture", "Clients, edge, services, data stores, async paths. Draw the main read and write flow", "A box diagram with arrows labelled by protocol and data"],
+      ["4. Data model and storage", "Entities, relationships, access patterns, keys, indexes, partition key, consistency per entity", "Schema sketch and a justified store choice"],
+      ["5. APIs and contracts", "Endpoints, idempotency, pagination, errors, versioning, events published", "A small API list and event list"],
+      ["6. Scaling and reliability", "Bottlenecks, caching, sharding, replication, failure of each component, degraded modes, multi-region", "A failure table: what breaks, impact, mitigation"],
+      ["7. Trade-offs and evolution", "What you chose not to build, what changes at 10x, what you would measure first", "Explicit decisions and triggers for revisiting them"]
+    ],
+    more: [
+      "Anti-pattern: drawing boxes before agreeing on numbers. A design for 100 requests per second and one for 1 million are different designs.",
+      "Anti-pattern: naming technologies without reasons. \"Kafka\" is not a design. \"An ordered, replayable log per order ID so consumers can rebuild state\" is.",
+      "Senior habit: state assumptions out loud, mark the riskiest one, and design the experiment or load test that would validate it."
+    ]
+  });
+
+  card("hld", "Back-of-envelope numbers to memorise", "Table", {
+    sum: "Round aggressively. The goal is the right order of magnitude.",
+    head: ["Quantity", "Value"],
+    rows: [
+      ["Seconds per day", "86,400 (call it 10^5)"],
+      ["Seconds per month, year", "2.6 million, 31.5 million"],
+      ["1 million requests per day", "about 12 requests per second average"],
+      ["Peak to average ratio", "2x to 5x for consumer traffic, 10x or more for events (sales, matches)"],
+      ["Powers of two", "2^10 = 1 KB, 2^20 = 1 MB, 2^30 = 1 GB, 2^40 = 1 TB"],
+      ["Single well-tuned PostgreSQL or MySQL node", "thousands to tens of thousands of simple queries per second, tens of TB of data with care"],
+      ["Single Redis node", "about 100k operations per second, more with pipelining"],
+      ["Single Kafka broker", "tens to hundreds of MB/s sustained, depending on disk and replication"],
+      ["Typical web server instance", "hundreds to a few thousand requests per second for simple handlers"],
+      ["Same-DC round trip", "0.2 to 1 ms. Cross-region: 50 to 150 ms. Intercontinental: 150 to 300 ms"],
+      ["SSD read, random", "0.05 to 0.15 ms. Memory read: 100 ns"],
+      ["Availability: 99.9, 99.99, 99.999", "8.8 h, 53 min, 5.3 min of downtime per year"]
+    ],
+    more: ["Numbers are for orientation. Validate with your own benchmark before committing capacity or budget."]
+  });
+
+  card("hld", "Capacity estimation, worked example", "Recipe", {
+    sum: "A photo-sharing feature: 50 million daily active users.",
+    lang: "python",
+    code: R`DAU = 50_000_000
+uploads_per_user_per_day = 0.5
+views_per_user_per_day = 40
+
+# Traffic
+upload_qps_avg = DAU * uploads_per_user_per_day / 86_400          # ~290/s
+view_qps_avg   = DAU * views_per_user_per_day   / 86_400          # ~23,000/s
+peak = 3
+print(upload_qps_avg * peak, view_qps_avg * peak)                 # ~870/s writes, ~69,000/s reads
+# read:write about 80:1 -> design is read-dominated: CDN + cache first
+
+# Storage (originals 2 MB, plus 3 thumbnails ~ 0.3 MB total)
+photos_per_day = DAU * uploads_per_user_per_day                   # 25M
+bytes_per_photo = 2.3e6
+per_day_tb = photos_per_day * bytes_per_photo / 1e12              # ~57 TB/day
+per_year_pb = per_day_tb * 365 / 1000                             # ~21 PB/year, times 2-3 for replication
+# -> object storage, lifecycle to cold tiers, dedupe, compress
+
+# Egress
+view_bytes = 0.3e6                                                # thumbnail/preview served mostly
+egress_gbps_peak = view_qps_avg * peak * view_bytes * 8 / 1e9     # ~166 Gbit/s peak -> CDN is mandatory`,
+    more: [
+      "What the numbers tell you: write rate is trivial for a database. Storage and egress are the cost drivers, so the architecture centres on object storage and a CDN, not on a clever database.",
+      "Re-check the dominant term whenever an assumption changes. If average views per user doubles, egress doubles and the CDN contract matters more than any code change."
+    ]
+  });
+
+  card("hld", "Availability and capacity maths", "Table", {
+    sum: "A few formulas explain a surprising number of design decisions.",
+    head: ["Rule", "Formula", "Consequence"],
+    rows: [
+      ["Serial dependencies", "A = a1 x a2 x ... x an", "Five services at 99.9 percent in the request path give 99.5 percent (about 44 hours of downtime a year). Fewer synchronous hops, more async"],
+      ["Redundant components", "A = 1 - (1 - a)^n", "Two independent 99.9 percent replicas give 99.9999 percent, if failover works and failures are independent"],
+      ["Little's law", "L = lambda x W", "Concurrent requests in the system = arrival rate x time in system. 1,000 req/s at 200 ms needs about 200 concurrent slots, size thread and connection pools from this"],
+      ["Utilisation and queueing", "Waiting time grows sharply above about 70 to 80 percent utilisation", "Do not run databases and queues near 100 percent. Headroom is what absorbs bursts"],
+      ["Amdahl's law", "Speedup = 1 / (s + (1 - s)/n), s = serial fraction", "A 10 percent serial part caps speedup at 10x however many machines you add. Look for locks, single leaders and hot rows"],
+      ["Error budget", "1 - SLO", "A 99.9 percent SLO gives about 43 minutes a month. Spend it on deploys and experiments, and freeze when it is gone"]
+    ],
+    more: ["Independence is the weak point of the redundancy formula. Two replicas in one rack, one deploy pipeline or one DNS provider share fate."]
+  });
+
+  card("hld", "Data model and access-pattern first", "Concept", {
+    sum: "In distributed systems, choose storage from the queries you must serve, not from the entities you can draw.",
+    head: ["Access pattern", "Fits", "Why"],
+    rows: [
+      ["Fetch by key, very high volume", "Key-value or wide-column (DynamoDB, Cassandra, Redis)", "Single partition lookups scale linearly"],
+      ["Joins, constraints, ad-hoc queries, transactions", "Relational (PostgreSQL, MySQL)", "The planner and constraints do the work"],
+      ["Search and ranking", "Search engine (OpenSearch)", "Inverted index and scoring"],
+      ["Aggregations over huge data", "Column store (ClickHouse, BigQuery)", "Columnar scans and compression"],
+      ["Relationship traversal", "Graph database or recursive SQL", "Multi-hop queries"],
+      ["Immutable event history", "Log (Kafka) plus object storage", "Append-only, replayable"],
+      ["Time series", "Time-series store or partitioned tables", "Retention and downsampling"]
+    ],
+    more: [
+      "Polyglot persistence has a cost: each store needs backup, monitoring, security, upgrade skills and a sync path. Add a store when a measured need justifies that cost.",
+      "Choose the partition key to match the dominant query and to spread load. A key like `country` or `date` creates hot partitions. A key like `user_id` spreads evenly and keeps one user's data together."
+    ]
+  });
+
+  card("hld", "API design for distributed callers", "Table", {
+    sum: "Clients will retry, time out and call from flaky networks. Design the contract for that world.",
+    head: ["Concern", "Practice"],
+    rows: [
+      ["Idempotency", "`POST /payments` with an `Idempotency-Key` header. Store key to response for 24 hours. A retry returns the original result"],
+      ["Pagination", "Cursor (keyset) based, not offset based. Stable under inserts and fast on big tables"],
+      ["Errors", "Distinguish retryable (`429`, `503`, timeouts) from permanent (`400`, `404`, `409`). Return `Retry-After` for throttling"],
+      ["Concurrency", "Optimistic locking with `ETag` and `If-Match`, or a `version` field, returning `409` or `412` on conflict"],
+      ["Long operations", "`202 Accepted` with a status URL, or a webhook or event on completion"],
+      ["Versioning", "Additive changes only within a version. Tolerant readers. Deprecation windows and usage metrics per client"],
+      ["Bulk and partial failure", "Per-item results in batch endpoints, never all-or-nothing surprises"],
+      ["Time and ordering", "Server-assigned timestamps and sequence numbers, never trust client clocks for ordering"],
+      ["Rate limits and quotas", "Per client keys, published headers (`X-RateLimit-*` or `RateLimit`)"]
+    ]
+  });
+
+  card("hld", "Finding the bottleneck", "Recipe", {
+    sum: "Reason from the request path. Every system has a first bottleneck, and it moves after you fix it.",
+    lang: "text",
+    code: R`Request path:  client -> CDN -> LB -> app -> cache -> DB -> disk
+For each hop ask: capacity? what saturates first? how does it fail when full?
+
+Typical order of saturation as traffic grows:
+  1. database connections / single-row hot spots / slow queries
+  2. database write throughput on the primary
+  3. cache hit ratio drops, stampedes after restarts
+  4. a shared lock, counter or sequence (serial section)
+  5. fan-out amplification (one request -> hundreds of calls)
+  6. network egress and cross-AZ traffic cost
+  7. a downstream third party with its own rate limit`,
+    head: ["Symptom", "Likely cause", "First fix"],
+    rows: [
+      ["Latency rises with load, CPU low", "Waiting on locks, connection pool, or downstream", "Inspect pool wait time, lock waits, downstream latency"],
+      ["p99 bad, p50 fine", "GC pauses, noisy neighbour, one slow replica, fan-out tail", "Hedging, outlier ejection, profile pauses"],
+      ["Throughput flat while adding servers", "Serial bottleneck (database primary, lock)", "Shard, batch, remove the lock, queue writes"],
+      ["Everything slows after one dependency slows", "No timeouts or bulkheads, retries pile on", "Timeouts, circuit breakers, bulkheads, shed load"],
+      ["Brief outage after deploy or cache flush", "Cold caches and stampede", "Warmup, request coalescing, staggered rollout"]
+    ]
+  });
+
+  card("hld", "How a system evolves over time", "Table", {
+    wide: true,
+    sum: "Do the simplest thing that meets today's requirements with a clear path to the next stage. Each step has a trigger, not a date.",
+    head: ["Stage", "Shape", "Trigger to move on", "Typical next step"],
+    rows: [
+      ["1. Single node", "One app, one database, one box", "Capacity or availability requirements", "Separate database, add load balancer and a second app node"],
+      ["2. Stateless app tier", "Load balancer, N app servers, managed database with a standby", "Read load or database CPU", "Read replicas, cache, CDN for static content"],
+      ["3. Read scaling", "Cache, replicas, CDN, search index", "Write throughput or table size", "Queue writes, partition tables, archive old data"],
+      ["4. Async and decoupled", "Message queue or log, workers, outbox", "Team and deploy contention, uneven scaling needs", "Extract modules into services along domain boundaries"],
+      ["5. Partitioned data", "Sharded stores, per-tenant or per-region cells", "Single primary cannot keep up", "Cell architecture, multi-region"],
+      ["6. Multi-region", "Active-passive or active-active", "Latency to users, regional failure tolerance, residency", "Global data placement, conflict handling"]
+    ],
+    more: [
+      "Most products never need stage 5 or 6. Skipping to them early costs complexity and delivery speed.",
+      "Every transition should be reversible or staged: dual writes behind a flag, shadow traffic, read from new store while writing both, then cut over."
+    ]
+  });
+
+  card("hld", "Non-functional requirements checklist", "Recipe", {
+    sum: "Turn vague words into numbers before choosing a design.",
+    lang: "text",
+    code: R`Latency          p50/p95/p99 targets per endpoint, and where measured (client or server)
+Throughput       average and peak requests per second, growth per year
+Availability     SLO (99.9, 99.95...), what counts as down, degraded modes allowed
+Durability       RPO (acceptable data loss, often 0 for money), backup and retention
+Recovery         RTO (time to restore), region failure expectations
+Consistency      which reads must be fresh, which may be stale and by how much
+Ordering         per-entity, global, none
+Scale            data volume, number of tenants, hot-spot risk (celebrity users, big sellers)
+Security         authn/authz model, data classification, encryption, audit
+Compliance       GDPR, PCI DSS, HIPAA, data residency, retention and deletion rules
+Cost             budget per request or per user, who pays for egress and storage
+Operability      who is on call, deploy frequency, observability needs
+Evolvability     expected change areas, API stability promises`
+  });
+
+  /* ================= MICROSERVICES ================= */
+  card("micro", "Monolith, modular monolith or microservices?", "Table", {
+    wide: true,
+    sum: "Microservices trade in-process simplicity for independent deployability and scaling. You pay in network failure modes, data consistency and operations.",
+    head: ["", "Modular monolith", "Microservices"],
+    rows: [
+      ["Deploy unit", "One artifact, strict internal module boundaries", "Many artifacts, deployed independently"],
+      ["Transactions", "One ACID transaction across modules (use sparingly)", "Local ACID only. Sagas across services"],
+      ["Calls", "In-process, nanoseconds, no partial failure", "Network, milliseconds, timeouts, retries, versioning"],
+      ["Team scaling", "Good up to a few teams with clear module ownership", "Needed when many teams must release without coordinating"],
+      ["Scaling", "Scale the whole app", "Scale hot services separately, choose per-service tech"],
+      ["Operational cost", "Low: one pipeline, one dashboard", "High: many pipelines, discovery, tracing, on-call, contract testing"],
+      ["Refactoring", "Easy across modules with an IDE and tests", "Hard across service boundaries, needs migrations and versioning"],
+      ["Failure isolation", "A bug can take the whole process down", "Bulkheads between services if designed for it"]
+    ],
+    more: [
+      "Use microservices when: independent teams are blocked by a shared release train, parts of the system have very different scaling or reliability needs, regulatory isolation is required, or a domain has stabilised enough to draw a hard boundary.",
+      "Do not use them when: a single team owns the product, the domain is still being discovered (boundaries will be wrong and expensive to move), or you lack CI/CD, observability and on-call maturity.",
+      "Real-world pattern: Amazon Prime Video's video monitoring team moved a distributed workflow back into a single process to cut cost and complexity. Shopify runs a large modular monolith. Netflix and Uber run thousands of services with heavy platform investment. Size and team structure decide, not fashion.",
+      "Pragmatic path: build a modular monolith with enforced boundaries (separate packages, no cross-module table access, events between modules). Extract a module into a service when a concrete force demands it."
+    ],
+    watch: ["The distributed monolith: services that must deploy together, share a database or call each other synchronously in long chains. You get all the costs of microservices and none of the benefits."]
+  });
+
+  card("micro", "Finding service boundaries", "Table", {
+    sum: "Decompose by business capability and data ownership, not by technical layer or by noun.",
+    head: ["Strategy", "How", "Good when", "Risk"],
+    rows: [
+      ["By business capability", "Services align to things the business does: Catalog, Pricing, Checkout, Fulfilment, Billing", "Mature domain, stable teams", "Capabilities overlap if modelled loosely"],
+      ["By bounded context (DDD)", "Boundaries follow where the language changes (\"Customer\" means different things in Sales and Support)", "Complex domains. The best default", "Needs domain expertise and workshops"],
+      ["By subdomain type", "Core domain gets best people and custom design. Supporting and generic subdomains bought or kept simple", "Prioritising investment", "Misjudging what is core"],
+      ["By volatility", "Isolate parts that change often from stable parts", "Fast-changing pricing rules, experiments", "Over-fragmentation"],
+      ["By scaling and reliability needs", "Separate the 100k RPS read path from the admin back office", "Clear load differences", "Boundaries driven by load can cut across domain meaning"],
+      ["Strangler (incremental extraction)", "Carve capabilities out of a monolith one at a time", "Existing monolith", "Long-lived dual systems if not finished"]
+    ],
+    more: [
+      "Test for a good boundary: most changes touch one service, the service can be explained without mentioning others' internals, and it owns its data.",
+      "Test for a bad boundary: two services always change and deploy together, one needs a join over the other's tables, or they exchange chatty, fine-grained calls.",
+      "Anti-pattern: entity services (`CustomerService`, `OrderService` that are CRUD over a table). They push all business logic into callers and create tight coupling.",
+      "Anti-pattern: one service per team member's idea. Sizing question: can a team of 5 to 9 own it fully, including on-call?"
+    ]
+  });
+
+  card("micro", "Communication styles", "Table", {
+    wide: true,
+    sum: "Choose by coupling and by what the caller needs. Many systems use all of these.",
+    head: ["Style", "Mechanism", "Strengths", "Weaknesses", "Use for"],
+    rows: [
+      ["Synchronous request-response", "REST or gRPC", "Simple mental model, immediate result", "Temporal coupling: callee must be up. Availability multiplies. Latency adds", "Queries and commands needing an immediate answer"],
+      ["Asynchronous command", "Queue message to one consumer", "Decouples in time, absorbs bursts, retries", "No immediate result, needs status or callback, ordering and idempotency", "Do this work eventually: send email, generate report"],
+      ["Event notification", "Pub/sub: \"OrderPlaced\" with minimal data", "Loose coupling, easy to add consumers", "Implicit flow, hard to trace. Consumers call back for details", "Broadcast facts to unknown consumers"],
+      ["Event-carried state transfer", "Event contains the data consumers need", "Consumers keep a local copy, no runtime call to the owner", "Data duplication, schema evolution, ordering", "Read-heavy cross-service data (product names, prices)"],
+      ["Request-reply over messaging", "Correlation ID and reply queue", "Async transport with RPC feel", "Complexity, timeouts still needed", "Integration with broker-only environments"],
+      ["Streaming (gRPC, WebSocket, SSE)", "Long-lived connection", "Low latency push, back-pressure in gRPC", "Connection management, reconnect logic", "Live updates, telemetry"]
+    ],
+    more: [
+      "Rule: prefer asynchronous communication for commands that cross a team or availability boundary. Use synchronous calls for queries on the critical path, and then protect them with timeouts, circuit breakers and caches.",
+      "A synchronous chain A to B to C to D at 99.9 percent each gives about 99.6 percent end to end, with latencies adding up. Cut the chain, or collapse it with data replication."
+    ]
+  });
+
+  card("micro", "REST, gRPC, GraphQL and messaging compared", "Table", {
+    sum: "Protocol choice is about who the client is and how much the contract must evolve.",
+    head: ["", "REST/JSON", "gRPC/Protobuf", "GraphQL", "Async messaging"],
+    rows: [
+      ["Best for", "Public and partner APIs, browsers", "Internal service-to-service, low latency", "Client-driven aggregation (mobile, BFF)", "Decoupled workflows and events"],
+      ["Contract", "OpenAPI", "`.proto` files, codegen", "Schema (SDL)", "Event schema (Avro, Protobuf, JSON Schema)"],
+      ["Performance", "Text, larger payloads", "Binary, HTTP/2 multiplexing, streaming", "Flexible, risk of expensive queries", "Throughput depends on broker"],
+      ["Evolution", "Additive fields, versioned paths", "Add fields, never reuse numbers", "Deprecate fields, no versions", "Compatibility modes in a registry"],
+      ["Pitfalls", "Chatty APIs, over-fetching", "Browser support needs a proxy, load balancing needs L7 awareness", "N+1 resolvers, authorisation per field, cost control", "Lost messages, duplicates, ordering"]
+    ],
+    more: [
+      "gRPC and HTTP/2 keep long-lived connections, so a Layer 4 load balancer pins a client to one backend. Use client-side balancing or an L7 proxy such as Envoy.",
+      "Always set deadlines on gRPC calls. Deadlines propagate through the call chain, which is exactly what you want."
+    ]
+  });
+
+  card("micro", "Data ownership and database per service", "Concept", {
+    sum: "Each service owns its data and exposes it only through its API or events. No other service reads or writes its tables.",
+    lang: "text",
+    code: R`WRONG (shared database)              RIGHT (ownership)
+ Orders ----\                        Orders --> [orders DB]
+ Billing ---+--> [one big DB]        Billing --> [billing DB]
+ Shipping --/    joins across it     Shipping --> [shipping DB]
+ schema change breaks everyone       others learn about changes via API / events`,
+    head: ["Need", "Without cross-service joins"],
+    rows: [
+      ["Show order with customer name", "Keep a copy of needed customer fields in the order (snapshot at purchase), updated from `CustomerChanged` events, or call the Customer API and cache"],
+      ["Report across services", "Stream events to a warehouse or read-model store, build the report there"],
+      ["Consistent uniqueness (email)", "Own it in one service. Others reference by ID"],
+      ["Referential integrity across services", "Reference by ID, handle \"not found\" gracefully, verify through events"],
+      ["Search across domains", "A search service indexed from events"]
+    ],
+    more: [
+      "Use it when: you want independent deploys and schema freedom. Do not use it when two pieces are always changed in one transaction. They probably belong in one service.",
+      "Same database engine for many services is acceptable if schemas, credentials and access are separate per service. What matters is the ownership boundary, not the number of servers.",
+      "Cost: duplicated data, eventual consistency, no ad-hoc joins. Benefit: schema and technology freedom, blast-radius containment, independent scaling."
+    ],
+    watch: ["A shared database with \"we only read from it\" is still coupling. Any schema change now needs coordination, and you cannot tell who depends on what."]
+  });
+
+  card("micro", "Distributed transactions: why not 2PC", "Table", {
+    sum: "Two-phase commit gives atomicity across resources but blocks and couples availability. Most microservice systems avoid it.",
+    lang: "text",
+    code: R`Coordinator            Participant A         Participant B
+  prepare  ---------->  vote YES (locks held)
+  prepare  ------------------------------->  vote YES (locks held)
+  commit   ---------->  commit, release
+  commit   ------------------------------->  commit, release
+If the coordinator dies after prepare, participants hold locks until it recovers (blocking).`,
+    head: ["Aspect", "2PC (XA)", "Saga"],
+    rows: [
+      ["Atomicity", "All or nothing, at commit time", "Eventually all or compensated. Intermediate states are visible"],
+      ["Isolation", "Locks hold until commit", "None across steps. Needs semantic locks and design for dirty reads"],
+      ["Availability", "All participants must be up", "Steps proceed independently, retried"],
+      ["Latency", "Several round trips with locks held", "Each step is a local transaction"],
+      ["Technology support", "Needs XA-capable databases and brokers", "Any store, plus a messaging layer"],
+      ["Good for", "A few systems in one trust domain, strong atomicity required", "Long business processes across services"]
+    ],
+    more: ["Spanner and CockroachDB use 2PC across Raft groups internally and make it practical with replicated participants. The coordinator failure problem is removed because each participant and the coordinator state are replicated by consensus."]
+  });
+
+  card("micro", "Saga: orchestration versus choreography", "Table", {
+    wide: true,
+    sum: "A saga is a sequence of local transactions. If one fails, previously completed steps are undone by compensating transactions.",
+    lang: "text",
+    code: R`Orchestrated order saga (state machine in the Order service or a workflow engine)
+  PlaceOrder
+    -> ReserveStock       ok ->  ChargePayment      ok ->  ScheduleShipping  ok -> Completed
+                          |                         |
+                    fail -> Reject                  fail -> ReleaseStock -> Cancel order
+Compensations run in reverse order and must be idempotent and retried until they succeed.`,
+    head: ["", "Orchestration", "Choreography"],
+    rows: [
+      ["Control", "Central coordinator sends commands and tracks state", "Each service reacts to events and emits new ones"],
+      ["Visibility", "One place shows the process state", "Flow is implicit across services, hard to see"],
+      ["Coupling", "Coordinator knows all participants", "Services know only events"],
+      ["Failure handling", "Explicit: timeouts, retries, compensation decided centrally", "Each service must handle failures and compensation events"],
+      ["Risk", "Coordinator becomes a god service", "Cyclic event dependencies, hard debugging as steps grow"],
+      ["Rule of thumb", "Three or more steps, branching, or business-critical flow", "Two or three simple steps among few services"]
+    ],
+    more: [
+      "Tools: Temporal, Camunda, AWS Step Functions and Netflix Conductor store workflow state and drive retries and timers for you.",
+      "Design rules: every step idempotent, every compensation idempotent, store saga state durably, give each step a timeout, and make the final state observable (an order status page).",
+      "Isolation tricks (countermeasures): semantic lock (a `PENDING` flag), commutative updates, reread value before acting, version checks.",
+      "Real example: a ride-hailing trip. Match driver, authorise payment hold, start trip, capture payment on completion. Cancel at any point triggers the right compensation (release the hold, free the driver)."
+    ],
+    watch: [
+      "Not every step can be compensated (an email already sent, a physical shipment). Put irreversible steps last, or make them \"pivot\" steps after which the saga only moves forward with retries.",
+      "Forgetting the timeout case: a participant that never answers leaves the saga hanging. Every wait needs a deadline and a policy."
+    ]
+  });
+
+  card("micro", "Transactional outbox and inbox", "Recipe", {
+    sum: "Update your data and publish an event atomically, without a distributed transaction.",
+    lang: "text",
+    code: R`Service A                                     Broker               Service B
+BEGIN                                                              (inbox)
+  UPDATE orders SET status='PAID'
+  INSERT INTO outbox(event_id, type, payload)
+COMMIT
+relay (poller or CDC) reads outbox ---publish---> topic ---consume--->  BEGIN
+                                                                        INSERT INTO inbox(event_id) -- dedupe key
+                                                                        apply change
+                                                                        COMMIT, ack`,
+    head: ["Piece", "Purpose"],
+    rows: [
+      ["Outbox table", "Event rows written in the same local transaction as the business change"],
+      ["Relay", "Polls with `FOR UPDATE SKIP LOCKED`, or streams the WAL with Debezium, publishes to the broker, marks as sent"],
+      ["Inbox table (idempotent receiver)", "Stores processed event IDs so duplicate deliveries have no effect"],
+      ["Ordering", "Publish with the aggregate ID as the partition key to keep per-entity order"]
+    ],
+    more: [
+      "Guarantee: at-least-once publication, never a lost event or a phantom event. Effective exactly-once comes from the idempotent receiver.",
+      "Pitfall: unbounded outbox growth. Delete or partition-drop published rows.",
+      "Alternative: listen-to-yourself, where the service publishes the event first and applies its own change when it consumes it. Simpler transactionally, but reads can lag behind writes."
+    ]
+  });
+
+  card("micro", "Independent deployability and versioning", "Table", {
+    sum: "The point of microservices is releasing one service without coordinating with others. That works only with disciplined contracts.",
+    head: ["Practice", "How"],
+    rows: [
+      ["Backward-compatible changes", "Add optional fields, add endpoints, never rename, retype or remove in place"],
+      ["Expand and contract", "Add the new field, migrate producers and consumers, remove the old field after usage is zero"],
+      ["Consumer-driven contract tests", "Consumers publish expectations (Pact), providers verify in CI. Catches breaking changes without end-to-end environments"],
+      ["Tolerant reader", "Consumers ignore unknown fields and accept missing optional ones"],
+      ["API versioning", "Version only for unavoidable breaks. Run old and new in parallel and watch usage per client"],
+      ["Database migrations", "Schema changes compatible with both the old and new code version (rolling deploys run both)"],
+      ["Feature flags", "Deploy dark, release by flag, roll back by flag"],
+      ["Progressive delivery", "Canary or blue/green with automated rollback on SLO regression"],
+      ["Avoid lockstep releases", "If two services must deploy together, the boundary is wrong or a contract is missing"]
+    ],
+    more: ["Event schemas deserve the same care as APIs, and have more consumers. Use a schema registry with compatibility checks in CI."]
+  });
+
+  /* ================= RESILIENCE AND PLATFORM ================= */
+  card("resil", "Timeouts and deadlines", "Concept", {
+    sum: "Every remote call needs a timeout. Without one, a slow dependency holds threads and connections until you run out.",
+    head: ["Type", "Meaning", "Guidance"],
+    rows: [
+      ["Connect timeout", "Time to establish a connection", "Short: 100 ms to 1 s inside a data centre"],
+      ["Request (read) timeout", "Time to receive a response", "Based on the callee's p99 plus a margin, never infinite"],
+      ["Deadline", "Absolute time by which the whole user request must finish, propagated downstream", "Each hop uses the remaining budget (gRPC deadlines, header such as `x-request-deadline`)"],
+      ["Idle and keep-alive timeouts", "Closing unused connections", "Match across client, proxy and server, or you get resets on stale connections"]
+    ],
+    lang: "python",
+    code: R`import httpx, time
+
+def call_downstream(url, deadline):                 # deadline = absolute monotonic time
+    remaining = deadline - time.monotonic()
+    if remaining <= 0.05:
+        raise TimeoutError("budget exhausted, not calling downstream")
+    return httpx.get(url, timeout=httpx.Timeout(remaining, connect=min(0.5, remaining)))`,
+    more: [
+      "Timeouts must decrease down the call chain: if the edge allows 2 s, a service in the middle should not give a downstream call 5 s.",
+      "Pitfall: timeouts without cancellation. The caller gives up, but the callee keeps working on a dead request. Propagate cancellation and check deadlines in the server."
+    ]
+  });
+
+  card("resil", "Retries with exponential backoff and jitter", "Recipe", {
+    sum: "Retry transient failures, spread retries out in time, and cap them. Uncontrolled retries turn a blip into an outage.",
+    lang: "python",
+    code: R`import random, time
+
+def retry(fn, attempts=4, base=0.1, cap=5.0, retryable=(TimeoutError, ConnectionError)):
+    for i in range(attempts):
+        try:
+            return fn()
+        except retryable:
+            if i == attempts - 1:
+                raise
+            # full jitter: random wait between 0 and the exponential ceiling
+            time.sleep(random.uniform(0, min(cap, base * 2 ** i)))`,
+    head: ["Rule", "Why"],
+    rows: [
+      ["Retry only idempotent operations, or ones protected by an idempotency key", "A retry of a non-idempotent call can run twice"],
+      ["Retry only transient errors (timeouts, `503`, `429`, connection reset)", "Retrying `400` or `404` never helps"],
+      ["Add jitter", "Without it, all clients retry at the same instants and re-create the spike"],
+      ["Retry at one layer only", "Three layers each retrying 3 times means 3 x 3 x 3 = 27 attempts against the bottom service"],
+      ["Use a retry budget", "Allow retries as a fraction of recent requests (for example 10 percent). When the dependency is really down, retries stop instead of multiplying load"],
+      ["Respect `Retry-After`", "The server knows when it will recover"]
+    ],
+    watch: ["Retry storm: a dependency slows, clients time out and retry, load doubles, it slows further. This is the typical start of a metastable failure. Budgets and circuit breakers break the loop."]
+  });
+
+  card("resil", "Circuit breaker", "Concept", {
+    sum: "Stop calling a failing dependency for a while, fail fast, and probe for recovery. It protects the caller's resources and gives the callee room to recover.",
+    lang: "text",
+    code: R`        failures > threshold              cool-down elapsed
+CLOSED ------------------------> OPEN ------------------------> HALF-OPEN
+  ^  calls pass through            all calls fail fast             few trial calls
+  |                                                                 |
+  +---------------- trial calls succeed ----------------------------+
+                    trial call fails -> back to OPEN`,
+    head: ["Setting", "Typical value", "Notes"],
+    rows: [
+      ["Failure rate threshold", "50 percent over a sliding window", "Combine with a minimum request count so two failures do not trip it"],
+      ["Slow call threshold", "Calls over 1 s count as failures", "Slow calls hurt as much as errors"],
+      ["Open duration", "10 to 60 s", "Then half-open"],
+      ["Half-open trial calls", "3 to 10", "Close if most succeed"],
+      ["Fallback", "Cached value, default, degraded feature, queue for later", "Decide it per feature before the incident"]
+    ],
+    more: [
+      "Libraries: Resilience4j (Java), Polly (.NET), Envoy or Istio outlier detection (proxy level), `pybreaker` (Python). Netflix's Hystrix is in maintenance mode.",
+      "Use it for: calls to remote services that can fail or slow down. Do not use it for: local calls, or as a replacement for fixing capacity.",
+      "Pitfall: one breaker for all endpoints of a service. A failing `/report` endpoint then blocks healthy `/health`. Scope breakers per dependency and operation."
+    ]
+  });
+
+  card("resil", "Bulkhead", "Concept", {
+    sum: "Partition resources so one failing consumer or dependency cannot exhaust everything. Named after ship compartments.",
+    head: ["Form", "Example"],
+    rows: [
+      ["Thread or connection pool per dependency", "10 connections reserved for the recommendation service, so its slowness cannot take the 50 used for payments"],
+      ["Semaphore limits", "At most 20 concurrent calls to a legacy system"],
+      ["Separate deployments per tenant tier", "Free-tier traffic cannot starve enterprise customers"],
+      ["Queue per priority", "Checkout events are not stuck behind a bulk import"],
+      ["Cells (shuffle sharding)", "Each customer maps to a subset of servers, so a poison request takes out a small group, not everyone"]
+    ],
+    more: [
+      "Sizing: from Little's law, concurrency = rate x latency. Leave margin, and reject (do not queue forever) when the pool is full.",
+      "Netflix-style isolation example: calls to the personalisation service run in their own pool. When it stalls, the home page loads without personalised rows instead of failing."
+    ]
+  });
+
+  card("resil", "Idempotency", "Recipe", {
+    sum: "An operation is idempotent when repeating it has the same effect as doing it once. It makes retries and at-least-once delivery safe.",
+    lang: "python",
+    code: R`def charge(request, idem_key, db):
+    with db.transaction():
+        row = db.fetch_one("SELECT status, response FROM idempotency WHERE key = %s FOR UPDATE", idem_key)
+        if row and row.status == "done":
+            return row.response                           # replay stored answer
+        if row and row.status == "in_progress":
+            raise Conflict("same request still running")  # 409, client retries later
+        db.execute("INSERT INTO idempotency(key, status, request_hash) VALUES (%s, 'in_progress', %s) "
+                   "ON CONFLICT DO NOTHING", idem_key, hash(request))
+    result = payment_provider.charge(request, idempotency_key=idem_key)   # pass the key downstream too
+    db.execute("UPDATE idempotency SET status='done', response=%s WHERE key=%s", result, idem_key)
+    return result`,
+    head: ["Approach", "Example"],
+    rows: [
+      ["Naturally idempotent operations", "`PUT /users/1 {...}`, `DELETE`, set a flag, upsert by ID"],
+      ["Idempotency key", "Client sends a unique key (UUID) per logical operation. Server stores key to result. Stripe popularised this"],
+      ["Deduplicate by message ID", "Consumer stores processed IDs (inbox table) in the same transaction as the effect"],
+      ["Conditional writes", "`UPDATE ... WHERE version = n`, compare-and-set"]
+    ],
+    watch: [
+      "Store the request hash with the key. The same key with a different body is a client bug, return an error.",
+      "Keys need a retention window longer than the longest client retry plus any queue delay."
+    ]
+  });
+
+  card("resil", "Rate limiting algorithms", "Table", {
+    wide: true,
+    sum: "Protect services from overload and abuse, and share capacity fairly.",
+    head: ["Algorithm", "How", "Pros", "Cons"],
+    rows: [
+      ["Fixed window counter", "Count per calendar window (per minute)", "Simple, cheap", "Burst of 2x at window edges"],
+      ["Sliding window log", "Store timestamps, count those in the last N seconds", "Accurate", "Memory per client"],
+      ["Sliding window counter", "Weighted sum of current and previous window counts", "Cheap and close to accurate", "Approximate"],
+      ["Token bucket", "Bucket refills at rate r up to capacity b. Each request takes a token", "Allows controlled bursts. The usual choice (AWS, Stripe)", "Needs two numbers per client"],
+      ["Leaky bucket", "Queue drains at a constant rate", "Smooth output, protects downstream", "Adds queueing delay, drops when full"],
+      ["Concurrency limit", "Cap in-flight requests", "Reflects real capacity. Adaptive variants adjust to latency (Netflix concurrency-limits)", "Needs tuning or an adaptive algorithm"]
+    ],
+    lang: "python",
+    code: R`import time
+class TokenBucket:
+    def __init__(self, rate, burst):
+        self.rate, self.capacity = rate, burst
+        self.tokens, self.last = burst, time.monotonic()
+    def allow(self, cost=1):
+        now = time.monotonic()
+        self.tokens = min(self.capacity, self.tokens + (now - self.last) * self.rate)
+        self.last = now
+        if self.tokens >= cost:
+            self.tokens -= cost
+            return True
+        return False        # respond 429 with Retry-After`,
+    more: [
+      "Distributed limiting: keep counters in Redis with a Lua script (atomic check and update), or accept approximate local limits plus periodic sync for very high rates. See the Distributed concepts section.",
+      "Limit by the right key: API key or tenant first, then IP as a backstop. Also protect expensive endpoints with separate, lower limits.",
+      "Load shedding differs from rate limiting. It drops work based on server health (queue depth, CPU), prioritising critical traffic, regardless of who sent it."
+    ]
+  });
+
+  card("resil", "Load shedding and backpressure", "Table", {
+    sum: "When demand exceeds capacity, choose what to drop on purpose, or the system chooses for you by collapsing.",
+    head: ["Technique", "How"],
+    rows: [
+      ["Bounded queues", "Fixed-size queue, reject with `503` or `429` when full. Unbounded queues turn overload into huge latency"],
+      ["Priority shedding", "Drop low-priority traffic first (batch, prefetch, analytics), keep checkout and login"],
+      ["Adaptive concurrency", "Lower the concurrency limit when latency rises (AIMD, gradient algorithms)"],
+      ["Request coalescing", "Collapse identical concurrent requests into one backend call"],
+      ["Graceful degradation", "Serve stale data, hide non-essential features, return partial results"],
+      ["Backpressure to producers", "Slow or block producers (TCP, reactive streams, broker flow control) rather than dropping silently"],
+      ["Brownout", "Temporarily disable expensive features under load (recommendations, high-resolution images)"]
+    ],
+    more: ["Rule: reject early and cheaply. A request refused at the edge costs microseconds. One accepted and then timed out costs the full work and a retry."]
+  });
+
+  card("resil", "Service discovery and load balancing", "Table", {
+    sum: "Callers must find healthy instances while topology keeps changing.",
+    head: ["Approach", "How", "Examples", "Notes"],
+    rows: [
+      ["Client-side discovery", "Client asks a registry, picks an instance", "Eureka, Consul, gRPC xDS clients", "Smart clients, no extra hop, library per language"],
+      ["Server-side discovery", "Client calls a load balancer that knows the instances", "Kubernetes Service, cloud load balancers", "Simple clients, extra hop"],
+      ["DNS-based", "Name resolves to instance IPs", "Kubernetes headless services, Route 53", "Caching and TTL delay failure reaction"],
+      ["Mesh data plane", "Sidecar proxy balances using control-plane data", "Envoy with Istio or Linkerd", "Language-neutral, adds a proxy hop"]
+    ],
+    more: [
+      "Algorithms: round robin, least connections, power of two choices (pick two at random, take the less loaded, which works much better than random), consistent hashing for cache affinity, locality-aware.",
+      "Health checks: separate liveness (restart me) from readiness (send me traffic). A readiness check that depends on a downstream can cascade a downstream outage into a full upstream outage.",
+      "Connection draining and graceful shutdown: stop accepting new work, finish in-flight requests, then exit, so rolling deploys drop nothing."
+    ]
+  });
+
+  card("resil", "API gateway and Backend-for-Frontend", "Table", {
+    sum: "A gateway is the single entry for external traffic. A BFF is a gateway tailored to one client type.",
+    head: ["", "API gateway", "Backend-for-Frontend"],
+    rows: [
+      ["Purpose", "Cross-cutting edge concerns: routing, TLS, authentication, rate limiting, caching, request logging", "Aggregate and shape data for one frontend (web, iOS, Android, partner)"],
+      ["Owned by", "Platform team", "The team that owns that frontend"],
+      ["Logic", "Little to none. Policy and routing", "Client-specific aggregation, field selection, orchestration"],
+      ["Examples", "Kong, Envoy Gateway, AWS API Gateway, Apigee, NGINX", "A Node or Kotlin service per client, GraphQL layer"]
+    ],
+    more: [
+      "Use a BFF when mobile and web need very different payloads or call sequences. Skip it when one general API serves all clients well.",
+      "Anti-pattern: business logic in the gateway. It becomes a shared monolith that every team must change, and everything depends on it.",
+      "Anti-pattern: one giant BFF for all clients. It recreates a monolith at the edge.",
+      "Gateways need high availability (multi-AZ, autoscaling), strict timeouts and per-route limits, since all traffic passes through."
+    ]
+  });
+
+  card("resil", "Service mesh", "Concept", {
+    sum: "A dedicated layer for service-to-service traffic. Proxies handle mTLS, retries, timeouts, routing and telemetry so application code does not.",
+    lang: "yaml",
+    code: R`# Istio: retries, timeout and circuit breaking for one service, no application code
+apiVersion: networking.istio.io/v1
+kind: VirtualService
+metadata: { name: payments }
+spec:
+  hosts: [payments]
+  http:
+    - route: [{ destination: { host: payments } }]
+      timeout: 2s
+      retries: { attempts: 2, perTryTimeout: 800ms, retryOn: "connect-failure,refused-stream,503" }
+---
+apiVersion: networking.istio.io/v1
+kind: DestinationRule
+metadata: { name: payments }
+spec:
+  host: payments
+  trafficPolicy:
+    connectionPool: { http: { http2MaxRequests: 200, maxRequestsPerConnection: 100 } }
+    outlierDetection: { consecutive5xxErrors: 5, interval: 10s, baseEjectionTime: 30s, maxEjectionPercent: 50 }`,
+    head: ["Option", "Notes"],
+    rows: [
+      ["Sidecar model", "A proxy (Envoy, Linkerd2-proxy) per pod. Most features, extra CPU and memory per pod"],
+      ["Ambient or node-level model", "Shared per-node proxies, optional per-namespace L7 proxies (Istio ambient). Lower overhead, newer"],
+      ["eBPF and CNI based (Cilium)", "Kernel-level networking and policy, some mesh features without sidecars"],
+      ["Libraries instead", "Resilience4j, gRPC interceptors. No infrastructure, but one implementation per language"]
+    ],
+    more: [
+      "Use a mesh for: uniform mTLS and authorisation policy, traffic shifting (canary), consistent telemetry across many services and languages. Do not use it for: a handful of services, or when the team cannot operate it.",
+      "Cost: latency per hop (small), resource overhead, a new failure domain (control plane), debugging through proxies. Retries in the mesh plus retries in code multiply. Pick one layer."
+    ]
+  });
+
+  card("resil", "Observability in a microservices world", "Table", {
+    sum: "You cannot attach a debugger to a request that crossed 12 services. Instrument from day one.",
+    head: ["Signal", "Role", "Must have"],
+    rows: [
+      ["Metrics", "Is it healthy? Alerts, SLOs, capacity", "RED per endpoint (rate, errors, duration histograms), USE per resource, business metrics (orders per minute)"],
+      ["Logs", "What happened to this request?", "Structured JSON, correlation or trace ID in every line, no secrets, sampling for noisy levels"],
+      ["Traces", "Where did the time go across services?", "Context propagation (W3C `traceparent`) through HTTP, gRPC, queues and async hops"],
+      ["Profiles", "Why is this code slow?", "Continuous profiling for hot services"],
+      ["Events and changes", "What changed?", "Deploys, config and flag changes overlaid on graphs"]
+    ],
+    more: [
+      "Alert on symptoms users feel (error ratio, latency SLO burn rate), not causes. Use burn-rate alerts on SLOs.",
+      "Standardise: one library or sidecar for telemetry across all services (OpenTelemetry), shared dashboards, shared service naming.",
+      "Pitfall: high-cardinality labels in metrics (user IDs). Put those in logs and traces.",
+      "Pitfall: broken context propagation at queues and thread pools, so traces split in two. Test it."
+    ]
+  });
+
+  /* ================= DOMAIN-DRIVEN DESIGN ================= */
+  card("ddd", "Why DDD matters for distributed systems", "Concept", {
+    sum: "DDD gives you a principled way to draw boundaries. In microservices, wrong boundaries are the most expensive mistake, because they become network calls and team dependencies.",
+    head: ["Strategic DDD (where to draw lines)", "Tactical DDD (how to model inside a line)"],
+    rows: [
+      ["Domain, subdomains (core, supporting, generic)", "Entities, value objects"],
+      ["Bounded contexts and ubiquitous language", "Aggregates and invariants"],
+      ["Context mapping (how contexts relate)", "Domain events, domain services"],
+      ["Team and ownership alignment", "Repositories, factories, application services"]
+    ],
+    more: [
+      "Use DDD when: the domain is complex, the business rules are the competitive advantage, and developers can talk to domain experts. Do not use it when: the system is mostly CRUD over forms, or the domain is generic (use a product).",
+      "Strategic DDD gives value even when tactical patterns are overkill. Many teams use bounded contexts and a shared language and skip aggregates and repositories.",
+      "Intermediate thinking: DDD means entities, repositories and layers. Senior thinking: DDD is about language, boundaries and where to invest modelling effort."
+    ]
+  });
+
+  card("ddd", "Subdomains and where to invest", "Table", {
+    sum: "Classify each part of the business. Invest design effort and your best people where it differentiates you.",
+    head: ["Type", "Meaning", "Example (e-commerce)", "Strategy"],
+    rows: [
+      ["Core domain", "What makes the business win. Complex and changing", "Pricing and promotions engine, recommendations, fulfilment optimisation", "Build in-house, best engineers, rich domain model"],
+      ["Supporting subdomain", "Necessary, specific to your business, not differentiating", "Catalogue management, returns workflow", "Build simply, or modest customisation"],
+      ["Generic subdomain", "Solved problems common to all businesses", "Identity, payments processing, email delivery, tax calculation", "Buy or adopt open source"]
+    ],
+    more: ["Anti-pattern: building your own generic subdomain (a custom identity provider) while starving the core domain. Subdomains change over time. Re-evaluate at least yearly."]
+  });
+
+  card("ddd", "Bounded context and ubiquitous language", "Concept", {
+    sum: "A bounded context is an explicit boundary within which a model and its language are consistent. The same word can mean different things in different contexts.",
+    lang: "text",
+    code: R`"Product" in each context:
+  Catalog:    name, description, images, categories, SEO text
+  Pricing:    SKU, base price, rules, currency, tax class
+  Inventory:  SKU, quantity on hand, warehouse bins, reorder level
+  Shipping:   weight, dimensions, hazmat flag, customs code
+One giant "Product" model serving all four becomes a 200-column table everybody fears to change.
+Four small models, linked by the same product ID, evolve independently.`,
+    head: ["Idea", "Practice"],
+    rows: [
+      ["Ubiquitous language", "Developers, product and domain experts use the same terms in conversation, tickets, code and tests. Class and method names come from the language"],
+      ["Language boundary", "Each context has its own glossary. Translate at the boundary (anti-corruption layer), not by forcing one global model"],
+      ["Context size", "Where the language is consistent and one team can own it. Often larger than one aggregate, smaller than the company"],
+      ["Discovery", "Listen for ambiguity: when two people say the same word and mean different things, you found a boundary"]
+    ],
+    more: ["Anti-pattern: a canonical enterprise data model that every service must use. It couples every team to every change."]
+  });
+
+  card("ddd", "Context mapping patterns", "Table", {
+    wide: true,
+    sum: "How bounded contexts relate, in terms of both models and teams. The map shows where to expect friction.",
+    head: ["Pattern", "Relationship", "Use when", "Risk"],
+    rows: [
+      ["Partnership", "Two teams succeed or fail together and coordinate changes", "Tight, mutual dependency, high trust", "Coordination cost, hard to scale beyond two teams"],
+      ["Shared kernel", "Teams share a small common model and code", "Tiny, stable overlap", "Changes need joint agreement. Grows into a monolith"],
+      ["Customer-supplier", "Upstream provides, downstream consumes. Downstream needs influence the upstream backlog", "Clear provider, cooperative teams", "Upstream ignores downstream if power is unbalanced"],
+      ["Conformist", "Downstream adopts upstream's model as is", "Upstream will not change (a large vendor)", "Upstream model leaks into your domain"],
+      ["Anti-corruption layer (ACL)", "Downstream translates the upstream model into its own", "Legacy system, third party, messy models", "Cost of translation code. Worth it to protect the core"],
+      ["Open host service", "Upstream publishes a stable, well-documented protocol for many consumers", "Many downstream teams", "Needs versioning discipline"],
+      ["Published language", "A shared, documented exchange format (events, schemas)", "Many-to-many integration", "Schema governance"],
+      ["Separate ways", "No integration. Each context solves its need on its own", "Integration cost exceeds value", "Duplicate effort, inconsistent data"],
+      ["Big ball of mud (as a label)", "An area with no clear model, to be contained", "Legacy you must live with", "Spreads if not fenced off with an ACL"]
+    ],
+    more: [
+      "Draw the context map and put the team names on it. The upstream/downstream arrows and the pattern labels show which relationships need an ACL, which need contract tests and which need a meeting.",
+      "Example: a new Loyalty service integrates with a 15-year-old Billing system. Put an ACL in front of Billing that exposes `Charge`, `Refund` and `Balance` in Loyalty's terms. The legacy data model never reaches Loyalty's code."
+    ]
+  });
+
+  card("ddd", "Tactical building blocks", "Table", {
+    sum: "Patterns for modelling inside one bounded context.",
+    head: ["Block", "Definition", "Example"],
+    rows: [
+      ["Entity", "Defined by identity that persists over time. Equality by ID", "`Order` #1001, `Customer` 42"],
+      ["Value object", "Defined by its attributes, immutable, no identity. Equality by value. Carries behaviour and validation", "`Money(amount, currency)`, `Address`, `DateRange`, `Email`"],
+      ["Aggregate", "A cluster of entities and value objects treated as one consistency unit with a single root", "`Order` (root) with `OrderLine` items"],
+      ["Aggregate root", "The only entry point. Enforces the invariants of the aggregate", "`order.addLine(...)` and never `line.setQty(...)` from outside"],
+      ["Domain event", "A fact that happened in the domain, named in the past tense", "`OrderPlaced`, `PaymentCaptured`"],
+      ["Repository", "Collection-like access to aggregates. Loads and saves whole aggregates", "`orders.get(id)`, `orders.save(order)`"],
+      ["Domain service", "Domain logic that does not belong to one entity", "`TransferFunds`, `PricingPolicy`"],
+      ["Application service", "Orchestrates a use case: load, call domain, save, publish. No business rules", "`PlaceOrderHandler`"],
+      ["Factory", "Complex creation that keeps invariants", "`OrderFactory.fromCart(cart)`"]
+    ]
+  });
+
+  card("ddd", "Aggregate example with invariants", "Recipe", {
+    sum: "The aggregate protects its rules. Callers cannot put it in an invalid state, and it records domain events.",
+    lang: "python",
+    code: R`from dataclasses import dataclass, field
+from decimal import Decimal
+
+@dataclass(frozen=True)
+class Money:                                     # value object
+    amount: Decimal
+    currency: str
+    def __add__(self, o):
+        if o.currency != self.currency:
+            raise ValueError("currency mismatch")
+        return Money(self.amount + o.amount, self.currency)
+
+class Order:                                     # aggregate root
+    MAX_LINES = 50
+    def __init__(self, order_id, customer_id):
+        self.id, self.customer_id = order_id, customer_id      # reference other aggregates by ID only
+        self._lines, self.status, self.events = [], "DRAFT", []
+
+    def add_line(self, sku, qty, unit_price: Money):
+        if self.status != "DRAFT":
+            raise ValueError("cannot modify a placed order")   # invariant
+        if len(self._lines) >= self.MAX_LINES:
+            raise ValueError("too many lines")                 # invariant
+        self._lines.append((sku, qty, unit_price))
+
+    def total(self) -> Money:
+        return sum((p * q for _, q, p in self._lines), start=Money(Decimal(0), "EUR")) if self._lines else Money(Decimal(0), "EUR")
+
+    def place(self):
+        if not self._lines:
+            raise ValueError("empty order")
+        self.status = "PLACED"
+        self.events.append(("OrderPlaced", self.id, str(self.total().amount)))   # published via outbox after save`,
+    more: [
+      "The application service loads the aggregate, calls a method, saves it and publishes events in one transaction (with the outbox).",
+      "Note that `customer_id` is an ID, not an object reference. Aggregates refer to each other by ID."
+    ]
+  });
+
+  card("ddd", "Aggregate design rules", "Table", {
+    sum: "From Vaughn Vernon's rules of thumb. Get the size wrong and you get either contention or inconsistency.",
+    head: ["Rule", "Reason"],
+    rows: [
+      ["Protect true invariants inside the aggregate boundary", "An invariant that must always hold is the reason for an aggregate. Anything else can be eventually consistent"],
+      ["Design small aggregates", "Big aggregates mean big loads, optimistic lock conflicts and contention. A root plus a few value objects is typical"],
+      ["Reference other aggregates by identity", "Avoids loading object graphs and makes sharding easy"],
+      ["One transaction modifies one aggregate", "Use domain events and eventual consistency between aggregates"],
+      ["Use optimistic concurrency with a version field", "Detect concurrent changes without long locks"],
+      ["Model by invariants, not by data relationships", "A customer has many orders, but orders are not part of the customer aggregate"]
+    ],
+    watch: [
+      "The God aggregate: `Customer` containing orders, addresses, payments and tickets. Every change conflicts with every other. Split by invariant.",
+      "Anemic domain model: entities are data bags and all rules live in services. You pay for the DDD vocabulary and get none of the protection."
+    ]
+  });
+
+  card("ddd", "From bounded contexts to services", "Table", {
+    sum: "A bounded context is a good unit for a service. It is not always one service, and not every service is a context.",
+    head: ["Mapping", "When", "Notes"],
+    rows: [
+      ["One context, one service", "The usual starting point", "Owned by one team, one data store, one deployable"],
+      ["One context, several deployables", "Different scaling for read and write sides, or a worker for async jobs", "Same model and team, separate processes. Still one context"],
+      ["Several contexts, one deployable (modular monolith)", "Early stage, or small team", "Enforce boundaries in code, separate schemas. Extract later"],
+      ["One service spanning contexts", "Never intentionally", "Usually accidental. The shared model drifts into a mess"],
+      ["Context split across teams", "Large context. Avoid if possible", "Needs shared ownership rules. Consider splitting the language"]
+    ],
+    more: [
+      "Uber's DOMA (domain-oriented microservice architecture) groups many microservices into domains with a gateway, reducing the sprawl where each service is its own island.",
+      "Start coarser than you think. Merging services is hard, but splitting a well-factored module out of a service is easier than undoing a premature split."
+    ]
+  });
+
+  card("ddd", "Event Storming", "Recipe", {
+    sum: "A workshop where developers and domain experts map a business process on a wall with sticky notes, to discover events, rules and boundaries quickly (Alberto Brandolini).",
+    head: ["Sticky colour", "Represents", "Example"],
+    rows: [
+      ["Orange", "Domain event (past tense)", "Order Placed, Payment Failed"],
+      ["Blue", "Command (the intent that causes an event)", "Place Order, Capture Payment"],
+      ["Yellow (small)", "Actor or user role", "Customer, Warehouse clerk"],
+      ["Yellow (large)", "Aggregate that handles commands and emits events", "Order, Shipment"],
+      ["Lilac or purple", "Policy: \"whenever X happens, do Y\"", "Whenever payment is captured, reserve stock"],
+      ["Pink", "External system", "Payment provider, ERP"],
+      ["Green", "Read model or view people need to decide", "Order status page"],
+      ["Red or hot spot", "Question, conflict, unknown", "\"Who decides refunds above 500?\""]
+    ],
+    more: [
+      "Flow: Big Picture (chronological events across the whole business) then Process Level (add commands, policies, actors) then Software Design (aggregates and contexts).",
+      "Boundaries appear where the language changes, where events change meaning, or where different groups of people argue. Draw lines around clusters of events and aggregates, and name each cluster.",
+      "Output: bounded context candidates, a context map, a list of events (your integration events), and hot spots to investigate. Invite everyone who knows the process, and keep it to a few hours with a wall-sized surface."
+    ]
+  });
+
+  card("ddd", "DDD with CQRS and Event Sourcing", "Concept", {
+    sum: "Natural companions, but independent. You can use DDD without either.",
+    lang: "text",
+    code: R`Command side (write model)                         Query side (read models)
+ command -> aggregate (validates, emits events)    events -> projection -> read store (SQL view, search index, cache)
+          -> event store / DB + outbox ----------------^                 -> queries return denormalised DTOs
+With event sourcing the event log IS the source of truth; state = fold(events).`,
+    head: ["Concept", "What it gives", "What it costs"],
+    rows: [
+      ["CQRS", "Read models shaped for screens, independent scaling, simple write model", "Eventual consistency between sides, projections to maintain, more infrastructure"],
+      ["Event sourcing", "Full audit history, temporal queries (\"state at 3 pm\"), rebuild read models by replay, natural domain events", "Event schema evolution (upcasting), snapshots for long streams, hard ad-hoc queries, steeper learning curve, deleting personal data (GDPR) needs crypto-shredding"],
+      ["Aggregate as consistency boundary", "Each event stream is one aggregate, which makes sharding and optimistic concurrency straightforward", "Cross-aggregate invariants need sagas"]
+    ],
+    more: [
+      "Use event sourcing when history is the product: ledgers, trading, compliance-heavy workflows, collaborative history. Do not use it for general CRUD, or as a way to \"get events for free\". The outbox pattern gives you events at far lower cost.",
+      "Use CQRS when read and write shapes or loads differ a lot. A single table with a few views does not need it.",
+      "Real example: a banking ledger stores `Deposited` and `Withdrawn` events per account. The balance is a projection. An auditor can replay any account to any date."
+    ]
+  });
+
+  card("ddd", "Common mistakes applying DDD to microservices", "Pitfall", {
+    sum: "What goes wrong in practice.",
+    watch: [
+      "Using tactical patterns everywhere (aggregates, repositories) in a CRUD context. Complexity without benefit.",
+      "Skipping the domain experts. Developers invent a language, and the code diverges from how the business talks.",
+      "One service per entity (`CustomerService`, `ProductService`). It is a technical split, not a bounded context.",
+      "Sharing domain model libraries between contexts. It is a shared kernel in disguise, and every release needs everyone.",
+      "Aggregates that mirror database tables or contain whole object graphs.",
+      "Publishing internal domain events as the public contract. Separate internal events from integration events, which are stable, versioned and minimal.",
+      "Big-bang design. Boundaries should evolve with learning: start with a modular monolith, observe change patterns, then split.",
+      "Ignoring team structure. Contexts without owning teams drift. Align them (Conway's law)."
+    ]
+  });
+
+  /* ================= CORE DISTRIBUTED SYSTEMS CONCEPTS ================= */
+  card("dist", "Replication strategies", "Table", {
+    wide: true,
+    sum: "Copies give availability and read scale. Every strategy answers: who accepts writes, and how do conflicts get resolved?",
+    head: ["", "Leader-follower", "Multi-leader", "Leaderless (quorum)"],
+    rows: [
+      ["Writes go to", "One leader", "Leader in each region or site", "Any replica (coordinator picks N, waits for W)"],
+      ["Conflicts", "None. Single order", "Yes, needs resolution (last write wins, merge, CRDT, application logic)", "Yes, resolved on read or in background (read repair, anti-entropy)"],
+      ["Failover", "Promote a follower, risk losing recent async writes or split brain", "Other leaders keep going", "No failover step, survives node loss up to quorum"],
+      ["Consistency", "Strong from the leader, followers lag", "Eventual across sites", "Tunable: R + W > N gives overlap, but not linearizability by itself"],
+      ["Examples", "PostgreSQL, MySQL, MongoDB, Kafka partitions, Redis", "Multi-region MySQL setups, CouchDB, collaborative editors", "Dynamo, Cassandra, Riak, ScyllaDB"],
+      ["Best for", "Most OLTP workloads", "Offline-capable apps, multi-region writes with local latency", "Very high availability and write throughput, key-based access"]
+    ],
+    more: [
+      "Synchronous versus asynchronous replication: synchronous makes the follower a durability partner (no loss on failover, higher write latency). Asynchronous is faster and can lose the last writes. Semi-sync (one sync follower) is the common compromise.",
+      "Quorum arithmetic: N replicas, write to W, read from R. R + W > N means every read set overlaps the latest write set. N=3, W=2, R=2 tolerates one failure for both reads and writes. Sloppy quorums and hinted handoff trade that overlap for availability.",
+      "Pitfall: reading from followers right after a write without read-your-writes handling. Users see their own data disappear.",
+      "Pitfall: automatic failover with long replication lag promotes a stale follower and silently loses committed writes. Know your RPO."
+    ]
+  });
+
+  card("dist", "Conflict resolution and CRDTs", "Table", {
+    sum: "When replicas accept concurrent writes, you need a deterministic rule to merge them.",
+    head: ["Method", "How", "Cost"],
+    rows: [
+      ["Last write wins (LWW)", "Highest timestamp wins", "Silently drops concurrent updates, and clock skew can pick the wrong winner. Fine for caches and idempotent overwrites"],
+      ["Version vectors", "Detect concurrency, keep siblings, let the application or user merge", "Complexity pushed to the application (Dynamo carts, Riak)"],
+      ["Application-level merge", "Domain-specific rule (union of cart items)", "You write and test it"],
+      ["CRDTs", "Data types designed so any order of merges converges", "Metadata growth, limited to supported types, semantics must fit"],
+      ["Operational transformation (OT)", "Transform concurrent operations against each other, with a central server ordering them", "Hard to get right, needs a server. Used in Google Docs historically"]
+    ],
+    lang: "python",
+    code: R`# G-Counter CRDT: each replica increments only its own slot; merge = element-wise max
+class GCounter:
+    def __init__(self, replica): self.r, self.c = replica, {}
+    def inc(self, n=1): self.c[self.r] = self.c.get(self.r, 0) + n
+    def value(self): return sum(self.c.values())
+    def merge(self, other):
+        for k, v in other.c.items():
+            self.c[k] = max(self.c.get(k, 0), v)     # commutative, associative, idempotent`,
+    more: [
+      "Common CRDTs: G-Counter, PN-Counter (increments and decrements), LWW-Register, OR-Set (add and remove), sequence CRDTs for text (RGA, Yjs, Automerge).",
+      "Redis Enterprise active-active, Riak data types, Azure Cosmos DB conflict policies and collaborative tools use these ideas."
+    ]
+  });
+
+  card("dist", "Partitioning (sharding) strategies", "Table", {
+    wide: true,
+    sum: "Split data across nodes to scale writes and storage. The partition key is the most important decision you will make.",
+    head: ["Strategy", "How", "Pros", "Cons"],
+    rows: [
+      ["Range", "Key ranges per shard (A-F, G-M, or date ranges)", "Efficient range scans, simple to understand", "Hot spots with sequential keys (timestamps, auto-increment IDs)"],
+      ["Hash", "`hash(key) mod N` or hash ranges", "Even distribution", "Range queries scatter across shards. `mod N` reshuffles almost everything when N changes"],
+      ["Consistent hashing", "Keys and nodes on a ring. A key belongs to the next node clockwise", "Adding or removing a node moves only about 1/N of the keys", "Needs virtual nodes for balance"],
+      ["Directory (lookup table)", "A service maps key to shard", "Flexible, supports moving single tenants", "The directory is a dependency and a bottleneck"],
+      ["Geo or tenant based", "Shard by region or customer", "Data locality, residency, noisy-neighbour isolation", "Uneven sizes, large tenants need special handling"],
+      ["Composite (hash plus range)", "Hash on partition key, sort by a range key inside it", "Even spread and efficient per-entity range queries (DynamoDB, Cassandra)", "Design around access patterns"]
+    ],
+    more: [
+      "Choose a key with high cardinality and even access. Hot keys (celebrity accounts, a flash-sale product) need special handling: split the key with a random suffix and scatter-gather on read, cache heavily, or isolate them.",
+      "Resharding is the cost. Plan with many more logical partitions than nodes (for example 1,024 or 4,096 partitions mapped to a few nodes), so rebalancing moves whole partitions, not individual rows.",
+      "Cross-shard queries and transactions are expensive. If most queries need several shards, the key is wrong.",
+      "Secondary indexes: local (each shard indexes its own data, queries scatter) versus global (partitioned by the indexed term, writes touch several shards)."
+    ]
+  });
+
+  card("dist", "Consistent hashing", "Recipe", {
+    sum: "Map keys and nodes onto a ring so that membership changes move a minimal amount of data. Virtual nodes smooth the load.",
+    lang: "python",
+    code: R`import bisect, hashlib
+
+def h(s: str) -> int:
+    return int(hashlib.md5(s.encode()).hexdigest(), 16)
+
+class Ring:
+    def __init__(self, nodes, vnodes=200):
+        self.ring = sorted((h(f"{n}#{i}"), n) for n in nodes for i in range(vnodes))
+        self.keys = [k for k, _ in self.ring]
+    def node_for(self, key: str):
+        i = bisect.bisect(self.keys, h(key)) % len(self.ring)
+        return self.ring[i][1]
+
+ring = Ring(["cache-1", "cache-2", "cache-3"])
+print(ring.node_for("user:42"))
+# Add cache-4: only keys whose ring position falls in cache-4's arcs (about 1/4) move.
+# With hash(key) % N, going from 3 to 4 nodes remaps about 75 percent of keys.`,
+    head: ["Variant", "Notes"],
+    rows: [
+      ["Virtual nodes", "Each physical node owns many ring positions. Smooths imbalance, and bigger machines can own more"],
+      ["Jump consistent hash", "No memory, very fast, but nodes must be numbered 0..N-1 and only growth at the end is cheap"],
+      ["Rendezvous (HRW) hashing", "Each key picks the node with the highest hash(key, node). Simple, no ring, O(N) per lookup"],
+      ["Bounded loads", "Cap each node's share to avoid overload from hot keys"]
+    ],
+    more: ["Used by: Dynamo, Cassandra, Memcached client libraries, CDNs, load balancers with session affinity (Maglev hashing at Google)."]
+  });
+
+  card("dist", "Consensus: Raft and Paxos", "Concept", {
+    sum: "A group of nodes agrees on a sequence of values (a replicated log) even if a minority fail. It is the building block of strongly consistent systems.",
+    lang: "text",
+    code: R`Raft in one picture (3 or 5 nodes)
+ 1. Leader election: followers that hear nothing for a randomised timeout become candidates,
+    ask for votes in a new term. A majority elects one leader per term.
+ 2. Log replication: client -> leader appends entry -> sends to followers
+    -> entry is COMMITTED once a majority stored it -> leader applies and replies.
+ 3. Safety: a candidate with a less complete log cannot win. Committed entries are never lost.
+
+N nodes tolerate floor((N-1)/2) failures:  3 -> 1,  5 -> 2,  7 -> 3`,
+    head: ["Topic", "Detail"],
+    rows: [
+      ["Raft versus Paxos", "Same guarantees. Raft is designed to be understandable (leader-based log). Paxos (and Multi-Paxos) is older, more flexible, harder to implement"],
+      ["Used by", "etcd, Consul, Kafka KRaft controllers, RabbitMQ quorum queues, CockroachDB, TiKV (Raft). Spanner and Chubby (Paxos)"],
+      ["When you need it", "Leader election, configuration and metadata, locks and leases, strongly consistent replicated state"],
+      ["When you do not", "High-volume data path where eventual consistency is fine. Do not build your own. Use etcd, ZooKeeper or a database that embeds it"],
+      ["Costs", "Every write needs a majority round trip. Latency is set by the slower of the fastest majority. Do not span regions casually"],
+      ["Pitfalls", "Even-sized clusters add no fault tolerance. Slow disks (fsync) slow the whole group. Membership changes need care"]
+    ],
+    more: [
+      "A consensus group is small (3 to 7 nodes). Large systems shard data into many Raft groups (CockroachDB ranges, TiKV regions) and use a transaction layer over them.",
+      "FLP impossibility says no deterministic algorithm can guarantee consensus in a fully asynchronous system with even one crash. Practical systems use timeouts, which means liveness depends on timing, safety does not."
+    ]
+  });
+
+  card("dist", "Leader election, leases and fencing", "Recipe", {
+    sum: "A leader needs a time-limited lease and a way for resources to reject a stale leader.",
+    lang: "text",
+    code: R`Client A acquires lock/lease from etcd/ZooKeeper -> gets fencing token 33
+Client A stalls (GC pause, VM freeze) beyond the lease
+Client B acquires lease -> token 34, writes to storage with token 34
+Client A wakes up, still believes it is leader, writes with token 33
+Storage rejects token 33 < 34 (highest seen)   <-- fencing: correctness does not depend on clocks`,
+    head: ["Mechanism", "Notes"],
+    rows: [
+      ["ZooKeeper ephemeral nodes, etcd leases, Consul sessions", "Built on consensus, leader holds a key while its session is alive. Standard choice"],
+      ["Database row lock or advisory lock", "Simple when you already have a database. Leader is whoever holds the lock"],
+      ["Kubernetes Lease objects", "Used by controllers, `client-go` leader election"],
+      ["Redis lock with TTL", "Good for efficiency (avoid duplicate work). Not safe for correctness without fencing"],
+      ["Ring-based or bully algorithms", "Mostly textbook. Production systems use consensus-backed election"]
+    ],
+    more: [
+      "Rule: a lease protects you from a dead leader. A fencing token protects you from a zombie leader. You need both if a stale write would be harmful.",
+      "Leader election pitfalls: two leaders during a partition, thundering herd on release, election storms from short timeouts, and slow failover from long ones. Tune lease length against pause times (GC, VM).",
+      "Example: a nightly billing job runs on three instances. A lease ensures only one runs at a time, and the invoice writes carry a fencing token so a paused instance cannot double-bill."
+    ]
+  });
+
+  card("dist", "Clocks, ordering and causality", "Table", {
+    wide: true,
+    sum: "There is no global clock. Wall clocks drift and jump. Order events by causality, not by timestamps, unless you bound uncertainty.",
+    head: ["Mechanism", "How it works", "Gives you", "Cost or limit"],
+    rows: [
+      ["Wall clock (NTP)", "Time of day synchronised over the network", "Human-readable times, roughly aligned (ms to tens of ms)", "Can jump backwards. Never use it alone for ordering or for lease expiry"],
+      ["Monotonic clock", "Time since an arbitrary start, never goes back", "Measuring durations and timeouts on one machine", "Meaningless across machines"],
+      ["Lamport clock", "Counter per node. Increment on each event. On receive: max(local, msg) + 1", "If A happened before B then L(A) < L(B). A total order consistent with causality", "L(A) < L(B) does not prove A caused B"],
+      ["Vector clock", "A vector of counters, one per node. Compare vectors", "Detects concurrency exactly: A before B, B before A, or concurrent", "Size grows with number of writers. Pruning needed (Dynamo)"],
+      ["Hybrid logical clock (HLC)", "Physical time plus a logical counter, kept close to wall time", "Causal order and timestamps humans can read, bounded drift", "Used by CockroachDB, MongoDB and YugabyteDB"],
+      ["TrueTime (Spanner)", "GPS and atomic clocks give a time interval [earliest, latest]. Commit waits out the uncertainty", "External consistency across the globe", "Needs special hardware and a few ms of commit wait"],
+      ["Sequence numbers from a single log", "A leader or Kafka partition assigns increasing offsets", "Total order within that log", "Single serialisation point"]
+    ],
+    lang: "python",
+    code: R`def vc_compare(a, b):                    # vector clocks as dicts {node: counter}
+    keys = set(a) | set(b)
+    le = all(a.get(k, 0) <= b.get(k, 0) for k in keys)
+    ge = all(a.get(k, 0) >= b.get(k, 0) for k in keys)
+    return "equal" if le and ge else "a<b" if le else "a>b" if ge else "concurrent"
+
+print(vc_compare({"A": 2, "B": 1}, {"A": 2, "B": 3}))   # a<b : b saw a
+print(vc_compare({"A": 3}, {"B": 2}))                    # concurrent`,
+    more: ["Bug pattern: using `System.currentTimeMillis()` as an ordering key across servers. Two writes within the skew window land in the wrong order, and last-write-wins keeps the older one."]
+  });
+
+  card("dist", "Gossip, failure detection and anti-entropy", "Table", {
+    sum: "How large clusters learn about membership and repair divergence without a central coordinator.",
+    head: ["Mechanism", "How", "Used by"],
+    rows: [
+      ["Gossip protocol", "Each node periodically tells a few random peers what it knows. Information spreads in O(log N) rounds", "Cassandra, Consul (Serf), Dynamo, Redis Cluster"],
+      ["Heartbeats", "Periodic liveness messages with a timeout", "Almost everything"],
+      ["Phi-accrual failure detector", "Outputs a suspicion level from observed heartbeat intervals instead of a binary alive or dead", "Cassandra, Akka"],
+      ["SWIM", "Randomised probing plus indirect probes via other nodes to reduce false positives", "HashiCorp memberlist, Consul"],
+      ["Merkle trees (anti-entropy)", "Compare hash trees of key ranges to find differences cheaply, then sync only those", "Dynamo, Cassandra repair"],
+      ["Read repair and hinted handoff", "Fix stale replicas when they are read, and queue writes for a temporarily down node", "Dynamo-style stores"]
+    ],
+    more: ["A failure detector can never be both fast and always right. Slow nodes look dead. Tune for your cost of a false positive (needless failover) versus a false negative (slow detection)."]
+  });
+
+  card("dist", "Message queues versus event streaming", "Table", {
+    wide: true,
+    sum: "Queues distribute work. Logs record history. Choose by what consumers need to do with messages after they are read.",
+    head: ["", "Message queue (RabbitMQ, SQS)", "Event log (Kafka, Pulsar, Kinesis)"],
+    rows: [
+      ["Model", "Broker tracks per-message state, deletes after ack", "Consumers track an offset in an append-only retained log"],
+      ["Replay", "No (unless streams or DLQ redrive)", "Yes, by offset or time. New consumers can start from the beginning"],
+      ["Consumption", "Competing consumers share one queue", "Consumer groups, each group reads everything. Parallelism = partitions"],
+      ["Ordering", "Per queue, broken by redelivery and parallel consumers", "Per partition"],
+      ["Routing", "Rich (exchanges, filters)", "Topic and key"],
+      ["Per-message features", "TTL, priorities, delays, dead letters", "Few. Build them in consumers"],
+      ["Good for", "Task distribution, RPC, integration with retries and routing", "Event-driven architecture, CDC, stream processing, audit, rebuilding read models"]
+    ],
+    more: [
+      "Delivery guarantees: at-most-once (may lose), at-least-once (may duplicate, the practical default), exactly-once (an effect achieved by idempotence or transactions within one system, not a property of the network).",
+      "Ordering: only guaranteed within a partition or queue. Choose a key per entity that needs order. Global ordering costs you all parallelism.",
+      "Exactly-once reality: Kafka's idempotent producer and transactions give exactly-once within Kafka. Once the effect leaves Kafka (a database write, an email), you need idempotent handlers.",
+      "Pitfall: using a log as a queue with a single partition for \"ordering\", then not being able to scale consumers. Pitfall: using a queue for event sourcing, then needing replay it cannot provide."
+    ]
+  });
+
+  card("dist", "Caching at scale", "Table", {
+    wide: true,
+    sum: "Caches trade freshness for latency and load. Plan for invalidation, cold starts and stampedes before the first deploy.",
+    head: ["Strategy", "Flow", "Strengths", "Risks"],
+    rows: [
+      ["Cache-aside (lazy loading)", "Read: check cache, on miss read DB and fill. Write: update DB, invalidate key", "Simple, cache failure is survivable, only hot data cached", "Miss penalty, stampede, stale reads between write and invalidate"],
+      ["Read-through", "Cache layer loads on miss", "Less client code", "Same as cache-aside, tied to the cache provider"],
+      ["Write-through", "Write to cache and DB synchronously", "Cache always fresh for written keys", "Write latency, caches data that may never be read"],
+      ["Write-behind (write-back)", "Write to cache, flush to DB asynchronously", "Very fast writes, batching", "Data loss if the cache dies before flush, ordering issues"],
+      ["Refresh-ahead", "Reload hot keys before TTL expiry", "No miss latency for hot keys", "Wasted work if prediction is wrong"],
+      ["CDN and edge cache", "Cache at the network edge by URL", "Offloads origin, lowers latency", "Purge latency, cache key design, personalised content"]
+    ],
+    more: [
+      "Stampede (thundering herd): a hot key expires and thousands of requests hit the database together. Fixes: per-key lock or request coalescing (single flight), stale-while-revalidate, TTL jitter, probabilistic early refresh.",
+      "Invalidation options: TTL only (simple, bounded staleness), explicit delete on write, event-driven invalidation from CDC, versioned keys (`product:42:v17`) so old values age out.",
+      "Hot key: one key gets most traffic (viral post). Replicate that key across several cache nodes, use a local in-process cache with a short TTL in front, or split into sub-keys.",
+      "Cold start: after a deploy or cache failure the database sees full load. Warm the cache, roll out gradually, and size the database for the cold case or protect it with rate limits.",
+      "Consistency: a cache is a second copy of data. Decide the acceptable staleness per data type (product description: minutes, inventory count on checkout: none)."
+    ],
+    watch: ["A cache that hides a slow query can make the system fall over when it is cold. Test the cache-empty case under load."]
+  });
+
+  card("dist", "Distributed rate limiting", "Table", {
+    sum: "A limit across many gateway instances needs shared state or an approximation.",
+    head: ["Approach", "How", "Trade-off"],
+    rows: [
+      ["Central counter in Redis", "Lua script does check and increment atomically (token bucket or sliding window)", "Exact, adds a network hop and a dependency. Redis failure policy: fail open or fail closed"],
+      ["Local limits with a fair share", "Each instance gets limit / N", "No dependency, inaccurate with uneven load balancing"],
+      ["Local limits with periodic sync", "Instances report usage and refresh allowances every few hundred ms", "Slightly loose, scales to huge rates"],
+      ["Sticky routing", "Hash the client to one instance", "Accurate per client, hot clients overload one node"],
+      ["Edge or CDN rate limiting", "Enforced at the provider's edge", "Stops abuse before it reaches you, less custom logic"]
+    ],
+    more: [
+      "Decide failure behaviour explicitly. Fail open (allow all) when the limiter store is down protects availability. Fail closed protects the backend. Many teams fail open with a conservative local fallback limit.",
+      "Return `429` with `Retry-After`. Separate limits for authenticated tiers, and for expensive operations."
+    ]
+  });
+
+  card("dist", "Bloom filters, sketches and probabilistic structures", "Table", {
+    sum: "Trade a little accuracy for a lot of memory and speed. Very common at scale.",
+    head: ["Structure", "Answers", "Error", "Use"],
+    rows: [
+      ["Bloom filter", "Is x in the set?", "False positives, never false negatives", "Skip disk reads for missing keys (LSM trees), avoid caching one-hit wonders, check username availability before a database hit"],
+      ["Count-min sketch", "Approximate frequency of x", "Overestimates", "Heavy hitters, trending items, rate monitoring"],
+      ["HyperLogLog", "Approximate count of distinct items", "About 1 to 2 percent", "Unique visitors in 12 KB (Redis `PFCOUNT`)"],
+      ["Cuckoo filter", "Membership with deletions", "False positives", "Like Bloom, but supports delete"],
+      ["t-digest, HDR histogram", "Approximate quantiles (p99)", "Small", "Latency percentiles that can be merged across nodes"]
+    ]
+  });
+
+  /* ================= PATTERNS CATALOG ================= */
+  card("patterns", "Pattern catalog: problem to pattern", "Table", {
+    wide: true,
+    sum: "Start from the problem you have, then pick the pattern. Each links to a detailed card in this guide.",
+    head: ["Problem", "Pattern", "Core idea", "Main cost", "Details in"],
+    rows: [
+      ["Clients need one entry point with auth and limits", "API gateway", "Edge routing and cross-cutting policy", "Single point of failure and logic creep", "Microservices"],
+      ["Mobile and web need different shapes", "Backend-for-Frontend", "One backend per client experience", "Duplicated logic across BFFs", "Microservices"],
+      ["Slow dependency drags callers down", "Circuit breaker, bulkhead, timeout", "Fail fast, isolate resources", "Tuning, fallbacks to design", "Microservices"],
+      ["Transient errors", "Retry with backoff and jitter", "Try again later, spread out", "Retry storms without budgets", "Microservices"],
+      ["Multi-service business transaction", "Saga", "Local transactions plus compensations", "No isolation, compensation design", "Microservices"],
+      ["Update data and publish event atomically", "Transactional outbox", "Event row in the same local transaction", "Relay and cleanup", "Microservices"],
+      ["Different read and write needs", "CQRS", "Separate models for commands and queries", "Eventual consistency, two models", "DDD"],
+      ["Need complete history, rebuildable state", "Event sourcing", "Events are the source of truth", "Schema evolution, complexity", "DDD"],
+      ["Replace a legacy system gradually", "Strangler fig", "Route traffic piece by piece to new code", "Long coexistence, dual maintenance", "This section"],
+      ["Cross-cutting infra without code changes", "Sidecar", "Helper process next to each service", "Resource overhead, one more moving part", "This section"],
+      ["Simplify outbound calls from a service", "Ambassador", "A local proxy handles retries, auth, routing", "Another hop to debug", "This section"],
+      ["Protect your model from a legacy or vendor model", "Anti-corruption layer", "Translate between models at the boundary", "Translation code to maintain", "DDD, this section"],
+      ["Many consumers react to facts", "Publish-subscribe", "Producers emit events, consumers subscribe", "Implicit flows, schema governance", "This section"],
+      ["Spread work over workers", "Competing consumers", "Many consumers share one queue", "Ordering, idempotency", "Distributed concepts"],
+      ["Large payloads in messages", "Claim check", "Store blob elsewhere, send a reference", "Extra store and lifecycle", "This section"],
+      ["Scale data beyond one node", "Sharding, consistent hashing", "Partition by key", "Cross-shard operations, rebalancing", "Distributed concepts"],
+      ["Only one worker may do a job", "Leader election, lease with fencing", "Consensus-backed single leader", "Failover delay, zombie leaders", "Distributed concepts"],
+      ["Limit blast radius of failures", "Cell-based architecture, shuffle sharding", "Independent copies serving slices of customers", "Cost, routing layer, cell management", "This section"],
+      ["Aggregate data from many services", "API composition, scatter-gather", "A composer calls several services and merges", "Tail latency, partial failure", "This section"],
+      ["Safe duplicates", "Idempotent receiver", "Dedupe by message or key ID", "Dedupe store retention", "Microservices"]
+    ]
+  });
+
+  card("patterns", "Strangler fig", "Recipe", {
+    sum: "Replace a legacy system incrementally. A routing facade sends some requests to new code and the rest to the old system, until nothing remains in the old one.",
+    lang: "text",
+    code: R`Phase 1: facade in front, 100 percent to legacy
+  client -> [proxy/gateway] -> legacy monolith
+Phase 2: new service takes over one capability (for example product search)
+  client -> [proxy] --/search--> new Search service  (fed by CDC or events from legacy)
+                    \--rest----> legacy
+Phase 3: repeat per capability, shadow traffic and canary before each switch
+Phase N: legacy empty -> decommission`,
+    head: ["Step", "Detail"],
+    rows: [
+      ["Choose the seam", "A capability with clear inputs and outputs, preferably read-heavy or at the edge. Avoid the most entangled core first"],
+      ["Introduce the facade", "Gateway or reverse proxy that can route by path, header or user cohort"],
+      ["Get data to the new service", "CDC from the legacy database, dual write behind a flag, or an anti-corruption layer calling legacy APIs"],
+      ["Verify before switching", "Shadow traffic compare, then canary a percentage, with a one-line rollback"],
+      ["Cut over, then delete", "Remove the legacy code. Otherwise you carry both forever"]
+    ],
+    more: [
+      "Use when: a big-bang rewrite is too risky, the old system must keep running, and you can put a facade in front. Do not use when: the legacy system has no seams and no stable interface. Sometimes a rewrite of a small system is cheaper.",
+      "Real-world example: many large companies (Amazon retail, Netflix moving from the data centre to the cloud, banks moving off mainframes) migrated this way over years, capability by capability.",
+      "Pitfall: the migration stalls at 80 percent, leaving two systems and double the cost. Plan the last, ugly 20 percent from the start and track the legacy shrink as a metric."
+    ]
+  });
+
+  card("patterns", "Sidecar and Ambassador", "Table", {
+    sum: "Deploy a helper container alongside the app container, sharing its lifecycle and network namespace.",
+    lang: "yaml",
+    code: R`# Kubernetes pod with an app and a sidecar proxy/agent
+spec:
+  containers:
+    - name: app
+      image: shop/orders:1.8
+      env: [{ name: HTTP_PROXY, value: "http://localhost:3128" }]   # ambassador: app talks to localhost
+    - name: envoy                                                  # sidecar doing mTLS, retries, telemetry
+      image: envoyproxy/envoy:v1.31
+      ports: [{ containerPort: 3128 }]
+    - name: log-shipper                                            # another sidecar: ships logs
+      image: fluent/fluent-bit
+      volumeMounts: [{ name: logs, mountPath: /var/log/app }]`,
+    head: ["", "Sidecar", "Ambassador"],
+    rows: [
+      ["Purpose", "Adds a capability to the app: logging, metrics, config reload, security, service mesh proxy", "Represents remote services to the app: handles connection details, retries, routing, auth, circuit breaking"],
+      ["Direction", "Often both inbound and outbound", "Outbound calls"],
+      ["Examples", "Envoy in Istio, Fluent Bit log agent, Dapr, Vault agent", "Local proxy for a sharded cache or database (twemproxy, a connection pooler like PgBouncer next to the app)"],
+      ["Benefit", "Language-neutral, upgrade independently of the app", "App code stays simple and talks to localhost"],
+      ["Cost", "CPU and memory per pod, startup ordering, extra latency hop, debugging complexity", "Same"]
+    ],
+    more: [
+      "Kubernetes native sidecar containers (init containers with a restart policy) fix start and stop ordering problems that plagued older sidecars.",
+      "Use when: you have many services in several languages and need uniform behaviour. Do not use when: a small library does the job with less overhead."
+    ]
+  });
+
+  card("patterns", "Anti-corruption layer", "Recipe", {
+    sum: "A translation layer between your model and a legacy or external one, so foreign concepts and quirks do not leak into your domain.",
+    lang: "python",
+    code: R`class LegacyBillingClient:               # the messy upstream: SOAP-ish, cryptic codes
+    def post_txn(self, acct_no, amt_cents, tx_type_code, ref): ...
+
+class PaymentsGateway:                    # your domain-facing port
+    def charge(self, customer_id: str, money: Money, order_id: str) -> "ChargeResult": ...
+
+class LegacyBillingAdapter(PaymentsGateway):   # the anti-corruption layer
+    def charge(self, customer_id, money, order_id):
+        acct = self._acct_for(customer_id)              # map IDs
+        code = {"EUR": "E1", "USD": "U1"}[money.currency]
+        resp = self.legacy.post_txn(acct, int(money.amount * 100), code, order_id)
+        return ChargeResult(ok=resp.status == "00", reference=resp.ref)   # map results, hide codes`,
+    more: [
+      "Use when integrating with legacy systems, vendors you cannot change, or another team's model that does not fit yours. It is the main defence against big balls of mud.",
+      "Do not use when upstream is a well-designed open host service with a published language that fits you. Conformist is cheaper then.",
+      "Test it heavily with recorded upstream responses. It is the one place where the old world's behaviour is allowed to surprise you."
+    ]
+  });
+
+  card("patterns", "Publish-subscribe and event-driven patterns", "Table", {
+    wide: true,
+    sum: "Producers announce facts and do not know who listens. The pattern family differs in what the event carries and who coordinates.",
+    head: ["Pattern", "Event carries", "Consumers", "Use when", "Watch out"],
+    rows: [
+      ["Event notification", "ID and type only (\"OrderPlaced #1001\")", "Fetch details from the producer if needed", "Loose coupling, sparse data needs", "Callback storms on the producer, consumers depend on its API availability"],
+      ["Event-carried state transfer", "Enough state to act without a callback", "Maintain a local read copy", "Read-heavy cross-service data, resilience to producer outage", "Duplicated data, schema evolution, ordering, large events"],
+      ["Event sourcing", "Every state change as an immutable event", "Rebuild state or projections", "History is the product", "See DDD section"],
+      ["Choreographed saga", "Step outcomes", "Next steps react", "Short, simple processes", "Flow invisible across services"],
+      ["Command message", "An instruction for one recipient", "One consumer", "Delegating work", "Not an event. Name it as a command"],
+      ["Event gateway or router", "Any", "Filters and routes (EventBridge, Kafka Streams)", "Many producers and consumers, rule-based routing", "Another critical piece to run"]
+    ],
+    more: [
+      "Event design: name events as facts in past tense (`OrderPlaced`), include an event ID, timestamp, aggregate ID, version and a schema reference. Keep a stable integration event separate from internal domain events.",
+      "Ordering and duplicates: consumers must handle both. Use per-aggregate partition keys, and idempotent handlers.",
+      "Pitfall: event spaghetti. Without a catalogue of events and owners, nobody knows who consumes what, and changes break unknown consumers. Document events (AsyncAPI), use a registry, and monitor consumer groups per topic."
+    ]
+  });
+
+  card("patterns", "Claim check, scatter-gather and API composition", "Table", {
+    sum: "Three small patterns that appear in almost every large system.",
+    head: ["Pattern", "How", "Example", "Pitfall"],
+    rows: [
+      ["Claim check", "Put the large payload in object storage and send a reference (key, signed URL) in the message", "Video upload event carries the S3 key, not the video", "Orphaned blobs, access control on the reference, lifecycle policies"],
+      ["Scatter-gather", "Send a request to many workers or shards in parallel and merge the answers", "Search query over 50 index shards", "Tail latency: the slowest shard sets the time. Use timeouts and partial results"],
+      ["API composition", "A composer (gateway, BFF, GraphQL) calls several services and joins the data in memory", "Order details page: order, customer, shipping, product images", "N+1 calls, partial failure handling, joins of large sets in memory. Move to a read model (CQRS) when it hurts"]
+    ]
+  });
+
+  card("patterns", "Cell-based architecture and shuffle sharding", "Concept", {
+    sum: "Run many independent, identical copies (cells) of the whole stack, each serving a slice of customers. A failure is contained to one cell.",
+    lang: "text",
+    code: R`                  [ thin routing layer: customer -> cell ]
+        /               |               |                \
+   [cell 1]         [cell 2]        [cell 3]   ...    [cell N]
+   own LB, app,     each: complete stack, own database, own capacity, deployed separately
+   DB, cache
+Blast radius of a bad deploy, poison request or overload = 1/N of customers.`,
+    head: ["Idea", "Detail"],
+    rows: [
+      ["Cell", "A self-contained deployment unit with a fixed maximum size (load tested to a known limit)"],
+      ["Router", "Maps a tenant or key to a cell. Must be extremely simple and highly available, since it is shared"],
+      ["Shuffle sharding", "Each customer is assigned a random small subset of workers (for example 2 of 8). A poison customer affects only those workers, and few other customers share the exact same subset. Used in AWS Route 53 and other AWS services"],
+      ["Deploy strategy", "Roll out to one cell, watch, then proceed to the next"],
+      ["Capacity", "Add cells to scale instead of growing one cell beyond its tested size"]
+    ],
+    more: [
+      "Use when: a global outage is unacceptable and you have a clear tenancy key. Do not use at small scale. The operational overhead of many cells is substantial.",
+      "Cost: duplicated baseline capacity, cross-cell queries become hard (needs a separate analytics path), and migrating a tenant between cells needs tooling."
+    ]
+  });
+
+  card("patterns", "Shared-nothing architecture", "Concept", {
+    sum: "Each node has its own CPU, memory and storage and shares nothing with other nodes. Capacity grows by adding nodes.",
+    head: ["Aspect", "Detail"],
+    rows: [
+      ["Why", "No shared lock, disk or memory means no single contention point and failures stay local"],
+      ["Examples", "Cassandra, DynamoDB, Kafka brokers, sharded PostgreSQL (Citus), stateless web tiers with external state"],
+      ["Requirement", "Stateless services (state in a database, cache or token) so any instance can serve any request"],
+      ["Cost", "Work that needs global state (cross-shard transactions, global uniqueness, global ordering) becomes expensive or impossible without coordination"],
+      ["Contrast", "Shared-disk or shared-everything systems (Oracle RAC, a single big database): simpler semantics, scaling limits"]
+    ],
+    more: ["Practical rule: keep application servers stateless and push all state to systems designed to scale. Session data in a signed cookie or Redis, files in object storage, not on local disks."]
+  });
+
+  card("patterns", "How patterns interact", "Table", {
+    sum: "Patterns are combined. Know the dependencies so you adopt the supporting ones with the main one.",
+    head: ["If you adopt", "You will usually also need", "Because"],
+    rows: [
+      ["Asynchronous messaging", "Outbox, idempotent receiver, dead-letter handling, schema registry", "At-least-once delivery and atomic publish are the hard parts"],
+      ["Saga", "Outbox, idempotency, timeouts, a status read model, observability by saga ID", "Steps retry, compensations repeat, and users need to see progress"],
+      ["Microservices", "Gateway, discovery, centralised tracing, contract tests, CI/CD per service, platform tooling", "Without them each team rebuilds the basics, or goes blind"],
+      ["CQRS", "Event or CDC pipeline, projection rebuild tooling, read-your-writes strategy", "Read models lag and must be rebuildable"],
+      ["Event sourcing", "Snapshots, upcasters for schema changes, projections, crypto-shredding for personal data", "Long streams and changing schemas"],
+      ["Caching", "Invalidation strategy, stampede protection, metrics on hit ratio", "Staleness and cold starts are the real problems"],
+      ["Circuit breaker and retries", "Timeouts, bulkheads, fallbacks, retry budgets", "A breaker with no fallback just fails differently"],
+      ["Sharding", "Directory or routing, rebalancing tooling, cross-shard query strategy", "Operational cost shows up at resharding time"],
+      ["Service mesh", "Clear policy on which layer retries, certificate management, mesh observability", "Duplicate retries and opaque failures otherwise"]
+    ]
+  });
+
+  card("patterns", "Classic design patterns that still matter", "Table", {
+    sum: "The Gang of Four patterns did not go away. They appear inside services and in distributed forms.",
+    head: ["Classic pattern", "Where it shows up now"],
+    rows: [
+      ["Strategy", "Pluggable pricing rules, routing and load-balancing policies, retry policies"],
+      ["Observer", "Domain events in-process, pub/sub across services"],
+      ["Decorator", "Middleware chains: auth, logging, rate limiting, retry wrappers around clients"],
+      ["Adapter and Facade", "Anti-corruption layer, gateway, client SDKs over legacy APIs"],
+      ["Proxy", "Service mesh proxies, caching proxies, circuit breaker as a proxy"],
+      ["Chain of Responsibility", "Request pipelines and filters in gateways and frameworks"],
+      ["State", "Aggregate lifecycles, saga state machines, order status"],
+      ["Command", "Command messages, undo and compensations, job queues"],
+      ["Factory and Builder", "Aggregate creation with invariants, test data builders"],
+      ["Repository (PoEAA, DDD)", "Aggregate persistence behind an interface"],
+      ["Singleton", "Mostly an anti-pattern in distributed systems: a process-local singleton is not a cluster-wide singleton. Use leader election if you need one worker"]
+    ]
+  });
+
+  /* ================= END-TO-END EXAMPLES ================= */
+  card("e2e", "Design 1: e-commerce order processing, requirements and numbers", "Recipe", {
+    wide: true,
+    sum: "A marketplace with 20 million monthly active users, regular flash sales and a global seller base. Goal: never lose or double-charge an order, and survive a 10x sale spike.",
+    lang: "python",
+    code: R`# Functional: browse, cart, checkout, pay, reserve stock, ship, track, cancel/refund
+# Non-functional: no lost or duplicate orders, payments exactly-once in effect,
+#                 checkout p99 < 800 ms, browse p99 < 200 ms, 99.95 percent availability on checkout
+
+orders_per_day = 1_000_000                       # normal day
+avg_qps  = orders_per_day / 86_400               # ~12 orders/s
+sale_peak = avg_qps * 50                         # flash sale: ~600 orders/s for minutes
+browse_qps = 30_000                              # product views dominate (read:write ~ 100:1)
+order_size = 5_000                               # bytes incl. lines and address
+orders_per_year_tb = orders_per_day * 365 * order_size / 1e12    # ~1.8 TB/year -> fits one sharded RDBMS easily
+# Insight: orders are NOT a scale problem. Correctness, stock contention on hot SKUs,
+# and the browse read path are. Design for consistency in checkout, caching for browse.`,
+    more: [
+      "Intermediate trap: sharding the orders database on day one. At 600 orders per second a single PostgreSQL primary is fine. The pain is elsewhere: payment calls, stock on one hot SKU, and the read path.",
+      "Write the invariants explicitly: stock never negative, an order is paid at most once, every paid order eventually ships or is refunded."
+    ]
+  });
+
+  card("e2e", "Design 1: architecture and data ownership", "Concept", {
+    wide: true,
+    sum: "Boundaries follow bounded contexts. Each service owns its data. The checkout path is a saga, the browse path is cached read models.",
+    lang: "text",
+    code: R`            CDN / edge cache (static, product images, cacheable catalog pages)
+                       |
+                 [ API gateway ]  auth, rate limit, routing
+        ┌──────────────┼──────────────────────────┬───────────────┐
+   [ Web BFF ]    [ Mobile BFF ]            [ Partner API ]       |
+        └──────────────┼──────────────────────────┘               |
+   ┌──────────┬────────┴────────┬──────────┬───────────┬──────────┴───┐
+ Catalog    Cart/Pricing     Order       Payment     Inventory     Shipping
+ (search,   (Redis +         (orders DB, (provider   (stock DB,    (carriers,
+  read      pricing rules)    saga        adapter,    reservations)  labels)
+  models)                     state)      ledger)
+   |                              \            |           /            |
+ search index                      └──────── Kafka (events) ───────────┘
+ (OpenSearch)                      OrderPlaced, StockReserved, PaymentCaptured, ShipmentCreated ...
+                                   consumers: notifications, analytics warehouse, fraud, email`,
+    head: ["Service", "Owns", "Store", "Notes"],
+    rows: [
+      ["Catalog", "Products, categories, media", "PostgreSQL plus search index and CDN", "Read-heavy. Product data replicated to search and cache by events"],
+      ["Cart and Pricing", "Carts, price rules, promotions", "Redis with persistence, DB for rules", "Core domain: promotions and pricing. Ephemeral carts"],
+      ["Order", "Orders, order state machine, saga coordination", "PostgreSQL (primary plus replicas), outbox", "Source of truth for order status"],
+      ["Inventory", "Stock levels, reservations", "PostgreSQL or DynamoDB with conditional writes", "Strong consistency for decrement, TTL on reservations"],
+      ["Payment", "Payment attempts, ledger, provider tokens", "PostgreSQL, append-only ledger", "Generic subdomain: wrap a provider (Stripe, Adyen). Idempotency keys to the provider"],
+      ["Shipping", "Shipments, labels, carrier status", "PostgreSQL", "Async. Carriers are slow and unreliable, so use queues and retries"]
+    ],
+    more: [
+      "Why events: Order must not call Notification, Analytics, Fraud and Loyalty synchronously. They subscribe to `OrderPlaced`. Adding a consumer needs no change to Order.",
+      "Why BFFs: mobile needs a compact payload and fewer round trips than the web."
+    ]
+  });
+
+  card("e2e", "Design 1: the checkout saga", "Recipe", {
+    wide: true,
+    sum: "Orchestrated in the Order service. Each step is a local transaction with a compensation. Users see an order status, not a spinner that hides failure.",
+    lang: "text",
+    code: R`POST /orders  (Idempotency-Key: k-123)
+ 1. Order: create order PENDING in DB + outbox(OrderCreated)        [local tx]
+ 2. Inventory: reserve items (TTL 15 min), reply StockReserved / OutOfStock
+        OutOfStock  -> Order REJECTED, done
+ 3. Payment: authorise card (idempotency key = orderId), reply Authorised / Declined
+        Declined    -> compensate: release reservation, Order PAYMENT_FAILED
+ 4. Order: mark CONFIRMED, emit OrderConfirmed
+ 5. Shipping (async): create shipment. Failures are retried, never undo the sale
+ 6. Payment: capture on shipment (or immediately for digital goods)
+
+Timeouts: each awaiting step has a deadline. Expiry -> run compensations, notify the customer.
+Order states: PENDING -> RESERVED -> AUTHORISED -> CONFIRMED -> SHIPPED -> DELIVERED
+              any state -> CANCELLED (with the matching compensations)`,
+    head: ["Concern", "Decision"],
+    rows: [
+      ["Orchestrator", "A state machine persisted in the orders DB (or Temporal). Commands via the broker, replies as events"],
+      ["Idempotency", "Client idempotency key on `POST /orders`. Orders and saga steps keyed by `orderId` so redelivered commands do nothing new"],
+      ["Authorise then capture", "Authorise at checkout (reserves funds), capture at shipment. Avoids refunds for out-of-stock after a charge"],
+      ["Ambiguous payment result (timeout)", "Do not assume failure. Query the provider by idempotency key, or wait for the webhook. Mark the order `PAYMENT_UNKNOWN` and reconcile"],
+      ["Irreversible steps last", "Shipping label purchase and email confirmation come after the point of no return"],
+      ["User experience", "Return `202 Accepted` with an order ID, then push status over SSE or WebSocket or poll"]
+    ],
+    watch: [
+      "Webhooks from the payment provider can arrive before your synchronous call returns, twice, or out of order. Handle events by order ID and current state, not by assuming sequence.",
+      "A compensation that fails must retry until it succeeds, and alert if it cannot. A stuck compensation means money or stock is lost."
+    ]
+  });
+
+  card("e2e", "Design 1: inventory without overselling", "Recipe", {
+    sum: "Decrement stock atomically in one place. Hot SKUs in flash sales are the contention point.",
+    lang: "sql",
+    code: R`-- Conditional decrement: atomic, no read-modify-write race
+UPDATE stock
+SET available = available - $qty, reserved = reserved + $qty
+WHERE sku = $sku AND available >= $qty
+RETURNING available;                    -- 0 rows -> out of stock
+
+INSERT INTO reservations (order_id, sku, qty, expires_at)
+VALUES ($order, $sku, $qty, now() + interval '15 minutes')
+ON CONFLICT (order_id, sku) DO NOTHING; -- idempotent on redelivery
+-- a sweeper releases expired reservations: available += qty`,
+    head: ["Problem", "Approach"],
+    rows: [
+      ["Hot SKU contention (thousands of buyers, one row)", "Split stock into N buckets (`sku#0..#15`) and decrement a random bucket, with fallback to others. Or queue purchases per SKU and process them serially. Or pre-allocate stock to cells"],
+      ["Flash sale surge", "Waiting room or queue at the edge, rate-limit checkout, serve a static page, sell only what you have reserved"],
+      ["Display vs truth", "Product page shows an approximate cached count. Checkout is authoritative"],
+      ["Reservation leaks", "TTL plus sweeper. Release on payment failure and on cart abandonment"],
+      ["Multi-warehouse", "Reserve from the nearest warehouse with stock, with an allocation service"]
+    ],
+    more: ["Alternative: allow slight overselling and compensate with backorders or cancellations for low-value items. It is a business decision, and cheaper than perfect consistency at massive scale."]
+  });
+
+  card("e2e", "Design 1: failure scenarios and scaling", "Table", {
+    wide: true,
+    sum: "Walk every dependency and ask what happens when it fails. Write the answer down.",
+    head: ["Failure", "Impact", "Mitigation"],
+    rows: [
+      ["Payment provider slow or down", "Checkout stalls", "Timeout, circuit breaker, queue authorisation for retry, second provider failover, clear user message"],
+      ["Inventory service down", "Cannot reserve", "Fail checkout fast with a retry message. Do not guess stock. Browse stays up from caches"],
+      ["Broker outage", "Events delayed", "Outbox keeps events in the DB. Relay resumes. Checkout stays correct, downstream updates lag"],
+      ["Order DB primary fails", "No new orders", "Automatic failover with synchronous standby (no data loss), clients retry with idempotency keys"],
+      ["Duplicate event delivery", "Double effects", "Idempotent consumers keyed by event ID"],
+      ["Poison message", "Consumer stuck", "Retry limit, dead-letter topic, alert, replay tool"],
+      ["Region outage", "Everything in that region", "Active-passive standby region, replicated DB and events, practised runbook. RPO and RTO stated in numbers"],
+      ["Sale spike 10x", "Saturation", "Autoscale stateless tiers, cache, rate limit, waiting room, pre-warm, shed non-critical features (recommendations)"]
+    ],
+    more: [
+      "Scaling order: cache and CDN first, then read replicas and search, then async decoupling, then sharding order data by customer ID only when one primary no longer suffices.",
+      "Senior addition: define the degraded modes in advance. When recommendations are down, show best sellers. When search is down, show category browse."
+    ]
+  });
+
+  card("e2e", "Design 2: social feed, fan-out on write versus read", "Table", {
+    wide: true,
+    sum: "A timeline for 300 million users where a post must appear in followers' feeds quickly. The core decision is when to do the work: at write time or read time.",
+    lang: "python",
+    code: R`# Rough numbers
+users = 300_000_000;  dau = 100_000_000
+posts_per_day = 100_000_000                      # ~1,200 writes/s average, ~5k/s peak
+feed_reads_per_day = dau * 10                    # 1 billion/day -> ~12k reads/s avg, ~40k peak
+avg_followers = 200
+fanout_writes_per_day = posts_per_day * avg_followers          # 20 billion feed inserts/day ~ 230k/s !
+# Reads are cheap if feeds are precomputed. Writes explode with followers, especially celebrities (50M followers).`,
+    head: ["", "Fan-out on write (push)", "Fan-out on read (pull)", "Hybrid"],
+    rows: [
+      ["Write", "Insert post ID into every follower's feed", "Store the post once", "Push for normal users"],
+      ["Read", "Fast: read one precomputed list", "Slow: fetch followees' recent posts and merge at read time", "Merge pushed feed with pulled celebrity posts"],
+      ["Cost", "Huge write amplification. Wasted work for inactive followers", "Heavy reads, tail latency from many calls", "Balanced"],
+      ["Celebrity problem", "One post triggers 50M writes, feed delay for everyone", "Fine", "Do not push for accounts above a follower threshold. Pull them at read time"],
+      ["Freshness", "Near real-time", "Always fresh", "Near real-time for most"]
+    ],
+    more: [
+      "Real-world: Twitter's home timeline has been described publicly as push for most accounts with a pull-and-merge path for very high follower accounts.",
+      "Optimisations: push only to active users (logged in within N days), cap each feed at a few hundred entries, store post IDs not content, hydrate posts at read time from a cache.",
+      "Ranking: a ranking service re-orders candidates. This is a separate read-time pipeline (candidate generation, scoring, filtering)."
+    ]
+  });
+
+  card("e2e", "Design 2: feed architecture and storage", "Concept", {
+    wide: true,
+    sum: "Write path through a queue so posting is fast and fan-out is asynchronous. Feeds live in an in-memory store as lists of post IDs.",
+    lang: "text",
+    code: R`POST /posts -> [Post service] -> posts DB (sharded by author_id) + object store for media
+                     |  outbox -> Kafka "post-created" (key: author_id)
+                     v
+              [Fan-out workers]  (consumer group, scaled by lag)
+                 read follower IDs (graph service, paged) -> for each active follower:
+                 ZADD feed:{follower} score=post_time member=post_id   (Redis sorted set, trimmed to 800)
+GET /feed -> [Feed service]: ZREVRANGE feed:{me} 0 49
+                 + merge celebrity posts (pull from celebrity_posts:{celeb} for followed celebs)
+                 -> hydrate post and author objects from cache -> rank -> respond`,
+    head: ["Component", "Choice and reason"],
+    rows: [
+      ["Post store", "Sharded SQL or wide-column keyed by `author_id`. Writes are modest"],
+      ["Social graph", "Adjacency lists in a sharded store, with followers paged. Graph queries are bounded (one hop)"],
+      ["Feed store", "Redis or similar: sorted set per user, capped length. Rebuildable from the post store, so loss is tolerable"],
+      ["Fan-out", "Queue-driven workers, batching writes, backpressure by consumer lag. Delay under load is acceptable"],
+      ["Hydration", "Multi-get from a cache for posts and profiles, falling back to the database"],
+      ["Media", "Object storage plus CDN, async transcoding pipeline"],
+      ["Consistency", "Eventual. Users must see their own post immediately (read-your-writes): insert it into their own feed synchronously"]
+    ],
+    watch: [
+      "Deletes and privacy changes must propagate to precomputed feeds. Filter at read time (check visibility on hydration) rather than trying to remove from every feed instantly.",
+      "Cold feeds: a user returning after months has no feed. Build it on demand with the pull path, then cache."
+    ]
+  });
+
+  card("e2e", "Design 2: notification system", "Recipe", {
+    sum: "Deliver push, email and SMS reliably, with user preferences, deduplication and rate limits. Providers are slow and fail often, so everything is asynchronous.",
+    lang: "text",
+    code: R`event producers (order shipped, new follower, security alert)
+     -> [Notification API/ingest]  validate, assign notification_id (idempotent), priority
+     -> Kafka "notifications" (partition by user_id)
+     -> [Router]  load preferences, quiet hours, locale, channel choice; dedupe (user, type, entity, window)
+     -> per-channel queues:  push  |  email  |  sms        (separate queues = isolation)
+     -> [Channel workers]  render template, rate limit per user and per provider, call provider
+          retry with backoff + jitter, failover to second provider, DLQ after N tries
+     -> delivery receipts (webhooks) -> status store -> analytics`,
+    head: ["Concern", "Design"],
+    rows: [
+      ["Priorities", "Separate high-priority queue for security codes (2FA) and order alerts. Marketing never delays them"],
+      ["Deduplication", "Key = user + type + entity + window. Stored with TTL in Redis. Prevents double sends on retries"],
+      ["User protection", "Per-user rate limits and digesting (combine 20 likes into one push), preferences honoured everywhere, easy opt-out"],
+      ["Provider failures", "Circuit breaker per provider, automatic failover (SMS aggregator A to B), backoff"],
+      ["Idempotent sending", "Provider calls carry the notification ID so a retry does not send twice when the provider supports it"],
+      ["Scheduling", "Delayed queue or scheduler (time-bucketed storage) for reminders"],
+      ["Observability", "Funnel metrics per channel: accepted, sent, delivered, opened. Alert on provider error rates and queue lag"]
+    ],
+    more: ["Delivery to a phone cannot be exactly-once. Aim for at-least-once with dedupe, and accept rare duplicates over lost security alerts."]
+  });
+
+  card("e2e", "Design 3: real-time collaborative editing", "Concept", {
+    wide: true,
+    sum: "Many users edit one document at once. Edits must converge to the same document everywhere without losing anyone's work, with low latency.",
+    lang: "text",
+    code: R`client A --ws--> [Edge/WebSocket gateway] --route by doc_id (consistent hashing)--> [Doc session server]
+client B --ws-->                                                                  | in-memory doc state
+                                                                                  | applies/transforms ops, broadcasts
+                                                                                  v
+                                             append to op log (durable) + periodic snapshot to storage
+presence/cursors: ephemeral, pub/sub only, never persisted`,
+    head: ["Approach", "How it works", "Pros", "Cons"],
+    rows: [
+      ["Operational transformation (OT)", "A central server orders operations and transforms concurrent ones against each other so intent is preserved", "Mature in text editors, smaller metadata", "Transform functions are hard to get right, needs a central server"],
+      ["CRDTs (Yjs, Automerge)", "Operations commute by design. Each character or element has a unique ID and position metadata", "Works peer to peer and offline, simple server (relay and store)", "Metadata overhead, garbage collection of tombstones, history can grow"],
+      ["Last-writer-wins per field", "Whole fields or blocks overwritten by timestamp", "Very simple", "Loses concurrent edits to the same field. Fine for design tools with object-level properties"]
+    ],
+    more: [
+      "Routing: all editors of one document connect to the same session server (consistent hashing on `doc_id`), so ordering is trivial and in-memory. If it dies, clients reconnect to the new owner, which loads the snapshot plus log and clients resend unacknowledged ops.",
+      "Persistence: append every operation to a log for durability, snapshot every N operations or seconds, compact old logs.",
+      "Scale: documents are the shard key. One hot document with thousands of editors is the hard case, so cap participants or switch most users to read-only fan-out.",
+      "Offline: CRDTs make long offline edits mergeable. OT systems queue and rebase ops, which gets harder over long gaps.",
+      "Real-world: Google Docs is an OT lineage system. Figma has described a server-authoritative design inspired by CRDTs with per-property last-writer-wins. Many newer editors use Yjs or Automerge."
+    ]
+  });
+
+  card("e2e", "Design 4: strong where it matters, eventual elsewhere", "Table", {
+    wide: true,
+    sum: "A money-moving product (wallet, marketplace payouts). Decide per data item what consistency it needs. Do not pay for linearizability everywhere.",
+    head: ["Data or operation", "Consistency", "Mechanism", "Why"],
+    rows: [
+      ["Account balance and ledger entries", "Strong (serializable or linearizable)", "Single leader per account shard, double-entry ledger, `SERIALIZABLE` or conditional updates, synchronous replica", "A wrong balance is a financial and legal problem"],
+      ["Money transfer between accounts", "Atomic within one ledger database", "One transaction writes both entries. Across systems use sagas plus reconciliation", "Debit and credit must happen together"],
+      ["Payment provider status", "Eventually consistent with reconciliation", "Idempotent calls, webhooks, nightly reconciliation job comparing ledger to provider reports", "External systems cannot join your transaction"],
+      ["Transaction history screen", "Read-your-writes, otherwise eventual", "Replica read with fallback to primary after a write", "Users need to see what they just did"],
+      ["Notifications and emails", "Eventual, at-least-once", "Outbox and queue, dedupe", "Late is fine, lost is not"],
+      ["Analytics and fraud features", "Eventual, near real-time", "Event stream to stream processor", "Slight staleness acceptable"],
+      ["Product, merchant and profile data", "Eventual, cached", "CDC to cache and search", "Staleness of seconds or minutes is harmless"]
+    ],
+    lang: "sql",
+    code: R`-- Double-entry ledger: every transfer is two rows that sum to zero, written in one transaction
+BEGIN ISOLATION LEVEL SERIALIZABLE;
+  INSERT INTO ledger_entries (txn_id, account_id, amount_cents, created_at) VALUES
+    ($txn, $from, -$amt, now()), ($txn, $to, +$amt, now());
+  UPDATE accounts SET balance_cents = balance_cents - $amt WHERE id = $from AND balance_cents >= $amt;
+COMMIT;                                           -- retry on 40001; txn_id is a unique idempotency key
+-- Invariant check (runs continuously): SELECT sum(amount_cents) FROM ledger_entries;  -- must equal 0`,
+    more: [
+      "Reconciliation is the safety net that makes eventual consistency with external parties acceptable. Compare internal records with the provider's settlement files daily and raise any difference as an incident.",
+      "Intermediate thinking: put everything in one big strongly consistent database. Senior thinking: isolate the small core that needs strong guarantees, make everything else derive from it with events."
+    ]
+  });
+
+  card("e2e", "Presenting a design in 45 minutes", "Table", {
+    sum: "A time plan for interviews and design reviews. The structure is the same.",
+    head: ["Minutes", "Do", "Signals competence when"],
+    rows: [
+      ["0 to 5", "Clarify scope, users, functional and non-functional requirements, scale numbers", "You ask about consistency, latency and failure expectations, and state assumptions"],
+      ["5 to 10", "Estimate load, storage and bandwidth. Identify the dominant resource", "Numbers drive design choices"],
+      ["10 to 20", "High-level architecture, main flows, data model, APIs", "Each box has a reason and an owner of data"],
+      ["20 to 35", "Deep dive into the 1 or 2 hardest parts (hot keys, consistency, fan-out, ordering)", "You compare alternatives and name the trade-offs"],
+      ["35 to 42", "Failure modes, scaling, monitoring, security", "You walk each dependency's failure"],
+      ["42 to 45", "Summarise decisions, what you would revisit at 10x, what you would measure first", "You show evolution, not a final answer"]
+    ],
+    more: [
+      "Common mistakes: designing for Google scale when the numbers say otherwise, naming technologies with no reasoning, ignoring failure, skipping the data model, and never stating what you chose not to build.",
+      "Senior signal: you proactively list risks and open questions, and propose how to de-risk them (prototype, load test, canary)."
+    ]
+  });
+
+  /* ================= ADVANCED TOPICS AND PRODUCTION REALITY ================= */
+  card("prod", "Evolutionary architecture and fitness functions", "Concept", {
+    sum: "Architecture is never finished. Design so change is cheap, and protect the properties you care about with automated checks.",
+    head: ["Idea", "Practice"],
+    rows: [
+      ["Fitness function", "An automated test of an architectural property: no dependency from `domain` to `infrastructure`, p99 under 300 ms in a load test, no cyclic dependencies between modules, no service reading another's tables"],
+      ["Architecture decision records (ADRs)", "Short documents: context, decision, alternatives, consequences, date, status. Stored in the repo. They explain the why to future teams"],
+      ["Last responsible moment", "Delay irreversible decisions until you have information, but do not delay until the cost of change explodes"],
+      ["Reversible versus irreversible decisions", "Move fast on two-way doors (a library, a queue name), slow on one-way doors (public API shape, primary data store, partition key)"],
+      ["Incremental change", "Small steps behind flags with metrics. Parallel run and shadow traffic for risky migrations"],
+      ["Tech radar and paved roads", "A small set of supported technologies and templates. Teams may deviate, but pay the operational cost themselves"]
+    ],
+    more: [
+      "Example fitness function in CI: ArchUnit (Java) or import-linter (Python) rules that fail the build if the `orders` module imports `billing` internals.",
+      "Measure change cost: lead time for change, how many teams a typical change touches, and how often deployments are rolled back."
+    ]
+  });
+
+  card("prod", "Chaos engineering and failure testing", "Recipe", {
+    sum: "Test your assumptions about failure before production does. Start small, in a safe scope, with a hypothesis.",
+    head: ["Step", "Detail"],
+    rows: [
+      ["1. Define steady state", "A measurable normal: success rate, p99 latency, orders per minute"],
+      ["2. Hypothesis", "\"If one inventory pod dies, checkout error rate stays below 0.1 percent\""],
+      ["3. Inject the smallest fault", "Kill a pod, add 300 ms latency to one dependency, drop 5 percent of packets, fill a disk, expire a certificate"],
+      ["4. Limit the blast radius", "One zone or 1 percent of traffic, an abort button, run during business hours with the team watching"],
+      ["5. Observe and learn", "Did alerts fire? Did the runbook work? Did retries make it worse?"],
+      ["6. Fix and automate", "Add the experiment to regular game days or CI"]
+    ],
+    more: [
+      "Tools: Chaos Monkey and the Simian Army (Netflix), Gremlin, Chaos Mesh, LitmusChaos, AWS Fault Injection Service, Toxiproxy for network faults in tests, Jepsen for testing database consistency claims.",
+      "Cheaper first steps: game days where you walk through a failure scenario on paper, restore-from-backup drills, failover rehearsals, and load tests to the first bottleneck.",
+      "Mindset: the goal is confidence and learning, not breaking things. If you cannot afford the failure in production, test it where you can, and treat the gap as a risk."
+    ]
+  });
+
+  card("prod", "Multi-region architecture", "Table", {
+    wide: true,
+    sum: "Regions give lower latency for users, disaster recovery and data residency, at the price of the hardest consistency problems and large operational cost.",
+    head: ["Model", "How it works", "RTO and RPO", "Cost and complexity", "Fits"],
+    rows: [
+      ["Single region, multi-AZ", "Spread across zones in one region", "Minutes, near-zero data loss for zone failure", "Low", "Most applications. Survives a data-centre failure, not a region failure"],
+      ["Backup and restore (cold)", "Backups copied to another region", "Hours, hours of data loss", "Lowest", "Non-critical systems"],
+      ["Pilot light and warm standby", "Replicated data, minimal or scaled-down compute in region B", "Minutes to an hour, seconds to minutes of loss", "Medium", "Business-critical with a regional DR need"],
+      ["Active-passive", "Region B takes over on failure (DNS or global load balancer). DB replicates asynchronously", "Minutes, seconds of loss (async lag)", "Medium to high", "Common DR design"],
+      ["Active-active, partitioned by user", "Each user homed in one region. Other region is the backup", "Seconds, small loss", "High", "Global apps with clear home region, residency laws"],
+      ["Active-active, global writes", "Any region accepts writes to shared data", "Near zero", "Highest. Needs a globally consistent database (Spanner, CockroachDB, DynamoDB global tables) or conflict resolution", "Very strict availability and latency needs"]
+    ],
+    more: [
+      "Latency reality: cross-region round trips are 50 to 150 ms. A synchronously replicated write across regions adds that to every commit. Keep chatty flows inside a region.",
+      "Data residency and sovereignty (GDPR, local laws) may force data to stay in a region. Design the partition key to include region.",
+      "Failover is a product feature you must practise. An untested failover plan fails when needed: stale configs, expired credentials, capacity not pre-provisioned, DNS TTLs, forgotten dependencies in the primary region.",
+      "Avoid hidden global dependencies: a single-region auth service, config store, secrets manager or CI pipeline defeats the whole design.",
+      "Fail back is harder than failing over. Plan how data written in the secondary returns to the primary."
+    ]
+  });
+
+  card("prod", "Cost as an architecture constraint", "Table", {
+    sum: "At scale, architecture is cost architecture. Know the drivers and design with them.",
+    head: ["Driver", "What it looks like", "Lever"],
+    rows: [
+      ["Data egress and cross-AZ traffic", "Chatty services across zones, replication, logs shipped to another region", "Zone-aware routing, compress, keep chatty pairs together, sample logs"],
+      ["Over-provisioned databases", "Primary sized for peak 24/7", "Read replicas, caching, autoscaling storage, serverless tiers, schedule non-prod"],
+      ["Observability volume", "Logs and high-cardinality metrics cost more than the app", "Sampling, retention tiers, drop debug logs, cardinality limits"],
+      ["Idle environments", "Dozens of full staging stacks", "Ephemeral environments, scale to zero"],
+      ["Microservice overhead", "Per-service minimum footprint, sidecars, pipelines, on-call", "Merge services that always change together, share platform"],
+      ["Managed services premium", "Higher unit price", "Weigh against engineers' time to operate. Re-evaluate at scale"],
+      ["Retries and amplification", "Wasted work, duplicate processing", "Retry budgets, idempotent short-circuits, deduplication"]
+    ],
+    more: ["Attribute cost per service and per feature (tags, cost allocation). What is invisible is not optimised. Track unit economics: cost per order, per active user, per 1,000 requests."]
+  });
+
+  card("prod", "Conway's law and team topologies", "Table", {
+    sum: "A system's structure mirrors the communication structure of the organisation that builds it. Design the teams and the architecture together.",
+    head: ["Concept", "Meaning", "Practice"],
+    rows: [
+      ["Conway's law", "Organisations produce designs that copy their communication structure", "Three teams building a compiler yields a three-pass compiler. A frontend team and a backend team yields a handoff boundary in the middle of every feature"],
+      ["Inverse Conway manoeuvre", "Shape teams to get the architecture you want", "Create cross-functional stream-aligned teams per bounded context"],
+      ["Stream-aligned team", "Owns a flow of work for a business area end to end", "Most teams. Own services, data, on-call"],
+      ["Platform team", "Provides a self-service internal platform (deploy, observability, data stores)", "Treat it as a product with customers inside the company"],
+      ["Enabling team", "Helps others adopt practices temporarily (security, SRE, data)", "Coaching, not gatekeeping"],
+      ["Complicated-subsystem team", "Owns a specialised component needing deep expertise", "Video codec, pricing optimiser, ML platform"],
+      ["Cognitive load", "How much a team can hold in its head", "A team that owns too many services becomes a bottleneck. Size services and domains to team capacity"]
+    ],
+    more: [
+      "Amazon's \"two-pizza teams\" with single-threaded owners and API-only interaction are the standard example of architecture and team design reinforcing each other.",
+      "Signs of mismatch: PRs routinely need approval from three other teams, a feature needs coordinated releases from several teams, or a service has no clear owner."
+    ],
+    watch: ["Reorganising teams without changing the architecture (or the reverse) leaves the old coupling in place. The friction returns within months."]
+  });
+
+  card("prod", "Production reality: what actually causes outages", "Pitfall", {
+    sum: "Patterns that repeat in postmortems across companies.",
+    watch: [
+      "Changes cause most incidents: deploys, config, feature flags, certificate expiry, quota limits. Make changes small, staged and reversible, and show them next to your graphs.",
+      "Retry storms and cascading failures: a small slowdown amplified by timeouts, retries and queues into a full outage.",
+      "Capacity cliffs: connection pool exhaustion, file descriptors, thread pools, database connections, ephemeral ports, DNS rate limits, cloud API quotas.",
+      "Single points of failure hiding in shared dependencies: DNS, auth, config service, secret store, a shared database, a certificate authority.",
+      "Unbounded anything: queues, caches, logs, retries, fan-out, result sets, tenant sizes.",
+      "Time bombs: expiring certificates, leap seconds, disk filling slowly, ID counter overflow, log rotation, license keys.",
+      "Cold caches and cold starts after a restart or failover, when everything hits the database at once.",
+      "Operational blind spots: no alert on the symptom users see, no runbook, only one person who knows the system.",
+      "Untested recovery: backups that never restored, failover never rehearsed.",
+      "Human factors: tired on-call engineers, unclear ownership, no incident command structure."
+    ],
+    more: [
+      "Learn from public postmortems: AWS (S3 2017, us-east-1 events), Cloudflare, GitHub, Slack, Google Cloud, Facebook's 2021 BGP outage. The pattern \"a routine change plus a latent bug plus a missing safety check\" is common.",
+      "Write blameless postmortems with a timeline, contributing factors and concrete, owned action items. Track them to completion."
+    ]
+  });
+
+  card("prod", "When to deliberately choose simpler designs", "Table", {
+    sum: "Complexity is a cost you pay every day. Add it only for a requirement you can name and measure.",
+    head: ["Temptation", "Simpler default", "Move up when"],
+    rows: [
+      ["Microservices from day one", "Modular monolith with enforced boundaries", "Teams block each other, or parts need independent scaling or compliance isolation"],
+      ["Kafka for everything", "A database table or a managed queue", "You need replay, many independent consumers or sustained high throughput"],
+      ["Event sourcing and CQRS", "CRUD plus an audit table and an outbox", "History or temporal queries are core requirements"],
+      ["Sharding", "Bigger instance, read replicas, partitioned tables, archiving", "A single primary cannot handle the write load after optimisation"],
+      ["Multi-region active-active", "Multi-AZ plus tested backup and restore", "A regional outage is unacceptable to the business, with a budget that proves it"],
+      ["A service mesh", "Libraries, a gateway and managed load balancers", "Dozens of services and a need for uniform mTLS and traffic control"],
+      ["A custom platform", "Managed cloud services", "Scale makes the managed price exceed the cost of a team"],
+      ["Strong consistency everywhere", "Strong where invariants demand it, caches and replicas elsewhere", "Never for everything. Pay the latency only where needed"]
+    ],
+    more: [
+      "Senior judgement is often subtraction. The best distributed system is the one you did not need to build.",
+      "Write down the trigger for the next step (for example \"primary CPU above 60 percent at peak for two weeks\"), so growth is a planned response, not a guess."
+    ]
+  });
+
+  card("prod", "Architecture review checklist", "Recipe", {
+    sum: "Questions to ask of any design, your own included.",
+    lang: "text",
+    code: R`Boundaries      Who owns each piece of data? Can a service be deployed alone? What is the blast radius?
+Consistency     Which invariants must always hold, and where is each enforced? What is eventually consistent, by how long?
+Failure         What happens when each dependency is slow, down, or wrong? Timeouts, retries, budgets, fallbacks, bulkheads?
+Idempotency     Can every state-changing operation be retried safely? Which ones cannot?
+Ordering        What needs order, per what key? What happens on duplicates and reorderings?
+Capacity        Dominant resource? Headroom? What is the first bottleneck at 10x? Load tested?
+Data            Partition key, hot keys, growth, retention, backups, restore tested, schema evolution?
+Security        Authn/authz between services, secrets, least privilege, data classification, audit trail?
+Operations      Dashboards, SLOs, alerts on symptoms, runbooks, deploy and rollback, on-call owner?
+Evolution       How do we change this API/schema without a flag day? What would make us revisit the decision?
+Cost            Cost per unit of work? Largest line items? Who sees the bill?
+Simplicity      Is each component earning its keep? What is the simplest design that meets the requirements?`
+  });
+
+  card("prod", "Further depth: what to study next", "Table", {
+    wide: true,
+    sum: "Once these foundations are solid, go deeper in these directions.",
+    head: ["Topic", "Resource", "Why"],
+    rows: [
+      ["Everything in one book", "Martin Kleppmann, Designing Data-Intensive Applications", "The best single treatment of replication, partitioning, transactions, consistency, batch and stream processing"],
+      ["Database internals", "Alex Petrov, Database Internals", "Storage engines, B-trees and LSM trees, then distributed protocols"],
+      ["Microservices in practice", "Sam Newman, Building Microservices (2nd ed.), Monolith to Microservices", "Decomposition, migration patterns, testing and deployment"],
+      ["Patterns for services", "Chris Richardson, Microservices Patterns (and microservices.io)", "Saga, outbox, CQRS, API composition with code"],
+      ["Domain-driven design", "Eric Evans, Domain-Driven Design. Vaughn Vernon, Implementing DDD and DDD Distilled. Alberto Brandolini, Event Storming", "Strategic and tactical DDD, discovery workshops"],
+      ["Resilience and operations", "Michael Nygard, Release It! Google SRE book and workbook", "Stability patterns, SLOs, incident response"],
+      ["Evolutionary design", "Ford, Parsons and Kua, Building Evolutionary Architectures. Team Topologies by Skelton and Pais", "Fitness functions, team and architecture alignment"],
+      ["Foundational papers", "Lamport: Time, Clocks and the Ordering of Events. Dynamo (2007). Bigtable. Spanner. Raft (Ongaro and Ousterhout). Kafka. The Tail at Scale. Life Beyond Distributed Transactions (Helland)", "The original ideas, short and readable"],
+      ["Testing distributed systems", "Jepsen analyses (Kyle Kingsbury), TLA+ and Hillel Wayne's Practical TLA+, property-based and deterministic simulation testing", "How to find consistency bugs before users do"],
+      ["Consensus and consistency depth", "Raft visualisation and the Raft paper, Paxos Made Simple, Viotti and Vukolic's consistency survey", "Understand what your database really guarantees"],
+      ["Stream processing", "Flink, Kafka Streams, event-time, watermarks, exactly-once state", "Real-time derived data"],
+      ["Data architecture", "Lakehouse, data mesh, CDC pipelines, OLAP engines", "Analytics beyond the operational stack"],
+      ["Security architecture", "Zero trust, mTLS, SPIFFE, OAuth 2.0 and OIDC for service-to-service, threat modelling", "Security is an architectural property"]
+    ],
+    more: [
+      "Practice: run chaos or failure drills on a staging system, write an ADR for every significant decision, read one public postmortem a week, and review an existing system's architecture with the checklist in this guide.",
+      "Suggested order: DDIA, then Release It! and the SRE book, then Building Microservices and the DDD books, then the papers."
+    ]
+  });
+
+  /* ================= ENGINE ================= */
+  var SECS = [
+    { id: "models", t: "Mental models", d: "CAP and PACELC, consistency models, fallacies, failure modes, tail latency and how senior thinking differs." },
+    { id: "hld", t: "System design (HLD)", d: "A repeatable framework, estimation numbers, availability maths, data and API design, bottlenecks and evolution." },
+    { id: "micro", t: "Microservices", d: "When to split, boundaries, communication, data ownership, sagas, outbox and independent deployability." },
+    { id: "resil", t: "Resilience and platform", d: "Timeouts, retries, circuit breakers, bulkheads, idempotency, rate limiting, discovery, gateways, mesh and observability." },
+    { id: "ddd", t: "Domain-driven design", d: "Subdomains, bounded contexts, context maps, aggregates, event storming, CQRS and event sourcing." },
+    { id: "dist", t: "Distributed concepts", d: "Replication, sharding, consistent hashing, consensus, clocks, gossip, queues versus logs, caching at scale." },
+    { id: "patterns", t: "Patterns catalog", d: "Problem to pattern map: strangler fig, sidecar, anti-corruption layer, pub/sub, cells and how patterns combine." },
+    { id: "e2e", t: "Worked designs", d: "Order processing, social feed and notifications, collaborative editing, and mixed-consistency payments." },
+    { id: "prod", t: "Production reality", d: "Evolutionary architecture, chaos engineering, multi-region, cost, Conway's law, simpler choices and further reading." }
+  ];
+
+  var $ = function (id) { return document.getElementById(id); };
+  function esc(s) { return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); }
+  function fmt(s) { return esc(s).replace(/`([^`]+)`/g, "<code>$1</code>"); }
+  function load(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+  function save(k, v) { try { localStorage.setItem(k, v); } catch (e) { /* storage may be blocked */ } }
+
+  /* ---------- syntax highlighting ---------- */
+  // Generic tokenizer: re has capture groups, map[i] is the CSS class for group i+1.
+  function tok(src, re, map) {
+    var out = "", last = 0, m;
+    re.lastIndex = 0;
+    while ((m = re.exec(src))) {
+      if (m[0].length === 0) { re.lastIndex++; continue; }
+      out += esc(src.slice(last, m.index));
+      var cls = "";
+      for (var i = 1; i < m.length; i++) { if (m[i] !== undefined) { cls = map[i - 1]; break; } }
+      out += cls ? '<span class="' + cls + '">' + esc(m[0]) + "</span>" : esc(m[0]);
+      last = re.lastIndex;
+    }
+    return out + esc(src.slice(last));
+  }
+  function lines(src, fn) { return src.split("\n").map(fn).join("\n"); }
+  // Split a line into body and trailing "# comment" (the # must start the line or follow whitespace).
+  function cutHash(line) {
+    var i = line.search(/(^|\s)#/);
+    if (i < 0) return [line, ""];
+    var cut = line.charAt(i) === "#" ? i : i + 1;
+    return [line.slice(0, cut), line.slice(cut)];
+  }
+  function withComment(line, bodyFn) {
+    var p = cutHash(line);
+    return bodyFn(p[0]) + (p[1] ? '<span class="c">' + esc(p[1]) + "</span>" : "");
+  }
+
+  var STR = "\"(?:[^\"\\\\]|\\\\.)*\"|'[^']*'";
+  var SH_RE = new RegExp(
+    "(" + STR + ")" +
+    "|(\\$\\{\\{[^}]*\\}\\}|\\$\\{[^}]*\\}|\\$\\(|\\$[A-Za-z_]\\w*|\\$[0-9#?@*!$])" +
+    "|((?<=\\s)--?[A-Za-z][\\w:.+*=\\/\\-]*)" +
+    "|((?<=^\\s*|\\|\\s*|&&\\s*|;\\s*|sudo\\s+|\\$\\(\\s*|xargs\\s+(?:-\\S+\\s+)*)[a-z][\\w.\\-]*)", "g");
+  function hlShell(src) {
+    return lines(src, function (l) { return withComment(l, function (b) { return tok(b, SH_RE, ["s", "an", "ty", "f"]); }); });
+  }
+
+  var DOCKER_RE = new RegExp(
+    "(^\\s*(?:FROM|RUN|CMD|LABEL|EXPOSE|ENV|ADD|COPY|ENTRYPOINT|VOLUME|USER|WORKDIR|ARG|ONBUILD|STOPSIGNAL|HEALTHCHECK|SHELL|MAINTAINER)(?=\\s|$))" +
+    "|(" + STR + ")" +
+    "|(\\$\\{[^}]*\\}|\\$[A-Za-z_]\\w*)" +
+    "|((?<=\\s)--?[A-Za-z][\\w:.+*=\\/\\-]*)" +
+    "|(\\bAS\\b)", "g");
+  function hlDocker(src) {
+    return lines(src, function (l) { return withComment(l, function (b) { return tok(b, DOCKER_RE, ["k", "s", "an", "ty", "k"]); }); });
+  }
+
+  var YAML_VAL_RE = new RegExp(
+    "(" + STR + ")" +
+    "|(\\$\\{\\{[^}]*\\}\\}|\\$\\{[^}]*\\}|\\$[A-Za-z_]\\w*)" +
+    "|(\\b(?:true|false|null|yes|no)\\b)" +
+    "|((?<![\\w.\\/-])-?\\d+(?:\\.\\d+)?[a-zA-Z%]{0,3}(?![\\w.\\/-]))", "g");
+  function hlYaml(src) {
+    return lines(src, function (l) {
+      return withComment(l, function (b) {
+        var m = /^(\s*(?:-\s+)*)((?:"[^"]*"|'[^']*'|[^\s:#'"\[\]{},][^:#]*?))(:)(?=\s|$)(.*)$/.exec(b);
+        if (m) return esc(m[1]) + '<span class="f">' + esc(m[2]) + "</span>" + esc(m[3]) + tok(m[4], YAML_VAL_RE, ["s", "an", "k", "n"]);
+        return tok(b, YAML_VAL_RE, ["s", "an", "k", "n"]);
+      });
+    });
+  }
+
+  var HCL_RE = new RegExp(
+    "(\\/\\/[^\\n]*|#[^\\n]*|\\/\\*[\\s\\S]*?\\*\\/)" +
+    "|(\"(?:[^\"\\\\\\n]|\\\\.)*\")" +
+    "|(^\\s*(?:terraform|provider|resource|data|variable|output|module|locals|backend|required_providers|lifecycle|dynamic|moved|import|check|precondition|postcondition)(?=[\\s{]))" +
+    "|\\b(true|false|null|for|in|if|each|count|var|local|module|self)\\b" +
+    "|\\b(\\d+(?:\\.\\d+)?)\\b" +
+    "|(^\\s*[A-Za-z_][\\w\\-]*(?=\\s*=[^=]))" +
+    "|\\b([a-z_]+)(?=\\()", "gm");
+  function hlHcl(src) { return tok(src, HCL_RE, ["c", "s", "k", "k", "n", "f", "f"]); }
+
+  function hlIni(src) {
+    return lines(src, function (l) {
+      if (/^\s*[;#]/.test(l)) return '<span class="c">' + esc(l) + "</span>";
+      var s = /^(\s*\[[^\]]*\])(.*)$/.exec(l);
+      if (s) return '<span class="k">' + esc(s[1]) + "</span>" + esc(s[2]);
+      var kv = /^(\s*[A-Za-z][\w.\-]*)(\s*=\s*)(.*)$/.exec(l);
+      if (kv) return '<span class="f">' + esc(kv[1]) + "</span>" + esc(kv[2]) + esc(kv[3]);
+      return esc(l);
+    });
+  }
+
+  var JSON_RE = new RegExp(
+    "(\"(?:[^\"\\\\\\n]|\\\\.)*\"(?=\\s*:))" +
+    "|(\"(?:[^\"\\\\\\n]|\\\\.)*\")" +
+    "|\\b(true|false|null)\\b" +
+    "|(-?\\b\\d+(?:\\.\\d+)?(?:[eE][+-]?\\d+)?\\b)", "g");
+  function hlJson(src) { return tok(src, JSON_RE, ["f", "s", "k", "n"]); }
+
+  var PROMQL_RE = new RegExp(
+    "(#[^\\n]*)" +
+    "|(" + STR + "|`[^`]*`)" +
+    "|\\b(by|without|on|ignoring|group_left|group_right|offset|and|or|unless|bool|unwrap|json|logfmt|pattern|regexp|line_format|label_format)\\b" +
+    "|(\\b\\d+(?:\\.\\d+)?(?:ms|[smhdwy])?\\b)" +
+    "|(\\b[a-zA-Z_]\\w*(?=\\s*(?:=~|!=|!~|=(?!=))))" +
+    "|(\\b[a-z_]\\w*(?=\\())", "g");
+  function hlPromql(src) { return tok(src, PROMQL_RE, ["c", "s", "k", "n", "an", "f"]); }
+
+
+  var PY_KW = "and|as|assert|async|await|break|class|continue|def|del|elif|else|except|finally|for|from|global|if|import|in|is|lambda|nonlocal|not|or|pass|raise|return|try|while|with|yield|True|False|None|self";
+  var PY_RE = new RegExp(
+    "(#[^\\n]*)" +
+    "|(\"\"\"[\\s\\S]*?\"\"\"|[fFbBrR]?\"(?:[^\"\\\\\\n]|\\\\.)*\"|[fFbBrR]?'(?:[^'\\\\\\n]|\\\\.)*')" +
+    "|(@[A-Za-z_][\\w.]*)" +
+    "|\\b(" + PY_KW + ")\\b" +
+    "|\\b(\\d[\\d_]*(?:\\.\\d+)?(?:[eE][+-]?\\d+)?)\\b" +
+    "|\\b([A-Z]\\w*)\\b" +
+    "|\\b([a-z_]\\w*)(?=\\()", "g");
+  function hlPython(src) { return tok(src, PY_RE, ["c", "s", "an", "k", "n", "ty", "f"]); }
+
+  var SQL_KW = "SELECT|FROM|WHERE|GROUP BY|ORDER BY|HAVING|LIMIT|OFFSET|DISTINCT ON|DISTINCT|AS|AND|OR|NOT|IN|IS|NULL|LIKE|BETWEEN|EXISTS|ANY|ALL|CASE|WHEN|THEN|ELSE|END|JOIN|INNER|LEFT|RIGHT|FULL|CROSS|LATERAL|ON|USING|UNION|INTERSECT|EXCEPT|WITH|RECURSIVE|OVER|PARTITION BY|ROWS|PRECEDING|FOLLOWING|FILTER|INSERT INTO|INSERT|VALUES|UPDATE|SET|DELETE|RETURNING|CONFLICT|DO|NOTHING|MERGE|MATCHED|CREATE|ALTER|DROP|TABLE|INDEX|UNIQUE|CONCURRENTLY|EXTENSION|IF|PRIMARY KEY|REFERENCES|FOREIGN KEY|CHECK|DEFAULT|CONSTRAINT|EXCLUDE|ADD|COLUMN|ROLE|LOGIN|GRANT|REVOKE|PUBLICATION|SUBSCRIPTION|CONNECTION|POLICY|ENABLE|ROW LEVEL SECURITY|PARTITION|FOR|TO|OF|BEGIN|COMMIT|ROLLBACK|ISOLATION LEVEL|SKIP LOCKED|NOWAIT|UPDATE OF|TRUE|FALSE|GENERATED|ALWAYS|STORED|IDENTITY|VALID|NO|ASC|DESC|VACUUM|ANALYZE|EXPLAIN|MATERIALIZED|ATTACH|DETACH|REPLACE|FUNCTION|TRIGGER|WHERE|INCLUDE|RESET|SELECT|SAVEPOINT";
+  var SQL_RE = new RegExp(
+    "(--[^\\n]*|\\/\\*[\\s\\S]*?\\*\\/)" +
+    "|('(?:[^']|'')*')" +
+    "|(\\$\\d+|:{2}[a-z_]\\w*(?:\\[\\])?)" +
+    "|\\b(" + SQL_KW + ")\\b" +
+    "|\\b(\\d+(?:\\.\\d+)?)\\b" +
+    "|\\b(bigint|bigserial|boolean|bytea|date|double precision|inet|int|integer|interval|jsonb|json|numeric|real|serial|smallint|text|timestamptz|timestamp|tsvector|tsquery|tstzrange|uuid|varchar|vector)\\b" +
+    "|\\b([a-z_][a-z_0-9]*)(?=\\()", "gi");
+  function hlSql(src) { return tok(src, SQL_RE, ["c", "s", "an", "k", "n", "ty", "f"]); }
+
+
+  var REDIS_RE = new RegExp(
+    "(#[^\\n]*)" +
+    "|(\"(?:[^\"\\\\]|\\\\.)*\"|'[^']*')" +
+    "|(^\\s*[A-Z][A-Z.]+(?:\\s+[A-Z]+(?=\\s|$))?)" +
+    "|\\b(NX|XX|EX|PX|EXAT|PXAT|KEEPTTL|GET|MATCH|COUNT|LIMIT|WITHSCORES|BLOCK|STREAMS|GROUP|MAXLEN|MKSTREAM|REV|BYSCORE|BYLEX|LT|GT|CH|INCR|AND|OR|XOR|NOT)\\b" +
+    "|((?<![\\w:.-])-?\\d+(?:\\.\\d+)?(?![\\w:.-]))", "gm");
+  function hlRedis(src) { return tok(src, REDIS_RE, ["c", "s", "f", "k", "n"]); }
+
+  function highlight(code, lang) {
+    switch (lang) {
+      case "python": return hlPython(code);
+      case "sql": return hlSql(code);
+      case "redis": return hlRedis(code);
+      case "sh": return hlShell(code);
+      case "docker": return hlDocker(code);
+      case "yaml": return hlYaml(code);
+      case "hcl": return hlHcl(code);
+      case "ini": return hlIni(code);
+      case "json": return hlJson(code);
+      case "promql": return hlPromql(code);
+      default: return esc(code);
+    }
+  }
+
+  /* ---------- render cards ---------- */
+  function tableHTML(c) {
+    var h = "<div class=\"tw\"><table><thead><tr>" + c.head.map(function (x) { return "<th>" + fmt(x) + "</th>"; }).join("") + "</tr></thead><tbody>";
+    c.rows.forEach(function (r) { h += "<tr>" + r.map(function (x) { return "<td>" + fmt(x) + "</td>"; }).join("") + "</tr>"; });
+    return h + "</tbody></table></div>";
+  }
+  function cardEl(c) {
+    var code = c.code ? c.code.replace(/~\{/g, "${") : "";
+    var el = document.createElement("article");
+    el.className = "card" + (c.wide ? " wide" : "");
+    var badges = (c.v ? '<span class="tag ver' + (c.prev ? " prev" : "") + '">' + esc(c.v) + "</span>" : "") + '<span class="tag">' + esc(c.kind) + "</span>";
+    var h = '<div class="ch"><h3>' + fmt(c.t) + '</h3><div class="badges">' + badges + "</div></div>";
+    if (c.sum) h += '<p class="sum">' + fmt(c.sum) + "</p>";
+    if (c.rows) h += tableHTML(c);
+    if (code) h += '<div class="codewrap"><button class="copy" type="button" aria-label="Copy code">Copy</button><pre>' + highlight(code, c.lang || "sh") + "</pre></div>";
+    var hasMore = (c.more && c.more.length) || (c.watch && c.watch.length);
+    if (hasMore) h += '<button class="btn-d" type="button" aria-expanded="false">Show details</button>';
+    if (c.more && c.more.length) h += '<ul class="more">' + c.more.map(function (x) { return "<li>" + fmt(x) + "</li>"; }).join("") + "</ul>";
+    if (c.watch && c.watch.length) h += '<div class="watch"><b>Watch out</b><ul>' + c.watch.map(function (x) { return "<li>" + fmt(x) + "</li>"; }).join("") + "</ul></div>";
+    el.innerHTML = h;
+    var parts = [c.t, c.kind, c.sum || "", code, (c.head || []).join(" "), (c.rows || []).map(function (r) { return r.join(" "); }).join(" "), (c.more || []).join(" "), (c.watch || []).join(" "), c.v || ""];
+    el._idx = parts.join(" ").toLowerCase();
+    return el;
+  }
+
+  var main = $("main"), side = $("side"), chips = $("chips");
+  var secEls = {}, cardEls = [], navLinks = [];
+  SECS.forEach(function (s) {
+    var sec = document.createElement("section");
+    sec.className = "sec"; sec.id = "sec-" + s.id; sec.setAttribute("aria-labelledby", "h-" + s.id);
+    sec.innerHTML = '<div class="sec-head"><h2 id="h-' + s.id + '">' + esc(s.t) + "</h2><p>" + esc(s.d) + '</p></div><div class="cols"></div>';
+    var cols = sec.querySelector(".cols"), n = 0;
+    CARDS.forEach(function (c) {
+      if (c.sec !== s.id) return;
+      var el = cardEl(c); cols.appendChild(el); cardEls.push({ el: el, sec: s.id }); n++;
+    });
+    s.count = n; s.shown = n;
+    main.appendChild(sec); secEls[s.id] = sec;
+
+    var a = document.createElement("a"); a.href = "#sec-" + s.id;
+    a.innerHTML = esc(s.t) + "<span>" + n + "</span>";
+    side.appendChild(a);
+    var ch = document.createElement("a"); ch.href = "#sec-" + s.id; ch.textContent = s.t;
+    chips.appendChild(ch);
+    navLinks.push({ id: s.id, side: a, chip: ch, count: a.querySelector("span") });
+  });
+  var emptyMsg = document.createElement("p");
+  emptyMsg.className = "empty"; emptyMsg.hidden = true;
+  emptyMsg.textContent = "No card matches that. Try a shorter word, such as saga, quorum or shard.";
+  main.appendChild(emptyMsg);
+
+  /* ---------- search ---------- */
+  var q = $("q"), cnt = document.createElement("span");
+  cnt.className = "cnt"; cnt.id = "cnt"; cnt.setAttribute("aria-live", "polite");
+  q.parentNode.insertBefore(cnt, q.nextSibling);
+  function applyFilter() {
+    var terms = q.value.trim().toLowerCase().split(/\s+/).filter(Boolean), total = 0;
+    document.body.classList.toggle("searching", terms.length > 0);
+    SECS.forEach(function (s) { s.shown = 0; });
+    cardEls.forEach(function (o) {
+      var ok = terms.every(function (t) { return o.el._idx.indexOf(t) > -1; });
+      o.el.hidden = !ok;
+      if (ok) { total++; SECS.forEach(function (s) { if (s.id === o.sec) s.shown++; }); }
+    });
+    SECS.forEach(function (s, i) {
+      secEls[s.id].hidden = s.shown === 0;
+      navLinks[i].count.textContent = terms.length ? s.shown : s.count;
+      navLinks[i].side.hidden = navLinks[i].chip.hidden = s.shown === 0;
+    });
+    emptyMsg.hidden = total > 0;
+    cnt.textContent = terms.length ? total + (total === 1 ? " card" : " cards") : "";
+  }
+  q.addEventListener("input", applyFilter);
+  q.addEventListener("keydown", function (e) { if (e.key === "Escape") { q.value = ""; applyFilter(); q.blur(); } });
+  document.addEventListener("keydown", function (e) {
+    var tag = (e.target && e.target.tagName) || "";
+    if (e.key === "/" && tag !== "INPUT" && tag !== "TEXTAREA") { e.preventDefault(); q.focus(); q.select(); }
+  });
+
+  /* ---------- detail level, theme ---------- */
+  function setMode(m) {
+    document.body.classList.toggle("compact", m === "compact");
+    Array.prototype.forEach.call(document.querySelectorAll(".seg2 button"), function (b) { b.setAttribute("aria-pressed", b.dataset.mode === m ? "true" : "false"); });
+    save("ar-mode", m);
+  }
+  Array.prototype.forEach.call(document.querySelectorAll(".seg2 button"), function (b) { b.addEventListener("click", function () { setMode(b.dataset.mode); }); });
+  setMode(load("ar-mode") === "compact" ? "compact" : "detailed");
+
+  var root = document.documentElement;
+  var savedTheme = load("ar-theme");
+  if (savedTheme === "light" || savedTheme === "dark") root.setAttribute("data-theme", savedTheme);
+  $("theme").addEventListener("click", function () {
+    var cur = root.getAttribute("data-theme") || (window.matchMedia && matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+    var next = cur === "dark" ? "light" : "dark";
+    root.setAttribute("data-theme", next); save("ar-theme", next);
+  });
+
+  /* ---------- card actions: details, copy ---------- */
+  main.addEventListener("click", function (e) {
+    var d = e.target.closest(".btn-d");
+    if (d) {
+      var card = d.closest(".card"), open = card.classList.toggle("open");
+      d.textContent = open ? "Hide details" : "Show details"; d.setAttribute("aria-expanded", open ? "true" : "false");
+      return;
+    }
+    var c = e.target.closest(".copy");
+    if (c) {
+      var pre = c.parentNode.querySelector("pre"), label = "Copy";
+      function fallback() {
+        var r = document.createRange(); r.selectNodeContents(pre);
+        var s = window.getSelection(); s.removeAllRanges(); s.addRange(r); c.textContent = "Selected";
+      }
+      try { navigator.clipboard.writeText(pre.textContent).then(function () { c.textContent = "Copied"; }, fallback); } catch (err) { fallback(); }
+      setTimeout(function () { c.textContent = label; }, 1600);
+    }
+  });
+
+  /* ---------- scroll spy ---------- */
+  function setActive(id) {
+    navLinks.forEach(function (n) {
+      var on = n.id === id;
+      if (on) { n.side.setAttribute("aria-current", "true"); n.chip.setAttribute("aria-current", "true"); }
+      else { n.side.removeAttribute("aria-current"); n.chip.removeAttribute("aria-current"); }
+      if (on && chips.scrollWidth > chips.clientWidth) chips.scrollLeft = n.chip.offsetLeft - chips.clientWidth / 2 + n.chip.offsetWidth / 2;
+    });
+  }
+  if ("IntersectionObserver" in window) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) { if (en.isIntersecting) setActive(en.target.id.replace("sec-", "")); });
+    }, { rootMargin: "-140px 0px -65% 0px" });
+    SECS.forEach(function (s) { io.observe(secEls[s.id]); });
+  }
+  setActive(SECS[0].id);
+  applyFilter();
+})();
+</script>
+
+</body></html>
