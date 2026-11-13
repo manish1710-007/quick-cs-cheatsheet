@@ -1,0 +1,1716 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Clean Code Mastery</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap">
+<style>
+/* Layout: sticky header, collapsible module sidebar, single reading column; views switch on the URL hash. Dark-first cyber look, light variant via toggle. */
+:root{
+  color-scheme:dark;
+  --bg:#060a14;--panel:#0c1322;--panel2:#111b31;--line:#1c2a4a;--fg:#d5e1f4;--dim:#8497ba;
+  --cyan:#22e4ff;--mag:#ff3fe0;--blue:#5b83ff;--good:#34f5a1;--warn:#ffc83d;--bad:#ff5a7a;
+  --codebg:#050810;--scan:rgba(0,0,0,.13);--glow:rgba(34,228,255,.16);
+  --f-head:'Chakra Petch',system-ui,sans-serif;--f-body:'IBM Plex Sans',system-ui,-apple-system,'Segoe UI',sans-serif;--f-mono:'JetBrains Mono',ui-monospace,Menlo,Consolas,monospace;
+}
+:root[data-theme="light"]{color-scheme:light;
+  --bg:#eef2fa;--panel:#fff;--panel2:#e6ecf8;--line:#c5d0e6;--fg:#142038;--dim:#4d5f82;
+  --cyan:#00758c;--mag:#a8138f;--blue:#2a4fd0;--good:#08794a;--warn:#8a5b00;--bad:#c01e45;
+  --codebg:#f6f8fd;--scan:rgba(0,0,0,0);--glow:rgba(0,117,140,.12)}
+:root[data-theme="dark"]{color-scheme:dark}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.65 var(--f-body);padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 40px;overflow-x:hidden}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--panel)}
+body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:70;background:repeating-linear-gradient(to bottom,transparent 0 2px,var(--scan) 2px 3px)}
+a{color:var(--cyan)}
+button,input,textarea,select{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--cyan);outline-offset:2px;border-radius:3px}
+code,pre,kbd{font-family:var(--f-mono)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+/* header */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:var(--panel);border-bottom:1px solid var(--line);margin-inline:calc(-1*max(16px,env(safe-area-inset-left,0px)));padding:8px max(16px,env(safe-area-inset-right,0px)) 8px max(16px,env(safe-area-inset-left,0px));display:flex;gap:12px;align-items:center;flex-wrap:wrap;box-shadow:0 1px 18px var(--glow)}
+.brand{font:700 15px var(--f-head);letter-spacing:.14em;text-transform:uppercase;color:var(--cyan);text-decoration:none;white-space:nowrap}
+.brand small{display:block;font:500 10px var(--f-mono);letter-spacing:.12em;color:var(--mag)}
+.top .sp{flex:1}
+.search{flex:1 1 220px;max-width:420px;display:flex;align-items:center;gap:6px;background:var(--codebg);border:1px solid var(--line);border-radius:4px;padding:5px 10px}
+.search input{flex:1;min-width:0;background:none;border:0;outline:0;font-size:14px}
+.search:focus-within{border-color:var(--cyan);box-shadow:0 0 0 2px var(--glow)}
+.search kbd{font-size:11px;color:var(--dim);border:1px solid var(--line);border-radius:3px;padding:0 5px}
+.btn{background:var(--panel2);border:1px solid var(--line);border-radius:4px;padding:5px 11px;font:500 13px var(--f-mono);color:var(--fg);text-decoration:none;display:inline-flex;align-items:center;gap:6px}
+.btn:hover{border-color:var(--cyan);color:var(--cyan)}
+.btn.pri{background:var(--cyan);color:#021018;border-color:var(--cyan);font-weight:700}
+:root[data-theme="light"] .btn.pri,.btn.pri:hover{color:#021018}
+.btn.on{border-color:var(--good);color:var(--good)}
+.btn.sm{padding:2px 8px;font-size:12px}
+#menu{display:none}
+/* shell */
+.shell{display:grid;grid-template-columns:300px minmax(0,1fr);gap:28px;max-width:1380px;margin:0 auto;padding-top:18px}
+.side{position:sticky;top:calc(env(safe-area-inset-top,0px) + 62px);align-self:start;max-height:calc(100vh - 80px);overflow:auto;padding-right:6px;font-size:13.5px}
+.side h4{font:600 11px var(--f-mono);letter-spacing:.16em;text-transform:uppercase;color:var(--dim);margin:14px 0 6px}
+.nav a{display:flex;gap:8px;align-items:center;padding:5px 8px;color:var(--fg);text-decoration:none;border-radius:3px;border-left:2px solid transparent}
+.nav a:hover{background:var(--panel2)}
+.nav a.cur{border-left-color:var(--mag);background:var(--panel2);color:var(--cyan)}
+.nav .ck{font:12px var(--f-mono);color:var(--dim);width:14px}
+.nav .done .ck{color:var(--good)}
+details.mod{border-top:1px solid var(--line)}
+details.mod>summary{list-style:none;cursor:pointer;padding:7px 4px;font:600 14px var(--f-head);display:flex;gap:8px;align-items:center}
+details.mod>summary::-webkit-details-marker{display:none}
+details.mod>summary .n{font:500 11px var(--f-mono);color:var(--mag)}
+details.mod>summary .pc{margin-left:auto;font:11px var(--f-mono);color:var(--dim)}
+details.mod[open]>summary{color:var(--cyan)}
+main{min-width:0}
+.crumbs{font:12px var(--f-mono);color:var(--dim);display:flex;flex-wrap:wrap;gap:4px 8px;margin-bottom:14px}
+.crumbs a{color:var(--dim);text-decoration:none}.crumbs a:hover{color:var(--cyan)}
+.crumbs span.s{color:var(--line)}
+h1,h2,h3{font-family:var(--f-head);line-height:1.2;text-wrap:balance;margin:0}
+h1{font-size:clamp(26px,4.4vw,38px);letter-spacing:.01em}
+h2{font-size:22px;margin:28px 0 10px;color:var(--cyan)}
+h3{font-size:17px;margin:22px 0 8px;color:var(--fg)}
+p{margin:0 0 12px;max-width:78ch}
+.lede{color:var(--dim);font-size:16px;max-width:70ch}
+ul.b{margin:0 0 12px;padding-left:20px;max-width:78ch}ul.b li{margin:3px 0}
+code{font-size:.88em;background:var(--panel2);border:1px solid var(--line);border-radius:3px;padding:0 4px;overflow-wrap:anywhere}
+pre code{background:none;border:0;padding:0;font-size:inherit;overflow-wrap:normal}
+.meta{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0 18px}
+.tag{font:500 11px var(--f-mono);letter-spacing:.06em;text-transform:uppercase;border:1px solid var(--line);border-radius:3px;padding:2px 7px;color:var(--dim)}
+.tag.l1{color:var(--good);border-color:var(--good)}.tag.l2{color:var(--warn);border-color:var(--warn)}.tag.l3{color:var(--mag);border-color:var(--mag)}
+.tag.ok{color:var(--good);border-color:var(--good)}.tag.no{color:var(--dim)}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:16px;min-width:0}
+.grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fill,minmax(260px,1fr))}
+.grid>*{min-width:0}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+/* blocks */
+.call{border:1px solid var(--line);border-left:3px solid var(--cyan);background:var(--panel);padding:10px 14px;margin:14px 0;border-radius:0 5px 5px 0;max-width:80ch}
+.call b.lb{font:600 11px var(--f-mono);letter-spacing:.14em;text-transform:uppercase;display:block;margin-bottom:2px}
+.call.tip{border-left-color:var(--good)}.call.tip .lb{color:var(--good)}
+.call.warn{border-left-color:var(--warn)}.call.warn .lb{color:var(--warn)}
+.call.trap{border-left-color:var(--bad)}.call.trap .lb{color:var(--bad)}
+.call.note .lb{color:var(--cyan)}
+.call p{margin:0}
+.tw{overflow-x:auto;margin:12px 0;border:1px solid var(--line);border-radius:5px;max-width:100%}
+table{border-collapse:collapse;width:100%;font-size:13.5px}
+th,td{padding:7px 11px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+th{font:600 11px var(--f-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--cyan);background:var(--panel2);white-space:nowrap}
+tr:last-child td{border-bottom:0}
+.code{border:1px solid var(--line);border-radius:5px;background:var(--codebg);margin:12px 0;min-width:0;max-width:100%}
+.code .ch{display:flex;align-items:center;gap:6px;padding:4px 8px;border-bottom:1px solid var(--line);font:11px var(--f-mono);color:var(--dim);text-transform:uppercase;letter-spacing:.1em}
+.code .ch .sp{flex:1}
+.code pre{margin:0;padding:12px 14px;overflow-x:auto;font-size:13px;line-height:1.55;tab-size:2}
+.t-k{color:var(--mag)}.t-s{color:var(--good)}.t-c{color:var(--dim);font-style:italic}.t-n{color:var(--warn)}.t-t{color:var(--cyan)}.t-a{color:var(--blue)}
+.cmp{border:1px solid var(--line);border-radius:6px;margin:16px 0;background:var(--panel);min-width:0}
+.cmp .cb{display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding:8px 10px;border-bottom:1px solid var(--line)}
+.cmp .cb b{font:600 13px var(--f-head);margin-right:auto}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:4px;overflow:hidden}
+.seg button{background:none;border:0;padding:3px 10px;font:500 12px var(--f-mono);color:var(--dim)}
+.seg button[aria-pressed="true"]{background:var(--panel2);color:var(--cyan)}
+.seg button.bad[aria-pressed="true"]{color:var(--bad)}.seg button.good[aria-pressed="true"]{color:var(--good)}
+.cmp .code{margin:0;border:0;border-radius:0}
+.cmp .why{padding:10px 14px;border-top:1px solid var(--line);font-size:14px}
+.cmp .why ol{margin:4px 0 0;padding-left:20px}
+.cmp .why .tr{color:var(--dim);margin-top:6px}
+.dl{white-space:pre;display:block;padding:0 4px;margin:0 -4px}
+.dl.add{background:rgba(52,245,161,.13)}.dl.del{background:rgba(255,90,122,.14)}
+:root[data-theme="light"] .dl.add{background:rgba(8,121,74,.13)}:root[data-theme="light"] .dl.del{background:rgba(192,30,69,.12)}
+
+.smell{border:1px solid var(--line);border-radius:6px;padding:4px 14px 8px;margin:18px 0;background:var(--panel)}
+.smell h3{margin:10px 0 6px;color:var(--mag)}
+.smell dl{display:grid;grid-template-columns:110px minmax(0,1fr);gap:4px 12px;margin:6px 0;font-size:14px}
+.smell dt{font:600 11px var(--f-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--dim);padding-top:3px}
+.smell dd{margin:0}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin:26px 0 8px;padding-top:16px;border-top:1px solid var(--line)}
+.pn{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:22px}
+.pn a{display:block;border:1px solid var(--line);border-radius:5px;padding:10px 14px;text-decoration:none;color:var(--fg);background:var(--panel);min-width:0}
+.pn a:hover{border-color:var(--cyan)}
+.pn small{display:block;font:11px var(--f-mono);color:var(--dim);letter-spacing:.1em;text-transform:uppercase}
+.pn .nx{text-align:right}
+textarea.nt,textarea.ans{width:100%;min-height:90px;background:var(--codebg);border:1px solid var(--line);border-radius:5px;padding:8px 10px;resize:vertical;font:13px/1.5 var(--f-mono)}
+textarea:focus{border-color:var(--cyan);outline:0}
+/* dashboard */
+.ring{--p:0;width:96px;height:96px;border-radius:50%;background:conic-gradient(var(--cyan) calc(var(--p)*1%),var(--panel2) 0);display:grid;place-items:center;flex:none}
+.ring span{width:74px;height:74px;border-radius:50%;background:var(--panel);display:grid;place-items:center;font:700 20px var(--f-head)}
+.stat b{display:block;font:700 26px var(--f-head);color:var(--cyan)}
+.stat span{font:11px var(--f-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--dim)}
+.bar{height:6px;border-radius:3px;background:var(--panel2);overflow:hidden}.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--cyan),var(--mag))}
+.hero{border:1px solid var(--line);border-radius:8px;padding:22px;background:linear-gradient(135deg,var(--panel),var(--panel2));margin-bottom:18px;position:relative;overflow:hidden}
+.hero::after{content:"";position:absolute;right:-40px;top:-40px;width:200px;height:200px;border-radius:50%;background:radial-gradient(var(--glow),transparent 70%)}
+.eyebrow{font:500 11px var(--f-mono);letter-spacing:.2em;text-transform:uppercase;color:var(--mag);margin-bottom:6px}
+.notice{font-size:12.5px;color:var(--dim);border:1px dashed var(--line);border-radius:5px;padding:8px 12px;margin:14px 0}
+/* quiz/lab */
+.q{border:1px solid var(--line);border-radius:6px;padding:14px;background:var(--panel);margin:12px 0}
+.q .qt{font:600 12px var(--f-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--mag);margin-bottom:6px}
+.opt{display:flex;gap:10px;align-items:flex-start;width:100%;text-align:left;background:var(--panel2);border:1px solid var(--line);border-radius:5px;padding:8px 12px;margin:6px 0}
+.opt:hover:not(:disabled){border-color:var(--cyan)}
+.opt .k{font:700 12px var(--f-mono);color:var(--cyan);padding-top:2px}
+.opt.right{border-color:var(--good);background:rgba(52,245,161,.1)}.opt.wrong{border-color:var(--bad);background:rgba(255,90,122,.1)}
+:root[data-theme="light"] .opt.right{background:rgba(8,121,74,.1)}:root[data-theme="light"] .opt.wrong{background:rgba(192,30,69,.08)}
+.fb{margin-top:8px;padding:8px 12px;border-radius:5px;border:1px solid var(--line);font-size:14px}
+.fb.ok{border-color:var(--good)}.fb.no{border-color:var(--bad)}
+.chk{display:flex;gap:10px;align-items:flex-start;padding:7px 10px;border:1px solid var(--line);border-radius:5px;margin:6px 0;background:var(--panel2);cursor:pointer}
+.chk input{margin-top:5px;accent-color:var(--cyan)}
+.chk.ok{border-color:var(--good)}.chk.miss{border-color:var(--warn)}.chk.fp{border-color:var(--bad)}
+.chk .ex{display:block;font-size:13px;color:var(--dim);margin-top:2px}
+.pr{border:1px solid var(--line);border-radius:5px;background:var(--codebg);overflow-x:auto;margin:10px 0}
+.pr .ln{display:flex;font:13px/1.55 var(--f-mono);min-width:max-content;width:100%}
+.pr .ln .no{width:36px;flex:none;text-align:right;padding-right:8px;color:var(--dim);user-select:none}
+.pr .ln .tx{white-space:pre;padding-right:14px;flex:1}
+.pr .ln.hot{cursor:pointer}.pr .ln.hot:hover{background:var(--panel2)}
+.pr .ln.sel{background:rgba(255,63,224,.14)}
+.cm{margin:4px 0 4px 36px;padding:6px 10px;border:1px solid var(--mag);border-radius:5px;background:var(--panel);font-size:13.5px;max-width:78ch;white-space:normal}
+.cm.exp{border-color:var(--cyan)}.cm b{font:600 11px var(--f-mono);letter-spacing:.08em;text-transform:uppercase;display:block}
+.acc{border:1px solid var(--line);border-radius:6px;margin:8px 0;background:var(--panel)}
+.acc>summary{cursor:pointer;padding:10px 14px;font-weight:600;list-style:none;display:flex;gap:10px;align-items:flex-start}
+.acc>summary::-webkit-details-marker{display:none}
+.acc>summary::before{content:"▸";color:var(--cyan);font-family:var(--f-mono)}
+.acc[open]>summary::before{content:"▾"}
+.acc>div{padding:2px 16px 12px}
+.sniplist .card{margin:8px 0}
+select.btn{max-width:100%;min-width:0;text-overflow:ellipsis}
+.card.row{min-width:0}
+.up{position:fixed;right:max(16px,env(safe-area-inset-right,0px));bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:55;opacity:0;pointer-events:none;transition:opacity .2s}
+.up.show{opacity:1;pointer-events:auto}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--cyan);color:#021018;font:600 13px var(--f-mono);padding:7px 14px;border-radius:4px;z-index:80}
+mark{background:rgba(255,200,61,.3);color:inherit;border-radius:2px}
+.res{display:flex;flex-direction:column;gap:6px}
+.res .card h3{margin:0 0 4px}
+@media(max-width:940px){
+  .shell{grid-template-columns:minmax(0,1fr)}
+  #menu{display:inline-flex}
+  .side{position:fixed;left:0;top:calc(env(safe-area-inset-top,0px) + 56px);bottom:0;width:min(330px,88vw);max-height:none;background:var(--panel);z-index:45;padding:10px 14px max(16px,env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));border-right:1px solid var(--line);transform:translateX(-102%);transition:transform .2s}
+  .side.open{transform:none}
+  .brand small{display:none}
+  .search kbd{display:none}
+}
+@media(max-width:560px){.pn{grid-template-columns:1fr}.smell dl{grid-template-columns:1fr}.smell dt{padding-top:6px}.hero{padding:16px}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.side{transition:none}}
+</style>
+<div class="top" role="banner">
+  <button class="btn" id="menu" aria-label="Toggle lesson menu" aria-expanded="false">☰ Menu</button>
+  <a class="brand" href="#home">Cyber Formula Library<small>09 · Software Engineering</small></a>
+  <label class="search"><span class="sr">Search the guide</span>⌕<input id="q" type="search" placeholder="Search lessons, checklists, questions…" autocomplete="off"><kbd>/</kbd></label>
+  <span class="sp"></span>
+  <button class="btn" id="theme" aria-label="Toggle light or dark theme">◐ Theme</button>
+</div>
+<div class="shell">
+  <nav class="side" id="side" aria-label="Guide navigation"></nav>
+  <main id="main" tabindex="-1"></main>
+</div>
+<button class="btn up" id="up" aria-label="Back to top">↑ Top</button>
+<script>
+'use strict';
+const R=String.raw;
+const LESSONS=[],MODS=[];
+const P=t=>({k:'p',t}), H=t=>({k:'h',t}), UL=a=>({k:'ul',a});
+const CODE=(lang,c)=>({k:'code',lang,c:c.trim()});
+const CALL=(type,t)=>({k:'call',type,t});
+const TB=(head,rows)=>({k:'tb',head,rows});
+const CMP=(title,lang,bad,good,notes,trade)=>({k:'cmp',title,lang,bad:bad.trim(),good:good.trim(),notes,trade});
+const SM=(name,what,why,spot,ok,lang,bad,good)=>({k:'smell',name,what,why,spot,ok,lang,bad:bad.trim(),good:good.trim()});
+const MOD=(id,n,title,blurb,rel)=>MODS.push({id,n,title,blurb,rel:rel||[]});
+const LES=(id,mod,title,level,mins,blocks)=>LESSONS.push({id,mod,title,level,mins,blocks});
+const REFACT=[]; // catalog entries: name, when, how
+const RF=(name,when,how,lang,bad,good)=>{REFACT.push({name,when,how});return {k:'smell',name,what:when,why:how,spot:null,ok:null,lang,bad:bad.trim(),good:good.trim(),rf:true}};
+MOD('m01','01','Foundations of Clean Code','What clean code is, what it costs to skip it, and when "clean" turns into over-engineering.',['Java Mastery Guide','Architecture & Distributed Systems']);
+MOD('m02','02','Naming','Names carry most of the meaning in a codebase. Learn to choose them on purpose.',['Java Mastery Guide']);
+MOD('m03','03','Functions & Methods','Small, honest functions with few arguments and no surprises.',['Java Mastery Guide']);
+MOD('m04','04','Classes, Objects & Abstraction','Cohesion, coupling, encapsulation and where to draw boundaries.',['Java Mastery Guide','Spring Backend Mastery']);
+MOD('m05','05','SOLID in Practice','Five design guidelines, each with a violation, a fix and a limit.',['Architecture & Distributed Systems','Spring Backend Mastery']);
+
+LES('m01-what','m01','What is clean code?',1,8,[
+P(R`Clean code is code that another competent developer can read, change and trust without asking you what it does. It is a property of how the code reads to a team, so it can only be judged by someone other than the author. Working code is the entry fee. Whether it is clean decides what the next change costs.`),
+TB(['Quality','Question to ask','Signal when it is missing'],[
+['Readable','Can a new teammate explain this in 2 minutes?','Needs a walkthrough call; comments restate code'],
+['Maintainable','How many places change for one requirement?','Shotgun surgery; fear of touching a file'],
+['Extensible','Can I add a case without editing old, tested code?','Growing if/else or switch chains'],
+['Testable','Can I test the rule without a database or the network?','Tests need mocks of 6 collaborators, or a running server']]),
+H('Messy vs clean, side by side'),
+CMP('Same behavior, different cost','java',R`
+public double calc(List<Object[]> d, int t) {
+  double r = 0;
+  for (Object[] x : d) {
+    if ((int) x[2] == t) {
+      r += (double) x[0] * (int) x[1];
+      if (r > 1000) r = r * 0.9;
+    }
+  }
+  return r;
+}`,R`
+public Money totalFor(List<OrderLine> lines, CustomerTier tier) {
+  Money subtotal = lines.stream()
+      .filter(line -> line.tier() == tier)
+      .map(OrderLine::total)
+      .reduce(Money.ZERO, Money::plus);
+  return discountPolicy.apply(subtotal);
+}`,[
+'Types replace <code>Object[]</code> and index lookups, so a wrong cast becomes a compile error.',
+'Names state the intent: <code>totalFor</code>, <code>OrderLine</code>, <code>CustomerTier</code>.',
+'The magic <code>1000</code> and <code>0.9</code> moved into a named <code>discountPolicy</code>, where the business can find and change them.',
+'<code>Money</code> avoids <code>double</code> rounding bugs in currency.'],'Trade-off: three new types to write and maintain. That pays off once the code is read or changed more than a few times.'),
+CALL('note',R`Clean code is a set of guidelines and trade-offs, not a purity test. "Clean" in a throwaway script and "clean" in a payments service are different bars.`),
+H('Principles, guidelines, conventions, preferences'),
+TB(['Kind','Examples','How strictly'],[
+['Principle','Separate concerns; make illegal states unrepresentable','Rarely worth breaking; know why when you do'],
+['Guideline','Keep functions short; prefer 0-2 parameters','Default, with reasoned exceptions'],
+['Convention','Java: <code>camelCase</code> methods; Python: <code>snake_case</code>','Follow the team or language norm'],
+['Preference','Brace placement, <code>var</code> usage','Automate with a formatter; do not debate in review']])
+]);
+
+LES('m01-debt','m01','Technical debt and the Boy Scout Rule',1,7,[
+P(R`Technical debt is the extra cost of future changes caused by shortcuts or decay in the code. Ward Cunningham's original metaphor was about learning: shipping with your current understanding, then paying back as you learn more. Today the word also covers plain neglect. The "interest" is the slowdown every later change pays.`),
+TB(['Type','Example','Typical response'],[
+['Deliberate, prudent','Ship with a simple queue now; plan a broker at 10x load','Record it, add a ticket with a trigger'],
+['Deliberate, reckless','"We have no time for tests"','Push back; this usually costs more than it saves'],
+['Inadvertent','Learned a better model after shipping','Refactor as part of the next feature'],
+['Bit rot','Outdated dependencies, dead flags','Regular cleanup budget']]),
+H('The Boy Scout Rule'),
+P(R`"Leave the code a little cleaner than you found it." Each change includes one small improvement in the area you touched: a clearer name, one extracted method, a deleted dead branch. Small steps keep reviews readable and risk low. Large unrelated cleanups belong in their own pull request.`),
+CMP('A Boy Scout change inside a feature','java',R`
+// feature: add VIP free shipping
+if (o.t > 100 && u.v == 1) { s = 0; }
+else if (o.t > 100) { s = 5; }
+else { s = 10; }`,R`
+// feature: add VIP free shipping (and name what we touched)
+Money shipping = shippingFee(order, customer);
+
+private Money shippingFee(Order order, Customer customer) {
+  if (customer.isVip() && order.total().isAbove(FREE_SHIPPING_MIN)) return Money.ZERO;
+  if (order.total().isAbove(FREE_SHIPPING_MIN)) return STANDARD_REDUCED;
+  return STANDARD;
+}`,['The new rule landed in a named method, not in the middle of a long function.','Magic numbers became constants while we were there.','The diff stays reviewable: one concept, one method.'],'Trade-off: touching old code adds risk. Do it only where tests exist or where you add them first.'),
+CALL('warn',R`"We will clean it up later" has a poor track record. Make debt visible: a ticket, a <code>TODO(owner, date)</code> with a link, and a team rule for when it must be repaid.`)
+]);
+
+LES('m01-over','m01','Clean code vs over-engineering',2,8,[
+P(R`Clean code is not "more abstraction". Abstractions have a cost: more types, more indirection, more places to look. They only pay for themselves when they remove a real, recurring change cost. Software craftsmanship means choosing the simplest design that handles today's known requirements and keeps tomorrow's likely changes cheap.`),
+CMP('Speculative generality','java',R`
+interface PriceStrategyFactoryProvider { PriceStrategyFactory get(); }
+interface PriceStrategyFactory { PriceStrategy create(Context c); }
+interface PriceStrategy { Money price(Cart c); }
+class DefaultPriceStrategy implements PriceStrategy { /* the only one */ }`,R`
+Money price(Cart cart) {
+  return cart.subtotal().minus(cart.coupon().discount());
+}
+// extract a Strategy the day a second pricing rule actually appears`,['Three interfaces for one implementation hide a one-line rule.','Rule of thumb: abstract on the second or third real variation, not the first.','Deleting an unused abstraction is cheap; unwinding a wrong one is not.'],'Trade-off: waiting means one later refactor. With tests that refactor is routine.'),
+UL(['<b>Signs of too little structure:</b> copy-paste, 300-line methods, one class that everything imports.','<b>Signs of too much:</b> a class per verb, interfaces with one implementer and no test double, config for things that never change.','<b>Heuristic:</b> if explaining the structure takes longer than explaining the problem, simplify.']),
+CALL('tip',R`Ask: "What change am I making cheaper?" If you cannot name a concrete change, you are probably speculating. YAGNI ("you aren't gonna need it") and "make it work, make it right, make it fast" point the same way.`)
+]);
+
+LES('m02-intent','m02','Names that reveal intent',1,8,[
+P(R`A good name answers three questions: why it exists, what it does and how it is used. If a name needs a comment, change the name. Spend the time here, since every reader pays for a bad name again.`),
+CMP('Intent in names','java',R`
+int d; // elapsed time in days
+List<int[]> getThem() {
+  List<int[]> l1 = new ArrayList<>();
+  for (int[] x : theList) if (x[0] == 4) l1.add(x);
+  return l1;
+}`,R`
+int elapsedDays;
+List<Cell> getFlaggedCells() {
+  return gameBoard.stream()
+      .filter(Cell::isFlagged)
+      .toList();
+}`,['<code>elapsedDays</code> carries the unit; the comment is gone.','<code>Cell</code> and <code>isFlagged()</code> replace the magic <code>x[0] == 4</code>.','The method name says what it returns, not "them".'],'Trade-off: longer names. Keep length proportional to scope: tiny loop variable <code>i</code> is fine, a field is not.'),
+H('Rules that hold up'),
+UL(['<b>Pronounceable and searchable.</b> <code>genymdhms</code> cannot be spoken; <code>e</code> cannot be searched.','<b>No encodings.</b> Skip Hungarian notation (<code>strName</code>) and <code>I</code> prefixes unless your language community uses them (C# does).','<b>One word per concept.</b> Pick <code>fetch</code>, <code>get</code> or <code>retrieve</code> and use it everywhere.','<b>Avoid disinformation.</b> A variable named <code>accountList</code> that is a <code>Set</code> misleads. Use <code>accounts</code>.','<b>Do not add noise words.</b> <code>ProductInfo</code> vs <code>ProductData</code> is no real distinction.'])
+]);
+
+LES('m02-kinds','m02','Methods, classes, booleans and constants',1,9,[
+TB(['Element','Convention','Good','Weak'],[
+['Method','Verb phrase that says the effect or question','<code>cancelOrder()</code>, <code>findByEmail()</code>','<code>doIt()</code>, <code>process()</code>, <code>handle()</code>'],
+['Class','Noun that names one responsibility','<code>InvoiceCalculator</code>, <code>PasswordHasher</code>','<code>Manager</code>, <code>Helper</code>, <code>Util</code>, <code>Data</code>'],
+['Interface','Capability or role, not <code>IFoo</code> in Java','<code>PaymentGateway</code>, <code>Clock</code>','<code>IPaymentService</code>'],
+['Boolean','Reads as a true/false statement','<code>isActive</code>, <code>hasPermission</code>, <code>canRetry</code>','<code>flag</code>, <code>status</code>, <code>notDisabled</code>'],
+['Constant','<code>UPPER_SNAKE</code> in Java; name the meaning, not the value','<code>MAX_LOGIN_ATTEMPTS = 5</code>','<code>FIVE = 5</code>'],
+['Enum','Singular type, constants are members','<code>OrderStatus.SHIPPED</code>','<code>OrderStatuses.STATUS_SHIPPED</code>']]),
+CMP('Booleans and constants','java',R`
+boolean flag = !user.notActive();
+if (retries < 3) retry();
+double fee = amt * 0.029 + 0.3;`,R`
+boolean isActive = user.isActive();
+if (retries < MAX_RETRIES) retry();
+Money fee = amount.times(CARD_RATE).plus(CARD_FIXED_FEE);`,['Positive names avoid double negatives: <code>!notActive</code> forces a mental flip.','Constants record where a number comes from, so the next change touches one place.'],''),
+CALL('trap',R`A boolean parameter in a call, such as <code>render(true, false)</code>, tells the reader nothing. See flag arguments in Module 03.`)
+]);
+
+LES('m02-domain','m02','Domain language and misleading names',2,7,[
+P(R`Use the vocabulary the business uses. If support calls it a "refund", the code should not call it <code>ReverseTransaction</code>. This shared vocabulary is called the ubiquitous language in domain-driven design. A name that diverges from the domain forces a translation step in every conversation and every bug report.`),
+CMP('Domain terms and misleading names','java',R`
+class DataHolder { String s; int n; Date d; }          // what is it?
+List<User> getUsers() { /* returns only active users */ }
+void checkEmail(String e) { /* throws if invalid */ }`,R`
+class Shipment { TrackingNumber tracking; int parcelCount; LocalDate promisedBy; }
+List<User> getActiveUsers() { /* ... */ }
+void requireValidEmail(String email) { /* throws if invalid */ }`,[
+'Class and field names come from the shipping domain, so logistics staff can read them.',
+'<code>getActiveUsers</code> says what the filter is. A method that quietly filters is a trap.',
+'<code>check</code> hides that the method throws. <code>require...</code> signals the contract.'],'Trade-off: domain names must be agreed with the business. A wrong shared name spreads, so confirm the term first.'),
+H('Name by responsibility'),
+P(R`If you cannot name a class without "And", "Manager" or "Processor", it probably has two jobs. Splitting it usually produces two names that are easy to find. See SRP in Module 05.`)
+]);
+
+LES('m03-small','m03','Small, focused functions',1,8,[
+P(R`A function should do one thing at one level of abstraction. "One thing" means all its steps are at the same level: <code>validate(order)</code> and <code>save(order)</code> in the same body is fine; <code>validate(order)</code> next to a raw SQL string is not. Length follows from that. There is no magic line count, but a function that needs a scroll bar usually mixes levels.`),
+CMP('Mixed levels vs. one level','java',R`
+public void checkout(Cart cart, User user) {
+  if (cart.getItems().isEmpty()) throw new IllegalStateException("empty");
+  double total = 0;
+  for (Item i : cart.getItems()) total += i.getPrice() * i.getQty();
+  if (user.getCoupon() != null) total -= total * user.getCoupon().getPct() / 100;
+  Connection c = ds.getConnection();
+  PreparedStatement ps = c.prepareStatement("INSERT INTO orders ...");
+  // ... bind, execute, close, send email ...
+}`,R`
+public void checkout(Cart cart, User user) {
+  requireNotEmpty(cart);
+  Money total = pricing.totalFor(cart, user.coupon());
+  Order order = orders.save(Order.place(user, cart, total));
+  notifications.orderPlaced(order);
+}`,['The body reads like the business steps. Details sit one level down.','Each collaborator can be tested alone. SQL and email are behind interfaces.','The extraction test: can you describe the step with a name that is not just the code restated?'],'Trade-off: more indirection to navigate. Good IDE navigation and honest names offset it.'),
+CALL('warn',R`Do not chase tiny functions for their own sake. Splitting a coherent 15-line algorithm into five 3-line methods can hide the flow. Split where a name adds meaning.`)
+]);
+
+LES('m03-args','m03','Arguments and flag arguments',2,8,[
+UL(['<b>0 to 2 arguments</b> is ideal. 3 is a smell to examine. More than that: group related values into a parameter object.','<b>Output arguments</b> (mutating a passed-in object to return data) surprise readers. Return a value.','<b>Flag arguments</b> (a boolean that switches behavior) mean the function does two things. Split it.']),
+CMP('Flag argument and parameter object','java',R`
+void sendEmail(String to, String subject, String body, boolean html, boolean urgent, int retries);
+sendEmail("a@x.com", "Hi", "<b>Yo</b>", true, false, 3);`,R`
+record Email(Address to, String subject, Body body, Priority priority) {}
+void send(Email email);
+void sendWithRetry(Email email, RetryPolicy retry);
+
+send(new Email(address, "Hi", Body.html("<b>Yo</b>"), Priority.NORMAL));`,['<code>true, false, 3</code> is unreadable at the call site. Named types fix that.','Related values travel together in a <code>record</code>, so adding a field no longer breaks every caller.','Splitting <code>send</code> and <code>sendWithRetry</code> removes the boolean switch.'],'Trade-off: more types. For two stable parameters a plain signature is fine.'),
+CALL('tip',R`In languages with named arguments (Python, C#, Kotlin), <code>send(html=True)</code> is acceptable. In Java, prefer enums, records or builders.`)
+]);
+
+LES('m03-nest','m03','Guard clauses and nesting',1,7,[
+P(R`Deep nesting hides the main path. Handle invalid and special cases first and return early (guard clauses), leaving the normal flow unindented. Aim for the "happy path" along the left edge.`),
+CMP('Arrow code to guard clauses','java',R`
+double payout(Employee e) {
+  double result;
+  if (e.isDead()) { result = deadPay(); }
+  else {
+    if (e.isSeparated()) { result = separatedPay(); }
+    else {
+      if (e.isRetired()) { result = retiredPay(); }
+      else { result = normalPay(); }
+    }
+  }
+  return result;
+}`,R`
+double payout(Employee e) {
+  if (e.isDead()) return deadPay();
+  if (e.isSeparated()) return separatedPay();
+  if (e.isRetired()) return retiredPay();
+  return normalPay();
+}`,['Nesting depth drops from 4 to 1.','Each rule is a single line you can read, test and reorder.','Cyclomatic complexity is unchanged, but the shape is easier to follow.'],'Trade-off: multiple exits. In tiny, resource-owning code (manual cleanup) a single exit can be safer. With try-with-resources this rarely matters in Java.')
+]);
+
+LES('m03-pure','m03','Side effects, CQS, pure functions, composition',3,10,[
+P(R`<b>Command-Query Separation:</b> a method either changes state (command, returns nothing) or answers a question (query, changes nothing). A function that does both surprises callers. <b>Pure functions</b> depend only on their arguments and have no side effects, so they are trivial to test and safe to reuse.`),
+CMP('Hidden side effect','java',R`
+boolean checkPassword(String user, String pw) {
+  User u = repo.find(user);
+  if (hash(pw).equals(u.hash())) {
+    Session.initialize();           // surprise: changes global state
+    return true;
+  }
+  return false;
+}`,R`
+boolean isPasswordValid(User user, String pw) {
+  return hash(pw).equals(user.hash());
+}
+void logIn(User user, String pw) {
+  if (!isPasswordValid(user, pw)) throw new BadCredentials();
+  sessions.start(user);
+}`,['The query is now side-effect free and can be called anywhere, including tests.','The command is named for what it changes and fails loudly.'],'Trade-off: real APIs sometimes break CQS on purpose, such as <code>Stack.pop()</code> or atomic <code>compareAndSet</code>. Do it knowingly and document it.'),
+H('Function composition'),
+CODE('java',R`
+Function<String, String> normalize = ((Function<String, String>) String::trim).andThen(String::toLowerCase);
+Predicate<User> eligible = User::isActive;
+Predicate<User> adult = u -> u.age() >= 18;
+
+List<String> emails = users.stream()
+    .filter(eligible.and(adult))
+    .map(User::email)
+    .map(normalize)
+    .toList();`),
+P(R`Composition builds behavior from small named pieces. Keep each piece pure and name the composed result when it is reused. Avoid chains so long that a debugger cannot show intermediate values.`)
+]);
+
+LES('m04-cohesion','m04','Cohesion, coupling and encapsulation',2,9,[
+P(R`<b>Cohesion</b> measures how strongly a class's methods use its fields. High cohesion means the class is about one idea. <b>Coupling</b> measures how much a class knows about others. Aim for high cohesion and low coupling. <b>Encapsulation</b> keeps invariants inside the class: callers ask objects to act and do not reach in to edit their state.`),
+CMP('Tell, don\'t ask','java',R`
+// caller owns the rule
+if (account.getBalance() >= amount && !account.isFrozen()) {
+  account.setBalance(account.getBalance() - amount);
+}`,R`
+// the object owns its invariant
+account.withdraw(amount);   // throws InsufficientFunds / AccountFrozen
+
+class Account {
+  void withdraw(Money amount) {
+    if (frozen) throw new AccountFrozen(id);
+    if (balance.isLessThan(amount)) throw new InsufficientFunds(id, amount);
+    balance = balance.minus(amount);
+  }
+}`,['The rule exists in one place instead of every caller.','Setters are gone, so no code can put the account into an invalid state.','Law of Demeter: talk to your direct collaborators, not <code>a.getB().getC().doIt()</code>.'],'Trade-off: entities in persistence layers often need package-private constructors or setters for the framework. Keep that at the boundary.')
+]);
+
+LES('m04-compose','m04','Composition over inheritance, dependency injection',2,9,[
+P(R`Inheritance couples a subclass to every detail of its parent and fixes the relationship at compile time. Composition ("has-a") delegates to a collaborator you can swap. Use inheritance for a true is-a relationship with a stable contract; use composition for reuse.`),
+CMP('Inheritance for reuse vs. composition','java',R`
+class Stack<T> extends ArrayList<T> {      // exposes add(i, x), remove(i)...
+  void push(T t) { add(t); }
+  T pop() { return remove(size() - 1); }
+}`,R`
+class Stack<T> {
+  private final Deque<T> items = new ArrayDeque<>();
+  void push(T t) { items.addFirst(t); }
+  T pop() { return items.removeFirst(); }
+}`,['The public API is exactly <code>push</code> and <code>pop</code>. Callers cannot break stack discipline.','The storage can change without any caller noticing.'],''),
+H('Dependency injection'),
+CMP('Hard-wired vs injected','java',R`
+class ReportService {
+  private final Mailer mailer = new SmtpMailer("smtp.corp");   // cannot test or swap
+  void send(Report r) { mailer.send(r.toEmail()); }
+}`,R`
+class ReportService {
+  private final Mailer mailer;
+  ReportService(Mailer mailer) { this.mailer = mailer; }
+  void send(Report r) { mailer.send(r.toEmail()); }
+}
+// production: new ReportService(new SmtpMailer(cfg)); test: new ReportService(recordingMailer)`,['Constructor injection makes dependencies visible and the object immutable.','You do not need a DI framework to do DI. Spring just wires the same constructors.'],'Trade-off: more wiring code. A framework or a single composition root keeps it in one place.')
+]);
+
+LES('m04-god','m04','God objects, data vs behavior-rich objects',2,8,[
+P(R`A god object knows or does too much: <code>OrderManager</code> that validates, prices, persists, emails and renders PDFs. Signs: many unrelated fields, a name ending in "Manager", every feature touches it, merge conflicts on every release. Split by responsibility and let each part own its data.`),
+TB(['Style','Use when','Risk'],[
+['Behavior-rich object','Real business invariants (Order, Account)','Heavy classes if boundaries are fuzzy'],
+['Data carrier (record/DTO)','Crossing a boundary: API, messaging, query results','Anemic domain if business rules leak into services'],
+['Procedural service over data','Simple CRUD with little logic','Duplicate rules over time']]),
+CMP('Anemic data + god service','java',R`
+class Order { List<Line> lines; String status; double total; /* getters/setters */ }
+class OrderService {
+  void addLine(Order o, Line l) {...} void cancel(Order o) {...}
+  void applyCoupon(Order o, Coupon c) {...} void ship(Order o) {...} /* + email, pdf, tax ... */
+}`,R`
+class Order {
+  void addLine(Product p, int qty) {...}
+  void cancel() { status.requireCancellable(); status = CANCELLED; }
+  Money total() { return lines.stream().map(Line::total).reduce(Money.ZERO, Money::plus); }
+}
+class OrderPricing { Money applyCoupon(Order o, Coupon c) {...} }
+class OrderNotifier { void shipped(Order o) {...} }`,['Rules about an order live next to the data they protect.','Infrastructure concerns (pricing integrations, notifications) move to focused collaborators.'],'Trade-off: for simple CRUD screens a record plus a thin service is perfectly fine. Add behavior when rules appear.')
+]);
+
+LES('m05-srp','m05','Single Responsibility Principle',2,8,[
+P(R`A class should have one reason to change. A "reason to change" is a stakeholder or concern: pricing rules, persistence format, report layout. Two concerns in one class means a change for one risks breaking the other.`),
+CMP('SRP','java',R`
+class Employee {
+  Money calculatePay() {...}      // finance team changes this
+  void save() {...}               // DBAs change this
+  String reportHours() {...}      // HR changes this
+}`,R`
+class Employee { /* data + core invariants */ }
+class PayCalculator { Money calculatePay(Employee e) {...} }
+class EmployeeRepository { void save(Employee e) {...} }
+class HoursReporter { String report(Employee e) {...} }`,['Three actors, three classes. A finance change no longer touches HR code.'],'Limit: do not split by method count. If two things always change together, they belong together.'),
+CODE('text',R`
+UML (before)                      UML (after)
++----------------------+          +----------+   +---------------+
+| Employee             |          | Employee |<--| PayCalculator |
+|----------------------|          +----------+   +---------------+
+| calculatePay()       |   -->    +--------------------+  +---------------+
+| save()               |          | EmployeeRepository |  | HoursReporter |
+| reportHours()        |          +--------------------+  +---------------+
++----------------------+`)
+]);
+
+LES('m05-ocp','m05','Open/Closed Principle',2,8,[
+P(R`Software entities should be open for extension and closed for modification: add behavior by adding code, not by editing tested code. The usual tool is polymorphism or a strategy.`),
+CMP('OCP','java',R`
+double discount(Customer c, double amt) {
+  switch (c.type()) {
+    case REGULAR: return amt * 0.0;
+    case GOLD:    return amt * 0.1;
+    case PLATINUM:return amt * 0.2;
+    default: throw new IllegalArgumentException();
+  }
+}   // new tier = edit this method`,R`
+interface DiscountPolicy { Money apply(Money amount); }
+enum Tier implements DiscountPolicy {
+  REGULAR { public Money apply(Money m) { return m; } },
+  GOLD    { public Money apply(Money m) { return m.times(0.90); } },
+  PLATINUM{ public Money apply(Money m) { return m.times(0.80); } }
+}
+Money total = customer.tier().apply(amount);`,['A new tier is a new constant; callers stay untouched.','The compiler forces each tier to define its discount.'],'Limit: do not build extension points for variation that may never come. A simple <code>switch</code> that exists in one place is often fine (see Module 01).'),
+CODE('text',R`
+Client --> <<interface>> DiscountPolicy
+                 ^
+        +--------+---------+
+      Regular   Gold    Platinum`)
+]);
+
+LES('m05-lsp','m05','Liskov Substitution Principle',3,9,[
+P(R`Code that works with a base type must keep working when given any subtype. A subtype must honor the base contract: accept at least what the parent accepts (no stricter preconditions), promise at least what it promises (no weaker postconditions), and preserve invariants.`),
+CMP('LSP','java',R`
+class Rectangle { void setWidth(int w){...} void setHeight(int h){...} int area(){...} }
+class Square extends Rectangle {
+  void setWidth(int w)  { super.setWidth(w);  super.setHeight(w); }
+  void setHeight(int h) { super.setWidth(h);  super.setHeight(h); }
+}
+// client: r.setWidth(4); r.setHeight(5); assert r.area() == 20;   // fails for Square`,R`
+interface Shape { int area(); }
+record Rectangle(int width, int height) implements Shape { public int area(){ return width*height; } }
+record Square(int side) implements Shape { public int area(){ return side*side; } }`,['Mutable setters made the "is-a" relationship false. Immutable value types remove the conflict.','Modeling by behavior (<code>Shape.area()</code>) is safer than modeling by taxonomy.'],'Smell check: a subclass that throws <code>UnsupportedOperationException</code>, overrides to do nothing, or needs <code>instanceof</code> checks in callers is violating LSP.')
+]);
+
+LES('m05-isp','m05','Interface Segregation Principle',2,7,[
+P(R`Clients should not depend on methods they do not use. Prefer several small, role-focused interfaces to one wide interface.`),
+CMP('ISP','java',R`
+interface Worker { void work(); void eat(); void sleep(); }
+class Robot implements Worker {
+  public void work() {...}
+  public void eat()   { throw new UnsupportedOperationException(); }
+  public void sleep() { throw new UnsupportedOperationException(); }
+}`,R`
+interface Workable { void work(); }
+interface Feedable { void eat(); }
+class Human implements Workable, Feedable {...}
+class Robot implements Workable {...}`,['Implementers declare only what they can truthfully do.','Callers that need only <code>work()</code> accept <code>Workable</code>, so tests need tiny fakes.'],'Limit: dozens of one-method interfaces are noise. Split along real client needs. Java\'s <code>Comparator</code> and <code>Runnable</code> are good size models.')
+]);
+
+LES('m05-dip','m05','Dependency Inversion Principle',3,9,[
+P(R`High-level policy should not depend on low-level details. Both should depend on abstractions, and the abstraction is owned by the high-level side. The business code defines what it needs (<code>PaymentGateway</code>); infrastructure adapts to it (<code>StripeGateway</code>).`),
+CMP('DIP','java',R`
+class CheckoutService {
+  private final StripeClient stripe = new StripeClient(apiKey);
+  void pay(Order o) { stripe.charge(o.cardToken(), o.total().cents()); }
+}`,R`
+interface PaymentGateway { PaymentResult charge(PaymentRequest r); }   // owned by the domain
+
+class CheckoutService {
+  private final PaymentGateway gateway;
+  CheckoutService(PaymentGateway gateway) { this.gateway = gateway; }
+  void pay(Order o) { gateway.charge(PaymentRequest.of(o)); }
+}
+class StripeGateway implements PaymentGateway { /* adapter */ }`,['Source dependency now points from <code>StripeGateway</code> to the domain interface, inverting the direction.','Tests use a fake gateway; switching provider touches one adapter.'],'Limit: DIP is about boundaries that change independently or are costly to test (network, DB, clock). Do not wrap <code>String</code> or <code>List</code> behind interfaces.'),
+CODE('text',R`
+CheckoutService ---> <<interface>> PaymentGateway <--- StripeGateway
+(domain/policy)       (owned by domain)               (infrastructure)`),
+CALL('note',R`DIP is the principle; dependency injection is a technique to supply the dependency. You can follow DIP without a framework.`)
+]);
+MOD('m06','06','Code Smells & Anti-Patterns','A smell is a surface symptom that often points to a deeper design problem. It is a prompt to look, not a verdict.',['Java Mastery Guide','Architecture & Distributed Systems']);
+MOD('m07','07','Error Handling & Defensive Programming','Fail clearly, fail early, and keep the happy path readable.',['Java Mastery Guide','Spring Backend Mastery']);
+MOD('m08','08','Comments & Documentation','Write down what the code cannot say: why, not what.',[]);
+MOD('m09','09','Formatting & Code Organization','Consistency over taste, automated where possible.',['DevOps & Infrastructure']);
+MOD('m10','10','Refactoring Mastery','Behavior-preserving changes in small, verified steps.',['Java Mastery Guide']);
+
+LES('m06-size','m06','Long methods, large classes, duplicate code',1,10,[
+CALL('note',R`Each smell below lists: what it means, why it hurts, how to spot it, a bad and a refactored example, and when it is fine to leave it.`),
+SM('Long method','A method that does many things or mixes abstraction levels.','Hard to read, test and reuse; hides bugs in the middle.','Needs a scroll, comments that label sections ("// step 2"), many locals.','A linear, flat mapping or configuration method with no branching, or generated code.','java',R`
+void importUsers(File f) {
+  // read
+  List<String> lines = Files.readAllLines(f.toPath());
+  // parse
+  List<User> users = new ArrayList<>();
+  for (String l : lines) { String[] p = l.split(","); users.add(new User(p[0], p[1])); }
+  // save
+  for (User u : users) repo.save(u);
+}`,R`
+void importUsers(Path file) throws IOException {
+  List<User> users = parse(Files.readAllLines(file));
+  users.forEach(repo::save);
+}
+private List<User> parse(List<String> lines) { return lines.stream().map(this::toUser).toList(); }`),
+SM('Large class','A class with many fields and methods that serve different purposes.','Several reasons to change (SRP), low cohesion, merge conflicts.','Dozens of fields, groups of methods using disjoint field sets.','A cohesive framework class or a facade whose size comes from a wide but uniform API.','java',R`
+class Customer { String name; String street, city, zip; String cardNo, cardExp;
+  void validateAddress(){...} void chargeCard(Money m){...} String formatLabel(){...} }`,R`
+class Customer { Name name; Address address; PaymentMethod payment; }
+record Address(String street, String city, String zip) { String label() {...} boolean isValid() {...} }`),
+SM('Duplicate code','The same logic or structure in several places.','A bug fix or rule change must be made N times; copies drift.','Copy-paste with small edits; the same condition in several methods.','Two pieces look alike but change for different reasons. Wait for the third (rule of three) before merging.','java',R`
+double a = price * qty; if (isVip) a *= 0.9; invoice.setTotal(a);
+double b = price * qty; if (isVip) b *= 0.9; quote.setTotal(b);`,R`
+Money total = pricing.totalFor(price, qty, customer);
+invoice.setTotal(total); quote.setTotal(total);`)
+]);
+
+LES('m06-data','m06','Long parameter lists, primitive obsession, data clumps',2,10,[
+SM('Long parameter list','Four or more parameters, often of the same type.','Easy to swap arguments silently; callers are noisy.','Calls with several <code>null</code>, <code>true</code>, <code>0</code> in a row.','A private helper used in one place, or a well-known framework signature.','java',R`
+createUser("Ann","Lee","ann@x.com","555-0100","1 Main","Paris","75001",true,false);`,R`
+createUser(new NewUser(new PersonName("Ann","Lee"), email, phone, address, Consent.MARKETING_OFF));`),
+SM('Primitive obsession','Using <code>String</code>/<code>int</code> for domain concepts (email, money, id).','No validation in one place, easy to mix up IDs, rules scatter.','Several regexes for the same format; methods taking two <code>String</code> IDs.','Simple scripts or internal DTOs where no rules apply.','java',R`
+void transfer(String fromId, String toId, double amount) {...}
+transfer(toId, fromId, 10.0);   // compiles, wrong`,R`
+void transfer(AccountId from, AccountId to, Money amount) {...}
+record AccountId(String value) { AccountId { if (value.isBlank()) throw new IllegalArgumentException(); } }`),
+SM('Data clumps','Groups of values that always travel together.','The grouping is a missing concept; changes ripple through signatures.','The same 3 fields appear in several classes or parameter lists.','Two values that only coincide here.','java',R`
+double distance(double lat1, double lon1, double lat2, double lon2) {...}`,R`
+record GeoPoint(double lat, double lon) {}
+double distance(GeoPoint a, GeoPoint b) {...}`)
+]);
+
+LES('m06-coupling','m06','Feature envy, shotgun surgery, divergent change, inappropriate intimacy',3,11,[
+SM('Feature envy','A method uses another class\'s data more than its own.','Behavior is in the wrong place; the owner cannot protect its invariants.','Chains of <code>other.getX()</code>, <code>other.getY()</code> in one method.','Strategy/visitor/mapper classes whose job is to work on others\' data.','java',R`
+class Invoice { Money shipping(Customer c) {
+  return c.getAddress().getCountry().equals("US") ? Money.of(5) : Money.of(25); } }`,R`
+class Customer { boolean isDomestic() { return address.isIn(Country.US); } }
+class Invoice { Money shipping(Customer c) { return c.isDomestic() ? DOMESTIC : INTERNATIONAL; } }`),
+SM('Shotgun surgery','One change forces many small edits across classes.','Easy to miss one; a sign a concept is scattered.','A feature PR touches 10 files with 1-line edits.','A cross-cutting rename or version bump.','java',R`
+// adding a "GIFT" order type means editing 6 switch statements across 6 classes
+switch (order.type()) { case STANDARD: ... case EXPRESS: ... }`,R`
+interface OrderType { Money shipping(); boolean needsSignature(); String label(); }
+// add GiftOrderType once; callers use the interface`),
+SM('Divergent change','One class changes for many unrelated reasons.','The opposite of shotgun surgery; violates SRP.','"I edit this file for pricing, for emails and for reports."','A true coordination class in a small app.','java',R`
+class UserService { void register(){...} String renderWelcomeEmail(){...} void exportCsv(){...} }`,R`
+class UserRegistration { void register(){...} }
+class WelcomeEmail { String render(User u){...} }
+class UserExport { void toCsv(){...} }`),
+SM('Inappropriate intimacy','Two classes know each other\'s internals.','Changes in one break the other; hard to test alone.','Access to private-like fields via getters, bidirectional references.','Tightly bound parts that live in one module on purpose (e.g. an aggregate and its entities).','java',R`
+order.getCustomer().getWallet().getBalance();   // reaching through three objects`,R`
+order.canBePaidBy(customer);                    // ask the one that knows`)
+]);
+
+LES('m06-noise','m06','Dead code, magic values, deep nesting, excessive comments',1,9,[
+SM('Dead code','Code that never runs: unused methods, unreachable branches, commented-out code.','Reader cost with no benefit; hides what matters.','IDE greys it out; coverage shows zero; no callers.','Public library APIs with outside callers; keep until a deprecation period ends.','java',R`
+// if (legacyMode) { oldRoute(); }
+private void unusedHelper() {...}`,R`
+// deleted; git history keeps it`),
+SM('Magic numbers and strings','Literals whose meaning is not obvious.','Unclear and easy to get wrong; changes need a search.','Numbers other than 0/1 in conditions; repeated string keys.','Self-evident values (<code>x * 2</code>, array index 0) or one-off test data.','java',R`
+if (user.getRole().equals("ADM") && attempts > 5) lock(900);`,R`
+if (user.role() == Role.ADMIN && attempts > MAX_ATTEMPTS) lock(LOCKOUT);
+private static final Duration LOCKOUT = Duration.ofMinutes(15);`),
+SM('Deep nesting','Several levels of if/for inside each other.','The happy path is lost; high complexity.','Code drifting right; 3+ indentation levels in one method.','A natural nested data structure traversal that reads well.','java',R`
+if (a != null) { if (a.ok()) { for (X x : a.items()) { if (x.valid()) { use(x); } } } }`,R`
+if (a == null || !a.ok()) return;
+a.items().stream().filter(X::valid).forEach(this::use);`),
+SM('Excessive comments','Comments that restate code, apologize for it, or are stale.','They lie as code changes; they replace better names.','Comments above every line; "increment i".','Why-comments, legal headers, public API docs, warnings about non-obvious traps.','java',R`
+// check if the user is an admin and is not locked
+if (u.r == 1 && u.l == 0) {...}`,R`
+if (user.isAdmin() && !user.isLocked()) {...}`)
+]);
+
+LES('m06-design','m06','God objects, circular dependencies, premature optimization, over-engineering',3,11,[
+SM('God object','One class that knows and does most of the system.','Everything depends on it; it breaks often and cannot be tested alone.','Imported everywhere; huge; "Manager", "Controller", "Util" with unrelated methods.','A thin application entry point that only wires parts together.','java',R`
+class AppManager { void login(){...} void pay(){...} void ship(){...} void report(){...} }`,R`
+class LoginService {...}  class PaymentService {...}  class ShippingService {...}  class ReportService {...}`),
+SM('Circular dependency','A depends on B and B depends on A (classes, packages or modules).','Cannot build, test or reason about one without the other.','Package cycles in an IDE dependency view; "initialization order" bugs.','Almost never. Parent-child links inside one aggregate are an exception.','java',R`
+class Order { Customer customer; }  class Customer { List<Order> orders; void add(Order o){ o.customer = this; } }
+// package orders imports customers, customers imports orders`,R`
+class Order { CustomerId customerId; }          // reference by id
+interface OrdersOf { List<Order> find(CustomerId id); }   // lookup where needed`),
+SM('Premature optimization','Complicating code for speed that has not been measured.','Costs clarity now for a benefit that may never matter.','Hand-rolled caches, bit tricks or pooling with no profile or benchmark.','A measured hot path or a known algorithmic complexity issue (O(n²) over big n).','java',R`
+// "faster" string building, 1 call per request
+StringBuilder sb = new StringBuilder(); sb.append(a).append(b);   // inside rarely-run code`,R`
+String s = a + b;      // clear first; profile before changing`),
+SM('Over-engineering','More structure than the problem needs.','Slows every change and every reader.','Interfaces with one implementer, factories of factories, unused plug-in hooks.','Public libraries where stability and extension points are the product.','java',R`
+class NotificationStrategyFactoryRegistry { /* for one email sender */ }`,R`
+class EmailSender { void send(Message m) {...} }   // extract when SMS arrives`),
+CALL('tip',R`Smells guide where to look. Before refactoring, confirm the code is actually changing often. Stable, ugly code that nobody touches is a low-priority debt.`)
+]);
+
+LES('m07-errors','m07','Exceptions, error messages, swallowed errors',2,9,[
+P(R`Use exceptions for exceptional conditions and keep the happy path free of error-code checks. Create custom exceptions when callers need to react differently, and include the context that makes a failure diagnosable (ids, values, the operation).`),
+CMP('Swallowed and vague errors','java',R`
+try { repo.save(order); }
+catch (Exception e) { /* ignore */ }
+
+throw new RuntimeException("error");`,R`
+try { repo.save(order); }
+catch (DataAccessException e) {
+  throw new OrderNotSavedException("Could not save order " + order.id(), e);   // cause preserved
+}`,['Never catch and ignore. At minimum log with the stack trace, or rethrow with the cause.','Catch the narrowest type you can handle.','Message states what failed and for which input; the original exception is the <code>cause</code>.'],'Trade-off: checked vs unchecked. Modern Java code mostly uses unchecked domain exceptions and handles them at a boundary (e.g. a controller advice).'),
+CALL('trap',R`Logging and rethrowing at every layer produces the same stack trace five times. Handle an error once, at the layer that can act on it, and log it there.`),
+CALL('note',R`Logging vs exception handling: an exception transports a failure to someone who can decide; a log records that it happened. Do both once, not everywhere.`)
+]);
+
+LES('m07-null','m07','Null, Optional, validation and fail-fast',2,9,[
+P(R`Null is the most common source of runtime errors. Prefer not to return it. Return an empty collection, an <code>Optional</code> for "maybe absent" results, or throw. Validate at the boundary and fail fast, so invalid data never travels deep into the system.`),
+CMP('Null returns to Optional and validation','java',R`
+User find(String email) { return map.get(email); }       // may be null
+String city = find(e).getAddress().getCity();            // NPE waiting
+
+void register(String email) { /* no checks */ db.insert(email); }`,R`
+Optional<User> find(Email email) { return Optional.ofNullable(map.get(email)); }
+String city = find(email).map(User::address).map(Address::city).orElse("unknown");
+
+void register(Email email) {                              // Email validated at construction
+  Objects.requireNonNull(email, "email");
+  db.insert(email);
+}`,['<code>Optional</code> in a return type tells the caller absence is expected.','Value types like <code>Email</code> make invalid input unrepresentable after the boundary.','<code>requireNonNull</code> fails at the cause, not 10 calls later.'],'Limits: do not use <code>Optional</code> for fields, parameters or collections. It is a return-type tool.'),
+H('Resource management'),
+CODE('java',R`
+try (var in = Files.newBufferedReader(path); var out = Files.newBufferedWriter(target)) {
+  in.transferTo(out);          // both closed automatically, in reverse order
+}`),
+CALL('tip',R`Defensive programming is validating at trust boundaries (user input, network, files), not null-checking every private call. Inside the core, trust types and invariants.`)
+]);
+
+LES('m08-comments','m08','Comments that help and comments that hurt',1,8,[
+UL(['<b>Good comments:</b> intent and reasoning ("why"), warnings of consequences, non-obvious constraints, legal notices, public API docs.','<b>Bad comments:</b> restating code, journal comments, closing-brace markers, commented-out code, misleading or stale text.','<b>Rule:</b> try to say it in code first (a name, an extracted method). Comment what remains.']),
+CMP('Explain why, not what','java',R`
+// loop over users and add 1 to count if active
+for (User u : users) if (u.isActive()) count++;
+
+// TODO fix this
+Thread.sleep(200);`,R`
+long activeCount = users.stream().filter(User::isActive).count();
+
+// The payments sandbox rate-limits to 5 req/s and returns 429 without Retry-After.
+// TODO(ana, 2026-12): remove once we move to the production endpoint (PAY-412).
+Thread.sleep(SANDBOX_BACKOFF_MS);`,['The first comment repeated the code, so it was removed.','The second explains a non-obvious constraint and carries an owner, a date and a ticket.'],''),
+CALL('note',R`<code>TODO</code> and <code>FIXME</code> without an owner and a link become permanent. Many teams fail the build on stale ones.`)
+]);
+
+LES('m08-docs','m08','API docs, READMEs and Architecture Decision Records',2,8,[
+TB(['Document','Audience','Must answer'],[
+['Javadoc / API docs','Callers of a public method','Contract: what, parameters, errors, thread-safety, units'],
+['README','New developer or user','What is this, how do I run/test it, where is more help'],
+['ADR (decision record)','Future maintainers','Which decision, context, options, consequences'],
+['Runbook','On-call engineer','How to detect, diagnose, fix, escalate']]),
+CODE('markdown',R`
+# ADR-007: Use PostgreSQL for orders
+Status: accepted (2026-03-02)
+Context: Orders need transactions and reporting joins; team knows SQL.
+Options: PostgreSQL, DynamoDB, MongoDB.
+Decision: PostgreSQL.
+Consequences: Strong consistency and joins; vertical scale first; revisit sharding above ~2 TB.`),
+P(R`Keep docs next to the code (in the repo), review them in the same pull request, and delete what is out of date. An ADR is a record, so it is rarely edited. A new decision supersedes the old one.`),
+CALL('tip',R`Public API docs should describe behavior callers can rely on. Implementation details belong in code comments, if anywhere.`)
+]);
+
+LES('m09-format','m09','Formatting, grouping and automation',1,7,[
+P(R`Formatting is communication: consistent indentation and whitespace let readers scan structure. The most important rule is that the whole team follows one style, enforced by a tool. Debating brace placement in review is wasted effort.`),
+UL(['<b>Vertical grouping:</b> blank lines separate ideas; related lines stay together. Declare variables near use.','<b>Newspaper metaphor:</b> high-level at the top of a file; helpers below.','<b>Line length:</b> pick a limit (100-120) and let the formatter wrap.','<b>Imports:</b> no wildcard imports in Java; let the IDE or formatter order them.']),
+TB(['Language','Common formatter','Common linter'],[
+['Java','google-java-format, Spotless','Checkstyle, SpotBugs, PMD, Error Prone'],
+['Python','Black, Ruff format','Ruff, Flake8, Pylint'],
+['JavaScript / TypeScript','Prettier','ESLint (typescript-eslint)'],
+['C#','dotnet format, EditorConfig','Roslyn analyzers']]),
+CALL('tip',R`Put the formatter and linter in the build (and a pre-commit hook). A failing check is a shared rule; a review comment is a personal opinion.`)
+]);
+
+LES('m09-org','m09','Packages, modules and dependency boundaries',2,8,[
+P(R`Organize by feature (what the code is for), not only by technical layer. Dependencies should point inward, toward stable business code, and cycles between packages should fail the build.`),
+CODE('text',R`
+By layer (scatters one feature)        By feature (keeps a feature together)
+com.shop                               com.shop
+  controller/ OrderController            order/   OrderController, OrderService, Order, OrderRepository
+  service/    OrderService               payment/ PaymentController, PaymentGateway, ...
+  model/      Order, Payment             catalog/ ...
+  repository/ ...`),
+UL(['<b>Package-private by default.</b> Make only the feature\'s entry points public.','<b>Name projects and modules</b> by what they do (<code>orders-service</code>), with a consistent pattern across the repo.','<b>Enforce boundaries</b> with tests: ArchUnit in Java, import-linter in Python, dependency-cruiser in JS.']),
+CODE('java',R`
+@ArchTest
+static final ArchRule no_cycles = slices().matching("com.shop.(*)..").should().beFreeOfCycles();
+
+@ArchTest
+static final ArchRule domain_is_pure = noClasses().that().resideInAPackage("..domain..")
+    .should().dependOnClassesThat().resideInAnyPackage("..infrastructure..", "org.springframework..");`)
+]);
+
+LES('m10-extract','m10','Refactoring basics: Extract, Inline, Rename, Constants',1,12,[
+P(R`Refactoring changes structure without changing behavior. The loop is: make sure tests pass, apply one small change, run tests, commit. Use IDE refactorings (rename, extract) because they are mechanical and safe.`),
+RF('Extract Method','A fragment has a clear purpose or a comment labels it.','Move the fragment to a new method named for its intent; pass what it needs; replace the original with a call.','java',R`
+printOwing();   // inside:
+System.out.println("*** Customer Owes ***");
+double outstanding = 0;
+for (Order o : orders) outstanding += o.amount();
+System.out.println("name: " + name + " amount: " + outstanding);`,R`
+void printOwing() { printBanner(); double o = outstanding(); printDetails(o); }
+private double outstanding() { return orders.stream().mapToDouble(Order::amount).sum(); }`),
+RF('Inline Method','The body is as clear as its name, or indirection adds nothing.','Replace calls with the body and delete the method.','java',R`
+int rating() { return moreThanFiveLateDeliveries() ? 2 : 1; }
+boolean moreThanFiveLateDeliveries() { return lateDeliveries > 5; }`,R`
+int rating() { return lateDeliveries > 5 ? 2 : 1; }`),
+RF('Rename Variable / Method','A name no longer says what the thing is.','Use the IDE rename so every reference updates. Rename often, it is cheap.','java',R`
+double a = h * w;     // area?`,R`
+double floorArea = height * width;`),
+RF('Replace Magic Number with Constant','A literal carries meaning or appears twice.','Introduce a named constant (or enum, or config) and use it everywhere.','java',R`
+double potentialEnergy(double m, double h) { return m * 9.81 * h; }`,R`
+static final double GRAVITATIONAL_ACCELERATION = 9.81;
+double potentialEnergy(double mass, double height) { return mass * GRAVITATIONAL_ACCELERATION * height; }`)
+]);
+
+LES('m10-structure','m10','Refactoring structure: Extract Class, Move Method, Parameter Object, Encapsulate Field',2,12,[
+RF('Extract Class','One class does the work of two.','Create a new class, move related fields and methods into it, hold a reference from the original.','java',R`
+class Person { String name; String areaCode, number;
+  String phone() { return "(" + areaCode + ") " + number; } }`,R`
+class Person { String name; PhoneNumber phone; }
+record PhoneNumber(String areaCode, String number) { String format() { return "(" + areaCode + ") " + number; } }`),
+RF('Move Method','A method uses another class more than its own (feature envy).','Copy it to the class it envies, adapt it, delegate or remove the original.','java',R`
+class Account { double overdraftCharge() { return type.isPremium() ? 10 : days * 1.75; } }`,R`
+class AccountType { double overdraftCharge(int days) { return isPremium() ? 10 : days * 1.75; } }`),
+RF('Introduce Parameter Object','Several parameters travel together.','Create a class or record for the group, change signatures, then move behavior onto it.','java',R`
+List<Reading> between(LocalDate start, LocalDate end) {...}
+double avg(LocalDate start, LocalDate end) {...}`,R`
+record DateRange(LocalDate start, LocalDate end) { boolean contains(LocalDate d) {...} }
+List<Reading> between(DateRange range) {...}
+double avg(DateRange range) {...}`),
+RF('Encapsulate Field','A public field is read or written directly.','Make it private; expose behavior (or accessors if you must) to control changes.','java',R`
+class Temperature { public double celsius; }`,R`
+class Temperature {
+  private double celsius;
+  Temperature(double c) { if (c < -273.15) throw new IllegalArgumentException(); celsius = c; }
+  double celsius() { return celsius; }
+}`)
+]);
+
+LES('m10-conditions','m10','Refactoring conditionals and inheritance',3,12,[
+RF('Decompose Conditional','A condition or its branches are hard to read.','Extract the condition and each branch into well-named methods.','java',R`
+if (date.isBefore(SUMMER_START) || date.isAfter(SUMMER_END)) charge = qty * winterRate + winterFee;
+else charge = qty * summerRate;`,R`
+charge = isSummer(date) ? summerCharge(qty) : winterCharge(qty);`),
+RF('Replace Nested Conditional with Guard Clauses','Special cases bury the normal path.','Return early for each special case and leave the main path unindented.','java',R`
+double pay() { double r;
+  if (dead) r = 0; else { if (separated) r = sep(); else r = normal(); } return r; }`,R`
+double pay() { if (dead) return 0; if (separated) return sep(); return normal(); }`),
+RF('Replace Conditional with Polymorphism','The same type switch appears in several places.','Create a subclass or strategy per case and move each branch into it.','java',R`
+double speed() { switch (type) { case EUROPEAN: return base();
+  case AFRICAN: return base() - coconuts * 2; default: throw new IllegalStateException(); } }`,R`
+abstract class Bird { abstract double speed(); }
+class European extends Bird { double speed() { return base(); } }
+class African extends Bird { double speed() { return base() - coconuts * 2; } }`),
+RF('Replace Inheritance with Composition','A subclass uses only part of the parent or breaks its contract.','Hold the parent as a field, delegate the needed methods, remove the <code>extends</code>.','java',R`
+class Stack<T> extends Vector<T> {...}`,R`
+class Stack<T> { private final Deque<T> items = new ArrayDeque<>(); /* push, pop, peek */ }`),
+CALL('warn',R`Refactoring without tests is editing and hoping. If tests are missing, write characterization tests first (Module 13, working with legacy code).`)
+]);
+MOD('m11','11','Design Patterns & Architecture','When patterns reduce complexity, and the architectures that keep business logic apart from infrastructure.',['Architecture & Distributed Systems','Spring Backend Mastery']);
+MOD('m12','12','Testing & Code Quality','Tests are what make refactoring safe.',['Spring Backend Mastery']);
+MOD('m13','13','Professional Engineering Practices','The team habits that keep a codebase clean over years.',['DevOps & Infrastructure']);
+MOD('m14','14','Language-Specific Clean Code','Same principles, different idioms: Java first, then Python, JavaScript, TypeScript and C#.',['Java Mastery Guide']);
+MOD('m15','15','Real-World Case Studies','Nine realistic refactors with the reasoning and the expected benefit.',['Spring Backend Mastery','Databases & Messaging']);
+
+LES('m11-patterns','m11','When patterns help, and when they hurt',2,10,[
+P(R`Design patterns are named solutions to recurring problems. They help when they remove a real variation or coupling problem. They hurt when applied to code that has no such problem. Start with the problem (the smell), then choose the pattern.`),
+TB(['Pattern','Problem it solves','Java sketch','Do not use when'],[
+['Strategy','A behavior varies at runtime','<code>PricingRule</code> interface','There is one rule that never changes'],
+['Factory','Creation logic is complex or hides the concrete type','<code>PaymentGateways.forCountry(c)</code>','<code>new</code> is enough'],
+['Builder','Many optional parameters, immutable result','<code>HttpRequest.newBuilder()</code>','Three required fields: use a constructor or record'],
+['Adapter','Make a foreign API fit your interface','<code>StripeGateway implements PaymentGateway</code>','You own both sides'],
+['Decorator','Add behavior around an object without subclassing','<code>new CachingRepository(new JdbcRepository())</code>','One fixed combination exists'],
+['Observer','Many parties react to an event','<code>ApplicationEventPublisher</code>','Order and failure handling matter and are hidden by events']]),
+CMP('Strategy replaces a type switch','java',R`
+Money shipping(Order o) {
+  if (o.method() == STANDARD) return Money.of(5);
+  if (o.method() == EXPRESS)  return Money.of(15);
+  if (o.method() == PICKUP)   return Money.ZERO;
+  throw new IllegalArgumentException();
+}`,R`
+interface ShippingRule { Money cost(Order o); }
+Map<Method, ShippingRule> rules = Map.of(STANDARD, o -> Money.of(5), EXPRESS, o -> Money.of(15), PICKUP, o -> Money.ZERO);
+Money shipping(Order o) { return rules.get(o.method()).cost(o); }`,['Behavior is data you can register, test and extend.','With Java lambdas a Strategy needs no class hierarchy.'],'Trade-off: one more level of indirection. If there will only ever be three fixed methods, the original <code>switch</code> is fine.'),
+CMP('Builder for an immutable object','java',R`
+new Pizza("large", true, false, true, null, 2);`,R`
+Pizza.builder().size(LARGE).cheese().extraSauce().toppings(2).build();`,['Each value is labeled at the call site.','<code>build()</code> validates the whole object once.'],'Prefer a <code>record</code> with a compact constructor for small, all-required types.')
+]);
+
+LES('m11-arch','m11','Layered, Hexagonal and Clean Architecture',3,12,[
+P(R`All three separate business logic from infrastructure. They differ in how strictly dependencies are controlled.`),
+TB(['Style','Rule','Strength','Cost'],[
+['Layered','UI → service → data; each layer calls the next','Simple, familiar','Business logic tends to depend on the database model'],
+['Hexagonal (ports & adapters)','Core defines ports; adapters (web, DB, queue) implement them','Core is testable without infrastructure','More interfaces and mapping'],
+['Clean architecture','Concentric rings; dependencies point inward only','Framework- and DB-independent core','Most ceremony; needs discipline']]),
+CODE('text',R`
+         +-------------------------------------------+
+HTTP --> | web adapter --> [Port: PlaceOrder]        |
+         |                   Application / Domain    |
+DB   <-- | JPA adapter <-- [Port: OrderRepository]   |
+Queue<-- | Kafka adapter<-- [Port: OrderEvents]      |
+         +-------------------------------------------+
+         Dependencies point inward: adapters know the core, never the reverse.`),
+CMP('Business logic separated from infrastructure','java',R`
+@RestController class OrderController {
+  @Autowired JdbcTemplate jdbc;
+  @PostMapping("/orders") String create(@RequestBody Map<String,Object> body) {
+    // validate, compute price, SQL insert, send Kafka message, all here
+  }
+}`,R`
+// domain / application (no Spring, no SQL)
+interface PlaceOrder { OrderId place(PlaceOrderCommand cmd); }
+interface OrderRepository { void save(Order o); }
+
+class PlaceOrderService implements PlaceOrder {
+  PlaceOrderService(OrderRepository repo, Clock clock) {...}
+  public OrderId place(PlaceOrderCommand cmd) { Order o = Order.create(cmd, clock.instant()); repo.save(o); return o.id(); }
+}
+// adapters: OrderController (web), JpaOrderRepository (persistence)`,['Business rules are unit-testable with an in-memory repository.','Swapping Jdbc for JPA, or REST for a queue, touches adapters only.'],'When it is worth it: long-lived services with real rules. For a small CRUD service, plain layers are simpler and perfectly clean.'),
+CALL('note',R`See the Spring Backend Mastery and Architecture & Distributed Systems guides in this library for the full structure with Maven modules and ArchUnit rules.`)
+]);
+
+LES('m11-patterns2','m11','Dependency boundaries in practice',3,8,[
+UL(['<b>Anti-corruption layer:</b> translate a messy external model into your domain at the edge, so its names and quirks do not leak in.','<b>Mapping:</b> map entity ↔ domain ↔ DTO by hand or with MapStruct at the boundary. Do not return JPA entities from a controller.','<b>Time and randomness:</b> inject <code>Clock</code> and ID generators; hidden <code>Instant.now()</code> makes logic untestable.','<b>Framework annotations:</b> keep them out of the core when it is cheap to do so; accept them where the cost of separation exceeds the benefit.']),
+CMP('Anti-corruption layer','java',R`
+// domain code uses a vendor's field names and codes directly
+if ("A".equals(vendorResponse.getStat()) && vendorResponse.getAmt_cents() > 0) {...}`,R`
+class VendorPaymentMapper {
+  PaymentResult toDomain(VendorResponse r) {
+    return r.getStat().equals("A") ? PaymentResult.approved(Money.ofCents(r.getAmt_cents())) : PaymentResult.declined();
+  }
+}
+// the domain only sees PaymentResult`,['The vendor\'s naming and codes stay in one class.','If the vendor changes its API, one mapper and its tests change.'],'')
+]);
+
+LES('m12-tests','m12','Unit tests, naming and Arrange-Act-Assert',1,10,[
+P(R`A good unit test is fast, isolated, repeatable, self-checking and readable. Name the behavior and write the test in three visible parts: Arrange the data, Act on the thing under test, Assert the outcome.`),
+CMP('Unclear test vs. readable test','java',R`
+@Test void test1() {
+  Cart c = new Cart(); c.add(new Item("a", 10, 2)); c.setCoupon("X");
+  assertTrue(c.getTotal() > 0);
+}`,R`
+@Test
+void applies_percentage_coupon_to_subtotal() {
+  // Arrange
+  Cart cart = Cart.of(item("A", Money.of(10), 2));
+  // Act
+  Money total = cart.withCoupon(percent(10)).total();
+  // Assert
+  assertEquals(Money.of(18), total);
+}`,['The name states the behavior, so a failure reads like a specification.','The assertion checks an exact value. <code>&gt; 0</code> would pass for many bugs.','One reason to fail per test.'],''),
+UL(['<b>Test isolation:</b> no shared mutable state, no order dependence, no real clock or network.','<b>Meaningful assertions:</b> assert behavior and outcomes, not private calls.','<b>Test data builders</b> keep setup short and intent visible.'])
+]);
+
+LES('m12-doubles','m12','Mocks, real implementations, coverage and regression',2,10,[
+TB(['Technique','Use for','Watch out for'],[
+['Real object','Pure logic, value objects, in-memory collaborators','Slow or non-deterministic collaborators'],
+['Fake (in-memory)','Repositories, queues, clocks','Fakes must behave like the real thing'],
+['Stub','Canned answers for a dependency','Over-specifying inputs'],
+['Mock','Verify an important interaction (email sent once)','Tests coupled to implementation; mock everything = test nothing'],
+['Real infrastructure (Testcontainers)','SQL, serialization, migrations','Slower; keep few and focused']]),
+P(R`<b>Coverage</b> shows what code ran, not whether anything was asserted. A line can be 100% covered and untested. Use it to find untested areas, not as a target to hit. A <b>regression test</b> is a test added when a bug is found, so it cannot come back: reproduce first, then fix.`),
+CMP('Over-mocked test','java',R`
+verify(repo).findById(1L); verify(mapper).map(any()); verify(validator).validate(any());
+// asserts the wiring, not the result`,R`
+OrderRepository repo = new InMemoryOrderRepository(existingOrder);
+PlaceOrder uc = new PlaceOrderService(repo, fixedClock);
+assertEquals(OrderStatus.PLACED, uc.place(cmd).status());`,['The second test survives refactoring because it checks behavior.'],'')
+]);
+
+LES('m12-tdd','m12','TDD and refactoring safely',2,9,[
+P(R`Test-Driven Development is a short loop: <b>Red</b> (write a failing test), <b>Green</b> (make it pass the simplest way), <b>Refactor</b> (clean up while green). It drives design toward testable code and leaves a safety net behind.`),
+CODE('java',R`
+// 1. RED
+@Test void fizz_for_multiples_of_three() { assertEquals("Fizz", FizzBuzz.of(3)); }
+// 2. GREEN
+static String of(int n) { return n % 3 == 0 ? "Fizz" : String.valueOf(n); }
+// 3. REFACTOR, then add the next test (5 -> Buzz, 15 -> FizzBuzz)`),
+UL(['<b>Refactoring safely:</b> run tests before and after every small step; commit on green; revert instead of debugging a long failed refactor.','<b>No tests yet?</b> Add characterization tests that pin current behavior, even if it looks wrong, then refactor.','<b>TDD is a tool, not a religion:</b> it shines for logic with clear rules. For exploratory UI work, test after.'])
+]);
+
+LES('m13-git','m13','Commits, pull requests and code review',1,10,[
+UL(['<b>Commits:</b> one logical change; imperative subject under ~72 characters; the body explains why. Conventional Commits (<code>feat:</code>, <code>fix:</code>) help automation.','<b>Pull requests:</b> small (a reviewer can finish in 20-30 minutes), described, linked to an issue, with tests. Separate refactors from behavior changes.','<b>Review etiquette:</b> critique the code, not the person; ask questions; explain why; mark nits as nits; praise good work; the author owns the decision and the reviewer owns a timely answer.']),
+CMP('Review comment phrasing','text',R`
+"This is wrong. Why would you do it like this?"
+"Rename this."`,R`
+"nit: could we call this 'activeUsers'? 'list' doesn't say what is in it."
+"Question: if two requests arrive together, can both pass this check? A unique constraint might close that gap."`,['The second set names the concern, offers a reason and leaves room for discussion.','Label severity: <code>nit</code>, <code>suggestion</code>, <code>blocking</code>.'],''),
+CALL('tip',R`Google's public engineering practices guide states the standard simply: approve a change when it improves the overall code health, even if it is not perfect.`)
+]);
+
+LES('m13-quality','m13','CI, static analysis, quality gates and technical debt',2,10,[
+P(R`Automate what machines do better than reviewers: formatting, simple bug patterns, dependency vulnerabilities, test execution and coverage floors. A quality gate is a rule the build enforces (for example: no failing tests, no new critical findings, coverage on changed lines above a threshold).`),
+TB(['Tool class','Examples (Java)','Catches'],[
+['Formatter','Spotless, google-java-format','Style'],
+['Linter / static analysis','Checkstyle, PMD, SpotBugs, Error Prone, SonarQube','Likely bugs, smells, complexity'],
+['Dependency scan','OWASP Dependency-Check, Dependabot','Known vulnerable libraries'],
+['Architecture tests','ArchUnit','Layer and cycle violations']]),
+H('Managing technical debt'),
+UL(['Keep a visible debt list with impact (how often we touch it, what it costs) and a trigger for repayment.','Spend a steady slice of capacity (often 10-20%) on it, or pair it with feature work in the same area.','Prioritize debt in code that changes often. Ignore ugly code that never changes.']),
+CALL('warn',R`Coverage thresholds and static-analysis scores become targets people game. Use them to spot trends, and keep humans in the loop.`)
+]);
+
+LES('m13-legacy','m13','Legacy code and safe production refactoring',3,11,[
+P(R`Michael Feathers defines legacy code as code without tests. The method for changing it safely: find a seam, get the code under test, make the change, then refactor.`),
+UL(['<b>Characterization tests:</b> call the code, observe the output, assert it. They document behavior, not correctness.','<b>Seams:</b> places where you can change behavior without editing in place (a constructor parameter, an overridable method, an interface).','<b>Strangler fig:</b> route one feature at a time to the new implementation behind the old entry point; delete the old path when unused.','<b>Branch by abstraction:</b> introduce an interface, switch callers to it, add the new implementation, flip, remove the old.','<b>Safe release:</b> feature flags, dark launches, canary release, and an easy rollback. Compare old and new outputs in production before trusting the new path.']),
+CMP('Creating a seam','java',R`
+class InvoicePrinter {
+  void print(Invoice i) { Printer p = new HardwarePrinter(); p.send(render(i)); }   // untestable
+}`,R`
+class InvoicePrinter {
+  private final Printer printer;
+  InvoicePrinter(Printer printer) { this.printer = printer; }
+  InvoicePrinter() { this(new HardwarePrinter()); }       // old callers still compile
+  void print(Invoice i) { printer.send(render(i)); }
+}`,['A second constructor keeps old callers working while tests inject a fake.'],'')
+]);
+
+LES('m14-java','m14','Java: modern idioms and Spring Boot style',2,11,[
+UL(['<b>Records</b> for immutable data carriers; <b>sealed interfaces</b> with pattern matching for closed hierarchies.','<b>Streams</b> for transformations, plain loops when there are side effects or complex control flow.','<b>Constructor injection</b> and <code>final</code> fields; avoid field <code>@Autowired</code>.','<b>try-with-resources</b>; <b>Optional</b> only as a return type.','<b>Naming:</b> classes <code>PascalCase</code>, methods and variables <code>camelCase</code>, constants <code>UPPER_SNAKE</code>, packages lowercase.']),
+CMP('Java 8 style vs modern Java','java',R`
+public class Point { private final int x, y; /* ctor, getters, equals, hashCode, toString */ }
+if (shape instanceof Circle) { Circle c = (Circle) shape; return Math.PI * c.r * c.r; }
+else if (shape instanceof Square) { Square s = (Square) shape; return s.side * s.side; }
+throw new IllegalArgumentException();`,R`
+record Point(int x, int y) {}
+sealed interface Shape permits Circle, Square {}
+record Circle(double r) implements Shape {}
+record Square(double side) implements Shape {}
+
+double area(Shape s) {
+  return switch (s) {
+    case Circle c -> Math.PI * c.r() * c.r();
+    case Square q -> q.side() * q.side();
+  };   // compiler checks every case is covered
+}`,['Boilerplate disappears and the compiler proves the switch is exhaustive.'],'Needs Java 21 for pattern matching in <code>switch</code>; records and sealed types need 16/17+.'),
+CMP('Spring Boot service','java',R`
+@Service class UserService {
+  @Autowired private UserRepository repo;
+  public User get(Long id) { return repo.findById(id).get(); }   // NoSuchElementException
+}`,R`
+@Service
+class UserService {
+  private final UserRepository repo;
+  UserService(UserRepository repo) { this.repo = repo; }
+  User get(UserId id) { return repo.findById(id.value()).orElseThrow(() -> new UserNotFound(id)); }
+}`,['Constructor injection makes the dependency explicit and testable.','A domain exception replaces <code>NoSuchElementException</code> and can map to HTTP 404 in one place.'],'')
+]);
+
+LES('m14-langs','m14','Python, JavaScript, TypeScript and C# compared',2,12,[
+P(R`The principles carry over. The idioms differ, so follow each language's norms instead of forcing Java style everywhere.`),
+TB(['Topic','Python','JavaScript','TypeScript','C#'],[
+['Naming','<code>snake_case</code> functions, <code>PascalCase</code> classes (PEP 8)','<code>camelCase</code>, <code>PascalCase</code> classes','Same as JS; types <code>PascalCase</code>','<code>PascalCase</code> methods and properties; <code>_camelCase</code> private fields (common)'],
+['Immutability','<code>@dataclass(frozen=True)</code>, tuples','<code>const</code>, <code>Object.freeze</code>','<code>readonly</code>, <code>as const</code>','<code>record</code>, <code>init</code> properties'],
+['Absence','<code>None</code>, <code>Optional[T]</code> hints','<code>null</code>/<code>undefined</code>, <code>?.</code>, <code>??</code>','<code>strictNullChecks</code>, union types','Nullable reference types, <code>?.</code>'],
+['Errors','Exceptions; EAFP style','Exceptions, rejected promises','Same; typed results are common','Exceptions; <code>IDisposable</code>/<code>using</code>'],
+['Format/Lint','Black, Ruff','Prettier, ESLint','Prettier, typescript-eslint','dotnet format, analyzers']]),
+CMP('Same refactor, four languages','text',R`
+# Python
+def total(order):
+    t = 0
+    for l in order["lines"]: t += l["p"] * l["q"]
+    return t
+
+// JavaScript
+function total(o) { let t = 0; for (const l of o.lines) t += l.p * l.q; return t; }
+
+// C#
+decimal Total(Order o) { decimal t = 0; foreach (var l in o.Lines) t += l.P * l.Q; return t; }`,R`
+# Python
+def order_total(order: Order) -> Decimal:
+    return sum((line.unit_price * line.quantity for line in order.lines), Decimal(0))
+
+// TypeScript
+const orderTotal = (order: Order): number =>
+  order.lines.reduce((sum, line) => sum + line.unitPrice * line.quantity, 0);
+
+// C#
+decimal OrderTotal(Order order) => order.Lines.Sum(line => line.UnitPrice * line.Quantity);`,['Names say what and in which unit; types document the contract.','Each language uses its own idiom (generator, <code>reduce</code>, LINQ) instead of a literal translation.'],'Use integer minor units or a decimal/Money type for currency in every language; avoid binary floating point.')
+]);
+
+LES('m15-rest','m15','Cases: REST API, Spring service, large controller',3,13,[
+CALL('note',R`Each case shows the original, the refactor, the reasoning and the expected benefit. Benefits are expectations from common outcomes, not measured results from your system. Measure your own.`),
+H('Case 1: A poorly written REST API'),
+CMP('Verbs in URLs, wrong status codes, leaking entities','java',R`
+@PostMapping("/getUser") public Map<String,Object> getUser(@RequestBody Map<String,String> b) {
+  User u = repo.findById(Long.parseLong(b.get("id"))).get();
+  return Map.of("status", "ok", "data", u);      // always 200, exposes entity incl. passwordHash
+}`,R`
+@GetMapping("/users/{id}")
+ResponseEntity<UserResponse> get(@PathVariable long id) {
+  return ResponseEntity.ok(UserResponse.from(service.get(new UserId(id))));
+}
+@ExceptionHandler(UserNotFound.class) ProblemDetail notFound(UserNotFound e) { return ProblemDetail.forStatus(404); }`,['Resource URL with the right HTTP method; the response type is explicit.','The DTO stops sensitive fields leaking.','Errors map to proper status codes in one handler.'],'Expected benefit: fewer client workarounds, safer output, and an API that tools can document.'),
+H('Case 2: Improving a Spring Boot service'),
+CMP('Transaction and logic mixed in a controller-service blob','java',R`
+@Transactional public void approve(Long id) {
+  Loan l = em.find(Loan.class, id);
+  if (l.getAmount() > 10000 && !l.getUser().getRole().equals("MANAGER")) throw new RuntimeException("no");
+  l.setStatus("APPROVED"); emailClient.send(l.getUser().getEmail(), "ok");   // email inside DB transaction
+}`,R`
+@Transactional public void approve(LoanId id, Approver by) {
+  Loan loan = loans.get(id);
+  loan.approveBy(by);                     // rule lives in the domain
+  loans.save(loan);
+  events.publish(new LoanApproved(id));   // email sent after commit by a listener
+}`,['The approval rule moved into <code>Loan</code>, where it is unit-testable.','Sending email after commit avoids holding a transaction open on a slow network call and avoids mailing for rolled-back work.'],'Expected benefit: faster tests, fewer production incidents from slow external calls.'),
+H('Case 3: Refactoring a large controller'),
+CMP('Fat controller to thin controller','java',R`
+@PostMapping("/orders") public String create(@RequestBody OrderReq r) {
+  if (r.items == null || r.items.isEmpty()) return "error";
+  double t = 0; for (ItemReq i : r.items) t += catalog.price(i.sku) * i.qty;
+  if (r.coupon != null) t *= 0.9;
+  jdbc.update("insert into orders ...", ...);
+  return "ok";
+}`,R`
+@PostMapping("/orders")
+ResponseEntity<OrderResponse> create(@Valid @RequestBody CreateOrderRequest req) {
+  OrderId id = placeOrder.place(req.toCommand());
+  return ResponseEntity.created(URI.create("/orders/" + id)).body(new OrderResponse(id));
+}`,['Controller: parse, validate, call, map. Nothing else.','Pricing and persistence live in the use case and repository.'],'Expected benefit: the business rule can be tested without starting a web server.')
+]);
+
+LES('m15-dup','m15','Cases: duplicate logic, database code, payment service',3,13,[
+H('Case 4: Removing duplicate business logic'),
+CMP('Tax rule copied in three places','java',R`
+// InvoiceService
+double tax = country.equals("DE") ? net * 0.19 : country.equals("FR") ? net * 0.20 : 0;
+// QuoteService: same expression; CartService: same expression, but DE is 0.16 (stale)`,R`
+class TaxPolicy { Money taxOn(Money net, Country c) { return net.times(rates.rateFor(c)); } }
+// all three services call TaxPolicy; rates come from one table`,['One source of truth; the stale 0.16 bug cannot exist.'],'Expected benefit: a rate change is one edit with one test.'),
+H('Case 5: Improving database interaction code'),
+CMP('N+1 queries and string-built SQL','java',R`
+List<Order> orders = repo.findAll();
+for (Order o : orders) total += o.getCustomer().getTier().discount();   // lazy load per row
+jdbc.query("select * from users where name = '" + name + "'", ...);     // SQL injection`,R`
+@Query("select o from Order o join fetch o.customer c where o.status = :status")
+List<Order> findWithCustomer(@Param("status") OrderStatus status);
+
+jdbc.query("select id, name from users where name = ?", mapper, name);`,['A fetch join loads the data in one query instead of N+1.','Bind parameters prevent SQL injection and select only needed columns.'],'Expected benefit: query count per request drops sharply (verify with a query log), and injection risk is removed.'),
+H('Case 6: Refactoring a payment processing service'),
+CMP('Payment with mixed concerns and no idempotency','java',R`
+public boolean pay(String card, double amount) {
+  try { stripe.charge(card, amount); db.update("set paid=1"); return true; }
+  catch (Exception e) { return false; }      // was the card charged? unknown
+}`,R`
+public PaymentResult pay(PaymentCommand cmd) {
+  return payments.findByKey(cmd.idempotencyKey())
+      .orElseGet(() -> charge(cmd));          // retry-safe
+}
+private PaymentResult charge(PaymentCommand cmd) {
+  try {
+    ChargeResult r = gateway.charge(cmd.token(), cmd.amount(), cmd.idempotencyKey());
+    return payments.save(PaymentResult.from(r));
+  } catch (GatewayTimeout e) { return payments.save(PaymentResult.pending(cmd)); }   // reconcile later
+}`,['<code>Money</code> and tokens replace <code>double</code> and raw card numbers.','An idempotency key makes retries safe. Explicit states (approved, declined, pending) replace a boolean.'],'Expected benefit: no double charges on retry and a clear path to reconcile unknown outcomes.')
+]);
+
+LES('m15-legacy','m15','Cases: exceptions, God class, legacy codebase',3,13,[
+H('Case 7: Improving exception handling in a backend application'),
+CMP('Catch-all handlers','java',R`
+@GetMapping("/orders/{id}") Order get(@PathVariable long id) {
+  try { return service.get(id); } catch (Exception e) { e.printStackTrace(); return null; }
+}`,R`
+@GetMapping("/orders/{id}") OrderResponse get(@PathVariable long id) { return OrderResponse.from(service.get(new OrderId(id))); }
+
+@RestControllerAdvice class ApiErrors {
+  @ExceptionHandler(OrderNotFound.class) ProblemDetail notFound(OrderNotFound e) { return ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, e.getMessage()); }
+  @ExceptionHandler(Exception.class) ProblemDetail unexpected(Exception e) { log.error("Unhandled", e); return ProblemDetail.forStatus(500); }
+}`,['Clients get consistent errors; logs get the stack trace once.','Controllers lose the try/catch noise.'],'Expected benefit: uniform API errors and faster incident triage.'),
+H('Case 8: Breaking down a God class'),
+CODE('text',R`
+Before: OrderManager (2,400 lines)  validate + price + persist + email + pdf + audit
+Steps (each one a green, committed step):
+ 1. Characterization tests around the public methods.
+ 2. Extract Class: OrderPricing        (move price methods, delegate from OrderManager)
+ 3. Extract Class: OrderNotifier       (email)
+ 4. Extract Class: InvoicePdfRenderer  (pdf)
+ 5. Move persistence to OrderRepository
+ 6. OrderManager now only coordinates -> rename it PlaceOrderService
+After: 5 classes, each under ~300 lines, each testable alone.`),
+P(R`Reasoning: extract the parts with the clearest seams first, keep delegation methods during the transition, and delete them once callers migrate. Expected benefit: smaller merge conflicts and independent tests per concern.`),
+H('Case 9: Improving an existing legacy codebase'),
+UL(['<b>Map:</b> find the change hot spots (version control history) and the bug hot spots. Work there first.','<b>Protect:</b> characterization tests around those areas.','<b>Cut:</b> introduce seams, extract the first services, route through a strangler.','<b>Guard:</b> add formatter, linter and a CI gate so new code does not regress.','<b>Measure:</b> track lead time, change failure rate and flaky tests, not just lines refactored.'])
+]);
+/* ---------- QUIZ BANK ---------- */
+const TF=['True','False'];
+const QUIZ=[
+{id:'q1',topic:'m01',type:'mcq',q:'Which best describes clean code?',opts:['Code with the fewest lines','Code another developer can read, change and trust without asking the author','Code that uses the most design patterns','Code with 100% test coverage'],a:1,why:'Clean code is judged by readers and future changers. Line count, patterns and coverage are not the definition.'},
+{id:'q2',topic:'m01',type:'tf',q:'The Boy Scout Rule says to rewrite a whole module whenever you touch it.',opts:TF,a:1,why:'It says to leave the code a little cleaner than you found it: small, local improvements.'},
+{id:'q3',topic:'m01',type:'scenario',q:'A teammate adds three interfaces and a factory for a feature that has exactly one implementation and no planned variation. Best response?',opts:['Approve; abstractions are always good','Ask what change the abstraction makes cheaper; suggest extracting it when a second case appears','Reject all interfaces in the project','Add more layers for consistency'],a:1,why:'Abstractions cost indirection. Extract on a real second variation, supported by tests.'},
+{id:'q4',topic:'m02',type:'mcq',q:'Which boolean name is best?',opts:['flag','status','isEligibleForRefund','notDisabled'],a:2,why:'It reads as a true/false statement and is positive. "notDisabled" forces double negatives.'},
+{id:'q5',topic:'m02',type:'smell',q:'<code>class DataManager { void process() {...} }</code> has which naming problem?',opts:['Too long','Vague noise words; the name does not say the responsibility','It should start with I','Methods must be nouns'],a:1,why:'"Data", "Manager" and "process" say nothing. Name the responsibility.'},
+{id:'q6',topic:'m03',type:'mcq',q:'What is wrong with <code>render(true, false)</code> at a call site?',opts:['Nothing','The booleans are flag arguments with no meaning at the call site','Booleans are not allowed','It must be static'],a:1,why:'Flag arguments hide intent and imply the function does two things. Split it or use named types.'},
+{id:'q7',topic:'m03',type:'bug',q:'Find the problem:',code:R`boolean isValid(User u) {
+  if (u.age() < 18) { u.setStatus("MINOR"); return false; }
+  return true;
+}`,opts:['Wrong comparison operator','A query named isValid has a side effect (changes status)','Missing null check','Should return int'],a:1,why:'This violates command-query separation. A name starting with "is" promises no change.'},
+{id:'q8',topic:'m03',type:'tf',q:'Guard clauses reduce nesting by handling special cases first and returning early.',opts:TF,a:0,why:'That is exactly the technique.'},
+{id:'q9',topic:'m04',type:'mcq',q:'"Tell, don\'t ask" encourages you to:',opts:['Expose getters so callers can decide','Let the object that owns the data perform the behavior','Use more comments','Prefer static methods'],a:1,why:'Put behavior with data to keep invariants in one place.'},
+{id:'q10',topic:'m04',type:'scenario',q:'<code>class Stack extends ArrayList</code> exposes <code>add(index, x)</code>. Which fix fits best?',opts:['Add a comment saying do not use add(index)','Use composition: hold a Deque and expose only push/pop','Make Stack final','Rename to StackList'],a:1,why:'Composition limits the public API to the intended operations.'},
+{id:'q11',topic:'m05',type:'mcq',q:'A switch on type that must be edited for each new variant mainly violates:',opts:['Single Responsibility','Open/Closed','Interface Segregation','Liskov Substitution'],a:1,why:'New behavior requires editing existing code, so it is not closed to modification. Polymorphism or a strategy fixes it.'},
+{id:'q12',topic:'m05',type:'smell',q:'A <code>Penguin extends Bird</code> whose <code>fly()</code> throws <code>UnsupportedOperationException</code> signals a violation of:',opts:['DIP','LSP','SRP','OCP'],a:1,why:'Callers expecting any Bird to fly break. The hierarchy models taxonomy, not behavior.'},
+{id:'q13',topic:'m05',type:'mcq',q:'Dependency Inversion means:',opts:['Use a DI framework','High-level policy and low-level details both depend on abstractions owned by the high-level side','Invert the class hierarchy','Never use concrete classes'],a:1,why:'DI frameworks are a technique, not the principle.'},
+{id:'q14',topic:'m05',type:'tf',q:'Interface Segregation suggests splitting a fat interface along real client needs.',opts:TF,a:0,why:'Clients should not depend on methods they do not use.'},
+{id:'q15',topic:'m06',type:'smell',q:'A method that uses five getters of another class and little of its own data shows:',opts:['Data clumps','Feature envy','Dead code','Divergent change'],a:1,why:'It belongs on the class it envies (Move Method).'},
+{id:'q16',topic:'m06',type:'smell',q:'Adding one new order type requires editing six classes. That is:',opts:['Shotgun surgery','God object','Primitive obsession','Speculative generality'],a:0,why:'One change scatters across many classes; the concept is not in one place.'},
+{id:'q17',topic:'m06',type:'mcq',q:'Which is a legitimate reason to leave duplicate code alone?',opts:['It is faster to type','The two copies change for different reasons and may diverge','It has no tests','The author is senior'],a:1,why:'Merging code that only looks alike creates wrong coupling. Wait for the third occurrence.'},
+{id:'q18',topic:'m06',type:'bug',q:'Identify the smell:',code:R`void transfer(String from, String to, double amount) {...}
+transfer(toId, fromId, 50.0);`,opts:['Dead code','Primitive obsession (strings and double for domain concepts)','Deep nesting','God object'],a:1,why:'Two String IDs can be swapped silently and double is wrong for money. Use AccountId and Money types.'},
+{id:'q19',topic:'m07',type:'bug',q:'What is the bug?',code:R`try { save(order); }
+catch (Exception e) { }`,opts:['Missing finally','Swallowed exception hides failures','Should use a loop','Order must be static'],a:1,why:'An empty catch loses the error. Handle, log with the stack trace, or rethrow with the cause.'},
+{id:'q20',topic:'m07',type:'tf',q:'<code>Optional</code> is intended mainly as a return type, not for fields or parameters.',opts:TF,a:0,why:'That is the stated design intent in the Java documentation and widely followed practice.'},
+{id:'q21',topic:'m07',type:'mcq',q:'Fail-fast means:',opts:['Exit the program on any error','Detect invalid input or state at the boundary and stop early with a clear error','Retry quickly','Skip validation for speed'],a:1,why:'Early, clear failures are easier to diagnose than corrupted data found later.'},
+{id:'q22',topic:'m08',type:'mcq',q:'Which comment is most valuable?',opts:['// increment i','// loop through users','// Sandbox returns 429 without Retry-After, so we back off 200 ms','// end of if'],a:2,why:'It records a non-obvious external constraint, the kind of "why" code cannot show.'},
+{id:'q23',topic:'m10',type:'mcq',q:'Refactoring is:',opts:['Rewriting for new features','Changing structure without changing observable behavior','Fixing bugs','Optimizing performance'],a:1,why:'Behavior stays the same; structure improves. Tests verify it.'},
+{id:'q24',topic:'m10',type:'scenario',q:'You must refactor code with no tests. First step?',opts:['Start extracting methods','Write characterization tests that pin current behavior','Rewrite it','Delete the unclear parts'],a:1,why:'Tests are the safety net. Pin current behavior first.'},
+{id:'q25',topic:'m11',type:'mcq',q:'In hexagonal architecture, who owns the repository interface?',opts:['The database adapter','The application/domain core','The web layer','The ORM'],a:1,why:'The core defines the port; adapters implement it, so dependencies point inward.'},
+{id:'q26',topic:'m12',type:'mcq',q:'High line coverage proves:',opts:['The code is correct','Lines were executed, not that behavior was verified','No bugs exist','Tests are good'],a:1,why:'Coverage shows execution only; assertions decide quality.'},
+{id:'q27',topic:'m12',type:'tf',q:'A test that verifies five mock interactions but checks no result is a robust refactoring safety net.',opts:TF,a:1,why:'It is coupled to implementation and breaks on harmless refactors.'},
+{id:'q28',topic:'m13',type:'scenario',q:'A 1,800-line pull request mixes a refactor and a new feature. Best action?',opts:['Approve quickly','Ask to split into a refactor PR and a feature PR','Reject permanently','Add reviewers until someone approves'],a:1,why:'Smaller, single-purpose PRs are reviewable and easy to revert.'},
+{id:'q29',topic:'m14',type:'mcq',q:'Which is idiomatic naming in Python (PEP 8)?',opts:['calculateTotal()','calculate_total()','CalculateTotal()','calculate-total()'],a:1,why:'PEP 8 recommends snake_case for functions and variables.'},
+{id:'q30',topic:'m15',type:'code',q:'Short exercise: rewrite <code>if (u != null) { if (u.active()) { if (u.email() != null) send(u.email()); } }</code> using guard clauses.',model:R`if (u == null || !u.active() || u.email() == null) return;
+send(u.email());`,why:'Special cases exit first, leaving one unindented happy path. Splitting into three separate guard lines is also fine.'},
+{id:'q31',topic:'m03',type:'code',q:'Short exercise: replace the flag argument in <code>void log(String msg, boolean error)</code> with a clearer design.',model:R`void info(String msg) {...}
+void error(String msg) {...}`,why:'Two methods express two behaviors. An enum Level parameter is another valid design.'},
+{id:'q32',topic:'m07',type:'code',q:'Short exercise: write the Java statement that ensures an <code>email</code> parameter is not null and fails with a helpful message.',model:R`Objects.requireNonNull(email, "email must not be null");`,why:'Fail at the boundary with a message that names the problem.'}
+];
+
+/* ---------- SMELL DETECTOR ---------- */
+const SMELLX=[
+{id:'sd1',title:'Order processor',level:1,code:R`public class OrderProcessor {
+  public double proc(List<Object[]> d, String t, boolean f) {
+    double r = 0;
+    for (int i = 0; i < d.size(); i++) {
+      if (d.get(i)[2].equals(t)) {
+        r += (double) d.get(i)[0] * (int) d.get(i)[1];
+        if (f) { r = r * 0.9; }
+      }
+    }
+    // send email
+    EmailClient.getInstance().send("admin@shop.com", "done");
+    return r;
+  }
+}`,findings:[
+{t:'Unclear names (proc, d, t, f, r)',ok:true,why:'Names say nothing about intent. Rename to something like totalFor(lines, category, applyDiscount).'},
+{t:'Flag argument f switches behavior',ok:true,why:'A boolean parameter means the method does two things.'},
+{t:'Object[] with index access and casts instead of a typed class',ok:true,why:'Primitive/structure obsession; casts can fail at runtime. Use an OrderLine type.'},
+{t:'Magic number 0.9',ok:true,why:'Name the discount and put it in a policy.'},
+{t:'Mixed responsibilities: pricing and sending email',ok:true,why:'SRP violation. A calculation method should not send mail, and it hides a side effect.'},
+{t:'Hard-wired singleton EmailClient makes it untestable',ok:true,why:'Inject a Notifier (DIP) so tests can use a fake.'},
+{t:'The for loop must be a while loop',ok:false,why:'Loop style is a preference here. The real issue is index access via casts, not for vs while.'},
+{t:'The class is too small',ok:false,why:'Size is not the problem. The responsibilities are.'}]},
+{id:'sd2',title:'Shipping calculator',level:2,code:R`double shipping(Order o) {
+  if (o.getType().equals("STANDARD")) {
+    if (o.getWeight() > 20) return 25.0;
+    return 5.0;
+  } else if (o.getType().equals("EXPRESS")) {
+    if (o.getWeight() > 20) return 45.0;
+    return 15.0;
+  } else if (o.getType().equals("PICKUP")) {
+    return 0;
+  }
+  return -1;
+}`,findings:[
+{t:'Type-switching on strings; a new type means editing this method (OCP)',ok:true,why:'Use an enum with behavior or a strategy per shipping type.'},
+{t:'Returning -1 as an error code for unknown types',ok:true,why:'Callers may add -1 to a total. Throw an exception or use a closed type.'},
+{t:'Magic numbers (20, 25.0, 5.0, 45.0, 15.0)',ok:true,why:'Rates and thresholds belong in named constants or configuration.'},
+{t:'String comparison for type; a typo compiles fine',ok:true,why:'An enum makes invalid types unrepresentable and the compiler checks coverage.'},
+{t:'double used for money',ok:true,why:'Use BigDecimal or a Money type to avoid rounding errors.'},
+{t:'Nested if inside if is a SOLID violation',ok:false,why:'Shallow nesting is not itself a SOLID problem. The real issues are listed above.'},
+{t:'Method name is too long',ok:false,why:'"shipping" is short, if slightly vague. Length is not the issue.'}]},
+{id:'sd3',title:'User service',level:3,code:R`@Service
+public class UserService {
+  @Autowired UserRepository repo;
+  @Autowired JavaMailSender mailer;
+
+  public User register(String email, String password) {
+    User u = new User();
+    u.setEmail(email);
+    u.setPassword(password);
+    repo.save(u);
+    try { mailer.send(welcome(email)); } catch (Exception e) {}
+    return u;
+  }
+
+  public String exportCsv() { /* builds CSV of all users */ }
+}`,findings:[
+{t:'Password stored without hashing',ok:true,why:'A security bug: hash with a slow password hasher (bcrypt, Argon2) before saving.'},
+{t:'No validation of email or password (fail-fast missing)',ok:true,why:'Validate at the boundary with value types or Jakarta Validation.'},
+{t:'Empty catch swallows mail failures silently',ok:true,why:'At least log it, or send the email after commit through an event.'},
+{t:'Field injection with @Autowired',ok:true,why:'Constructor injection exposes dependencies and keeps fields final.'},
+{t:'Mail sending runs in the registration flow; unrelated export method in same class (divergent change)',ok:true,why:'Registration, email and CSV export change for different reasons. Split them.'},
+{t:'Returning the entity with a password field to callers',ok:true,why:'Return a DTO without sensitive fields.'},
+{t:'The class should be an abstract class',ok:false,why:'Nothing here calls for inheritance.'}]}
+];
+
+/* ---------- REFACTORING PLAYGROUND ---------- */
+const REFX=[
+{id:'rf1',title:'Name and extract',level:1,goal:'Make the method read like the business rule. Use Rename and Extract Method.',code:R`double calc(double p, int q, boolean v) {
+  double t = p * q;
+  if (v) t = t * 0.9;
+  if (t > 500) t = t - 25;
+  return t;
+}`,hints:['What do p, q, v and t represent?','The two if statements are two pricing rules. Can each get a name?','Replace 0.9, 500 and 25 with constants.'],steps:[
+{t:'Rename for intent',c:R`double orderTotal(double unitPrice, int quantity, boolean isVip) {
+  double total = unitPrice * quantity;
+  if (isVip) total = total * 0.9;
+  if (total > 500) total = total - 25;
+  return total;
+}`},{t:'Extract the rules into named methods and constants',c:R`private static final double VIP_FACTOR = 0.9;
+private static final double BULK_THRESHOLD = 500;
+private static final double BULK_REBATE = 25;
+
+double orderTotal(double unitPrice, int quantity, boolean isVip) {
+  double total = unitPrice * quantity;
+  total = applyVipDiscount(total, isVip);
+  return applyBulkRebate(total);
+}
+private double applyVipDiscount(double total, boolean isVip) { return isVip ? total * VIP_FACTOR : total; }
+private double applyBulkRebate(double total) { return total > BULK_THRESHOLD ? total - BULK_REBATE : total; }`}],
+expected:'orderTotal(100, 6, true) → 540 - 25 = 515.0 (same as before: 600 * 0.9 = 540, then 540 > 500, minus 25). Behavior is unchanged.',explain:'Behavior is identical; each rule now has a name and a single place to change. Next step (outside this exercise): replace double with a Money type.'},
+{id:'rf2',title:'Guard clauses',level:1,goal:'Flatten the nesting using guard clauses. Keep the behavior.',code:R`String describe(User u) {
+  String r;
+  if (u != null) {
+    if (u.isActive()) {
+      if (u.email() != null) {
+        r = u.name() + " <" + u.email() + ">";
+      } else { r = u.name(); }
+    } else { r = "inactive"; }
+  } else { r = "unknown"; }
+  return r;
+}`,hints:['Handle null first and return.','Then handle inactive.','Finish with the email decision.'],steps:[
+{t:'Return early for special cases',c:R`String describe(User u) {
+  if (u == null) return "unknown";
+  if (!u.isActive()) return "inactive";
+  if (u.email() == null) return u.name();
+  return u.name() + " <" + u.email() + ">";
+}`}],expected:'describe(null) → "unknown"; inactive user → "inactive"; active without email → name; otherwise "Name <email>".',explain:'Nesting depth went from 3 to 0 and the temporary variable disappeared.'},
+{id:'rf3',title:'Replace conditional with polymorphism',level:2,goal:'Remove the type switch so a new employee type does not require editing this method.',code:R`double pay(Employee e) {
+  switch (e.type) {
+    case ENGINEER: return e.salary + e.bonus;
+    case MANAGER:  return e.salary + e.bonus + e.reports * 100;
+    case INTERN:   return e.stipend;
+    default: throw new IllegalArgumentException();
+  }
+}`,hints:['Each case is a different behavior of the same concept.','Create an abstract method pay() on a base type or interface.','Each subtype owns the formula it needs.'],steps:[
+{t:'Introduce an interface and move each branch',c:R`interface Employee { double pay(); }
+record Engineer(double salary, double bonus) implements Employee { public double pay() { return salary + bonus; } }
+record Manager(double salary, double bonus, int reports) implements Employee {
+  public double pay() { return salary + bonus + reports * 100; } }
+record Intern(double stipend) implements Employee { public double pay() { return stipend; } }`},
+{t:'Callers just call pay()',c:R`double total = employees.stream().mapToDouble(Employee::pay).sum();`}],expected:'new Manager(5000, 1000, 3).pay() → 6300.0. Adding a Contractor means adding one record.',explain:'The switch statement is gone and the compiler enforces that every type defines pay(). If the set of types is closed and small, a sealed interface with pattern matching is an equally good alternative.'},
+{id:'rf4',title:'Break up a service class',level:3,goal:'Split this class by responsibility and inject dependencies.',code:R`public class ReportService {
+  public void sendMonthlyReport(int userId) {
+    Connection c = DriverManager.getConnection("jdbc:...");
+    ResultSet rs = c.createStatement().executeQuery("select * from sales where user_id=" + userId);
+    StringBuilder sb = new StringBuilder("<html>");
+    while (rs.next()) sb.append("<p>").append(rs.getString("item")).append("</p>");
+    new SmtpMailer("smtp.corp").send(userId + "@corp.com", sb.append("</html>").toString());
+  }
+}`,hints:['Count the jobs: query data, render HTML, send mail.','Which of those is infrastructure, and which is policy?','Define small interfaces the report use case depends on.','Fix the SQL string concatenation while you are there.'],steps:[
+{t:'Define ports',c:R`interface SalesQuery { List<Sale> forUser(UserId id); }
+interface ReportRenderer { String render(List<Sale> sales); }
+interface Mailer { void send(Address to, String subject, String body); }`},
+{t:'Use case coordinates; adapters do the work',c:R`class MonthlyReport {
+  private final SalesQuery sales; private final ReportRenderer renderer; private final Mailer mailer;
+  MonthlyReport(SalesQuery s, ReportRenderer r, Mailer m) { sales = s; renderer = r; mailer = m; }
+  void sendTo(User user) {
+    mailer.send(user.address(), "Monthly report", renderer.render(sales.forUser(user.id())));
+  }
+}
+// JdbcSalesQuery uses a PreparedStatement: "select item from sales where user_id = ?"`}],expected:'A test builds MonthlyReport with fake SalesQuery, a StubRenderer and a recording Mailer, and asserts one email was sent to the user.',explain:'Three jobs became three collaborators. The use case is 4 lines and fully testable. The SQL injection is fixed by a bound parameter inside the JDBC adapter.'}
+];
+
+/* ---------- CODE REVIEW SIMULATOR ---------- */
+const PRS=[
+{id:'pr1',title:'PR #214: Add loyalty points to checkout',desc:'Adds points when an order is placed. Author note: "works on my machine, ready for review."',lines:[
+'class CheckoutService {','  @Autowired UserRepo repo;','','  public double doCheckout(Cart c, int uid, boolean pts) {','    User u = repo.findById(uid).get();','    double t = 0;','    for (Item i : c.items) t += i.price * i.qty;','    if (pts) {','      u.points = u.points + (int) (t / 10);','      repo.save(u);','    }','    System.out.println("done " + t);','    return t;','  }','}'],
+issues:[
+{l:1,sev:'suggestion',c:'Question: this class pricing, loyalty and persistence? Consider separating loyalty points into its own collaborator so checkout has one reason to change.'},
+{l:3,sev:'suggestion',c:'Prefer constructor injection. It makes dependencies visible and the class easy to test.'},
+{l:4,sev:'nit',c:'<code>doCheckout</code>, <code>uid</code>, <code>pts</code> are vague. Also the boolean flag changes behavior; could the loyalty step be its own method or object?'},
+{l:5,sev:'blocking',c:'<code>.get()</code> on an Optional throws a bare <code>NoSuchElementException</code> when the user is missing. Use <code>orElseThrow(() -> new UserNotFound(uid))</code>.'},
+{l:7,sev:'blocking',c:'<code>double</code> for money will produce rounding errors. Use BigDecimal or a Money type. Price calculation could live on <code>Cart</code>.'},
+{l:9,sev:'suggestion',c:'Magic number 10 (points per 10 currency units). Name it, and consider <code>u.earnPoints(...)</code> so the rule lives on the user instead of editing a public field.'},
+{l:12,sev:'nit',c:'Use a logger, not <code>System.out</code>. Also avoid logging order totals if they are sensitive.'}],
+tips:['Lead with questions and reasons.','Separate blocking issues from nits and say which is which.','Say what is good, too: here the loyalty feature has a clear business purpose.']},
+{id:'pr2',title:'PR #301: Export orders endpoint',desc:'New REST endpoint that returns orders by status. "Quick one, needed for the dashboard."',lines:[
+'@RestController','public class OrderController {','  @Autowired JdbcTemplate jdbc;','','  @GetMapping("/getOrders")','  public List<Map<String,Object>> getOrders(@RequestParam String status) {','    return jdbc.queryForList("select * from orders where status = \'" + status + "\'");','  }','','  @GetMapping("/orders/count")','  public int count() {','    return jdbc.queryForObject("select count(*) from orders", Integer.class);','  }','}'],
+issues:[
+{l:3,sev:'suggestion',c:'The controller talks directly to JDBC. A service or repository would keep HTTP concerns out of data access and make this testable.'},
+{l:5,sev:'suggestion',c:'REST style: use a noun path and the HTTP method for the verb, e.g. <code>GET /orders?status=SHIPPED</code>.'},
+{l:6,sev:'suggestion',c:'Returning raw maps exposes every column and has no stable contract. Return a DTO with only the needed fields, and add pagination.'},
+{l:7,sev:'blocking',c:'SQL injection: <code>status</code> is concatenated into the query. Use a bind parameter (<code>?</code>) or Spring Data. This must be fixed before merge.'},
+{l:7,sev:'suggestion',c:'<code>select *</code> returns all columns, including any that should not leave the service. List the columns you need.'},
+{l:11,sev:'nit',c:'<code>queryForObject</code> can return null. For a count it is safe, but prefer returning a <code>long</code>.'}],
+tips:['Security issues are blocking, and the comment should explain the exploit in a sentence.','Offer the fix, not just the problem.','Keep tone collaborative: "we" and questions, not accusations.']}
+];
+
+/* ---------- INTERVIEW ---------- */
+const INTERVIEW=[
+{id:'i1',level:1,cat:'Fundamentals',q:'What makes code "clean"?',a:R`Code that other developers can understand, change and test with low effort. It is readable (clear names, small focused functions), has low duplication, expresses intent, and is covered by tests. Example: replacing <code>Object[]</code> index access with typed <code>OrderLine</code> objects. Add that clean is contextual; a one-off script does not need the same investment as a long-lived service.`},
+{id:'i2',level:1,cat:'Fundamentals',q:'What is technical debt and how do you manage it?',a:R`Extra future cost caused by shortcuts or decay. Make it visible (tickets with owners and triggers), prioritize by how often the code changes, pay down steadily (a capacity slice or the Boy Scout Rule), and avoid reckless debt. Deliberate, recorded debt to hit a deadline can be a reasonable trade.`},
+{id:'i3',level:1,cat:'Naming',q:'How do you name a method that returns a boolean?',a:R`As a true/false statement in positive form: <code>isActive</code>, <code>hasPermission</code>, <code>canRetry</code>. Avoid negatives like <code>isNotDisabled</code> because they force mental inversion.`},
+{id:'i4',level:1,cat:'Functions',q:'Why avoid flag arguments?',a:R`A boolean that switches behavior means the function does two things and the call site (<code>render(true)</code>) is unreadable. Split into two methods, or use an enum or parameter object. In languages with named arguments the problem is smaller.`},
+{id:'i5',level:2,cat:'Java',q:'When would you use a record, and when not?',a:R`Use for immutable data carriers with value semantics (DTOs, value objects like <code>Money</code>, map keys). Records give constructor, accessors, <code>equals</code>, <code>hashCode</code>, <code>toString</code> and can validate in a compact constructor. Avoid for entities with identity and mutable lifecycle (typical JPA entities) and where you need inheritance.`},
+{id:'i6',level:2,cat:'Java',q:'Optional: where is it appropriate?',a:R`As a return type signaling that absence is expected. Not for fields, method parameters or collection elements; use an empty collection instead of <code>Optional<List></code>. Avoid <code>get()</code> without a check; prefer <code>orElseThrow</code>, <code>map</code>, <code>orElse</code>.`},
+{id:'i7',level:2,cat:'SOLID',q:'Explain the Open/Closed Principle with an example.',a:R`Extend behavior without modifying existing, tested code. A discount calculator with a <code>switch</code> on customer tier needs editing for each tier. Replace with a <code>DiscountPolicy</code> interface (or enum with behavior); new tiers are new implementations. Caveat: do not add extension points before a second variation exists.`},
+{id:'i8',level:2,cat:'SOLID',q:'Give a Liskov Substitution violation and a fix.',a:R`<code>Square extends Rectangle</code> with mutable setters: code that sets width and height independently breaks because <code>Square</code> couples them. Fix: immutable shapes behind a <code>Shape.area()</code> interface, or avoid the hierarchy. General signs: subclass throws <code>UnsupportedOperationException</code>, strengthens preconditions, or callers use <code>instanceof</code>.`},
+{id:'i9',level:2,cat:'SOLID',q:'Dependency Inversion vs Dependency Injection?',a:R`DIP is a design principle: high-level policy depends on abstractions it owns, and low-level details implement them. DI is a technique for supplying dependencies from outside (constructor injection). You can do DI without DIP (injecting a concrete class) and DIP without a framework.`},
+{id:'i10',level:2,cat:'Smells',q:'How do you tell shotgun surgery from divergent change?',a:R`Shotgun surgery: one change requires many small edits across many classes (a concept is scattered). Divergent change: one class changes for many unrelated reasons (several concepts in one place). Fixes go in opposite directions: gather scattered logic (Move Method, Extract Class), or split the class.`},
+{id:'i11',level:2,cat:'Refactoring',q:'How do you refactor safely?',a:R`Have tests (characterization tests if none), work in small steps, run tests after each, commit on green, use IDE refactorings, keep refactors separate from behavior changes, and revert rather than debug a long failed refactor. For production risk, use feature flags and compare old and new outputs.`},
+{id:'i12',level:2,cat:'Error handling',q:'Checked or unchecked exceptions?',a:R`Checked exceptions force handling at compile time but leak through layers and break lambdas. Most modern Java codebases use unchecked domain exceptions, translate low-level exceptions at boundaries, preserve the cause, and handle errors once at a boundary (e.g. a controller advice). Use checked for recoverable conditions callers should handle.`},
+{id:'i13',level:2,cat:'Testing',q:'Mock or real implementation?',a:R`Prefer real objects or fakes for logic and in-memory collaborators; they test behavior and survive refactoring. Use mocks to verify important interactions with external systems (an email sent once) or when real ones are slow or non-deterministic. Over-mocking couples tests to implementation.`},
+{id:'i14',level:2,cat:'Testing',q:'Does 100% coverage mean good tests?',a:R`No. Coverage shows executed lines, not asserted behavior. A test with no assertion can reach 100%. Use coverage to find untested code, together with mutation testing or review of assertions for quality.`},
+{id:'i15',level:3,cat:'Design',q:'Your team wants an interface and factory for every class. Respond.',a:R`Ask what change each abstraction makes cheaper. Abstract at real seams: boundaries (DB, network, clock), real variation, or test isolation. For a single stable implementation, the abstraction costs navigation and hides logic. Propose extracting when a second implementation or a test need appears.`},
+{id:'i16',level:3,cat:'Architecture',q:'When is hexagonal/clean architecture not worth it?',a:R`For small CRUD services with little business logic, short-lived tools, or prototypes, the extra interfaces and mapping outweigh the benefit. It pays off in long-lived systems with real rules, multiple adapters, or a need to test logic without infrastructure.`},
+{id:'i17',level:3,cat:'Design',q:'Composition vs inheritance: how do you decide?',a:R`Inheritance only for a genuine is-a relationship with a stable contract the subclass fully honors (LSP). Otherwise composition: it hides unneeded API, lets you swap behavior at runtime and avoids the fragile base class problem. Example: <code>Stack</code> holding a <code>Deque</code> rather than extending <code>ArrayList</code>.`},
+{id:'i18',level:3,cat:'Legacy',q:'You inherit a 3,000-line class with no tests. Plan?',a:R`1) Find hot spots from version control and bug history. 2) Add characterization tests around the parts you will change. 3) Find seams (constructor parameters, extract interfaces). 4) Extract classes with the clearest responsibility, keeping delegation until callers move. 5) Add CI, formatter and linter so it does not regress. 6) Measure change lead time and failures.`},
+{id:'i19',level:3,cat:'Review',q:'You find a security flaw in a colleague\'s PR. How do you comment?',a:R`Mark it blocking, explain the exploit in one or two sentences, link a fix or give a snippet, and stay collaborative: "This concatenates user input into SQL, so <code>status=' OR '1'='1</code> returns all rows. Could we use a bind parameter?" Critique the code, not the person.`},
+{id:'i20',level:3,cat:'Scenario',q:'Two services share duplicated pricing logic and keep drifting. What do you do?',a:R`Identify the single owner of the rule. If both services are in one codebase, extract a shared policy class with tests. Across services, avoid a shared library coupling if teams deploy independently: make one service the owner and call it, or publish the rule as a versioned library with a deprecation policy. Add a test that compares both until the duplication is removed.`},
+{id:'i21',level:1,cat:'Comments',q:'When should you write a comment?',a:R`To explain why: intent, non-obvious constraints, warnings, legal notices, public API contracts. Not to restate what the code does. First try to express it with a better name or an extracted method.`},
+{id:'i22',level:2,cat:'Practice',q:'How do you keep refactors from blocking feature delivery?',a:R`Refactor in the area you are changing (Boy Scout), keep refactor commits separate from behavior changes, ship in small PRs, and schedule larger debt items with a clear payoff such as less time per change in a hot area.`}
+];
+
+/* ---------- PATHS ---------- */
+const PATHS=[
+{id:'beginner',name:'Beginner',time:'about 2.5 hours',pre:'Basic programming in any language.',lessons:['m01-what','m02-intent','m02-kinds','m03-small','m03-nest','m09-format','m10-extract','m08-comments']},
+{id:'intermediate',name:'Intermediate',time:'about 4 hours',pre:'Beginner path and comfort writing classes.',lessons:['m05-srp','m05-ocp','m05-lsp','m05-isp','m05-dip','m06-size','m06-data','m06-coupling','m07-errors','m07-null','m12-tests','m12-doubles','m11-patterns']},
+{id:'advanced',name:'Advanced',time:'about 4 hours',pre:'Intermediate path.',lessons:['m04-cohesion','m04-compose','m04-god','m11-arch','m11-patterns2','m13-legacy','m09-org','m15-legacy','m06-design']},
+{id:'backend',name:'Professional Backend Developer',time:'about 5 hours',pre:'Intermediate path and a Java/Spring project.',lessons:['m14-java','m04-compose','m11-arch','m15-rest','m15-dup','m07-errors','m12-doubles','m13-git','m13-quality','m15-legacy']}
+];
+
+/* ---------- RESOURCES ---------- */
+/* ver: true = the link was opened and its title confirmed while building this page; false = the URL is widely published but was not reachable for a check from the build environment. */
+const RESOURCES=[
+{t:'Refactoring (2nd ed.)',by:'Martin Fowler',type:'Book',lvl:'Intermediate',d:'The standard catalog of behavior-preserving transformations with motivations and mechanics.',url:'https://martinfowler.com/books/refactoring.html',ver:true},
+{t:'Refactoring Catalog',by:'Martin Fowler',type:'Online reference',lvl:'Intermediate',d:'Online index of the refactorings from the book.',url:'https://refactoring.com/catalog/',ver:false},
+{t:'Technical Debt (bliki)',by:'Martin Fowler',type:'Article',lvl:'Beginner',d:'Short explanation of the technical debt metaphor and its quadrants.',url:'https://martinfowler.com/bliki/TechnicalDebt.html',ver:true},
+{t:'Google Engineering Practices',by:'Google',type:'Industry guide',lvl:'Intermediate',d:'Public code review guidelines: how to review and how to write small changes.',url:'https://google.github.io/eng-practices/',ver:false},
+{t:'Google Java Style Guide',by:'Google',type:'Style guide',lvl:'Beginner',d:'Formatting and naming conventions for Java source.',url:'https://google.github.io/styleguide/javaguide.html',ver:true},
+{t:'OWASP Secure Coding Practices Quick Reference Guide',by:'OWASP',type:'Industry guide',lvl:'Intermediate',d:'Checklist-style secure coding requirements for input validation, auth, errors and more.',url:'https://owasp.org/www-project-secure-coding-practices-quick-reference-guide/',ver:true},
+{t:'Architectural Decision Records',by:'ADR community',type:'Community',lvl:'Beginner',d:'Templates and tools for recording architecture decisions.',url:'https://adr.github.io/',ver:true},
+{t:'PEP 8: Style Guide for Python Code',by:'Python Software Foundation',type:'Official documentation',lvl:'Beginner',d:'Official Python style conventions.',url:'https://peps.python.org/pep-0008/',ver:false},
+{t:'C# Coding Conventions',by:'Microsoft Learn',type:'Official documentation',lvl:'Beginner',d:'Microsoft\'s recommended C# conventions.',url:'https://learn.microsoft.com/en-us/dotnet/csharp/fundamentals/coding-style/coding-conventions',ver:false},
+{t:'Conventional Commits 1.0.0',by:'conventionalcommits.org',type:'Specification',lvl:'Beginner',d:'A lightweight convention for commit messages.',url:'https://www.conventionalcommits.org/en/v1.0.0/',ver:false},
+{t:'Refactoring.Guru',by:'Refactoring.Guru',type:'Community / tutorial',lvl:'Beginner',d:'Illustrated explanations of design patterns and code smells.',url:'https://refactoring.guru/',ver:false},
+{t:'Clean Code: A Handbook of Agile Software Craftsmanship',by:'Robert C. Martin',type:'Book',lvl:'Beginner',d:'Naming, functions, comments and error handling. Some advice is opinionated; read critically.',url:null},
+{t:'The Pragmatic Programmer',by:'David Thomas and Andrew Hunt',type:'Book',lvl:'Beginner',d:'Practical habits for professional developers (DRY, orthogonality, tracer bullets).',url:null},
+{t:'Working Effectively with Legacy Code',by:'Michael Feathers',type:'Book',lvl:'Advanced',d:'Techniques for getting untested code under test: seams, characterization tests, dependency breaking.',url:null},
+{t:'A Philosophy of Software Design',by:'John Ousterhout',type:'Book',lvl:'Intermediate',d:'Argues for deep modules and managing complexity; a useful counterpoint to very small functions.',url:null}
+];
+const REF=[
+{id:'r-clean',t:'Clean Code checklist',items:['Names reveal intent and are searchable','Functions do one thing at one level of abstraction','No duplicated rules; no dead code','No magic numbers or strings','Errors are handled once, with context','Comments explain why, not what','Formatting is automated','Tests exist and read like specifications','Dependencies point toward business code']},
+{id:'r-solid',t:'SOLID cheat sheet',items:['S: one reason to change (one actor)','O: add behavior by adding code, not editing tested code','L: subtypes honor the base contract; no surprises for callers','I: small role-based interfaces; clients depend only on what they use','D: policy owns the abstraction; details implement it','Limit: apply when there is real variation, a real boundary, or a test need']},
+{id:'r-name',t:'Naming conventions',items:['Classes: nouns, PascalCase (OrderValidator)','Methods: verb phrases, camelCase (cancelOrder)','Booleans: isX, hasX, canX in positive form','Constants: UPPER_SNAKE_CASE (Java), named for meaning','Packages: lowercase, by feature','Python: snake_case functions, PascalCase classes; C#: PascalCase methods','Avoid: Manager, Helper, Util, Data, Info, process, handle without context']},
+{id:'r-func',t:'Function design checklist',items:['Can I name it with a verb phrase that is not "and"?','0-2 arguments (3+ → parameter object)','No flag arguments','Queries do not change state; commands return nothing','Guard clauses; nesting of 2 or less','All statements at one abstraction level','Side effects are visible in the name']},
+{id:'r-class',t:'Class design checklist',items:['One responsibility; name has no "And"/"Manager"','Fields are used by most methods (cohesion)','Invariants protected; no public mutable state','Dependencies injected, not constructed inside','Small public surface','Composition preferred; inheritance honors the contract']},
+{id:'r-review',t:'Code review checklist',items:['Does it do what the PR says, and is the design sound?','Are edge cases and failures handled?','Is there a security risk (input, auth, secrets, SQL)?','Are tests meaningful and readable?','Are names clear? Is anything over-engineered?','Is it small enough to review? Are refactors separate?','Comments are phrased as questions or suggestions with reasons']},
+{id:'r-pr',t:'Pull request checklist',items:['Title and description say what and why','Linked issue','Tests added or updated, build green','No unrelated changes; refactor split from behavior change','No debug code, secrets or commented-out code','Docs / changelog updated if behavior changed','Migration and rollback noted if relevant']},
+{id:'r-test',t:'Testing checklist',items:['Each test has one reason to fail','Name states the behavior','Arrange-Act-Assert visible','No dependence on order, clock, network or shared state','Assert outcomes, not implementation','Bug fix has a regression test','Few slow integration tests; many fast unit tests']},
+{id:'r-java',t:'Java-specific conventions',items:['Records for data carriers; sealed types for closed hierarchies','Constructor injection and final fields','try-with-resources for closeables','Optional as a return type only','Unchecked domain exceptions translated at boundaries','No wildcard imports; formatter enforces style','Prefer immutable collections (List.of, toList())','Use BigDecimal or a Money type for currency']},
+{id:'r-anti',t:'Common anti-patterns',items:['God object / Manager class','Anemic domain model with all logic in services','Singleton used as hidden global state','Swallowed exceptions','Copy-paste inheritance','Primitive obsession','Service locator hiding dependencies','Returning JPA entities from controllers','Premature abstraction and premature optimization']},
+{id:'r-debt',t:'Technical debt assessment guide',items:['Impact: how much slower is each change here?','Frequency: how often does this code change?','Risk: how likely and costly is a production failure?','Cost to fix: size of the refactor and test gap','Priority = frequency × impact × risk, relative to cost','Record: owner, trigger, ticket, date','Review the list every quarter and delete what no longer matters']}
+];
+/* ================= ENGINE ================= */
+const KEY='fdb-cleancode-v1';
+let S={},memOnly=false;
+const DEF=()=>({done:{},bm:{},snips:[],notes:{},recent:[],last:'',streak:{last:'',n:0},daily:{},qs:{a:0,c:0},sd:{},rf:{},pr:{},theme:''});
+function load(){try{const r=localStorage.getItem(KEY);S=Object.assign(DEF(),r?JSON.parse(r):{})}catch(e){S=DEF();memOnly=true}}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){memOnly=true}}
+const $=(s,r)=> (r||document).querySelector(s), $$=(s,r)=>[...(r||document).querySelectorAll(s)];
+const esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+const LV=['','Beginner','Intermediate','Advanced'];
+const lvTag=l=>`<span class="tag l${l}">${LV[l]}</span>`;
+const today=()=>new Date().toLocaleDateString('en-CA');
+function touch(){const t=today();if(S.streak.last===t)return;const y=new Date(Date.now()-864e5).toLocaleDateString('en-CA');S.streak.n=S.streak.last===y?S.streak.n+1:1;S.streak.last=t;save()}
+function toast(t){const d=document.createElement('div');d.className='toast';d.textContent=t;d.setAttribute('role','status');document.body.appendChild(d);setTimeout(()=>d.remove(),1600)}
+function copy(text){const fb=()=>{const t=document.createElement('textarea');t.value=text;t.style.position='fixed';t.style.opacity='0';document.body.appendChild(t);t.select();let ok=false;try{ok=document.execCommand('copy')}catch(e){}t.remove();toast(ok?'Copied':'Select the text and copy it manually')};
+  try{navigator.clipboard.writeText(text).then(()=>toast('Copied'),fb)}catch(e){fb()}}
+const mod=id=>MODS.find(m=>m.id===id);
+const les=id=>LESSONS.find(l=>l.id===id);
+const mLessons=mid=>LESSONS.filter(l=>l.mod===mid);
+const doneCount=()=>LESSONS.filter(l=>S.done[l.id]).length;
+const pct=(a,b)=>b?Math.round(100*a/b):0;
+
+/* ---- highlighter ---- */
+const KW=new Set('abstract assert boolean break byte case catch char class const continue default do double else enum extends final finally float for if implements import instanceof int interface long new package private protected public return short static super switch synchronized this throw throws try void volatile while var record sealed permits yield null true false def lambda from as with pass None True False elif in is not and or async await function let export type readonly undefined typeof namespace using foreach string decimal bool get set init'.split(' '));
+const RE_C=/(\/\/.*|\/\*[\s\S]*?\*\/)|("(?:\\.|[^"\\\n])*"|'(?:\\.|[^'\\\n])*')|(\b\d+(?:\.\d+)?[dDfFlL]?\b)|(@\w+)|(\b[A-Za-z_]\w*\b)/g;
+const RE_P=/(#.*)|("(?:\\.|[^"\\\n])*"|'(?:\\.|[^'\\\n])*')|(\b\d+(?:\.\d+)?\b)|(@\w+)|(\b[A-Za-z_]\w*\b)/g;
+function hl(code,lang){
+  if(lang==='text'||lang==='markdown')return esc(code);
+  const re=new RegExp((lang==='python'?RE_P:RE_C).source,'g');let out='',last=0,m;
+  while((m=re.exec(code))){out+=esc(code.slice(last,m.index));last=re.lastIndex;const t=m[0];
+    if(m[1])out+=`<span class="t-c">${esc(t)}</span>`;else if(m[2])out+=`<span class="t-s">${esc(t)}</span>`;
+    else if(m[3])out+=`<span class="t-n">${t}</span>`;else if(m[4])out+=`<span class="t-a">${t}</span>`;
+    else if(KW.has(t))out+=`<span class="t-k">${t}</span>`;else if(/^[A-Z]/.test(t)&&/[a-z]/.test(t))out+=`<span class="t-t">${t}</span>`;else out+=t}
+  return out+esc(code.slice(last))}
+function diff(a,b){const A=a.split('\n'),B=b.split('\n'),n=A.length,m=B.length;
+  const L=Array.from({length:n+1},()=>new Array(m+1).fill(0));
+  for(let i=n-1;i>=0;i--)for(let j=m-1;j>=0;j--)L[i][j]=A[i]===B[j]?L[i+1][j+1]+1:Math.max(L[i+1][j],L[i][j+1]);
+  const o=[];let i=0,j=0;while(i<n&&j<m){if(A[i]===B[j]){o.push([' ',A[i]]);i++;j++}else if(L[i+1][j]>=L[i][j+1])o.push(['-',A[i++]]);else o.push(['+',B[j++]])}
+  while(i<n)o.push(['-',A[i++]]);while(j<m)o.push(['+',B[j++]]);return o}
+const CODES=[];
+function codeBlock(lang,code,opts){opts=opts||{};const ci=CODES.push(code)-1;
+  return `<div class="code"><div class="ch"><span>${esc(lang)}</span><span class="sp"></span><button class="btn sm" data-act="copy" data-ci="${ci}">Copy</button>${opts.noSave?'':`<button class="btn sm" data-act="save" data-ci="${ci}" data-lang="${esc(lang)}">Save</button>`}</div><pre><code>${hl(code,lang)}</code></pre></div>`}
+const CMPS={};let cmpN=0;
+function cmpView(c,v){const lang=c.lang;
+  if(v==='diff')return diff(c.bad,c.good).map(([k,t])=>`<span class="dl ${k==='+'?'add':k==='-'?'del':''}">${k===' '?'  ':k+' '}${hl(t,lang)}</span>`).join('');
+  return hl(v==='bad'?c.bad:c.good,lang)}
+function cmpHtml(c,labels){const id='c'+(cmpN++);CMPS[id]=c;labels=labels||['Before','After'];
+  return `<section class="cmp" data-cmp="${id}" data-v="bad"><div class="cb"><b>${c.title}</b><div class="seg" role="group" aria-label="Choose view"><button class="bad" aria-pressed="true" data-act="cmp" data-v="bad">${labels[0]}</button><button class="good" aria-pressed="false" data-act="cmp" data-v="good">${labels[1]}</button><button aria-pressed="false" data-act="cmp" data-v="diff">Changes</button></div></div>
+  <div class="code"><div class="ch"><span class="vl">${esc(c.lang)} · ${labels[0].toLowerCase()}</span><span class="sp"></span><button class="btn sm" data-act="cmpcopy">Copy</button><button class="btn sm" data-act="cmpsave">Save</button></div><pre><code class="cv">${cmpView(c,'bad')}</code></pre></div>
+  ${c.notes&&c.notes.length?`<div class="why"><b>What changed and why</b><ol>${c.notes.map(n=>`<li>${n}</li>`).join('')}</ol>${c.trade?`<div class="tr">${c.trade}</div>`:''}</div>`:''}</section>`}
+const CL={tip:'Tip',warn:'Caution',trap:'Trap',note:'Note'};
+function inl(t){return t}
+function blockHtml(b){
+  switch(b.k){
+    case 'p':return `<p>${b.t}</p>`;
+    case 'h':return `<h3>${b.t}</h3>`;
+    case 'ul':return `<ul class="b">${b.a.map(x=>`<li>${x}</li>`).join('')}</ul>`;
+    case 'code':return codeBlock(b.lang,b.c);
+    case 'call':return `<div class="call ${b.type}"><b class="lb">${CL[b.type]}</b><p>${b.t}</p></div>`;
+    case 'tb':return `<div class="tw"><table><thead><tr>${b.head.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${b.rows.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
+    case 'cmp':return cmpHtml(b);
+    case 'smell':{const c={title:b.rf?'Before and after':'Bad example and refactoring',lang:b.lang,bad:b.bad,good:b.good,notes:[],trade:''};
+      return `<article class="smell"><h3>${b.name}</h3><dl>${b.rf?`<dt>When</dt><dd>${b.what}</dd><dt>How</dt><dd>${b.why}</dd>`:`<dt>What</dt><dd>${b.what}</dd><dt>Why it hurts</dt><dd>${b.why}</dd><dt>How to spot</dt><dd>${b.spot}</dd><dt>Leave it when</dt><dd>${b.ok}</dd>`}</dl>${cmpHtml(c,['Bad','Refactored'])}</article>`}
+  }return ''}
+
+/* ---- derived catalogs & search index ---- */
+const SMELLS=[];LESSONS.forEach(l=>l.blocks.forEach(b=>{if(b.k==='smell'&&!b.rf)SMELLS.push({name:b.name,what:b.what,why:b.why,spot:b.spot,ok:b.ok,lid:l.id})}));
+const strip=s=>String(s==null?'':s).replace(/<[^>]+>/g,' ').replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&amp;/g,'&');
+function lessonText(l){const o=[l.title];l.blocks.forEach(b=>{switch(b.k){case 'p':case 'h':case 'call':o.push(b.t);break;case 'ul':o.push(...b.a);break;case 'tb':o.push(...b.head,...b.rows.flat());break;case 'cmp':o.push(b.title,...(b.notes||[]),b.trade||'',b.bad,b.good);break;case 'smell':o.push(b.name,b.what,b.why,b.spot||'',b.ok||'');break;case 'code':o.push(b.c)}});return strip(o.join(' '))}
+const INDEX=[];
+LESSONS.forEach(l=>INDEX.push({ty:'Lesson',t:l.title,x:lessonText(l),href:'#lesson-'+l.id,sub:'Module '+mod(l.mod).n}));
+REF.forEach(r=>INDEX.push({ty:'Reference',t:r.t,x:strip(r.items.join(' ')),href:'#reference',sub:'Quick reference'}));
+INTERVIEW.forEach(q=>INDEX.push({ty:'Interview',t:q.q,x:strip(q.q+' '+q.a),href:'#interview',sub:q.cat}));
+RESOURCES.forEach(r=>INDEX.push({ty:'Resource',t:r.t,x:strip(r.t+' '+r.by+' '+r.d),href:'#resources',sub:r.by}));
+
+/* ---- layout pieces ---- */
+const main=$('#main'),side=$('#side');
+function crumbs(parts){return `<nav class="crumbs" aria-label="Breadcrumb"><a href="#home">Library</a><span class="s">/</span><span>09 Software Engineering</span><span class="s">/</span><a href="#home">Clean Code Mastery</a>${parts.map(p=>`<span class="s">/</span>${p[1]?`<a href="${p[1]}">${p[0]}</a>`:`<span aria-current="page">${p[0]}</span>`}`).join('')}</nav>`}
+function buildSide(){
+  const tools=[['home','Dashboard'],['paths','Learning paths'],['smells','Smell detector'],['refactor','Refactoring playground'],['review','Review simulator'],['quiz','Knowledge checks'],['interview','Interview arena'],['reference','Quick reference'],['resources','Resources']];
+  side.innerHTML=`<h4>Practice and library</h4><div class="nav">${tools.map(t=>`<a href="#${t[0]}" data-r="${t[0]}"><span class="ck"></span>${t[1]}</a>`).join('')}</div><h4>Lessons</h4>`+MODS.map(m=>{const ls=mLessons(m.id);const d=ls.filter(l=>S.done[l.id]).length;
+    return `<details class="mod" data-m="${m.id}"><summary><span class="n">${m.n}</span>${m.title}<span class="pc">${d}/${ls.length}</span></summary><div class="nav">${ls.map(l=>`<a href="#lesson-${l.id}" data-r="lesson-${l.id}" class="${S.done[l.id]?'done':''}"><span class="ck">${S.done[l.id]?'✓':'·'}</span>${l.title}</a>`).join('')}</div></details>`}).join('')}
+function navState(r){$$('.nav a',side).forEach(a=>{const on=a.dataset.r===r;a.classList.toggle('cur',on);if(on){a.setAttribute('aria-current','page');const d=a.closest('details');if(d)d.open=true}else a.removeAttribute('aria-current')});
+  $$('details.mod',side).forEach(d=>{const ls=mLessons(d.dataset.m);const x=ls.filter(l=>S.done[l.id]).length;d.querySelector('.pc').textContent=x+'/'+ls.length;$$('.nav a',d).forEach((a,i)=>{const dn=!!S.done[ls[i].id];a.classList.toggle('done',dn);a.querySelector('.ck').textContent=dn?'✓':'·'})})}
+
+/* ---- question component ---- */
+function qHtml(q,idx){return `<div class="q"><div class="qt">${idx||''}${({mcq:'Multiple choice',tf:'True or false',bug:'Find the bug',smell:'Identify the smell',scenario:'Scenario',code:'Short exercise'})[q.type]}</div><p>${q.q}</p>${q.code?codeBlock('java',q.code,{noSave:true}):''}<div class="opts">${q.type==='code'?`<textarea class="ans" aria-label="Your answer" placeholder="Write your answer here (it is not executed)"></textarea><div class="row"><button class="btn" data-q="show">Show model answer</button></div><div class="fbx"></div>`:q.opts.map((o,i)=>`<button class="opt" data-i="${i}"><span class="k">${'ABCD'[i]}</span><span>${o}</span></button>`).join('')+'<div class="fbx"></div>'}</div></div>`}
+function mountQ(el,q,cb){let fin=false;
+  const fbx=$('.fbx',el);
+  if(q.type==='code'){$('[data-q=show]',el).onclick=()=>{fbx.innerHTML=`<div class="fb">${codeBlock('java',q.model,{noSave:true})}<p>${q.why}</p><div class="row"><span>How did you do?</span><button class="btn sm" data-self="1">I got it</button><button class="btn sm" data-self="0">Not yet</button></div></div>`;$$('[data-self]',fbx).forEach(b=>b.onclick=()=>{if(fin)return;fin=true;$$('[data-self]',fbx).forEach(x=>x.disabled=true);cb(b.dataset.self==='1')});$('[data-q=show]',el).disabled=true};return}
+  $$('.opt',el).forEach(b=>b.onclick=()=>{if(fin)return;fin=true;const i=+b.dataset.i,ok=i===q.a;
+    $$('.opt',el).forEach(o=>{o.disabled=true;if(+o.dataset.i===q.a)o.classList.add('right')});if(!ok)b.classList.add('wrong');
+    fbx.innerHTML=`<div class="fb ${ok?'ok':'no'}"><b>${ok?'Correct.':'Not quite.'}</b> ${q.why}</div>`;cb(ok)})}
+function record(ok){S.qs.a++;if(ok)S.qs.c++;touch();save()}
+function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+const hash=s=>[...s].reduce((h,c)=>(h*31+c.charCodeAt(0))>>>0,7);
+const dailyQ=()=>{const p=QUIZ.filter(q=>q.type!=='code');return p[hash(today())%p.length]};
+
+/* ---- views ---- */
+const V={};
+function revisionText(){let t='CLEAN CODE MASTERY: REVISION CHECKLIST\nGenerated '+today()+'\n';MODS.forEach(m=>{t+='\nModule '+m.n+' '+m.title+'\n';mLessons(m.id).forEach(l=>{t+=' ['+(S.done[l.id]?'x':' ')+'] '+l.title+'\n'})});
+  t+='\nPractice\n';SMELLEX_LIST().forEach(x=>t+=' ['+(S.sd[x.id]!=null?'x':' ')+'] Smell detector: '+x.title+'\n');REFX.forEach(x=>t+=' ['+(S.rf[x.id]?'x':' ')+'] Refactoring: '+x.title+'\n');PRS.forEach(x=>t+=' ['+(S.pr[x.id]!=null?'x':' ')+'] Review: '+x.title+'\n');
+  t+='\nKey checks\n';REF.slice(0,1).concat(REF.filter(r=>r.id==='r-solid')).forEach(r=>{t+=r.t+'\n';r.items.forEach(i=>t+=' [ ] '+i+'\n')});return t}
+const SMELLEX_LIST=()=>SMELLX;
+V.home=()=>{
+  const dn=doneCount(),total=LESSONS.length,p=pct(dn,total);
+  const next=LESSONS.find(l=>!S.done[l.id]);const resume=les(S.last)||next||LESSONS[0];
+  const dq=dailyQ(),dd=S.daily[today()];
+  const bms=LESSONS.filter(l=>S.bm[l.id]);
+  main.innerHTML=crumbs([['Dashboard']])+`
+  <section class="hero"><div class="eyebrow">09 — Software Engineering &amp; Professional Practices</div><h1>Clean Code Mastery</h1>
+  <p class="lede">${total} lessons across 15 modules, with before-and-after code, a smell detector, refactoring exercises, a code review simulator, quizzes and an interview arena. Java first, with Python, JavaScript, TypeScript and C# comparisons.</p>
+  <div class="row" style="margin-top:14px;gap:18px"><div class="ring" style="--p:${p}"><span>${p}%</span></div>
+  <div style="min-width:0"><div class="row"><a class="btn pri" href="#lesson-${resume.id}">${S.last?'Resume':'Start'}: ${resume.title}</a><a class="btn" href="#paths">Choose a path</a></div><p style="margin:10px 0 0;color:var(--dim);font-size:13px">${dn} of ${total} lessons complete.</p></div></div></section>
+  <div class="grid" style="margin-bottom:18px">
+   <div class="card stat"><b>${S.streak.n}</b><span>day streak</span></div>
+   <div class="card stat"><b>${dn}/${total}</b><span>lessons done</span></div>
+   <div class="card stat"><b>${S.qs.a?pct(S.qs.c,S.qs.a)+'%':'–'}</b><span>quiz accuracy (${S.qs.a} answered)</span></div>
+   <div class="card stat"><b>${bms.length+S.snips.length}</b><span>bookmarks and snippets</span></div></div>
+  <h2>Daily Clean Code challenge</h2><div id="daily"></div>
+  <h2>Modules</h2><div class="grid">${MODS.map(m=>{const ls=mLessons(m.id),d=ls.filter(l=>S.done[l.id]).length,mins=ls.reduce((a,l)=>a+l.mins,0);return `<a class="card" style="text-decoration:none;color:inherit" href="#lesson-${ls[0].id}"><div class="eyebrow">Module ${m.n}</div><h3 style="margin:0 0 6px">${m.title}</h3><p style="font-size:13.5px;color:var(--dim);margin-bottom:10px">${m.blurb}</p><div class="bar"><i style="width:${pct(d,ls.length)}%"></i></div><p style="font:11px var(--f-mono);color:var(--dim);margin:6px 0 0">${d}/${ls.length} lessons · about ${mins} min</p></a>`}).join('')}</div>
+  <h2>Recently visited</h2>${S.recent.length?`<div class="row">${S.recent.map(id=>les(id)).filter(Boolean).map(l=>`<a class="btn" href="#lesson-${l.id}">${l.title}</a>`).join('')}</div>`:'<p style="color:var(--dim)">Lessons you open will appear here.</p>'}
+  <h2>Bookmarks</h2>${bms.length?`<div class="row">${bms.map(l=>`<a class="btn" href="#lesson-${l.id}">★ ${l.title}</a>`).join('')}</div>`:'<p style="color:var(--dim)">Use the Bookmark button on any lesson.</p>'}
+  <h2>Saved snippets</h2><div class="sniplist">${S.snips.length?S.snips.map((s,i)=>`<div class="card"><div class="row" style="justify-content:space-between"><span class="tag">${esc(s.lang)} · from ${esc(s.from||'lesson')}</span><span class="row"><button class="btn sm" data-act="snipcopy" data-i="${i}">Copy</button><button class="btn sm" data-act="snipdel" data-i="${i}">Remove</button></span></div><pre style="margin:8px 0 0;overflow-x:auto;font-size:12.5px"><code>${esc(s.code)}</code></pre></div>`).join(''):'<p style="color:var(--dim)">Press Save on any code block to keep it here.</p>'}</div>
+  <h2>Revision checklist</h2><p>A plain-text checklist of everything in this guide with your current progress. Copy it into your notes app.</p><textarea class="nt" id="rev" readonly rows="8" aria-label="Revision checklist text">${esc(revisionText())}</textarea><div class="row" style="margin-top:8px"><button class="btn" id="revcopy">Copy checklist</button></div>
+  <div class="notice">${memOnly?'Browser storage is unavailable here, so progress lasts only until you close this page. ':''}Progress, notes, bookmarks and snippets are saved only in this browser using local storage. Clearing site data, using a private window or switching browsers or devices will remove or hide them.</div>`;
+  const box=$('#daily');box.innerHTML=qHtml(dq);mountQ(box.firstElementChild,dq,ok=>{S.daily[today()]={ok};record(ok);toast(ok?'Daily challenge done':'Daily challenge answered')});
+  if(dd){$$('.opt',box).forEach(o=>o.disabled=true);$$('.opt',box)[dq.a].classList.add('right');$('.fbx',box).innerHTML=`<div class="fb ${dd.ok?'ok':'no'}"><b>${dd.ok?'Done today.':'Answered today.'}</b> ${dq.why}</div>`}
+  $('#revcopy').onclick=()=>copy($('#rev').value);
+};
+V.lesson=id=>{const l=les(id);if(!l){location.hash='#home';return}
+  const m=mod(l.mod),i=LESSONS.indexOf(l),pv=LESSONS[i-1],nx=LESSONS[i+1];
+  S.last=id;S.recent=[id].concat(S.recent.filter(x=>x!==id)).slice(0,6);save();
+  main.innerHTML=crumbs([['Module '+m.n+' '+m.title,'#lesson-'+mLessons(m.id)[0].id],[l.title]])+`<div class="eyebrow">Module ${m.n} · Lesson ${mLessons(m.id).indexOf(l)+1} of ${mLessons(m.id).length}</div><h1>${l.title}</h1>
+  <div class="meta">${lvTag(l.level)}<span class="tag">about ${l.mins} min</span><span class="tag">${S.done[id]?'Completed':'Not completed'}</span></div>
+  ${l.blocks.map(blockHtml).join('')}
+  <div class="actions"><button class="btn ${S.done[id]?'on':'pri'}" id="done">${S.done[id]?'✓ Completed (click to undo)':'Mark lesson complete'}</button><button class="btn ${S.bm[id]?'on':''}" id="bm">${S.bm[id]?'★ Bookmarked':'☆ Bookmark'}</button></div>
+  <h3>Your notes</h3><textarea class="nt" id="note" placeholder="Notes for this lesson, saved in this browser" aria-label="Notes for this lesson">${esc(S.notes[id]||'')}</textarea>
+  ${m.rel.length?`<p style="margin-top:14px;color:var(--dim);font-size:13px">Related guides in the library: ${m.rel.map(r=>`<span class="tag">${r}</span>`).join(' ')}</p>`:''}
+  <div class="pn">${pv?`<a href="#lesson-${pv.id}"><small>← Previous</small>${pv.title}</a>`:'<span></span>'}${nx?`<a class="nx" href="#lesson-${nx.id}"><small>Next →</small>${nx.title}</a>`:'<a class="nx" href="#quiz"><small>Next →</small>Test yourself with the quiz</a>'}</div>`;
+  $('#done').onclick=()=>{S.done[id]=!S.done[id];if(S.done[id])touch();save();V.lesson(id);navState('lesson-'+id)};
+  $('#bm').onclick=()=>{S.bm[id]=!S.bm[id];save();V.lesson(id)};
+  $('#note').oninput=e=>{S.notes[id]=e.target.value;save()}};
+V.paths=()=>{main.innerHTML=crumbs([['Learning paths']])+`<h1>Learning paths</h1><p class="lede">Four routes through the material. Each shows prerequisites, estimated time, your completion and the next lesson to take.</p>`+PATHS.map((p,pi)=>{const ls=p.lessons.map(les),d=ls.filter(l=>S.done[l.id]).length,nx=ls.find(l=>!S.done[l.id]);
+    return `<section class="card" style="margin:14px 0"><div class="row" style="justify-content:space-between"><h2 style="margin:0">${p.name}</h2><span class="tag">${p.time}</span></div><p style="color:var(--dim);margin:6px 0 10px">Prerequisites: ${p.pre}</p><div class="bar"><i style="width:${pct(d,ls.length)}%"></i></div><p style="font:12px var(--f-mono);color:var(--dim)">${d}/${ls.length} complete</p>
+    <ol style="padding-left:20px;margin:8px 0">${ls.map(l=>`<li><a href="#lesson-${l.id}">${l.title}</a> ${S.done[l.id]?'<span class="tag ok">done</span>':''}</li>`).join('')}</ol>
+    <div class="row">${nx?`<a class="btn pri" href="#lesson-${nx.id}">Next: ${nx.title}</a>`:`<span class="tag ok">Path complete</span>${PATHS[pi+1]?`<a class="btn" href="#paths">Recommended next: ${PATHS[pi+1].name} path</a>`:`<a class="btn" href="#interview">Recommended next: interview arena</a>`}`}</div></section>`}).join('')};
+V.smells=()=>{main.innerHTML=crumbs([['Smell detector']])+`<h1>Code smell detector</h1><p class="lede">Read the flawed code, tick every real problem you see, then submit. This is a learning exercise with a fixed answer key. It is not a static analysis tool and does not analyze code you paste.</p><div class="grid">${SMELLX.map(x=>`<button class="card" style="text-align:left" data-sd="${x.id}"><div class="eyebrow">${LV[x.level]}</div><h3 style="margin:0">${x.title}</h3><p style="color:var(--dim);font-size:13px;margin:6px 0 0">${S.sd[x.id]!=null?'Best score '+S.sd[x.id]+'%':'Not attempted'}</p></button>`).join('')}</div><div id="ex"></div>`;
+  $$('[data-sd]').forEach(b=>b.onclick=()=>{const x=SMELLX.find(s=>s.id===b.dataset.sd);const ord=shuffle(x.findings);
+    $('#ex').innerHTML=`<h2>${x.title}</h2>${codeBlock('java',x.code,{noSave:true})}<h3>Which of these are real problems?</h3><div id="fl">${ord.map((f,i)=>`<label class="chk"><input type="checkbox" data-i="${i}"><span>${f.t}<span class="ex" hidden></span></span></label>`).join('')}</div><div class="row"><button class="btn pri" id="sub">Submit</button></div><div id="res"></div>`;
+    $('#ex').scrollIntoView({behavior:'smooth'});
+    $('#sub').onclick=()=>{let ok=0,miss=0,fp=0;$$('#fl .chk').forEach((lb,i)=>{const f=ord[i],c=$('input',lb).checked;lb.classList.remove('ok','miss','fp');const ex=$('.ex',lb);ex.hidden=false;ex.textContent=f.why;
+      if(f.ok&&c){ok++;lb.classList.add('ok')}else if(f.ok&&!c){miss++;lb.classList.add('miss')}else if(!f.ok&&c){fp++;lb.classList.add('fp')}$('input',lb).disabled=true});
+      const tot=x.findings.filter(f=>f.ok).length,sc=Math.max(0,Math.round(100*(ok-fp)/tot));S.sd[x.id]=Math.max(S.sd[x.id]||0,sc);touch();save();$('#sub').disabled=true;
+      $('#res').innerHTML=`<div class="fb ${sc>=70?'ok':'no'}"><b>Score ${sc}%.</b> Found ${ok} of ${tot} real problems, missed ${miss}, and ticked ${fp} that are not problems. Green = correct, amber = missed, red = false alarm. Read each explanation, then reopen the exercise to try again.</div>`}})};
+V.refactor=()=>{main.innerHTML=crumbs([['Refactoring playground']])+`<h1>Refactoring playground</h1><p class="lede">Each exercise has the original code, a goal, hints, step-by-step solutions and the expected behavior. Write your attempt in the scratchpad (it is not executed), then reveal hints and steps as needed.</p><div class="grid">${REFX.map(x=>`<button class="card" style="text-align:left" data-rf="${x.id}"><div class="eyebrow">${LV[x.level]}</div><h3 style="margin:0">${x.title}</h3><p style="color:var(--dim);font-size:13px;margin:6px 0 0">${S.rf[x.id]?'Solved':'Not solved'}</p></button>`).join('')}</div><div id="ex"></div>`;
+  $$('[data-rf]').forEach(b=>b.onclick=()=>{const x=REFX.find(s=>s.id===b.dataset.rf);let hi=0,si=0;
+    const draw=()=>{$('#ex').innerHTML=`<h2>${x.title}</h2><p><b>Goal:</b> ${x.goal}</p><h3>Original</h3>${codeBlock('java',x.code,{noSave:true})}<h3>Your scratchpad</h3><textarea class="ans" id="pad" aria-label="Your refactoring attempt" placeholder="Rewrite the code here"></textarea>
+      <h3>Hints (${hi}/${x.hints.length})</h3>${x.hints.slice(0,hi).map((h,i)=>`<div class="call tip"><p>${i+1}. ${h}</p></div>`).join('')}${hi<x.hints.length?'<button class="btn" id="hint">Show next hint</button>':''}
+      <h3>Solution steps (${si}/${x.steps.length})</h3>${x.steps.slice(0,si).map((s,i)=>`<p><b>Step ${i+1}: ${s.t}</b></p>${codeBlock('java',s.c)}`).join('')}${si<x.steps.length?'<button class="btn" id="step">Reveal next step</button>':`<h3>Expected output</h3><p>${x.expected}</p><h3>Why this design is better</h3><p>${x.explain}</p><button class="btn ${S.rf[x.id]?'on':'pri'}" id="solved">${S.rf[x.id]?'✓ Solved':'Mark solved'}</button>`}`;
+      const pad=$('#pad');pad.value=draw.pad||'';pad.oninput=()=>draw.pad=pad.value;
+      const h=$('#hint');if(h)h.onclick=()=>{hi++;draw()};const s=$('#step');if(s)s.onclick=()=>{si++;draw()};const sv=$('#solved');if(sv)sv.onclick=()=>{S.rf[x.id]=true;touch();save();draw();toast('Saved')}};
+    draw.pad='';draw();$('#ex').scrollIntoView({behavior:'smooth'})})};
+V.review=()=>{main.innerHTML=crumbs([['Review simulator']])+`<h1>Code review simulator</h1><p class="lede">Open a pull request, click any line to write a review comment, then compare your review with an expert one. Phrase comments the way you would in a real review.</p><div class="grid">${PRS.map(x=>`<button class="card" style="text-align:left" data-pr="${x.id}"><h3 style="margin:0">${x.title}</h3><p style="color:var(--dim);font-size:13px;margin:6px 0 0">${S.pr[x.id]!=null?'Last result: found '+S.pr[x.id]+' issues':'Not reviewed'}</p></button>`).join('')}</div><div id="ex"></div>`;
+  $$('[data-pr]').forEach(b=>b.onclick=()=>{const x=PRS.find(s=>s.id===b.dataset.pr);const cm={};let shown=false;
+    const draw=()=>{$('#ex').innerHTML=`<h2>${x.title}</h2><p>${x.desc}</p><p style="color:var(--dim);font-size:13px">Click a line to add or edit a comment.</p><div class="pr" id="prc">${x.lines.map((t,i)=>{const n=i+1;return `<div class="ln hot${cm[n]!==undefined?' sel':''}" data-l="${n}" tabindex="0" role="button" aria-label="Line ${n}"><span class="no">${n}</span><span class="tx">${esc(t)||' '}</span></div>`+(cm[n]!==undefined?`<div class="cm"><b>Your comment</b><textarea class="ans" data-c="${n}" aria-label="Comment on line ${n}" placeholder="Write your review comment">${esc(cm[n])}</textarea></div>`:'')+(shown?x.issues.filter(s=>s.l===n).map(s=>`<div class="cm exp"><b>Expert · ${s.sev}${cm[n]!==undefined&&cm[n].trim()?' · you commented here':' · missed'}</b>${s.c}</div>`).join(''):'')}).join('')}</div>
+      <div class="row"><button class="btn pri" id="cmpb">${shown?'Hide expert review':'Compare with expert review'}</button></div><div id="sum"></div>`;
+      $$('.ln.hot').forEach(r=>{const fn=()=>{const n=+r.dataset.l;if(cm[n]===undefined)cm[n]='';else if(!cm[n].trim())delete cm[n];draw();const t=$(`[data-c="${n}"]`);if(t)t.focus()};r.onclick=fn;r.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();fn()}}});
+      $$('[data-c]').forEach(t=>t.oninput=()=>{cm[+t.dataset.c]=t.value});
+      $('#cmpb').onclick=()=>{shown=!shown;draw();if(shown){const found=x.issues.filter(s=>cm[s.l]!==undefined&&cm[s.l].trim()).length,bl=x.issues.filter(s=>s.sev==='blocking'),bf=bl.filter(s=>cm[s.l]!==undefined&&cm[s.l].trim()).length;S.pr[x.id]=found;touch();save();
+        $('#sum').innerHTML=`<div class="fb ${bf===bl.length?'ok':'no'}"><b>You commented on ${found} of ${x.issues.length} expert points, including ${bf} of ${bl.length} blocking issues.</b> A comment on the right line counts even if your wording differs. Compare tone and reasoning too.</div><h3>Etiquette takeaways</h3><ul class="b">${x.tips.map(t=>`<li>${t}</li>`).join('')}</ul>`}}};
+    draw();$('#ex').scrollIntoView({behavior:'smooth'})})};
+V.quiz=()=>{
+  main.innerHTML=crumbs([['Knowledge checks']])+`<h1>Knowledge checks</h1><p class="lede">${QUIZ.length} questions: multiple choice, true/false, find-the-bug, identify-the-smell, scenarios and short coding exercises. Each answer gets immediate feedback and an explanation.</p>
+  <div class="card row"><label for="qt">Topic</label><select id="qt" class="btn"><option value="all">All modules</option>${MODS.filter(m=>QUIZ.some(q=>q.topic===m.id)).map(m=>`<option value="${m.id}">${m.n} ${m.title}</option>`).join('')}</select><label for="qn">Questions</label><select id="qn" class="btn"><option>5</option><option selected>10</option><option>20</option></select><button class="btn pri" id="go">Start</button></div><div id="run"></div>`;
+  $('#go').onclick=()=>{const t=$('#qt').value,n=+$('#qn').value;let pool=shuffle(QUIZ.filter(q=>t==='all'||q.topic===t)).slice(0,n);if(!pool.length)return;let i=0,sc=0;const wrong=[];const by={};
+    const step=()=>{if(i>=pool.length){const bt=Object.entries(by).map(([k,v])=>`<tr><td>${k}</td><td>${v[0]}/${v[1]}</td></tr>`).join('');
+      $('#run').innerHTML=`<div class="card"><h2 style="margin-top:0">Result: ${sc}/${pool.length} (${pct(sc,pool.length)}%)</h2><div class="tw"><table><thead><tr><th>Question type</th><th>Correct</th></tr></thead><tbody>${bt}</tbody></table></div>${wrong.length?`<h3>Review these</h3><ul class="b">${wrong.map(q=>`<li>${strip(q.q)} <a href="#lesson-${mLessons(q.topic)[0].id}">Open module ${mod(q.topic).n}</a></li>`).join('')}</ul>`:'<p>No misses. Nice work.</p>'}<button class="btn pri" id="again">New round</button></div>`;$('#again').onclick=()=>$('#go').click();return}
+      const q=pool[i];$('#run').innerHTML=`<p style="font:12px var(--f-mono);color:var(--dim)">Question ${i+1} of ${pool.length} · score ${sc}</p>`+qHtml(q)+'<div class="row"><button class="btn pri" id="nxt" hidden>'+(i===pool.length-1?'See results':'Next question')+'</button></div>';
+      mountQ($('#run .q'),q,ok=>{record(ok);if(ok)sc++;else wrong.push(q);const k=({mcq:'Multiple choice',tf:'True/false',bug:'Find the bug',smell:'Smell',scenario:'Scenario',code:'Short exercise'})[q.type];by[k]=by[k]||[0,0];by[k][1]++;if(ok)by[k][0]++;$('#nxt').hidden=false;$('#nxt').focus()});
+      $('#nxt').onclick=()=>{i++;step()}};step()}};
+V.interview=()=>{const cats=[...new Set(INTERVIEW.map(q=>q.cat))];
+  main.innerHTML=crumbs([['Interview arena']])+`<h1>Interview preparation arena</h1><p class="lede">${INTERVIEW.length} questions with model answers, from beginner to advanced, covering Java clean code, SOLID, smells, refactoring, trade-offs, scenarios and code review. Use the mock mode for a randomized run with a summary.</p>
+  <div class="row"><div class="seg"><button aria-pressed="true" id="tb">Question bank</button><button aria-pressed="false" id="tm">Mock interview</button></div></div><div id="pane"></div>`;
+  const bank=()=>{$('#pane').innerHTML=`<div class="row" style="margin:12px 0"><label for="lf">Level</label><select id="lf" class="btn"><option value="0">All</option><option value="1">Beginner</option><option value="2">Intermediate</option><option value="3">Advanced</option></select><label for="cf">Topic</label><select id="cf" class="btn"><option value="">All</option>${cats.map(c=>`<option>${c}</option>`).join('')}</select></div><div id="ql"></div>`;
+    const f=()=>{const l=+$('#lf').value,c=$('#cf').value;$('#ql').innerHTML=INTERVIEW.filter(q=>(!l||q.level===l)&&(!c||q.cat===c)).map(q=>`<details class="acc"><summary><span>${q.q}<br>${lvTag(q.level)} <span class="tag">${q.cat}</span></span></summary><div><p>${q.a}</p></div></details>`).join('')};$('#lf').onchange=f;$('#cf').onchange=f;f()};
+  const mock=()=>{$('#pane').innerHTML=`<div class="card" style="margin-top:12px"><p>Eight random questions. Answer in your own words (typing is optional), reveal the model answer, then rate yourself honestly.</p><button class="btn pri" id="ms">Start mock interview</button></div><div id="mr"></div>`;
+    $('#ms').onclick=()=>{const qs=shuffle(INTERVIEW).slice(0,8);let i=0;const rate=[];
+      const step=()=>{if(i>=qs.length){const tot=rate.reduce((a,b)=>a+b.r,0),mx=qs.length*2;const weak=rate.filter(x=>x.r<2).map(x=>x.q.cat);const wc={};weak.forEach(w=>wc[w]=(wc[w]||0)+1);
+        $('#mr').innerHTML=`<div class="card"><h2 style="margin-top:0">Summary: ${pct(tot,mx)}%</h2><p>${tot} of ${mx} self-rated points. ${weak.length?'Topics to revisit: '+Object.entries(wc).map(([k,v])=>`${k} (${v})`).join(', ')+'.':'All answers rated solid.'}</p><ul class="b">${rate.map(x=>`<li>${x.r===2?'Solid':x.r===1?'Partial':'Missed'}: ${x.q.q}</li>`).join('')}</ul><button class="btn pri" id="ms2">Try again</button></div>`;$('#ms2').onclick=()=>$('#ms').click();touch();save();return}
+        const q=qs[i];$('#mr').innerHTML=`<div class="q"><div class="qt">Question ${i+1} of ${qs.length} · ${q.cat} · ${LV[q.level]}</div><p style="font-size:17px">${q.q}</p><textarea class="ans" aria-label="Your answer" placeholder="Answer out loud or type it here"></textarea><div class="row" style="margin-top:8px"><button class="btn" id="rv">Reveal model answer</button></div><div id="mans"></div></div>`;
+        $('#rv').onclick=()=>{$('#rv').disabled=true;$('#mans').innerHTML=`<div class="fb"><p>${q.a}</p><div class="row"><span>Rate your answer:</span><button class="btn sm" data-r="2">Solid</button><button class="btn sm" data-r="1">Partial</button><button class="btn sm" data-r="0">Missed</button></div></div>`;$$('[data-r]').forEach(b=>b.onclick=()=>{rate.push({q,r:+b.dataset.r});i++;step()})}};step()}};
+  $('#tb').onclick=()=>{$('#tb').setAttribute('aria-pressed','true');$('#tm').setAttribute('aria-pressed','false');bank()};$('#tm').onclick=()=>{$('#tm').setAttribute('aria-pressed','true');$('#tb').setAttribute('aria-pressed','false');mock()};bank()};
+V.reference=()=>{
+  const cards=REF.map(r=>({t:r.t,html:`<ul class="b">${r.items.map(i=>`<li>${i}</li>`).join('')}</ul>`,txt:r.t+'\n'+r.items.map(i=>'- '+strip(i)).join('\n')}));
+  cards.push({t:'Code smells catalog',html:`<div class="tw"><table><thead><tr><th>Smell</th><th>Means</th><th>Leave alone when</th></tr></thead><tbody>${SMELLS.map(s=>`<tr><td><a href="#lesson-${s.lid}">${s.name}</a></td><td>${s.what}</td><td>${s.ok}</td></tr>`).join('')}</tbody></table></div>`,txt:'Code smells: '+SMELLS.map(s=>s.name).join(', ')});
+  cards.push({t:'Refactoring techniques catalog',html:`<div class="tw"><table><thead><tr><th>Technique</th><th>Use when</th><th>How</th></tr></thead><tbody>${REFACT.map(s=>`<tr><td>${s.name}</td><td>${s.when}</td><td>${s.how}</td></tr>`).join('')}</tbody></table></div>`,txt:'Refactorings: '+REFACT.map(s=>s.name).join(', ')});
+  main.innerHTML=crumbs([['Quick reference']])+`<h1>Quick reference</h1><p class="lede">Checklists and catalogs for revisiting. Filter by any word.</p><label class="search" style="max-width:420px;margin-bottom:14px"><span class="sr">Filter reference</span>⌕<input id="rf" type="search" placeholder="Filter, e.g. review, naming, flag"></label><div id="rl"></div>`;
+  const draw=q=>{$('#rl').innerHTML=cards.filter(c=>!q||strip(c.t+' '+c.html).toLowerCase().includes(q)).map((c,i)=>`<section class="card" style="margin:12px 0"><div class="row" style="justify-content:space-between"><h2 style="margin:0">${c.t}</h2><button class="btn sm" data-cp="${i}">Copy</button></div>${c.html}</section>`).join('')||'<p>No matches.</p>';
+    const shown=cards.filter(c=>!q||strip(c.t+' '+c.html).toLowerCase().includes(q));$$('[data-cp]').forEach(b=>b.onclick=()=>copy(shown[+b.dataset.cp].txt))};
+  $('#rf').oninput=e=>draw(e.target.value.toLowerCase().trim());draw('')};
+V.resources=()=>{const grp=t=>t==='Book'?'Books':['Official documentation','Specification','Style guide'].includes(t)?'Official documentation and style guides':t==='Industry guide'?'Industry guides':'Community material';
+  const order=['Official documentation and style guides','Industry guides','Books','Community material'];
+  main.innerHTML=crumbs([['Resources']])+`<h1>Additional learning resources</h1><p class="lede">Categories are labeled so you can tell official documentation from books and community material. Link status: <b>Link checked</b> means the page was opened and its title confirmed while this guide was built. <b>Link not checked</b> means the URL is the publisher's published address but could not be opened from the build environment. Books without a link have none listed because a link could not be confirmed; find them through your library or publisher.</p>`+order.map(g=>{const rs=RESOURCES.filter(r=>grp(r.type)===g);return rs.length?`<h2>${g}</h2><div class="grid">${rs.map(r=>`<article class="card"><h3 style="margin:0 0 4px">${r.t}</h3><p style="color:var(--dim);font-size:13px;margin:0 0 8px">${r.by}</p><p style="font-size:14px">${r.d}</p><div class="row"><span class="tag">${r.type}</span><span class="tag">${r.lvl}</span>${r.url?`<span class="tag ${r.ver?'ok':'no'}">${r.ver?'Link checked':'Link not checked'}</span>`:'<span class="tag no">No link</span>'}</div>${r.url?`<p style="margin:10px 0 0"><a href="${r.url}" target="_blank" rel="noopener noreferrer">Open resource ↗</a></p>`:''}</article>`).join('')}</div>`:''}).join('')};
+V.search=()=>{const q=($('#q').value||'').trim().toLowerCase();const terms=q.split(/\s+/).filter(Boolean);
+  const res=terms.length?INDEX.map(e=>{const hay=(e.t+' '+e.x).toLowerCase();if(!terms.every(t=>hay.includes(t)))return null;let sc=0;terms.forEach(t=>{if(e.t.toLowerCase().includes(t))sc+=5;sc+=Math.min(3,hay.split(t).length-1)});return {e,sc}}).filter(Boolean).sort((a,b)=>b.sc-a.sc).slice(0,40):[];
+  const snip=e=>{const x=e.x,l=x.toLowerCase(),k=l.indexOf(terms[0]);const s=Math.max(0,k-50);let t=esc(x.slice(s,s+160));terms.forEach(w=>{t=t.replace(new RegExp('('+w.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+')','ig'),'<mark>$1</mark>')});return (s>0?'…':'')+t+'…'};
+  main.innerHTML=crumbs([['Search']])+`<h1>Search</h1><p class="lede">${terms.length?res.length+' result'+(res.length===1?'':'s')+' for “'+esc(q)+'”':'Type in the search box above to search lessons, references, interview questions and resources.'}</p><div class="res">${res.map(r=>`<a class="card" style="text-decoration:none;color:inherit" href="${r.e.href}"><div class="row"><span class="tag">${r.e.ty}</span><span style="color:var(--dim);font-size:12px">${r.e.sub}</span></div><h3 style="margin:6px 0 4px">${r.e.t}</h3><p style="font-size:13px;color:var(--dim);margin:0">${snip(r.e)}</p></a>`).join('')}</div>`};
+
+/* ---- router ---- */
+function route(){const r=(location.hash||'#home').slice(1)||'home';side.classList.remove('open');$('#menu').setAttribute('aria-expanded','false');
+  if(r.startsWith('lesson-'))V.lesson(r.slice(7));else if(V[r]&&r!=='lesson')V[r]();else V.home();
+  navState(V[r]||r.startsWith('lesson-')?r:'home');window.scrollTo(0,0);main.focus({preventScroll:true});document.title=(r.startsWith('lesson-')&&les(r.slice(7))?les(r.slice(7)).title+' · ':'')+'Clean Code Mastery'}
+/* ---- events ---- */
+document.addEventListener('click',e=>{const b=e.target.closest('[data-act]');if(!b)return;const a=b.dataset.act;
+  if(a==='copy')copy(CODES[+b.dataset.ci]);
+  else if(a==='save'){const code=CODES[+b.dataset.ci];if(!S.snips.some(s=>s.code===code)){S.snips.unshift({code,lang:b.dataset.lang,from:(location.hash.startsWith('#lesson-')&&les(location.hash.slice(8))||{}).title});S.snips=S.snips.slice(0,30);save()}toast('Saved to dashboard')}
+  else if(a==='cmp'){const s=b.closest('.cmp'),c=CMPS[s.dataset.cmp],v=b.dataset.v;s.dataset.v=v;$$('.seg button',s).forEach(x=>x.setAttribute('aria-pressed',String(x===b)));$('.cv',s).innerHTML=cmpView(c,v);const lab=b.textContent;$('.vl',s).textContent=c.lang+' · '+lab.toLowerCase()}
+  else if(a==='cmpcopy'||a==='cmpsave'){const s=b.closest('.cmp'),c=CMPS[s.dataset.cmp],v=s.dataset.v,code=v==='bad'?c.bad:c.good;if(a==='cmpcopy')copy(code);else{if(!S.snips.some(x=>x.code===code)){S.snips.unshift({code,lang:c.lang,from:c.title});save()}toast('Saved to dashboard')}}
+  else if(a==='snipcopy')copy(S.snips[+b.dataset.i].code);
+  else if(a==='snipdel'){S.snips.splice(+b.dataset.i,1);save();V.home()}});
+$('#menu').onclick=()=>{const o=side.classList.toggle('open');$('#menu').setAttribute('aria-expanded',String(o))};
+$('#theme').onclick=()=>{const cur=document.documentElement.dataset.theme||'dark';S.theme=cur==='light'?'dark':'light';document.documentElement.dataset.theme=S.theme;save()};
+$('#q').addEventListener('input',e=>{if(e.target.value.trim()){if(location.hash!=='#search')history.replaceState(null,'','#search');V.search();navState('search');window.scrollTo(0,0)}else if(location.hash==='#search'){location.hash='#home'}});
+$('#q').addEventListener('keydown',e=>{if(e.key==='Escape'){e.target.value='';e.target.blur();if(location.hash==='#search')location.hash='#home'}});
+document.addEventListener('keydown',e=>{if(e.key==='/'&&!/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName)){e.preventDefault();$('#q').focus()}});
+const up=$('#up');addEventListener('scroll',()=>up.classList.toggle('show',scrollY>700),{passive:true});up.onclick=()=>scrollTo({top:0,behavior:'smooth'});
+addEventListener('hashchange',()=>{if(location.hash!=='#search')$('#q').value='';route()});
+load();if(S.theme)document.documentElement.dataset.theme=S.theme;
+buildSide();route();
+</script>
+
+</body></html>
