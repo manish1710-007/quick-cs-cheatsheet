@@ -1,5 +1,4 @@
-<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
-<title>Clean Code Mastery</title>
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style><title>Clean Code Mastery</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap">
 <style>
@@ -183,8 +182,9 @@ mark{background:rgba(255,200,61,.3);color:inherit;border-radius:2px}
 @media(max-width:560px){.pn{grid-template-columns:1fr}.smell dl{grid-template-columns:1fr}.smell dt{padding-top:6px}.hero{padding:16px}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.side{transition:none}}
 </style>
+</head><body>
 <div class="top" role="banner">
-  <button class="btn" id="menu" aria-label="Toggle lesson menu" aria-expanded="false">☰ Menu</button>
+  <button class="btn" id="menu" aria-label="Toggle lesson menu" aria-controls="side" aria-expanded="false">☰ Menu</button>
   <a class="brand" href="#home">Cyber Formula Library<small>09 · Software Engineering</small></a>
   <label class="search"><span class="sr">Search the guide</span>⌕<input id="q" type="search" placeholder="Search lessons, checklists, questions…" autocomplete="off"><kbd>/</kbd></label>
   <span class="sp"></span>
@@ -405,7 +405,7 @@ double payout(Employee e) {
 ]);
 
 LES('m03-pure','m03','Side effects, CQS, pure functions, composition',3,10,[
-P(R`<b>Command-Query Separation:</b> a method either changes state (command, returns nothing) or answers a question (query, changes nothing). A function that does both surprises callers. <b>Pure functions</b> depend only on their arguments and have no side effects, so they are trivial to test and safe to reuse.`),
+P(R`<b>Command-Query Separation:</b> a method should generally either change state (a command) or answer a question without changing state (a query). Commands commonly return void, but may return a result when the operation needs one; a query should not mutate observable state. A function that does both surprises callers. <b>Pure functions</b> depend only on their arguments and have no side effects, so they are trivial to test and safe to reuse.`),
 CMP('Hidden side effect','java',R`
 boolean checkPassword(String user, String pw) {
   User u = repo.find(user);
@@ -1035,7 +1035,8 @@ class InvoicePrinter {
 ]);
 
 LES('m14-java','m14','Java: modern idioms and Spring Boot style',2,11,[
-UL(['<b>Records</b> for immutable data carriers; <b>sealed interfaces</b> with pattern matching for closed hierarchies.','<b>Streams</b> for transformations, plain loops when there are side effects or complex control flow.','<b>Constructor injection</b> and <code>final</code> fields; avoid field <code>@Autowired</code>.','<b>try-with-resources</b>; <b>Optional</b> only as a return type.','<b>Naming:</b> classes <code>PascalCase</code>, methods and variables <code>camelCase</code>, constants <code>UPPER_SNAKE</code>, packages lowercase.']),
+UL(['<b>Records</b> for immutable data carriers; <b>sealed interfaces</b> with pattern matching for closed hierarchies.','<b>Streams</b> for transformations, plain loops when there are side effects or complex control flow.','<b>Constructor injection</b> and <code>final</code> fields; avoid field <code>@Autowired</code>.','<b>try-with-resources</b>; <b>Optional</b> mainly as a return type; avoid it for fields and parameters unless an API has a clear reason.','<b>Naming:</b> classes <code>PascalCase</code>, methods and variables <code>camelCase</code>, constants <code>UPPER_SNAKE</code>, packages lowercase.']),
+CALL('note',R`Java records are shallowly immutable: their component fields are final, but a referenced mutable object can still be changed. Prefer immutable component types (or defensive copies) when you need deep immutability.`),
 CMP('Java 8 style vs modern Java','java',R`
 public class Point { private final int x, y; /* ctor, getters, equals, hashCode, toString */ }
 if (shape instanceof Circle) { Circle c = (Circle) shape; return Math.PI * c.r * c.r; }
@@ -1121,8 +1122,15 @@ CMP('Transaction and logic mixed in a controller-service blob','java',R`
   Loan loan = loans.get(id);
   loan.approveBy(by);                     // rule lives in the domain
   loans.save(loan);
-  events.publish(new LoanApproved(id));   // email sent after commit by a listener
-}`,['The approval rule moved into <code>Loan</code>, where it is unit-testable.','Sending email after commit avoids holding a transaction open on a slow network call and avoids mailing for rolled-back work.'],'Expected benefit: faster tests, fewer production incidents from slow external calls.'),
+  events.publish(new LoanApproved(id));   // listener runs after successful commit
+}
+
+@Component
+class LoanApprovedListener {
+  @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
+  void on(LoanApproved event) { email.sendFor(event.loanId()); }
+}`,['The approval rule moved into <code>Loan</code>, where it is unit-testable.','<code>@TransactionalEventListener(phase = AFTER_COMMIT)</code> prevents the email listener from running when the transaction rolls back.','The listener runs after commit, so the database transaction does not wait for the email network call.'],'Reliability caveat: an in-process after-commit event is not durable. The process can stop after the database commits but before the listener finishes. For important delivery, write an outbox record in the same transaction and publish it asynchronously with retries.'),
+CALL('note',R`Publishing an application event does not automatically mean “after commit.” The listener must use transaction-aware handling, such as <code>@TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)</code>. For guaranteed eventual delivery, use a transactional outbox.`),
 H('Case 3: Refactoring a large controller'),
 CMP('Fat controller to thin controller','java',R`
 @PostMapping("/orders") public String create(@RequestBody OrderReq r) {
@@ -1163,15 +1171,19 @@ public boolean pay(String card, double amount) {
   catch (Exception e) { return false; }      // was the card charged? unknown
 }`,R`
 public PaymentResult pay(PaymentCommand cmd) {
-  return payments.findByKey(cmd.idempotencyKey())
-      .orElseGet(() -> charge(cmd));          // retry-safe
-}
-private PaymentResult charge(PaymentCommand cmd) {
+  // Atomic insert protected by UNIQUE(idempotency_key); returns existing row on conflict.
+  PaymentAttempt attempt = payments.claimOrLoad(cmd.idempotencyKey(), cmd);
+  if (!attempt.newlyClaimed()) return attempt.currentResult();
+
   try {
+    // Send the same key to the provider; never generate a new key for a retry.
     ChargeResult r = gateway.charge(cmd.token(), cmd.amount(), cmd.idempotencyKey());
-    return payments.save(PaymentResult.from(r));
-  } catch (GatewayTimeout e) { return payments.save(PaymentResult.pending(cmd)); }   // reconcile later
-}`,['<code>Money</code> and tokens replace <code>double</code> and raw card numbers.','An idempotency key makes retries safe. Explicit states (approved, declined, pending) replace a boolean.'],'Expected benefit: no double charges on retry and a clear path to reconcile unknown outcomes.')
+    return payments.markCompleted(attempt.id(), PaymentResult.from(r));
+  } catch (GatewayTimeout e) {
+    payments.markPending(attempt.id()); // reconcile with provider using the same key
+    return PaymentResult.pending(attempt.id());
+  }
+}`,['The database must enforce a unique constraint on <code>idempotency_key</code>; a plain find-then-charge check races under concurrent requests.','<code>claimOrLoad</code> represents an atomic claim operation. Concurrent requests with the same key must reuse the same attempt/result rather than start another charge.','Pass the same idempotency key to the payment provider when it supports provider-side idempotency.','A timeout is an unknown outcome, not proof of failure. Keep the attempt pending and reconcile with the provider before deciding whether another charge is safe.'],'This is a conceptual flow, not a drop-in implementation. Production code also needs transaction boundaries, safe claim/lease handling, key-to-request consistency checks, and a reconciliation worker. Do not hold a database transaction open while waiting on the payment network.')
 ]);
 
 LES('m15-legacy','m15','Cases: exceptions, God class, legacy codebase',3,13,[
@@ -1242,7 +1254,9 @@ catch (Exception e) { }`,opts:['Missing finally','Swallowed exception hides fail
 send(u.email());`,why:'Special cases exit first, leaving one unindented happy path. Splitting into three separate guard lines is also fine.'},
 {id:'q31',topic:'m03',type:'code',q:'Short exercise: replace the flag argument in <code>void log(String msg, boolean error)</code> with a clearer design.',model:R`void info(String msg) {...}
 void error(String msg) {...}`,why:'Two methods express two behaviors. An enum Level parameter is another valid design.'},
-{id:'q32',topic:'m07',type:'code',q:'Short exercise: write the Java statement that ensures an <code>email</code> parameter is not null and fails with a helpful message.',model:R`Objects.requireNonNull(email, "email must not be null");`,why:'Fail at the boundary with a message that names the problem.'}
+{id:'q32',topic:'m07',type:'code',q:'Short exercise: write the Java statement that ensures an <code>email</code> parameter is not null and fails with a helpful message.',model:R`Objects.requireNonNull(email, "email must not be null");`,why:'Fail at the boundary with a message that names the problem.'},
+{id:'q33',topic:'m09',type:'mcq',q:'What is the strongest reason to enforce formatting with a formatter in CI?',opts:['It guarantees the code has no bugs','It removes subjective style debates and keeps the whole team consistent','It makes every method shorter','It replaces code review'],a:1,why:'A formatter automates mechanical style decisions. It improves consistency, but it does not prove correctness or replace review.'},
+{id:'q34',topic:'m09',type:'scenario',q:'A feature package needs a class from infrastructure, while infrastructure also imports the feature package. What should you investigate first?',opts:['Add more public classes','Break the dependency cycle and make dependencies point toward stable policy or domain code','Move every class into one package','Suppress the architecture test'],a:1,why:'Cyclic dependencies make boundaries hard to understand and change. Define a clear inward dependency direction and enforce it with architecture tests.'}
 ];
 
 /* ---------- SMELL DETECTOR ---------- */
@@ -1478,7 +1492,7 @@ const REF=[
 {id:'r-review',t:'Code review checklist',items:['Does it do what the PR says, and is the design sound?','Are edge cases and failures handled?','Is there a security risk (input, auth, secrets, SQL)?','Are tests meaningful and readable?','Are names clear? Is anything over-engineered?','Is it small enough to review? Are refactors separate?','Comments are phrased as questions or suggestions with reasons']},
 {id:'r-pr',t:'Pull request checklist',items:['Title and description say what and why','Linked issue','Tests added or updated, build green','No unrelated changes; refactor split from behavior change','No debug code, secrets or commented-out code','Docs / changelog updated if behavior changed','Migration and rollback noted if relevant']},
 {id:'r-test',t:'Testing checklist',items:['Each test has one reason to fail','Name states the behavior','Arrange-Act-Assert visible','No dependence on order, clock, network or shared state','Assert outcomes, not implementation','Bug fix has a regression test','Few slow integration tests; many fast unit tests']},
-{id:'r-java',t:'Java-specific conventions',items:['Records for data carriers; sealed types for closed hierarchies','Constructor injection and final fields','try-with-resources for closeables','Optional as a return type only','Unchecked domain exceptions translated at boundaries','No wildcard imports; formatter enforces style','Prefer immutable collections (List.of, toList())','Use BigDecimal or a Money type for currency']},
+{id:'r-java',t:'Java-specific conventions',items:['Records for data carriers; sealed types for closed hierarchies','Constructor injection and final fields','try-with-resources for closeables','Use Optional mainly for return values; avoid fields and parameters unless the API has a clear reason.','Unchecked domain exceptions translated at boundaries','No wildcard imports; formatter enforces style','Prefer immutable collections (List.of, toList())','Use BigDecimal or a Money type for currency']},
 {id:'r-anti',t:'Common anti-patterns',items:['God object / Manager class','Anemic domain model with all logic in services','Singleton used as hidden global state','Swallowed exceptions','Copy-paste inheritance','Primitive obsession','Service locator hiding dependencies','Returning JPA entities from controllers','Premature abstraction and premature optimization']},
 {id:'r-debt',t:'Technical debt assessment guide',items:['Impact: how much slower is each change here?','Frequency: how often does this code change?','Risk: how likely and costly is a production failure?','Cost to fix: size of the refactor and test gap','Priority = frequency × impact × risk, relative to cost','Record: owner, trigger, ticket, date','Review the list every quarter and delete what no longer matters']}
 ];
@@ -1492,8 +1506,9 @@ const $=(s,r)=> (r||document).querySelector(s), $$=(s,r)=>[...(r||document).quer
 const esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 const LV=['','Beginner','Intermediate','Advanced'];
 const lvTag=l=>`<span class="tag l${l}">${LV[l]}</span>`;
-const today=()=>new Date().toLocaleDateString('en-CA');
-function touch(){const t=today();if(S.streak.last===t)return;const y=new Date(Date.now()-864e5).toLocaleDateString('en-CA');S.streak.n=S.streak.last===y?S.streak.n+1:1;S.streak.last=t;save()}
+const dateKey=d=>[d.getFullYear(),String(d.getMonth()+1).padStart(2,'0'),String(d.getDate()).padStart(2,'0')].join('-');
+const today=()=>dateKey(new Date());
+function touch(){const t=today();if(S.streak.last===t)return;const previous=new Date();previous.setHours(12,0,0,0);previous.setDate(previous.getDate()-1);const y=dateKey(previous);S.streak.n=S.streak.last===y?S.streak.n+1:1;S.streak.last=t;save()}
 function toast(t){const d=document.createElement('div');d.className='toast';d.textContent=t;d.setAttribute('role','status');document.body.appendChild(d);setTimeout(()=>d.remove(),1600)}
 function copy(text){const fb=()=>{const t=document.createElement('textarea');t.value=text;t.style.position='fixed';t.style.opacity='0';document.body.appendChild(t);t.select();let ok=false;try{ok=document.execCommand('copy')}catch(e){}t.remove();toast(ok?'Copied':'Select the text and copy it manually')};
   try{navigator.clipboard.writeText(text).then(()=>toast('Copied'),fb)}catch(e){fb()}}
@@ -1567,7 +1582,7 @@ function navState(r){$$('.nav a',side).forEach(a=>{const on=a.dataset.r===r;a.cl
   $$('details.mod',side).forEach(d=>{const ls=mLessons(d.dataset.m);const x=ls.filter(l=>S.done[l.id]).length;d.querySelector('.pc').textContent=x+'/'+ls.length;$$('.nav a',d).forEach((a,i)=>{const dn=!!S.done[ls[i].id];a.classList.toggle('done',dn);a.querySelector('.ck').textContent=dn?'✓':'·'})})}
 
 /* ---- question component ---- */
-function qHtml(q,idx){return `<div class="q"><div class="qt">${idx||''}${({mcq:'Multiple choice',tf:'True or false',bug:'Find the bug',smell:'Identify the smell',scenario:'Scenario',code:'Short exercise'})[q.type]}</div><p>${q.q}</p>${q.code?codeBlock('java',q.code,{noSave:true}):''}<div class="opts">${q.type==='code'?`<textarea class="ans" aria-label="Your answer" placeholder="Write your answer here (it is not executed)"></textarea><div class="row"><button class="btn" data-q="show">Show model answer</button></div><div class="fbx"></div>`:q.opts.map((o,i)=>`<button class="opt" data-i="${i}"><span class="k">${'ABCD'[i]}</span><span>${o}</span></button>`).join('')+'<div class="fbx"></div>'}</div></div>`}
+function qHtml(q,idx){return `<div class="q"><div class="qt">${idx||''}${({mcq:'Multiple choice',tf:'True or false',bug:'Find the bug',smell:'Identify the smell',scenario:'Scenario',code:'Short exercise'})[q.type]}</div><p>${q.q}</p>${q.code?codeBlock('java',q.code,{noSave:true}):''}<div class="opts">${q.type==='code'?`<textarea class="ans" aria-label="Your answer" placeholder="Write your answer here (it is not executed)"></textarea><div class="row"><button class="btn" data-q="show">Show model answer</button></div><div class="fbx" role="status" aria-live="polite" aria-atomic="true"></div>`:q.opts.map((o,i)=>`<button class="opt" data-i="${i}"><span class="k">${'ABCD'[i]}</span><span>${o}</span></button>`).join('')+'<div class="fbx" role="status" aria-live="polite" aria-atomic="true"></div>'}</div></div>`}
 function mountQ(el,q,cb){let fin=false;
   const fbx=$('.fbx',el);
   if(q.type==='code'){$('[data-q=show]',el).onclick=()=>{fbx.innerHTML=`<div class="fb">${codeBlock('java',q.model,{noSave:true})}<p>${q.why}</p><div class="row"><span>How did you do?</span><button class="btn sm" data-self="1">I got it</button><button class="btn sm" data-self="0">Not yet</button></div></div>`;$$('[data-self]',fbx).forEach(b=>b.onclick=()=>{if(fin)return;fin=true;$$('[data-self]',fbx).forEach(x=>x.disabled=true);cb(b.dataset.self==='1')});$('[data-q=show]',el).disabled=true};return}
@@ -1598,7 +1613,7 @@ V.home=()=>{
   <div class="grid" style="margin-bottom:18px">
    <div class="card stat"><b>${S.streak.n}</b><span>day streak</span></div>
    <div class="card stat"><b>${dn}/${total}</b><span>lessons done</span></div>
-   <div class="card stat"><b>${S.qs.a?pct(S.qs.c,S.qs.a)+'%':'–'}</b><span>quiz accuracy (${S.qs.a} answered)</span></div>
+   <div class="card stat"><b>${S.qs.a?pct(S.qs.c,S.qs.a)+'%':'–'}</b><span>quiz &amp; daily accuracy (${S.qs.a} answered)</span></div>
    <div class="card stat"><b>${bms.length+S.snips.length}</b><span>bookmarks and snippets</span></div></div>
   <h2>Daily Clean Code challenge</h2><div id="daily"></div>
   <h2>Modules</h2><div class="grid">${MODS.map(m=>{const ls=mLessons(m.id),d=ls.filter(l=>S.done[l.id]).length,mins=ls.reduce((a,l)=>a+l.mins,0);return `<a class="card" style="text-decoration:none;color:inherit" href="#lesson-${ls[0].id}"><div class="eyebrow">Module ${m.n}</div><h3 style="margin:0 0 6px">${m.title}</h3><p style="font-size:13.5px;color:var(--dim);margin-bottom:10px">${m.blurb}</p><div class="bar"><i style="width:${pct(d,ls.length)}%"></i></div><p style="font:11px var(--f-mono);color:var(--dim);margin:6px 0 0">${d}/${ls.length} lessons · about ${mins} min</p></a>`}).join('')}</div>
@@ -1624,7 +1639,7 @@ V.lesson=id=>{const l=les(id);if(!l){location.hash='#home';return}
   $('#done').onclick=()=>{S.done[id]=!S.done[id];if(S.done[id])touch();save();V.lesson(id);navState('lesson-'+id)};
   $('#bm').onclick=()=>{S.bm[id]=!S.bm[id];save();V.lesson(id)};
   $('#note').oninput=e=>{S.notes[id]=e.target.value;save()}};
-V.paths=()=>{main.innerHTML=crumbs([['Learning paths']])+`<h1>Learning paths</h1><p class="lede">Four routes through the material. Each shows prerequisites, estimated time, your completion and the next lesson to take.</p>`+PATHS.map((p,pi)=>{const ls=p.lessons.map(les),d=ls.filter(l=>S.done[l.id]).length,nx=ls.find(l=>!S.done[l.id]);
+V.paths=()=>{main.innerHTML=crumbs([['Learning paths']])+`<h1>Learning paths</h1><p class="lede">Four routes through the material. Each shows prerequisites, estimated time, your completion and the next lesson to take. Time estimates include reading, working through examples, completing practice and reviewing notes; they are not just the sum of the lesson-minute labels.</p>`+PATHS.map((p,pi)=>{const ls=p.lessons.map(les),d=ls.filter(l=>S.done[l.id]).length,nx=ls.find(l=>!S.done[l.id]);
     return `<section class="card" style="margin:14px 0"><div class="row" style="justify-content:space-between"><h2 style="margin:0">${p.name}</h2><span class="tag">${p.time}</span></div><p style="color:var(--dim);margin:6px 0 10px">Prerequisites: ${p.pre}</p><div class="bar"><i style="width:${pct(d,ls.length)}%"></i></div><p style="font:12px var(--f-mono);color:var(--dim)">${d}/${ls.length} complete</p>
     <ol style="padding-left:20px;margin:8px 0">${ls.map(l=>`<li><a href="#lesson-${l.id}">${l.title}</a> ${S.done[l.id]?'<span class="tag ok">done</span>':''}</li>`).join('')}</ol>
     <div class="row">${nx?`<a class="btn pri" href="#lesson-${nx.id}">Next: ${nx.title}</a>`:`<span class="tag ok">Path complete</span>${PATHS[pi+1]?`<a class="btn" href="#paths">Recommended next: ${PATHS[pi+1].name} path</a>`:`<a class="btn" href="#interview">Recommended next: interview arena</a>`}`}</div></section>`}).join('')};
@@ -1703,6 +1718,8 @@ document.addEventListener('click',e=>{const b=e.target.closest('[data-act]');if(
   else if(a==='snipcopy')copy(S.snips[+b.dataset.i].code);
   else if(a==='snipdel'){S.snips.splice(+b.dataset.i,1);save();V.home()}});
 $('#menu').onclick=()=>{const o=side.classList.toggle('open');$('#menu').setAttribute('aria-expanded',String(o))};
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&side.classList.contains('open')){side.classList.remove('open');$('#menu').setAttribute('aria-expanded','false');$('#menu').focus()}});
+document.addEventListener('click',e=>{if(side.classList.contains('open')&&!side.contains(e.target)&&!$('#menu').contains(e.target)){side.classList.remove('open');$('#menu').setAttribute('aria-expanded','false')}});
 $('#theme').onclick=()=>{const cur=document.documentElement.dataset.theme||'dark';S.theme=cur==='light'?'dark':'light';document.documentElement.dataset.theme=S.theme;save()};
 $('#q').addEventListener('input',e=>{if(e.target.value.trim()){if(location.hash!=='#search')history.replaceState(null,'','#search');V.search();navState('search');window.scrollTo(0,0)}else if(location.hash==='#search'){location.hash='#home'}});
 $('#q').addEventListener('keydown',e=>{if(e.key==='Escape'){e.target.value='';e.target.blur();if(location.hash==='#search')location.hash='#home'}});
