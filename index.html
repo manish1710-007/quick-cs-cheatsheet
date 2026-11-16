@@ -1,250 +1,489 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>★ CYBER FORMULA LIBRARY ★</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#071331">
+  <title>★ CYBER FORMULA LIBRARY ★</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap');
+
+    :root {
+      --ink: #050916;
+      --navy: #071331;
+      --panel: rgba(7, 20, 53, .88);
+      --blue: #167cff;
+      --ice: #a8eaff;
+      --cyan: #42dcff;
+      --silver: #d8e8f7;
+      --muted: #8faacb;
+      --pink: #e34cff;
+      --line: rgba(122, 196, 255, .34);
+      --sidebar-width: 272px;
+      --chrome: linear-gradient(110deg,#eaf8ff 0%,#82caff 18%,#fff 34%,#688dff 51%,#f8faff 67%,#8be8ff 82%,#dce8ff 100%);
+    }
+
+    * { box-sizing: border-box; }
+    html, body { width: 100%; height: 100%; margin: 0; }
+    body {
+      overflow: hidden;
+      color: #eaf6ff;
+      background:
+        radial-gradient(ellipse at 70% 0%, rgba(29,100,255,.25), transparent 42%),
+        radial-gradient(ellipse at 10% 100%, rgba(32,190,255,.12), transparent 42%),
+        #030713;
+      font-family: 'Rajdhani', sans-serif;
+    }
+    body::before {
+      content: ""; position: fixed; inset: 0; z-index: 20; pointer-events: none;
+      opacity: .13;
+      background: repeating-linear-gradient(to bottom, transparent 0 3px, rgba(130,205,255,.2) 4px, transparent 5px);
+      mix-blend-mode: screen;
+    }
+    body::after {
+      content: ""; position: fixed; inset: 0; z-index: 19; pointer-events: none;
+      opacity: .08;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.35'/%3E%3C/svg%3E");
+    }
+
+    .app-shell { display: flex; width: 100%; height: 100dvh; position: relative; }
+    .sidebar {
+      width: var(--sidebar-width); min-width: var(--sidebar-width); height: 100%;
+      display: flex; flex-direction: column; z-index: 10;
+      background: linear-gradient(160deg, rgba(10,27,65,.97), rgba(3,8,24,.98) 70%);
+      border-right: 1px solid rgba(99,184,255,.55);
+      box-shadow: 10px 0 40px rgba(0,0,0,.35), inset -1px 0 rgba(255,255,255,.08);
+    }
+    .sidebar-header {
+      position: relative; padding: 22px 18px 16px; overflow: hidden;
+      border-bottom: 1px solid var(--line);
+      background:
+        linear-gradient(135deg, rgba(23,113,255,.27), transparent 65%),
+        repeating-linear-gradient(135deg, transparent 0 9px, rgba(110,200,255,.035) 10px 11px);
+    }
+    .sidebar-header::after {
+      content: "FORMULA / DATABASE"; position: absolute; right: -18px; bottom: 13px;
+      font: 9px 'Space Mono', monospace; letter-spacing: 2px; color: rgba(145,213,255,.25);
+      transform: rotate(-90deg); transform-origin: right;
+    }
+    .brand-kicker { font: 9px 'Space Mono', monospace; letter-spacing: 3px; color: var(--cyan); }
+    .sidebar-header h1 {
+      margin: 7px 0 1px; font: 900 clamp(24px,2.3vw,31px)/.95 'Orbitron', sans-serif;
+      letter-spacing: -1.5px; color: transparent; background: var(--chrome);
+      background-clip: text; -webkit-background-clip: text;
+      filter: drop-shadow(0 2px 8px rgba(49,166,255,.55));
+    }
+    .subtitle { margin-top: 10px; font: 9px 'Space Mono', monospace; color: #8deaff; letter-spacing: 1.3px; min-height: 13px; }
+    .subtitle::before { content: "●"; color: #65ffbb; margin-right: 7px; text-shadow: 0 0 8px #65ffbb; }
+
+    .menu-container { min-height: 0; flex: 1; display: flex; flex-direction: column; }
+    .menu-search { padding: 15px 14px 11px; border-bottom: 1px solid rgba(115,190,255,.2); }
+    .menu-search-label { display: block; margin-bottom: 7px; font: 9px 'Space Mono',monospace; color: #75dfff; letter-spacing: 1.6px; }
+    .menu-search-row { display: flex; border: 1px solid rgba(92,174,255,.5); background: rgba(0,7,25,.8); box-shadow: inset 0 0 14px rgba(27,115,255,.12); }
+    #topic-search { width: 100%; min-width: 0; padding: 10px 9px; color: white; border: 0; outline: 0; background: transparent; font: 13px 'Rajdhani',sans-serif; letter-spacing: .5px; }
+    #topic-search::placeholder { color: #6d86aa; }
+    .menu-search-clear { display: none; width: 34px; color: var(--ice); border: 0; background: transparent; font-size: 20px; cursor: pointer; }
+    .menu-search-clear.visible { display: block; }
+    .search-status { margin-top: 7px; color: #6e9fc7; font: 9px 'Space Mono',monospace; letter-spacing: .5px; }
+    #topic-list { overflow: auto; list-style: none; padding: 9px 10px 18px; margin: 0; scrollbar-width: thin; scrollbar-color: #2365a9 #071126; }
+    #topic-list li { margin: 0 0 5px; }
+    #topic-list button {
+      width: 100%; min-height: 32px; padding: 7px 10px; text-align: left;
+      color: #b9cce4; cursor: pointer; border: 1px solid transparent;
+      border-left: 2px solid rgba(81,155,255,.35);
+      background: linear-gradient(90deg, rgba(28,61,111,.48), rgba(8,20,48,.55));
+      font: 600 12px 'Rajdhani',sans-serif; letter-spacing: .8px; text-transform: uppercase;
+      transition: .18s ease;
+    }
+    #topic-list button::before { content: "›"; color: #55cfff; margin-right: 9px; }
+    #topic-list button:hover { color: white; border-color: rgba(80,190,255,.5); border-left-color: var(--cyan); background: linear-gradient(90deg,rgba(24,119,255,.35),rgba(15,37,81,.8)); transform: translateX(2px); }
+    #topic-list button.active-topic { color: #fff; border-color: rgba(83,207,255,.55); border-left: 3px solid #65eaff; background: linear-gradient(90deg,rgba(0,137,255,.48),rgba(49,44,132,.34)); box-shadow: inset 0 0 18px rgba(40,151,255,.16), 0 0 12px rgba(26,130,255,.12); }
+    #topic-list button.active-topic::before { content: "✦"; color: #a9f6ff; }
+
+    .main-content { min-width: 0; flex: 1; height: 100%; position: relative; padding: 12px; }
+    .desktop-frame {
+      height: 100%; width: 100%; position: relative; overflow: hidden;
+      border: 1px solid rgba(105,192,255,.65);
+      background: linear-gradient(145deg,rgba(8,25,63,.86),rgba(2,8,23,.97));
+      box-shadow: 0 0 0 3px rgba(36,104,188,.12), 0 18px 70px rgba(0,0,0,.45), inset 0 0 55px rgba(20,107,255,.13);
+    }
+    .desktop-frame::before { content: ""; position: absolute; inset: 0; pointer-events: none; z-index: 2; border: 1px solid rgba(255,255,255,.12); }
+    .topbar {
+      height: 39px; position: absolute; z-index: 5; inset: 0 0 auto;
+      display: flex; align-items: center; justify-content: space-between; padding: 0 14px;
+      border-bottom: 1px solid rgba(110,196,255,.32);
+      background: linear-gradient(90deg,rgba(4,13,34,.94),rgba(11,40,91,.78),rgba(4,13,34,.94));
+      font: 9px 'Space Mono',monospace; letter-spacing: 1.3px; color: #a8d9ff;
+    }
+    .topbar-left { display: flex; gap: 10px; align-items: center; }
+    .live-dot { width: 6px; height: 6px; background: #72ffbd; border-radius: 50%; box-shadow: 0 0 9px #72ffbd; }
+    .topbar-right { color: #789cbe; }
+    #settings-btn {
+      position: absolute; top: 49px; right: 12px; z-index: 12; width: 39px; height: 37px;
+      color: #dff7ff; border: 1px solid rgba(127,209,255,.7);
+      background: linear-gradient(145deg,rgba(45,117,202,.8),rgba(6,22,55,.94));
+      box-shadow: 0 0 16px rgba(46,164,255,.25), inset 0 1px rgba(255,255,255,.3);
+      cursor: pointer; font-size: 17px; transition: .2s;
+    }
+    #settings-btn:hover { transform: rotate(25deg); box-shadow: 0 0 22px rgba(67,196,255,.55); }
+
+    .iframe-container { position: absolute; inset: 39px 0 0; overflow: hidden; }
+    .placeholder {
+      position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+      overflow: auto; background-position: center; background-size: cover; background-color: #07183b;
+      transition: background-image .3s ease;
+    }
+    .placeholder::before {
+      content: ""; position: absolute; inset: 0; z-index: 0;
+      background: linear-gradient(120deg,rgba(0,12,45,.38),rgba(0,54,145,.13) 48%,rgba(1,7,25,.58)),
+                  repeating-linear-gradient(0deg,transparent 0 39px,rgba(110,195,255,.045) 40px);
+      pointer-events: none;
+    }
+    .placeholder::after {
+      content: ""; position: absolute; inset: 0; pointer-events: none; opacity: .45;
+      background: radial-gradient(ellipse at 50% 48%,transparent 10%,rgba(0,0,0,.5) 100%);
+    }
+    .landing-content { position: relative; z-index: 1; width: min(900px,92%); padding: 35px 20px 42px; text-align: center; }
+    .landing-overline { color: #9af1ff; font: 10px 'Space Mono',monospace; letter-spacing: 4px; text-shadow: 0 0 12px #23baff; }
+    .landing-title {
+      margin: 15px 0 4px; font: 900 clamp(35px,7vw,82px)/.94 'Orbitron',sans-serif;
+      letter-spacing: -4px; color: transparent; background: var(--chrome); background-clip: text; -webkit-background-clip: text;
+      filter: drop-shadow(0 4px 0 rgba(5,24,65,.9)) drop-shadow(0 0 20px rgba(60,169,255,.65));
+      text-transform: uppercase;
+    }
+    .landing-jp { color: #b6d9ff; font: 600 clamp(12px,2vw,17px) 'Rajdhani',sans-serif; letter-spacing: 8px; text-shadow: 0 0 14px #168cff; }
+    .landing-rule { width: min(380px,70%); height: 1px; margin: 21px auto; background: linear-gradient(90deg,transparent,#8deaff,#fff,#8deaff,transparent); box-shadow: 0 0 12px #4cbfff; }
+    .landing-copy { max-width: 520px; margin: 0 auto; color: #c4dcf3; font: 500 15px/1.5 'Rajdhani',sans-serif; letter-spacing: 1px; }
+    .landing-copy strong { color: #fff; }
+    .module-prompt { display: inline-flex; align-items: center; gap: 11px; margin-top: 25px; padding: 11px 18px; color: #dffaff; border: 1px solid rgba(129,220,255,.65); background: rgba(2,15,43,.7); box-shadow: 0 0 22px rgba(29,150,255,.2), inset 0 0 18px rgba(35,135,255,.13); font: 10px 'Space Mono',monospace; letter-spacing: 1.5px; }
+    .module-prompt span { color: #74f3ff; font-size: 15px; }
+    .landing-meta { display: flex; justify-content: center; flex-wrap: wrap; gap: 9px; margin-top: 22px; }
+    .meta-chip { padding: 5px 9px; border: 1px solid rgba(146,202,255,.28); background: rgba(3,13,37,.48); color: #a6c9eb; font: 8px 'Space Mono',monospace; letter-spacing: 1px; }
+    #contentFrame { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; background: #fff; opacity: 0; z-index: 3; }
+    .loader { position: absolute; inset: 0; display: none; flex-direction: column; align-items: center; justify-content: center; z-index: 4; background: rgba(2,9,26,.96); }
+    .spinner { width: 42px; height: 42px; border: 2px solid rgba(77,170,255,.2); border-top-color: #8cecff; border-right-color: #d84bff; border-radius: 50%; animation: spin .8s linear infinite; box-shadow: 0 0 20px rgba(52,167,255,.2); }
+    .loader-text { margin-top: 15px; color: #8cecff; font: 10px 'Space Mono',monospace; letter-spacing: 3px; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    @keyframes shimmer { 0%,100% { opacity: .75; } 50% { opacity: 1; } }
+    .landing-overline { animation: shimmer 3s ease-in-out infinite; }
+
+    .settings-panel {
+      display: none; position: absolute; z-index: 15; top: 94px; right: 14px;
+      width: min(440px,calc(100vw - var(--sidebar-width) - 45px)); max-height: calc(100% - 112px); overflow: auto;
+      padding: 18px; color: #e8f7ff; border: 1px solid rgba(118,205,255,.65);
+      background: linear-gradient(145deg,rgba(8,26,66,.98),rgba(3,9,28,.98));
+      box-shadow: 0 18px 55px rgba(0,0,0,.58), 0 0 28px rgba(38,143,255,.2), inset 0 1px rgba(255,255,255,.12);
+      backdrop-filter: blur(18px);
+    }
+    .settings-head { display: flex; justify-content: space-between; align-items: start; gap: 10px; margin-bottom: 14px; }
+    .settings-panel h3 { margin: 0; color: #c9f3ff; font: 700 14px 'Orbitron',sans-serif; letter-spacing: 1.5px; }
+    .settings-sub { margin-top: 5px; color: #779ec5; font: 9px 'Space Mono',monospace; }
+    .close-settings { border: 0; color: #a9dcff; background: transparent; font-size: 22px; cursor: pointer; }
+    .wallpaper-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 9px; }
+    .wp-option {
+      position: relative; min-height: 92px; overflow: hidden; cursor: pointer; border: 1px solid rgba(125,192,255,.35);
+      background-color: #0c2d69; background-position: center; background-size: cover;
+      transition: .18s ease;
+    }
+    .wp-option:hover { transform: translateY(-2px); border-color: #8cecff; box-shadow: 0 0 14px rgba(66,183,255,.25); }
+    .wp-option.active { border: 2px solid #9af3ff; box-shadow: 0 0 16px rgba(61,200,255,.4); }
+    .wp-option.active::after { content: "✓ SELECTED"; position: absolute; top: 6px; right: 6px; padding: 3px 5px; color: #00132a; background: #a5f3ff; font: 8px 'Space Mono',monospace; }
+    .wp-label { position: absolute; inset: auto 0 0; padding: 17px 8px 7px; color: white; background: linear-gradient(transparent,rgba(0,5,20,.92)); font: 700 11px 'Rajdhani',sans-serif; letter-spacing: 1.1px; text-transform: uppercase; }
+
+    @media (max-width: 760px) {
+      :root { --sidebar-width: 205px; }
+      .main-content { padding: 7px; }
+      .landing-title { letter-spacing: -2px; }
+      .landing-jp { letter-spacing: 4px; }
+      .topbar-right { display: none; }
+      .settings-panel { right: 8px; width: min(420px,calc(100vw - var(--sidebar-width) - 25px)); }
+    }
+    @media (max-width: 560px) {
+      .app-shell { flex-direction: column; }
+      .sidebar { width: 100%; min-width: 0; height: 42%; min-height: 210px; }
+      .sidebar-header { padding: 11px 14px 9px; }
+      .sidebar-header h1 { font-size: 22px; }
+      .subtitle { margin-top: 5px; }
+      .menu-search { padding: 8px 12px 7px; }
+      #topic-list { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 4px; padding: 7px 9px 10px; }
+      #topic-list li { margin: 0; }
+      #topic-list button { min-height: 29px; padding: 5px 6px; font-size: 10px; }
+      .main-content { min-height: 0; flex: 1; padding: 6px; }
+      .desktop-frame { min-height: 0; }
+      .settings-panel { top: 48px; right: 8px; width: min(420px,calc(100vw - 28px)); max-height: calc(100% - 60px); }
+      .landing-content { padding: 20px 8px; }
+      .landing-title { font-size: clamp(29px,10vw,54px); }
+      .landing-copy { font-size: 13px; }
+    }
+  </style>
 </head>
 <body>
+<div class="app-shell">
+  <aside class="sidebar">
+    <header class="sidebar-header">
+      <div class="brand-kicker">★ DIGITAL ARCHIVE // 2003–2077</div>
+      <h1>FORMULA DB</h1>
+      <div class="subtitle" id="typewriter-text">SYSTEM READY</div>
+    </header>
 
-    <div class="sidebar">
-        <div class="sidebar-header">
-            <h1>FORMULA DB</h1>
-            <div class="subtitle" id="typewriter-text">SYSTEM READY</div>
+    <div class="menu-container">
+      <div class="menu-search">
+        <label class="menu-search-label" for="topic-search">⌕ SEARCH DATABASE</label>
+        <div class="menu-search-row">
+          <input id="topic-search" type="search" placeholder="Find a topic..." autocomplete="off" spellcheck="false" aria-label="Search Formula DB topics">
+          <button type="button" id="clear-search" class="menu-search-clear" aria-label="Clear topic search" title="Clear search">×</button>
         </div>
-
-        <div class="menu-container">
-            <div class="menu-search">
-                <label class="menu-search-label" for="topic-search">SEARCH DATABASE</label>
-                <div class="menu-search-row">
-                    <input
-                        id="topic-search"
-                        type="search"
-                        placeholder="Find a topic..."
-                        autocomplete="off"
-                        spellcheck="false"
-                        aria-label="Search Formula DB topics"
-                    >
-                    <button type="button" id="clear-search" class="menu-search-clear" aria-label="Clear topic search" title="Clear search">×</button>
-                </div>
-                <div id="search-status" class="search-status" aria-live="polite">32 MODULES AVAILABLE</div>
-            </div>
-            <ul id="topic-list">
-                <li><button onclick="loadPage('files/algorithms_formulas.html')">Algorithms</button></li>
-                <li><button onclick="loadPage('files/compiler_design_formulas.html')">Compiler</button></li>
-                <li><button onclick="loadPage('files/computer_networks_formulas.html')">Networks</button></li>
-                <li><button onclick="loadPage('files/computer_organization_formulas.html')">Org & Arch</button></li>
-                <li><button onclick="loadPage('files/database_formulas.html')">Database</button></li>
-                <li><button onclick="loadPage('files/digital_logic_formulas.html')">Digital Logic</button></li>
-                <li><button onclick="loadPage('files/discrete_mathematics_formulas.html')">Discrete Math</button></li>
-                <li><button onclick="loadPage('files/disk_scheduling_paging_formulas.html')">Disk Paging</button></li>
-                <li><button onclick="loadPage('files/operating_systems_formulas.html')">OS</button></li>
-                <li><button onclick="loadPage('files/theory_of_computation_formulas.html')">Theory of Comp</button></li>
-                <li><button onclick="loadPage('files/programming_ds_algo_formulas.html')">Prog & DS</button></li>
-                <li><button onclick="loadPage('files/system_design_formulas.html')">System Design</button></li>
-                <li><button onclick="loadPage('files/algorithm_patterns_guide.html')">Algo Patterns</button></li>
-                <li><button onclick="loadPage('files/apis_formulas.html')">APIs</button></li>
-                <li><button onclick="loadPage('files/cloud_containers_formulas.html')">Cloud & Containers</button></li>
-                <li><button onclick="loadPage('files/springboot_formulas.html')">SpringBoot</button></li>
-                <li><button onclick="loadPage('files/mern_formulas.html')">MERN</button></li>
-                <li><button onclick="loadPage('files/10x_developer_guide.html')">10x Developer</button></li>
-                <li><button onclick="loadPage('files/backend_saas_production_guide.html')">Backend SaaS</button></li>
-                <li><button onclick="loadPage('files/postgresql_cassandra_guide.html')">Postgre vs Cass</button></li>
-                <li><button onclick="loadPage('files/git_mastery_guide.html')">GIT</button></li>
-                <li><button onclick="loadPage('files/linux_mastery_guide.html')">Linux</button></li>
-                <li><button onclick="loadPage('files/neovim_vim_mastery_guide.html')">NeoVim/Vim</button></li>
-                <li><button onclick="loadPage('files/distributed_systems_guide.html')">Distributed Systems</button></li>
-                <li><button onclick="loadPage('files/microservices_guide.html')">MicroServices</button></li>
-                <li><button onclick="loadPage('files/blender_mastery_guide.html')">Blender</button></li>
-                <li><button onclick="loadPage('files/unity_mastery_guide.html')">Unity</button></li>
-                <li><button onclick="loadPage('files/unreal_mastery_guide.html')">Unreal</button></li>
-                <li><button onclick="loadPage('files/AI_mastery_guide.html')">AI</button></li>
-                <li><button onclick="loadPage('files/cybersecurity_mastery_guide.html')">CyberSecurity</button></li>
-                <li><button onclick="loadPage('files/ethical_hacking_mastery_guide.html')">Hacking</button></li>
-                <li><button onclick="loadPage('files/important_methods.html')">Imp Methods</button></li>
-                <li><button onclick="loadPage('files/sorting al.html')">Sorting Algorithms</button></li>
-                <li><button onclick="loadPage('files/LazyVim_Plugin_Walkthrough.html')">NeoVim Starting Tutorial</button></li>
-                <li><button onclick="loadPage('files/DevOps Mastery Guide.html')">DevOps Mastery Guide</button></li>
-                <li><button onclick="loadPage('files/Java Mastery Guide.html')">Java Mastery Guide</button></li>
-                <li><button onclick="loadPage('files/AI & LLM Mastery Guide.html')">AI & LLM Mastery Guide</button></li>
-                <li><button onclick="loadPage('files/Databases & Messaging Guide.html')">Databases & Messaging Guide</button></li>
-                <li><button onclick="loadPage('files/Architecture & Distributed Systems Guide.html')">Architecture & Distributed Systems Guide</button></li>
-                <li><button onclick="loadPage('files/Spring Backend Mastery Guide.html')">Spring Backend Mastery Guide</button></li>
-                <li><button onclick="loadPage('files/Clean Code Mastery Guide.html')">Clean Code Mastery Guide</button></li>
-                <li><button onclick="loadPage('files/software_testing_patterns_Guide.html')">Software Testing Patterns</button></li>
-                <li><button onclick="loadPage('files/code_review_mastery.html')">Code Review Mastery</button></li>
-                <li><button onclick="loadPage('files/software_documentation.html')">Software Documentation</button></li>
-            </ul>
-        </div>
+        <div id="search-status" class="search-status" aria-live="polite">MODULES AVAILABLE</div>
+      </div>
+      <ul id="topic-list">
+        <li><button onclick="loadPage('files/algorithms_formulas.html')">Algorithms</button></li>
+        <li><button onclick="loadPage('files/compiler_design_formulas.html')">Compiler</button></li>
+        <li><button onclick="loadPage('files/computer_networks_formulas.html')">Networks</button></li>
+        <li><button onclick="loadPage('files/computer_organization_formulas.html')">Org & Arch</button></li>
+        <li><button onclick="loadPage('files/database_formulas.html')">Database</button></li>
+        <li><button onclick="loadPage('files/digital_logic_formulas.html')">Digital Logic</button></li>
+        <li><button onclick="loadPage('files/discrete_mathematics_formulas.html')">Discrete Math</button></li>
+        <li><button onclick="loadPage('files/disk_scheduling_paging_formulas.html')">Disk Paging</button></li>
+        <li><button onclick="loadPage('files/operating_systems_formulas.html')">OS</button></li>
+        <li><button onclick="loadPage('files/theory_of_computation_formulas.html')">Theory of Comp</button></li>
+        <li><button onclick="loadPage('files/programming_ds_algo_formulas.html')">Prog & DS</button></li>
+        <li><button onclick="loadPage('files/system_design_formulas.html')">System Design</button></li>
+        <li><button onclick="loadPage('files/algorithm_patterns_guide.html')">Algo Patterns</button></li>
+        <li><button onclick="loadPage('files/apis_formulas.html')">APIs</button></li>
+        <li><button onclick="loadPage('files/cloud_containers_formulas.html')">Cloud & Containers</button></li>
+        <li><button onclick="loadPage('files/springboot_formulas.html')">SpringBoot</button></li>
+        <li><button onclick="loadPage('files/mern_formulas.html')">MERN</button></li>
+        <li><button onclick="loadPage('files/10x_developer_guide.html')">10x Developer</button></li>
+        <li><button onclick="loadPage('files/backend_saas_production_guide.html')">Backend SaaS</button></li>
+        <li><button onclick="loadPage('files/postgresql_cassandra_guide.html')">Postgre vs Cass</button></li>
+        <li><button onclick="loadPage('files/git_mastery_guide.html')">GIT</button></li>
+        <li><button onclick="loadPage('files/linux_mastery_guide.html')">Linux</button></li>
+        <li><button onclick="loadPage('files/neovim_vim_mastery_guide.html')">NeoVim/Vim</button></li>
+        <li><button onclick="loadPage('files/distributed_systems_guide.html')">Distributed Systems</button></li>
+        <li><button onclick="loadPage('files/microservices_guide.html')">MicroServices</button></li>
+        <li><button onclick="loadPage('files/blender_mastery_guide.html')">Blender</button></li>
+        <li><button onclick="loadPage('files/unity_mastery_guide.html')">Unity</button></li>
+        <li><button onclick="loadPage('files/unreal_mastery_guide.html')">Unreal</button></li>
+        <li><button onclick="loadPage('files/AI_mastery_guide.html')">AI</button></li>
+        <li><button onclick="loadPage('files/cybersecurity_mastery_guide.html')">CyberSecurity</button></li>
+        <li><button onclick="loadPage('files/ethical_hacking_mastery_guide.html')">Hacking</button></li>
+        <li><button onclick="loadPage('files/important_methods.html')">Imp Methods</button></li>
+        <li><button onclick="loadPage('files/sorting al.html')">Sorting Algorithms</button></li>
+        <li><button onclick="loadPage('files/LazyVim_Plugin_Walkthrough.html')">NeoVim Starting Tutorial</button></li>
+        <li><button onclick="loadPage('files/DevOps Mastery Guide.html')">DevOps Mastery Guide</button></li>
+        <li><button onclick="loadPage('files/Java Mastery Guide.html')">Java Mastery Guide</button></li>
+        <li><button onclick="loadPage('files/AI & LLM Mastery Guide.html')">AI & LLM Mastery Guide</button></li>
+        <li><button onclick="loadPage('files/Databases & Messaging Guide.html')">Databases & Messaging Guide</button></li>
+        <li><button onclick="loadPage('files/Architecture & Distributed Systems Guide.html')">Architecture & Distributed Systems Guide</button></li>
+        <li><button onclick="loadPage('files/Spring Backend Mastery Guide.html')">Spring Backend Mastery Guide</button></li>
+        <li><button onclick="loadPage('files/Clean Code Mastery Guide.html')">Clean Code Mastery Guide</button></li>
+        <li><button onclick="loadPage('files/software_testing_patterns_Guide.html')">Software Testing Patterns</button></li>
+        <li><button onclick="loadPage('files/code_review_mastery.html')">Code Review Mastery</button></li>
+        <li><button onclick="loadPage('files/software_documentation.html')">Software Documentation</button></li>
+      </ul>
     </div>
+  </aside>
 
-    <div class="main-content">
-        
-        <button id="settings-btn" onclick="toggleSettings()">⚙️</button>
+  <main class="main-content">
+    <section class="desktop-frame">
+      <div class="topbar">
+        <div class="topbar-left"><span class="live-dot"></span><span>CYBER FORMULA LIBRARY</span><span style="color:#537eaa">/</span><span>HOME TERMINAL</span></div>
+        <div class="topbar-right">東京 // ARCHIVE NODE 01 &nbsp; · &nbsp; <span id="clock">00:00:00</span></div>
+      </div>
+      <button id="settings-btn" onclick="toggleSettings()" aria-label="Open wallpaper studio" title="Wallpaper studio">⚙</button>
 
-        <div id="settings-panel" class="settings-panel">
-            <h3>WALLPAPER SELECT</h3>
-            <div class="wallpaper-grid">
-                <div class="wp-option active" style="background-image: url('Think\ K\ Pop\ GIF.gif');" onclick="setWallpaper('matrix', 'Think K Pop GIF.gif', this)">
-                    <div class="wp-label">Saku Code</div>
-                </div>
-                <div class="wp-option" style="background-image: url('https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExcjVuMHowMnM1YmE4OHlwbHNrbWU2aXRydGY2ODhtZThkYncyN20wcSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/gH1jGsCnQBiFHWMFzh/giphy.gif');" onclick="setWallpaper('city', 'https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExcjVuMHowMnM1YmE4OHlwbHNrbWU2aXRydGY2ODhtZThkYncyN20wcSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/gH1jGsCnQBiFHWMFzh/giphy.gif', this)">
-                    <div class="wp-label">Cyber City</div>
-                </div>
-                <div class="wp-option" style="background-image: url('https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExdXc0eWV4NDcwOXg4b243MGViYXZqbGoxbGhueWllcDNiY3Y3cHg2ZyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/9dVc1FBxVhkqEG0SpW/giphy.gif');" onclick="setWallpaper('neon', 'https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExdXc0eWV4NDcwOXg4b243MGViYXZqbGoxbGhueWllcDNiY3Y3cHg2ZyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/9dVc1FBxVhkqEG0SpW/giphy.gif', this)">
-                    <div class="wp-label">Neon Grid</div>
-                </div>
-                <div class="wp-option" style="background-image: url('https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExM2dhaW10bzF4NDdpdGt6aDdneHByanpzeTNwc3RlbGh2d3h3d3dlMCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/W6dHvprT7oks6BpX5R/giphy.gif');" onclick="setWallpaper('anime', 'https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExM2dhaW10bzF4NDdpdGt6aDdneHByanpzeTNwc3RlbGh2d3h3d3dlMCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/W6dHvprT7oks6BpX5R/giphy.gif', this)">
-                    <div class="wp-label">Anime Night</div>
-                </div>
-            </div>
+      <section id="settings-panel" class="settings-panel" aria-label="Wallpaper studio">
+        <div class="settings-head">
+          <div><h3>WALLPAPER STUDIO</h3><div class="settings-sub">CUSTOMIZE YOUR TERMINAL // VISUAL DATABASE</div></div>
+          <button class="close-settings" onclick="toggleSettings()" aria-label="Close wallpaper studio">×</button>
         </div>
-
-        <div class="iframe-container">
-            
-            <div id="placeholderText" class="placeholder">
-                <div class="placeholder-content">
-                    ✦ SELECT A MODULE ✦
-                    <span class="placeholder-sub">モジュールを選択してください</span>
-                </div>
-            </div>
-
-            <div id="loader" class="loader">
-                <div class="spinner"></div>
-                <div class="loader-text">LOADING...</div>
-            </div>
-
-            <iframe id="contentFrame" src="about:blank"></iframe>
+        <div class="wallpaper-grid" id="wallpaper-grid">
+          <div class="wp-option active" data-wallpaper="local-saku" style="background-image:linear-gradient(135deg,#111e76,#e23cff 55%,#031333)" onclick="selectWallpaper('local-saku', 'Think K Pop GIF.gif', this)">
+            <div class="wp-label">Saku Code · Local GIF</div>
+          </div>
+          <div class="wp-option" data-wallpaper="city" style="background-image:linear-gradient(135deg,#071d53,#197bdb,#120b39)" onclick="selectWallpaper('city', 'https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExcjVuMHowMnM1YmE4OHlwbHNrbWU2aXRydGY2ODhtZThkYncyN20wcSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/gH1jGsCnQBiFHWMFzh/giphy.gif', this)">
+            <div class="wp-label">Cyber City · GIF</div>
+          </div>
+          <div class="wp-option" data-wallpaper="neon" style="background-image:linear-gradient(135deg,#080e42,#e32dff,#007bff)" onclick="selectWallpaper('neon', 'https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExdXc0eWV4NDcwOXg4b243MGViYXZqbGoxbGhueWllcDNiY3Y3cHg2ZyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/9dVc1FBxVhkqEG0SpW/giphy.gif', this)">
+            <div class="wp-label">Neon Grid · GIF</div>
+          </div>
+          <div class="wp-option" data-wallpaper="anime" style="background-image:linear-gradient(135deg,#061f5b,#57dfff,#d8c9ff)" onclick="selectWallpaper('anime', 'https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExM2dhaW10bzF4NDdpdGt6aDdneHByanpzeTNwc3RlbGh2d3h3d3dlMCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/W6dHvprT7oks6BpX5R/giphy.gif', this)">
+            <div class="wp-label">Anime Night · GIF</div>
+          </div>
+          <div class="wp-option" data-wallpaper="blue-static" style="background-image:radial-gradient(circle at 70% 25%,#74eaff,transparent 20%),linear-gradient(135deg,#031039,#0758d7 55%,#07112e)" onclick="selectWallpaper('blue-static', '', this)">
+            <div class="wp-label">Blue Frequency · Motion</div>
+          </div>
+          <div class="wp-option" data-wallpaper="chrome" style="background-image:linear-gradient(130deg,#07142e,#a9d8ff 28%,#1a4b9d 42%,#f4fbff 58%,#172c64 75%,#040817)" onclick="selectWallpaper('chrome', '', this)">
+            <div class="wp-label">Chrome Dream</div>
+          </div>
+          <div class="wp-option" data-wallpaper="matrix" style="background-image:repeating-linear-gradient(90deg,transparent 0 18px,rgba(54,255,167,.5) 19px 20px),linear-gradient(135deg,#010b13,#062b3b,#020611)" onclick="selectWallpaper('matrix', '', this)">
+            <div class="wp-label">Digital Rain</div>
+          </div>
+          <div class="wp-option" data-wallpaper="violet" style="background-image:radial-gradient(ellipse at 50% 0%,#8b48ff,transparent 48%),linear-gradient(140deg,#09051e,#101e5b,#030713)" onclick="selectWallpaper('violet', '', this)">
+            <div class="wp-label">Midnight Shrine</div>
+          </div>
         </div>
-    </div>
+      </section>
 
-    <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            const subtitleEl = document.getElementById('typewriter-text');
-            const text = "SYSTEM READY // v2.0";
-            subtitleEl.textContent = '';
+      <div class="iframe-container">
+        <div id="placeholderText" class="placeholder">
+          <div class="landing-content">
+            <div class="landing-overline">✦ WELCOME TO THE UNDERGROUND KNOWLEDGE NETWORK ✦</div>
+            <h2 class="landing-title">CYBER<br>FORMULA</h2>
+            <div class="landing-jp">サイバー・フォーミュラ・ライブラリ</div>
+            <div class="landing-rule"></div>
+            <p class="landing-copy">A personal archive of <strong>code, systems, algorithms & digital craft.</strong><br>Choose a module from the database and enter the knowledge grid.</p>
+            <div class="module-prompt"><span>✦</span> SELECT A MODULE TO INITIALIZE <span>✦</span></div>
+            <div class="landing-meta">
+              <span class="meta-chip">SYS // ONLINE</span><span class="meta-chip" id="module-count">43 MODULES</span><span class="meta-chip">EST. 2003 — 2077</span>
+            </div>
+          </div>
+        </div>
+        <div id="loader" class="loader"><div class="spinner"></div><div class="loader-text">ACCESSING MODULE...</div></div>
+        <iframe id="contentFrame" src="about:blank" title="Selected learning module"></iframe>
+      </div>
+    </section>
+  </main>
+</div>
 
-            let i = 0;
-            function typeWriter() {
-                if (i < text.length) {
-                    subtitleEl.textContent += text.charAt(i);
-                    i++;
-                    setTimeout(typeWriter, 80);
-                }
-            }
-            setTimeout(typeWriter, 500);
-            loadSavedWallpaper();
-            initializeTopicSearch();
-        });
+<script>
+  const WALLPAPER_KEY = 'cfl_selected_wallpaper_v3';
+  const CUSTOM_WALLPAPERS_KEY = 'cfl_custom_wallpapers_v3';
+  const wallpaperPresets = {
+    'local-saku': { url: 'Think K Pop GIF.gif', type: 'image' },
+    city: { url: 'https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExcjVuMHowMnM1YmE4OHlwbHNrbWU2aXRydGY2ODhtZThkYncyN20wcSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/gH1jGsCnQBiFHWMFzh/giphy.gif', type: 'image' },
+    neon: { url: 'https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExdXc0eWV4NDcwOXg4b243MGViYXZqbGoxbGhueWllcDNiY3Y3cHg2ZyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/9dVc1FBxVhkqEG0SpW/giphy.gif', type: 'image' },
+    anime: { url: 'https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExM2dhaW10bzF4NDdpdGt6aDdneHByanpzeTNwc3RlbGh2d3h3d3dlMCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/W6dHvprT7oks6BpX5R/giphy.gif', type: 'image' },
+    'blue-static': { type: 'gradient', background: 'radial-gradient(circle at 70% 25%,rgba(116,234,255,.8),transparent 20%),linear-gradient(135deg,#031039,#0758d7 55%,#07112e)' },
+    chrome: { type: 'gradient', background: 'linear-gradient(130deg,#07142e,#a9d8ff 28%,#1a4b9d 42%,#f4fbff 58%,#172c64 75%,#040817)' },
+    matrix: { type: 'gradient', background: 'repeating-linear-gradient(90deg,transparent 0 18px,rgba(54,255,167,.18) 19px 20px),linear-gradient(135deg,#010b13,#062b3b,#020611)' },
+    violet: { type: 'gradient', background: 'radial-gradient(ellipse at 50% 0%,#8b48ff,transparent 48%),linear-gradient(140deg,#09051e,#101e5b,#030713)' }
+  };
 
-        function loadPage(url) {
-            const placeholder = document.getElementById('placeholderText');
-            const loader = document.getElementById('loader');
-            const iframe = document.getElementById('contentFrame');
+  document.addEventListener('DOMContentLoaded', () => {
+    const subtitle = document.getElementById('typewriter-text');
+    const text = 'SYSTEM READY // v3.0';
+    subtitle.textContent = '';
+    let i = 0;
+    (function typeWriter() {
+      if (i < text.length) {
+        subtitle.textContent += text.charAt(i++);
+        setTimeout(typeWriter, 65);
+      }
+    })();
+    initializeTopicSearch();
+    restoreWallpaper();
+    updateClock();
+    setInterval(updateClock, 1000);
+    document.getElementById('module-count').textContent = `${document.querySelectorAll('#topic-list li').length} MODULES`;
+  });
 
-            // Keep the current topic visibly selected in the sidebar.
-            document.querySelectorAll('#topic-list button').forEach(button => {
-                const isActive = button.getAttribute('onclick')?.includes(url) ?? false;
-                button.classList.toggle('active-topic', isActive);
-                if (isActive) {
-                    button.setAttribute('aria-current', 'page');
-                } else {
-                    button.removeAttribute('aria-current');
-                }
-            });
+  function updateClock() {
+    document.getElementById('clock').textContent = new Intl.DateTimeFormat(undefined, {
+      hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false
+    }).format(new Date());
+  }
 
-            placeholder.style.display = 'none';
-            loader.style.display = 'flex';
-            iframe.style.opacity = '0';
+  function loadPage(url) {
+    const placeholder = document.getElementById('placeholderText');
+    const loader = document.getElementById('loader');
+    const iframe = document.getElementById('contentFrame');
 
-            setTimeout(() => {
-                iframe.onload = () => {
-                    loader.style.display = 'none';
-                    iframe.style.transition = "opacity 0.5s ease";
-                    iframe.style.opacity = '1';
-                };
-                iframe.src = url;
-            }, 150);
-        }
+    document.querySelectorAll('#topic-list button').forEach(button => {
+      const isActive = button.getAttribute('onclick')?.includes(url) ?? false;
+      button.classList.toggle('active-topic', isActive);
+      if (isActive) button.setAttribute('aria-current', 'page');
+      else button.removeAttribute('aria-current');
+    });
 
-        function initializeTopicSearch() {
-            const searchInput = document.getElementById('topic-search');
-            const clearButton = document.getElementById('clear-search');
-            const searchStatus = document.getElementById('search-status');
-            const topicItems = Array.from(document.querySelectorAll('#topic-list li'));
-            const total = topicItems.length;
+    placeholder.style.display = 'none';
+    loader.style.display = 'flex';
+    iframe.style.opacity = '0';
+    iframe.onload = () => {
+      loader.style.display = 'none';
+      iframe.style.transition = 'opacity .45s ease';
+      iframe.style.opacity = '1';
+    };
+    iframe.onerror = () => {
+      loader.style.display = 'none';
+      iframe.style.opacity = '1';
+    };
+    setTimeout(() => { iframe.src = url; }, 100);
+  }
 
-            function filterTopics() {
-                const query = searchInput.value.trim().toLocaleLowerCase();
-                let visible = 0;
+  function initializeTopicSearch() {
+    const input = document.getElementById('topic-search');
+    const clear = document.getElementById('clear-search');
+    const status = document.getElementById('search-status');
+    const items = Array.from(document.querySelectorAll('#topic-list li'));
+    const total = items.length;
 
-                topicItems.forEach(item => {
-                    const matches = item.textContent.toLocaleLowerCase().includes(query);
-                    item.hidden = !matches;
-                    if (matches) visible++;
-                });
+    function filterTopics() {
+      const query = input.value.trim().toLocaleLowerCase();
+      let visible = 0;
+      items.forEach(item => {
+        const matches = item.textContent.toLocaleLowerCase().includes(query);
+        item.hidden = !matches;
+        if (matches) visible++;
+      });
+      status.textContent = query ? `${visible} / ${total} MODULES FOUND` : `${total} MODULES AVAILABLE`;
+      clear.classList.toggle('visible', input.value.length > 0);
+    }
+    input.addEventListener('input', filterTopics);
+    clear.addEventListener('click', () => { input.value = ''; filterTopics(); input.focus(); });
+    document.addEventListener('keydown', event => {
+      const target = event.target;
+      const typing = target instanceof HTMLElement &&
+        (target.isContentEditable || ['INPUT','TEXTAREA','SELECT'].includes(target.tagName));
+      if (event.key === '/' && !typing && !event.ctrlKey && !event.metaKey && !event.altKey) {
+        event.preventDefault(); input.focus();
+      } else if (event.key === 'Escape') {
+        if (document.activeElement === input) { input.value = ''; filterTopics(); input.blur(); }
+        else document.getElementById('settings-panel').style.display = 'none';
+      }
+    });
+    filterTopics();
+  }
 
-                searchStatus.textContent = query
-                    ? `${visible} / ${total} MODULES FOUND`
-                    : `${total} MODULES AVAILABLE`;
-                clearButton.classList.toggle('visible', searchInput.value.length > 0);
-            }
+  function toggleSettings() {
+    const panel = document.getElementById('settings-panel');
+    panel.style.display = panel.style.display === 'block' ? 'none' : 'block';
+  }
 
-            searchInput.addEventListener('input', filterTopics);
-            clearButton.addEventListener('click', () => {
-                searchInput.value = '';
-                filterTopics();
-                searchInput.focus();
-            });
+  function applyWallpaper(wallpaper) {
+    const placeholder = document.getElementById('placeholderText');
+    placeholder.style.backgroundImage = '';
+    placeholder.style.background = '';
+    if (wallpaper.type === 'gradient') {
+      placeholder.style.background = wallpaper.background;
+    } else if (wallpaper.url) {
+      const safeUrl = wallpaper.url.replace(/["\\]/g, '\\$&');
+      placeholder.style.backgroundImage = `linear-gradient(120deg,rgba(0,12,45,.24),rgba(0,30,90,.08)),url("${safeUrl}")`;
+    }
+  }
 
-            // Press / to search; Escape clears the query and returns focus to the menu.
-            document.addEventListener('keydown', event => {
-                const target = event.target;
-                const typingInField = target instanceof HTMLElement &&
-                    (target.isContentEditable || ['INPUT', 'TEXTAREA', 'SELECT'].includes(target.tagName));
+  function selectWallpaper(id, legacyUrl, element) {
+    let wallpaper = wallpaperPresets[id];
+    if (!wallpaper && legacyUrl) wallpaper = { url: legacyUrl, type: 'image' };
+    if (!wallpaper) return;
+    applyWallpaper(wallpaper);
+    document.querySelectorAll('.wp-option').forEach(option => option.classList.remove('active'));
+    const selected = element || document.querySelector(`.wp-option[data-wallpaper="${CSS.escape(id)}"]`);
+    if (selected) selected.classList.add('active');
+    try { localStorage.setItem(WALLPAPER_KEY, id); } catch (error) {}
+  }
 
-                if (event.key === '/' && !typingInField && !event.ctrlKey && !event.metaKey && !event.altKey) {
-                    event.preventDefault();
-                    searchInput.focus();
-                } else if (event.key === 'Escape' && document.activeElement === searchInput) {
-                    searchInput.value = '';
-                    filterTopics();
-                    searchInput.blur();
-                }
-            });
+  function restoreWallpaper() {
+    let id = 'local-saku';
+    try { id = localStorage.getItem(WALLPAPER_KEY) || id; } catch (error) {}
+    const wallpaper = wallpaperPresets[id] || wallpaperPresets['local-saku'];
+    applyWallpaper(wallpaper);
+    const selected = document.querySelector(`.wp-option[data-wallpaper="${CSS.escape(id)}"]`);
+    document.querySelectorAll('.wp-option').forEach(option => option.classList.remove('active'));
+    if (selected) selected.classList.add('active');
+  }
 
-            filterTopics();
-        }
 
-        function toggleSettings() {
-            const panel = document.getElementById('settings-panel');
-            panel.style.display = panel.style.display === 'block' ? 'none' : 'block';
-        }
-
-        function setWallpaper(type, url, clickedElement) {
-            const placeholder = document.getElementById('placeholderText');
-            placeholder.style.backgroundImage = `url("${url.replace(/"/g, '\\"')}")`;
-
-            document.querySelectorAll('.wp-option').forEach(el => el.classList.remove('active'));
-            const selectedOption = clickedElement || document.querySelector(`.wp-option[onclick*="${type}"]`);
-            if (selectedOption) selectedOption.classList.add('active');
-
-            localStorage.setItem('selected_wallpaper', url);
-        }
-
-        function loadSavedWallpaper() {
-            const savedUrl = localStorage.getItem('selected_wallpaper');
-            if (savedUrl) {
-                const placeholder = document.getElementById('placeholderText');
-                placeholder.style.backgroundImage = `url("${savedUrl.replace(/"/g, '\\"')}")`;
-
-                document.querySelectorAll('.wp-option').forEach(el => {
-                    const isSelected = el.style.backgroundImage.includes(savedUrl.substring(0, 20));
-                    el.classList.toggle('active', isSelected);
-                });
-            }
-        }
-    </script>
+</script>
 </body>
 </html>
